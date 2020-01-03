@@ -13,7 +13,7 @@
   option-filter-prop="{{ form.optionFilterProp }}"
   :show-arrow="{{ form.showArrow ? 'true' : 'false' }}"
   :token-separators="{{ form.tokenSeparators }}"
-  mode="{{ form.mode }}"
+  mode="{{ form.value is same as(null) ? form.mode : 'default' }}"
   not-found-content="{{ form.notFoundContent }}"
   :dropdown-match-select-width="false"
   placeholder="{{ form.placeholder }}"

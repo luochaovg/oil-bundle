@@ -8,6 +8,11 @@ use Leon\BswBundle\Module\Form\Entity\Button;
 class Output extends ArgsOutput
 {
     /**
+     * @var int
+     */
+    public $id = 0;
+
+    /**
      * @var array
      */
     public $record = [];

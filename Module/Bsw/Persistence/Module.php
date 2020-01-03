@@ -34,13 +34,12 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK    = 'BeforeHook';        // 钩子前处理
-    const AFTER_HOOK     = 'AfterHook';         // 钩子后处理
-    const BEFORE_RENDER  = 'BeforeRender';      // 渲染前处理
-    const FORM_OPERATE   = 'FormOperates';      // 操作按钮
-    const AFTER_SUBMIT   = 'AfterSubmit';       // 提交后处理
-    const CUSTOM_PERSIST = 'CustomPersist';     // 自定义持久化处理
-    const WHEN_PERSIST   = 'WhenPersist';       // 与持久化同时处理（事务级）
+    const BEFORE_HOOK   = 'BeforeHook';        // 钩子前处理
+    const AFTER_HOOK    = 'AfterHook';         // 钩子后处理
+    const BEFORE_RENDER = 'BeforeRender';      // 渲染前处理
+    const FORM_OPERATE  = 'FormOperates';      // 操作按钮
+    const AFTER_SUBMIT  = 'AfterSubmit';       // 提交后处理
+    const WHEN_PERSIST  = 'WhenPersist';       // 与持久化同时处理（事务级）
 
     /**
      * @var string
@@ -487,24 +486,16 @@ class Module extends Bsw
     }
 
     /**
-     * Persistence to MySQL
+     * Record handler
      *
      * @param array $record
      * @param array $annotation
      * @param array $extraSubmit
      *
-     * @return Output
-     * @throws
+     * @return array
      */
-    protected function persistence(array $record, array $annotation, array $extraSubmit): ArgsOutput
+    protected function recordHandler(array $record, array $annotation, array $extraSubmit): array
     {
-        if (empty($this->entity)) {
-            throw new ModuleException('Entity is required for persistence module');
-        }
-
-        $pk = $this->repository->pk();
-        $newly = empty($record[$pk]);
-
         foreach ($record as $field => $value) {
 
             // Field don't exists
@@ -568,11 +559,36 @@ class Module extends Bsw
             }
         }
 
+        return $record;
+    }
+
+    /**
+     * Persistence to MySQL
+     *
+     * @param array $record
+     * @param array $annotation
+     * @param array $extraSubmit
+     *
+     * @return Output
+     * @throws
+     */
+    protected function persistence(array $record, array $annotation, array $extraSubmit): ArgsOutput
+    {
+        if (empty($this->entity)) {
+            throw new ModuleException('Entity is required for persistence module');
+        }
+
+        $pk = $this->repository->pk();
+        $newly = empty($record[$pk]);
+
         if ($newly) {
 
             /**
              * Newly
              */
+
+            // TODO
+            $record = $this->recordHandler($record, $annotation, $extraSubmit);
             $result = $id = $this->repository->newly($record);
 
         } else {
@@ -580,8 +596,9 @@ class Module extends Bsw
             /**
              * Modify by id
              */
-            $id = Helper::dig($record, $pk);
-            $result = $this->repository->modify([$pk => $id], $record);
+
+            $record = $this->recordHandler($record, $annotation, $extraSubmit);
+            $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
         }
 
         /**
@@ -653,6 +670,7 @@ class Module extends Bsw
             }
         }
 
+        $output->id = $this->input->id;
         $output->record = $record;
         $output->operates = $operates;
         $output->formatJson = $this->json($format);
