@@ -1,0 +1,6 @@
+{% if form.previewRoute %}
+  <a-button
+    bsw-data='{"location": "{{ path(form.previewRoute, form.previewArgs) }}"}'
+    @click.navite="showIFrameByVue"
+  >{{ 'b:icon-tag'|icon|raw }} {{ 'Select'|trans({}, 'twig') }}</a-button>
+{% endif %}

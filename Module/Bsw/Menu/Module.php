@@ -1,0 +1,205 @@
+<?php
+
+namespace Leon\BswBundle\Module\Bsw\Menu;
+
+use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Entity\BswAdminMenu;
+use Leon\BswBundle\Module\Bsw\ArgsInput;
+use Leon\BswBundle\Module\Bsw\ArgsOutput;
+use Leon\BswBundle\Module\Bsw\Bsw;
+use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu;
+use Leon\BswBundle\Module\Entity\Abs;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+/**
+ * @property Input $input
+ */
+class Module extends Bsw
+{
+    /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return 'menu';
+    }
+
+    /**
+     * @return string|null
+     */
+    public function twig(): ?string
+    {
+        return '@LeonBsw/limbs/menu';
+    }
+
+    /**
+     * @return array
+     */
+    public function css(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function javascript(): ?array
+    {
+        return ['diy;module/scaffold.js'];
+    }
+
+    /**
+     * @return ArgsInput
+     */
+    public function input(): ArgsInput
+    {
+        return new Input();
+    }
+
+    /**
+     * @return array
+     */
+    protected function listMenu(): array
+    {
+        return $this->web->caching(
+            function () {
+                $filter = [
+                    'limit'  => 0,
+                    'select' => [
+                        'bam.id',
+                        'bam.menuId',
+                        'bam.routeName',
+                        'bam.icon',
+                        'bam.value',
+                        'bam.javascript',
+                        'bam.jsonParams',
+                    ],
+                    'where'  => [$this->input->expr->eq('bam.state', ':state')],
+                    'args'   => ['state' => [Abs::NORMAL]],
+                    'sort'   => ['bam.sort' => Abs::SORT_ASC],
+                ];
+
+                $list = $this->web->repo(BswAdminMenu::class)->lister($filter);
+                $menuList = [];
+
+                foreach ($list as $item) {
+                    $menu = new Menu();
+                    $menu->attributes($item);
+                    array_push($menuList, $menu);
+                }
+
+                return $menuList;
+            }
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function menuBuilder(): array
+    {
+        $menu = $slaveMenuDetail = [];
+        $parent = $current = $masterIndex = 0;
+
+        $menuList = $this->listMenu();
+        if (empty($menuList)) {
+            return [$menu, $menu, $slaveMenuDetail, $parent, $current];
+        }
+
+        foreach ($menuList as $item) {
+
+            /**
+             * @var Menu $item
+             */
+            $route = trim($item->getRouteName());
+
+            // access control
+            if ($route && empty($this->input->access[$route])) {
+                continue;
+            }
+
+            $args = Helper::parseJsonString($item->getJsonParams() ?? '', []);
+
+            // route path
+            if ($route) {
+                try {
+                    $item->setUrl($this->web->url($route, $args, false));
+                } catch (RouteNotFoundException $e) {
+                    $this->input->logger->warning("Menu route error, {$e->getMessage()}");
+                }
+            }
+
+            // javascript
+            if ($javascript = $item->getJavascript()) {
+                $item->setUrl(Html::scriptBuilder($javascript, $args));
+            }
+
+            $menu[$item->getMenuId()][$item->getId()] = $item;
+            if ($item->getMenuId() !== $masterIndex) {
+                $slaveMenuDetail[$item->getRouteName()] = [
+                    'info'   => $item->getValue(),
+                    'menuId' => $item->getMenuId(),
+                ];
+            }
+
+            // current and parent
+            $currentMap = $this->web->parameters('menus_same_current_map');
+            $parentMap = $this->web->parameters('menus_same_parent_map');
+
+            $_route = $this->input->route;
+            if (isset($currentMap[$_route])) {
+                $_route = $currentMap[$_route];
+            } elseif (isset($parentMap[$_route])) {
+                $sameParentOnly = true;
+                $_route = $parentMap[$_route];
+            }
+
+            foreach ($this->web->parameters('crumbs_preview_pre') as $keyword) {
+                $_route = str_replace("_{$keyword}", '_preview', $_route);
+            }
+
+            if ($route == $_route) {
+                $parent = $item->getMenuId() ?: $masterIndex;
+                $current = empty($sameParentOnly) ? $item->getId() : 0;
+            }
+        }
+
+        $masterMenu = Helper::dig($menu, $masterIndex);
+        $slaveMenu = $menu;
+
+        $_masterMenu = [];
+        foreach ($masterMenu as $index => $item) {
+            if (!empty($slaveMenu[$index]) || !empty($item->getRouteName())) {
+                $_masterMenu[$index] = $item;
+            }
+        }
+
+        return [$_masterMenu, $slaveMenu, $slaveMenuDetail, $parent, $current];
+    }
+
+    /**
+     * @return ArgsOutput
+     */
+    public function logic(): ArgsOutput
+    {
+        $output = new Output();
+        [
+            $output->masterMenu,
+            $output->slaveMenu,
+            $output->slaveMenuDetail,
+            $output->parent,
+            $output->current,
+        ] = $this->menuBuilder();
+
+        $output = $this->caller(
+            $this->method . ucfirst($this->name()),
+            self::ARGS_BEFORE_RENDER,
+            Output::class,
+            $output,
+            [$output]
+        );
+
+        return $output;
+    }
+}

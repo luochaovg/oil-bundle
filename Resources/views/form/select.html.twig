@@ -1,0 +1,27 @@
+{% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
+<a-select
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  :label-in-value="{{ form.labelInValue ? 'true' : 'false' }}"
+  :default-active-first-option="true"
+  :show-search="{{ form.showSearch ? 'true' : 'false' }}"
+  option-filter-prop="{{ form.optionFilterProp }}"
+  :show-arrow="{{ form.showArrow ? 'true' : 'false' }}"
+  :token-separators="{{ form.tokenSeparators }}"
+  mode="{{ form.mode }}"
+  not-found-content="{{ form.notFoundContent }}"
+  :dropdown-match-select-width="false"
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { {{ initial }} rules: {{ form.rules }} }]"
+>
+  {% for value, label in form.enum %}
+    <a-select-option value="{{ value }}">{{ label }}</a-select-option>
+  {% endfor %}
+</a-select>
+{% include '@LeonBsw/form/iframe-entrypoint.html.twig' %}

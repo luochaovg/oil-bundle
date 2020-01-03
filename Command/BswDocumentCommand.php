@@ -1,0 +1,755 @@
+<?php
+
+namespace Leon\BswBundle\Command;
+
+use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Exception\CommandException;
+use Leon\BswBundle\Module\Interfaces\CommandInterface;
+use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Validator\Entity\In;
+use Leon\BswBundle\Module\Validator\Entity\InKey;
+use Leon\BswBundle\Module\Validator\Validator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Output\OutputInterface;
+use ReflectionMethod;
+
+class BswDocumentCommand extends Command implements CommandInterface
+{
+    use BswFoundation;
+
+    /**
+     * @const string
+     */
+    const TAG_RIGHT = '¹';
+    const TAG_WRONG = 'º';
+    const TAG_TREE  = '└ ';
+    const TAG_LINE  = '``›››››``';
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $source = '_source';
+
+    /**
+     * @var string
+     */
+    private $build = '_build';
+
+    /**
+     * @var string
+     */
+    private $indent;
+
+    /**
+     * @var string
+     */
+    private $hostApi;
+
+    /**
+     * @var string
+     */
+    private $hostAnalog;
+
+    /**
+     * @var string
+     */
+    private $lang;
+
+    /**
+     * @return array
+     */
+    public function args(): array
+    {
+        return [
+            'host-api'    => [null, InputOption::VALUE_OPTIONAL, 'Host for api'],
+            'host-analog' => [null, InputOption::VALUE_OPTIONAL, 'Host for analog'],
+            'lang'        => [null, InputOption::VALUE_OPTIONAL, 'Language for document', 'cn'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function base(): array
+    {
+        return [
+            'prefix'  => 'bsw',
+            'keyword' => 'document',
+            'info'    => 'Auto document with annotation use sphinx',
+        ];
+    }
+
+    /**
+     * init
+     */
+    public function init()
+    {
+        $this->indent = Helper::enSpace(1, true);
+        $this->path = $this->kernel->getProjectDir() . '/document';
+    }
+
+    /**
+     * Logic
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
+        $params = $input->getOptions();
+
+        $this->hostApi = $params['host-api'];
+        $this->hostAnalog = $params['host-analog'];
+        $this->lang = $params['lang'];
+
+        $route = $this->web->getRouteCollection();
+        $this->buildRstFile($route);
+
+        // run sphinx build
+        `sphinx-build -b html {$this->path}/ {$this->path}/{$this->build}`;
+
+        return $output->writeln('<info> Document use sphinx build done. </info>');
+    }
+
+    /**
+     * Build rst file
+     *
+     * @param array $route
+     *
+     * @return void
+     * @throws
+     */
+    private function buildRstFile(array $route)
+    {
+        $n = Abs::ENTER;
+        $n2 = Abs::ENTER . Abs::ENTER;
+
+        $index = "{$n}.. include:: ./rst/readme.rst{$n}";
+
+        $list = [];
+        foreach ($route as $item) {
+            $list[md5($item['class'])][] = $item;
+        }
+
+        $errorBill = null;
+        $errorBill .= ".. list-table::{$n}";
+        $errorBill .= "{$this->indent}:widths: 15 35 50{$n2}";
+        $errorBill .= "{$this->indent}* - Code{$n}";
+        $errorBill .= "{$this->indent}  - Tiny{$n}";
+        $errorBill .= "{$this->indent}  - Description for logger{$n2}";
+
+        foreach ($this->web->apiErrorBill() as $errorCode => $error) {
+            $errorBill .= "{$this->indent}* - **{$errorCode}**{$n}";
+            $errorBill .= "{$this->indent}  - ``{$error['tiny']}``{$n}";
+            $errorBill .= "{$this->indent}  - {$error['description']}{$n2}";
+        }
+
+        file_put_contents("{$this->path}/rst/api_error.rst", $errorBill);
+
+        /**
+         * @var Filesystem $fs
+         */
+        $fs = new Filesystem();
+
+        $fs->remove(["{$this->path}/{$this->source}", "{$this->path}/{$this->build}"]);
+        $fs->mkdir(["{$this->path}/{$this->source}", "{$this->path}/{$this->build}"]);
+
+        $moduleIndex = null;
+        $moduleIndex .= "{$this->indent}/rst/api_request{$n}";
+        $moduleIndex .= "{$this->indent}/rst/api_response{$n}";
+        foreach ($list as $module => $api) {
+            $moduleIndex .= "{$this->indent}{$this->source}/{$module}{$n}";
+            $this->buildApiRstFile("{$this->path}/{$this->source}/{$module}.rst", $api);
+        }
+
+        // index (tocTree)
+        $index .= "{$n}.. toctree::{$n}";
+        $index .= "{$this->indent}:maxdepth: 2{$n}";
+        $index .= "{$this->indent}:numbered:{$n}";
+        $index .= "{$this->indent}:caption: PROJECT DOCUMENT{$n2}";
+        $index .= $moduleIndex;
+
+        file_put_contents($this->path . '/index.rst', $index);
+    }
+
+    /**
+     * Build rst file for every controller.
+     *
+     * @param string $rstFile
+     * @param array  $apiList
+     *
+     * @return void
+     * @throws
+     */
+    private function buildApiRstFile(string $rstFile, array $apiList)
+    {
+        $page = null;
+        $lineTitle = $this->line('"');
+
+        /**
+         * @param string $append
+         * @param int    $n
+         * @param int    $indent
+         * @param bool   $return
+         *
+         * @return string
+         */
+        $append = function (
+            ?string $append = null,
+            int $n = 1,
+            int $indent = 0,
+            bool $return = false
+        ) use (&$page): string {
+            $rst = ($this->indent($indent) . $append . str_repeat(Abs::ENTER, $n));
+            if ($return) {
+                return $rst;
+            }
+
+            return $page .= $rst;
+        };
+
+        /**
+         * @param array $table
+         * @param array $list
+         * @param int   $indent
+         */
+        $appendTable = function (array $table, array $list, int $indent = 0) use ($append) {
+
+            $append(".. list-table::", 1, $indent);
+
+            $widths = implode(' ', array_values($table));
+            $append(":widths: {$widths}", 2, $indent + 1);
+
+            // table header
+            $max = count($table) - 1;
+            foreach (array_keys($table) as $index => $title) {
+                $flag = $index ? ' ' : '*';
+                $n = ($index >= $max) ? 2 : 1;
+                $append("{$flag} - {$title}", $n, $indent + 1);
+            }
+
+            // table body
+            foreach ($list as $item) {
+                foreach ($item as $i => $v) {
+                    $flag = $i ? ' ' : '*';
+                    $n = ($i >= $max) ? 2 : 1;
+                    $append("{$flag} - {$v}", $n, $indent + 1);
+                }
+            }
+        };
+
+        $append();
+        $classInfo = current($apiList)['desc_cls'];
+        $classInfo = $this->lang($classInfo);
+
+        if (empty($classInfo)) {
+            throw new CommandException(current($apiList)['class'] . ' has no description');
+        }
+        $append($classInfo);
+        $append($this->line('='), 2);
+
+        $maxOrder = count($apiList) - 1;
+        $validatorBill = $this->web->apiValidatorBill($this->lang);
+        $validatorBill[Abs::VALIDATION_IF_SET] = $this->lang('Validation when not blank');
+
+        $tagsMap = [
+            '[AUTH]' => '{AUTH}',
+            '[USER]' => '{USER}',
+            '[AJAX]' => '{AJAX}',
+        ];
+
+        foreach ($apiList as $order => $api) {
+
+            $api['desc_fn'] = $this->lang($api['desc_fn']);
+
+            // method description (title)
+            $append($api['desc_fn']);
+            $append($this->line('-'), 2);
+
+            $class = $api['class'];
+            $className = "\\{$class}";
+            $classStr = addslashes($class);
+
+            $docFlag = call_user_func([$className, Abs::FN_API_DOC_FLAG]);
+            foreach ($docFlag as &$item) {
+                $item = $this->lang($item);
+            }
+
+            // method path (table)
+            $append($this->lang('Basic info'));
+            $append($lineTitle, 2);
+
+            // namespace
+            $instance = new ReflectionMethod($api['class'], $api['method']);
+            $file = $instance->getFileName();
+            $line = $instance->getStartLine();
+
+            if (PHP_OS === 'Darwin') {
+                $file = "`{$classStr}::{$api['method']}() <phpstorm://open?file={$file}&line={$line}>`_";
+            } else {
+                $file = "`{$classStr}::{$api['method']}() <phpstorm://open?url=file://{$file}&line={$line}>`_";
+            }
+
+            $host = $this->hostApi ?: $this->web->host();
+            $http = $api['http'] ? implode('|', $api['http']) : 'ANY';
+            $appendTable(
+                ['Title' => 25, 'Content' => 75],
+                [
+                    ['Method', "**{$http}**"],
+                    ['Route Name', $api['route']],
+                    ['Route URL', "{$host}{$api['uri']}"],
+                    ['Namespace', $file],
+                ]
+            );
+
+            // license
+            $args = [];
+            $license = $api['license'];
+
+            foreach ($tagsMap as $tag => $var) {
+                if (strpos($api['desc_fn'], $tag) !== false) {
+                    $exists = false;
+                    foreach ($license as $lc) {
+                        if (strpos($lc, $var) !== false) {
+                            $exists = true;
+                            break;
+                        }
+                    }
+                    !$exists && array_unshift($license, $var);
+                }
+            }
+
+            // extra document
+            $ajaxRequest = false;
+            if (!empty($license)) {
+                $append($this->lang('Supplementary notes'));
+                $append($lineTitle, 2);
+                $append(".. note::");
+
+                $n = count($license) > 1;
+                foreach ($license as $lc) {
+                    if (strpos($lc, '{AJAX}') !== false) {
+                        $ajaxRequest = true;
+                    }
+                    $prefix = $n ? '- ' : null;
+                    $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
+                }
+            }
+
+            // request params (warning or table)
+            $append($this->lang('Request params'));
+            $append($lineTitle, 2);
+
+            // input
+            $input = $this->web->getInputAnnotation($api['class'], $api['method']);
+            if (empty($input) && empty($api['param'])) {
+
+                // no input (warning)
+                $append(".. warning::");
+                if (!empty($lr = $api['license-request'])) {
+                    $n = count($lr) > 1;
+                    foreach ($lr as $lc) {
+                        $prefix = $n ? '- ' : null;
+                        $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
+                    }
+                } else {
+                    $append($this->lang('Without request params'), 2, 1);
+                }
+
+            } else {
+
+                // input params (table)
+                $paramList = [];
+                foreach ($api['param'] as $name => $item) {
+                    $label = Helper::stringToLabel($item['info'] ?: $name);
+                    $label = Helper::docVarReplace($this->lang($label, 'fields'), $docFlag);
+                    $args[] = [$name, $item['type'], $label, Abs::REQ_GET];
+                    if ('GET' == $api['http']) {
+                        $http = self::TAG_RIGHT . ' GET';
+                    } else {
+                        $http = self::TAG_WRONG . ' GET';
+                    }
+                    $paramList[] = [
+                        $name,
+                        "**Y**",
+                        "**-**",
+                        "``-``",
+                        $http,
+                        $label,
+                    ];
+                }
+
+                $argsIndent = 0;
+                foreach ($input as $item) {
+                    $label = $item->trans ? $this->lang($item->label, 'fields') : $item->label;
+                    $label = Helper::docVarReplace($label, $docFlag);
+                    $args[] = [$item->field, $item->type, $label, $item->method ?: current($api['http'])];
+
+                    $rules = [];
+                    $enumDocument = null;
+
+                    foreach ($item->rules as $fn => $params) {
+
+                        $argsString = null;
+
+                        if (in_array($fn, [Abs::VALIDATION_IF_SET])) {
+                            $validator = null;
+                        } else {
+
+                            /**
+                             * @var Validator $validator
+                             */
+                            $validator = Helper::underToCamel($fn, false);
+                            $validator = "\\Leon\\BswBundle\\Module\\Validator\\Entity\\{$validator}";
+                            $handler = $item->rulesArgsHandler[$fn] ?? null;
+                            $validator = new $validator(null, $params, $this->translator, $this->lang, $handler);
+                        }
+
+                        if ($params) {
+
+                            $_params = $validator->arrayArgs();
+                            $_class = get_class($validator);
+
+                            if (in_array($_class, [In::class])) {
+                                $enumDocument .= $this->enumDocument($_params, false);
+                                $argsString = false;
+                            } elseif (in_array($_class, [InKey::class])) {
+                                $enumDocument .= $this->enumDocument($_params, true);
+                                $argsString = false;
+                            } else {
+                                $argsString = Helper::printArray($_params, '%s', false, ', ');
+                            }
+                        }
+
+                        $rules[] = [
+                            'fn'        => Helper::camelToUnder($fn),
+                            'args'      => $argsString,
+                            'validator' => $validator,
+                        ];
+                    }
+
+                    $required = !empty($rules);
+
+                    if ($rules) {
+
+                        $rulesStr = null;
+                        $i = 0;
+
+                        foreach ($rules as $rule) {
+
+                            /**
+                             * @var Validator $validator
+                             */
+                            list($fn, $arg, $validator) = array_values($rule);
+
+                            if (!$validator) {
+                                $required = false;
+                            } else {
+                                $required = ($required && $validator->isRequired());
+                            }
+
+                            if ($arg === false) {
+                                continue;
+                            }
+
+                            $indent = $i ? $argsIndent + 2 : $argsIndent;
+                            $_indent = $argsIndent + 3;
+
+                            $_ruleBill = $validatorBill[$fn];
+                            if (!isset($arg)) {
+                                $_rule = $fn;
+                            } else {
+                                $_rule = "{$fn}({$arg})";
+                            }
+
+                            $rulesStr .= $append(".. div:: show-tips", 2, $indent, true);
+                            $rulesStr .= $append($_rule, 1, $_indent, true);
+                            $rulesStr .= $append(".. div:: show-tips-hidden", 2, $_indent - 1, true);
+                            $rulesStr .= $append(rawurlencode($_ruleBill), 1, $_indent, true);
+
+                            $i++;
+                        }
+
+                    } else {
+                        $rulesStr = "``-``";
+                    }
+
+                    $item->method = $item->method ?: implode('|', $api['http']);
+
+                    $required = ($required ? 'Y' : 'N');
+                    $signature = ($item->sign ? 'Y' : 'N');
+                    $http = $item->method ?: Abs::REQ_ALL;
+
+                    if (in_array($http, $api['http'])) {
+                        $http = self::TAG_RIGHT . " {$http}";
+                    } else {
+                        $http = self::TAG_WRONG . " {$http}";
+                    }
+
+                    $paramList[] = [
+                        $item->field,
+                        "**{$required}**",
+                        "**{$signature}**",
+                        $rulesStr,
+                        $http,
+                        $label . ' ' . $enumDocument,
+                    ];
+                }
+
+                $appendTable(
+                    [
+                        'Name'        => 20,
+                        'Required'    => 10,
+                        'Signature'   => 10,
+                        'Validator'   => 20,
+                        'Method'      => 15,
+                        'Description' => 25,
+                    ],
+                    $paramList,
+                    $argsIndent
+                );
+            }
+
+            // analog request
+            $append($this->lang('Analog question'));
+            $append($lineTitle, 2);
+
+            if (empty($this->hostAnalog)) {
+                $append($this->lang('Should configure analog host'), 2);
+            } else {
+                $host = $this->hostApi ?: $this->web->host();
+                $analog = $host . str_replace('.{_format}', null, $api['uri']);
+                if (strpos($analog, 'http') === false) {
+                    $analog = "http:{$analog}";
+                }
+                $analog = [
+                    'method' => current($api['http']),
+                    'api'    => $analog,
+                    'args'   => $args,
+                ];
+                $analog = $this->hostAnalog . '/api?s=' . base64_encode(json_encode($analog));
+                $debug = $this->lang('Analog debug interface');
+                $append("`{$debug}  ‹{$api['desc_fn']}› <{$analog}>`_", 2);
+            }
+
+            // response params (warning or table)
+            $setsType = strtolower($api['tutorial'] ?? 'object');
+            $responseParams = $this->lang('Response params');
+            $append("{$responseParams} ``({$setsType})``");
+            $append($lineTitle, 2);
+
+            // output
+            $property = $this->web->getOutputAnnotation($api['class'], $api['method']);
+            if (!$property) {
+                // no output (warning)
+                $append(".. warning::");
+                if (!empty($lr = $api['license-response'])) {
+                    $n = count($lr) > 1;
+                    foreach ($lr as $lc) {
+                        $prefix = $n ? '- ' : null;
+                        $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
+                    }
+                } else {
+                    $append($this->lang('Without response params'), 2, 1);
+                }
+            } else {
+
+                // output params (table)
+                $_property = [];
+                foreach ($property as $name => $item) {
+                    $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? self::TAG_TREE : null);
+                    $item['field'] = current(array_reverse(explode('.', $name)));
+                    $item['label'] = $item['label'] ?? $item['field'];
+                    $_property[$name] = $item;
+                }
+
+                $propertyIndent = 0;
+                $propertyList = [];
+
+                foreach ($property = $_property as $name => $item) {
+
+                    if ($item['field'] === '__line__') {
+                        $item['field'] = $item['type'] = self::TAG_LINE;
+                        $item['label'] = "**{$item['label']}**";
+                        $item['trans'] = false;
+                    }
+
+                    $label = $item['label'];
+                    if ($item['trans']) {
+                        $label = Helper::stringToLabel($label);
+                        $label = $this->lang($label, 'fields');
+                    }
+                    $label = Helper::docVarReplace($label, $docFlag);
+                    $enumDocument = $this->enumDocument($item['enum']);
+                    $indent = $this->indent($propertyIndent + 3);
+                    $type = $item['type'];
+                    $propertyList[] = [
+                        "{$item['indent']}{$item['field']}",
+                        strpos($type, self::TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
+                        "{$item['indent']}{$label} {$enumDocument}",
+                    ];
+                }
+                $appendTable(['Name' => 30, 'Type' => 20, 'Description' => 50], $propertyList, $propertyIndent);
+
+                // response params demo
+                $append($this->lang('Response params demo'));
+                $append($lineTitle, 2);
+                $append(".. code:: console", 2);
+
+                $setsTypeMap = [
+                    'object'   => ['begin' => '{', 'end' => '}'],
+                    'object[]' => ['begin' => '[{', 'end' => '}]'],
+                ];
+
+                if (!isset($setsTypeMap[$setsType])) {
+                    throw new CommandException(
+                        "`{$setsType}` is invalid type, must in " . implode('、', array_keys($setsTypeMap))
+                    );
+                }
+
+                if ($property) {
+                    $setsEnd = $setsTypeMap[$setsType]['end'];
+                    $setsEndHalf = null;
+                } else {
+                    $setsEnd = null;
+                    $setsEndHalf = $setsTypeMap[$setsType]['end'];
+                }
+
+                $docString = null;
+                $docKeys = [];
+                $docKeysArgs = [];
+                $maxKeyLen = $maxDemoLen = 0;
+                $fn = ($ajaxRequest ? Abs::FN_RESPONSE_KEYS_AJAX : Abs::FN_RESPONSE_KEYS);
+
+                if (method_exists($className, $fn)) {
+
+                    $docKeys = call_user_func([$className, $fn]);
+                    $docKeysArgs = Helper::dig($docKeys, 'args');
+
+                    $maxKeyLen = max(Helper::arrayLength($docKeys, true, 'key')) + 3;
+                    $maxDemoLen = max(Helper::arrayLength($docKeys, true, 'demo')) + 3;
+                    $docKeys['data']['demo'] = $setsTypeMap[$setsType]['begin'];
+                }
+
+                foreach ($docKeys as $k => $item) {
+                    if (empty($item)) {
+                        continue;
+                    }
+                    $key = $this->pad("\"{$item['key']}\"", $maxKeyLen);
+                    $demo = ($k == 'data') ? "{$item['demo']}" : "{$item['demo']},";
+                    if ($setsEndHalf && $k == 'data') {
+                        $demo .= $setsEndHalf;
+                    }
+                    $demo = $this->pad($demo, $maxDemoLen);
+                    $notes = $this->lang($item['notes'], 'twig', $docKeysArgs);
+                    $docString .= $this->indent(2) . "{$key}: {$demo} // {$notes}" . Abs::ENTER;
+                }
+
+                $append($setsTypeMap['object']['begin'], 1, 1);
+                $append($docString, 0);
+
+                if ($property) {
+                    $maxKeyLen = max(Helper::arrayLength($property)) + 3;
+                    foreach ($property as $field => $item) {
+                        $field = $this->pad("\"{$item['field']}\"", $maxKeyLen);
+                        $append("{$item['indent']}{$field}: ({$item['type']})", 1, $docKeys ? 3 : 2);
+                    }
+                }
+
+                if ($docKeys && $setsEnd) {
+                    $append($setsEnd, 1, 2);
+                }
+
+                $append($setsTypeMap['object']['end'], 2, 1);
+            }
+
+            if ($order != $maxOrder) {
+                $append(".. image:: ../_static/img/line.png", 2);
+                //$append("----", 2);
+            }
+        }
+
+        file_put_contents($rstFile, $page);
+    }
+
+    /**
+     * Document for enum
+     *
+     * @param array $enum
+     * @param bool  $showKey
+     *
+     * @return string
+     */
+    private function enumDocument(array $enum, bool $showKey = true): ?string
+    {
+        $document = null;
+        foreach ($enum as $key => $val) {
+            $val = $showKey ? $this->lang($val, 'enum') : $val;
+            $key = $showKey ? "{$key}:" : null;
+            $document .= "``{$key}{$val}`` ";
+        }
+
+        return $document;
+    }
+
+    /**
+     * Translator
+     *
+     * @param string $key
+     * @param string $domain
+     * @param array  $args
+     *
+     * @return string
+     */
+    private function lang(string $key, string $domain = 'twig', array $args = []): string
+    {
+        return $this->translator->trans($key, $args, $domain, $this->lang);
+    }
+
+    /**
+     * Get line
+     *
+     * @param string $char
+     *
+     * @return string
+     */
+    protected function line(string $char): string
+    {
+        return str_repeat($char, 50);
+    }
+
+    /**
+     * Indent with 4 space
+     *
+     * @param int $repeat
+     *
+     * @return string
+     */
+    protected function indent(int $repeat = 1): string
+    {
+        return str_repeat($this->indent, $repeat);
+    }
+
+    /**
+     * Pad space to right
+     *
+     * @param string $target
+     * @param int    $length
+     *
+     * @return string
+     */
+    protected function pad(string $target, int $length)
+    {
+        return str_pad($target, $length, ' ', STR_PAD_RIGHT);
+    }
+}

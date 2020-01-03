@@ -1,0 +1,15 @@
+<a-input-number
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  :min="{{ form.min }}"
+  :max="{{ form.max }}"
+  step="{{ form.step }}"
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+></a-input-number>
+{% include '@LeonBsw/form/iframe-entrypoint.html.twig' %}

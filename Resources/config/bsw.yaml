@@ -1,0 +1,179 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+    locale: en
+    version: 1.0.0
+    sf_version: !php/const App\Kernel::VERSION
+    cert: '%kernel.project_dir%/certificate'
+    file: '%kernel.project_dir%/../file'
+    salt: BackendSteeringWheel
+    config_cache_enabled: true
+    config_cache_default_expires: 86400
+    upload_to_oss: true
+
+    platform_sms: aws
+    platform_email: aws
+
+    backend_with_google_secret: true
+    backend_with_ip_strict: true
+    backend_maintain_alone: true
+    backend_with_login_log: true
+    backend_captcha_digit: 4
+    backend_auth_root_id: 1
+
+    aes_key: KHkBMKsNdc8Ttkjl
+    aes_iv: KHkBMKsNdc8Ttkjl
+    aes_method: AES-128-CBC
+
+    jwt_issuer: bsw-antd
+    jwt_type: hmac
+
+    bd_dwz_token: baidu-dwz-token
+
+    ali_key: ali-key
+    ali_secret: ali-secret
+    ali_sms_key: ''
+    ali_sms_secret: ''
+    ali_sms_region: ali-sms-region
+    ali_oss_key: ''
+    ali_oss_secret: ''
+    ali_oss_bucket: ali-oss-bucket
+    ali_oss_endpoint: ali-oss-endpoint
+
+    tx_key: tx-key
+    tx_secret: tx-secret
+    tx_sms_key: ''
+    tx_sms_secret: ''
+
+    aws_region: aws-region
+    aws_key: aws-key
+    aws_secret: aws-secret
+    aws_email: bsw-antd@gmail.com
+
+    smtp_host: smtp.mail.com
+    smtp_port: 587
+    smtp_sender: smtp-sender@mail.com
+    smtp_secret: smtp-secret
+
+    bsw_component:
+        Leon\BswBundle\Component\Aes:
+            arguments: ['%aes_key%', '%aes_iv%', '%aes_method%']
+
+        Leon\BswBundle\Component\AwsSDK:
+            arguments: ['%aws_region%', '%aws_key%', '%aws_secret%', {mail_sender: '%aws_email%'}]
+
+        Leon\BswBundle\Component\BaiDuShortUrl:
+            arguments: ['%bd_dwz_token%']
+
+        Leon\BswBundle\Component\Fetch:
+            arguments: ['%kernel.debug%']
+
+        Leon\BswBundle\Component\JWT:
+            arguments: ['%cert%/jwt_private.pem', '%cert%/jwt_public.pem', '%jwt_issuer%', '%jwt_type%']
+
+        Leon\BswBundle\Component\Rsa:
+            arguments: ['%cert%/rsa_private.pem', '%cert%/rsa_public.pem']
+
+    bsw_cnf:
+        app_logo: /bundles/leonbsw/img/logo.svg
+        app_ico: /bundles/leonbsw/img/favicon.ico
+        app_name: Backend Steering Wheel
+        host: //app.bsw-antd.com
+        host_official: http://www.bsw-antd.com
+        host_file: http://file.bsw-antd.com
+
+        cache_enabled: true
+        cache_default_expires: 86400
+        copyright: Backend Steering Wheel ©2019 Spring Basic on Ant Design For Vue
+        debug_devil: ehwkJqsdWHmsjSE2
+        debug_uuid: user_id_OR_device_id
+        debug_cost: false
+        api_vs_client_time_diff: 300
+        curl_timeout_second: 30
+
+        route_default: app_site_index
+        route_login: app_user_login
+        route_logout: app_user_logout
+        route_profile: app_user_profile
+        route_clean_backend: app_clean_backend
+        route_clean_frontend: app_clean_frontend
+        route_upload: app_upload
+
+        usr_account: name
+        usr_uid: user_id
+        usr_role: role_id
+        usr_update: update_time
+        usr_login: login_time
+        usr_avatar: avatar
+
+        app_online_date: '2019-07-01' # use string
+        rm_local_file_when_oss: true
+        font_symbol: //at.alicdn.com/t/font_1199208_jwd6vj7okd.js
+
+    currency_code: CNY
+    currency_char: ￥
+
+    bsw_route_exclude_login:
+        - app_user_login
+        - app_user_logout
+        - app_captcha
+        - app_upload
+
+    module_extra_path: []
+
+    bsw_crumbs_preview_pre:
+        - persistence
+        - away
+        - sort
+        - export
+        - import
+
+    bsw_crumbs_map:
+        app_bsw_admin_role_access_control_grant: app_bsw_admin_role_preview
+        app_bsw_admin_access_control_grant: app_bsw_admin_user_preview
+
+    bsw_crumbs_keyword_to_icon_map:
+        preview: b:icon-form
+        persistence: b:icon-edit
+
+    bsw_menus_same_current_map: []
+
+    bsw_menus_same_parent_map:
+        app_site_index: app_bsw_config_preview
+
+    bsw_json:
+        theme: dark
+        menu_width: 256
+        menu_collapsed: no
+        table_border: yes
+        table_padding: no
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Leon\BswBundle\Twig\AppExtension:
+        public: true
+
+    Leon\BswBundle\EventListener\LocaleSubscriber:
+        arguments:
+            - '%kernel.default_locale%'
+
+    Leon\BswBundle\Controller\FoundationFreeController:
+        public: true
+
+    Leon\BswBundle\Command\BswInitCommand:
+        tags: ['console.command']
+
+    Leon\BswBundle\Command\BswDocumentCommand:
+        tags: ['console.command']
+
+    Leon\BswBundle\Command\BswScaffoldCommand:
+        tags: ['console.command']

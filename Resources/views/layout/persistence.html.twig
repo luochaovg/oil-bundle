@@ -1,0 +1,71 @@
+{% extends '@LeonBsw/layout/blank.html.twig' %}
+
+{% set uuid = scaffold.uuid %}
+{% set tpl_content_class = ['app-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
+
+{% block page %}
+  <div class="app-persistence">
+    <a-form
+      id="form_persistence_{{ uuid }}"
+      :form="form_persistence_{{ uuid }}"
+      @submit="submit_persistence_{{ uuid }}"
+    >
+      {% set total_column = 24 %}
+      {% set label_column = 5 %}
+
+      {% for field, item in persistence.record %}
+        {% set form = item.type %}
+        {% set wrapper_column = item.column ?: (total_column - label_column) %}
+        <a-form-item
+          v-show="{{ item.hide ? 'false' : 'true' }}"
+          :label-col="{md: { span: {{ total_column }} }, lg: { span: {{ label_column }} }}"
+          :wrapper-col="{md: { span: {{ total_column }} }, lg: { span: {{ wrapper_column }} }}"
+          label="{{ item.label|trans({}, 'twig') }}"
+          extra="{{ item.tips|trans({}, 'twig') }}"
+        >
+          {% if item.title %}
+          <a-tooltip placement="topLeft" title="{{ item.title }}">
+            {% endif %}
+            {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
+            {% if item.title %}
+          </a-tooltip>
+          {% endif %}
+        </a-form-item>
+      {% endfor %}
+
+      <a-form-item
+        :wrapper-col="{sm: { span: {{ total_column }}, offset: 0 }, md: { span: {{ total_column - label_column }}, offset: {{ label_column }} }}"
+      >
+        {% for form in persistence.operates %}
+          {% include '@LeonBsw/form/button.html.twig' %}
+        {% endfor %}
+      </a-form-item>
+    </a-form>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+app.configure({
+    data: {
+        form_persistence_{{ uuid }}: null,
+        date_format_{{ uuid }}: {{ persistence.formatJson|raw }},
+        key_for_form: 'form_persistence_{{ uuid }}',
+        key_for_file_md5: null,
+        key_for_file_sha1: null,
+        key_for_file_list: null,
+        {% for key, value in persistence.dataKeys %}
+        {{ key }}: {{ value }},
+        {% endfor %}
+    },
+    method: {
+        submit_persistence_{{ uuid }}(e) {
+            this.persistence(e, '{{ uuid }}');
+        }
+    },
+    logic: {
+        form_persistence_{{ uuid }}(v) {
+            app.cnf.v.form_persistence_{{ uuid }} = v.$form.createForm(v);
+        }
+    }
+});
+{% endblock %}

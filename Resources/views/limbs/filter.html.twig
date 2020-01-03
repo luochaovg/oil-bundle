@@ -1,0 +1,62 @@
+{% if filter.filter is not empty %}
+  <a-form
+    class="app-filter-form"
+    :form="form_filter_{{ uuid }}"
+    layout="vertical"
+    @submit="submit_filter_{{ uuid }}"
+  >
+    {% for key, item in filter.filter %}
+      {% set extra = 0 %}
+      {% if item.column > 2 %}
+        {% set extra = (((item.column - 2) / 2)|round(0, 'ceil')) * 8 %}
+      {% endif %}
+      {% set width = (filter.columnPx * item.column + extra) %}
+      <a-form-item
+        label="{{ item.label }}"
+        class="app-filter-item"
+        :style="{ width: '{{ width }}px', display: filter_display_{{ uuid }}('{{ key }}') }"
+      >
+        {% if item.type is iterable %}
+          {% if item.title %}
+            <a-tooltip placement="top" title="{{ item.title }}">
+          {% endif %}
+          <a-input-group compact>
+            {% for k,v in item.type %}
+              {% include '@LeonBsw/form/' ~ v.itemName ~ '.html.twig' with {field: v.key, form: v} %}
+            {% endfor %}
+          </a-input-group>
+          {% if item.title %}
+            </a-tooltip>
+          {% endif %}
+        {% else %}
+          {% if item.title %}
+            <a-tooltip placement="top" title="{{ item.title }}">
+          {% endif %}
+          {% include '@LeonBsw/form/' ~ item.type.itemName ~ '.html.twig' with {field: key, form: item.type} %}
+          {% if item.title %}
+            </a-tooltip>
+          {% endif %}
+        {% endif %}
+      </a-form-item>
+    {% endfor %}
+
+    {% if filter.filter|length > filter.maxShow %}
+      <a-form-item class="app-filter-item app-filter-action" label="　">
+        <a-button @click="toggle_filter_{{ uuid }}" type="dashed">
+          <span v-if="expand_filter_{{ uuid }}">
+            {{ 'a:left'|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
+          </span>
+          <span v-else>
+            {{ filter.textShow|trans({}, 'twig') }} {{ 'a:right'|icon|raw }}
+          </span>
+        </a-button>
+      </a-form-item>
+    {% endif %}
+
+    {% for item in filter.operates %}
+      <a-form-item class="app-filter-item app-filter-action" label="　">
+        {% include '@LeonBsw/form/button.html.twig' with {form: item} %}
+      </a-form-item>
+    {% endfor %}
+  </a-form>
+{% endif %}

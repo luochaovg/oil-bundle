@@ -1,0 +1,80 @@
+{% extends '@LeonBsw/layout/blank.html.twig' %}
+
+{% set uuid = scaffold.uuid %}
+{% set tpl_content_class = ['app-chart-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
+
+{% block page %}
+  {% include '@LeonBsw/limbs/filter.html.twig' %}
+  {% if chart.tabsMenu is not empty %}
+    <a-tabs
+      class="app-chart-tabs"
+      default-active-key="{{ scaffold.route }}"
+      @change="tabsSwitch"
+      :tab-bar-gutter="6"
+      type="card"
+    >
+      {% for index, link in chart.tabsMenu %}
+        <a-tab-pane key="{{ link.route }}">
+          <span
+            id="{{ link.route }}"
+            bsw-data='{"location": "{{ link.url }}"}'
+            slot="tab">
+            {{ link.icon|icon|raw }}{{ link.label|trans({}, 'twig') }}
+          </span>
+        </a-tab-pane>
+      {% endfor %}
+    </a-tabs>
+  {% endif %}
+
+  <div class="app-chart-list">
+    {% for index, item in chart.items %}
+      <div class="bsw-chart" id="chart-{{ index }}" style="width: {{ item.width }}; height: {{ item.height }}; {{ item.style }}"></div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block javascript %}
+app.configure({
+    data: {
+        form_filter_{{ uuid }}: null,
+        date_format_{{ uuid }}: {{ filter.formatJson|raw }},
+        expand_filter_{{ uuid }}: false,
+    },
+    method: {
+        submit_filter_{{ uuid }}(e) {
+            this.filter(e, '{{ uuid }}');
+        },
+        toggle_filter_{{ uuid }}() {
+          this.expand_filter_{{ uuid }} = !this.expand_filter_{{ uuid }};
+        },
+        filter_display_{{ uuid }}(key) {
+            let list = this.expand_filter_{{ uuid }} ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
+            return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
+        },
+    },
+    logic: {
+        form_filter_{{ uuid }}(v) {
+            app.cnf.v.form_filter_{{ uuid }} = v.$form.createForm(v);
+        },
+    }
+});
+app.configure({
+    data: {},
+    method: {
+        tabsSwitch(key) {
+            this.redirect(this.getBswData($(`#${key}`)));
+        },
+    },
+    logic: {
+        chart() {
+            {% for index, item in chart.items %}
+            app.chart({
+                id: '{{ index }}',
+                theme: '{{ item.theme }}',
+                option: {{ item.option|raw }}
+            });
+            {% endfor %}
+        }
+    }
+});
+{% endblock %}

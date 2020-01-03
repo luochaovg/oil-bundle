@@ -1,0 +1,73 @@
+{% set tpl_api = {login: path('app_user_login_handler')} %}
+{% extends '@LeonBsw/layout/empty.html.twig' %}
+
+{% block content %}
+
+  <div class="header">
+    <a href="{{ void }}">
+      <img src="{{ scaffold.cnf.app_logo }}">
+      {% set app_name = scaffold.cnf.app_name ?? 'Application' %}
+      <span>{{ app_name }}</span>
+    </a>
+  </div>
+
+  <a-form
+    :form="form"
+    class="login-form"
+    @submit="handleSubmit"
+  >
+    <a-form-item>
+      <a-input
+        v-model.trim="account"
+        name="account_4_{{ scaffold.cnf.app_name ?? 'bsw' }}"
+        autocomplete="on"
+        placeholder="{{ account|trans({}, 'twig') }}"
+        :size="size"
+      >
+        <a-icon slot="prefix" type="user"></a-icon>
+      </a-input>
+    </a-form-item>
+    <a-form-item>
+      <a-input
+        type="password"
+        v-model.trim="password"
+        placeholder="{{ password|trans({}, 'twig') }}"
+        :size="size"
+      >
+        <a-icon slot="prefix" type="lock"></a-icon>
+      </a-input>
+    </a-form-item>
+    <a-form-item class="app-captcha-item">
+      <a-input
+        v-model.trim="captcha"
+        placeholder="{{ captcha|trans({}, 'twig') }}"
+        :size="size"
+      >
+        <b-icon slot="prefix" type="icon-yanzhengma1"></b-icon>
+      </a-input>
+      <img class="app-captcha" src="{{ path('app_captcha') }}">
+    </a-form-item>
+    {% if google_captcha is defined %}
+      <a-form-item>
+        <a-input
+          v-model.trim="google_captcha"
+          placeholder="{{ google_captcha|trans({}, 'twig') }}"
+          :size="size"
+        >
+          <b-icon slot="prefix" type="icon-yanzhengma1"></b-icon>
+        </a-input>
+      </a-form-item>
+    {% endif %}
+    <a-form-item>
+      <a-button
+        type="primary"
+        html-type="submit"
+        class="login-form-button"
+        :size="size"
+        :loading="btnLoading"
+      >
+        {{ 'Sign in'|trans({}, 'twig') }}
+      </a-button>
+    </a-form-item>
+  </a-form>
+{% endblock %}

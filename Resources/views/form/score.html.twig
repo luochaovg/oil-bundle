@@ -1,0 +1,15 @@
+<a-rate
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  v-decorator="['{{ field }}', { initialValue: {{ form.value }} }]"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  :allow-half="{{ form.allowHalf ? 'true' : 'false' }}"
+  {% if form.character %}
+    character="{{ form.character }}"
+  {% endif %}
+  :count="{{ form.count }}"
+  {{ form.attributes|raw }}
+></a-rate>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="keywords" content="{{ tpl_keyword ?? scaffold.seo.keyword }}">
+  <meta name="description" content="{{ tpl_description ?? scaffold.seo.description }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="shortcut icon" href="{{ scaffold.cnf.app_ico }}" type="image/x-icon"/>
+  <title>{{ tpl_title ?? scaffold.seo.title }}</title>
+  {% set void = 'javascript:void(null);' %}
+  {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
+  {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}
+  {% include '@LeonBsw/limbs/css.html.twig' with {position: top} %}
+  <style>{% block stylesheets %}{% endblock %}</style>
+  {% include '@LeonBsw/limbs/js.html.twig' with {position: top} %}
+</head>
+
+<body class="{{ ['app-foundation', tpl_foundation_class ?? null]|filter(v => v)|join(' ') }}">
+{% block w3c %}{% endblock %}
+{% include '@LeonBsw/limbs/css.html.twig' with {position: bottom} %}
+{% include '@LeonBsw/limbs/js.html.twig' with {position: bottom} %}
+<script>{% block javascript %}{% endblock %}</script>
+</body>
+</html>

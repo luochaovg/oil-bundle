@@ -1,0 +1,12 @@
+<a-input
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  type="{{ form.type }}"
+  size="{{ form.size }}"
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+></a-input>

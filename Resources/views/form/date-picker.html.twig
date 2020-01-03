@@ -1,0 +1,15 @@
+{% set initial = (form.value is same as(null)) ? "null" : "moment(`" ~ form.value ~ "`, `" ~ form.format ~ "`)" %}
+<a-date-picker
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  placeholder="{{ form.placeholder }}"
+  format="{{ form.format }}"
+  :show-time="{{ form.showTime ? 'true' : 'false' }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+></a-date-picker>

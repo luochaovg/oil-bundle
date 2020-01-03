@@ -1,0 +1,19 @@
+<a-slider
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :dots="{{ form.dots ? 'true' : 'false' }}"
+  :min="{{ form.min }}"
+  :max="{{ form.max }}"
+  :marks="{{ form.marks }}"
+  :included="{{ form.included ? 'true' : 'false' }}"
+  :range="{{ form.range ? 'true' : 'false' }}"
+  :step="{{ form.step }}"
+  :vertical="{{ form.vertical ? 'true' : 'false' }}"
+  :tooltip-visible="{{ form.tooltipVisible ? 'true' : 'false' }}"
+  :tip-formatter="{{ form.tipFormatter }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: {{ form.value }} }]"
+></a-slider>

@@ -1,0 +1,87 @@
+{% extends '@LeonBsw/layout/persistence.html.twig' %}
+
+{% set tpl_content_class_diy = 'app-grant' %}
+
+{% block page %}
+  <p class="app-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
+  <p class="app-hide" v-init:disabled_list='{{ logic.disabled_json|raw }}'></p>
+  <div class="app-persistence">
+    <a-form
+      id="form_persistence_{{ uuid }}"
+      :form="form_persistence_{{ uuid }}"
+      @submit="submit_persistence_{{ uuid }}"
+    >
+      {% set total_column = 24 %}
+      {% set label_column = 4 %}
+      {% set dress = logic.dress %}
+      {% set _column = (total_column - label_column) %}
+
+      <a-form-item
+        :label-col="{lg: { span: {{ total_column }} }, xl: { span: {{ label_column }} }}"
+        :wrapper-col="{lg: { span: {{ total_column }} }, xl: { span: {{ _column }} }}"
+        label="{{ 'Action'|trans({}, 'twig') }}"
+      >
+        <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
+        <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
+      </a-form-item>
+
+      <a-form-item v-show="false">
+        <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
+      </a-form-item>
+
+      {% for field, item in logic.form %}
+        <a-form-item
+          :label-col="{lg: { span: {{ total_column }} }, xl: { span: {{ label_column }} }}"
+          :wrapper-col="{lg: { span: {{ total_column }} }, xl: { span: {{ _column }} }}"
+          label="{{ item.label|trans({}, 'twig') }}"
+        >
+          {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
+          <a-checkbox-group
+            {% if item.type.class %}
+              class="{{ item.type.class }}"
+            {% endif %}
+            :style="{width: '100%'}"
+            :disabled="{{ item.type.disabled ? 'true' : 'false' }}"
+            placeholder="{{ item.type.placeholder }}"
+            {{ item.type.attributes|raw }}
+            v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
+          >
+            <a-row>
+              {% for value, label in item.type.enum %}
+                {% set disabled = attribute(logic.disabled, value) ?? false %}
+                {% set _dress = attribute(dress, value) ?? null %}
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
+                  {% if _dress is not null %}
+                    <a-tooltip placement="top">
+                      <template slot="title">{{ _dress.tips|trans({}, 'twig') }}</template>
+                      <a-checkbox
+                        :disabled="{{ disabled ? 'true' : 'false' }}"
+                        class="{{ _dress.class }}"
+                        value="{{ value }}">
+                        {{ label }}
+                      </a-checkbox>
+                    </a-tooltip>
+                  {% else %}
+                    <a-checkbox
+                      :disabled="{{ disabled ? 'true' : 'false' }}"
+                      value="{{ value }}">
+                      {{ label }}
+                    </a-checkbox>
+                  {% endif %}
+                </a-col>
+              {% endfor %}
+            </a-row>
+          </a-checkbox-group>
+        </a-form-item>
+      {% endfor %}
+
+      <a-form-item
+        :wrapper-col="{lg: { span: {{ total_column }}, offset: 0 }, xl: { span: {{ _column }}, offset: {{ label_column }} }}"
+      >
+        {% for form in persistence.operates %}
+          {% include '@LeonBsw/form/button.html.twig' %}
+        {% endfor %}
+      </a-form-item>
+    </a-form>
+  </div>
+{% endblock %}

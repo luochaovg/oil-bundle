@@ -1,0 +1,12 @@
+<a-switch
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  checked-children="{{ form.checkedChildren }}"
+  un-checked-children="{{ form.unCheckedChildren }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: {{ form.value ? 'true' : 'false' }}, valuePropName: 'checked' }]"
+></a-switch>

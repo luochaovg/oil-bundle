@@ -1,0 +1,30 @@
+<a-button
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  type="{{ form.type }}"
+  size="{{ form.size }}"
+  :block="{{ form.block ? 'true' : 'false' }}"
+  :ghost="{{ form.ghost ? 'true' : 'false' }}"
+  html-type="{{ form.htmlType }}"
+  {% if form.circle %}
+    shape="circle"
+  {% endif %}
+  {% if form.iconTag is same as('a') %}
+    icon="{{ form.icon|icon(false) }}"
+  {% endif %}
+  bsw-data="{{ form.data }}"
+  @click="dispatcherByVue"
+  {{ form.attributes|raw }}
+>
+  {% if form.iconTag is same as('b') %}
+    {{ form.icon|icon|raw }}
+  {% endif %}
+  {{ form.label|trans({}, 'twig') }}
+  {% if form.selector and uuid is defined %}
+    {% set var = 'selected_row_keys_' ~ uuid ~ '.length' %}
+    {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
+  {% endif %}
+</a-button>

@@ -1,0 +1,21 @@
+{% if (form.value[0] is same as(null)) or (form.value[1] is same as(null)) %}
+  {% set initial = "null" %}
+{% else %}
+  {% set dateHead = "moment(`" ~ form.value[0] ~ "`, `" ~ form.format ~ "`)" %}
+  {% set dateTail = "moment(`" ~ form.value[1] ~ "`, `" ~ form.format ~ "`)" %}
+  {% set initial = "[" ~ dateHead ~ ", " ~ dateTail ~ "]" %}
+{% endif %}
+<a-range-picker
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  :placeholder="['{{ form.placeholder }}', '{{ form.placeholder }}']"
+  format="{{ form.format }}"
+  :show-time="{ defaultValue: [moment('{{ form.timeHead }}', '{{ form.timeFormat }}'), moment('{{ form.timeTail }}', '{{ form.timeFormat }}')] }"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+></a-range-picker>

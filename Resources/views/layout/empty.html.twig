@@ -1,0 +1,9 @@
+{% extends '@LeonBsw/foundation/scaffold.html.twig' %}
+
+{% block body %}
+  <a-spin :spinning="spinning" tip="{{ scaffold.loading_text ?? 'loading' }}" wrapper-class-name="app-loading">
+    <b-icon slot="indicator" type="{{ scaffold.loading_icon ?? 'icon-Loading' }}" spin></b-icon>
+    <a-back-top></a-back-top>
+    {% block content %}{% endblock %}
+  </a-spin>
+{% endblock %}

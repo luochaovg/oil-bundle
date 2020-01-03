@@ -1,0 +1,25 @@
+{% set initial = (form.value is empty) ? null : ('"' ~ form.value|join('","') ~ '"') %}
+<a-checkbox-group
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ form.rules }} }]"
+>
+  <a-row>
+    {% for value, label in form.enum %}
+      {% if form.num > 0 %}
+        <a-col :span="{{ 24 / form.num }}">
+          <a-checkbox value="{{ value }}">{{ label }}</a-checkbox>
+        </a-col>
+      {% else %}
+        <a-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8" :xxl="8">
+          <a-checkbox value="{{ value }}">{{ label }}</a-checkbox>
+        </a-col>
+      {% endif %}
+    {% endfor %}
+  </a-row>
+</a-checkbox-group>

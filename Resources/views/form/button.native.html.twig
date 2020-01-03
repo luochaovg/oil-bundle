@@ -1,0 +1,27 @@
+{% set class = {
+  type: 'ant-btn-' ~ form.type,
+  size: {small: 'ant-btn-sm', large: 'ant-btn-lg'}[form.size] ?? null,
+  block: form.ghost ? 'ant-btn-block' : null,
+  ghost: form.ghost ? 'ant-btn-background-ghost' : null,
+  circle: form.circle ? 'ant-btn-circle' : null
+} %}
+
+<button
+  class="{{ ['ant-btn']|merge(class)|filter(v => v)|join(' ') }}"
+  {% if form.styleStringify %}
+    style="{{ form.styleStringify }}"
+  {% endif %}
+  {% if form.disabled %}
+    disabled="disabled"
+  {% endif %}
+  type="{{ form.htmlType }}"
+  bsw-data="{{ form.data }}"
+  onclick="app.cnf.v.dispatcherByNative(this)"
+  {% if form.selector and uuid is defined %}
+    {% set var = 'selected_row_keys_' ~ uuid ~ '.length' %}
+    {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
+  {% endif %}
+  {{ form.attributes|raw }}
+>
+  <span>{{ form.label|trans({}, 'twig') }}</span>
+</button>

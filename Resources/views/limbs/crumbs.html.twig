@@ -1,0 +1,19 @@
+<a-breadcrumb v-show="{{ crumbs.list is empty ? 'false' : 'true' }}" separator=">">
+  {% for item in crumbs.list %}
+    {% if item.route is empty or loop.last %}
+      <a-breadcrumb-item>
+        {% if item.icon is not empty %}
+          {{ item.icon|icon|raw }}
+        {% endif %}
+        {{ item.label|trans({}, 'twig') }}
+      </a-breadcrumb-item>
+    {% else %}
+      <a-breadcrumb-item>
+        {% if item.icon is not empty %}
+          {{ item.icon|icon|raw }}
+        {% endif %}
+        <a href="{{ path(item.route) }}">{{ item.label|trans({}, 'twig') }}</a>
+      </a-breadcrumb-item>
+    {% endif %}
+  {% endfor %}
+</a-breadcrumb>

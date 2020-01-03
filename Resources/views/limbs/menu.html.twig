@@ -1,0 +1,57 @@
+<a-layout-sider
+  class="app-menu"
+  :theme="theme"
+  v-show="!bsw.isMobile()"
+  collapsible
+  v-model="menuCollapsed"
+  :width="menuWidth"
+>
+  <div class="logo">
+    <a href="{{ path(scaffold.cnf.route_default) }}">
+      {% if scaffold.cnf.app_logo %}
+        <img src="{{ scaffold.cnf.app_logo }}" alt="logo">
+      {% endif %}
+      {% set app_name = scaffold.cnf.app_name ?? 'Application' %}
+      <h1 :style="`max-width:${menuWidth - 80}px;`" title="{{ app_name }}">{{ app_name }} <sup>{{ scaffold.env }}</sup></h1>
+    </a>
+  </div>
+  <a-menu
+    :theme="theme"
+    :default-open-keys="['{{ menu.parent }}']"
+    :default-selected-keys="['{{ menu.current }}']"
+    @click="redirectByVue"
+    mode="inline"
+    :inline-collapsed="menuCollapsed"
+    :force-sub-menu-render="true"
+  >
+    {% for menu_item in menu.masterMenu %}
+
+      {% set sub_menu = attribute(menu.slaveMenu, menu_item.id) ?? [] %}
+      {% if sub_menu is not empty %}
+        <a-sub-menu key="{{ menu_item.id }}">
+          <span slot="title">
+            {% if menu_item.icon is not empty %}
+              {{ menu_item.icon|icon|raw }}
+            {% endif %}
+            <span>{{ menu_item.value|trans({}, 'twig') }}</span>
+          </span>
+          {% for sub_menu_item in sub_menu %}
+            <a-menu-item key="{{ sub_menu_item.id }}">
+              {% if sub_menu_item.icon is not empty %}
+                {{ sub_menu_item.icon|icon|raw }}
+              {% endif %}
+              <span bsw-data='{"location": "{{ sub_menu_item.url ?? '' }}"}'>{{ sub_menu_item.value|trans({}, 'twig') }}</span>
+            </a-menu-item>
+          {% endfor %}
+        </a-sub-menu>
+      {% else %}
+        <a-menu-item key="{{ menu_item.id }}">
+          {% if menu_item.icon is not empty %}
+            {{ menu_item.icon|icon|raw }}
+          {% endif %}
+          <span bsw-data='{"location": "{{ menu_item.url ?? '' }}"}'>{{ menu_item.value|trans({}, 'twig') }}</span>
+        </a-menu-item>
+      {% endif %}
+    {% endfor %}
+  </a-menu>
+</a-layout-sider>

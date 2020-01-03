@@ -1,0 +1,169 @@
+{% extends '@LeonBsw/layout/blank.html.twig' %}
+
+{% set uuid = scaffold.uuid %}
+
+{% block page %}
+  {% include '@LeonBsw/limbs/filter.html.twig' %}
+  <div class="app-preview">
+    <a-table
+      :columns="columns_{{ uuid }}"
+      :data-source="list_{{ uuid }}"
+      :bordered="{{ preview.border ? 'true' : 'false' }}"
+      :pagination="false"
+      :locale="{
+          filterConfirm: '{{ 'Sure'|trans({}, 'twig') }}',
+          filterReset: '{{ 'Reset'|trans({}, 'twig') }}',
+          emptyText: '{{ 'No data'|trans({}, 'twig') }}',
+        }"
+      {% set fields = (preview.choice.fields ?? [])|array_map('${record.%s}')|join(preview.choice.split) %}
+      :row-key="record => `{{ fields }}`"
+      {% if preview.choice.enable ?? false %}
+        :row-selection="{
+            type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
+            selectedRowKeys: selected_row_keys_{{ uuid }},
+            onChange: on_select_change_{{ uuid }},
+          }"
+      {% endif %}
+      :scroll="{x: {{ preview.scroll }}}"
+      size="{{ preview.size }}"
+      @change="sort_data_{{ uuid }}"
+    >
+      {% for item in preview.dress %}
+        {{ item|raw }}
+      {% endfor %}
+    </a-table>
+    <a-pagination
+      :show-quick-jumper="true"
+      :hide-on-single-page="true"
+      :show-total="(total, range) => `Total ${total}`"
+      :page-size="page_data_{{ uuid }}.pageSize"
+      :default-current="page_data_{{ uuid }}.currentPage"
+      :total="page_data_{{ uuid }}.totalItem"
+      :simple="false"
+      size="{{ preview.size }}"
+      @change="pagination_{{ uuid }}"
+    ></a-pagination>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+app.configure({
+    data: {
+        form_filter_{{ uuid }}: null,
+        date_format_{{ uuid }}: {{ filter.formatJson|raw }},
+        expand_filter_{{ uuid }}: false,
+    },
+    method: {
+        submit_filter_{{ uuid }}(e) {
+            this.filter(e, '{{ uuid }}');
+        },
+        toggle_filter_{{ uuid }}() {
+          this.expand_filter_{{ uuid }} = !this.expand_filter_{{ uuid }};
+        },
+        filter_display_{{ uuid }}(key) {
+            let list = this.expand_filter_{{ uuid }} ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
+            return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
+        },
+    },
+    logic: {
+        form_filter_{{ uuid }}(v) {
+            app.cnf.v.form_filter_{{ uuid }} = v.$form.createForm(v);
+        },
+    }
+});
+app.configure({
+    data: {
+        columns_{{ uuid }}: {{ preview.columnsJson|raw }},
+        list_{{ uuid }}: {{ preview.listJson|raw }},
+        selected_row_keys_{{ uuid }}: [],
+        dynamic_{{ uuid }}: {{ preview.dynamic }},
+        url_{{ uuid }}: '{{ scaffold.url|raw }}',
+        page_data_{{ uuid }}: {{ preview.pageJson|raw }},
+        page_{{ uuid }}: 1,
+    },
+    method: {
+        on_select_change_{{ uuid }}(selectedRowKeys) {
+            this.selected_row_keys_{{ uuid }} = selectedRowKeys;
+        },
+        get_url(url) {
+            url = url || this.url_{{ uuid }};
+            let uuid = '{{ uuid }}';
+            let page = this.page_{{ uuid }};
+            return bsw.setParams({uuid, page}, url);
+        },
+        pagination_{{ uuid }}(page) {
+            this.pagination(this.get_url(), page, '{{ uuid }}');
+        },
+        pagination_refresh_{{ uuid }}() {
+            this.pagination(this.get_url(), null, '{{ uuid }}');
+        },
+        sort_data_{{ uuid }}(pagination, filters, sorter) {
+            let url = this.get_url();
+            url = bsw.unsetParams(['uuid'], url);
+            url = bsw.unsetParamsBeginWith(['sequence'], url);
+            if (typeof sorter.field !== 'undefined') {
+                let key = bsw.humpToUnder(sorter.field);
+                key = `sequence[${key}]`;
+                url = bsw.setParams({[key]: sorter.order}, url);
+            }
+            this.pagination(url, null, '{{ uuid }}');
+        },
+        image_change_table_{{ uuid }}() {
+            let that = this;
+            let doChecker = setInterval(() => checker(), 50);
+            let checker = function() {
+                let total = $('img').length;
+                let done = 0;
+                $('img').each(function() {
+                    done += (this.complete ? 1 : 0);
+                });
+                let tmp = that.columns_{{ uuid }}[0].fixed;
+                that.columns_{{ uuid }}[0].fixed = !tmp;
+                that.columns_{{ uuid }}[0].fixed = tmp;
+                if ((done >= total) || total === 0) {
+                    clearInterval(doChecker);
+                }
+            }
+        },
+    },
+    logic: {
+        resize_{{ uuid }}(v) {
+            let upper = {{ preview.scroll }};
+            let columns = v.columns_{{ uuid }};
+            let fixed = [];
+            for (let index in columns) {
+                if (!columns.hasOwnProperty(index)) {
+                    continue;
+                }
+                if (columns[index].fixed) {
+                    fixed[index] = columns[index].fixed;
+                }
+            }
+            let resize = function() {
+                let width = $('.ant-table-wrapper').width();
+                let free = ((width < 720) || (width > upper));
+                for (let index in fixed) {
+                    if (!fixed.hasOwnProperty(index)) {
+                        continue;
+                    }
+                    columns[index].fixed = free ? false : fixed[index];
+                }
+            };
+            resize();
+            $(window).resize(() => resize());
+        },
+        image_{{ uuid }}(v) {
+            v.image_change_table_{{ uuid }}();
+        },
+        dynamic_{{ uuid }}(v) {
+            if (v.dynamic_{{ uuid }} < 5) {
+                return;
+            }
+            setInterval(function() {
+                v.no_loading_once = true;
+                v.pagination_refresh_{{ uuid }}();
+            }, v.dynamic_{{ uuid }} * 1000);
+        }
+    }
+});
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends '@LeonBsw/layout/empty.html.twig' %}
+
+{% block content %}
+  <a-layout class="{{ ['app-scaffold', tpl_scaffold_class ?? null]|filter(v => v)|join(' ') }}">
+    {% if menu_html is defined %}
+      <a-drawer
+        wrap-class-name="app-menu-mobile"
+        v-if="bsw.isMobile()"
+        placement="left"
+        :closable="false"
+        :visible="!menuCollapsed"
+        :width="menuWidth"
+        @close="menuTrigger"
+      >
+        {{ (menu_html ?? null)|raw }}
+      </a-drawer>
+    {% endif %}
+    {{ (menu_html ?? null)|raw }}
+    <a-layout>
+      {{ (header_html ?? null)|raw }}
+      <a-layout-content>
+        {{ (crumbs_html ?? null)|raw }}
+        {{ (welcome_html ?? null)|raw }}
+        {% if operate is defined and operate.position is same as(top) %}
+          {{ (operate_html ?? null)|raw }}
+        {% endif %}
+        <div class="{{ ['app-content', tpl_content_class ?? null]|filter(v => v)|join(' ') }}">
+          {% block page %}{% endblock %}
+        </div>
+        {% if operate is defined and operate.position is same as(bottom) %}
+          {{ (operate_html ?? null)|raw }}
+        {% endif %}
+      </a-layout-content>
+      {{ (footer_html ?? null)|raw }}
+    </a-layout>
+  </a-layout>
+{% endblock %}

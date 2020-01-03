@@ -1,0 +1,16 @@
+<a-modal
+  v-model="modal.visible"
+  :title="modal.title || '{{ modal.title|trans({}, 'twig') }}'"
+  :keyboard="false"
+  :mask-closable="false"
+  :destroy-on-close="true"
+  :ok-text="modal.okText || '{{ modal.okText|trans({}, 'twig') }}'"
+  :width="modal.width || '{{ modal.width }}'"
+  :wrap-class-name="modal.wrapClassName || '{{ modal.wrapClassName }}'"
+  :centered="modal.centered"
+  {% if not modal.footer %}
+    :footer="null"
+  {% endif %}
+>
+  <div v-html="modal.content"></div>
+</a-modal>

@@ -1,0 +1,66 @@
+
+div.code > div.highlight {
+    padding: 2px 4px;
+    background-color: #e7f2fa;
+    border-left: 4px solid #6ab0de;
+    margin: 20px 0;
+}
+
+.rst-content div[class^='highlight'] {
+    border: none;
+}
+
+.rst-content .warning {
+    background: #f3f2f1;
+}
+
+.rst-content .warning .admonition-title {
+    background: #dcdcdc;
+}
+
+.wy-nav-content {
+    max-width: 900px;
+}
+
+table.docutils {
+    width: 100%;
+}
+
+.show-tips {
+    display: inline-block;
+    margin: 2px;
+    font-size: 90%;
+    line-height: normal;
+    background: #fdefdf;
+    color: #0a0909b5;
+    border-top: solid 3px #fdac86;
+    padding: 4px 6px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+}
+
+.show-tips-hidden {
+    display: none;
+}
+
+div.rst-content img {
+    width: 100%;
+    height: 18px;
+    margin: 36px auto !important;
+    opacity: .1;
+}
+
+p {
+    font-size: 14px;
+}
+
+.highlight > pre {
+    border-radius: 2px;
+    background-color: #e7f2fa;
+    border-left: 4px solid #6ab0de;
+}
+
+.tippy-popper p {
+    margin-bottom: unset;
+}

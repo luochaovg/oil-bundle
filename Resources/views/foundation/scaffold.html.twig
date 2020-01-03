@@ -1,0 +1,12 @@
+{% extends '@LeonBsw/foundation/w3c.html.twig' %}
+
+{% block w3c %}
+  {% include '@LeonBsw/limbs/innocence.html.twig' %}
+  <div class="{{ ['app-body', tpl_body_class ?? null]|filter(v => v)|join(' ') }}">
+    <template>
+      {% include '@LeonBsw/limbs/init.html.twig' %}
+      {{ (modal_html ?? null)|raw }}
+      {% block body %}{% endblock %}
+    </template>
+  </div>
+{% endblock %}
