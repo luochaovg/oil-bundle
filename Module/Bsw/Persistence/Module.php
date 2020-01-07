@@ -488,14 +488,20 @@ class Module extends Bsw
     /**
      * Record handler
      *
-     * @param array $record
-     * @param array $annotation
-     * @param array $extraSubmit
+     * @param array  $record
+     * @param array  $annotation
+     * @param array  $extraSubmit
+     * @param string $multipleField
      *
      * @return array
      */
-    protected function recordHandler(array $record, array $annotation, array $extraSubmit): array
-    {
+    protected function recordHandler(
+        array $record,
+        array $annotation,
+        array $extraSubmit,
+        string $multipleField = null
+    ): array {
+
         foreach ($record as $field => $value) {
 
             // Field don't exists
@@ -535,31 +541,48 @@ class Module extends Bsw
         $recordClean = Html::cleanArrayHtml($record);
 
         /**
-         * Handler by validator type
+         * Select use multiple mode
          */
-        foreach ($record as $field => &$value) {
+        $multiple = false;
+        $recordList = [$record];
 
-            if (!$annotation[$field]['html']) {
-                $value = $recordClean[$field];
-            }
-
-            /**
-             * @var Form $form
-             */
-            // $form = $annotation[$field]['type'];
-
-            /**
-             * validator type
-             */
-            $type = $annotation[$field]['validatorType'];
-            if (strpos($type, 'int') !== false) {
-                $value = intval($value);
-            } else {
-                $value = strval($value);
+        if (isset($record[$multipleField])) {
+            $multiple = true;
+            $recordList = [];
+            foreach ($record[$multipleField] as $item) {
+                $record[$multipleField] = $item;
+                array_push($recordList, $record);
             }
         }
 
-        return $record;
+        /**
+         * Handler by validator type
+         */
+        foreach ($recordList as &$item) {
+            foreach ($item as $field => $value) {
+
+                if (!$annotation[$field]['html']) {
+                    $item[$field] = $recordClean[$field];
+                }
+
+                /**
+                 * @var Form $form
+                 */
+                // $form = $annotation[$field]['type'];
+
+                /**
+                 * validator type
+                 */
+                $type = $annotation[$field]['validatorType'];
+                if (strpos($type, 'int') !== false) {
+                    $item[$field] = intval($value);
+                } else {
+                    $item[$field] = strval($value);
+                }
+            }
+        }
+
+        return $multiple ? $recordList : current($recordList);
     }
 
     /**
@@ -587,9 +610,24 @@ class Module extends Bsw
              * Newly
              */
 
-            // TODO
-            $record = $this->recordHandler($record, $annotation, $extraSubmit);
-            $result = $id = $this->repository->newly($record);
+            $multiple = null;
+            foreach ($annotation as $field => $item) {
+                /**
+                 * @var Form $type
+                 */
+                $type = $item['type'];
+                if (get_class($type) == Select::class && $type->getMode() == Select::MODE_MULTIPLE) {
+                    $multiple = $field;
+                    break;
+                }
+            }
+
+            $record = $this->recordHandler($record, $annotation, $extraSubmit, $multiple);
+            if ($multiple) {
+                $result = $this->repository->newlyMultiple($record);
+            } else {
+                $result = $this->repository->newly($record);
+            }
 
         } else {
 
