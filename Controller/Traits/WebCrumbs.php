@@ -79,8 +79,8 @@ trait WebCrumbs
                     return [];
                 }
 
-                array_unshift($stack, new Crumb('Home', 'app_site_index', 'a:home'));
                 $crumbsIconMap = $this->parameters('crumbs_keyword_to_icon_map');
+                array_unshift($stack, new Crumb('Home', 'app_site_index', $crumbsIconMap['home']));
 
                 /**
                  * @var Crumb[] $stack

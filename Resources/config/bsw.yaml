@@ -112,7 +112,7 @@ parameters:
 
         app_online_date: '2019-07-01' # use string
         rm_local_file_when_oss: true
-        font_symbol: //at.alicdn.com/t/font_1199208_jwd6vj7okd.js
+        font_symbol: //at.alicdn.com/t/font_1199208_sq9tay0befl.js
 
     currency_code: CNY
     currency_char: ￥
@@ -137,8 +137,9 @@ parameters:
         app_bsw_admin_access_control_grant: app_bsw_admin_user_preview
 
     bsw_crumbs_keyword_to_icon_map:
-        preview: b:icon-form
-        persistence: b:icon-edit
+        home: b:icon-home2
+        preview: b:icon-computer
+        persistence: b:icon-Editfolder
 
     bsw_menus_same_current_map: []
 
