@@ -36,6 +36,7 @@ $(function () {
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
+        ckEditor: {},
 
         no_loading_once: false,
         spinning: false,
@@ -121,7 +122,7 @@ $(function () {
             }));
         },
 
-        filter(event, uuid) {
+        filter(event, uuid, jump = false) {
             let that = this;
             let formatKey = `date_format_${uuid}`;
             event.preventDefault();
@@ -145,11 +146,11 @@ $(function () {
                         }
                     }
                 }
-                return this[`${this.formMethod}FilterForm`](values, uuid);
+                return this[`${this.formMethod}FilterForm`](values, uuid, jump);
             });
         },
 
-        submitFilterForm(values, uuid) {
+        submitFilterForm(values, uuid, jump = false) {
             let _values = {};
             let number = 0;
             for (let field in values) {
@@ -171,7 +172,12 @@ $(function () {
 
             let url = bsw.unsetParamsBeginWith(['filter']);
             url = bsw.setParams({filter: _values}, url);
-            this.pagination(url, null, uuid);
+
+            if (jump) {
+                location.href = url;
+            } else {
+                this.pagination(url, null, uuid);
+            }
         },
 
         persistence(event, uuid) {
@@ -263,6 +269,9 @@ $(function () {
 
         showModal(options) {
             options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = app.popupCosySize().width;
+            }
             this.modal = Object.assign(this.modal, options);
         },
 
@@ -314,18 +323,14 @@ $(function () {
         },
 
         showIFrameByVue(event) {
-            let width = document.body.clientWidth;
-            let height = document.body.clientHeight;
-            width *= (width < 1285 ? 1 : .7);
-            height *= (height < 666 ? .9 : .75);
-
+            let size = app.popupCosySize();
             let object = $(event.target);
             let data = this.getBswData(object);
             data.location = bsw.setParams({iframe: true, fill: object.prev().attr('id')}, data.location);
 
             let options = {
                 visible: true,
-                width: width,
+                width: size.width,
                 title: app.lang.please_select,
                 centered: true,
                 wrapClassName: 'app-preview-iframe',
@@ -333,7 +338,7 @@ $(function () {
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#app-preview-iframe").height(height);
+                $("#app-preview-iframe").height(size.height);
             });
         },
 
@@ -348,6 +353,24 @@ $(function () {
         fillParentFormInParent(data, element) {
             this.modal.visible = false;
             this[this.key_for_form].setFieldsValue({[data.fill]: data.ids.join(',')});
+        },
+
+        initCkEditor() {
+            let that = this;
+            $('.app-persistence .bsw-ck-editor').each(function () {
+                let id = $(this).attr('id');
+                ClassicEditor.create(this, {}).then(editor => {
+                    that.ckEditor[id] = editor;
+                    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                        return new FileUploadAdapter(loader);
+                    };
+                    that.ckEditor[id].model.document.on('change:data', function () {
+                        that[that.key_for_form].setFieldsValue({[id]: that.ckEditor[id].getData()});
+                    });
+                }).catch(err => {
+                    console.log(err.stack);
+                });
+            });
         },
 
     }, app.config.method || {})).directive(Object.assign({

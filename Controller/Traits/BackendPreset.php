@@ -78,14 +78,15 @@ trait BackendPreset
     {
         $label = Helper::stringToLabel($field);
         $args = [
-            'title'   => $this->translator->trans($label, [], 'twig'),
-            'content' => Html::tag('pre', $content, ['class' => 'app-pre app-long-text']),
+            'title'    => $this->translator->trans($label, [], 'twig'),
+            'content'  => Html::tag('pre', $content, ['class' => 'app-pre app-long-text']),
+            'centered' => true,
         ];
 
         $button = (new Button($label))
             ->setSize(Button::SIZE_SMALL)
             ->setType(Button::THEME_DASHED)
-            ->setClick('showModalByNativeWithContent')
+            ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 
         $button = $this->renderPart('@LeonBsw/form/button.native', ['form' => $button]);

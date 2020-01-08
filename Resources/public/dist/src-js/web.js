@@ -11,7 +11,7 @@
 window.web = FoundationAntD;
 window.app = new FoundationAntD({
     rsaPublicKey: ""
-}, jQuery, Vue, antd);
+}, jQuery, Vue, antd, window.lang || {});
 
 //
 // Init

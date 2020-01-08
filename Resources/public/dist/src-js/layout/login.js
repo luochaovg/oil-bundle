@@ -1,7 +1,6 @@
 'use strict';
 
 app.configure({
-
     data: {
         size: 'large',
         form: null,
@@ -11,13 +10,11 @@ app.configure({
         captcha: null,
         google_captcha: null
     },
-
     method: {
         handleSubmit: function handleSubmit(e) {
             var _this = this;
 
             e.preventDefault();
-
             var login = {
                 account: this.account,
                 password: this.password,
@@ -31,7 +28,6 @@ app.configure({
                 app.error(app.lang.username_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-
                 return false;
             }
 
@@ -41,7 +37,6 @@ app.configure({
                 app.error(app.lang.password_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-
                 return false;
             }
 
@@ -50,7 +45,6 @@ app.configure({
                 app.warning(app.lang.password_length_error, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-
                 return false;
             }
 
@@ -60,7 +54,6 @@ app.configure({
                 app.error(app.lang.captcha_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-
                 return false;
             }
 
@@ -73,7 +66,6 @@ app.configure({
             });
         }
     },
-
     logic: {
         form: function form(v) {
             v.form = v.$form.createForm(v);

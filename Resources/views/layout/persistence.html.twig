@@ -10,8 +10,8 @@
       :form="form_persistence_{{ uuid }}"
       @submit="submit_persistence_{{ uuid }}"
     >
-      {% set total_column = 24 %}
-      {% set label_column = 5 %}
+      {% set total_column = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
+      {% set label_column = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
 
       {% for field, item in persistence.record %}
         {% set form = item.type %}
@@ -69,6 +69,9 @@ app.configure({
     logic: {
         form_persistence_{{ uuid }}(v) {
             app.cnf.v.form_persistence_{{ uuid }} = v.$form.createForm(v);
+            app.cnf.v.$nextTick(function () {
+                app.cnf.v.initCkEditor();
+            });
         }
     }
 });

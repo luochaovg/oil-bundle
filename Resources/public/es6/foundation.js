@@ -1317,6 +1317,19 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Cosy size for popup
+     *
+     * @returns {{width: number, height: number}}
+     */
+    popupCosySize() {
+        let width = document.body.clientWidth;
+        let height = document.body.clientHeight;
+        width *= (width < 1285 ? 1 : .7);
+        height *= (height < 666 ? .9 : .75);
+        return {width, height};
+    }
+
+    /**
      * Encrypt by rsa public key
      *
      * @param text string

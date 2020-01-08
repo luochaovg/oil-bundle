@@ -20,6 +20,7 @@ use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
+use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Form;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -562,7 +563,7 @@ class Module extends Bsw
             foreach ($item as $field => $value) {
 
                 if (!$annotation[$field]['html']) {
-                    $item[$field] = $recordClean[$field];
+                    $value = $recordClean[$field];
                 }
 
                 /**
@@ -705,6 +706,11 @@ class Module extends Bsw
             $form = $item['type'];
             if (isset($fillData[$key])) {
                 $form->setValue($fillData[$key]);
+            }
+            if (get_class($form) == TextArea::class && strpos($form->getClass(), 'bsw-ck-editor') !== false) {
+                $this->web->appendSrcJsWithKey('ck-editor', Abs::JS_EDITOR);
+                $this->web->appendSrcJsWithKey('ck-editor-custom', Abs::JS_EDITOR_CUSTOM);
+                $this->web->appendSrcCssWithKey('ck-editor', Abs::CSS_EDITOR);
             }
         }
 

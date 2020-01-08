@@ -226,8 +226,9 @@ var FoundationPrototype = function () {
          * @param split string
          * @return {*}
          */
-        value: function bigHump(target, split) {
-            split = split || '-';
+        value: function bigHump(target) {
+            var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
+
             var reg = new RegExp(split, 'g');
             return target.replace(reg, ' ').ucWords().replace(/ /g, '');
         }
@@ -242,8 +243,26 @@ var FoundationPrototype = function () {
          * @param split string
          * @return {*}
          */
-        value: function smallHump(target, split) {
-            return target.bigHump(split).lcFirst();
+        value: function smallHump(target) {
+            var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
+
+            return FoundationPrototype.lcFirst(FoundationPrototype.bigHump(target, split));
+        }
+    }, {
+        key: 'humpToUnder',
+
+
+        /**
+         * String hump to under
+         *
+         * @param target
+         * @param split
+         * @returns {void | string | *}
+         */
+        value: function humpToUnder(target) {
+            var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
+
+            return FoundationPrototype.leftTrim(target.replace(/([A-Z])/g, split + '$1').toLowerCase(), split);
         }
     }, {
         key: 'format',
@@ -775,7 +794,7 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'setParams',
         value: function setParams(items) {
             var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-            var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+            var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 
             var queryParams = this.parseQueryString(url, true);
@@ -794,6 +813,7 @@ var FoundationTools = function (_FoundationPrototype) {
          *
          * @param items json
          * @param url string
+         * @param needEncode bool
          *
          * @return {string}
          */
@@ -801,6 +821,8 @@ var FoundationTools = function (_FoundationPrototype) {
     }, {
         key: 'unsetParams',
         value: function unsetParams(items, url) {
+            var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
 
             url = url || location.href;
             var queryParams = this.parseQueryString(url, true);
@@ -835,7 +857,7 @@ var FoundationTools = function (_FoundationPrototype) {
             var host = queryParams.hostPart;
             delete queryParams.hostPart;
 
-            url = host + '?' + decodeURI(this.jsonBuildQuery(queryParams));
+            url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
             return FoundationPrototype.trim(url, '?');
         }
 
@@ -844,6 +866,7 @@ var FoundationTools = function (_FoundationPrototype) {
          *
          * @param items json
          * @param url string
+         * @param needEncode bool
          *
          * @return {string}
          */
@@ -851,6 +874,8 @@ var FoundationTools = function (_FoundationPrototype) {
     }, {
         key: 'unsetParamsBeginWith',
         value: function unsetParamsBeginWith(items, url) {
+            var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
             url = url || location.href;
             var queryParams = this.parseQueryString(url, true);
 
@@ -889,7 +914,7 @@ var FoundationTools = function (_FoundationPrototype) {
             var host = queryParams.hostPart;
             delete queryParams.hostPart;
 
-            url = host + '?' + decodeURI(this.jsonBuildQuery(queryParams));
+            url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
             return FoundationPrototype.trim(url, '?');
         }
 
@@ -1035,7 +1060,7 @@ var FoundationTools = function (_FoundationPrototype) {
     }, {
         key: 'parseInt',
         value: function (_parseInt) {
-            function parseInt(_x2) {
+            function parseInt(_x5) {
                 return _parseInt.apply(this, arguments);
             }
 
@@ -1245,8 +1270,11 @@ var FoundationAntD = function (_FoundationTools) {
      * @param jQuery object
      * @param Vue object
      * @param AntD object
+     * @param lang object
      */
     function FoundationAntD(cnf, jQuery, Vue, AntD) {
+        var lang = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+
         _classCallCheck(this, FoundationAntD);
 
         var _this2 = _possibleConstructorReturn(this, (FoundationAntD.__proto__ || Object.getPrototypeOf(FoundationAntD)).call(this));
@@ -1254,8 +1282,8 @@ var FoundationAntD = function (_FoundationTools) {
         _this2.v = Vue;
         _this2.d = AntD;
         _this2.config = {};
+        _this2.lang = lang;
         _this2.cnf = Object.assign({
-            lang: {},
             rsaPublicKey: null,
             marginTop: '150px',
             loadingMarginTop: '250px',
@@ -1379,10 +1407,10 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             var message = {
-                success: this.cnf.lang.success || 'Success',
-                info: this.cnf.lang.info || 'Information',
-                warning: this.cnf.lang.warning || 'Warning',
-                error: this.cnf.lang.error || 'Error'
+                success: this.lang.success || 'Success',
+                info: this.lang.info || 'Information',
+                warning: this.lang.warning || 'Warning',
+                error: this.lang.error || 'Error'
             }[type];
 
             return this.cnf.v.$notification[type]({
@@ -1438,18 +1466,18 @@ var FoundationAntD = function (_FoundationTools) {
 
 
             var title = options.title || {
-                success: this.cnf.lang.success || 'Success',
-                info: this.cnf.lang.info || 'Information',
-                warning: this.cnf.lang.warning || 'Warning',
-                error: this.cnf.lang.error || 'Error'
+                success: this.lang.success || 'Success',
+                info: this.lang.info || 'Information',
+                warning: this.lang.warning || 'Warning',
+                error: this.lang.error || 'Error'
             }[type];
 
             var modal = this.cnf.v['$' + type](Object.assign({
                 title: title,
                 content: description,
-                okText: this.cnf.lang.i_got_it || 'I got it',
+                okText: this.lang.i_got_it || 'I got it',
                 onCancel: onClose,
-                onOk: onClose
+                onOk: options.onOk || onClose
             }, options));
 
             if (typeof duration === 'undefined') {
@@ -1552,8 +1580,8 @@ var FoundationAntD = function (_FoundationTools) {
                 title: title,
                 content: content,
                 keyboard: false,
-                okText: this.cnf.lang.okay || 'Okay',
-                cancelText: this.cnf.lang.cancel || 'Cancel'
+                okText: this.lang.okay || 'Okay',
+                cancelText: this.lang.cancel || 'Cancel'
             }, options));
         }
 
@@ -1587,7 +1615,11 @@ var FoundationAntD = function (_FoundationTools) {
                     contentType: upload ? false : 'application/x-www-form-urlencoded',
                     timeout: that.cnf.requestTimeout * 1000,
                     beforeSend: function beforeSend() {
-                        that.cnf.v.spinning = true;
+                        if (that.cnf.v.no_loading_once) {
+                            that.cnf.v.no_loading_once = false;
+                        } else {
+                            that.cnf.v.spinning = true;
+                        }
                     },
                     success: function success(data) {
                         that.cnf.v.spinning = false;

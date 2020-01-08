@@ -23,6 +23,9 @@ class Abs
     const BK_DISPLAY_ARGS = 1;
     const BK_TWIG_ARGS    = 2;
 
+    const PERSISTENCE_TOTAL_COLUMN = 24;
+    const PERSISTENCE_LABEL_COLUMN = 5;
+
     const BEGIN_REQUEST = 'Begin request';
     const BEGIN_VALID   = 'Begin valid';
     const BEGIN_LOGIC   = 'Begin logic';
@@ -347,13 +350,13 @@ class Abs
     const JS_CHART_ROMA           = 'npm;echarts/theme/roma.js';
     const JS_CHART_SHINE          = 'npm;echarts/theme/shine.js';
     const JS_CHART_VINTAGE        = 'npm;echarts/theme/vintage.js';
-    const JS_CHART_CHALK          = 'diy;echart.chalk.keep.js';
-    const JS_CHART_ESSOS          = 'diy;echart.essos.keep.js';
-    const JS_CHART_HALLOWEEN      = 'diy;echart.halloween.keep.js';
-    const JS_CHART_PURPLE_PASSION = 'diy;echart.purple-passion.keep.js';
-    const JS_CHART_WALDEN         = 'diy;echart.walden.keep.js';
-    const JS_CHART_WESTEROS       = 'diy;echart.westeros.keep.js';
-    const JS_CHART_WONDERLAND     = 'diy;echart.wonderland.keep.js';
+    const JS_CHART_CHALK          = 'diy;echart/chalk.keep.js';
+    const JS_CHART_ESSOS          = 'diy;echart/essos.keep.js';
+    const JS_CHART_HALLOWEEN      = 'diy;echart/halloween.keep.js';
+    const JS_CHART_PURPLE_PASSION = 'diy;echart/purple-passion.keep.js';
+    const JS_CHART_WALDEN         = 'diy;echart/walden.keep.js';
+    const JS_CHART_WESTEROS       = 'diy;echart/westeros.keep.js';
+    const JS_CHART_WONDERLAND     = 'diy;echart/wonderland.keep.js';
     const JS_CONSOLE              = 'npm;vconsole/dist/vconsole.min.js';
     const JS_PHOTOS               = 'npm;photoswipe/dist/photoswipe.min.js';
     const JS_FANCY_BOX            = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.js';
@@ -361,13 +364,13 @@ class Abs
     const JS_FOUNDATION           = 'diy;foundation.js';
     const JS_BSW                  = 'diy;bsw.js';
     const JS_WEB                  = 'diy;web.js';
-    const JS_EDITOR_CUSTOM        = 'diy;ckeditor5.js';
-    const JS_EDITOR               = 'odd;ckeditor5/build/ckeditor.js';
+    const JS_EDITOR               = 'npm;@ckeditor/ckeditor5-build-classic/build/ckeditor.js';
+    const JS_EDITOR_CUSTOM        = 'diy;third/ckeditor5-custom.js';
     const CHART_DEFAULT_THEME     = 'westeros';
 
     const JS_LANG = [
-        'cn' => 'diy;lang.cn.js',
-        'en' => 'diy;lang.en.js',
+        'cn' => 'diy;lang/cn.js',
+        'en' => 'diy;lang/en.js',
     ];
 
     const CSS_ANT_D     = 'npm;ant-design-vue/dist/antd.min.css';
@@ -378,7 +381,7 @@ class Abs
     const CSS_FANCY_BOX = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.css';
     const CSS_BSW       = 'diy;bsw.css';
     const CSS_WEB       = 'diy;web.css';
-    const CSS_EDITOR    = 'diy;ckeditor5.css';
+    const CSS_EDITOR    = 'diy;third/ckeditor5.css';
 
     // slot 变量模板
     const SLOT_VARIABLES = "value, record, index";

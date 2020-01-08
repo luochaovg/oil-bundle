@@ -303,10 +303,8 @@ div.ant-modal-mask {
   overflow: hidden;
   white-space: pre-wrap;
 }
-.app-operate {
-  text-align: right;
-}
 .app-operate.top {
+  text-align: right;
   margin-bottom: 15px;
 }
 @media screen and (max-width: 992px) {
@@ -316,6 +314,7 @@ div.ant-modal-mask {
   }
 }
 .app-operate.bottom {
+  text-align: left;
   margin-top: 15px;
 }
 @media screen and (max-width: 992px) {
@@ -424,7 +423,7 @@ span.ant-calendar-picker {
   margin: 30px;
 }
 .app-filter-form {
-  padding: 20px;
+  padding: 16px 20px;
   overflow: hidden;
   margin-bottom: 10px;
   background: #fafafa;
@@ -469,5 +468,40 @@ div.modal-container-center div.ant-modal-body > div {
 }
 a.app-preview-link {
   padding-right: 5px;
+}
+iframe#app-preview-iframe {
+  width: 100%;
+  border: none;
+}
+.app-preview-iframe .ant-modal-body {
+  padding: 0;
+  margin: 0;
+}
+.ant-back-top {
+  z-index: 99;
+  right: 80px;
+}
+@media screen and (max-width: 992px) {
+  .ant-back-top {
+    right: 50px;
+    bottom: 40px;
+  }
+}
+.ant-modal {
+  max-width: calc(100vw - 16px);
+  margin: 8px auto;
+  overflow-x: hidden;
+}
+.ant-drawer-content-wrapper {
+  background: none;
+}
+.ant-drawer-content-wrapper .ant-drawer-content {
+  background: inherit;
+}
+.ant-drawer-content-wrapper .ant-drawer-content .ant-drawer-wrapper-body {
+  background: inherit;
+}
+ul.ant-pagination li {
+  margin-bottom: 5px;
 }
 /*# sourceMappingURL=bsw.css.map */

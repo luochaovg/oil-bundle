@@ -29,7 +29,7 @@ module.exports = function (grunt) {
                 ]
             },
             common: {
-                src: 'dist/src-css/**/*.css'
+                src: ['!dist/src-css/**/*.keep.css', 'dist/src-css/**/*.css']
             }
         },
         cssmin: {
@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'dist/src-css/',
-                        src: ['**/*.css'],
+                        src: ['**/*.css', '!**/*.keep.css'],
                         dest: 'dist/css/',
                         ext: '.css',
                         extDot: 'last'
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'es6/',
-                        src: ['**/*.js'],
+                        src: ['**/*.js', '!**/*.keep.js'],
                         dest: 'dist/src-js/',
                         ext: '.js',
                         extDot: 'last'
@@ -72,6 +72,12 @@ module.exports = function (grunt) {
                         cwd: 'es6/',
                         src: ['**/*.keep.js'],
                         dest: 'dist/src-js/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'es6/',
+                        src: ['**/*.keep.js'],
+                        dest: 'dist/js/'
                     },
                 ],
             },
@@ -90,7 +96,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'dist/src-js/',
-                        src: ['**/*.js'],
+                        src: ['**/*.js', '!**/*.keep.js'],
                         dest: 'dist/js/',
                         ext: '.js',
                         extDot: 'last'
@@ -108,7 +114,7 @@ module.exports = function (grunt) {
                 }
             },
             js: {
-                files: ['es6/**/*.js'],
+                files: ['!es6/**/*.js', 'es6/**/*.js'],
                 tasks: ['handle-js'],
                 options: {
                     spawn: true,
@@ -128,6 +134,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('listen', ['watch']);
     grunt.registerTask('handle-css', ['less', 'postcss', 'cssmin']);
-    grunt.registerTask('handle-js', ['babel', 'copy', 'uglify']);
-    grunt.registerTask('handle-all', ['less', 'postcss', 'cssmin', 'babel', 'copy', 'uglify']);
+    grunt.registerTask('handle-js', ['copy', 'babel', 'uglify']);
+    grunt.registerTask('handle-all', ['less', 'postcss', 'cssmin', 'copy', 'babel', 'uglify']);
 };

@@ -79,8 +79,8 @@ class PersistenceConverter extends AnnotationConverter
      */
     protected function column($value)
     {
-        $totalColumn = 24;
-        $labelColumn = 5;
+        $totalColumn = Abs::PERSISTENCE_TOTAL_COLUMN;
+        $labelColumn = Abs::PERSISTENCE_LABEL_COLUMN;
 
         $max = $totalColumn - $labelColumn;
         $moderate = $max < 8 ? $max : 8;
@@ -149,8 +149,11 @@ class PersistenceConverter extends AnnotationConverter
      */
     protected function rules($value)
     {
-        $value = (array)$value;
+        if ($value === false) {
+            return [];
+        }
 
+        $value = (array)$value;
         $notNull = $this->items[NotNull::class] ?? null;
         $pk = $this->items[Id::class] ?? null;
 

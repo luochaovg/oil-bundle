@@ -42,7 +42,7 @@ app.configure({
     },
     method: {
         submit_filter_{{ uuid }}(e) {
-            this.filter(e, '{{ uuid }}');
+            this.filter(e, '{{ uuid }}', true);
         },
         toggle_filter_{{ uuid }}() {
           this.expand_filter_{{ uuid }} = !this.expand_filter_{{ uuid }};
