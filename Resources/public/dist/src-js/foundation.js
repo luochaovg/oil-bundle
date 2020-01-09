@@ -1333,7 +1333,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'vue',
         value: function vue() {
-            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.app-content';
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-content';
 
             var that = this;
             var conf = {};
@@ -1407,10 +1407,10 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             var message = {
-                success: this.lang.success || 'Success',
-                info: this.lang.info || 'Information',
-                warning: this.lang.warning || 'Warning',
-                error: this.lang.error || 'Error'
+                success: this.lang.success,
+                info: this.lang.info,
+                warning: this.lang.warning,
+                error: this.lang.error
             }[type];
 
             return this.cnf.v.$notification[type]({
@@ -1466,18 +1466,22 @@ var FoundationAntD = function (_FoundationTools) {
 
 
             var title = options.title || {
-                success: this.lang.success || 'Success',
-                info: this.lang.info || 'Information',
-                warning: this.lang.warning || 'Warning',
-                error: this.lang.error || 'Error'
+                success: this.lang.success,
+                info: this.lang.info,
+                warning: this.lang.warning,
+                error: this.lang.error
             }[type];
+
+            if (type === 'confirm' && typeof options.width === 'undefined') {
+                options.width = this.popupCosySize().width;
+            }
 
             var modal = this.cnf.v['$' + type](Object.assign({
                 title: title,
                 content: description,
-                okText: this.lang.i_got_it || 'I got it',
-                onCancel: onClose,
-                onOk: options.onOk || onClose
+                okText: this.lang.i_got_it,
+                onOk: options.onOk || onClose,
+                onCancel: onClose
             }, options));
 
             if (typeof duration === 'undefined') {
@@ -1580,8 +1584,9 @@ var FoundationAntD = function (_FoundationTools) {
                 title: title,
                 content: content,
                 keyboard: false,
-                okText: this.lang.okay || 'Okay',
-                cancelText: this.lang.cancel || 'Cancel'
+                width: 320,
+                okText: this.lang.confirm,
+                cancelText: this.lang.cancel
             }, options));
         }
 
@@ -1631,12 +1636,12 @@ var FoundationAntD = function (_FoundationTools) {
                         if (obj.responseJSON) {
                             var result = obj.responseJSON;
                             var message = '[' + result.code + '] ' + result.message;
-                            return that.confirm(result.classify, message, 0, null, { width: 600 });
+                            return that.confirm(result.classify, message, 0);
                         }
 
                         if (obj.responseText) {
                             var _message = '[' + obj.status + '] ' + obj.statusText;
-                            return that.confirm('error', _message, 0, null);
+                            return that.confirm('error', _message, 0);
                         }
 
                         if (obj.statusText === 'timeout') {
@@ -1667,8 +1672,7 @@ var FoundationAntD = function (_FoundationTools) {
         value: function response(result, successSameHandler, failedSameHandler, duration) {
 
             if (typeof result.code === 'undefined') {
-                //return this.error('An error has occurred');
-                return this.error('Oops! something went wrong');
+                return this.error(this.lang.response_error_message);
             }
 
             var that = this;
@@ -1716,6 +1720,22 @@ var FoundationAntD = function (_FoundationTools) {
                     successSameHandler && successSameHandler(result);
                 }
             });
+        }
+
+        /**
+         * Cosy size for popup
+         *
+         * @returns {{width: number, height: number}}
+         */
+
+    }, {
+        key: 'popupCosySize',
+        value: function popupCosySize() {
+            var width = document.body.clientWidth;
+            var height = document.body.clientHeight;
+            width *= width < 1285 ? 1 : .7;
+            height *= height < 666 ? .9 : .75;
+            return { width: width, height: height };
         }
 
         /**

@@ -66,7 +66,8 @@ trait Preview
                 ->setArgs(['id' => $current['id']]),
 
             (new Button('Google qr code'))
-                ->setType(Button::THEME_DEFAULT)->setRoute('app_bsw_admin_user_google_qr_code')
+                ->setType(Button::THEME_DEFAULT)
+                ->setRoute('app_bsw_admin_user_google_qr_code')
                 ->setArgs(['id' => $current['id']])
                 ->setClick('showModalAfterRequest'),
 

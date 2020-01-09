@@ -148,7 +148,7 @@ class Line extends Chart
 
         $this->setFeature(
             array_merge(
-                [
+                $this->mobile ? [] : [
                     'dataZoom'  => [
                         'yAxisIndex' => 'none',
                         'title'      => [

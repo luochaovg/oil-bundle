@@ -22,7 +22,7 @@ NydhxUEs0y8aMzWbGwIDAQAB
 
 $(function () {
     // vue
-    app.vue('.app-body').template(app.config.template || null).data(Object.assign({
+    app.vue('.bsw-body').template(app.config.template || null).data(Object.assign({
 
         bsw,
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -75,17 +75,10 @@ $(function () {
                 that[fn](data, element);
             };
             if (typeof data.confirm === 'undefined') {
-                return action();
+                action();
+            } else {
+                app.showConfirm(data.confirm, app.lang.confirm_title, {onOk: () => action()});
             }
-            app.cnf.v.$confirm({
-                title: app.lang.confirm_title || 'Operation confirmation',
-                content: data.confirm,
-                cancelText: app.lang.cancel || 'Cancel',
-                okText: app.lang.confirm || 'Confirm',
-                width: 320,
-                keyboard: false,
-                onOk: () => action(),
-            });
         },
 
         dispatcherByNative(element) {
@@ -281,8 +274,8 @@ $(function () {
                     let sets = res.sets;
                     let logic = sets.logic || sets;
                     this.showModal({
-                        width: logic.width || 1000,
-                        title: logic.title || 'Modal page',
+                        width: logic.width || data.width || app.popupCosySize().width,
+                        title: logic.title || data.title || app.lang.modal_title,
                         content: sets.content,
                     });
                 }).catch((reason => {
@@ -333,12 +326,12 @@ $(function () {
                 width: size.width,
                 title: app.lang.please_select,
                 centered: true,
-                wrapClassName: 'app-preview-iframe',
-                content: `<iframe id="app-preview-iframe" src="${data.location}"></iframe>`,
+                wrapClassName: 'bsw-preview-iframe',
+                content: `<iframe id="bsw-preview-iframe" src="${data.location}"></iframe>`,
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#app-preview-iframe").height(size.height);
+                $("#bsw-preview-iframe").height(size.height);
             });
         },
 
@@ -357,12 +350,12 @@ $(function () {
 
         initCkEditor() {
             let that = this;
-            $('.app-persistence .bsw-ck-editor').each(function () {
+            $('.bsw-persistence .bsw-ck-editor').each(function () {
                 let id = $(this).attr('id');
                 ClassicEditor.create(this, {}).then(editor => {
                     that.ckEditor[id] = editor;
                     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                        return new FileUploadAdapter(loader);
+                        return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
                         that[that.key_for_form].setFieldsValue({[id]: that.ckEditor[id].getData()});
@@ -393,7 +386,7 @@ $(function () {
     }, app.config.component || {})).init(function (v) {
 
         // change captcha
-        $('img.app-captcha').off('click').on('click', function () {
+        $('img.bsw-captcha').off('click').on('click', function () {
             let src = $(this).attr('src');
             src = bsw.setParams({t: bsw.timestamp()}, src);
             $(this).attr('src', src);
@@ -413,14 +406,14 @@ $(function () {
         // page loading
         setTimeout(function () {
             // message
-            $('.app-page-loading').fadeOut(200, function () {
+            $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
                     let duration = v.message.duration ? v.message.duration : undefined;
                     try {
                         app[v.message.classify](v.message.content, duration, null, v.message.type);
                     } catch (e) {
-                        console.warn('Some error happen in source data of message');
+                        console.warn(app.lang.message_data_error);
                         console.warn(v.message);
                     }
                 }

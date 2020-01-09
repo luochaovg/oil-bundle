@@ -21,7 +21,7 @@ window.app = new FoundationAntD({
 
 $(function () {
     // vue
-    app.vue('.app-body').template(app.config.template || null).data(Object.assign({
+    app.vue('.bsw-body').template(app.config.template || null).data(Object.assign({
 
         bsw: bsw,
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -35,6 +35,7 @@ $(function () {
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
+        ckEditor: {},
 
         no_loading_once: false,
         spinning: false,
@@ -70,19 +71,12 @@ $(function () {
                 that[fn](data, element);
             };
             if (typeof data.confirm === 'undefined') {
-                return action();
+                action();
+            } else {
+                app.showConfirm(data.confirm, app.lang.confirm_title, { onOk: function onOk() {
+                        return action();
+                    } });
             }
-            app.cnf.v.$confirm({
-                title: app.lang.confirm_title || 'Operation confirmation',
-                content: data.confirm,
-                cancelText: app.lang.cancel || 'Cancel',
-                okText: app.lang.confirm || 'Confirm',
-                width: 320,
-                keyboard: false,
-                onOk: function onOk() {
-                    return action();
-                }
-            });
         },
         dispatcherByNative: function dispatcherByNative(element) {
             this.dispatcher(this.getBswData($(element)), element);
@@ -265,6 +259,9 @@ $(function () {
         },
         showModal: function showModal(options) {
             options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = app.popupCosySize().width;
+            }
             this.modal = Object.assign(this.modal, options);
         },
         showModalAfterRequest: function showModalAfterRequest(data, element) {
@@ -275,8 +272,8 @@ $(function () {
                     var sets = res.sets;
                     var logic = sets.logic || sets;
                     _this3.showModal({
-                        width: logic.width || 1000,
-                        title: logic.title || 'Modal page',
+                        width: logic.width || data.width || app.popupCosySize().width,
+                        title: logic.title || data.title || app.lang.modal_title,
                         content: sets.content
                     });
                 }).catch(function (reason) {
@@ -314,26 +311,22 @@ $(function () {
             });
         },
         showIFrameByVue: function showIFrameByVue(event) {
-            var width = document.body.clientWidth;
-            var height = document.body.clientHeight;
-            width *= width < 1285 ? 1 : .7;
-            height *= height < 666 ? .9 : .75;
-
+            var size = app.popupCosySize();
             var object = $(event.target);
             var data = this.getBswData(object);
             data.location = bsw.setParams({ iframe: true, fill: object.prev().attr('id') }, data.location);
 
             var options = {
                 visible: true,
-                width: width,
+                width: size.width,
                 title: app.lang.please_select,
                 centered: true,
-                wrapClassName: 'app-preview-iframe',
-                content: '<iframe id="app-preview-iframe" src="' + data.location + '"></iframe>'
+                wrapClassName: 'bsw-preview-iframe',
+                content: '<iframe id="bsw-preview-iframe" src="' + data.location + '"></iframe>'
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#app-preview-iframe").height(height);
+                $("#bsw-preview-iframe").height(size.height);
             });
         },
         fillParentForm: function fillParentForm(data, element) {
@@ -348,14 +341,19 @@ $(function () {
             this[this.key_for_form].setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
         },
         initCkEditor: function initCkEditor() {
-            $('.app-persistence .bsw-ck-editor').each(function () {
+            var that = this;
+            $('.bsw-persistence .bsw-ck-editor').each(function () {
+                var id = $(this).attr('id');
                 ClassicEditor.create(this, {}).then(function (editor) {
-                    window.editor = editor;
+                    that.ckEditor[id] = editor;
                     editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
-                        return new FileUploadAdapter(loader);
+                        return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
+                    that.ckEditor[id].model.document.on('change:data', function () {
+                        that[that.key_for_form].setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
+                    });
                 }).catch(function (err) {
-                    bsw.log(err.stack);
+                    console.log(err.stack);
                 });
             });
         }
@@ -379,7 +377,7 @@ $(function () {
     }, app.config.component || {})).init(function (v) {
 
         // change captcha
-        $('img.app-captcha').off('click').on('click', function () {
+        $('img.bsw-captcha').off('click').on('click', function () {
             var src = $(this).attr('src');
             src = bsw.setParams({ t: bsw.timestamp() }, src);
             $(this).attr('src', src);
@@ -399,14 +397,14 @@ $(function () {
         // page loading
         setTimeout(function () {
             // message
-            $('.app-page-loading').fadeOut(200, function () {
+            $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
                     var _duration = v.message.duration ? v.message.duration : undefined;
                     try {
                         app[v.message.classify](v.message.content, _duration, null, v.message.type);
                     } catch (e) {
-                        console.warn('Some error happen in source data of message');
+                        console.warn(app.lang.message_data_error);
                         console.warn(v.message);
                     }
                 }

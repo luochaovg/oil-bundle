@@ -1,11 +1,11 @@
 {% extends '@LeonBsw/layout/persistence.html.twig' %}
 
-{% set tpl_content_class_diy = 'app-grant' %}
+{% set tpl_content_class_diy = 'bsw-grant' %}
 
 {% block page %}
-  <p class="app-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
-  <p class="app-hide" v-init:disabled_list='{{ logic.disabled_json|raw }}'></p>
-  <div class="app-persistence">
+  <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
+  <p class="bsw-hide" v-init:disabled_list='{{ logic.disabled_json|raw }}'></p>
+  <div class="bsw-persistence">
     <a-form
       id="form_persistence_{{ uuid }}"
       :form="form_persistence_{{ uuid }}"

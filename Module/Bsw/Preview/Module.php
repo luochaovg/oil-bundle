@@ -715,7 +715,7 @@ class Module extends Bsw
                 $item[$operate] .= $this->web->renderPart('@LeonBsw/form/button.native', ['form' => $button]);
             }
 
-            $item[$operate] = "<div class='app-record-action'>{$item[$operate]}</div>";
+            $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";
 
             /**
              * field dress

@@ -24,7 +24,7 @@ class Abs
     const BK_TWIG_ARGS    = 2;
 
     const PERSISTENCE_TOTAL_COLUMN = 24;
-    const PERSISTENCE_LABEL_COLUMN = 5;
+    const PERSISTENCE_LABEL_COLUMN = 4;
 
     const BEGIN_REQUEST = 'Begin request';
     const BEGIN_VALID   = 'Begin valid';
@@ -396,22 +396,22 @@ class Abs
     const SLOT_HTML_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
     // 空数据展示模板
-    const TPL_NIL = "<div class='app-disable'>{Abs::NIL}</div>";
+    const TPL_NIL = "<div class='bsw-disable'>{Abs::NIL}</div>";
 
     // [配合]空数据展示模板
     const TPL_ELSE_NIL = "<div v-else>{Abs::TPL_NIL}</div>";
 
     // 脏数据展示模板
-    const TPL_DIRTY = "<div class='app-disable'>{Abs::DIRTY}</div>";
+    const TPL_DIRTY = "<div class='bsw-disable'>{Abs::DIRTY}</div>";
 
     // [配合]脏数据展示模板
     const TPL_ELSE_DIRTY = "<div v-else>{Abs::TPL_DIRTY}</div>";
 
     // 未设置展示模板
-    const TPL_NOT_SET = "<div class='app-disable'>{Abs::NOT_SET}</div>";
+    const TPL_NOT_SET = "<div class='bsw-disable'>{Abs::NOT_SET}</div>";
 
     // 非文件展示模板
-    const TPL_NOT_FILE = "<div class='app-disable'>{Abs::NOT_FILE}</div>";
+    const TPL_NOT_FILE = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
 
     // 普通 dress 模板
     const TPL_DRESS = "<a-tag color='{dress}'>{value}</a-tag>";
@@ -438,7 +438,7 @@ class Abs
     const TPL_DRESS_PURPLE = "<a-tag color='purple'>{value}</a-tag>";
 
     // 无 dress 枚举模板
-    const TPL_ENUM_0_DRESS = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='app-long-text'>{value}</div>{Abs::TPL_ELSE_DIRTY}";
+    const TPL_ENUM_0_DRESS = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_DIRTY}";
 
     // 单 dress 枚举模板
     const TPL_ENUM_1_DRESS = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' :color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
@@ -450,34 +450,34 @@ class Abs
     const TPL_ENUM_STATE = "<a-badge v-if='{Abs::SLOT_NOT_BLANK}' :status='{dress}' :text='{enum}'></a-badge>{Abs::TPL_ELSE_DIRTY}";
 
     // 代码模板
-    const RENDER_CODE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='app-code app-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_CODE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 图标模板
     const RENDER_ICON = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}.substring(0, 1) == \"a\"' :type='{:value}.substring(2)'></a-icon><b-icon v-else :type='{:value}.substring(2)'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 禁用状态模板
-    const RENDER_DISABLE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='app-disable app-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_DISABLE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 文本模板 (标识空)
-    const RENDER_TEXT = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='app-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_TEXT = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 图片
-    const RENDER_IMAGE = "<a v-if='{Abs::SLOT_NOT_BLANK}' :href='{:value}' class='app-preview-image' data-fancybox='preview' :data-caption='{:value}'><img :src='{:value}'></a>{Abs::TPL_ELSE_NIL}";
+    const RENDER_IMAGE = "<a v-if='{Abs::SLOT_NOT_BLANK}' :href='{:value}' class='bsw-preview-image' data-fancybox='preview' :data-caption='{:value}'><img :src='{:value}'></a>{Abs::TPL_ELSE_NIL}";
 
     // 链接
-    const RENDER_LINK = "<div v-if='{Abs::SLOT_NOT_BLANK}'><span class='app-code app-long-text'><a class='app-preview-link' :href='{:value}' target='_blank'>✪</a>{value}</span></div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_LINK = "<div v-if='{Abs::SLOT_NOT_BLANK}'><span class='bsw-code bsw-long-text'><a class='bsw-preview-link' :href='{:value}' target='_blank'>✪</a>{value}</span></div>{Abs::TPL_ELSE_NIL}";
 
     // 密文 (统一)
-    const RENDER_SECRET_1 = "<div class='app-disable'>{Abs::SECRET}</div>";
+    const RENDER_SECRET_1 = "<div class='bsw-disable'>{Abs::SECRET}</div>";
 
     // 密文 (标识空)
-    const RENDER_SECRET_2 = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='app-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_SECRET_2 = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
 
     // html 文本模板
-    const HTML_TEXT = "<div class='app-long-text'>{value}</div>";
+    const HTML_TEXT = "<div class='bsw-long-text'>{value}</div>";
 
     // html pre 标签
-    const HTML_PRE = "<pre class='app-pre app-long-text'>{value}</pre>";
+    const HTML_PRE = "<pre class='bsw-pre bsw-long-text'>{value}</pre>";
 
     // html 粉色模板
     const HTML_PINK = "<div class='ant-tag ant-tag-has-color' style='background-color: #eb2f96;'>{value}</div>";

@@ -9,10 +9,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 
 var FileUploadAdapter = function () {
-    function FileUploadAdapter(loader) {
+    function FileUploadAdapter(editor, loader, api) {
         _classCallCheck(this, FileUploadAdapter);
 
+        this.editor = editor;
         this.loader = loader;
+        this.api = api;
     }
 
     _createClass(FileUploadAdapter, [{
@@ -20,19 +22,18 @@ var FileUploadAdapter = function () {
         value: function upload() {
             var _this = this;
 
-            return new Promise(function (resolve, reject) {
-                var data = new FormData();
-                data.append('file', _this.loader.file);
-                data.append('type', 'img');
-
-                bsw.request(ajaxUploadAction, data, null, true).then(function (res) {
-                    if (res.errorCode) {
-                        reject(res.message);
-                    } else {
-                        resolve({
-                            default: res.file
-                        });
-                    }
+            return this.loader.file.then(function (file) {
+                return new Promise(function (resolve, reject) {
+                    var data = new FormData();
+                    data.append('ck-editor', file);
+                    data.append('file_flag', 'ck-editor');
+                    app.request(_this.api, data, null, true).then(function (res) {
+                        if (res.error) {
+                            reject(res.message);
+                        } else {
+                            resolve({ default: res.sets.attachment_url });
+                        }
+                    });
                 });
             });
         }

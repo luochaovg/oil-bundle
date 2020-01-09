@@ -1,13 +1,13 @@
 {% extends '@LeonBsw/layout/blank.html.twig' %}
 
 {% set uuid = scaffold.uuid %}
-{% set tpl_content_class = ['app-chart-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
+{% set tpl_content_class = ['bsw-chart-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
   {% include '@LeonBsw/limbs/filter.html.twig' %}
   {% if chart.tabsMenu is not empty %}
     <a-tabs
-      class="app-chart-tabs"
+      class="bsw-chart-tabs"
       default-active-key="{{ scaffold.route }}"
       @change="tabsSwitch"
       :tab-bar-gutter="6"
@@ -26,9 +26,10 @@
     </a-tabs>
   {% endif %}
 
-  <div class="app-chart-list">
+  <div class="bsw-chart-list">
     {% for index, item in chart.items %}
-      <div class="bsw-chart" id="chart-{{ index }}" style="width: {{ item.width }}; height: {{ item.height }}; {{ item.style }}"></div>
+      <div class="bsw-chart" id="chart-{{ index }}"
+           style="width: {{ item.width }}; height: {{ item.height }}; {{ item.style }}"></div>
     {% endfor %}
   </div>
 {% endblock %}
@@ -54,7 +55,7 @@ app.configure({
     },
     logic: {
         form_filter_{{ uuid }}(v) {
-            app.cnf.v.form_filter_{{ uuid }} = v.$form.createForm(v);
+            v.form_filter_{{ uuid }} = v.$form.createForm(v);
         },
     }
 });
@@ -66,7 +67,7 @@ app.configure({
         },
     },
     logic: {
-        chart() {
+        chart(v) {
             {% for index, item in chart.items %}
             app.chart({
                 id: '{{ index }}',

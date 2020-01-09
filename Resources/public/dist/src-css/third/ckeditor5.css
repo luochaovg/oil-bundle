@@ -22,7 +22,7 @@
   line-height: 1.5;
 }
 .ck.ck-content blockquote p {
-  margin: 0 !important;
+  margin: 8px 0 !important;
 }
 .ant-form-item .ck-editor {
   line-height: normal;

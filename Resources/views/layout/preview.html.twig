@@ -4,7 +4,7 @@
 
 {% block page %}
   {% include '@LeonBsw/limbs/filter.html.twig' %}
-  <div class="app-preview">
+  <div class="bsw-preview">
     <a-table
       :columns="columns_{{ uuid }}"
       :data-source="list_{{ uuid }}"
@@ -67,7 +67,7 @@ app.configure({
     },
     logic: {
         form_filter_{{ uuid }}(v) {
-            app.cnf.v.form_filter_{{ uuid }} = v.$form.createForm(v);
+            v.form_filter_{{ uuid }} = v.$form.createForm(v);
         },
     }
 });

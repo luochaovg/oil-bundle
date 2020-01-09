@@ -15,7 +15,7 @@
   {% include '@LeonBsw/limbs/js.html.twig' with {position: top} %}
 </head>
 
-<body class="{{ ['app-foundation', tpl_foundation_class ?? null]|filter(v => v)|join(' ') }}">
+<body class="{{ ['bsw-foundation', tpl_foundation_class ?? null]|filter(v => v)|join(' ') }}">
 {% block w3c %}{% endblock %}
 {% include '@LeonBsw/limbs/css.html.twig' with {position: bottom} %}
 {% include '@LeonBsw/limbs/js.html.twig' with {position: bottom} %}

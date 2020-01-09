@@ -989,7 +989,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @return {*}
      */
-    vue(selector = '.app-content') {
+    vue(selector = '.bsw-content') {
         let that = this;
         let conf = {};
         return {
@@ -1043,10 +1043,10 @@ class FoundationAntD extends FoundationTools {
         }
 
         let message = {
-            success: this.lang.success || 'Success',
-            info: this.lang.info || 'Information',
-            warning: this.lang.warning || 'Warning',
-            error: this.lang.error || 'Error',
+            success: this.lang.success,
+            info: this.lang.info,
+            warning: this.lang.warning,
+            error: this.lang.error,
         }[type];
 
         return this.cnf.v.$notification[type]({
@@ -1091,18 +1091,22 @@ class FoundationAntD extends FoundationTools {
     confirm(type, description, duration, onClose = self.blank, options = {}) {
 
         let title = options.title || {
-            success: this.lang.success || 'Success',
-            info: this.lang.info || 'Information',
-            warning: this.lang.warning || 'Warning',
-            error: this.lang.error || 'Error',
+            success: this.lang.success,
+            info: this.lang.info,
+            warning: this.lang.warning,
+            error: this.lang.error,
         }[type];
+
+        if (type === 'confirm' && typeof options.width === 'undefined') {
+            options.width = this.popupCosySize().width;
+        }
 
         let modal = this.cnf.v[`$${type}`](Object.assign({
             title,
             content: description,
-            okText: this.lang.i_got_it || 'I got it',
-            onCancel: onClose,
+            okText: this.lang.i_got_it,
             onOk: options.onOk || onClose,
+            onCancel: onClose,
         }, options));
 
         if (typeof duration === 'undefined') {
@@ -1188,8 +1192,9 @@ class FoundationAntD extends FoundationTools {
             title,
             content,
             keyboard: false,
-            okText: this.lang.okay || 'Okay',
-            cancelText: this.lang.cancel || 'Cancel',
+            width: 320,
+            okText: this.lang.confirm,
+            cancelText: this.lang.cancel,
         }, options));
     }
 
@@ -1231,12 +1236,12 @@ class FoundationAntD extends FoundationTools {
                     if (obj.responseJSON) {
                         let result = obj.responseJSON;
                         let message = `[${result.code}] ${result.message}`;
-                        return that.confirm(result.classify, message, 0, null, {width: 600});
+                        return that.confirm(result.classify, message, 0);
                     }
 
                     if (obj.responseText) {
                         let message = `[${obj.status}] ${obj.statusText}`;
-                        return that.confirm('error', message, 0, null);
+                        return that.confirm('error', message, 0);
                     }
 
                     if (obj.statusText === 'timeout') {
@@ -1264,8 +1269,7 @@ class FoundationAntD extends FoundationTools {
     response(result, successSameHandler, failedSameHandler, duration) {
 
         if (typeof result.code === 'undefined') {
-            //return this.error('An error has occurred');
-            return this.error('Oops! something went wrong');
+            return this.error(this.lang.response_error_message);
         }
 
         let that = this;

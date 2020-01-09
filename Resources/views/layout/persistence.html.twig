@@ -1,10 +1,10 @@
 {% extends '@LeonBsw/layout/blank.html.twig' %}
 
 {% set uuid = scaffold.uuid %}
-{% set tpl_content_class = ['app-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
+{% set tpl_content_class = ['bsw-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
-  <div class="app-persistence">
+  <div class="bsw-persistence">
     <a-form
       id="form_persistence_{{ uuid }}"
       :form="form_persistence_{{ uuid }}"
@@ -68,8 +68,8 @@ app.configure({
     },
     logic: {
         form_persistence_{{ uuid }}(v) {
-            app.cnf.v.form_persistence_{{ uuid }} = v.$form.createForm(v);
-            app.cnf.v.$nextTick(function () {
+            v.form_persistence_{{ uuid }} = v.$form.createForm(v);
+            v.$nextTick(function () {
                 app.cnf.v.initCkEditor();
             });
         }

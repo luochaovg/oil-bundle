@@ -4,26 +4,25 @@
 
 class FileUploadAdapter {
 
-    constructor(loader) {
+    constructor(editor, loader, api) {
+        this.editor = editor;
         this.loader = loader;
+        this.api = api;
     }
 
     upload() {
-        return new Promise((resolve, reject) => {
+        return this.loader.file.then(file => new Promise((resolve, reject) => {
             const data = new FormData();
-            data.append('file', this.loader.file);
-            data.append('type', 'img');
-
-            bsw.request(ajaxUploadAction, data, null, true).then(function (res) {
-                if (res.errorCode) {
+            data.append('ck-editor', file);
+            data.append('file_flag', 'ck-editor');
+            app.request(this.api, data, null, true).then(function (res) {
+                if (res.error) {
                     reject(res.message);
                 } else {
-                    resolve({
-                        default: res.file
-                    });
+                    resolve({default: res.sets.attachment_url});
                 }
             });
-        });
+        }));
     }
 
     abort() {

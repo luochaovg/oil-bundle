@@ -583,7 +583,7 @@ class BswBackendController extends BswWebController
             $fullOption = call_user_func_array($option['afterOption'], [$fullOption]);
         }
 
-        $width = is_null($width) ? '80%' : $width;
+        $width = is_null($width) ? '92%' : $width;
         $height = is_null($height) ? '700px' : $height;
         $style = is_null($style) ? ['margin' => '50px auto', 'float' => 'none'] : $style;
 

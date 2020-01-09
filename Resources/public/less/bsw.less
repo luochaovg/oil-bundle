@@ -1,6 +1,6 @@
 @import "foundation.less";
 
-.app-scaffold {
+.bsw-scaffold {
   min-height: 100vh;
 }
 
@@ -144,17 +144,17 @@
       margin-bottom: 15px;
     }
 
-    .app-welcome {
+    .bsw-welcome {
       padding: 20px;
       background: #fff;
       margin-bottom: 15px;
     }
 
-    .app-content {
+    .bsw-content {
       overflow: auto;
       padding: 0;
 
-      .app-preview {
+      .bsw-preview {
         background: #fff;
       }
 
@@ -176,7 +176,7 @@
   }
 }
 
-.app-menu-mobile {
+.bsw-menu-mobile {
   .ant-drawer-body {
     padding: 0;
 
@@ -187,17 +187,17 @@
   }
 }
 
-.app-disable {
+.bsw-disable {
   color: #ddd;
 }
 
-.app-text {
+.bsw-text {
   text-align: center;
   font-size: 16px;
   margin: 25px auto;
 }
 
-.app-long-text {
+.bsw-long-text {
   word-break: break-all;
   //word-wrap: break-word;
   overflow: hidden;
@@ -208,7 +208,7 @@ thead.ant-table-thead > tr > th > div {
   //white-space: nowrap;
 }
 
-.app-operate {
+.bsw-operate {
   &.top {
     text-align: right;
     margin-bottom: 15px;
@@ -232,7 +232,7 @@ thead.ant-table-thead > tr > th > div {
   }
 }
 
-.app-record-action {
+.bsw-record-action {
   button {
     margin: 3px 2px;
   }
@@ -242,13 +242,13 @@ thead.ant-table-thead > tr > th > div {
   }
 }
 
-.app-persistence {
+.bsw-persistence {
   padding: 80px 40px;
   overflow: hidden;
   transition: padding .6s ease-out;
 
   > form {
-    max-width: 800px;
+    max-width: 850px;
   }
 
   @media screen and (max-width: @mobile) {
@@ -256,7 +256,7 @@ thead.ant-table-thead > tr > th > div {
   }
 }
 
-.app-grant form {
+.bsw-grant form {
   max-width: unset;
   user-select: none;
 
@@ -288,7 +288,7 @@ div.ant-input-number {
 
 .ant-menu,
 .ant-tag,
-.app-menu .logo,
+.bsw-menu .logo,
 .ant-layout-header,
 .ant-layout-footer,
 .ant-form-item-label,
@@ -297,7 +297,7 @@ div.ant-input-number {
   user-select: none;
 }
 
-.app-pre {
+.bsw-pre {
   margin-bottom: 0;
 }
 
@@ -322,7 +322,7 @@ span.ant-calendar-picker {
   }
 }
 
-.app-preview-image {
+.bsw-preview-image {
   display: inline-block;
   border: 1px rgba(24, 144, 255, 1) dashed;
   border-radius: 8px;
@@ -336,23 +336,23 @@ span.ant-calendar-picker {
   }
 }
 
-.app-chart-tabs {
+.bsw-chart-tabs {
   margin: 30px 30px 0 30px;
   text-align: center;
 }
 
-.app-chart-list {
+.bsw-chart-list {
   margin: 30px;
 }
 
-.app-filter-form {
+.bsw-filter-form {
   padding: 16px 20px;
   overflow: hidden;
   margin-bottom: 10px;
   background: #fafafa;
   border: 1px solid #e8e8e8;
 
-  .app-filter-item {
+  .bsw-filter-item {
     margin: 4px;
     float: left;
 
@@ -361,24 +361,24 @@ span.ant-calendar-picker {
       color: rgba(0, 0, 0, .60);
     }
 
-    &.app-filter-action button {
+    &.bsw-filter-action button {
       margin: 0;
     }
   }
 }
 
-.app-page-container {
+.bsw-page-container {
   background: white;
 }
 
 .ant-form-item-required:before {
-  animation: app-breathing 2s infinite;
+  animation: bsw-breathing 2s infinite;
 }
 
-.app-chart-container {
+.bsw-chart-container {
   background: white;
 
-  .app-filter-form {
+  .bsw-filter-form {
     border: none;
     border-bottom: 1px solid #e8e8e8;
   }
@@ -403,16 +403,16 @@ div.modal-container-center div.ant-modal-body > div {
   }
 }
 
-a.app-preview-link {
+a.bsw-preview-link {
   padding-right: 5px;
 }
 
-iframe#app-preview-iframe {
+iframe#bsw-preview-iframe {
   width: 100%;
   border: none;
 }
 
-.app-preview-iframe .ant-modal-body {
+.bsw-preview-iframe .ant-modal-body {
   padding: 0;
   margin: 0;
 }
@@ -459,4 +459,8 @@ blockquote {
   p {
     margin: 8px 0 !important;
   }
+}
+
+.ant-breadcrumb-separator {
+  color: rgba(0, 0, 0, 0.15);
 }

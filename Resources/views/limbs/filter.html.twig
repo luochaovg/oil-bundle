@@ -1,6 +1,6 @@
 {% if filter.filter is not empty %}
   <a-form
-    class="app-filter-form"
+    class="bsw-filter-form"
     :form="form_filter_{{ uuid }}"
     layout="vertical"
     @submit="submit_filter_{{ uuid }}"
@@ -13,7 +13,7 @@
       {% set width = (filter.columnPx * item.column + extra) %}
       <a-form-item
         label="{{ item.label }}"
-        class="app-filter-item"
+        class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filter_display_{{ uuid }}('{{ key }}') }"
       >
         {% if item.type is iterable %}
@@ -41,7 +41,7 @@
     {% endfor %}
 
     {% if filter.filter|length > filter.maxShow %}
-      <a-form-item class="app-filter-item app-filter-action" label="　">
+      <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
         <a-button @click="toggle_filter_{{ uuid }}" type="dashed">
           <span v-if="expand_filter_{{ uuid }}">
             {{ 'a:left'|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
@@ -54,7 +54,7 @@
     {% endif %}
 
     {% for item in filter.operates %}
-      <a-form-item class="app-filter-item app-filter-action" label="　">
+      <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
         {% include '@LeonBsw/form/button.html.twig' with {form: item} %}
       </a-form-item>
     {% endfor %}
