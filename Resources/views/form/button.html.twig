@@ -23,8 +23,8 @@
     {{ form.icon|icon|raw }}
   {% endif %}
   {{ form.label|trans({}, 'twig') }}
-  {% if form.selector and uuid is defined %}
-    {% set var = 'selected_row_keys_' ~ uuid ~ '.length' %}
+  {% if form.selector %}
+    {% set var = 'preview_selected_row.length' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
 </a-button>

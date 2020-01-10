@@ -27,7 +27,7 @@ var FileUploadAdapter = function () {
                     var data = new FormData();
                     data.append('ck-editor', file);
                     data.append('file_flag', 'ck-editor');
-                    app.request(_this.api, data, null, true).then(function (res) {
+                    bsw.request(_this.api, data, null, true).then(function (res) {
                         if (res.error) {
                             reject(res.message);
                         } else {

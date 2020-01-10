@@ -1,14 +1,12 @@
 {% extends '@LeonBsw/layout/blank.html.twig' %}
-
-{% set uuid = scaffold.uuid %}
 {% set tpl_content_class = ['bsw-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
   <div class="bsw-persistence">
     <a-form
-      id="form_persistence_{{ uuid }}"
-      :form="form_persistence_{{ uuid }}"
-      @submit="submit_persistence_{{ uuid }}"
+      id="persistence_form"
+      :form="persistence_form"
+      @submit="persistence_submit"
     >
       {% set total_column = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
       {% set label_column = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
@@ -49,28 +47,27 @@
 {% endblock %}
 
 {% block javascript %}
-app.configure({
+bsw.configure({
     data: {
-        form_persistence_{{ uuid }}: null,
-        date_format_{{ uuid }}: {{ persistence.formatJson|raw }},
-        key_for_form: 'form_persistence_{{ uuid }}',
-        key_for_file_md5: null,
-        key_for_file_sha1: null,
-        key_for_file_list: null,
+        persistence_form: null,
+        persistence_format: {{ persistence.formatJson|raw }},
+        persistence_file_md5: null,
+        persistence_file_sha1: null,
+        persistence_file_list: null,
         {% for key, value in persistence.dataKeys %}
         {{ key }}: {{ value }},
         {% endfor %}
     },
     method: {
-        submit_persistence_{{ uuid }}(e) {
-            this.persistence(e, '{{ uuid }}');
+        persistence_submit(e) {
+            this.persistence(e);
         }
     },
     logic: {
-        form_persistence_{{ uuid }}(v) {
-            v.form_persistence_{{ uuid }} = v.$form.createForm(v);
+        persistence_init(v) {
+            v.persistence_form = v.$form.createForm(v);
             v.$nextTick(function () {
-                app.cnf.v.initCkEditor();
+                bsw.cnf.v.initCkEditor();
             });
         }
     }

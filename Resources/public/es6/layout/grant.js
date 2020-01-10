@@ -1,4 +1,4 @@
-app.configure({
+bsw.configure({
     data: {
         selected_list: {},
         disabled_list: []
@@ -6,10 +6,9 @@ app.configure({
     method: {
         selectAll() {
             let that = this;
-            let data = that[that.key_for_form];
             $.each(this.selected_list, function (key, meta) {
                 let disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                let selected = data.getFieldValue(key);
+                let selected = that.persistence_form.getFieldValue(key);
                 let values = [];
                 for (let v of meta) {
                     if (disabled.includes(v)) {
@@ -20,22 +19,21 @@ app.configure({
                         values.push(v);
                     }
                 }
-                data.setFieldsValue({[key]: values});
+                that.persistence_form.setFieldsValue({[key]: values});
             });
         },
         unSelectAll() {
             let that = this;
-            let data = that[that.key_for_form];
             $.each(this.selected_list, function (key, meta) {
                 let disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                let selected = data.getFieldValue(key);
+                let selected = that.persistence_form.getFieldValue(key);
                 let values = [];
                 for (let v of meta) {
                     if (disabled.includes(v) && selected.includes(v)) {
                         values.push(v);
                     }
                 }
-                data.setFieldsValue({[key]: values});
+                that.persistence_form.setFieldsValue({[key]: values});
             });
         },
     },

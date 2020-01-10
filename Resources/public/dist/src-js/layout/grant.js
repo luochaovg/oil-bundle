@@ -2,7 +2,7 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-app.configure({
+bsw.configure({
     data: {
         selected_list: {},
         disabled_list: []
@@ -10,10 +10,9 @@ app.configure({
     method: {
         selectAll: function selectAll() {
             var that = this;
-            var data = that[that.key_for_form];
             $.each(this.selected_list, function (key, meta) {
                 var disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                var selected = data.getFieldValue(key);
+                var selected = that.persistence_form.getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
@@ -46,15 +45,14 @@ app.configure({
                     }
                 }
 
-                data.setFieldsValue(_defineProperty({}, key, values));
+                that.persistence_form.setFieldsValue(_defineProperty({}, key, values));
             });
         },
         unSelectAll: function unSelectAll() {
             var that = this;
-            var data = that[that.key_for_form];
             $.each(this.selected_list, function (key, meta) {
                 var disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                var selected = data.getFieldValue(key);
+                var selected = that.persistence_form.getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
@@ -83,7 +81,7 @@ app.configure({
                     }
                 }
 
-                data.setFieldsValue(_defineProperty({}, key, values));
+                that.persistence_form.setFieldsValue(_defineProperty({}, key, values));
             });
         }
     }

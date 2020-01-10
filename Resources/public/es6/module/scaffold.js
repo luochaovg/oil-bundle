@@ -1,4 +1,4 @@
-app.configure({
+bsw.configure({
     method: {
         themeSwitch() {
             this.theme = bsw.cookieMapNext('bsw_theme', this.themeMap, this.theme, true);
@@ -11,26 +11,26 @@ app.configure({
             let _collapsed = this.menuCollapsed ? 'yes' : 'no';
             let collapsed = bsw.cookieMapNext('bsw_menu_collapsed', this.opposeMap, _collapsed, true);
             this.menuCollapsed = (collapsed === 'yes');
-        }
-    },
-
-    logic: {
-        menu(v) {
+        },
+        scaffoldInit() {
             // theme
-            v.theme = bsw.cookieMapCurrent('bsw_theme', v.themeMap, v.configure.theme || v.theme);
+            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, this.configure.theme || this.theme);
             // color weak
-            v.weak = bsw.cookieMapCurrent('bsw_color_weak', v.opposeMap, v.configure.weak || v.weak);
-            bsw.switchClass('bsw-weak', v.weak);
+            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, this.configure.weak || this.weak);
+            bsw.switchClass('bsw-weak', this.weak);
             // menu
-            v.menuWidth = v.configure.menu_width || v.menuWidth;
+            this.menuWidth = this.configure.menu_width || this.menuWidth;
             let collapsed = bsw.cookieMapCurrent(
                 'bsw_menu_collapsed',
-                v.opposeMap,
-                (typeof v.configure.menu_collapsed === 'undefined') ? v.menuWidth : v.configure.menu_collapsed
+                this.opposeMap,
+                (typeof this.configure.menu_collapsed === 'undefined') ? this.menuWidth : this.configure.menu_collapsed
             );
-            v.$nextTick(function () {
-                v.menuCollapsed = (collapsed === 'yes');
+
+            let menuCollapsed = (collapsed === 'yes');
+            this.$nextTick(function () {
+                this.menuCollapsed = menuCollapsed;
             });
+            return menuCollapsed;
         }
-    }
+    },
 });

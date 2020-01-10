@@ -1,9 +1,9 @@
 {% if filter.filter is not empty %}
   <a-form
     class="bsw-filter-form"
-    :form="form_filter_{{ uuid }}"
+    :form="filter_form"
     layout="vertical"
-    @submit="submit_filter_{{ uuid }}"
+    @submit="filter_submit"
   >
     {% for key, item in filter.filter %}
       {% set extra = 0 %}
@@ -14,7 +14,7 @@
       <a-form-item
         label="{{ item.label }}"
         class="bsw-filter-item"
-        :style="{ width: '{{ width }}px', display: filter_display_{{ uuid }}('{{ key }}') }"
+        :style="{ width: '{{ width }}px', display: filter_display('{{ key }}') }"
       >
         {% if item.type is iterable %}
           {% if item.title %}
@@ -42,8 +42,8 @@
 
     {% if filter.filter|length > filter.maxShow %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
-        <a-button @click="toggle_filter_{{ uuid }}" type="dashed">
-          <span v-if="expand_filter_{{ uuid }}">
+        <a-button @click="filter_toggle" type="dashed">
+          <span v-if="filter_expand">
             {{ 'a:left'|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
           </span>
           <span v-else>

@@ -6,8 +6,7 @@
 // Register global
 //
 
-window.bsw = FoundationAntD;
-window.app = new FoundationAntD({
+window.bsw = new FoundationAntD({
     rsaPublicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc
 B4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5
@@ -22,7 +21,7 @@ NydhxUEs0y8aMzWbGwIDAQAB
 
 $(function () {
     // vue
-    app.vue('.bsw-body').template(app.config.template || null).data(Object.assign({
+    bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
 
         bsw,
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -46,7 +45,7 @@ $(function () {
             visible: false,
         },
 
-    }, app.config.data)).computed(Object.assign({}, app.config.computed || {})).method(Object.assign({
+    }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
 
         moment,
 
@@ -77,7 +76,7 @@ $(function () {
             if (typeof data.confirm === 'undefined') {
                 action();
             } else {
-                app.showConfirm(data.confirm, app.lang.confirm_title, {onOk: () => action()});
+                bsw.showConfirm(data.confirm, bsw.lang.confirm_title, {onOk: () => action()});
             }
         },
 
@@ -94,18 +93,18 @@ $(function () {
             this.formMethod = $(element).attr('bsw-method');
         },
 
-        pagination(url, page, uuid) {
+        pagination(url, page) {
             let that = this;
             if (page) {
                 url = bsw.setParams({page}, url);
             }
-            app.request(url).then((res) => {
-                app.response(res).then(() => {
-                    that[`list_${uuid}`] = res.sets.preview.list;
-                    that[`page_${uuid}`] = page;
-                    that[`url_${uuid}`] = url;
-                    that[`page_data_${uuid}`] = res.sets.preview.page;
-                    that[`image_change_table_${uuid}`]();
+            bsw.request(url).then((res) => {
+                bsw.response(res).then(() => {
+                    that.preview_list = res.sets.preview.list;
+                    that.preview_page_number = page;
+                    that.preview_url = url;
+                    that.preview_pagination_data = res.sets.preview.page;
+                    that.preview_image_change();
                     history.replaceState({}, "", bsw.unsetParams(['uuid'], url));
                 }).catch((reason => {
                     console.warn(reason);
@@ -115,11 +114,10 @@ $(function () {
             }));
         },
 
-        filter(event, uuid, jump = false) {
+        filter(event, jump = false) {
             let that = this;
-            let formatKey = `date_format_${uuid}`;
             event.preventDefault();
-            that[`form_filter_${uuid}`].validateFields((err, values) => {
+            that.filter_form.validateFields((err, values) => {
                 if (err) {
                     return false;
                 }
@@ -129,21 +127,23 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        values[field] = values[field].format(values[field]._f || that[formatKey][field]);
+                        let format = values[field]._f || that.filter_format[field];
+                        values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                values[field][i] = values[field][i].format(values[field][i]._f || that[formatKey][field]);
+                                let format = values[field][i]._f || that.filter_format[field];
+                                values[field][i] = values[field][i].format(format);
                             }
                         }
                     }
                 }
-                return this[`${this.formMethod}FilterForm`](values, uuid, jump);
+                return this[`${this.formMethod}FilterForm`](values, jump);
             });
         },
 
-        submitFilterForm(values, uuid, jump = false) {
+        submitFilterForm(values, jump = false) {
             let _values = {};
             let number = 0;
             for (let field in values) {
@@ -169,15 +169,14 @@ $(function () {
             if (jump) {
                 location.href = url;
             } else {
-                this.pagination(url, null, uuid);
+                this.pagination(url);
             }
         },
 
-        persistence(event, uuid) {
+        persistence(event) {
             let that = this;
-            let formatKey = `date_format_${uuid}`;
             event.preventDefault();
-            that[`form_persistence_${uuid}`].validateFields((err, values) => {
+            that.persistence_form.validateFields((err, values) => {
                 if (err) {
                     return false;
                 }
@@ -187,12 +186,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        values[field] = values[field].format(values[field]._f || that[formatKey][field]);
+                        let format = values[field]._f || that.persistence_format[field];
+                        values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                values[field][i] = values[field][i].format(values[field][i]._f || that[formatKey][field]);
+                                let format = values[field][i]._f || that.persistence_format[field];
+                                values[field][i] = values[field][i].format(format);
                             }
                         }
                     }
@@ -200,16 +201,21 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return this[`${this.formMethod}PersistenceForm`](values, uuid);
+                return this[`${this.formMethod}PersistenceForm`](values);
             });
         },
 
-        submitPersistenceForm(values, uuid) {
+        submitPersistenceForm(values) {
             let data = {submit: values};
-            app.request(this.formUrl, data).then((res) => {
-                app.response(res).catch((reason => {
-                    console.warn(reason);
-                }));
+            bsw.request(this.formUrl, data).then((res) => {
+                let params = bsw.parseQueryString();
+                if (params.iframe) {
+                    parent.postMessage({response: res, function: 'handleResponse'}, '*');
+                } else {
+                    bsw.response(res).catch((reason => {
+                        console.warn(reason);
+                    }));
+                }
             }).catch((reason => {
                 console.warn(reason);
             }));
@@ -222,9 +228,9 @@ $(function () {
                 this.spinning = true;
             }
 
-            let keyMd5 = this.key_for_file_md5;
-            let keySha1 = this.key_for_file_sha1;
-            let keyList = this.key_for_file_list;
+            let keyMd5 = this.persistence_file_md5;
+            let keySha1 = this.persistence_file_sha1;
+            let keyList = this.persistence_file_list;
 
             if (!file.response) {
                 this[keyList] = fileList;
@@ -251,11 +257,11 @@ $(function () {
                         if ($(`#${field}`).length === 0) {
                             continue;
                         }
-                        this[this.key_for_form].setFieldsValue({[field]: sets[map[key]]});
+                        this.persistence_form.setFieldsValue({[field]: sets[map[key]]});
                     }
                 }
             }
-            app.response(file.response).catch((reason => {
+            bsw.response(file.response).catch((reason => {
                 console.warn(reason);
             }));
         },
@@ -263,19 +269,20 @@ $(function () {
         showModal(options) {
             options.visible = true;
             if (typeof options.width === 'undefined') {
-                options.width = app.popupCosySize().width;
+                options.width = bsw.popupCosySize().width;
             }
             this.modal = Object.assign(this.modal, options);
         },
 
         showModalAfterRequest(data, element) {
-            app.request(data.location).then((res) => {
-                app.response(res).then(() => {
+            bsw.request(data.location).then((res) => {
+                bsw.response(res).then(() => {
                     let sets = res.sets;
                     let logic = sets.logic || sets;
                     this.showModal({
-                        width: logic.width || data.width || app.popupCosySize().width,
-                        title: logic.title || data.title || app.lang.modal_title,
+                        centered: true,
+                        width: logic.width || data.width || bsw.popupCosySize().width,
+                        title: logic.title || data.title || bsw.lang.modal_title,
                         content: sets.content,
                     });
                 }).catch((reason => {
@@ -288,9 +295,9 @@ $(function () {
 
         requestByAjax(data, element) {
             let that = this;
-            app.request(data.location).then((res) => {
-                app.response(res, () => {
-                    that[`pagination_refresh_${data.uuid}`]();
+            bsw.request(data.location).then((res) => {
+                bsw.response(res).then(() => {
+                    that.preview_pagination_refresh();
                 }).catch((reason => {
                     console.warn(reason);
                 }));
@@ -300,14 +307,12 @@ $(function () {
         },
 
         multipleAction(data, element) {
-            let ids = this[`selected_row_keys_${data.uuid}`];
+            let ids = this.preview_selected_row;
             if (ids.length === 0) {
-                return app.warning(app.lang.select_item_first);
+                return bsw.warning(bsw.lang.select_item_first);
             }
-            app.request(data.location, {ids: ids}).then((res) => {
-                app.response(res, () => {
-                    console.log(res);
-                }).catch((reason => {
+            bsw.request(data.location, {ids: ids}).then((res) => {
+                bsw.response(res).catch((reason => {
                     console.warn(reason);
                 }));
             }).catch((reason => {
@@ -315,37 +320,39 @@ $(function () {
             }));
         },
 
-        showIFrameByVue(event) {
-            let size = app.popupCosySize();
-            let object = $(event.target);
-            let data = this.getBswData(object);
-            data.location = bsw.setParams({iframe: true, fill: object.prev().attr('id')}, data.location);
+        showIFrame(data, element) {
+            let size = bsw.popupCosySize();
+            let fill = $(element).prev().attr('id');
+            data.location = bsw.setParams({iframe: true, fill}, data.location);
 
             let options = {
                 visible: true,
-                width: size.width,
-                title: app.lang.please_select,
+                width: data.width || size.width,
+                title: data.title || bsw.lang.please_select,
                 centered: true,
                 wrapClassName: 'bsw-preview-iframe',
                 content: `<iframe id="bsw-preview-iframe" src="${data.location}"></iframe>`,
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-preview-iframe").height(size.height);
+                $("#bsw-preview-iframe").height(data.height || size.height);
             });
         },
 
-        fillParentForm(data, element) {
-            data.ids = this[`selected_row_keys_${data.uuid}`];
-            if (data.ids.length === 0) {
-                return app.warning(app.lang.select_item_first);
-            }
-            parent.postMessage(data, '*');
+        showIFrameByNative(element) {
+            this.showIFrame(this.getBswData($(element)), element);
         },
 
-        fillParentFormInParent(data, element) {
-            this.modal.visible = false;
-            this[this.key_for_form].setFieldsValue({[data.fill]: data.ids.join(',')});
+        showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0])
+        },
+
+        fillParentForm(data, element) {
+            data.ids = this.preview_selected_row;
+            if (data.ids.length === 0) {
+                return bsw.warning(bsw.lang.select_item_first);
+            }
+            parent.postMessage(data, '*');
         },
 
         initCkEditor() {
@@ -358,15 +365,31 @@ $(function () {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        that[that.key_for_form].setFieldsValue({[id]: that.ckEditor[id].getData()});
+                        that.persistence_form.setFieldsValue({[id]: that.ckEditor[id].getData()});
                     });
                 }).catch(err => {
-                    console.log(err.stack);
+                    console.warn(err.stack);
                 });
             });
         },
 
-    }, app.config.method || {})).directive(Object.assign({
+        //
+        // for iframe exec in parent
+        //
+
+        fillParentFormInParent(data, element) {
+            this.modal.visible = false;
+            this.persistence_form.setFieldsValue({[data.fill]: data.ids.join(',')});
+        },
+
+        handleResponseInParent(data, element) {
+            this.modal.visible = false;
+            bsw.response(data.response).catch((reason => {
+                console.warn(reason);
+            }));
+        },
+
+    }, bsw.config.method || {})).directive(Object.assign({
 
         // directive
         init: {
@@ -375,15 +398,20 @@ $(function () {
             }
         },
 
-    }, app.config.directive || {})).component(Object.assign({
+    }, bsw.config.directive || {})).component(Object.assign({
 
         // component
-        'b-icon': app.d.Icon.createFromIconfontCN({
+        'b-icon': bsw.d.Icon.createFromIconfontCN({
             // /bundles/leonbsw/dist/js/iconfont.js
             scriptUrl: $('#var-font-symbol').attr('bsw-value')
         }),
 
-    }, app.config.component || {})).init(function (v) {
+    }, bsw.config.component || {})).init(function (v) {
+
+        let change = false;
+        if (v.scaffoldInit) {
+            change = v.scaffoldInit();
+        }
 
         // change captcha
         $('img.bsw-captcha').off('click').on('click', function () {
@@ -392,28 +420,26 @@ $(function () {
             $(this).attr('src', src);
         });
 
-        let duration = 100;
-        setTimeout(function () {
+        v.$nextTick(function () {
             // logic
-            for (let fn in app.config.logic || []) {
-                if (!app.config.logic.hasOwnProperty(fn)) {
+            for (let fn in bsw.config.logic || []) {
+                if (!bsw.config.logic.hasOwnProperty(fn)) {
                     continue;
                 }
-                app.config.logic[fn](v);
+                bsw.config.logic[fn](v);
             }
-        }, duration);
+        });
 
-        // page loading
+        let timeout = change ? 800 : 100;
         setTimeout(function () {
-            // message
             $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
                     let duration = v.message.duration ? v.message.duration : undefined;
                     try {
-                        app[v.message.classify](v.message.content, duration, null, v.message.type);
+                        bsw[v.message.classify](v.message.content, duration, null, v.message.type);
                     } catch (e) {
-                        console.warn(app.lang.message_data_error);
+                        console.warn(bsw.lang.message_data_error);
                         console.warn(v.message);
                     }
                 }
@@ -422,12 +448,12 @@ $(function () {
                     v.showModal(v.tips);
                 }
             });
-        }, duration + 400);
+        }, timeout);
     });
 
     window.addEventListener('message', function (event) {
         event.data.function += 'InParent';
-        app.cnf.v.dispatcher(event.data, $('body')[0]);
+        bsw.cnf.v.dispatcher(event.data, $('body')[0]);
     }, false)
 });
 

@@ -15,7 +15,7 @@ class FileUploadAdapter {
             const data = new FormData();
             data.append('ck-editor', file);
             data.append('file_flag', 'ck-editor');
-            app.request(this.api, data, null, true).then(function (res) {
+            bsw.request(this.api, data, null, true).then(function (res) {
                 if (res.error) {
                     reject(res.message);
                 } else {

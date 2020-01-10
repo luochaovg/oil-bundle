@@ -16,9 +16,9 @@
   {% endif %}
   type="{{ form.htmlType }}"
   bsw-data="{{ form.data }}"
-  onclick="app.cnf.v.dispatcherByNative(this)"
-  {% if form.selector and uuid is defined %}
-    {% set var = 'selected_row_keys_' ~ uuid ~ '.length' %}
+  onclick="bsw.cnf.v.dispatcherByNative(this)"
+  {% if form.selector %}
+    {% set var = 'preview_selected_row.length' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {{ form.attributes|raw }}

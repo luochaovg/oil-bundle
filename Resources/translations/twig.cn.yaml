@@ -102,5 +102,6 @@ Should update token:                                            '接口将返回
 Http code:                                                      'http 状态码'
 'Logic code {{ ok }} means error, otherwise success message':   '逻辑状态码非 {{ ok }} 时为错误提示，否则为普通提示'
 'Data when logic code is {{ ok }}':                             '逻辑状态码为 {{ ok }} 时的相关数据'
-Error type for frontend:                                        '错误类型，方便前端使用相应样式提示'
+Message classify for frontend:                                  '消息类型，方便前端使用相应样式提示'
+Popup type for frontend:                                        '弹窗类型，方便前端使用相应样式提示'
 Supplementary notes:                                            '补充说明'

@@ -1,4 +1,4 @@
-app.configure({
+bsw.configure({
     data: {
         size: 'large',
         form: null,
@@ -21,34 +21,34 @@ app.configure({
             // account
             if (typeof login.account === 'undefined' || !login.account) {
                 this.btnLoading = true;
-                app.error(app.lang.username_required, 3).then(() => this.btnLoading = false);
+                bsw.error(bsw.lang.username_required, 3).then(() => this.btnLoading = false);
                 return false;
             }
 
             // password
             if (typeof login.password === 'undefined' || !login.password) {
                 this.btnLoading = true;
-                app.error(app.lang.password_required, 3).then(() => this.btnLoading = false);
+                bsw.error(bsw.lang.password_required, 3).then(() => this.btnLoading = false);
                 return false;
             }
 
             if (login.password.length < 8 || login.password.length > 20) {
                 this.btnLoading = true;
-                app.warning(app.lang.password_length_error, 3).then(() => this.btnLoading = false);
+                bsw.warning(bsw.lang.password_length_error, 3).then(() => this.btnLoading = false);
                 return false;
             }
 
             // number captcha
             if (typeof login.captcha === 'undefined' || !login.captcha) {
                 this.btnLoading = true;
-                app.error(app.lang.captcha_required, 3).then(() => this.btnLoading = false);
+                bsw.error(bsw.lang.captcha_required, 3).then(() => this.btnLoading = false);
                 return false;
             }
 
-            login.password = app.rsaEncrypt(login.password);
-            app.request(this.api_login, login).then((res) => {
+            login.password = bsw.rsaEncrypt(login.password);
+            bsw.request(this.api_login, login).then((res) => {
                 this.btnLoading = true;
-                app.response(res, null, null, 2).catch(() => {
+                bsw.response(res, null, null, 2).catch(() => {
                     this.btnLoading = false;
                 });
             });

@@ -61,7 +61,12 @@ trait WebResponse
             'classify'   => [
                 'key'   => 'classify',
                 'demo'  => '"warning"',
-                'notes' => 'Error type for frontend',
+                'notes' => 'Message classify for frontend',
+            ],
+            'type' => [
+                'key'   => 'type',
+                'demo'  => '"message"',
+                'notes' => 'Popup type for frontend',
             ],
             'duration'   => [
                 'key'   => 'duration',
@@ -84,6 +89,7 @@ trait WebResponse
      * @param string $message
      * @param array  $data
      * @param string $classify
+     * @param string $type
      * @param int    $duration
      *
      * @return JsonResponse
@@ -95,6 +101,7 @@ trait WebResponse
         string $message = null,
         array $data = [],
         string $classify = Abs::TAG_CLASSIFY_INFO,
+        string $type = Abs::TAG_TYPE_MESSAGE,
         ?int $duration = null
     ): JsonResponse {
 
@@ -171,6 +178,7 @@ trait WebResponse
             $message,
             $data,
             Abs::TAG_CLASSIFY_SUCCESS,
+            Abs::TAG_TYPE_MESSAGE,
             $duration
         );
     }
@@ -199,6 +207,7 @@ trait WebResponse
             $message,
             $data,
             Abs::TAG_CLASSIFY_SUCCESS,
+            Abs::TAG_TYPE_MESSAGE,
             $duration
         );
     }
@@ -248,6 +257,7 @@ trait WebResponse
             $tiny,
             $data,
             Abs::TAG_CLASSIFY_ERROR,
+            Abs::TAG_TYPE_MESSAGE,
             $duration
         );
     }

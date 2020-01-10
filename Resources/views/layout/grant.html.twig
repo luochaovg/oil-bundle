@@ -1,5 +1,4 @@
 {% extends '@LeonBsw/layout/persistence.html.twig' %}
-
 {% set tpl_content_class_diy = 'bsw-grant' %}
 
 {% block page %}
@@ -7,9 +6,9 @@
   <p class="bsw-hide" v-init:disabled_list='{{ logic.disabled_json|raw }}'></p>
   <div class="bsw-persistence">
     <a-form
-      id="form_persistence_{{ uuid }}"
-      :form="form_persistence_{{ uuid }}"
-      @submit="submit_persistence_{{ uuid }}"
+      id="persistence_form"
+      :form="persistence_form"
+      @submit="persistence_submit"
     >
       {% set total_column = 24 %}
       {% set label_column = 4 %}

@@ -273,7 +273,15 @@ abstract class BswWebController extends AbstractController
             [$code4http, $code4logic] = $code->all();
         }
 
-        return $this->responseAjax($code4logic, $code4http, $message, $data, $classify, $duration);
+        return $this->responseAjax(
+            $code4logic,
+            $code4http,
+            $message,
+            $data,
+            $classify,
+            $type,
+            $duration
+        );
     }
 
     /**
@@ -773,7 +781,8 @@ abstract class BswWebController extends AbstractController
             $code4http,
             $message,
             [],
-            Abs::TAG_CLASSIFY_ERROR
+            Abs::TAG_CLASSIFY_ERROR,
+            Abs::TAG_TYPE_CONFIRM
         );
     }
 }

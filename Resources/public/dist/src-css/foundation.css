@@ -14,12 +14,16 @@
   height: 100%;
   position: fixed;
   z-index: 10000;
-  background: #ffffff;
+  background-color: #ffffff;
   letter-spacing: 2px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 .bsw-page-loading span {
   position: absolute;
-  font-size: 12px;
+  font-size: 20px;
+  font-weight: lighter;
   top: 38.2%;
   left: 50%;
   color: rgba(0, 0, 0, 0.4);

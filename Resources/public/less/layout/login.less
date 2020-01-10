@@ -1,4 +1,5 @@
 @import "../foundation.less";
+
 @img: "/bundles/leonbsw/img";
 
 div.ant-spin-container {
@@ -14,35 +15,45 @@ div.header {
   width: 100%;
   text-align: center;
   user-select: none;
+
   a {
     text-decoration: none;
   }
+
   img {
     width: 50px;
     vertical-align: top;
     margin-right: 10px;
   }
+
   span {
     color: #1890ff;
     font-size: 32px;
+    padding-right: 14px;
+    font-weight: 200;
   }
 }
 
 .login-form {
   margin: 80px auto 0;
   max-width: 360px;
+
   .login-form-forgot {
     float: right;
   }
+
   .login-form-button {
     width: 100%;
   }
+
   .ant-input-prefix .anticon {
     color: rgba(0, 0, 0, .25);
   }
+
   .ant-input-affix-wrapper .ant-input:not(:first-child) {
     padding-left: 36px;
   }
+
   @media screen and (max-width: @mobile) {
     margin: 70px auto 0;
     max-width: 320px;
@@ -52,9 +63,11 @@ div.header {
 .bsw-captcha-item .ant-form-item-children {
   display: flex;
   flex-direction: row;
+
   > span {
     flex: 1;
   }
+
   > img.bsw-captcha {
     margin-left: 10px;
     border: 1px solid #d9d9d9;

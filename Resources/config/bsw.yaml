@@ -113,6 +113,9 @@ parameters:
         app_online_date: '2019-07-01' # use string
         rm_local_file_when_oss: true
         font_symbol: //at.alicdn.com/t/font_1199208_sq9tay0befl.js
+        loading_background_image: ''
+        spinning_icon: ''
+        spinning_label: ''
 
     currency_code: CNY
     currency_char: ￥

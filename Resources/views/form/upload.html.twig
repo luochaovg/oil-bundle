@@ -26,9 +26,9 @@
   name="{{ form.flag }}"
   :data="{ file_flag: '{{ form.flag }}' }"
   @click.native="
-    key_for_file_md5 = '{{ form.fileMd5Key }}',
-    key_for_file_sha1 = '{{ form.fileSha1Key }}',
-    key_for_file_list = '{{ form.fileListKey }}'"
+    persistence_file_md5 = '{{ form.fileMd5Key }}',
+    persistence_file_sha1 = '{{ form.fileSha1Key }}',
+    persistence_file_list = '{{ form.fileListKey }}'"
   @change="{{ form.change }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}FileList']"

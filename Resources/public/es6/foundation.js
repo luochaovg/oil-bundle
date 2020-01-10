@@ -16,7 +16,7 @@ class FoundationPrototype {
      *
      * @return {string}
      */
-    static trim(source, haystack) {
+    trim(source, haystack) {
         haystack = haystack ? ('\\s' + haystack) : '\\s';
         return source.replace(new RegExp('(^[' + haystack + ']*)|([' + haystack + ']*$)', 'g'), '');
     }
@@ -29,7 +29,7 @@ class FoundationPrototype {
      *
      * @return {string}
      */
-    static leftTrim(source, haystack) {
+    leftTrim(source, haystack) {
         haystack = haystack ? ('\\s' + haystack) : '\\s';
         return source.replace(new RegExp('(^[' + haystack + ']*)', 'g'), '');
     }
@@ -42,7 +42,7 @@ class FoundationPrototype {
      *
      * @return {string}
      */
-    static rightTrim(source, haystack) {
+    rightTrim(source, haystack) {
         haystack = haystack ? ('\\s' + haystack) : '\\s';
         return source.replace(new RegExp('([' + haystack + ']*$)', 'g'), '');
     }
@@ -56,7 +56,7 @@ class FoundationPrototype {
      * @param type string
      * @return {*}
      */
-    static pad(target, padStr, length, type) {
+    pad(target, padStr, length, type) {
         padStr = padStr.toString();
         type = type || 'left';
 
@@ -102,7 +102,7 @@ class FoundationPrototype {
      * @param type string
      * @return {*}
      */
-    static fill(target, fillStr, length, type) {
+    fill(target, fillStr, length, type) {
         fillStr = fillStr.toString();
         type = type || 'left';
 
@@ -135,7 +135,7 @@ class FoundationPrototype {
      * @param num int
      * @return {string}
      */
-    static repeat(target, num) {
+    repeat(target, num) {
         num = (isNaN(num) || num < 1) ? 1 : num + 1;
         return new Array(num).join(target);
     };
@@ -146,7 +146,7 @@ class FoundationPrototype {
      * @param target string
      * @return {*}
      */
-    static ucWords(target) {
+    ucWords(target) {
         return target.replace(/\b(\w)+\b/g, function (word) {
             return word.replace(word.charAt(0), word.charAt(0).toUpperCase());
         });
@@ -158,7 +158,7 @@ class FoundationPrototype {
      * @param target string
      * @return {*}
      */
-    static ucFirst(target) {
+    ucFirst(target) {
         return target.replace(target.charAt(0), target.charAt(0).toUpperCase());
     };
 
@@ -168,7 +168,7 @@ class FoundationPrototype {
      * @param target string
      * @return {*}
      */
-    static lcFirst(target) {
+    lcFirst(target) {
         return target.replace(target.charAt(0), target.charAt(0).toLowerCase());
     };
 
@@ -179,7 +179,7 @@ class FoundationPrototype {
      * @param split string
      * @return {*}
      */
-    static bigHump(target, split = '_') {
+    bigHump(target, split = '_') {
         let reg = new RegExp(split, 'g');
         return target.replace(reg, ' ').ucWords().replace(/ /g, '');
     };
@@ -191,8 +191,8 @@ class FoundationPrototype {
      * @param split string
      * @return {*}
      */
-    static smallHump(target, split = '_') {
-        return FoundationPrototype.lcFirst(FoundationPrototype.bigHump(target, split));
+    smallHump(target, split = '_') {
+        return this.lcFirst(this.bigHump(target, split));
     };
 
     /**
@@ -202,8 +202,8 @@ class FoundationPrototype {
      * @param split
      * @returns {void | string | *}
      */
-    static humpToUnder(target, split = '_') {
-        return FoundationPrototype.leftTrim(target.replace(/([A-Z])/g, `${split}$1`).toLowerCase(), split);
+    humpToUnder(target, split = '_') {
+        return this.leftTrim(target.replace(/([A-Z])/g, `${split}$1`).toLowerCase(), split);
     };
 
     /**
@@ -213,7 +213,7 @@ class FoundationPrototype {
      * @param fmt string
      * @return {*}
      */
-    static format(target, fmt = 'yyyy-MM-dd hh:mm:ss') {
+    format(target, fmt = 'yyyy-MM-dd hh:mm:ss') {
         let o = {
             'M+': target.getMonth() + 1,
             'd+': target.getDate(),
@@ -246,7 +246,7 @@ class FoundationPrototype {
      * @param target string
      * @return {any[]}
      */
-    static arrayUnique(target) {
+    arrayUnique(target) {
         return Array.from(new Set(target));
     }
 
@@ -257,7 +257,7 @@ class FoundationPrototype {
      * @param value mixed
      * @return {*}
      */
-    static arrayRemoveValue(target, value) {
+    arrayRemoveValue(target, value) {
         let index = target.indexOf(value);
         if (index > -1) {
             target.splice(index, 1);
@@ -272,7 +272,7 @@ class FoundationPrototype {
      * @param second array
      * @return {*}
      */
-    static arrayIntersect(first, second) {
+    arrayIntersect(first, second) {
         return first.filter((v) => second.indexOf(v) > -1);
     }
 
@@ -283,7 +283,7 @@ class FoundationPrototype {
      * @param second array
      * @return {*}
      */
-    static arrayDifference(first, second) {
+    arrayDifference(first, second) {
         return first.filter((v) => second.indexOf(v) === -1);
     }
 
@@ -294,7 +294,7 @@ class FoundationPrototype {
      * @param second array
      * @return {*}
      */
-    static arrayComplement(first, second) {
+    arrayComplement(first, second) {
         return first.filter((v) => !(second.indexOf(v) > -1)).concat(second.filter((v) => !(first.indexOf(v) > -1)));
     }
 
@@ -305,7 +305,7 @@ class FoundationPrototype {
      * @param second array
      * @return {*}
      */
-    static arrayUnion(first, second) {
+    arrayUnion(first, second) {
         return first.concat(second.filter((v) => !(first.indexOf(v) > -1)));
     }
 
@@ -318,7 +318,7 @@ class FoundationPrototype {
      *
      * @return {array}
      */
-    static swap(source, first, last) {
+    swap(source, first, last) {
         source[first] = source.splice(last, 1, source[first])[0];
         return source;
     }
@@ -331,7 +331,7 @@ class FoundationPrototype {
      *
      * @return {array}
      */
-    static up(source, index) {
+    up(source, index) {
         if (index === 0) {
             return source;
         }
@@ -346,7 +346,7 @@ class FoundationPrototype {
      *
      * @return {array}
      */
-    static down(source, index) {
+    down(source, index) {
         if (index === source.length - 1) {
             return source;
         }
@@ -363,7 +363,7 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Blank fn
      */
-    static blank() {
+    blank() {
     }
 
     /**
@@ -372,7 +372,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isArray(val) {
+    isArray(val) {
         if (null === val) {
             return false;
         }
@@ -385,7 +385,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isObject(val) {
+    isObject(val) {
         if (null === val) {
             return false;
         }
@@ -398,7 +398,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isJson(val) {
+    isJson(val) {
         if (null === val) {
             return false;
         }
@@ -411,7 +411,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isString(val) {
+    isString(val) {
         if (null === val) {
             return false;
         }
@@ -424,7 +424,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isNumeric(val) {
+    isNumeric(val) {
         if (null === val || '' === val) {
             return false;
         }
@@ -437,7 +437,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isBoolean(val) {
+    isBoolean(val) {
         if (null === val) {
             return false;
         }
@@ -450,7 +450,7 @@ class FoundationTools extends FoundationPrototype {
      * @param val mixed
      * @return {boolean}
      */
-    static isFunction(val) {
+    isFunction(val) {
         if (null === val) {
             return false;
         }
@@ -463,7 +463,7 @@ class FoundationTools extends FoundationPrototype {
      * @param json object
      * @return {number}
      */
-    static jsonLength(json) {
+    jsonLength(json) {
         let length = 0;
         let i;
         for (i in json) {
@@ -478,7 +478,7 @@ class FoundationTools extends FoundationPrototype {
      * @param obj join
      * @return {{left: *, top: *, width: number, height: number}}
      */
-    static offset(obj) {
+    offset(obj) {
         obj = obj.jquery ? obj : $(obj);
         let pos = obj.offset();
         return {
@@ -496,7 +496,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {int}
      */
-    static timestamp(second = false) {
+    timestamp(second = false) {
         let time = new Date().getTime();
         return second ? Math.ceil(time / 1000) : time;
     }
@@ -509,7 +509,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @returns {array}
      */
-    static parseQueryString(url = null, hostPart = false) {
+    parseQueryString(url = null, hostPart = false) {
 
         url = decodeURIComponent(url || location.href);
         if (url.indexOf('?') === -1) {
@@ -549,7 +549,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {string}
      */
-    static jsonBuildQuery(source, returnObject = false, needEncode = true) {
+    jsonBuildQuery(source, returnObject = false, needEncode = true) {
 
         let query = '', _query = {}, name, value, fullSubName, subName, subValue, innerObject, i;
         for (name in source) {
@@ -558,7 +558,7 @@ class FoundationTools extends FoundationPrototype {
             }
             value = source[name];
 
-            if (FoundationTools.isArray(value)) {
+            if (this.isArray(value)) {
                 for (i = 0; i < value.length; ++i) {
                     subValue = value[i];
                     fullSubName = name + '[' + i + ']';
@@ -567,7 +567,7 @@ class FoundationTools extends FoundationPrototype {
                     query += this.jsonBuildQuery(innerObject, returnObject, needEncode) + '&';
                     _query = Object.assign(_query, this.jsonBuildQuery(innerObject, returnObject, needEncode));
                 }
-            } else if (FoundationTools.isObject(value)) {
+            } else if (this.isObject(value)) {
                 for (subName in value) {
                     if (!value.hasOwnProperty(subName)) {
                         continue;
@@ -605,7 +605,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {string}
      */
-    static setParams(items, url = null, needEncode = false) {
+    setParams(items, url = null, needEncode = false) {
 
         let queryParams = this.parseQueryString(url, true);
         let host = queryParams.hostPart;
@@ -615,7 +615,7 @@ class FoundationTools extends FoundationPrototype {
         let queryString = this.jsonBuildQuery(items);
         url = `${host}?${queryString}`;
 
-        return FoundationPrototype.trim(url, '?');
+        return this.trim(url, '?');
     }
 
     /**
@@ -627,7 +627,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {string}
      */
-    static unsetParams(items, url, needEncode = false) {
+    unsetParams(items, url, needEncode = false) {
 
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
@@ -642,7 +642,7 @@ class FoundationTools extends FoundationPrototype {
         delete queryParams.hostPart;
 
         url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
-        return FoundationPrototype.trim(url, '?');
+        return this.trim(url, '?');
     }
 
     /**
@@ -654,7 +654,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {string}
      */
-    static unsetParamsBeginWith(items, url, needEncode = false) {
+    unsetParamsBeginWith(items, url, needEncode = false) {
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
@@ -673,7 +673,7 @@ class FoundationTools extends FoundationPrototype {
         delete queryParams.hostPart;
 
         url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
-        return FoundationPrototype.trim(url, '?');
+        return this.trim(url, '?');
     }
 
     /**
@@ -685,7 +685,7 @@ class FoundationTools extends FoundationPrototype {
      * @param pos string
      * @return {number}
      */
-    static pam(obj, length, type, pos) {
+    pam(obj, length, type, pos) {
         length = length || 1;
         type = type || ['margin', 'padding'];
         pos = pos || ['left', 'right'];
@@ -706,7 +706,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {{}}
      */
-    static device() {
+    device() {
         let u = navigator.userAgent;
         return {
             ie: u.indexOf('Trident') > -1,
@@ -728,7 +728,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @returns boolean
      */
-    static isMobile() {
+    isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
@@ -739,7 +739,7 @@ class FoundationTools extends FoundationPrototype {
      * @param begin int
      * @return {*}
      */
-    static rand(end, begin) {
+    rand(end, begin) {
         begin = begin || 0;
 
         let rank = begin;
@@ -756,7 +756,7 @@ class FoundationTools extends FoundationPrototype {
      * @param obj object
      * @param ctrl bool
      */
-    static keyBind(num, callback, obj, ctrl) {
+    keyBind(num, callback, obj, ctrl) {
         obj = obj || $(document);
         obj.unbind('keydown').bind('keydown', function (event) {
             if (ctrl) {
@@ -776,7 +776,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {{}}
      */
-    static media() {
+    media() {
         let width = document.body.clientWidth;
         return {
             'xs': width < 576,
@@ -795,7 +795,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return int
      */
-    static parseInt(value) {
+    parseInt(value) {
         value = parseInt(value);
         return isNaN(value) ? 0 : value;
     }
@@ -805,7 +805,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return {{}}
      */
-    static cookie() {
+    cookie() {
         return {
             set: function (name, value, time = 86400 * 365, domain = null) {
                 let expires = new Date();
@@ -849,7 +849,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return mixed
      */
-    static cookieMapNext(name, map, def, set = false) {
+    cookieMapNext(name, map, def, set = false) {
         let ck = this.cookie();
         let current = ck.get(name, def);
         let next = map[current] || def;
@@ -866,7 +866,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @return mixed
      */
-    static cookieMapCurrent(name, map, def) {
+    cookieMapCurrent(name, map, def) {
         let current = this.cookie().get(name, def);
 
         return map[current] ? current : def;
@@ -880,13 +880,13 @@ class FoundationTools extends FoundationPrototype {
      *
      * @returns {{}}
      */
-    static evalExpr(expression, def = null) {
+    evalExpr(expression, def = null) {
         let data = null;
         try {
             data = window.eval(`(${expression})`);
         } catch (e) {
             console.warn(`Expression has syntax error: ${expression}`);
-            console.error(e);
+            console.warn(e);
         }
 
         return data ? data : def;
@@ -899,7 +899,7 @@ class FoundationTools extends FoundationPrototype {
      * @param add bool
      * @param element string
      */
-    static switchClass(cls, add, element = 'html') {
+    switchClass(cls, add, element = 'html') {
         let container = $(element);
         container.removeClass(cls);
         add === 'yes' && container.addClass(cls);
@@ -913,7 +913,7 @@ class FoundationTools extends FoundationPrototype {
      *
      * @returns boolean
      */
-    static checkJsonDeep(data, keys) {
+    checkJsonDeep(data, keys) {
         let origin = data;
         keys = keys.split('.');
         for (let key of keys) {
@@ -955,9 +955,9 @@ class FoundationAntD extends FoundationTools {
             shade: .1,
             zIndex: 9999,
             requestTimeout: 30,
-            notificationDuration: 6,
-            messageDuration: 6,
-            confirmDuration: 6,
+            notificationDuration: 5,
+            messageDuration: 5,
+            confirmDuration: 5,
             alertType: 'message',
             notificationPlacement: 'topRight',
             v: null,
@@ -1246,7 +1246,7 @@ class FoundationAntD extends FoundationTools {
 
                     if (obj.statusText === 'timeout') {
                         console.warn('Client request timeout: ', obj);
-                        console.log(`Retry current request in times ${times}`);
+                        console.warn(`Retry current request in times ${times}`);
 
                         if (times <= 3) {
                             return that.request(url, data, type, upload, ++times);
@@ -1292,7 +1292,8 @@ class FoundationAntD extends FoundationTools {
             if (result.error) {
 
                 if (result.message) {
-                    that[result.classify](result.message).then(() => {
+                    let duration = result.duration ? result.duration : duration;
+                    that[result.classify](result.message, duration, null, result.type).then(() => {
                         failedHandler(result);
                     }).catch((reason => {
                         console.warn(reason);
@@ -1306,7 +1307,8 @@ class FoundationAntD extends FoundationTools {
             } else {
 
                 if (result.message) {
-                    that[result.classify](result.message, result.duration || duration).then(function () {
+                    let duration = result.duration ? result.duration : duration;
+                    that[result.classify](result.message, duration, null, result.type).then(function () {
                         successHandler(result);
                     }).catch((reason => {
                         console.warn(reason);
@@ -1358,7 +1360,7 @@ class FoundationAntD extends FoundationTools {
         let chart = echarts.init(document.getElementById(`chart-${option.id}`), option.theme);
         let o = option.option;
 
-        if (FoundationTools.checkJsonDeep(o, 'tooltip.formatter')) {
+        if (this.checkJsonDeep(o, 'tooltip.formatter')) {
             if (o.tooltip.formatter === ':stackBar') {
                 o.tooltip.formatter = function (params) {
                     let total = 0;

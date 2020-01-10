@@ -1,5 +1,3 @@
-{% set uuid = scaffold.uuid %}
-
 <div class="bsw-operate {{ operate.position }}" v-show="{{ operate.buttons ? 'true' : 'false' }}">
   {% for form in operate.buttons %}
     {% include '@LeonBsw/form/button.html.twig' %}

@@ -23,7 +23,7 @@ var FoundationPrototype = function () {
         _classCallCheck(this, FoundationPrototype);
     }
 
-    _createClass(FoundationPrototype, null, [{
+    _createClass(FoundationPrototype, [{
         key: 'trim',
 
 
@@ -246,7 +246,7 @@ var FoundationPrototype = function () {
         value: function smallHump(target) {
             var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
 
-            return FoundationPrototype.lcFirst(FoundationPrototype.bigHump(target, split));
+            return this.lcFirst(this.bigHump(target, split));
         }
     }, {
         key: 'humpToUnder',
@@ -262,7 +262,7 @@ var FoundationPrototype = function () {
         value: function humpToUnder(target) {
             var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
 
-            return FoundationPrototype.leftTrim(target.replace(/([A-Z])/g, split + '$1').toLowerCase(), split);
+            return this.leftTrim(target.replace(/([A-Z])/g, split + '$1').toLowerCase(), split);
         }
     }, {
         key: 'format',
@@ -468,7 +468,7 @@ var FoundationTools = function (_FoundationPrototype) {
         return _possibleConstructorReturn(this, (FoundationTools.__proto__ || Object.getPrototypeOf(FoundationTools)).apply(this, arguments));
     }
 
-    _createClass(FoundationTools, null, [{
+    _createClass(FoundationTools, [{
         key: 'blank',
 
 
@@ -742,7 +742,7 @@ var FoundationTools = function (_FoundationPrototype) {
                 }
                 value = source[name];
 
-                if (FoundationTools.isArray(value)) {
+                if (this.isArray(value)) {
                     for (i = 0; i < value.length; ++i) {
                         subValue = value[i];
                         fullSubName = name + '[' + i + ']';
@@ -751,7 +751,7 @@ var FoundationTools = function (_FoundationPrototype) {
                         query += this.jsonBuildQuery(innerObject, returnObject, needEncode) + '&';
                         _query = Object.assign(_query, this.jsonBuildQuery(innerObject, returnObject, needEncode));
                     }
-                } else if (FoundationTools.isObject(value)) {
+                } else if (this.isObject(value)) {
                     for (subName in value) {
                         if (!value.hasOwnProperty(subName)) {
                             continue;
@@ -805,7 +805,7 @@ var FoundationTools = function (_FoundationPrototype) {
             var queryString = this.jsonBuildQuery(items);
             url = host + '?' + queryString;
 
-            return FoundationPrototype.trim(url, '?');
+            return this.trim(url, '?');
         }
 
         /**
@@ -858,7 +858,7 @@ var FoundationTools = function (_FoundationPrototype) {
             delete queryParams.hostPart;
 
             url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
-            return FoundationPrototype.trim(url, '?');
+            return this.trim(url, '?');
         }
 
         /**
@@ -915,7 +915,7 @@ var FoundationTools = function (_FoundationPrototype) {
             delete queryParams.hostPart;
 
             url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
-            return FoundationPrototype.trim(url, '?');
+            return this.trim(url, '?');
         }
 
         /**
@@ -1183,7 +1183,7 @@ var FoundationTools = function (_FoundationPrototype) {
                 data = window.eval('(' + expression + ')');
             } catch (e) {
                 console.warn('Expression has syntax error: ' + expression);
-                console.error(e);
+                console.warn(e);
             }
 
             return data ? data : def;
@@ -1290,9 +1290,9 @@ var FoundationAntD = function (_FoundationTools) {
             shade: .1,
             zIndex: 9999,
             requestTimeout: 30,
-            notificationDuration: 6,
-            messageDuration: 6,
-            confirmDuration: 6,
+            notificationDuration: 5,
+            messageDuration: 5,
+            confirmDuration: 5,
             alertType: 'message',
             notificationPlacement: 'topRight',
             v: null,
@@ -1646,7 +1646,7 @@ var FoundationAntD = function (_FoundationTools) {
 
                         if (obj.statusText === 'timeout') {
                             console.warn('Client request timeout: ', obj);
-                            console.log('Retry current request in times ' + times);
+                            console.warn('Retry current request in times ' + times);
 
                             if (times <= 3) {
                                 return that.request(url, data, type, upload, ++times);
@@ -1695,7 +1695,8 @@ var FoundationAntD = function (_FoundationTools) {
                 if (result.error) {
 
                     if (result.message) {
-                        that[result.classify](result.message).then(function () {
+                        var _duration = result.duration ? result.duration : _duration;
+                        that[result.classify](result.message, _duration, null, result.type).then(function () {
                             failedHandler(result);
                         }).catch(function (reason) {
                             console.warn(reason);
@@ -1708,7 +1709,8 @@ var FoundationAntD = function (_FoundationTools) {
                 } else {
 
                     if (result.message) {
-                        that[result.classify](result.message, result.duration || duration).then(function () {
+                        var _duration2 = result.duration ? result.duration : _duration2;
+                        that[result.classify](result.message, _duration2, null, result.type).then(function () {
                             successHandler(result);
                         }).catch(function (reason) {
                             console.warn(reason);
@@ -1769,7 +1771,7 @@ var FoundationAntD = function (_FoundationTools) {
             var chart = echarts.init(document.getElementById('chart-' + option.id), option.theme);
             var o = option.option;
 
-            if (FoundationTools.checkJsonDeep(o, 'tooltip.formatter')) {
+            if (this.checkJsonDeep(o, 'tooltip.formatter')) {
                 if (o.tooltip.formatter === ':stackBar') {
                     o.tooltip.formatter = function (params) {
                         var total = 0;

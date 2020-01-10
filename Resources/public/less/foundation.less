@@ -18,12 +18,17 @@
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index: 10000;
-  background: rgba(255, 255, 255, 1);
-  letter-spacing: 2px;
+  z-index: 99999;
+  background-color: rgba(255, 255, 255, 1);
+  letter-spacing: 3px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
   span {
     position: absolute;
-    font-size: 12px;
+    font-size: 20px;
+    font-weight: lighter;
     top: 38.2%;
     left: 50%;
     color: rgba(0, 0, 0, .4);
@@ -107,38 +112,46 @@ div.ant-modal-mask {
 
 .tippy-popper {
   max-width: 500px;
+
   .tippy-tooltip.light-theme {
     color: rgba(0, 0, 0, 0.51);
     text-align: left;
     box-shadow: 0 0 10px 2px rgba(154, 161, 177, .2), 0 2px 40px -4px rgba(36, 40, 47, .2), 0 2px 4px -2px rgba(91, 94, 105, .2);
     background-color: #fff;
+
     &[data-animatefill] {
       background-color: transparent
     }
+
     .tippy-backdrop {
       background-color: #fff
     }
+
     .tippy-roundarrow {
       width: 24px;
       height: 24px;
       fill: #fff;
     }
   }
+
   &[x-placement^=top] .tippy-tooltip.light-theme .tippy-arrow {
     border-top: 7px solid #fff;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
   }
+
   &[x-placement^=bottom] .tippy-tooltip.light-theme .tippy-arrow {
     border-bottom: 7px solid #fff;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
   }
+
   &[x-placement^=left] .tippy-tooltip.light-theme .tippy-arrow {
     border-left: 7px solid #fff;
     border-top: 7px solid transparent;
     border-bottom: 7px solid transparent;
   }
+
   &[x-placement^=right] .tippy-tooltip.light-theme .tippy-arrow {
     border-right: 7px solid #fff;
     border-top: 7px solid transparent;

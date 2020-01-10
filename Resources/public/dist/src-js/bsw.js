@@ -10,8 +10,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // Register global
 //
 
-window.bsw = FoundationAntD;
-window.app = new FoundationAntD({
+window.bsw = new FoundationAntD({
     rsaPublicKey: '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc\nB4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5\nIZ18C43C4jhtcNncjY6HRDTykkgul8OX2t6eJrRhRcWFYI7ygoYMZZ7vEfHImsXH\nNydhxUEs0y8aMzWbGwIDAQAB\n-----END PUBLIC KEY-----'
 }, jQuery, Vue, antd, window.lang || {});
 
@@ -21,7 +20,7 @@ window.app = new FoundationAntD({
 
 $(function () {
     // vue
-    app.vue('.bsw-body').template(app.config.template || null).data(Object.assign({
+    bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
 
         bsw: bsw,
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -45,7 +44,7 @@ $(function () {
             visible: false
         }
 
-    }, app.config.data)).computed(Object.assign({}, app.config.computed || {})).method(Object.assign({
+    }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
 
         moment: moment,
 
@@ -73,7 +72,7 @@ $(function () {
             if (typeof data.confirm === 'undefined') {
                 action();
             } else {
-                app.showConfirm(data.confirm, app.lang.confirm_title, { onOk: function onOk() {
+                bsw.showConfirm(data.confirm, bsw.lang.confirm_title, { onOk: function onOk() {
                         return action();
                     } });
             }
@@ -88,18 +87,18 @@ $(function () {
             this.formUrl = data.location;
             this.formMethod = $(element).attr('bsw-method');
         },
-        pagination: function pagination(url, page, uuid) {
+        pagination: function pagination(url, page) {
             var that = this;
             if (page) {
                 url = bsw.setParams({ page: page }, url);
             }
-            app.request(url).then(function (res) {
-                app.response(res).then(function () {
-                    that['list_' + uuid] = res.sets.preview.list;
-                    that['page_' + uuid] = page;
-                    that['url_' + uuid] = url;
-                    that['page_data_' + uuid] = res.sets.preview.page;
-                    that['image_change_table_' + uuid]();
+            bsw.request(url).then(function (res) {
+                bsw.response(res).then(function () {
+                    that.preview_list = res.sets.preview.list;
+                    that.preview_page_number = page;
+                    that.preview_url = url;
+                    that.preview_pagination_data = res.sets.preview.page;
+                    that.preview_image_change();
                     history.replaceState({}, "", bsw.unsetParams(['uuid'], url));
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -108,15 +107,14 @@ $(function () {
                 console.warn(reason);
             });
         },
-        filter: function filter(event, uuid) {
+        filter: function filter(event) {
             var _this = this;
 
-            var jump = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+            var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
             var that = this;
-            var formatKey = 'date_format_' + uuid;
             event.preventDefault();
-            that['form_filter_' + uuid].validateFields(function (err, values) {
+            that.filter_form.validateFields(function (err, values) {
                 if (err) {
                     return false;
                 }
@@ -126,21 +124,23 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        values[field] = values[field].format(values[field]._f || that[formatKey][field]);
+                        var format = values[field]._f || that.filter_format[field];
+                        values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                values[field][i] = values[field][i].format(values[field][i]._f || that[formatKey][field]);
+                                var _format = values[field][i]._f || that.filter_format[field];
+                                values[field][i] = values[field][i].format(_format);
                             }
                         }
                     }
                 }
-                return _this[_this.formMethod + 'FilterForm'](values, uuid, jump);
+                return _this[_this.formMethod + 'FilterForm'](values, jump);
             });
         },
-        submitFilterForm: function submitFilterForm(values, uuid) {
-            var jump = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+        submitFilterForm: function submitFilterForm(values) {
+            var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
             var _values = {};
             var number = 0;
@@ -167,16 +167,15 @@ $(function () {
             if (jump) {
                 location.href = url;
             } else {
-                this.pagination(url, null, uuid);
+                this.pagination(url);
             }
         },
-        persistence: function persistence(event, uuid) {
+        persistence: function persistence(event) {
             var _this2 = this;
 
             var that = this;
-            var formatKey = 'date_format_' + uuid;
             event.preventDefault();
-            that['form_persistence_' + uuid].validateFields(function (err, values) {
+            that.persistence_form.validateFields(function (err, values) {
                 if (err) {
                     return false;
                 }
@@ -186,12 +185,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        values[field] = values[field].format(values[field]._f || that[formatKey][field]);
+                        var format = values[field]._f || that.persistence_format[field];
+                        values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                values[field][i] = values[field][i].format(values[field][i]._f || that[formatKey][field]);
+                                var _format2 = values[field][i]._f || that.persistence_format[field];
+                                values[field][i] = values[field][i].format(_format2);
                             }
                         }
                     }
@@ -199,15 +200,20 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return _this2[_this2.formMethod + 'PersistenceForm'](values, uuid);
+                return _this2[_this2.formMethod + 'PersistenceForm'](values);
             });
         },
-        submitPersistenceForm: function submitPersistenceForm(values, uuid) {
+        submitPersistenceForm: function submitPersistenceForm(values) {
             var data = { submit: values };
-            app.request(this.formUrl, data).then(function (res) {
-                app.response(res).catch(function (reason) {
-                    console.warn(reason);
-                });
+            bsw.request(this.formUrl, data).then(function (res) {
+                var params = bsw.parseQueryString();
+                if (params.iframe) {
+                    parent.postMessage({ response: res, function: 'handleResponse' }, '*');
+                } else {
+                    bsw.response(res).catch(function (reason) {
+                        console.warn(reason);
+                    });
+                }
             }).catch(function (reason) {
                 console.warn(reason);
             });
@@ -222,9 +228,9 @@ $(function () {
                 this.spinning = true;
             }
 
-            var keyMd5 = this.key_for_file_md5;
-            var keySha1 = this.key_for_file_sha1;
-            var keyList = this.key_for_file_list;
+            var keyMd5 = this.persistence_file_md5;
+            var keySha1 = this.persistence_file_sha1;
+            var keyList = this.persistence_file_list;
 
             if (!file.response) {
                 this[keyList] = fileList;
@@ -249,31 +255,31 @@ $(function () {
                         if ($('#' + field).length === 0) {
                             continue;
                         }
-                        this[this.key_for_form].setFieldsValue(_defineProperty({}, field, sets[map[key]]));
+                        this.persistence_form.setFieldsValue(_defineProperty({}, field, sets[map[key]]));
                     }
                 }
             }
-            app.response(file.response).catch(function (reason) {
+            bsw.response(file.response).catch(function (reason) {
                 console.warn(reason);
             });
         },
         showModal: function showModal(options) {
             options.visible = true;
             if (typeof options.width === 'undefined') {
-                options.width = app.popupCosySize().width;
+                options.width = bsw.popupCosySize().width;
             }
             this.modal = Object.assign(this.modal, options);
         },
         showModalAfterRequest: function showModalAfterRequest(data, element) {
             var _this3 = this;
 
-            app.request(data.location).then(function (res) {
-                app.response(res).then(function () {
+            bsw.request(data.location).then(function (res) {
+                bsw.response(res).then(function () {
                     var sets = res.sets;
                     var logic = sets.logic || sets;
                     _this3.showModal({
-                        width: logic.width || data.width || app.popupCosySize().width,
-                        title: logic.title || data.title || app.lang.modal_title,
+                        width: logic.width || data.width || bsw.popupCosySize().width,
+                        title: logic.title || data.title || bsw.lang.modal_title,
                         content: sets.content
                     });
                 }).catch(function (reason) {
@@ -285,9 +291,9 @@ $(function () {
         },
         requestByAjax: function requestByAjax(data, element) {
             var that = this;
-            app.request(data.location).then(function (res) {
-                app.response(res, function () {
-                    that['pagination_refresh_' + data.uuid]();
+            bsw.request(data.location).then(function (res) {
+                bsw.response(res).then(function () {
+                    that.preview_pagination_refresh();
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -296,49 +302,48 @@ $(function () {
             });
         },
         multipleAction: function multipleAction(data, element) {
-            var ids = this['selected_row_keys_' + data.uuid];
+            var ids = this.preview_selected_row;
             if (ids.length === 0) {
-                return app.warning(app.lang.select_item_first);
+                return bsw.warning(bsw.lang.select_item_first);
             }
-            app.request(data.location, { ids: ids }).then(function (res) {
-                app.response(res, function () {
-                    console.log(res);
-                }).catch(function (reason) {
+            bsw.request(data.location, { ids: ids }).then(function (res) {
+                bsw.response(res).catch(function (reason) {
                     console.warn(reason);
                 });
             }).catch(function (reason) {
                 console.warn(reason);
             });
         },
-        showIFrameByVue: function showIFrameByVue(event) {
-            var size = app.popupCosySize();
-            var object = $(event.target);
-            var data = this.getBswData(object);
-            data.location = bsw.setParams({ iframe: true, fill: object.prev().attr('id') }, data.location);
+        showIFrame: function showIFrame(data, element) {
+            var size = bsw.popupCosySize();
+            var fill = $(element).prev().attr('id');
+            data.location = bsw.setParams({ iframe: true, fill: fill }, data.location);
 
             var options = {
                 visible: true,
-                width: size.width,
-                title: app.lang.please_select,
+                width: data.width || size.width,
+                title: data.title || bsw.lang.please_select,
                 centered: true,
                 wrapClassName: 'bsw-preview-iframe',
                 content: '<iframe id="bsw-preview-iframe" src="' + data.location + '"></iframe>'
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-preview-iframe").height(size.height);
+                $("#bsw-preview-iframe").height(data.height || size.height);
             });
         },
+        showIFrameByNative: function showIFrameByNative(element) {
+            this.showIFrame(this.getBswData($(element)), element);
+        },
+        showIFrameByVue: function showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0]);
+        },
         fillParentForm: function fillParentForm(data, element) {
-            data.ids = this['selected_row_keys_' + data.uuid];
+            data.ids = this.preview_selected_row;
             if (data.ids.length === 0) {
-                return app.warning(app.lang.select_item_first);
+                return bsw.warning(bsw.lang.select_item_first);
             }
             parent.postMessage(data, '*');
-        },
-        fillParentFormInParent: function fillParentFormInParent(data, element) {
-            this.modal.visible = false;
-            this[this.key_for_form].setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
         },
         initCkEditor: function initCkEditor() {
             var that = this;
@@ -350,14 +355,30 @@ $(function () {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        that[that.key_for_form].setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
+                        that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
                     });
                 }).catch(function (err) {
-                    console.log(err.stack);
+                    console.warn(err.stack);
                 });
             });
+        },
+
+
+        //
+        // for iframe exec in parent
+        //
+
+        fillParentFormInParent: function fillParentFormInParent(data, element) {
+            this.modal.visible = false;
+            this.persistence_form.setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
+        },
+        handleResponseInParent: function handleResponseInParent(data, element) {
+            this.modal.visible = false;
+            bsw.response(data.response).catch(function (reason) {
+                console.warn(reason);
+            });
         }
-    }, app.config.method || {})).directive(Object.assign({
+    }, bsw.config.method || {})).directive(Object.assign({
 
         // directive
         init: {
@@ -366,15 +387,20 @@ $(function () {
             }
         }
 
-    }, app.config.directive || {})).component(Object.assign({
+    }, bsw.config.directive || {})).component(Object.assign({
 
         // component
-        'b-icon': app.d.Icon.createFromIconfontCN({
+        'b-icon': bsw.d.Icon.createFromIconfontCN({
             // /bundles/leonbsw/dist/js/iconfont.js
             scriptUrl: $('#var-font-symbol').attr('bsw-value')
         })
 
-    }, app.config.component || {})).init(function (v) {
+    }, bsw.config.component || {})).init(function (v) {
+
+        var change = false;
+        if (v.scaffoldInit) {
+            change = v.scaffoldInit();
+        }
 
         // change captcha
         $('img.bsw-captcha').off('click').on('click', function () {
@@ -383,28 +409,26 @@ $(function () {
             $(this).attr('src', src);
         });
 
-        var duration = 100;
-        setTimeout(function () {
+        v.$nextTick(function () {
             // logic
-            for (var fn in app.config.logic || []) {
-                if (!app.config.logic.hasOwnProperty(fn)) {
+            for (var fn in bsw.config.logic || []) {
+                if (!bsw.config.logic.hasOwnProperty(fn)) {
                     continue;
                 }
-                app.config.logic[fn](v);
+                bsw.config.logic[fn](v);
             }
-        }, duration);
+        });
 
-        // page loading
+        var timeout = change ? 800 : 100;
         setTimeout(function () {
-            // message
             $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
-                    var _duration = v.message.duration ? v.message.duration : undefined;
+                    var duration = v.message.duration ? v.message.duration : undefined;
                     try {
-                        app[v.message.classify](v.message.content, _duration, null, v.message.type);
+                        bsw[v.message.classify](v.message.content, duration, null, v.message.type);
                     } catch (e) {
-                        console.warn(app.lang.message_data_error);
+                        console.warn(bsw.lang.message_data_error);
                         console.warn(v.message);
                     }
                 }
@@ -413,12 +437,12 @@ $(function () {
                     v.showModal(v.tips);
                 }
             });
-        }, duration + 400);
+        }, timeout);
     });
 
     window.addEventListener('message', function (event) {
         event.data.function += 'InParent';
-        app.cnf.v.dispatcher(event.data, $('body')[0]);
+        bsw.cnf.v.dispatcher(event.data, $('body')[0]);
     }, false);
 });
 

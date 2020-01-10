@@ -1,13 +1,12 @@
 {% extends '@LeonBsw/layout/blank.html.twig' %}
 
-{% set uuid = scaffold.uuid %}
-
 {% block page %}
   {% include '@LeonBsw/limbs/filter.html.twig' %}
+  {% set fields = (preview.choice.fields ?? [])|array_map('${record.%s}')|join(preview.choice.split) %}
   <div class="bsw-preview">
     <a-table
-      :columns="columns_{{ uuid }}"
-      :data-source="list_{{ uuid }}"
+      :columns="preview_columns"
+      :data-source="preview_list"
       :bordered="{{ preview.border ? 'true' : 'false' }}"
       :pagination="false"
       :locale="{
@@ -15,18 +14,17 @@
           filterReset: '{{ 'Reset'|trans({}, 'twig') }}',
           emptyText: '{{ 'No data'|trans({}, 'twig') }}',
         }"
-      {% set fields = (preview.choice.fields ?? [])|array_map('${record.%s}')|join(preview.choice.split) %}
       :row-key="record => `{{ fields }}`"
       {% if preview.choice.enable ?? false %}
         :row-selection="{
             type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
-            selectedRowKeys: selected_row_keys_{{ uuid }},
-            onChange: on_select_change_{{ uuid }},
+            selectedRowKeys: preview_selected_row,
+            onChange: preview_selected_change,
           }"
       {% endif %}
       :scroll="{x: {{ preview.scroll }}}"
       size="{{ preview.size }}"
-      @change="sort_data_{{ uuid }}"
+      @change="preview_sort_data"
     >
       {% for item in preview.dress %}
         {{ item|raw }}
@@ -36,69 +34,67 @@
       :show-quick-jumper="true"
       :hide-on-single-page="true"
       :show-total="(total, range) => `Total ${total}`"
-      :page-size="page_data_{{ uuid }}.pageSize"
-      :default-current="page_data_{{ uuid }}.currentPage"
-      :total="page_data_{{ uuid }}.totalItem"
+      :page-size="preview_pagination_data.pageSize"
+      :default-current="preview_pagination_data.currentPage"
+      :total="preview_pagination_data.totalItem"
       :simple="false"
       size="{{ preview.size }}"
-      @change="pagination_{{ uuid }}"
+      @change="preview_pagination"
     ></a-pagination>
   </div>
 {% endblock %}
 
 {% block javascript %}
-app.configure({
+bsw.configure({
     data: {
-        form_filter_{{ uuid }}: null,
-        date_format_{{ uuid }}: {{ filter.formatJson|raw }},
-        expand_filter_{{ uuid }}: false,
+        filter_form: null,
+        filter_expand: false,
+        filter_format: {{ filter.formatJson|raw }},
     },
     method: {
-        submit_filter_{{ uuid }}(e) {
-            this.filter(e, '{{ uuid }}');
+        filter_submit(e) {
+            this.filter(e);
         },
-        toggle_filter_{{ uuid }}() {
-          this.expand_filter_{{ uuid }} = !this.expand_filter_{{ uuid }};
+        filter_toggle() {
+          this.filter_expand = !this.filter_expand;
         },
-        filter_display_{{ uuid }}(key) {
-            let list = this.expand_filter_{{ uuid }} ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
+        filter_display(key) {
+            let list = this.filter_expand ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
             return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
         },
     },
     logic: {
-        form_filter_{{ uuid }}(v) {
-            v.form_filter_{{ uuid }} = v.$form.createForm(v);
+        filter_form(v) {
+            v.filter_form = v.$form.createForm(v);
         },
     }
 });
-app.configure({
+bsw.configure({
     data: {
-        columns_{{ uuid }}: {{ preview.columnsJson|raw }},
-        list_{{ uuid }}: {{ preview.listJson|raw }},
-        selected_row_keys_{{ uuid }}: [],
-        dynamic_{{ uuid }}: {{ preview.dynamic }},
-        url_{{ uuid }}: '{{ scaffold.url|raw }}',
-        page_data_{{ uuid }}: {{ preview.pageJson|raw }},
-        page_{{ uuid }}: 1,
+        preview_columns: {{ preview.columnsJson|raw }},
+        preview_list: {{ preview.listJson|raw }},
+        preview_selected_row: [],
+        preview_dynamic_refresh: {{ preview.dynamic }},
+        preview_url: '{{ scaffold.url|raw }}',
+        preview_pagination_data: {{ preview.pageJson|raw }},
+        preview_page_number: 1,
     },
     method: {
-        on_select_change_{{ uuid }}(selectedRowKeys) {
-            this.selected_row_keys_{{ uuid }} = selectedRowKeys;
+        preview_selected_change(selectedRow) {
+            this.preview_selected_row = selectedRow;
         },
-        get_url(url) {
-            url = url || this.url_{{ uuid }};
-            let uuid = '{{ uuid }}';
-            let page = this.page_{{ uuid }};
-            return bsw.setParams({uuid, page}, url);
+        preview_get_url(url) {
+            url = url || this.preview_url;
+            return bsw.setParams({uuid: '{{ scaffold.uuid }}', page: this.preview_page_number}, url);
         },
-        pagination_{{ uuid }}(page) {
-            this.pagination(this.get_url(), page, '{{ uuid }}');
+        preview_pagination(page) {
+            this.pagination(this.preview_get_url(), page);
         },
-        pagination_refresh_{{ uuid }}() {
-            this.pagination(this.get_url(), null, '{{ uuid }}');
+        preview_pagination_refresh() {
+            this.pagination(this.preview_get_url());
         },
-        sort_data_{{ uuid }}(pagination, filters, sorter) {
-            let url = this.get_url();
+        preview_sort_data(pagination, filters, sorter) {
+            let url = this.preview_get_url();
             url = bsw.unsetParams(['uuid'], url);
             url = bsw.unsetParamsBeginWith(['sequence'], url);
             if (typeof sorter.field !== 'undefined') {
@@ -106,9 +102,9 @@ app.configure({
                 key = `sequence[${key}]`;
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
-            this.pagination(url, null, '{{ uuid }}');
+            this.pagination(url);
         },
-        image_change_table_{{ uuid }}() {
+        preview_image_change() {
             let that = this;
             let doChecker = setInterval(() => checker(), 50);
             let checker = function() {
@@ -117,9 +113,9 @@ app.configure({
                 $('img').each(function() {
                     done += (this.complete ? 1 : 0);
                 });
-                let tmp = that.columns_{{ uuid }}[0].fixed;
-                that.columns_{{ uuid }}[0].fixed = !tmp;
-                that.columns_{{ uuid }}[0].fixed = tmp;
+                let tmp = that.preview_columns[0].fixed;
+                that.preview_columns[0].fixed = !tmp;
+                that.preview_columns[0].fixed = tmp;
                 if ((done >= total) || total === 0) {
                     clearInterval(doChecker);
                 }
@@ -127,9 +123,9 @@ app.configure({
         },
     },
     logic: {
-        resize_{{ uuid }}(v) {
+        preview_resize(v) {
             let upper = {{ preview.scroll }};
-            let columns = v.columns_{{ uuid }};
+            let columns = v.preview_columns;
             let fixed = [];
             for (let index in columns) {
                 if (!columns.hasOwnProperty(index)) {
@@ -152,17 +148,17 @@ app.configure({
             resize();
             $(window).resize(() => resize());
         },
-        image_{{ uuid }}(v) {
-            v.image_change_table_{{ uuid }}();
+        preview_image_change(v) {
+            v.preview_image_change();
         },
-        dynamic_{{ uuid }}(v) {
-            if (v.dynamic_{{ uuid }} < 5) {
+        preview_dynamic_refresh(v) {
+            if (v.preview_dynamic_refresh < 3) {
                 return;
             }
             setInterval(function() {
                 v.no_loading_once = true;
-                v.pagination_refresh_{{ uuid }}();
-            }, v.dynamic_{{ uuid }} * 1000);
+                v.preview_pagination_refresh();
+            }, v.preview_dynamic_refresh * 1000);
         }
     }
 });

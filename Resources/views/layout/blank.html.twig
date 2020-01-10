@@ -18,7 +18,7 @@
     {{ (menu_html ?? null)|raw }}
     <a-layout>
       {{ (header_html ?? null)|raw }}
-      <a-layout-content>
+      <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
         {{ (crumbs_html ?? null)|raw }}
         {{ (welcome_html ?? null)|raw }}
         {% if operate is defined and operate.position is same as(top) %}
