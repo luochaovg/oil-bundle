@@ -75,19 +75,7 @@ trait Upload
      */
     public function uploadCore($args): Response
     {
-        $options = [
-            'max_size'     => 128 * 1024,
-            'suffix'       => [],
-            'mime'         => [],
-            'pic_sizes'    => [[10, 'max'], [10, 'max']],
-            'save_replace' => false,
-            'root_path'    => $this->parameter('file'),
-            'save_name_fn' => ['uniqid'],
-            'save_path_fn' => function () use ($args) {
-                return $args->file_flag;
-            },
-        ];
-        $options = $this->dispatchMethod(Abs::FN_UPLOAD_OPTIONS, $options, [$args->file_flag, $options]);
+        $options = $this->uploadOptionByFlag($args->file_flag);
 
         // upload
         try {
@@ -98,7 +86,7 @@ trait Upload
         }
 
         // persistence attachment
-        list($new, $file) = $this->persistenceUpload($file);
+        [$new, $file] = $this->persistenceUpload($file);
         if ($new) {
             $file = $this->ossUpload($file);
         }

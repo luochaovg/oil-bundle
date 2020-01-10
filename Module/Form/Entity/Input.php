@@ -2,12 +2,14 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Form;
 
 class Input extends Form
 {
     use Size;
+    use AllowClear;
 
     /**
      * @const string
@@ -41,6 +43,14 @@ class Input extends Form
      * @var string
      */
     protected $type = self::TYPE_TEXT;
+
+    /**
+     * Input constructor.
+     */
+    public function __construct()
+    {
+        $this->allowClear = false;
+    }
 
     /**
      * @return string

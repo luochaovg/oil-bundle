@@ -40,7 +40,7 @@ class Upload extends Number
     /**
      * @var string
      */
-    protected $placeholder = 'Click to upload';
+    protected $placeholder = 'Click to select for upload';
 
     /**
      * @var string

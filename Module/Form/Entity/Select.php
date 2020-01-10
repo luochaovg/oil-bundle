@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\Enum;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
@@ -13,6 +14,7 @@ class Select extends Form
     use Size;
     use Enum;
     use PreviewRoute;
+    use AllowClear;
 
     /**
      * @const string
@@ -24,11 +26,6 @@ class Select extends Form
 
     const SEARCH_VALUE = 'value';
     const SEARCH_LABEL = 'children';
-
-    /**
-     * @var bool
-     */
-    protected $allowClear = true;
 
     /**
      * @var bool
@@ -64,26 +61,6 @@ class Select extends Form
      * @var array
      */
     protected $tokenSeparators = [';', '；'];
-
-    /**
-     * @return bool
-     */
-    public function isAllowClear(): bool
-    {
-        return $this->allowClear;
-    }
-
-    /**
-     * @param bool $allowClear
-     *
-     * @return $this
-     */
-    public function setAllowClear(bool $allowClear = true)
-    {
-        $this->allowClear = $allowClear;
-
-        return $this;
-    }
 
     /**
      * @return bool

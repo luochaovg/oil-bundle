@@ -782,7 +782,8 @@ abstract class BswWebController extends AbstractController
             $message,
             [],
             Abs::TAG_CLASSIFY_ERROR,
-            Abs::TAG_TYPE_CONFIRM
+            Abs::TAG_TYPE_CONFIRM,
+            0
         );
     }
 }

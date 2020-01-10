@@ -393,6 +393,19 @@ class FoundationTools extends FoundationPrototype {
     }
 
     /**
+     * Is null
+     *
+     * @param val mixed
+     * @return {boolean}
+     */
+    isNull(val) {
+        if (val) {
+            return false;
+        }
+        return typeof val !== 'undefined' && val !== 0;
+    }
+
+    /**
      * Is json
      *
      * @param val mixed
@@ -1218,7 +1231,7 @@ class FoundationAntD extends FoundationTools {
                 url,
                 processData: !upload,
                 contentType: upload ? false : 'application/x-www-form-urlencoded',
-                timeout: that.cnf.requestTimeout * 1000,
+                timeout: that.cnf.requestTimeout * 1000 * (upload ? 10 : 1),
                 beforeSend: function () {
                     if (that.cnf.v.no_loading_once) {
                         that.cnf.v.no_loading_once = false;
@@ -1232,7 +1245,6 @@ class FoundationAntD extends FoundationTools {
                 },
                 error: function (obj) {
                     that.cnf.v.spinning = false;
-
                     if (obj.responseJSON) {
                         let result = obj.responseJSON;
                         let message = `[${result.code}] ${result.message}`;
@@ -1290,9 +1302,8 @@ class FoundationAntD extends FoundationTools {
             };
 
             if (result.error) {
-
                 if (result.message) {
-                    let duration = result.duration ? result.duration : duration;
+                    let duration = bsw.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(() => {
                         failedHandler(result);
                     }).catch((reason => {
@@ -1301,13 +1312,12 @@ class FoundationAntD extends FoundationTools {
                 } else {
                     failedHandler(result);
                 }
-
                 failedSameHandler && failedSameHandler(result);
 
             } else {
 
                 if (result.message) {
-                    let duration = result.duration ? result.duration : duration;
+                    let duration = bsw.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(function () {
                         successHandler(result);
                     }).catch((reason => {
@@ -1316,7 +1326,6 @@ class FoundationAntD extends FoundationTools {
                 } else {
                     successHandler(result);
                 }
-
                 successSameHandler && successSameHandler(result);
             }
         });

@@ -16,26 +16,20 @@
         class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filter_display('{{ key }}') }"
       >
+        {% set begin = item.title ? '<a-tooltip placement="top" title="' ~ item.title ~'">' : null %}
+        {% set end = item.title ? '</a-tooltip>' : null %}
         {% if item.type is iterable %}
-          {% if item.title %}
-            <a-tooltip placement="top" title="{{ item.title }}">
-          {% endif %}
+          {{ begin|raw }}
           <a-input-group compact>
             {% for k,v in item.type %}
               {% include '@LeonBsw/form/' ~ v.itemName ~ '.html.twig' with {field: v.key, form: v} %}
             {% endfor %}
           </a-input-group>
-          {% if item.title %}
-            </a-tooltip>
-          {% endif %}
+          {{ end|raw }}
         {% else %}
-          {% if item.title %}
-            <a-tooltip placement="top" title="{{ item.title }}">
-          {% endif %}
+          {{ begin|raw }}
           {% include '@LeonBsw/form/' ~ item.type.itemName ~ '.html.twig' with {field: key, form: item.type} %}
-          {% if item.title %}
-            </a-tooltip>
-          {% endif %}
+          {{ end|raw }}
         {% endif %}
       </a-form-item>
     {% endfor %}

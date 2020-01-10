@@ -6,6 +6,7 @@
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   type="{{ form.type }}"
   size="{{ form.size }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

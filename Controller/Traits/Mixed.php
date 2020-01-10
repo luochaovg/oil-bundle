@@ -760,6 +760,31 @@ trait Mixed
     }
 
     /**
+     * Get upload option with flag
+     *
+     * @param string $flag
+     *
+     * @return array
+     */
+    public function uploadOptionByFlag(string $flag): array
+    {
+        $default = [
+            'max_size'     => 128 * 1024,
+            'suffix'       => [],
+            'mime'         => [],
+            'pic_sizes'    => [[10, 'max'], [10, 'max']],
+            'save_replace' => false,
+            'root_path'    => $this->parameter('file'),
+            'save_name_fn' => ['uniqid'],
+            'save_path_fn' => function () use ($flag) {
+                return $flag;
+            },
+        ];
+
+        return $this->dispatchMethod(Abs::FN_UPLOAD_OPTIONS, $default, [$flag, $default]);
+    }
+
+    /**
      * Get worksheet for excel
      *
      * @param string  $file

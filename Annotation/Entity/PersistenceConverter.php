@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Slider;
+use Leon\BswBundle\Module\Form\Entity\Upload;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
@@ -92,6 +93,7 @@ class PersistenceConverter extends AnnotationConverter
 
             return intval($value);
         }
+
         if (in_array(get_class($this->item->type), $this->fullWidthForm)) {
             return $max;
         }

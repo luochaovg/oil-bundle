@@ -9,7 +9,6 @@ use Leon\BswBundle\Component\MysqlDoc;
 use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Entity\Enum;
-use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Repository\FoundationRepository;

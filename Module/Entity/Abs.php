@@ -55,6 +55,7 @@ class Abs
     const TAG_CLASSIFY_ERROR   = 'error';
 
     const FLAG_SQL_ERROR = 'An exception occurred while executing';
+    const IMAGE_SUFFIX   = ['gif', 'jpg', 'jpeg', 'png'];
 
     const MYSQL_TINYINT_MIN       = -(2 ** 8) / 2;
     const MYSQL_TINYINT_MAX       = +(2 ** 8) / 2 - 1;

@@ -510,6 +510,22 @@ var FoundationTools = function (_FoundationPrototype) {
         }
 
         /**
+         * Is null
+         *
+         * @param val mixed
+         * @return {boolean}
+         */
+
+    }, {
+        key: 'isNull',
+        value: function isNull(val) {
+            if (val) {
+                return false;
+            }
+            return typeof val !== 'undefined' && val !== 0;
+        }
+
+        /**
          * Is json
          *
          * @param val mixed
@@ -1618,7 +1634,7 @@ var FoundationAntD = function (_FoundationTools) {
                     url: url,
                     processData: !upload,
                     contentType: upload ? false : 'application/x-www-form-urlencoded',
-                    timeout: that.cnf.requestTimeout * 1000,
+                    timeout: that.cnf.requestTimeout * 1000 * (upload ? 10 : 1),
                     beforeSend: function beforeSend() {
                         if (that.cnf.v.no_loading_once) {
                             that.cnf.v.no_loading_once = false;
@@ -1632,7 +1648,6 @@ var FoundationAntD = function (_FoundationTools) {
                     },
                     error: function error(obj) {
                         that.cnf.v.spinning = false;
-
                         if (obj.responseJSON) {
                             var result = obj.responseJSON;
                             var message = '[' + result.code + '] ' + result.message;
@@ -1693,9 +1708,8 @@ var FoundationAntD = function (_FoundationTools) {
                 };
 
                 if (result.error) {
-
                     if (result.message) {
-                        var _duration = result.duration ? result.duration : _duration;
+                        var _duration = bsw.isNull(result.duration) ? undefined : result.duration;
                         that[result.classify](result.message, _duration, null, result.type).then(function () {
                             failedHandler(result);
                         }).catch(function (reason) {
@@ -1704,12 +1718,11 @@ var FoundationAntD = function (_FoundationTools) {
                     } else {
                         failedHandler(result);
                     }
-
                     failedSameHandler && failedSameHandler(result);
                 } else {
 
                     if (result.message) {
-                        var _duration2 = result.duration ? result.duration : _duration2;
+                        var _duration2 = bsw.isNull(result.duration) ? undefined : result.duration;
                         that[result.classify](result.message, _duration2, null, result.type).then(function () {
                             successHandler(result);
                         }).catch(function (reason) {
@@ -1718,7 +1731,6 @@ var FoundationAntD = function (_FoundationTools) {
                     } else {
                         successHandler(result);
                     }
-
                     successSameHandler && successSameHandler(result);
                 }
             });

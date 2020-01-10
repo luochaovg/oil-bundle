@@ -25,18 +25,19 @@
           label="{{ item.label|trans({}, 'twig') }}"
           extra="{{ ((item.tips|trans({}, 'twig')) ~ autoTips)|trim(',') }}"
         >
-          {% if item.title %}
-          <a-tooltip placement="topLeft" title="{{ item.title }}">
-            {% endif %}
-            {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
-            {% if item.title %}
-          </a-tooltip>
-          {% endif %}
+          {% set begin = item.title ? '<a-tooltip placement="topLeft" title="' ~ item.title ~'">' : null %}
+          {% set end = item.title ? '</a-tooltip>' : null %}
+          {{ begin }}
+          {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
+          {{ end }}
         </a-form-item>
       {% endfor %}
 
       <a-form-item
-        :wrapper-col="{sm: { span: {{ total_column }}, offset: 0 }, md: { span: {{ total_column - label_column }}, offset: {{ label_column }} }}"
+        :wrapper-col="{
+          sm: { span: {{ total_column }}, offset: 0 },
+          md: { span: {{ total_column - label_column }}, offset: {{ label_column }} }
+        }"
       >
         {% for form in persistence.operates %}
           {% include '@LeonBsw/form/button.html.twig' %}

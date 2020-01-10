@@ -407,6 +407,13 @@ class Module extends Bsw
                 $form->setValue($item['value']);
             }
 
+            if (get_class($form) === Upload::class) {
+                /**
+                 * @var Upload $form
+                 */
+                $option = $this->web->uploadOptionByFlag($form->getFlag());
+            }
+
             /**
              * extra enum
              */
@@ -573,11 +580,6 @@ class Module extends Bsw
                 if (!$annotation[$field]['html']) {
                     $value = $recordClean[$field];
                 }
-
-                /**
-                 * @var Form $form
-                 */
-                // $form = $annotation[$field]['type'];
 
                 /**
                  * validator type

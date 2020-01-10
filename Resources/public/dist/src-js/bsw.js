@@ -259,6 +259,10 @@ $(function () {
                     }
                 }
             }
+
+            if (typeof file.response.code === 'undefined' || file.response.code === 500) {
+                this.spinning = false;
+            }
             bsw.response(file.response).catch(function (reason) {
                 console.warn(reason);
             });
@@ -278,6 +282,7 @@ $(function () {
                     var sets = res.sets;
                     var logic = sets.logic || sets;
                     _this3.showModal({
+                        centered: true,
                         width: logic.width || data.width || bsw.popupCosySize().width,
                         title: logic.title || data.title || bsw.lang.modal_title,
                         content: sets.content
@@ -424,7 +429,7 @@ $(function () {
             $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
-                    var duration = v.message.duration ? v.message.duration : undefined;
+                    var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                     try {
                         bsw[v.message.classify](v.message.content, duration, null, v.message.type);
                     } catch (e) {

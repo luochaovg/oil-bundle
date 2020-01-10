@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Component;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\UploadException;
 use Exception;
 
@@ -61,11 +62,6 @@ class Upload
      * @var bool
      */
     protected $saveReplace = false;
-
-    /**
-     * @var array
-     */
-    protected $imageSuffix = ['gif', 'jpg', 'jpeg', 'png'];
 
     /**
      * Upload constructor.
@@ -137,7 +133,7 @@ class Upload
             $file->saveName = $this->getSaveName($file);
 
             // check image
-            if (in_array($file->suffix, $this->imageSuffix)) {
+            if (in_array($file->suffix, Abs::IMAGE_SUFFIX)) {
 
                 // check sizes
                 if ($this->picSizes && !$this->checkSizes($file->tmpName)) {

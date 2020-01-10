@@ -261,6 +261,10 @@ $(function () {
                     }
                 }
             }
+
+            if (typeof file.response.code === 'undefined' || file.response.code === 500) {
+                this.spinning = false;
+            }
             bsw.response(file.response).catch((reason => {
                 console.warn(reason);
             }));
@@ -435,7 +439,7 @@ $(function () {
             $('.bsw-page-loading').fadeOut(200, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
-                    let duration = v.message.duration ? v.message.duration : undefined;
+                    let duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                     try {
                         bsw[v.message.classify](v.message.content, duration, null, v.message.type);
                     } catch (e) {
