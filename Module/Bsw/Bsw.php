@@ -272,14 +272,14 @@ abstract class Bsw
 
     /**
      * @param string $tpl
-     * @param string $uuid
+     * @param string $field
      * @param array  $var
      * @param string $container
      *
      * @return string
      * @throws
      */
-    protected function parseSlot(string $tpl, string $uuid, array $var = [], string $container = null): string
+    protected function parseSlot(string $tpl, string $field, array $var = [], string $container = null): string
     {
         static $constants;
 
@@ -303,9 +303,9 @@ abstract class Bsw
         $variables = array_merge(
             $constants,
             [
-                'slot'          => $uuid,
+                'slot'          => $field,
                 'slot-scope'    => Abs::SLOT_VARIABLES,
-                'uuid'          => $uuid,
+                'field'         => $field,
                 ':value'        => 'value',
                 'value'         => '{{ value }}',
                 'Abs::NIL'      => Abs::NIL,
@@ -344,7 +344,7 @@ abstract class Bsw
             return $template;
         }
 
-        return $this->parseSlot($template, $uuid, $var);
+        return $this->parseSlot($template, $field, $var);
     }
 
     /**

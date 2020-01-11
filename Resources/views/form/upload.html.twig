@@ -25,16 +25,25 @@
   :file-list="{{ form.fileListKey }}"
   name="{{ form.flag }}"
   :data="{ file_flag: '{{ form.flag }}' }"
-  @click.native="
-    persistence_file_md5 = '{{ form.fileMd5Key }}',
-    persistence_file_sha1 = '{{ form.fileSha1Key }}',
-    persistence_file_list = '{{ form.fileListKey }}'"
+  @click.native="persistence_upload_field = '{{ field }}'"
   @change="{{ form.change }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}FileList']"
 >
-  <a-button>
-    <a-icon type="upload"></a-icon>
-    {{ form.placeholder }}
-  </a-button>
+  <a-popover placement="rightBottom">
+    <template slot="content">
+      <a-table
+        :columns="persistence_upload_tips_collect.{{ field }}.columns"
+        :data-source="persistence_upload_tips_collect.{{ field }}.list"
+        :pagination="false"
+        :scroll="{ x: true }"
+        bordered
+        size="small"
+      ></a-table>
+    </template>
+    <a-button>
+      <a-icon type="upload"></a-icon>
+      {{ form.placeholder }}
+    </a-button>
+  </a-popover>
 </a-upload>

@@ -52,12 +52,9 @@ bsw.configure({
     data: {
         persistence_form: null,
         persistence_format: {{ persistence.formatJson|raw }},
-        persistence_file_md5: null,
-        persistence_file_sha1: null,
-        persistence_file_list: null,
-        {% for key, value in persistence.dataKeys %}
-        {{ key }}: {{ value }},
-        {% endfor %}
+        persistence_upload_field: null,
+        persistence_file_list_key_collect: {{ persistence.fileListKeyCollectJson|raw }},
+        persistence_upload_tips_collect: {{ persistence.uploadTipsCollectJson|raw }},
     },
     method: {
         persistence_submit(e) {

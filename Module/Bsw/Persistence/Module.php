@@ -24,6 +24,7 @@ use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Form;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Leon\BswBundle\Component\Upload as Uploader;
 use Exception;
 
 /**
@@ -310,18 +311,31 @@ class Module extends Bsw
                 $this->input->logger->warning("Upload route error, {$e->getMessage()}");
             }
 
-            $key = "{$field}_{$this->input->uuid}__FileList";
-            $form->setFileListKey($key);
+            /**
+             * File list key
+             */
+            $key = 'persistence_file_list_key_collect';
+            $form->setFileListKey("${key}.${field}.list");
             $form->setDisabled(!$this->web->routeIsAccess($form->getRouteForAccess()));
-            $output->dataKeys[$key] = '[]';
+            $output->fileListKeyCollect[$field] = [
+                'key'   => $key,
+                'list'  => [],
+                'field' => $field,
+                'md5'   => $form->getFileMd5Key(),
+                'sha1'  => $form->getFileSha1Key(),
+            ];
 
-            if ($md5 = $form->getFileMd5Key()) {
-                $form->setFileMd5Key("{$md5}_{$this->input->uuid}");
-            }
-
-            if ($sha1 = $form->getFileSha1Key()) {
-                $form->setFileSha1Key("{$sha1}_{$this->input->uuid}");
-            }
+            /**
+             * Upload tips
+             */
+            $option = $this->web->uploadOptionByFlag($form->getFlag());
+            $output->uploadTipsCollect[$field] = [
+                'columns' => [
+                    ['title' => 'Type', 'dataIndex' => 'type', 'align' => 'right'],
+                    ['title' => 'Condition', 'dataIndex' => 'condition'],
+                ],
+                'list'    => Uploader::optionTips($option),
+            ];
         }
     }
 
@@ -728,6 +742,9 @@ class Module extends Bsw
         $output->record = $record;
         $output->operates = $operates;
         $output->formatJson = $this->json($format);
+
+        $output->fileListKeyCollectJson = $this->json($output->fileListKeyCollect);
+        $output->uploadTipsCollectJson = $this->json($output->uploadTipsCollect);
 
         $output = $this->caller(
             $this->method . ucfirst($this->name()),

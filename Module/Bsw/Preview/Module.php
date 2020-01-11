@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  *
  * 1.模板自动变量
  *
- * {uuid}           = 字段唯一标记
+ * {field}          = 字段唯一标记
  * {:value}         = 字符串 "value"
  * {value}          = 字符串 "{{ value }}"
  * {Abs::TPL_XXX}   = "Abs:TPL_XXX" 常量对应的值 ("TPL_"开头的常量)
@@ -238,12 +238,11 @@ class Module extends Bsw
      *
      * @param string $field
      * @param array  $item
-     * @param string $uuid
      *
      * @return string|false
      * @throws
      */
-    protected function createSlot(string $field, array $item, string $uuid)
+    protected function createSlot(string $field, array $item)
     {
         /**
          * extra enum
@@ -268,7 +267,7 @@ class Module extends Bsw
          */
 
         if ($item['html'] === true) {
-            return $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $uuid);
+            return $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $field);
         }
 
         /**
@@ -284,7 +283,7 @@ class Module extends Bsw
                 );
             }
 
-            return $this->parseSlot($item['dress'], $uuid, [], Abs::SLOT_CONTAINER);
+            return $this->parseSlot($item['dress'], $field, [], Abs::SLOT_CONTAINER);
         }
 
         /**
@@ -315,7 +314,7 @@ class Module extends Bsw
                 $var['value'] = "{{ {$enumStringify}[value] }}";
             }
 
-            return $this->parseSlot($tpl, $uuid, $var, Abs::SLOT_CONTAINER);
+            return $this->parseSlot($tpl, $field, $var, Abs::SLOT_CONTAINER);
         }
 
         /**
@@ -330,7 +329,7 @@ class Module extends Bsw
                 'value'               => "{{ {$enumStringify}[value] }}",
             ];
 
-            return $this->parseSlot(Abs::TPL_ENUM_0_DRESS, $uuid, $var, Abs::SLOT_CONTAINER);
+            return $this->parseSlot(Abs::TPL_ENUM_0_DRESS, $field, $var, Abs::SLOT_CONTAINER);
         }
 
         /**
@@ -338,7 +337,7 @@ class Module extends Bsw
          */
 
         if ($item['render']) {
-            return $this->parseSlot($item['render'], $uuid, [], Abs::SLOT_CONTAINER);
+            return $this->parseSlot($item['render'], $field, [], Abs::SLOT_CONTAINER);
         }
 
         return false;
@@ -454,12 +453,11 @@ class Module extends Bsw
              * dress handler
              */
 
-            $uuid = "{$field}_{$this->input->uuid}";
-            $slot = $this->createSlot($field, $item, $uuid);
+            $slot = $this->createSlot($field, $item, $field);
 
             if ($slot !== false) {
-                $column['scopedSlots'] = ['customRender' => $uuid];
-                $dress[$uuid] = $slot;
+                $column['scopedSlots'] = ['customRender' => $field];
+                $dress[$field] = $slot;
             }
 
             /**
@@ -739,8 +737,7 @@ class Module extends Bsw
                     throw new ModuleException("{$this->method}{$charm}() should return scalar or " . Charm::class);
                 }
 
-                $uuid = "{$field}_{$this->input->uuid}";
-                $output->dress[$uuid] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $uuid);
+                $output->dress[$field] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $field);
             }
         }
 
@@ -758,19 +755,18 @@ class Module extends Bsw
                 $output->scroll += $width;
             }
 
-            $uuid = "{$operate}_{$this->input->uuid}";
             $output->columns[$operate] = array_merge(
                 [
                     'title'       => $this->web->labelLang('Action'),
                     'dataIndex'   => $operate,
                     'width'       => $width,
                     'align'       => Abs::POS_CENTER,
-                    'scopedSlots' => ['customRender' => $uuid],
+                    'scopedSlots' => ['customRender' => $operate],
                 ],
                 $output->columns[$operate] ?? []
             );
 
-            $output->dress[$uuid] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $uuid);
+            $output->dress[$operate] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $operate);
 
         } else {
             unset($output->columns[$operate]);

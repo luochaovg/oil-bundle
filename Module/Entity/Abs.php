@@ -56,6 +56,7 @@ class Abs
 
     const FLAG_SQL_ERROR = 'An exception occurred while executing';
     const IMAGE_SUFFIX   = ['gif', 'jpg', 'jpeg', 'png'];
+    const IMAGE_SIZE_MAX = 'MAX';
 
     const MYSQL_TINYINT_MIN       = -(2 ** 8) / 2;
     const MYSQL_TINYINT_MAX       = +(2 ** 8) / 2 - 1;
@@ -391,10 +392,10 @@ class Abs
     const SLOT_NOT_BLANK = '(({:value} !== "") && ({:value} !== null) && ({:value} !== false))';
 
     // slot 包裹容器模板
-    const SLOT_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
+    const SLOT_CONTAINER = "<div slot='{field}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
 
     // slot 包裹容器模板 (支持html)
-    const SLOT_HTML_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
+    const SLOT_HTML_CONTAINER = "<div slot='{field}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
     // 空数据展示模板
     const TPL_NIL = "<div class='bsw-disable'>{Abs::NIL}</div>";

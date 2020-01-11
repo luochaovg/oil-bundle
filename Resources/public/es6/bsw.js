@@ -105,7 +105,7 @@ $(function () {
                     that.preview_url = url;
                     that.preview_pagination_data = res.sets.preview.page;
                     that.preview_image_change();
-                    history.replaceState({}, "", bsw.unsetParams(['uuid'], url));
+                    history.replaceState({}, "", url);
                 }).catch((reason => {
                     console.warn(reason);
                 }));
@@ -221,43 +221,41 @@ $(function () {
             }));
         },
 
-        uploaderChange({file, fileList}) {
+        uploaderChange({file, fileList, event}) {
             if (file.status === 'done') {
                 this.spinning = false;
             } else if (file.status === 'uploading') {
                 this.spinning = true;
             }
 
-            let keyMd5 = this.persistence_file_md5;
-            let keySha1 = this.persistence_file_sha1;
-            let keyList = this.persistence_file_list;
+            let field = this.persistence_upload_field;
+            let collect = this.persistence_file_list_key_collect[field];
 
             if (!file.response) {
-                this[keyList] = fileList;
+                collect.list = fileList;
                 return;
             }
             if (file.response.error) {
-                this[keyList] = fileList.slice(0, -1);
+                collect.list = fileList.slice(0, -1);
             }
 
-            let files = this[keyList].slice(-1);
+            let files = collect.list.slice(-1);
             if (files.length) {
                 let sets = files[0].response.sets;
                 let map = {
-                    [keyMd5]: 'attachment_md5',
-                    [keySha1]: 'attachment_sha1',
-                    [keyList]: 'attachment_id',
+                    [collect.field]: 'attachment_id',
+                    [collect.md5]: 'attachment_md5',
+                    [collect.sha1]: 'attachment_sha1',
                 };
                 for (let key in map) {
                     if (!map.hasOwnProperty(key)) {
                         continue;
                     }
                     if (key && map[key]) {
-                        let field = `${key.split('_')[0]}`;
-                        if ($(`#${field}`).length === 0) {
+                        if ($(`#${key}`).length === 0) {
                             continue;
                         }
-                        this.persistence_form.setFieldsValue({[field]: sets[map[key]]});
+                        this.persistence_form.setFieldsValue({[key]: sets[map[key]]});
                     }
                 }
             }

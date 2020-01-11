@@ -30,5 +30,20 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
-    public $dataKeys = [];
+    public $fileListKeyCollect = [];
+
+    /**
+     * @var string
+     */
+    public $fileListKeyCollectJson;
+
+    /**
+     * @var array
+     */
+    public $uploadTipsCollect = [];
+
+    /**
+     * @var string
+     */
+    public $uploadTipsCollectJson;
 }

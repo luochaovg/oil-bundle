@@ -99,7 +99,7 @@ $(function () {
                     that.preview_url = url;
                     that.preview_pagination_data = res.sets.preview.page;
                     that.preview_image_change();
-                    history.replaceState({}, "", bsw.unsetParams(['uuid'], url));
+                    history.replaceState({}, "", url);
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -220,7 +220,8 @@ $(function () {
         },
         uploaderChange: function uploaderChange(_ref) {
             var file = _ref.file,
-                fileList = _ref.fileList;
+                fileList = _ref.fileList,
+                event = _ref.event;
 
             if (file.status === 'done') {
                 this.spinning = false;
@@ -228,34 +229,32 @@ $(function () {
                 this.spinning = true;
             }
 
-            var keyMd5 = this.persistence_file_md5;
-            var keySha1 = this.persistence_file_sha1;
-            var keyList = this.persistence_file_list;
+            var field = this.persistence_upload_field;
+            var collect = this.persistence_file_list_key_collect[field];
 
             if (!file.response) {
-                this[keyList] = fileList;
+                collect.list = fileList;
                 return;
             }
             if (file.response.error) {
-                this[keyList] = fileList.slice(0, -1);
+                collect.list = fileList.slice(0, -1);
             }
 
-            var files = this[keyList].slice(-1);
+            var files = collect.list.slice(-1);
             if (files.length) {
                 var _map;
 
                 var sets = files[0].response.sets;
-                var map = (_map = {}, _defineProperty(_map, keyMd5, 'attachment_md5'), _defineProperty(_map, keySha1, 'attachment_sha1'), _defineProperty(_map, keyList, 'attachment_id'), _map);
+                var map = (_map = {}, _defineProperty(_map, collect.field, 'attachment_id'), _defineProperty(_map, collect.md5, 'attachment_md5'), _defineProperty(_map, collect.sha1, 'attachment_sha1'), _map);
                 for (var key in map) {
                     if (!map.hasOwnProperty(key)) {
                         continue;
                     }
                     if (key && map[key]) {
-                        var field = '' + key.split('_')[0];
-                        if ($('#' + field).length === 0) {
+                        if ($('#' + key).length === 0) {
                             continue;
                         }
-                        this.persistence_form.setFieldsValue(_defineProperty({}, field, sets[map[key]]));
+                        this.persistence_form.setFieldsValue(_defineProperty({}, key, sets[map[key]]));
                     }
                 }
             }

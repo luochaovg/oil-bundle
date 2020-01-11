@@ -44,14 +44,13 @@ trait Preview
                 ->setSelector(Abs::SELECTOR_CHECKBOX)
                 ->setRoute('app_bsw_admin_menu_multiple_encase')
                 ->setClick('multipleAction')
-                ->setArgs(['uuid' => $this->uuid])
                 ->setConfirm($this->translator->trans('Are you sure')),
 
             (new Button('Sure', null, 'b:icon-rfq'))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
                 ->setScene(Button::SCENE_IFRAME)
-                ->setArgs(['uuid' => $this->uuid, 'fill' => $this->getArgs('fill')]),
+                ->setArgs(['fill' => $this->getArgs('fill')]),
 
             new Button('New record', 'app_bsw_admin_menu_persistence', 'a:plus'),
         ];

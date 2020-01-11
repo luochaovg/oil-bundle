@@ -9,11 +9,6 @@
       :data-source="preview_list"
       :bordered="{{ preview.border ? 'true' : 'false' }}"
       :pagination="false"
-      :locale="{
-          filterConfirm: '{{ 'Sure'|trans({}, 'twig') }}',
-          filterReset: '{{ 'Reset'|trans({}, 'twig') }}',
-          emptyText: '{{ 'No data'|trans({}, 'twig') }}',
-        }"
       :row-key="record => `{{ fields }}`"
       {% if preview.choice.enable ?? false %}
         :row-selection="{
@@ -85,7 +80,7 @@ bsw.configure({
         },
         preview_get_url(url) {
             url = url || this.preview_url;
-            return bsw.setParams({uuid: '{{ scaffold.uuid }}', page: this.preview_page_number}, url);
+            return bsw.setParams({page: this.preview_page_number}, url);
         },
         preview_pagination(page) {
             this.pagination(this.preview_get_url(), page);
@@ -95,7 +90,6 @@ bsw.configure({
         },
         preview_sort_data(pagination, filters, sorter) {
             let url = this.preview_get_url();
-            url = bsw.unsetParams(['uuid'], url);
             url = bsw.unsetParamsBeginWith(['sequence'], url);
             if (typeof sorter.field !== 'undefined') {
                 let key = bsw.humpToUnder(sorter.field);

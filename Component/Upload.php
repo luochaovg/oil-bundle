@@ -5,6 +5,8 @@ namespace Leon\BswBundle\Component;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\UploadException;
 use Exception;
+use phpDocumentor\Reflection\Types\Array_;
+use stdClass;
 
 class Upload
 {
@@ -164,6 +166,59 @@ class Upload
         isset($fileInfo) && finfo_close($fileInfo);
 
         return $result;
+    }
+
+    /**
+     * Get options tips
+     *
+     * @param array $option
+     *
+     * @return array
+     */
+    public static function optionTips(array $option): array
+    {
+        $option = (object)$option;
+        $tips = new stdClass();
+
+        $tips->maxSize = '≤' . Helper::humanSize(($option->max_size ?? 0) * 1024);
+        $tips->suffix = ['*'];
+        $tips->mime = ['*'];
+
+        if (!empty($option->suffix)) {
+            $tips->suffix = $option->suffix;
+        } elseif (!empty($option->no_suffix)) {
+            $tips->suffix = Helper::arrayMap($option->no_suffix, '!%s');
+        }
+
+        if (!empty($option->mime)) {
+            $tips->mime = $option->mime;
+        } elseif (!empty($option->no_mime)) {
+            $tips->mime = Helper::arrayMap($option->no_mime, '!%s');
+        }
+
+        $image = array_merge(Abs::IMAGE_SUFFIX, ['*']);
+        $intersect = array_intersect($image, $tips->suffix);
+        if (count($intersect) > 0) {
+            [[$wMin, $wMax], [$hMin, $hMax]] = $option->pic_sizes;
+            $wMax = (strtoupper($wMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$wMax}px";
+            $hMax = (strtoupper($hMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$hMax}px";
+            $tips->picSizes = "[{$wMin}px~{$wMax}]*[{$hMin}px~{$hMax}]";
+        }
+
+        $tips->suffix = implode('、', $tips->suffix);
+        $tips->mime = implode('、', $tips->mime);
+
+        $key = 0;
+        $_tips = [];
+        foreach ($tips as $type => $condition) {
+            $_tips[] = [
+                'key'       => ++$key,
+                'type'      => Helper::stringToLabel($type),
+                'condition' => $condition,
+            ];
+        }
+
+        return $_tips;
     }
 
     /**

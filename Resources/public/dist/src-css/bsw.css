@@ -337,12 +337,12 @@ div.ant-modal-mask {
 .bsw-persistence .button {
   width: 100%;
   height: 36px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .bsw-persistence .bsw-popup-select {
   width: 100%;
   height: 36px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .bsw-persistence .ant-upload-select {
   width: 100%;
@@ -350,7 +350,7 @@ div.ant-modal-mask {
 .bsw-persistence .ant-upload-select button {
   width: 100%;
   height: 36px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .bsw-persistence .ant-upload-drag {
   margin-top: 10px;
@@ -536,5 +536,11 @@ blockquote p {
 }
 .ant-breadcrumb-separator {
   color: rgba(0, 0, 0, 0.15);
+}
+.ant-empty-normal {
+  margin: 16px 0;
+}
+.ant-popover-inner-content {
+  padding: 12px;
 }
 /*# sourceMappingURL=bsw.css.map */

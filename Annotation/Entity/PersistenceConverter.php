@@ -94,7 +94,8 @@ class PersistenceConverter extends AnnotationConverter
             return intval($value);
         }
 
-        if (in_array(get_class($this->item->type), $this->fullWidthForm)) {
+        $form = get_class($this->item->type);
+        if (in_array($form, $this->fullWidthForm)) {
             return $max;
         }
 
