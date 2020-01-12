@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  *
  * 1.模板自动变量
  *
- * {field}          = 字段唯一标记
+ * {uuid}           = 字段唯一标记
  * {:value}         = 字符串 "value"
  * {value}          = 字符串 "{{ value }}"
  * {Abs::TPL_XXX}   = "Abs:TPL_XXX" 常量对应的值 ("TPL_"开头的常量)
@@ -453,10 +453,10 @@ class Module extends Bsw
              * dress handler
              */
 
-            $slot = $this->createSlot($field, $item, $field);
+            $slot = $this->createSlot($field, $item);
 
             if ($slot !== false) {
-                $column['scopedSlots'] = ['customRender' => $field];
+                $column['scopedSlots'] = ['customRender' => "__{$field}"];
                 $dress[$field] = $slot;
             }
 
@@ -761,7 +761,7 @@ class Module extends Bsw
                     'dataIndex'   => $operate,
                     'width'       => $width,
                     'align'       => Abs::POS_CENTER,
-                    'scopedSlots' => ['customRender' => $operate],
+                    'scopedSlots' => ['customRender' => "__{$operate}"],
                 ],
                 $output->columns[$operate] ?? []
             );

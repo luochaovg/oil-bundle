@@ -303,9 +303,9 @@ abstract class Bsw
         $variables = array_merge(
             $constants,
             [
-                'slot'          => $field,
+                'slot'          => "__{$field}",
                 'slot-scope'    => Abs::SLOT_VARIABLES,
-                'field'         => $field,
+                'uuid'          => "__{$field}",
                 ':value'        => 'value',
                 'value'         => '{{ value }}',
                 'Abs::NIL'      => Abs::NIL,

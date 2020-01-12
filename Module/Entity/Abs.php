@@ -392,10 +392,10 @@ class Abs
     const SLOT_NOT_BLANK = '(({:value} !== "") && ({:value} !== null) && ({:value} !== false))';
 
     // slot 包裹容器模板
-    const SLOT_CONTAINER = "<div slot='{field}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
+    const SLOT_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
 
     // slot 包裹容器模板 (支持html)
-    const SLOT_HTML_CONTAINER = "<div slot='{field}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
+    const SLOT_HTML_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
     // 空数据展示模板
     const TPL_NIL = "<div class='bsw-disable'>{Abs::NIL}</div>";
