@@ -26,6 +26,7 @@ use Leon\BswBundle\Module\Form\Form;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Leon\BswBundle\Component\Upload as Uploader;
 use Exception;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * @property Input                $input
@@ -318,24 +319,57 @@ class Module extends Bsw
             $form->setFileListKey("${key}.${field}.list");
             $form->setDisabled(!$this->web->routeIsAccess($form->getRouteForAccess()));
             $output->fileListKeyCollect[$field] = [
-                'key'   => $key,
-                'list'  => [],
-                'field' => $field,
-                'md5'   => $form->getFileMd5Key(),
-                'sha1'  => $form->getFileSha1Key(),
+                'key'  => $key,
+                'list' => [],
+                'id'   => $field,
+                'md5'  => $form->getFileMd5Key(),
+                'sha1' => $form->getFileSha1Key(),
+                'url'  => $form->getFileUrlKey(),
             ];
 
             /**
              * Upload tips
              */
+            $trans = $this->input->translator;
             $option = $this->web->uploadOptionByFlag($form->getFlag());
+            [$list, $suffix, $mime] = Uploader::optionTips(
+                $option,
+                function ($label) use ($trans) {
+                    return $trans->trans($label, [], 'twig');
+                }
+            );
+
             $output->uploadTipsCollect[$field] = [
                 'columns' => [
-                    ['title' => 'Type', 'dataIndex' => 'type', 'align' => 'right'],
-                    ['title' => 'Condition', 'dataIndex' => 'condition'],
+                    [
+                        'title'     => $trans->trans('Type', [], 'fields'),
+                        'dataIndex' => 'type',
+                        'align'     => 'right',
+                        'width'     => 100,
+                    ],
+                    [
+                        'title'     => $trans->trans('Condition', [], 'fields'),
+                        'dataIndex' => 'condition',
+                        'width'     => 240,
+                    ],
                 ],
-                'list'    => Uploader::optionTips($option),
+                'list'    => $list,
             ];
+
+            /**
+             * Accept
+             */
+            $accept = null;
+            if ($suffix != '*' && strpos($suffix, '!') !== 0) {
+                $accept .= ',.' . str_replace('、', ',.', $suffix);
+            }
+            if ($mime != '*' && strpos($mime, '!') !== 0) {
+                $accept .= ',' . str_replace('、', ',', $mime);
+            }
+
+            if ($accept) {
+                $form->setAccept(ltrim($accept, ','));
+            }
         }
     }
 
@@ -419,13 +453,6 @@ class Module extends Bsw
 
             if (isset($item['value'])) {
                 $form->setValue($item['value']);
-            }
-
-            if (get_class($form) === Upload::class) {
-                /**
-                 * @var Upload $form
-                 */
-                $option = $this->web->uploadOptionByFlag($form->getFlag());
             }
 
             /**

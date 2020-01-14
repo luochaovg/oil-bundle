@@ -30,20 +30,20 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}FileList']"
 >
-  <a-popover placement="rightBottom">
+  <a-popover>
     <template slot="content">
       <a-table
         :columns="persistence_upload_tips_collect.{{ field }}.columns"
         :data-source="persistence_upload_tips_collect.{{ field }}.list"
         :pagination="false"
-        :scroll="{ x: true }"
+        :scroll="{ x: 340 }"
         bordered
         size="small"
       ></a-table>
     </template>
     <a-button>
       <a-icon type="upload"></a-icon>
-      {{ form.placeholder }}
+      {{ form.buttonLabel|trans({}, 'twig') }}
     </a-button>
   </a-popover>
 </a-upload>

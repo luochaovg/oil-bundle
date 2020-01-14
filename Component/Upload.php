@@ -171,54 +171,59 @@ class Upload
     /**
      * Get options tips
      *
-     * @param array $option
+     * @param array    $option
+     * @param callable $labelHandler
      *
      * @return array
      */
-    public static function optionTips(array $option): array
+    public static function optionTips(array $option, callable $labelHandler = null): array
     {
         $option = (object)$option;
         $tips = new stdClass();
 
-        $tips->maxSize = '≤' . Helper::humanSize(($option->max_size ?? 0) * 1024);
-        $tips->suffix = ['*'];
-        $tips->mime = ['*'];
+        $tips->maxFileSize = '≤' . Helper::humanSize(($option->max_size ?? 0) * 1024);
+        $tips->allowSuffix = ['*'];
+        $tips->allowMime = ['*'];
 
         if (!empty($option->suffix)) {
-            $tips->suffix = $option->suffix;
+            $tips->allowSuffix = $option->suffix;
         } elseif (!empty($option->no_suffix)) {
-            $tips->suffix = Helper::arrayMap($option->no_suffix, '!%s');
+            $tips->allowSuffix = Helper::arrayMap($option->no_suffix, '!%s');
         }
 
         if (!empty($option->mime)) {
-            $tips->mime = $option->mime;
+            $tips->allowMime = $option->mime;
         } elseif (!empty($option->no_mime)) {
-            $tips->mime = Helper::arrayMap($option->no_mime, '!%s');
+            $tips->allowMime = Helper::arrayMap($option->no_mime, '!%s');
         }
 
         $image = array_merge(Abs::IMAGE_SUFFIX, ['*']);
-        $intersect = array_intersect($image, $tips->suffix);
+        $intersect = array_intersect($image, $tips->allowSuffix);
         if (count($intersect) > 0) {
             [[$wMin, $wMax], [$hMin, $hMax]] = $option->pic_sizes;
             $wMax = (strtoupper($wMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$wMax}px";
             $hMax = (strtoupper($hMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$hMax}px";
-            $tips->picSizes = "[{$wMin}px~{$wMax}]*[{$hMin}px~{$hMax}]";
+            $tips->pictureSizes = "[{$wMin}px~{$wMax}]*[{$hMin}px~{$hMax}]";
         }
 
-        $tips->suffix = implode('、', $tips->suffix);
-        $tips->mime = implode('、', $tips->mime);
+        $tips->allowSuffix = implode('、', $tips->allowSuffix);
+        $tips->allowMime = implode('、', $tips->allowMime);
 
         $key = 0;
         $_tips = [];
         foreach ($tips as $type => $condition) {
+            $type = Helper::stringToLabel($type);
+            if (is_callable($labelHandler)) {
+                $type = call_user_func_array($labelHandler, [$type]);
+            }
             $_tips[] = [
                 'key'       => ++$key,
-                'type'      => Helper::stringToLabel($type),
+                'type'      => $type,
                 'condition' => $condition,
             ];
         }
 
-        return $_tips;
+        return [$_tips, $tips->allowSuffix, $tips->allowMime];
     }
 
     /**

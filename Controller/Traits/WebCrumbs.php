@@ -89,6 +89,7 @@ trait WebCrumbs
                     foreach ($crumbsIconMap as $keyword => $icon) {
                         if (strpos($item->getRoute(), "_{$keyword}") !== false) {
                             $item->setIcon($icon);
+                            break;
                         }
                     }
                 }

@@ -3,12 +3,14 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
+use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
 
 class Upload extends Number
 {
     use Route;
     use Args;
+    use ButtonLabel;
 
     /**
      * @const string
@@ -40,11 +42,6 @@ class Upload extends Number
     /**
      * @var string
      */
-    protected $placeholder = 'Click to select for upload';
-
-    /**
-     * @var string
-     */
     protected $fileListKey;
 
     /**
@@ -60,7 +57,20 @@ class Upload extends Number
     /**
      * @var string
      */
+    protected $fileUrlKey;
+
+    /**
+     * @var string
+     */
     protected $url;
+
+    /**
+     * Input constructor.
+     */
+    public function __construct()
+    {
+        $this->setButtonLabel('Click to select for upload');
+    }
 
     /**
      * @return string
@@ -198,6 +208,26 @@ class Upload extends Number
     public function setFileSha1Key(string $fileSha1Key)
     {
         $this->fileSha1Key = $fileSha1Key;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileUrlKey(): ?string
+    {
+        return $this->fileUrlKey;
+    }
+
+    /**
+     * @param string $fileUrlKey
+     *
+     * @return $this
+     */
+    public function setFileUrlKey(string $fileUrlKey)
+    {
+        $this->fileUrlKey = $fileUrlKey;
 
         return $this;
     }

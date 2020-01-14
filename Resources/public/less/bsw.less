@@ -142,6 +142,10 @@
 
     &.iframe {
       margin: 10px;
+
+      .bsw-persistence {
+        padding: 60px 40px;
+      }
     }
 
     .ant-breadcrumb {
@@ -305,6 +309,10 @@ span.ant-form-item-children button {
   margin: 0 6px 6px 0;
 }
 
+.ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
 div.ant-input-number {
   width: 100%;
 }
@@ -438,14 +446,17 @@ a.bsw-preview-link {
   padding-right: 5px;
 }
 
-iframe#bsw-preview-iframe {
-  width: 100%;
-  border: none;
-}
-
-.bsw-preview-iframe .ant-modal-body {
+.bsw-iframe-container .ant-modal-body {
   padding: 0;
   margin: 0;
+
+  #bsw-iframe {
+    width: 100%;
+    border: none;
+    vertical-align: bottom;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .ant-back-top {

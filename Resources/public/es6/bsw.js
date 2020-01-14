@@ -243,9 +243,10 @@ $(function () {
             if (files.length) {
                 let sets = files[0].response.sets;
                 let map = {
-                    [collect.field]: 'attachment_id',
+                    [collect.id]: 'attachment_id',
                     [collect.md5]: 'attachment_md5',
                     [collect.sha1]: 'attachment_sha1',
+                    [collect.url]: 'attachment_url',
                 };
                 for (let key in map) {
                     if (!map.hasOwnProperty(key)) {
@@ -332,12 +333,12 @@ $(function () {
                 width: data.width || size.width,
                 title: data.title || bsw.lang.please_select,
                 centered: true,
-                wrapClassName: 'bsw-preview-iframe',
-                content: `<iframe id="bsw-preview-iframe" src="${data.location}"></iframe>`,
+                wrapClassName: 'bsw-iframe-container',
+                content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-preview-iframe").height(data.height || size.height);
+                $("#bsw-iframe").height(data.height || size.height);
             });
         },
 

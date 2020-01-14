@@ -20,12 +20,12 @@
         {% endif %}
         <a-form-item
           v-show="{{ item.hide ? 'false' : 'true' }}"
-          :label-col="{md: { span: {{ total_column }} }, lg: { span: {{ label_column }} }}"
-          :wrapper-col="{md: { span: {{ total_column }} }, lg: { span: {{ wrapper_column }} }}"
+          :label-col="{ md: { span: {{ total_column }} }, lg: { span: {{ label_column }} }}"
+          :wrapper-col="{ md: { span: {{ total_column }} }, lg: { span: {{ wrapper_column }} }}"
           label="{{ item.label|trans({}, 'twig') }}"
           extra="{{ ((item.tips|trans({}, 'twig')) ~ autoTips)|trim(',') }}"
         >
-          {% set begin = item.title ? '<a-tooltip placement="topLeft" title="' ~ item.title ~'">' : null %}
+          {% set begin = item.title ? '<a-tooltip title="' ~ item.title ~'">' : null %}
           {% set end = item.title ? '</a-tooltip>' : null %}
           {{ begin }}
           {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
@@ -35,8 +35,8 @@
 
       <a-form-item
         :wrapper-col="{
-          sm: { span: {{ total_column }}, offset: 0 },
-          md: { span: {{ total_column - label_column }}, offset: {{ label_column }} }
+          md: { span: {{ total_column }}, offset: 0 },
+          lg: { span: {{ total_column - label_column }}, offset: {{ label_column }} }
         }"
       >
         {% for form in persistence.operates %}

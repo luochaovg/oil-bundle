@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Form;
@@ -11,6 +12,7 @@ class Number extends Form
 {
     use Size;
     use PreviewRoute;
+    use ButtonLabel;
 
     /**
      * @var float
@@ -26,6 +28,14 @@ class Number extends Form
      * @var float|int
      */
     protected $max = Abs::MYSQL_INT_UNS_MAX;
+
+    /**
+     * Input constructor.
+     */
+    public function __construct()
+    {
+        $this->setButtonLabel('Popup for select');
+    }
 
     /**
      * @return float

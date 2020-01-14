@@ -3,5 +3,5 @@
     class="bsw-popup-select"
     bsw-data='{"location": "{{ path(form.previewRoute, form.previewArgs) }}"}'
     @click.navite="showIFrameByVue"
-  >{{ 'b:icon-tag'|icon|raw }} {{ 'Popup for select'|trans({}, 'twig') }}</a-button>
+  >{{ 'b:icon-tag'|icon|raw }} {{ form.buttonLabel|trans({}, 'twig') }}</a-button>
 {% endif %}

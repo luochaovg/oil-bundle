@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
+use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\Enum;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
@@ -15,6 +16,7 @@ class Select extends Form
     use Enum;
     use PreviewRoute;
     use AllowClear;
+    use ButtonLabel;
 
     /**
      * @const string
@@ -61,6 +63,14 @@ class Select extends Form
      * @var array
      */
     protected $tokenSeparators = [';', '；'];
+
+    /**
+     * Input constructor.
+     */
+    public function __construct()
+    {
+        $this->setButtonLabel('Popup for select');
+    }
 
     /**
      * @return bool

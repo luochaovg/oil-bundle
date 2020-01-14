@@ -51,7 +51,7 @@
                 {% set _dress = attribute(dress, value) ?? null %}
                 <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
                   {% if _dress is not null %}
-                    <a-tooltip placement="top">
+                    <a-tooltip>
                       <template slot="title">{{ _dress.tips|trans({}, 'twig') }}</template>
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"

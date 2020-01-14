@@ -16,7 +16,7 @@
         class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filter_display('{{ key }}') }"
       >
-        {% set begin = item.title ? '<a-tooltip placement="top" title="' ~ item.title ~'">' : null %}
+        {% set begin = item.title ? '<a-tooltip title="' ~ item.title ~'">' : null %}
         {% set end = item.title ? '</a-tooltip>' : null %}
         {% if item.type is iterable %}
           {{ begin|raw }}

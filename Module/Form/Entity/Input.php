@@ -49,7 +49,7 @@ class Input extends Form
      */
     public function __construct()
     {
-        $this->allowClear = false;
+        $this->setAllowClear(false);
     }
 
     /**
