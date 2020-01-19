@@ -1,4 +1,4 @@
-<a-input-number
+<a-input-number v-if="{{ form.needId ? 'true' : 'false' }}"
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}

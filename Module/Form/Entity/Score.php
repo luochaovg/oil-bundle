@@ -9,12 +9,12 @@ class Score extends Form
     /**
      * @var bool
      */
-    protected $allowClear = true;
+    protected $allowClear = false;
 
     /**
      * @var bool
      */
-    protected $allowHalf = true;
+    protected $allowHalf = false;
 
     /**
      * @var string
@@ -24,7 +24,7 @@ class Score extends Form
     /**
      * @var int
      */
-    protected $count = 5;
+    protected $count = 10;
 
     /**
      * @return bool

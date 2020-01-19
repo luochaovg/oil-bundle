@@ -66,7 +66,7 @@ class Enum
         1 => 'CURD create',
         2 => 'CURD update',
         3 => 'CURD retrieve',
-        4 => 'CURD delete'
+        4 => 'CURD delete',
     ];
 
     /**
@@ -766,5 +766,15 @@ class Enum
         Abs::MESSAGE_CAROUSEL  => 'Carousel message',
         Abs::MESSAGE_NOTICE    => 'Notice message',
         Abs::MESSAGE_POPUP     => 'Popup message',
+    ];
+
+    /**
+     * @const array 队列任务状态
+     */
+    const BSW_COMMAND_QUEUE_STATE = [
+        1 => 'Mission ready',
+        2 => 'Mission in progress',
+        3 => 'Mission success',
+        4 => 'Mission failed',
     ];
 }

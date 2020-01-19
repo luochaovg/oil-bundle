@@ -32,6 +32,10 @@ class Json extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
+        if (empty($value)) {
+            return null;
+        }
+
         if (is_string($value)) {
             $value = json_decode($value, true);
         }

@@ -118,6 +118,7 @@ class Abs
     const T_NUMERIC  = 'numeric';
     const T_CALLBACK = 'callback';
     const T_VOID     = 'void';
+    const T_JSON     = 'json';
 
     const T_ARRAY_MIXED = 'mixed';
     const T_ARRAY_INDEX = 'index';
@@ -141,6 +142,14 @@ class Abs
     const TPL_SUFFIX           = '.html.twig';
     const FORMAT_JSON          = 'json';
     const FORMAT_HTML          = 'html';
+    const VERIFY_JSON          = 'http://www.bejson.com/kim.htm';
+
+    const MEDIA_XS  = 575;
+    const MEDIA_SM  = 576;
+    const MEDIA_MD  = 768;
+    const MEDIA_LG  = 992;
+    const MEDIA_XL  = 1200;
+    const MEDIA_XXL = 1600;
 
     const DAY_BEGIN        = '00:00:00';
     const DAY_END          = '23:59:59';

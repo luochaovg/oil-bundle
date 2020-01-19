@@ -458,4 +458,19 @@ abstract class Bsw
     {
         return json_encode($source, JSON_UNESCAPED_UNICODE) ?: '{}';
     }
+
+    /**
+     * @return array
+     */
+    public function entityDocument(): array
+    {
+        return $this->web->caching(
+            function () {
+                $table = Helper::tableNameFromCls($this->entity);
+                $document = $this->web->mysqlSchemeDocument($table);
+
+                return Helper::arrayColumn($document['fields'], true, 'name');
+            }
+        );
+    }
 }

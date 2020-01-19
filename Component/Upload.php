@@ -259,26 +259,22 @@ class Upload
         }
 
         // check suffix
-        if (!empty($this->suffix)) {
-            if (!$this->checkSuffix($file->suffix, $this->suffix)) {
-                throw new UploadException('File suffix not allow');
-            }
-        } else {
-            if (!empty($this->noSuffix) && $this->checkSuffix($file->suffix, $this->noSuffix)) {
-                throw new UploadException('File suffix not allow');
-            }
+        if ($this->suffix && !in_array($file->suffix, $this->suffix)) {
+            throw new UploadException('File suffix not allow');
+        }
+
+        if ($this->noSuffix && in_array($file->suffix, $this->noSuffix)) {
+            throw new UploadException('File suffix not allow');
         }
 
         // check mime
-        // all file mime is application/octet-stream by adobe.flash upload
-        if (!empty($this->mime)) {
-            if (isset($file->type) && !$this->checkMime($file->type, $this->mime)) {
-                throw new UploadException('File mime not allow');
-            }
-        } else {
-            if (!empty($this->noMime) && $this->checkSuffix($file->suffix, $this->noMime)) {
-                throw new UploadException('File mime not allow');
-            }
+        // warning: all file mime is application/octet-stream by adobe.flash upload
+        if ($this->mime && !in_array($file->type, $this->mime)) {
+            throw new UploadException('File mime not allow');
+        }
+
+        if ($this->noMime && in_array($file->type, $this->noMime)) {
+            throw new UploadException('File mime not allow');
         }
 
         return true;
@@ -296,32 +292,6 @@ class Upload
         $size /= 1024; // B to KB
 
         return ($size <= $this->maxSize) || (0 == $this->maxSize);
-    }
-
-    /**
-     * Check mime
-     *
-     * @param string $mime
-     * @param array  $allow
-     *
-     * @return bool
-     */
-    private function checkMime(string $mime, array $allow): bool
-    {
-        return empty($allow) ? true : in_array($mime, $allow);
-    }
-
-    /**
-     * Check suffix
-     *
-     * @param string $suffix
-     * @param array  $allow
-     *
-     * @return bool
-     */
-    private function checkSuffix(string $suffix, array $allow): bool
-    {
-        return empty($allow) ? true : in_array($suffix, $allow);
     }
 
     /**

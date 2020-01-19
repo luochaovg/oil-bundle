@@ -40,7 +40,7 @@
               {% if sub_menu_item.icon is not empty %}
                 {{ sub_menu_item.icon|icon|raw }}
               {% endif %}
-              <span bsw-data='{"location": "{{ sub_menu_item.url ?? '' }}"}'>{{ sub_menu_item.value|trans({}, 'twig') }}</span>
+              <span bsw-data='{{ sub_menu_item.dataStringify }}'>{{ sub_menu_item.value|trans({}, 'twig') }}</span>
             </a-menu-item>
           {% endfor %}
         </a-sub-menu>
@@ -49,7 +49,7 @@
           {% if menu_item.icon is not empty %}
             {{ menu_item.icon|icon|raw }}
           {% endif %}
-          <span bsw-data='{"location": "{{ menu_item.url ?? '' }}"}'>{{ menu_item.value|trans({}, 'twig') }}</span>
+          <span bsw-data='{{ menu_item.dataStringify }}'>{{ menu_item.value|trans({}, 'twig') }}</span>
         </a-menu-item>
       {% endif %}
     {% endfor %}

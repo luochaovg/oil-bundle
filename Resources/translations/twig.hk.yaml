@@ -88,6 +88,7 @@ Grant authorization:                      '授權'
 Grant authorization for role:             '授權角色'
 Grant authorization for user:             '授權用戶'
 Dangerous permission, please be careful:  '危險權限，請謹慎分配'
+Verify JSON format:                       '驗證JSON'
 
 # bsw tools
 

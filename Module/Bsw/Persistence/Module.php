@@ -23,10 +23,10 @@ use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Form;
+use Leon\BswBundle\Module\Hook\Entity\JsonStringify;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Leon\BswBundle\Component\Upload as Uploader;
 use Exception;
-use function GuzzleHttp\Psr7\str;
 
 /**
  * @property Input                $input
@@ -497,13 +497,29 @@ class Module extends Bsw
 
             $this->formDefaultConfigure($form, $field, $item, $output);
 
+            $tipsAuto = $titleAuto = null;
+            if (get_class($form) == Select::class && $form->getMode() === Select::MODE_MULTIPLE) {
+                $tipsAuto = $this->input->translator->trans('For multiple newly', [], 'twig');
+            }
+            if (in_array(JsonStringify::class, $item['hook'])) {
+                $button = (new Button('Verify JSON format'))
+                    ->setIcon('b:icon-assessedbadge')
+                    ->setType(Button::THEME_LINK)
+                    ->setSize(Button::SIZE_SMALL)
+                    ->setClick('verifyJsonFormat')
+                    ->setArgs(['field' => $field, 'url' => Abs::VERIFY_JSON, 'key' => 'json']);
+                $titleAuto = $this->web->renderPart('@LeonBsw/form/button', ['form' => $button]);
+            }
+
             $_record[$field] = [
-                'hide'   => $item['hide'],
-                'label'  => $item['trans'] ? $this->web->labelLang($label) : $label,
-                'tips'   => $item['tips'],
-                'column' => $item['column'],
-                'type'   => $form,
-                'title'  => $item['title'],
+                'hide'      => $item['hide'],
+                'label'     => $item['trans'] ? $this->web->labelLang($label) : $label,
+                'tips'      => $item['tips'],
+                'tipsAuto'  => $tipsAuto,
+                'title'     => $item['title'],
+                'titleAuto' => $titleAuto,
+                'column'    => $item['column'],
+                'type'      => $form,
             ];
         }
 
@@ -559,7 +575,10 @@ class Module extends Bsw
         string $multipleField = null
     ): array {
 
+        $document = $this->entityDocument();
         foreach ($record as $field => $value) {
+
+            $_field = Helper::camelToUnder($field);
 
             // Field don't exists
             if (!isset($annotation[$field])) {
@@ -573,8 +592,8 @@ class Module extends Bsw
                 continue;
             }
 
-            // When field is allow null and it's unique key
-            if (is_null($value)) {
+            // When field is null but default is not null
+            if (is_null($value) && $document[$_field]['default'] !== null) {
                 unset($record[$field]);
                 continue;
             }
@@ -628,7 +647,7 @@ class Module extends Bsw
                 $type = $annotation[$field]['validatorType'];
                 if (strpos($type, 'int') !== false) {
                     $item[$field] = intval($value);
-                } else {
+                } elseif (!is_null($value)) {
                     $item[$field] = strval($value);
                 }
             }

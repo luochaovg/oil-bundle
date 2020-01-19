@@ -81,7 +81,7 @@ trait Grant
     {
         // Access from render
         $accessRender = $this->getAccessOfAll();
-        $accessDanger = array_filter(Helper::arrayColumn($accessRender, ['class', 'tips']));
+        $accessDanger = array_filter(Helper::arrayColumn($accessRender, ['class', 'title']));
 
         // Access from current administrator user id
         $accessCurrentAdmin = $this->getAccessOfUserWithRole($this->usr->{$this->cnf->usr_uid});
@@ -104,7 +104,7 @@ trait Grant
      * Grant authorization for user
      *
      * @Route("/bsw-admin-access-control/grant/{id}", name="app_bsw_admin_access_control_grant", requirements={"id": "\d+"})
-     * @Access(class="danger", tips=Abs::DANGER_ACCESS)
+     * @Access(class="danger", title=Abs::DANGER_ACCESS)
      *
      * @param int $id
      *

@@ -132,7 +132,7 @@ class Module extends Bsw
 
             // javascript
             if ($javascript = $item->getJavascript()) {
-                $item->setUrl(Html::scriptBuilder($javascript, $args));
+                $item->setArgs(array_merge(['function' => $javascript], $args));
             }
 
             $menu[$item->getMenuId()][$item->getId()] = $item;

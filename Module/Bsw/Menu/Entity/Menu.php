@@ -2,7 +2,9 @@
 
 namespace Leon\BswBundle\Module\Bsw\Menu\Entity;
 
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 
 class Menu
 {
@@ -45,6 +47,11 @@ class Menu
      * @var string
      */
     private $jsonParams;
+
+    /**
+     * @var array
+     */
+    private $args = [];
 
     /**
      * @return int
@@ -204,6 +211,36 @@ class Menu
         $this->jsonParams = $jsonParams;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArgs(): array
+    {
+        return $this->args;
+    }
+
+    /**
+     * @param array $args
+     *
+     * @return $this
+     */
+    public function setArgs(array $args)
+    {
+        $this->args = $args;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataStringify(): string
+    {
+        $data = array_merge(['location' => $this->getUrl()], $this->getArgs());
+
+        return Html::paramsBuilder($data);
     }
 
     /**

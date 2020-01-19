@@ -50,6 +50,9 @@ $(function () {
         moment,
 
         redirect(data) {
+            if (data.function && data.function !== 'redirect') {
+                return this.dispatcher(data, $('body'));
+            }
             let url = data.location;
             if (bsw.isMobile() && this.mobileDefaultCollapsed) {
                 bsw.cookie().set('bsw_menu_collapsed', 'yes');
@@ -256,7 +259,9 @@ $(function () {
                         if ($(`#${key}`).length === 0) {
                             continue;
                         }
-                        this.persistence_form.setFieldsValue({[key]: sets[map[key]]});
+                        if (this.persistence_form) {
+                            this.persistence_form.setFieldsValue({[key]: sets[map[key]]});
+                        }
                     }
                 }
             }
@@ -358,6 +363,12 @@ $(function () {
             parent.postMessage(data, '*');
         },
 
+        verifyJsonFormat(data, element) {
+            let json = this.persistence_form.getFieldValue(data.field);
+            let url = bsw.setParams({[data.key]: json}, data.url);
+            window.open(url);
+        },
+
         initCkEditor() {
             let that = this;
             $('.bsw-persistence .bsw-ck-editor').each(function () {
@@ -368,7 +379,9 @@ $(function () {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        that.persistence_form.setFieldsValue({[id]: that.ckEditor[id].getData()});
+                        if (that.persistence_form) {
+                            that.persistence_form.setFieldsValue({[id]: that.ckEditor[id].getData()});
+                        }
                     });
                 }).catch(err => {
                     console.warn(err.stack);
@@ -382,7 +395,9 @@ $(function () {
 
         fillParentFormInParent(data, element) {
             this.modal.visible = false;
-            this.persistence_form.setFieldsValue({[data.fill]: data.ids.join(',')});
+            if (this.persistence_form) {
+                this.persistence_form.setFieldsValue({[data.fill]: data.ids.join(',')});
+            }
         },
 
         handleResponseInParent(data, element) {

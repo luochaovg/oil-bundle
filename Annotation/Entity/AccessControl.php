@@ -32,5 +32,5 @@ class AccessControl extends Annotation
     /**
      * @var string
      */
-    public $tips;
+    public $title;
 }

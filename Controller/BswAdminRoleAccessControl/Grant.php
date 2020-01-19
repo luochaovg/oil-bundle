@@ -72,7 +72,7 @@ trait Grant
      * Grant authorization for role
      *
      * @Route("/bsw-admin-role-access-control/grant/{id}", name="app_bsw_admin_role_access_control_grant", requirements={"id": "\d+"})
-     * @Access(class="danger", tips=Abs::DANGER_ACCESS)
+     * @Access(class="danger", title=Abs::DANGER_ACCESS)
      *
      * @param int $id
      *
@@ -137,7 +137,7 @@ trait Grant
         };
 
         $dress = $this->getAccessOfAll();
-        $dress = Helper::arrayColumn($dress, ['class', 'tips']);
+        $dress = Helper::arrayColumn($dress, ['class', 'title']);
         $dress = array_filter($dress);
 
         $disabled = [];

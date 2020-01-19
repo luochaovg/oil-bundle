@@ -423,3 +423,8 @@ Expr is not null:               '不為空'
 Expr contain:                   '包含'
 Expr not contain:               '不包含'
 Expr between:                   '之間'
+
+Mission ready:                  '準備就緒'
+Mission in progress:            '執行中'
+Mission success:                '已完成'
+Mission failed:                 '已失敗'

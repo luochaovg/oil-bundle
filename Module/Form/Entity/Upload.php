@@ -65,6 +65,11 @@ class Upload extends Number
     protected $url;
 
     /**
+     * @var bool
+     */
+    protected $needId = true;
+
+    /**
      * Input constructor.
      */
     public function __construct()
@@ -248,6 +253,26 @@ class Upload extends Number
     public function setUrl(string $url)
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNeedId(): bool
+    {
+        return $this->needId;
+    }
+
+    /**
+     * @param bool $needId
+     *
+     * @return $this
+     */
+    public function setNeedId(bool $needId = true)
+    {
+        $this->needId = $needId;
 
         return $this;
     }

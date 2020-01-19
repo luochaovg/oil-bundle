@@ -368,10 +368,8 @@ class Module extends Bsw
      * @return array
      * @throws
      */
-    protected
-    function handleFilterData(
-        array $filter
-    ): array {
+    protected function handleFilterData(array $filter): array
+    {
         $record = [];
         $format = [];
 
@@ -482,12 +480,8 @@ class Module extends Bsw
      *
      * @return array
      */
-    protected
-    function getShowFilterItemList(
-        array $annotation,
-        array $group,
-        array $diffuse
-    ): array {
+    protected function getShowFilterItemList(array $annotation, array $group, array $diffuse): array
+    {
         $showList = Helper::arrayColumn($annotation, 'showPriority');
         foreach ($showList as $key => $priority) {
             if ($name = $diffuse[$key] ?? null) {
@@ -499,14 +493,7 @@ class Module extends Bsw
         }
 
         if ($this->entity) {
-            $document = $this->web->caching(
-                function () {
-                    $document = $this->web->mysqlSchemeDocument(Helper::tableNameFromCls($this->entity));
-
-                    return Helper::arrayColumn($document['fields'], true, 'name');
-                }
-            );
-
+            $document = $this->entityDocument();
             foreach ($showList as $key => &$priority) {
                 $key = substr($key, 0, strrpos($key, '_'));
                 $scheme = $document[$key] ?? null;
@@ -544,10 +531,8 @@ class Module extends Bsw
      *
      * @return array
      */
-    protected
-    function getFilterGroup(
-        array $annotation
-    ): array {
+    protected function getFilterGroup(array $annotation): array
+    {
         $group = [];
         $diffuse = [];
 
@@ -569,11 +554,8 @@ class Module extends Bsw
      * @param array  $annotation
      * @param Output $output
      */
-    protected
-    function handlerShowList(
-        array $annotation,
-        Output $output
-    ) {
+    protected function handlerShowList(array $annotation, Output $output)
+    {
         if ($this->input->iframe) {
             $output->maxShow = ceil($output->maxShow / 2);
         }
@@ -591,10 +573,8 @@ class Module extends Bsw
      *
      * @param Output $output
      */
-    protected
-    function handlerFilter(
-        Output $output
-    ) {
+    protected function handlerFilter(Output $output)
+    {
         foreach ($output->group as $name => $members) {
             foreach ($members as $field) {
                 if (!isset($output->filter[$name])) {
@@ -620,8 +600,7 @@ class Module extends Bsw
      * @return ArgsOutput
      * @throws
      */
-    public
-    function logic(): ArgsOutput
+    public function logic(): ArgsOutput
     {
         $output = new Output();
 

@@ -93,6 +93,9 @@ trait Upload
 
         // file url
         $file = $this->attachmentPreviewHandler($file, 'url', ['savePath', 'saveName'], false);
+        if (is_callable($options['file_fn'] ?? null)) {
+            $file = call_user_func_array($options['file_fn'], [$file]);
+        }
 
         return $this->okayAjax(
             [

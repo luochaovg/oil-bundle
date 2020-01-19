@@ -88,8 +88,8 @@ class BswAdminMenu extends FoundationEntity
     /**
      * @ORM\Column(type="string", name="`json_params`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=7)
-     * @BswAnnotation\Persistence(sort=7, type=BswForm\TextArea::class)
+     * @BswAnnotation\Preview(sort=7, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_PRE)
+     * @BswAnnotation\Persistence(sort=7, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=7)
      */
     protected $jsonParams;

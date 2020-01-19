@@ -493,6 +493,7 @@ class BswScaffoldCommand extends Command implements CommandInterface
             Abs::MYSQL_FLOAT      => ['doctrine' => 'float', 'validator' => Abs::T_NUMERIC],
             Abs::MYSQL_DOUBLE     => ['doctrine' => 'float', 'validator' => Abs::T_NUMERIC],
             Abs::MYSQL_DECIMAL    => ['doctrine' => 'float', 'validator' => Abs::T_NUMERIC],
+            Abs::MYSQL_JSON       => ['doctrine' => 'string', 'validator' => Abs::T_STRING],
         ];
 
         if (!$tabled) {

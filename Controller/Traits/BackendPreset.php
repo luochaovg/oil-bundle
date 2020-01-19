@@ -25,6 +25,28 @@ trait BackendPreset
     }
 
     /**
+     * @param array $enum
+     *
+     * @return array
+     */
+    public function acmeEnumExtraCommand(array $enum): array
+    {
+        $result = $this->commandCaller('list', ['--format' => 'json']);
+        $result = Helper::parseJsonString($result);
+
+        $commands = [];
+        foreach ($result['commands'] ?? [] as $item) {
+            $name = $item['name'];
+            if (strpos($name, 'mission:') !== 0 && strpos($name, 'queue:') !== 0) {
+                continue;
+            }
+            $commands[$name] = $item['description'];
+        }
+
+        return $commands;
+    }
+
+    /**
      * @param $current
      * @param $hooked
      * @param $original

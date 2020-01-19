@@ -433,7 +433,7 @@ div.modal-container-center div.ant-modal-body > div {
 }
 
 .ant-spin-container:after {
-  z-index: 99;
+  z-index: 998;
 }
 
 .ant-checkbox-wrapper {
@@ -460,7 +460,7 @@ a.bsw-preview-link {
 }
 
 .ant-back-top {
-  z-index: 99;
+  z-index: 998;
   right: 80px;
   @media screen and (max-width: @mobile) {
     right: 50px;
@@ -513,4 +513,60 @@ blockquote {
 
 .ant-popover-inner-content {
   padding: 12px;
+}
+
+.ant-btn {
+  &.bsw-btn {
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .12);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .045);
+
+    &:hover, &:active {
+      opacity: .8;
+    }
+  }
+
+  &.ant-btn-bsw-primary, &.ant-btn-bsw-primary:hover, &.ant-btn-bsw-primary:active {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+  }
+
+  &.ant-btn-bsw-secondary, &.ant-btn-bsw-secondary:hover, &.ant-btn-bsw-secondary:active {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+  }
+
+  &.ant-btn-bsw-success, &.ant-btn-bsw-success:hover, &.ant-btn-bsw-success:active {
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+  }
+
+  &.ant-btn-bsw-danger, &.ant-btn-bsw-danger:hover, &.ant-btn-bsw-danger:active {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+  }
+
+  &.ant-btn-bsw-warning, &.ant-btn-bsw-warning:hover, &.ant-btn-bsw-warning:active {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+  }
+
+  &.ant-btn-bsw-info, &.ant-btn-bsw-info:hover, &.ant-btn-bsw-info:active {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+  }
+
+  &.ant-btn-bsw-light, &.ant-btn-bsw-light:hover, &.ant-btn-bsw-light:active {
+    background-color: #f8f9fa !important;
+    border-color: rgba(52, 58, 64, .3) !important;
+
+    &.bsw-btn {
+      color: #343a40;
+    }
+  }
+
+  &.ant-btn-bsw-dark, &.ant-btn-bsw-dark:hover, &.ant-btn-bsw-dark:active {
+    background-color: #343a40 !important;
+    border-color: #343a40 !important;
+  }
 }

@@ -12,7 +12,9 @@
   :range="{{ form.range ? 'true' : 'false' }}"
   :step="{{ form.step }}"
   :vertical="{{ form.vertical ? 'true' : 'false' }}"
-  :tooltip-visible="{{ form.tooltipVisible ? 'true' : 'false' }}"
+  {% if form.tooltipVisible is not same as(null) %}
+    :tooltip-visible="{{ form.tooltipVisible ? 'true' : 'false' }}"
+  {% endif %}
   :tip-formatter="{{ form.tipFormatter }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ form.value }} }]"

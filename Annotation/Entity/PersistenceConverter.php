@@ -16,6 +16,7 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Radio;
+use Leon\BswBundle\Module\Form\Entity\Score;
 use Leon\BswBundle\Module\Form\Entity\Slider;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Symfony\Component\Validator\Constraints\Length;
@@ -39,8 +40,9 @@ class PersistenceConverter extends AnnotationConverter
      * @var array
      */
     protected $fullWidthForm = [
-        Radio::class,
         Checkbox::class,
+        Radio::class,
+        Score::class,
         Slider::class,
     ];
 

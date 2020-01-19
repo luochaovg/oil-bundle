@@ -52,9 +52,9 @@ class Slider extends Form
     protected $vertical = false;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    protected $tooltipVisible = true;
+    protected $tooltipVisible = null;
 
     /**
      * @var string
@@ -224,7 +224,7 @@ class Slider extends Form
     /**
      * @return bool
      */
-    public function isTooltipVisible(): bool
+    public function isTooltipVisible(): ?bool
     {
         return $this->tooltipVisible;
     }

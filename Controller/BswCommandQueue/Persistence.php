@@ -1,8 +1,8 @@
 <?php
 
-namespace Leon\BswBundle\Controller\BswAdminAccessControl;
+namespace Leon\BswBundle\Controller\BswCommandQueue;
 
-use Leon\BswBundle\Entity\BswAdminAccessControl;
+use Leon\BswBundle\Entity\BswCommandQueue;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
@@ -15,14 +15,14 @@ trait Persistence
      */
     public function persistenceEntity(): string
     {
-        return BswAdminAccessControl::class;
+        return BswCommandQueue::class;
     }
 
     /**
      * Persistence record
      *
-     * @Route("/bsw-admin-access-control/persistence/{id}", name="app_bsw_admin_access_control_persistence", requirements={"id": "\d+"})
-     * @Access(class="danger", title=Abs::DANGER_ACCESS)
+     * @Route("/bsw-command-queue/persistence/{id}", name="app_bsw_command_queue_persistence", requirements={"id": "\d+"})
+     * @Access()
      *
      * @param int $id
      *

@@ -15,6 +15,9 @@ use Leon\BswBundle\Repository\FoundationRepository;
 use Predis\Client;
 use Doctrine\ORM\Query\Expr;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application as CmdApplication;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -1318,5 +1321,25 @@ trait Foundation
             Abs::PG_TOTAL_ITEM   => $total,
             Abs::PG_ITEMS        => array_slice($list, $query['offset'], $query['limit']),
         ];
+    }
+
+    /**
+     * Call an command
+     *
+     * @param string $command
+     * @param array  $condition
+     *
+     * @return string
+     * @throws
+     */
+    public function commandCaller(string $command, array $condition = []): string
+    {
+        $application = new CmdApplication($this->kernel);
+        $application->setAutoExit(false);
+
+        $output = new BufferedOutput();
+        $application->find($command)->run(new ArrayInput($condition), $output);
+
+        return $output->fetch();
     }
 }
