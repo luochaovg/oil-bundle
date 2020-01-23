@@ -51,15 +51,15 @@
                 {% set _dress = attribute(dress, value) ?? null %}
                 <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
                   {% if _dress is not null %}
-                    <a-tooltip>
-                      <template slot="title">{{ _dress.title|trans({}, 'twig') }}</template>
+                    <a-popover overlay-class-name="bsw-popover">
+                      <template slot="content">{{ _dress.title|trans({}, 'twig') }}</template>
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
                         class="{{ _dress.class }}"
                         value="{{ value }}">
                         {{ label }}
                       </a-checkbox>
-                    </a-tooltip>
+                    </a-popover>
                   {% else %}
                     <a-checkbox
                       :disabled="{{ disabled ? 'true' : 'false' }}"

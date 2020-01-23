@@ -378,21 +378,19 @@ class BswBackendController extends BswWebController
                     $message->getDuration(),
                 ];
 
-                if ($this->ajax) {
-
-                    $codeMap = [
-                        Abs::TAG_CLASSIFY_SUCCESS => $this->codeOkForLogic,
-                        Abs::TAG_CLASSIFY_ERROR   => new ErrorException(),
-                    ];
-
-                    $classify = $message->getClassify();
-                    $code = $codeMap[$classify] ?? $this->codeOkForLogic;
-
-                    return $this->responseMessageWithAjax($code, ...$args);
-
-                } else {
+                if (!$this->ajax) {
                     return $this->responseMessage(...$args);
                 }
+
+                $codeMap = [
+                    Abs::TAG_CLASSIFY_SUCCESS => $this->codeOkForLogic,
+                    Abs::TAG_CLASSIFY_ERROR   => new ErrorException(),
+                ];
+
+                $classify = $message->getClassify();
+                $code = $codeMap[$classify] ?? $this->codeOkForLogic;
+
+                return $this->responseMessageWithAjax($code, ...$args);
             }
 
             if (!$name) {
@@ -432,8 +430,8 @@ class BswBackendController extends BswWebController
                 }
             }
         }
-        if ($this->ajax) {
 
+        if ($this->ajax) {
             $content = $this->show($showArgs, $view);
             $ajaxShowArgs = array_merge($showArgs, $ajaxShowArgs, ['content' => $content]);
 

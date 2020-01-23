@@ -498,13 +498,14 @@ class Module extends Bsw
             $this->formDefaultConfigure($form, $field, $item, $output);
 
             $tipsAuto = $titleAuto = null;
-            if (get_class($form) == Select::class && $form->getMode() === Select::MODE_MULTIPLE) {
+            if (get_class($form) == Select::class && $form->getMode() == Select::MODE_MULTIPLE && !$this->input->id) {
                 $tipsAuto = $this->input->translator->trans('For multiple newly', [], 'twig');
             }
+
             if (in_array(JsonStringify::class, $item['hook'])) {
                 $button = (new Button('Verify JSON format'))
                     ->setIcon('b:icon-assessedbadge')
-                    ->setType(Button::THEME_LINK)
+                    ->setType(Button::THEME_BSW_SUCCESS)
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
                     ->setArgs(['field' => $field, 'url' => Abs::VERIFY_JSON, 'key' => 'json']);
@@ -717,7 +718,7 @@ class Module extends Bsw
             return $this->showError($this->repository->pop());
         }
 
-        return $this->showSuccess($newly ? 'Newly record done' : 'Modify record done');
+        return $this->showSuccess($newly ? $this->input->i18nNewly : $this->input->i18nModify);
     }
 
     /**

@@ -470,7 +470,8 @@ abstract class Bsw
                 $document = $this->web->mysqlSchemeDocument($table);
 
                 return Helper::arrayColumn($document['fields'], true, 'name');
-            }
+            },
+            "bsw-entity-{$this->entity}"
         );
     }
 }

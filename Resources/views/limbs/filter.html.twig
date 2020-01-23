@@ -16,8 +16,8 @@
         class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filter_display('{{ key }}') }"
       >
-        {% set begin = item.title ? '<a-tooltip title="' ~ item.title ~'">' : null %}
-        {% set end = item.title ? '</a-tooltip>' : null %}
+        {% set begin = item.title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ item.title ~ '</template>' : null %}
+        {% set end = item.title ? '</a-popover>' : null %}
         {% if item.type is iterable %}
           {{ begin|raw }}
           <a-input-group compact>

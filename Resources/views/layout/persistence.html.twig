@@ -25,8 +25,8 @@
           extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
         >
           {% set title = (item.title ~ ',' ~ item.titleAuto)|trim(',') %}
-          {% set begin = title ? '<a-tooltip><template slot="title">' ~ title ~ '</template>' : null %}
-          {% set end = title ? '</a-tooltip>' : null %}
+          {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
+          {% set end = title ? '</a-popover>' : null %}
           {{ begin|raw }}
           {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
           {{ end|raw }}

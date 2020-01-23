@@ -30,4 +30,14 @@ class Input extends ArgsInput
      * @var string
      */
     public $fill = 'fill';
+
+    /**
+     * @var string
+     */
+    public $i18nNewly = 'Newly record done';
+
+    /**
+     * @var string
+     */
+    public $i18nModify = 'Modify record done';
 }
