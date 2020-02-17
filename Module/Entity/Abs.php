@@ -276,6 +276,9 @@ class Abs
     const REQ_HEAD   = 'HEAD';
     const REQ_ALL    = 'GET|POST|HEAD';
 
+    const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
+    const CONTENT_TYPE_JSON = 'application/json;charset=utf-8';
+
     const APP_TYPE_API      = 'api';
     const APP_TYPE_WEB      = 'web';
     const APP_TYPE_FRONTEND = 'frontend';

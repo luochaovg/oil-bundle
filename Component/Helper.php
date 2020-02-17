@@ -1016,6 +1016,7 @@ class Helper
      * @param string   $type
      * @param array    $params
      * @param callable $optionHandler
+     * @param string   $contentType
      * @param bool     $async
      *
      * @return mixed
@@ -1026,6 +1027,7 @@ class Helper
         string $type = Abs::REQ_GET,
         array $params = null,
         callable $optionHandler = null,
+        string $contentType = Abs::CONTENT_TYPE_FORM,
         bool $async = false
     ) {
         $options = [];
@@ -1067,10 +1069,22 @@ class Helper
             $options[CURLOPT_URL] = $url;
         }
 
+        if ($contentType) {
+            $options[CURLOPT_HTTPHEADER] = ["Content-Type: {$contentType}"];
+        }
+
         // use method POST
         if (strtoupper($type === Abs::REQ_POST)) {
             $options[CURLOPT_POST] = true;
-            !empty($params) && $options[CURLOPT_POSTFIELDS] = http_build_query($params);
+            if (!empty($params)) {
+                if ($contentType == Abs::CONTENT_TYPE_FORM) {
+                    $options[CURLOPT_POSTFIELDS] = http_build_query($params);
+                } elseif ($contentType == Abs::CONTENT_TYPE_JSON) {
+                    $options[CURLOPT_POSTFIELDS] = json_encode($params);
+                } else {
+                    $options[CURLOPT_POSTFIELDS] = $params;
+                }
+            }
         }
 
         // init

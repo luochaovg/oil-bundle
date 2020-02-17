@@ -773,6 +773,7 @@ class Module extends Bsw
         }
 
         if ($this->input->iframe) {
+            $output->scroll -= $output->columns[$operate]['width'];
             unset($output->columns[$operate]);
         }
 

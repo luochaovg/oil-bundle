@@ -30,6 +30,16 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     protected $params;
 
     /**
+     * @var int
+     */
+    protected $page = 0;
+
+    /**
+     * @var bool
+     */
+    protected $handlerByMultiple = false;
+
+    /**
      * @return array
      */
     public function args(): array
@@ -190,6 +200,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $result = [];
         }
 
+        $this->page = $page;
         if ($page === 1 && empty($result['items'])) {
             $this->empty($output);
 
@@ -198,8 +209,12 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
         $pageDone = 0;
         try {
-            foreach ($result['items'] as $record) {
-                $pageDone += ($this->handler($record) ? 1 : 0);
+            if ($this->handlerByMultiple) {
+                $pageDone += ($this->handler($result['items']) ? count($result['items']) : 0);
+            } else {
+                foreach ($result['items'] as $record) {
+                    $pageDone += ($this->handler($record) ? 1 : 0);
+                }
             }
         } catch (Exception $e) {
             $output->writeln("<error> {$e->getMessage()} </error>");
@@ -208,10 +223,9 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         }
 
         $totalSuccess += $pageDone;
-        $total = $result['total_item'];
         $pageCount = count($result['items']);
 
-        $output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $total));
+        $output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $result['total_item']));
 
         if ($limit == $pageCount) {
             return $this->logic($limit, $output, ++$page, $totalSuccess);

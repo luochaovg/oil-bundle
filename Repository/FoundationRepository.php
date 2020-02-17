@@ -869,11 +869,15 @@ abstract class FoundationRepository extends SFRepository
             return $query->getResult($hydrationMode);
         }
 
+        $options = [];
+        if (!empty($filter['group'])) {
+            $options = array_merge($options, ['distinct' => false, 'wrap-queries' => true]);
+        }
+
         /**
          * @var AbstractPagination|SlidingPagination $pagination
          */
         $query->setHydrationMode($hydrationMode);
-        $options = ['distinct' => $filter['distinct'] ?? true];
         $pagination = $this->container->get('knp_paginator')->paginate(
             $query,
             $filter['page'],
