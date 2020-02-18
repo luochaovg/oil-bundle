@@ -195,7 +195,7 @@ class Module extends Bsw
         }
 
         if ($annotationFull) {
-            $annotation = array_merge(...array_values($annotationFull));
+            $annotation = array_merge(...array_values(array_reverse($annotationFull)));
         }
 
         return [$annotation, $annotationFull];
@@ -372,7 +372,7 @@ class Module extends Bsw
             $annotationExtra[$operate] = ['show' => true];
         }
 
-        $annotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
+        $annotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $annotationExtra);
 
         /**
          * annotation handler with extra
@@ -793,7 +793,7 @@ class Module extends Bsw
         }
 
         foreach ($output->columns as $field => $preview) {
-            if (isset($item[$field])) {
+            if (array_key_exists($field, $item)) {
                 continue;
             }
             $output->scroll -= ($preview['width'] ?? 0);

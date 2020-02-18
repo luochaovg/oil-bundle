@@ -163,7 +163,7 @@ class Module extends Bsw
         }
 
         if ($annotationFull) {
-            $annotation = array_merge(...array_values($annotationFull));
+            $annotation = array_merge(...array_values(array_reverse($annotationFull)));
         }
 
         return [$annotation, $annotationFull];
@@ -225,7 +225,7 @@ class Module extends Bsw
 
         $fn = self::FILTER_ANNOTATION;
         $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
-        $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
+        $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra);
 
         /**
          * annotation handler with extra
@@ -267,9 +267,7 @@ class Module extends Bsw
                 continue;
             }
 
-            if (strpos($item['field'], '.') === false) {
-                $item['field'] = "{$this->query['alias']}.{$item['field']}";
-            }
+            $item['field'] = Helper::tableFieldAddAlias($item['field'], $this->query['alias']);
             if (in_array($item['field'], $allowFields)) {
                 $_annotation[Helper::camelToUnder($key)] = $item;
             }
