@@ -135,6 +135,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         }
 
         $total = $instance->lines();
+        dd($total);
         $beginLine = $this->params->{'data-line'};
 
         $args = Helper::pageArgs(['page' => $page, 'limit' => $limit]);
