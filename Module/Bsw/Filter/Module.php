@@ -225,7 +225,7 @@ class Module extends Bsw
 
         $fn = self::FILTER_ANNOTATION;
         $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
-        $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra);
+        $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
 
         /**
          * annotation handler with extra

@@ -66,8 +66,8 @@ class InputConverter extends AnnotationConverter
      */
     protected function sign($value)
     {
-        if (!is_bool($value)) {
-            $this->exception('sign', "Must be boolean value");
+        if (!is_bool($value) && ($value != Abs::AUTO)) {
+            $this->exception('sign', "Must be boolean value or string as 'auto'");
         }
 
         return $value;

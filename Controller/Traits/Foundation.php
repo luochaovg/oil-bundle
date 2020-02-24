@@ -523,6 +523,10 @@ trait Foundation
                 $value = $this->args($item->method ?: Abs::REQ_ALL, $item->field, !$item->html);
             }
 
+            if ($item->sign == Abs::AUTO) {
+                $item->sign = is_null($value) ? false : true;
+            }
+
             $extraArgs['_args_handler'] = $item->rulesArgsHandler;
             $result = $dispatcher->execute(
                 $item->field,

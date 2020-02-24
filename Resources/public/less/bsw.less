@@ -244,10 +244,10 @@ thead.ant-table-thead > tr > th > div {
   button {
     margin: 3px 2px;
   }
-}
 
-.ant-btn-sm {
-  font-size: 12px;
+  .ant-btn-sm {
+    font-size: 12px;
+  }
 }
 
 .bsw-persistence {
@@ -512,11 +512,7 @@ blockquote {
 }
 
 .ant-popover-inner-content {
-  padding: 12px 14px;
-}
-
-.bsw-popover .ant-popover-inner-content {
-  padding: 8px 10px;
+  padding: 12px;
 }
 
 .ant-btn {
@@ -527,6 +523,20 @@ blockquote {
 
     &:hover, &:active {
       opacity: .8;
+    }
+  }
+
+  &.bsw-btn[disabled] {
+    color: rgba(0, 0, 0, .25);
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    text-shadow: none;
+    box-shadow: none;
+
+    &:hover, &:active {
+      background-color: #f5f5f5 !important;
+      border-color: #d9d9d9 !important;
+      opacity: unset;
     }
   }
 

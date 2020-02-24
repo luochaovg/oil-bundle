@@ -13,7 +13,7 @@
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index: 99999;
+  z-index: 1000;
   background-color: #ffffff;
   letter-spacing: 3px;
   background-repeat: no-repeat;
@@ -47,8 +47,11 @@
 }
 /* Cover */
 .ant-spin-nested-loading > div > .ant-spin {
-  z-index: 9999;
+  z-index: 1000;
   position: fixed;
+}
+.ant-tooltip {
+  z-index: 998;
 }
 .ant-spin-blur:after {
   opacity: .2;

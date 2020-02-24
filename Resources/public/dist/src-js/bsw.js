@@ -49,6 +49,9 @@ $(function () {
         moment: moment,
 
         redirect: function redirect(data) {
+            if (data.function && data.function !== 'redirect') {
+                return this.dispatcher(data, $('body'));
+            }
             var url = data.location;
             if (bsw.isMobile() && this.mobileDefaultCollapsed) {
                 bsw.cookie().set('bsw_menu_collapsed', 'yes');
@@ -245,7 +248,7 @@ $(function () {
                 var _map;
 
                 var sets = files[0].response.sets;
-                var map = (_map = {}, _defineProperty(_map, collect.field, 'attachment_id'), _defineProperty(_map, collect.md5, 'attachment_md5'), _defineProperty(_map, collect.sha1, 'attachment_sha1'), _map);
+                var map = (_map = {}, _defineProperty(_map, collect.id, 'attachment_id'), _defineProperty(_map, collect.md5, 'attachment_md5'), _defineProperty(_map, collect.sha1, 'attachment_sha1'), _defineProperty(_map, collect.url, 'attachment_url'), _map);
                 for (var key in map) {
                     if (!map.hasOwnProperty(key)) {
                         continue;
@@ -254,7 +257,9 @@ $(function () {
                         if ($('#' + key).length === 0) {
                             continue;
                         }
-                        this.persistence_form.setFieldsValue(_defineProperty({}, key, sets[map[key]]));
+                        if (this.persistence_form) {
+                            this.persistence_form.setFieldsValue(_defineProperty({}, key, sets[map[key]]));
+                        }
                     }
                 }
             }
@@ -328,12 +333,12 @@ $(function () {
                 width: data.width || size.width,
                 title: data.title || bsw.lang.please_select,
                 centered: true,
-                wrapClassName: 'bsw-preview-iframe',
-                content: '<iframe id="bsw-preview-iframe" src="' + data.location + '"></iframe>'
+                wrapClassName: 'bsw-iframe-container',
+                content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-preview-iframe").height(data.height || size.height);
+                $("#bsw-iframe").height(data.height || size.height);
             });
         },
         showIFrameByNative: function showIFrameByNative(element) {
@@ -349,6 +354,11 @@ $(function () {
             }
             parent.postMessage(data, '*');
         },
+        verifyJsonFormat: function verifyJsonFormat(data, element) {
+            var json = this.persistence_form.getFieldValue(data.field);
+            var url = bsw.setParams(_defineProperty({}, data.key, json), data.url);
+            window.open(url);
+        },
         initCkEditor: function initCkEditor() {
             var that = this;
             $('.bsw-persistence .bsw-ck-editor').each(function () {
@@ -359,7 +369,9 @@ $(function () {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
+                        if (that.persistence_form) {
+                            that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
+                        }
                     });
                 }).catch(function (err) {
                     console.warn(err.stack);
@@ -374,7 +386,9 @@ $(function () {
 
         fillParentFormInParent: function fillParentFormInParent(data, element) {
             this.modal.visible = false;
-            this.persistence_form.setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
+            if (this.persistence_form) {
+                this.persistence_form.setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
+            }
         },
         handleResponseInParent: function handleResponseInParent(data, element) {
             this.modal.visible = false;

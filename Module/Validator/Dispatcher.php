@@ -38,8 +38,8 @@ class Dispatcher
      * @param array  $rules
      * @param mixed  $value
      * @param array  $extraArgs
-     * @param bool   $useLabel
      * @param bool   $sign
+     * @param bool   $useLabel
      *
      * @return ValidatorResult
      * @throws
@@ -100,7 +100,7 @@ class Dispatcher
                 throw new ValidatorException("{$rule} rule must extend class `{$className}`");
             }
 
-            list($result->args, $error) = $validator->validator($extraArgs);
+            [$result->args, $error] = $validator->validator($extraArgs);
             $value = $result->args;
 
             if (empty($error)) {

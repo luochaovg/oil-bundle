@@ -426,7 +426,7 @@ abstract class BswWebController extends AbstractController
         $caller = Helper::backtrace(1, ['class', 'function']);
         $annotation = $this->getInputAnnotation($caller['class'], $caller['function']);
 
-        [$error, $args, $_, $validator] = $this->parametersValidator($annotation);
+        [$error, $args, $sign, $validator] = $this->parametersValidator($annotation);
 
         /**
          * show error

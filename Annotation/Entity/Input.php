@@ -31,7 +31,7 @@ class Input extends Annotation
     public $rulesArgsHandler = [];
 
     /**
-     * @var bool
+     * @var bool|string
      */
     public $sign = true;
 

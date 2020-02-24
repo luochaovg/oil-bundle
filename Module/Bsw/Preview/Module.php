@@ -372,7 +372,7 @@ class Module extends Bsw
             $annotationExtra[$operate] = ['show' => true];
         }
 
-        $annotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $annotationExtra);
+        $annotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
 
         /**
          * annotation handler with extra

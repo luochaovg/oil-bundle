@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use InvalidArgumentException;
 use Exception;
+use function GuzzleHttp\Psr7\parse_query;
 
 abstract class ImportCsvCommand extends Command implements CommandInterface
 {
@@ -104,6 +105,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->params = (object)$this->options($input);
+        $this->params->args = (object)parse_query($this->params->args);
 
         ini_set('memory_limit', '2048M');
         ini_set('xdebug.max_nesting_level', 2048);

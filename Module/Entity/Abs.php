@@ -142,6 +142,7 @@ class Abs
     const TPL_SUFFIX           = '.html.twig';
     const FORMAT_JSON          = 'json';
     const FORMAT_HTML          = 'html';
+    const AUTO                 = 'auto';
     const VERIFY_JSON          = 'http://www.bejson.com/kim.htm';
 
     const MEDIA_XS  = 575;
