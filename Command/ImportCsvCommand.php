@@ -105,7 +105,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->params = (object)$this->options($input);
-        $this->params->args = (object)Helper::parseJsonString($this->params->args);
+        $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
 
         ini_set('memory_limit', '2048M');
         ini_set('xdebug.max_nesting_level', 2048);
