@@ -347,6 +347,17 @@ $(function () {
             });
         },
 
+        showIFrameWithChecked(data, element) {
+            let ids = this.preview_selected_row.join(',');
+            let args = {ids};
+            if (typeof data.form !== "undefined") {
+                let key = `fill[${data.form}]`;
+                args = {[key]: ids};
+            }
+            data.location = bsw.setParams(args, data.location);
+            this.showIFrame(data, element);
+        },
+
         showIFrameByNative(element) {
             this.showIFrame(this.getBswData($(element)), element);
         },
