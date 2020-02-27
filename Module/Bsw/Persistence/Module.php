@@ -37,12 +37,12 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK   = 'BeforeHook';        // 钩子前处理
-    const AFTER_HOOK    = 'AfterHook';         // 钩子后处理
-    const BEFORE_RENDER = 'BeforeRender';      // 渲染前处理
-    const FORM_OPERATE  = 'FormOperates';      // 操作按钮
-    const AFTER_SUBMIT  = 'AfterSubmit';       // 提交后处理
-    const WHEN_PERSIST  = 'WhenPersist';       // 与持久化同时处理（事务级）
+    const BEFORE_HOOK       = 'BeforeHook';        // 钩子前处理
+    const AFTER_HOOK        = 'AfterHook';         // 钩子后处理
+    const BEFORE_RENDER     = 'BeforeRender';      // 渲染前处理
+    const FORM_OPERATE      = 'FormOperates';      // 操作按钮
+    const AFTER_SUBMIT      = 'AfterSubmit';       // 提交后处理
+    const AFTER_PERSISTENCE = 'AfterPersistence';  // 持久化后处理
 
     /**
      * @var string
@@ -237,6 +237,8 @@ class Module extends Bsw
 
                 if ($result instanceof Error) {
                     return $this->showError($result->tiny());
+                } elseif ($result instanceof Message) {
+                    return $this->showMessage($result);
                 } else {
                     [$submit, $extraSubmit] = $result;
                 }
@@ -255,6 +257,8 @@ class Module extends Bsw
 
                 if ($result instanceof Error) {
                     return $this->showError($result->tiny());
+                } elseif ($result instanceof Message) {
+                    return $this->showMessage($result);
                 } else {
                     [$submit, $extraSubmit] = $result;
                 }
@@ -505,7 +509,7 @@ class Module extends Bsw
             if (in_array(JsonStringify::class, $item['hook'])) {
                 $button = (new Button('Verify JSON format'))
                     ->setIcon('b:icon-assessedbadge')
-                    ->setType(Button::THEME_BSW_SUCCESS)
+                    ->setType(Button::THEME_LINK)
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
                     ->setArgs(['field' => $field, 'url' => Abs::VERIFY_JSON, 'key' => 'json']);

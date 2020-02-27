@@ -37,10 +37,11 @@ trait BackendPreset
         $commands = [];
         foreach ($result['commands'] ?? [] as $item) {
             $name = $item['name'];
-            if (strpos($name, 'mission:') !== 0 && strpos($name, 'queue:') !== 0) {
-                continue;
+            foreach ($this->parameters('command_queue_pos') as $pos) {
+                if (strpos($name, $pos) === 0) {
+                    $commands[$name] = $item['description'];
+                }
             }
-            $commands[$name] = $item['description'];
         }
 
         return $commands;

@@ -74,6 +74,7 @@ class Upload extends Number
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setButtonLabel('Click to select for upload');
     }
 

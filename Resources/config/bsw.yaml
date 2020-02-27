@@ -151,6 +151,12 @@ parameters:
     bsw_menus_same_parent_map:
         app_site_index: app_bsw_config_preview
 
+    bsw_command_queue_pos:
+        - mission
+        - import
+        - export
+        - queue
+
     bsw_json:
         theme: dark
         menu_width: 256

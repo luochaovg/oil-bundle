@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Component;
 
 use Exception;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Download
 {
@@ -149,6 +150,27 @@ class Download
         header('Content-Type: application/force-download');
         header('Content-Disposition: attachment; filename=' . $name);
         readfile($url);
+    }
+
+    /**
+     * Remote save file
+     *
+     * @param string      $url
+     * @param string|null $name
+     * @param string      $path
+     *
+     * @return false|string
+     */
+    public function remoteSave(string $url, string $name = null, string $path = Abs::TMP_PATH)
+    {
+        if (empty($name)) {
+            $name = basename($url);
+        }
+
+        $file = Helper::joinString(DIRECTORY_SEPARATOR, $path, $name);
+        $result = @file_put_contents($file, fopen($url, 'rb'));
+
+        return $result ? $file : false;
     }
 
     /**

@@ -18,6 +18,18 @@ trait Upload
     ];
 
     /**
+     * @var array upload archive
+     */
+    public static $archiveMap = [
+        'application/x-bzip'           => 'bz',
+        'application/x-bzip2'          => 'bz2',
+        'application/x-rar-compressed' => 'rar',
+        'application/x-tar'            => 'tar',
+        'application/zip'              => 'zip',
+        'application/x-7z-compressed'  => '7z',
+    ];
+
+    /**
      * @var array upload excel
      */
     public static $excelMap = [
@@ -26,10 +38,11 @@ trait Upload
     ];
 
     /**
-     * @var array upload rar
+     * @var array upload csv
      */
-    public static $rarMap = [
-        'application/zip' => 'rar',
+    public static $csvMap = [
+        'text/plain' => 'csv',
+        'text/csv'   => 'csv',
     ];
 
     /**
@@ -41,6 +54,8 @@ trait Upload
         'image/jpeg'    => 'jpeg',
         'image/jpg'     => 'jpg',
         'image/svg+xml' => 'svg',
+        'image/bmp'     => 'bmp',
+        'image/webp'    => 'webp',
     ];
 
     /**
