@@ -331,9 +331,10 @@ class Module extends Bsw
                 continue;
             }
 
-            if (!isset($condition[$item['field']])) {
+            if (!isset($condition[$item['field']]) || is_scalar($condition[$item['field']]['value'])) {
                 $condition[$item['field']] = ['value' => [], 'filter' => Senior::class];
             }
+
             $condition[$item['field']]['value'][] = $annotation[$key]['value'];
         }
 
@@ -538,7 +539,7 @@ class Module extends Bsw
             if (!$item['group']) {
                 continue;
             }
-            $key = "{$item['group']}_group";
+            $key = "{$item['group']}__group";
             $group[$key][] = $field;
             $diffuse[$field] = $key;
         }

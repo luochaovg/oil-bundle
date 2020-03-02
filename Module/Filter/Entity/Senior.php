@@ -33,8 +33,10 @@ class Senior extends Filter
     const IS_NULL     = 9;
     const IS_NOT_NULL = 10;
     const LIKE        = 11;
-    const NOT_LIKE    = 12;
-    const BETWEEN     = 13;
+    const BEGIN_LIKE  = 12;
+    const END_LIKE    = 13;
+    const NOT_LIKE    = 14;
+    const BETWEEN     = 15;
 
     /**
      * @cosnt array
@@ -51,6 +53,8 @@ class Senior extends Filter
         self::IS_NULL     => 'Expr is null',
         self::IS_NOT_NULL => 'Expr is not null',
         self::LIKE        => 'Expr contain',
+        self::BEGIN_LIKE  => 'Expr begin contain',
+        self::END_LIKE    => 'Expr end contain',
         self::NOT_LIKE    => 'Expr not contain',
         self::BETWEEN     => 'Expr between',
     ];
@@ -166,6 +170,14 @@ class Senior extends Filter
             return ["{$field} LIKE '%{$target}%'"];
         }
 
+        if ($this->expression == self::BEGIN_LIKE) {
+            return ["{$field} LIKE '{$target}%'"];
+        }
+
+        if ($this->expression == self::END_LIKE) {
+            return ["{$field} LIKE '%{$target}'"];
+        }
+
         if ($this->expression == self::NOT_LIKE) {
             return ["{$field} NOT LIKE '%{$target}%'"];
         }
@@ -275,6 +287,14 @@ class Senior extends Filter
 
         if ($this->expression == self::LIKE) {
             return [$this->expr->like($field, $this->expr->literal("%{$target}%"))];
+        }
+
+        if ($this->expression == self::BEGIN_LIKE) {
+            return [$this->expr->like($field, $this->expr->literal("{$target}%"))];
+        }
+
+        if ($this->expression == self::END_LIKE) {
+            return [$this->expr->like($field, $this->expr->literal("%{$target}"))];
         }
 
         if ($this->expression == self::NOT_LIKE) {

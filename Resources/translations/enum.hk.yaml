@@ -421,6 +421,8 @@ Expr not in:                    '集合外'
 Expr is null:                   '為空'
 Expr is not null:               '不為空'
 Expr contain:                   '包含'
+Expr begin contain:             '開頭包含'
+Expr end contain:               '結尾包含'
 Expr not contain:               '不包含'
 Expr between:                   '之間'
 

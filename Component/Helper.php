@@ -1307,7 +1307,7 @@ class Helper
         string $string,
         bool $unique = true,
         bool $filter = true,
-        string $handler = null,
+        ?string $handler = 'trim',
         string $separator = ',',
         string $search = '，'
     ): array {
