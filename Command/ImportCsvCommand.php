@@ -173,6 +173,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $pageDone = 0;
         try {
             foreach ($items as $record) {
+                $record = Helper::numericValues($record);
                 $pageDone += ($this->handler($record) ? 1 : 0);
             }
         } catch (Exception $e) {
