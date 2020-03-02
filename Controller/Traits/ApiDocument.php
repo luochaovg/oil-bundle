@@ -129,7 +129,7 @@ trait ApiDocument
      * @return array
      * @throws
      */
-    protected function classBill(array $extraPath = [], string $module): array
+    protected function classBill(array $extraPath, string $module): array
     {
         $paths = array_merge(
             [

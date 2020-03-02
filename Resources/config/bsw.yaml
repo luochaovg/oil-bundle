@@ -18,6 +18,9 @@ parameters:
     platform_sms: aws
     platform_email: aws
 
+    telegram_bot_token: ''
+    telegram_hooks_host: ''
+
     backend_with_google_secret: true
     backend_with_ip_strict: true
     backend_maintain_alone: true

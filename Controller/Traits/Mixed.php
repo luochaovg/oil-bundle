@@ -44,6 +44,7 @@ use App\Kernel;
 use OTPHP\TOTP;
 use Exception;
 use Mailgun\Mailgun;
+use Telegram\Bot\Api;
 
 /**
  * @property AbstractController  $container
@@ -1061,5 +1062,19 @@ trait Mixed
 
         $down = new Download();
         $down->download($file, $filename);
+    }
+
+    /**
+     * Get telegram bot
+     *
+     * @return Api
+     * @throws
+     */
+    public function telegram(): Api
+    {
+        $telegram = new Api($this->parameter('telegram_bot_token'));
+        $telegram->setTimeOut($this->cnf->curl_timeout_second);
+
+        return $telegram;
     }
 }
