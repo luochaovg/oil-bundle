@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\BswMixed;
 use App\Kernel;
 use Leon\BswBundle\Annotation\Entity\Output as O;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Telegram\Bot\Api;
 use Exception;
@@ -28,7 +29,7 @@ trait Telegram
      */
     public function getTgDebugAction()
     {
-        if (($args = $this->valid()) instanceof Response) {
+        if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
         }
 
@@ -71,7 +72,7 @@ trait Telegram
      */
     public function getTgSetHookAction()
     {
-        if (($args = $this->valid()) instanceof Response) {
+        if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
         }
 
@@ -107,7 +108,7 @@ trait Telegram
      */
     public function postTgCmdAction()
     {
-        if (($args = $this->valid()) instanceof Response) {
+        if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
         }
 
