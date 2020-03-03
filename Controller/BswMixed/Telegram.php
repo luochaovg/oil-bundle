@@ -21,8 +21,8 @@ trait Telegram
      * @Route("/tg/debug", name="app_tg_debug")
      *
      * @O("bot", type="string", label="Bot name")
-     * @O("normal_update", type="object[]", label="Normal updates")
-     * @O("web_hook_update", type="object[]", label="Web hook updates")
+     * @O("mode", type="string", label="Mode")
+     * @O("updates", type="object[]", label="Updates")
      * @O("commands", type="array", label="Bot commands")
      *
      * @throws
@@ -40,20 +40,20 @@ trait Telegram
         $user = $telegram->getMe();
 
         $update = [];
-        $isWebHook = true;
+        $isWebHook = false;
 
         try {
             $update = $telegram->getUpdates(['limit' => 5]);
         } catch (Exception $e) {
-            $isWebHook = false;
+            $isWebHook = true;
         }
 
         return $this->okayAjax(
             [
-                'bot'             => "{$user->getFirstName()}({$user->getUsername()})",
-                'normal_update'   => $isWebHook ? [] : $update,
-                'web_hook_update' => $telegram->getWebhookUpdates()->all(),
-                'commands'        => $telegram->getCommands(),
+                'bot'      => "{$user->getFirstName()}({$user->getUsername()})",
+                'mode'     => $isWebHook ? 'WebHooks' : 'Normal',
+                'updates'  => $isWebHook ? $telegram->getWebhookUpdates()->all() : $update,
+                'commands' => $telegram->getCommands(),
             ],
             'Just debug telegram bot.'
         );
@@ -62,7 +62,7 @@ trait Telegram
     /**
      * TG机器人.设置钩子
      *
-     * @Route("/tg/hook", name="app_tg_hook")
+     * @Route("/tg/hooks", name="app_tg_hooks")
      *
      * @O("remove_hook_result", type="array", label="Result of delete web hook")
      * @O("set_hook_result", type="array", label="Result of set web hook")
@@ -70,7 +70,7 @@ trait Telegram
      *
      * @throws
      */
-    public function getTgSetHookAction()
+    public function getTgSetHooksAction()
     {
         if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
@@ -98,7 +98,7 @@ trait Telegram
     /**
      * TG机器人.设置指令
      *
-     * @Route("/tg/cmd", name="app_tg_cmd", methods="POST")
+     * @Route("/tg/cmd", name="app_tg_cmd", methods={"GET", "POST"})
      *
      * @O("ok", type="bool", label="Is ok for add commands")
      * @O("total", type="int", label="Total commands")
