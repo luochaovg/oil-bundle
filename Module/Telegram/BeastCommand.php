@@ -8,6 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 use Exception;
+use Telegram\Bot\FileUpload\InputFile;
 
 class BeastCommand extends Command
 {
@@ -150,8 +151,8 @@ class BeastCommand extends Command
             );
 
             shuffle($photoList);
-
-            return $this->replyWithPhoto(['photo' => $photoList[0]]);
+            
+            return $this->replyWithPhoto(['photo' => InputFile::create($photoList[0])]);
 
         } catch (Exception $e) {
             return $this->replyWithMessage(['text' => '*Error*: ' . $e->getMessage(), 'parse_mode' => 'Markdown']);
