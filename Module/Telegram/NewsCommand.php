@@ -28,9 +28,11 @@ class NewsCommand extends Command
     /**
      * @inheritdoc
      */
-    public function handle($arguments)
+    public function handle()
     {
+        $arguments = implode(' ', $this->getArguments());
         list($limit) = explode(' ', $arguments);
+
         $limit = intval($limit);
         if ($limit && $limit > 0 && $limit <= 50) {
             $this->limit = $limit;

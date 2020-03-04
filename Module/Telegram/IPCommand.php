@@ -23,8 +23,9 @@ class IPCommand extends Command
      * @inheritdoc
      * @return mixed
      */
-    public function handle($arguments)
+    public function handle()
     {
+        $arguments = implode(' ', $this->getArguments());
         list($ip) = explode(' ', $arguments);
 
         if (empty($ip)) {
