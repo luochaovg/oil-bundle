@@ -25,11 +25,11 @@ class IPCommand extends Command
      */
     public function handle()
     {
-        $arguments = implode(' ', $this->getArguments());
-        list($ip) = explode(' ', $arguments);
-
+        $ip = $this->getArguments();
         if (empty($ip)) {
-            return $this->replyWithMessage(['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']);
+            return $this->replyWithMessage(
+                ['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']
+            );
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);

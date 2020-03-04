@@ -46,13 +46,13 @@ class BeastCommand extends Command
      */
     public function handle()
     {
-        $arguments = implode(' ', $this->getArguments());
+        $secret = $this->getPattern();
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();
         $message = $telegram->getWebhookUpdate()->getMessage();
 
-        if (md5($arguments) != '69e0f71f25ece4351e4d73af430bec43') {
+        if (md5($secret) != '69e0f71f25ece4351e4d73af430bec43') {
             return $this->replyWithMessage(
                 ['text' => '*Error*: password error.', 'parse_mode' => 'Markdown']
             );
@@ -65,7 +65,7 @@ class BeastCommand extends Command
         }
 
         try {
-            $homeUrl = $this->homeUrl($arguments);
+            $homeUrl = $this->homeUrl($secret);
             $homeHtml = file_get_contents($homeUrl);
             $classifyMenu = [];
 

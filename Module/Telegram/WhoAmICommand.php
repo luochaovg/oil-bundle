@@ -22,7 +22,6 @@ class WhoAmICommand extends Command
      */
     public function handle()
     {
-        $arguments = implode(' ', $this->getArguments());
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();

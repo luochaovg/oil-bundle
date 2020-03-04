@@ -30,10 +30,7 @@ class NewsCommand extends Command
      */
     public function handle()
     {
-        $arguments = implode(' ', $this->getArguments());
-        list($limit) = explode(' ', $arguments);
-
-        $limit = intval($limit);
+        $limit = intval($this->getPattern());
         if ($limit && $limit > 0 && $limit <= 50) {
             $this->limit = $limit;
         }
