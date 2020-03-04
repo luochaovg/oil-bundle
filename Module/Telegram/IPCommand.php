@@ -4,10 +4,9 @@ namespace Leon\BswBundle\Module\Telegram;
 
 use Leon\BswBundle\Component\Helper;
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 use Exception;
 
-class IPCommand extends Command
+class IPCommand extends Acme
 {
     /**
      * @var string Command Name
@@ -25,7 +24,7 @@ class IPCommand extends Command
      */
     public function handle()
     {
-        $ip = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
+        $ip = $this->arguments();
         if (empty($ip)) {
             return $this->replyWithMessage(
                 ['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']

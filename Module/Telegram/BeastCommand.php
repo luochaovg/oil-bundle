@@ -2,15 +2,13 @@
 
 namespace Leon\BswBundle\Module\Telegram;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Rsa;
 use Symfony\Component\DomCrawler\Crawler;
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 use Exception;
 use Telegram\Bot\FileUpload\InputFile;
 
-class BeastCommand extends Command
+class BeastCommand extends Acme
 {
     /**
      * @var string Command Name
@@ -47,7 +45,7 @@ class BeastCommand extends Command
      */
     public function handle()
     {
-        $secret = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
+        $secret = $this->arguments();
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();
@@ -151,7 +149,7 @@ class BeastCommand extends Command
             );
 
             shuffle($photoList);
-            
+
             return $this->replyWithPhoto(['photo' => InputFile::create($photoList[0])]);
 
         } catch (Exception $e) {

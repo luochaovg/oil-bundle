@@ -117,6 +117,11 @@ trait Telegram
             $telegramPath,
             $commands,
             function ($_, $item) {
+
+                if (!Helper::strEndWith($item, 'Command.php')) {
+                    return false;
+                }
+
                 $command = str_replace('.php', null, $item);
                 $command = "Leon\\BswBundle\\Module\\Telegram\\{$command}";
 

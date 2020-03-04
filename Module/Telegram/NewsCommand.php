@@ -6,9 +6,8 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\DomCrawler\Crawler;
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 
-class NewsCommand extends Command
+class NewsCommand extends Acme
 {
     /**
      * @var string Command Name
@@ -30,7 +29,7 @@ class NewsCommand extends Command
      */
     public function handle()
     {
-        $limit = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
+        $limit = $this->arguments();
         if ($limit && $limit > 0 && $limit <= 50) {
             $this->limit = $limit;
         }

@@ -3,9 +3,8 @@
 namespace Leon\BswBundle\Module\Telegram;
 
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 
-class WhoAmICommand extends Command
+class WhoAmICommand extends Acme
 {
     /**
      * @var string Command Name

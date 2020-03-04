@@ -104,6 +104,14 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     abstract public function handler(array $record): bool;
 
     /**
+     * @param OutputInterface $output
+     */
+    public function done(OutputInterface $output)
+    {
+
+    }
+
+    /**
      * @param int $limit
      * @param int $page
      * @param int $pageDone
@@ -162,6 +170,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         ini_set('xdebug.max_nesting_level', 2048);
 
         if ($this->logic($this->params->limit, $output)) {
+            $this->done($output);
             $output->writeln("<info> \n recursion done\n </info>");
         }
     }
