@@ -17,7 +17,7 @@ trait EnumConverter
             return $value;
         }
 
-        $EnumClass = $this->extraArgs['enumClass'];
+        $EnumClass = $this->extraArgs['enumClass'] ?? 'UnknownEnumClass';
 
         if (is_string($value)) {
             if (!defined($express = "{$EnumClass}::{$value}")) {

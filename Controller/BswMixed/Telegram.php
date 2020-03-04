@@ -50,9 +50,9 @@ trait Telegram
 
         return $this->okayAjax(
             [
-                'bot'      => "{$user->getFirstName()}({$user->getUsername()})",
+                'bot'      => "{$user->get('first_name')}({$user->get('username')})",
                 'mode'     => $isWebHook ? 'WebHooks' : 'Normal',
-                'updates'  => $isWebHook ? $telegram->getWebhookUpdates()->all() : $update,
+                'updates'  => $isWebHook ? $telegram->getWebhookUpdate()->all() : $update,
                 'commands' => $telegram->getCommands(),
             ],
             'Just debug telegram bot.'
@@ -64,9 +64,9 @@ trait Telegram
      *
      * @Route("/tg/hooks", name="app_tg_hooks")
      *
-     * @O("remove_hook_result", type="array", label="Result of delete web hook")
-     * @O("set_hook_result", type="array", label="Result of set web hook")
-     * @O("web_hook_url", type="string", label="Web hook url")
+     * @O("remove_result", type="bool", label="Result of delete web hook")
+     * @O("set_params", type="array", label="Web hook params")
+     * @O("set_result", type="bool", label="Result of set web hook")
      *
      * @throws
      */
@@ -82,14 +82,11 @@ trait Telegram
         $telegram = $this->telegram();
         $params = ['url' => "{$this->parameter('telegram_hooks_host')}/tg/cmd"];
 
-        $removeResult = $telegram->removeWebhook()->getDecodedBody() ?? [];
-        $addResult = $telegram->setWebhook($params)->getDecodedBody() ?? [];
-
         return $this->okayAjax(
             [
-                'remove_hook_result' => $removeResult,
-                'set_hook_result'    => $addResult,
-                'web_hook_url'       => $params['url'],
+                'remove_result' => $telegram->removeWebhook(),
+                'set_params'    => $params,
+                'set_result'    => $telegram->setWebhook($params),
             ],
             'Telegram bot web hooked done.'
         );

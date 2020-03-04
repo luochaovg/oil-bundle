@@ -44,15 +44,13 @@ class BeastCommand extends Command
      * @inheritdoc
      * @return mixed
      */
-    public function handle($arguments)
+    public function handle()
     {
+        $arguments = implode(' ', $this->getArguments());
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();
-        $message = $telegram->getWebhookUpdates()->getMessage();
-
-        $from = $message->getFrom();
-        $chat = $message->getChat();
+        $message = $telegram->getWebhookUpdate()->getMessage();
 
         if (md5($arguments) != '69e0f71f25ece4351e4d73af430bec43') {
             return $this->replyWithMessage(
@@ -60,7 +58,7 @@ class BeastCommand extends Command
             );
         }
 
-        if ($chat->getId() < 0) {
+        if ($message->chat->id < 0) {
             return $this->replyWithMessage(
                 ['text' => '*Error*: group messages are not supported.', 'parse_mode' => 'Markdown']
             );

@@ -20,26 +20,24 @@ class WhoAmICommand extends Command
     /**
      * @inheritdoc
      */
-    public function handle($arguments)
+    public function handle()
     {
+        $arguments = implode(' ', $this->getArguments());
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();
-        $message = $telegram->getWebhookUpdates()->getMessage();
-
-        $from = $message->getFrom();
-        $chat = $message->getChat();
+        $message = $telegram->getWebhookUpdate()->getMessage();
 
         $caption = sprintf(
             '*Your Id*: %d' . PHP_EOL .
             '*Group Id*: %d' . PHP_EOL .
             '*Name*: %s %s' . PHP_EOL .
             '*Username*: %s',
-            $from->getId(),
-            $chat->getId(),
-            $from->getFirstName(),
-            $from->getLastName(),
-            $from->getUsername()
+            $message->from->id,
+            $message->chat->id,
+            $message->from->firstName,
+            $message->from->lastName,
+            $message->from->username
         );
 
         $this->replyWithMessage(['text' => $caption, 'parse_mode' => 'Markdown']);

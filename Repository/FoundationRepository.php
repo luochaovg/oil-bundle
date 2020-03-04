@@ -16,7 +16,7 @@ use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use Knp\Component\Pager\Pagination\SlidingPagination;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository as SFRepository;
 use Doctrine\DBAL\Connection;
@@ -54,7 +54,7 @@ abstract class FoundationRepository extends SFRepository
     protected $container;
 
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -102,8 +102,8 @@ abstract class FoundationRepository extends SFRepository
      * MasterRepository constructor.
      *
      * @param ContainerInterface  $container
-     * @param RegistryInterface   $registry
-     * @param RegistryInterface   $doctrine
+     * @param ManagerRegistry     $registry
+     * @param ManagerRegistry     $doctrine
      * @param ValidatorInterface  $validator
      * @param TranslatorInterface $translator
      * @param LoggerInterface     $logger
@@ -112,8 +112,8 @@ abstract class FoundationRepository extends SFRepository
      */
     public function __construct(
         ContainerInterface $container,
-        RegistryInterface $registry,
-        RegistryInterface $doctrine,
+        ManagerRegistry $registry,
+        ManagerRegistry $doctrine,
         ValidatorInterface $validator,
         TranslatorInterface $translator,
         LoggerInterface $logger
