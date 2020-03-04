@@ -46,7 +46,7 @@ class BeastCommand extends Command
      */
     public function handle()
     {
-        $secret = $this->getPattern();
+        $secret = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();

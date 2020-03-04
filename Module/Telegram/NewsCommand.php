@@ -30,14 +30,7 @@ class NewsCommand extends Command
      */
     public function handle()
     {
-        $this->replyWithMessage(
-            [
-                'text' =>
-                    '1)->' . $this->getUpdate()->getMessage()->text,
-            ]
-        );
-
-        $limit = intval($this->getPattern());
+        $limit = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
         if ($limit && $limit > 0 && $limit <= 50) {
             $this->limit = $limit;
         }

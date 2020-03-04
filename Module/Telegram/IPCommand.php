@@ -25,7 +25,7 @@ class IPCommand extends Command
      */
     public function handle()
     {
-        $ip = $this->getArguments();
+        $ip = explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
         if (empty($ip)) {
             return $this->replyWithMessage(
                 ['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']
