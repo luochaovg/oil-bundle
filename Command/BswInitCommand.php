@@ -230,7 +230,6 @@ class BswInitCommand extends Command implements CommandInterface
 
         $pdo = $this->pdo($params['doctrine'] ?: 'default');
         $database = $pdo->getDatabase();
-        $command = $this->getApplication()->find('bsw:scaffold');
 
         $schemeOnly = Helper::stringToArray($params['scheme-only']);
         $schemeStartOnly = $params['scheme-start-only'];
@@ -262,7 +261,7 @@ class BswInitCommand extends Command implements CommandInterface
 
             // Entity & Repository
             if ($scaffoldNeed) {
-                $command->run(
+                $this->getApplication()->find('bsw:scaffold')->run(
                     new ArrayInput(
                         [
                             '--table'     => $table,

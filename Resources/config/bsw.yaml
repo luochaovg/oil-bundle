@@ -120,6 +120,8 @@ parameters:
         spinning_icon: ''
         spinning_label: ''
 
+        telegram_receiver_command_queue: ''
+
     currency_code: CNY
     currency_char: ￥
 
@@ -181,13 +183,16 @@ services:
         arguments:
             - '%kernel.default_locale%'
 
-    Leon\BswBundle\Controller\FoundationFreeController:
+    Leon\BswBundle\Controller\BswFreeController:
         public: true
+
+    Leon\BswBundle\Command\BswDocumentCommand:
+        tags: ['console.command']
 
     Leon\BswBundle\Command\BswInitCommand:
         tags: ['console.command']
 
-    Leon\BswBundle\Command\BswDocumentCommand:
+    Leon\BswBundle\Command\BswMissionCommand:
         tags: ['console.command']
 
     Leon\BswBundle\Command\BswScaffoldCommand:

@@ -442,15 +442,17 @@ class Module extends Bsw
             $form->setDisabled($item['disabled']);
             $form->setStyle($item['style']);
 
-            foreach ($item['rules'] as &$message) {
-                $message = $trans->trans(
-                    $message,
-                    ['{{ field }}' => $trans->trans($label, [], 'fields')],
-                    'messages'
-                );
+            foreach ($item['rules'] as $key => &$rule) {
+                if (!is_array($rule) || !$rule['message']) {
+                    unset($item['rules'][$key]);
+                } else {
+                    $args = ['{{ field }}' => $trans->trans($label, [], 'fields')];
+                    $args = array_merge($args, $rule['args'] ?? []);
+                    $rule['message'] = $trans->trans($rule['message'], $args, 'messages');
+                }
             }
-            $form->setRules($item['rules']);
 
+            $form->setRules($item['rules']);
             if (isset($record[$field])) {
                 $form->setValue($record[$field]);
             }

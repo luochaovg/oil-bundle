@@ -25,6 +25,7 @@ class IPCommand extends Acme
     public function handle()
     {
         $ip = $this->arguments();
+
         if (empty($ip)) {
             return $this->replyWithMessage(
                 ['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']

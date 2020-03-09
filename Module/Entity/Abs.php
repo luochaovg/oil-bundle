@@ -398,6 +398,8 @@ class Abs
     const CSS_WEB       = 'diy;web.css';
     const CSS_EDITOR    = 'diy;third/ckeditor5.css';
 
+    const RULES_REQUIRED = ['required' => true, 'whitespace' => true, 'message' => '{{ field }} Required'];
+
     // slot 变量模板
     const SLOT_VARIABLES = "value, record, index";
 

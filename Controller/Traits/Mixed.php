@@ -1077,4 +1077,35 @@ trait Mixed
 
         return $telegram;
     }
+
+    /**
+     * Send message to telegram users
+     *
+     * @param string|array $receiver
+     * @param string       $message
+     * @param Api|null     $telegram
+     *
+     * @return array
+     */
+    public function telegramSendMessage($receiver, string $message, ?Api $telegram = null): array
+    {
+        if (!is_array($receiver)) {
+            $receiver = Helper::stringToArray($receiver, true, true, 'intval');
+        }
+
+        $error = [];
+        $telegram = $telegram ?? $this->telegram();
+
+        foreach ($receiver as $user) {
+            try {
+                $telegram->sendMessage(['chat_id' => $user, 'text' => $message, 'parse_mode' => 'Markdown']);
+            } catch (Exception $e) {
+                $message = "BotError: [{$user}] {$e->getMessage()}";
+                $this->logger->error($message);
+                array_push($error, $message);
+            }
+        }
+
+        return [$error, $receiver];
+    }
 }

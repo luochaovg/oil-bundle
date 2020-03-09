@@ -48,11 +48,39 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     }
 
     /**
+     * @param object $params
+     *
+     * @return object
+     */
+    public function params($params)
+    {
+        return $params;
+    }
+
+    /**
+     * @param object $params
+     *
+     * @return bool
+     */
+    public function forbid($params): bool
+    {
+        return false;
+    }
+
+    /**
      * @param array $record
      *
      * @return bool
      */
     abstract public function handler(array $record): bool;
+
+    /**
+     * @param OutputInterface $output
+     */
+    public function done(OutputInterface $output)
+    {
+
+    }
 
     /**
      * @param int $limit
@@ -106,11 +134,17 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     {
         $this->params = (object)$this->options($input);
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
+        $this->params = $this->params($this->params);
+
+        if ($this->forbid($this->params)) {
+            return;
+        }
 
         ini_set('memory_limit', '2048M');
         ini_set('xdebug.max_nesting_level', 2048);
 
         if ($this->logic($this->params->limit, $output, $this->params->csv)) {
+            $this->done($output);
             $output->writeln("<info> \n import done\n </info>");
         }
     }

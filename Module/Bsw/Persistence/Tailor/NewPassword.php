@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Tailor;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Input;
@@ -34,7 +35,7 @@ class NewPassword extends Tailor
         ];
 
         if (empty($id)) {
-            $annotationExtra[$this->newField]['rules'] = ['required' => '{{ field }} Required'];
+            $annotationExtra[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
         }
 
         return $annotationExtra;
@@ -48,7 +49,7 @@ class NewPassword extends Tailor
      */
     public function tailorPersistenceAfterSubmit(array $submitItems, int $id)
     {
-        list($submit, $extraSubmit) = $submitItems;
+        [$submit, $extraSubmit] = $submitItems;
         $newPassword = Helper::dig($submit, $this->newField);
 
         if (isset($newPassword) && strlen($newPassword) > 0) {

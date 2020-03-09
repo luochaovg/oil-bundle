@@ -201,16 +201,7 @@ abstract class Form
      */
     public function getRules(): string
     {
-        $rules = [];
-        foreach ($this->rules as $rule => $message) {
-            if ($rule == 'required') {
-                array_push($rules, ['required' => true, 'message' => $message]);
-            } else {
-                array_push($rules, ['type' => $rule, 'message' => $message]);
-            }
-        }
-
-        return json_encode($rules, JSON_UNESCAPED_UNICODE);
+        return json_encode($this->rules, JSON_UNESCAPED_UNICODE);
     }
 
     /**

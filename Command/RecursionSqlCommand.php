@@ -89,6 +89,16 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @param object $params
      *
+     * @return object
+     */
+    public function params($params)
+    {
+        return $params;
+    }
+
+    /**
+     * @param object $params
+     *
      * @return bool
      */
     public function forbid($params): bool
@@ -162,6 +172,9 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->params = (object)$this->options($input);
+        $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
+        $this->params = $this->params($this->params);
+
         if ($this->forbid($this->params)) {
             return;
         }
@@ -199,10 +212,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         $query = Helper::pageArgs(compact('paging', 'page', 'limit'));
 
         if ($entity = $this->entity()) {
+
             $this->repo = $this->repo($entity);
-            $filter = $this->filter();
-            $filter = array_merge($filter, $query);
+            $filter = array_merge($this->filter(), $query);
             $result = $this->repo->lister($filter);
+
         } elseif ($result = $this->lister()) {
             $result = $this->web->manualListForPagination($result, $query);
         } else {

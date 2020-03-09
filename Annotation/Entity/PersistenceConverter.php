@@ -163,7 +163,7 @@ class PersistenceConverter extends AnnotationConverter
         $pk = $this->items[Id::class] ?? null;
 
         if ($notNull && !$pk && $this->value !== '') {
-            $value['required'] = '{{ field }} Required';
+            $value[] = Abs::RULES_REQUIRED;
         }
 
         return $value;

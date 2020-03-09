@@ -55,9 +55,10 @@ trait Foundation
         CT\Breakpoint,
         CT\Database,
         CT\DisCache,
-        CT\Upload,
+        CT\FormRules,
         CT\Mixed,
-        CT\Request;
+        CT\Request,
+        CT\Upload;
 
     //
     // ↓↓ For component ↓↓
