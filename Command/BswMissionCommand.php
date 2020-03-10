@@ -74,7 +74,7 @@ class BswMissionCommand extends Command implements CommandInterface
         $command->run(new ArrayInput($condition), $output);
 
         $this->web->telegramSendMessage(
-            $this->web->cnf->telegram_receiver_command_queue,
+            $this->config('telegram_receiver_command_queue'),
             "Mission in process, flag is {$flag}."
         );
     }

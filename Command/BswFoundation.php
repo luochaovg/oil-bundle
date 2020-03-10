@@ -65,8 +65,6 @@ trait BswFoundation
         TranslatorInterface $translator,
         LoggerInterface $logger
     ) {
-        parent::__construct();
-
         $this->web = $web;
         $this->container = $container;
         $this->translator = $translator;
@@ -75,10 +73,11 @@ trait BswFoundation
         $this->expr = new Expr();
 
         ini_set('date.timezone', 'PRC');
-
         if (method_exists($this, $fn = Abs::FN_INIT)) {
             $this->{$fn}();
         }
+
+        parent::__construct();
     }
 
     /**
@@ -100,8 +99,8 @@ trait BswFoundation
         foreach ($this->args() as $name => $item) {
 
             $key = "{$prefix}_{$keyword}_{$name}";
-            if (isset($this->web->cnf->{$key})) {
-                $item[3] = $this->web->cnf->{$key};
+            if (!is_null($cnf = $this->config($key))) {
+                $item[3] = $cnf;
             }
             $this->addOption($name, ...$item);
         }
@@ -134,8 +133,8 @@ trait BswFoundation
     {
         $config = $this->web->caching(
             function () {
-                $config = $this->web->parameter('cnf');
-                $vgConfig = $this->web->parameter('vg_cnf');
+                $config = $this->web->parameters('cnf');
+                $vgConfig = $this->web->parameters('vg_cnf');
                 $dbConfig = $this->repo(BswConfig::class)->kvp(['value'], 'key');
 
                 return (object)array_merge($config, $vgConfig, $dbConfig);

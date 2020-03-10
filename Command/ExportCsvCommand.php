@@ -15,6 +15,11 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     protected $handlerByMultiple = true;
 
     /**
+     * @var bool
+     */
+    protected $hasCnText = true;
+
+    /**
      * @return array
      */
     public function args(): array
@@ -54,6 +59,10 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
      */
     public function handler(array $record): bool
     {
+        if ($this->hasCnText) {
+            setlocale(LC_ALL, 'zh_CN');
+        }
+
         if ($this->page == 1) {
             $header = $this->header();
             $keys = array_keys(current($record));

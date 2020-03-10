@@ -1079,15 +1079,15 @@ trait Mixed
     }
 
     /**
-     * Send message to telegram users
+     * Send anything to telegram users
      *
      * @param string|array $receiver
-     * @param string       $message
+     * @param callable     $logic
      * @param Api|null     $telegram
      *
      * @return array
      */
-    public function telegramSendMessage($receiver, string $message, ?Api $telegram = null): array
+    public function telegramSendAny($receiver, callable $logic, ?Api $telegram = null): array
     {
         if (!is_array($receiver)) {
             $receiver = Helper::stringToArray($receiver, true, true, 'intval');
@@ -1098,7 +1098,7 @@ trait Mixed
 
         foreach ($receiver as $user) {
             try {
-                $telegram->sendMessage(['chat_id' => $user, 'text' => $message, 'parse_mode' => 'Markdown']);
+                $logic($telegram, ['chat_id' => $user, 'parse_mode' => 'Markdown']);
             } catch (Exception $e) {
                 $message = "BotError: [{$user}] {$e->getMessage()}";
                 $this->logger->error($message);
@@ -1107,5 +1107,25 @@ trait Mixed
         }
 
         return [$error, $receiver];
+    }
+
+    /**
+     * Send message to telegram users
+     *
+     * @param string|array $receiver
+     * @param string       $message
+     * @param Api|null     $telegram
+     *
+     * @return array
+     */
+    public function telegramSendMessage($receiver, string $message, ?Api $telegram = null): array
+    {
+        return $this->telegramSendAny(
+            $receiver,
+            function (Api $telegram, array $params) use ($message) {
+                $telegram->sendMessage(array_merge($params, ['text' => $message]));
+            },
+            $telegram
+        );
     }
 }
