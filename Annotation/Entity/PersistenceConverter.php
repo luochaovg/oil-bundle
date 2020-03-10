@@ -15,6 +15,7 @@ use Leon\BswBundle\Annotation\Entity\Traits\TransConverter;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Score;
 use Leon\BswBundle\Module\Form\Entity\Slider;
@@ -163,7 +164,7 @@ class PersistenceConverter extends AnnotationConverter
         $pk = $this->items[Id::class] ?? null;
 
         if ($notNull && !$pk && $this->value !== '') {
-            $value[] = Abs::RULES_REQUIRED;
+            array_push($value, Abs::RULES_REQUIRED);
         }
 
         return $value;

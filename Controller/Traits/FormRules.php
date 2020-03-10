@@ -9,15 +9,13 @@ trait FormRules
     /**
      * Form rule required
      *
-     * @param bool        $whitespace
      * @param string|null $message
      *
      * @return array
      */
-    public function formRuleRequired(bool $whitespace = true, string $message = null): array
+    public function formRuleRequired(string $message = null): array
     {
         $rule = Abs::RULES_REQUIRED;
-        $rule['whitespace'] = $whitespace;
         $rule['message'] = $message ?? $rule['message'];
 
         return $rule;

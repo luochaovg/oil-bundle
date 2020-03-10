@@ -45,6 +45,7 @@ use OTPHP\TOTP;
 use Exception;
 use Mailgun\Mailgun;
 use Telegram\Bot\Api;
+use Telegram\Bot\FileUpload\InputFile;
 
 /**
  * @property AbstractController  $container
@@ -1083,11 +1084,12 @@ trait Mixed
      *
      * @param string|array $receiver
      * @param callable     $logic
+     * @param array        $params
      * @param Api|null     $telegram
      *
      * @return array
      */
-    public function telegramSendAny($receiver, callable $logic, ?Api $telegram = null): array
+    public function telegramSendAny($receiver, callable $logic, array $params = [], ?Api $telegram = null): array
     {
         if (!is_array($receiver)) {
             $receiver = Helper::stringToArray($receiver, true, true, 'intval');
@@ -1098,7 +1100,8 @@ trait Mixed
 
         foreach ($receiver as $user) {
             try {
-                $logic($telegram, ['chat_id' => $user, 'parse_mode' => 'Markdown']);
+                $params = array_merge(['chat_id' => $user, 'parse_mode' => 'Markdown'], $params);
+                $logic($telegram, $params);
             } catch (Exception $e) {
                 $message = "BotError: [{$user}] {$e->getMessage()}";
                 $this->logger->error($message);
@@ -1114,17 +1117,41 @@ trait Mixed
      *
      * @param string|array $receiver
      * @param string       $message
+     * @param array        $params
      * @param Api|null     $telegram
      *
      * @return array
      */
-    public function telegramSendMessage($receiver, string $message, ?Api $telegram = null): array
+    public function telegramSendMessage($receiver, string $message, array $params = [], ?Api $telegram = null): array
     {
         return $this->telegramSendAny(
             $receiver,
             function (Api $telegram, array $params) use ($message) {
                 $telegram->sendMessage(array_merge($params, ['text' => $message]));
             },
+            $params,
+            $telegram
+        );
+    }
+
+    /**
+     * Send document to telegram users
+     *
+     * @param string|array $receiver
+     * @param string       $file
+     * @param array        $params
+     * @param Api|null     $telegram
+     *
+     * @return array
+     */
+    public function telegramSendDocument($receiver, string $file, array $params = [], ?Api $telegram = null): array
+    {
+        return $this->telegramSendAny(
+            $receiver,
+            function (Api $telegram, array $params) use ($file) {
+                $telegram->sendDocument(array_merge($params, ['document' => new InputFile($file)]));
+            },
+            $params,
             $telegram
         );
     }
