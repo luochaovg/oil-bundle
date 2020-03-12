@@ -20,11 +20,6 @@ class Choice
     private $fields = ['id'];
 
     /**
-     * @var string
-     */
-    private $split = ',';
-
-    /**
      * Choice constructor.
      *
      * @param bool|null $enable
@@ -92,26 +87,6 @@ class Choice
     public function setFields(array $fields)
     {
         $this->fields = $fields;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSplit(): string
-    {
-        return $this->split;
-    }
-
-    /**
-     * @param string $split
-     *
-     * @return $this
-     */
-    public function setSplit(string $split)
-    {
-        $this->split = $split;
 
         return $this;
     }

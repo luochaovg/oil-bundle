@@ -2,33 +2,26 @@
 
 namespace Leon\BswBundle\Component;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\CurlException;
 use Leon\BswBundle\Module\Exception\ServiceException;
 
 class Service
 {
     /**
-     * @const string
+     * @var string
      */
-    const METHOD_GET  = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_HEAD = 'HEAD';
-
-    /**
-     * @const string
-     */
-    const SCHEME_HTTP  = 'http';
-    const SCHEME_HTTPS = 'https';
-
-    /**
-     * @var int
-     */
-    protected $method = self::METHOD_GET;
+    protected $method = Abs::REQ_GET;
 
     /**
      * @var string
      */
-    protected $scheme = self::SCHEME_HTTP;
+    protected $contentType = Abs::CONTENT_TYPE_FORM;
+
+    /**
+     * @var string
+     */
+    protected $scheme = Abs::SCHEME_HTTP;
 
     /**
      * @var string
@@ -90,13 +83,45 @@ class Service
     protected function methodChecker(): Service
     {
         $methods = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_HEAD,
+            Abs::REQ_GET,
+            Abs::REQ_POST,
+            Abs::REQ_HEAD,
         ];
 
         if (!in_array($this->method, $methods)) {
-            throw new ServiceException('method must in ' . implode('/', $methods));
+            throw new ServiceException('Method must in ' . implode('/', $methods));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return Service
+     * @throws
+     */
+    public function contentType(string $type): Service
+    {
+        $this->contentType = $type;
+
+        return $this->contentTypeChecker();
+    }
+
+    /**
+     * @return Service
+     * @throws
+     */
+    protected function contentTypeChecker(): Service
+    {
+        $types = [
+            Abs::CONTENT_TYPE_FORM,
+            Abs::CONTENT_TYPE_JSON,
+            '',
+        ];
+
+        if (!in_array($this->contentType, $types)) {
+            throw new ServiceException('Content type must in ' . implode('/', $types));
         }
 
         return $this;
@@ -111,7 +136,7 @@ class Service
     public function scheme(string $scheme): Service
     {
         $this->scheme = $scheme;
-        if ($scheme == self::SCHEME_HTTPS) {
+        if ($scheme == Abs::SCHEME_HTTPS) {
             $this->port = 443;
         }
 
@@ -125,12 +150,12 @@ class Service
     protected function schemeChecker(): Service
     {
         $scheme = [
-            self::SCHEME_HTTP,
-            self::SCHEME_HTTPS,
+            Abs::SCHEME_HTTP,
+            Abs::SCHEME_HTTPS,
         ];
 
         if (!in_array($this->scheme, $scheme)) {
-            throw new ServiceException('scheme must in ' . implode('/', $scheme));
+            throw new ServiceException('Scheme must in ' . implode('/', $scheme));
         }
 
         return $this;
@@ -158,11 +183,11 @@ class Service
     protected function hostChecker(bool $strict = false): Service
     {
         if (empty($this->host)) {
-            throw new ServiceException('host must be configured');
+            throw new ServiceException('Host must be configured');
         }
 
         if ($strict && strpos($this->host, ':')) {
-            throw new ServiceException('host contain special char `:`');
+            throw new ServiceException('Host contain special char `:`');
         }
 
         return $this;
@@ -188,7 +213,7 @@ class Service
     protected function portChecker(): Service
     {
         if ($this->port < 1 || $this->port > 65535) {
-            throw new ServiceException('port must between 1 and 65535');
+            throw new ServiceException('Port must between 1 and 65535');
         }
 
         return $this;
@@ -262,7 +287,7 @@ class Service
     protected function timeoutChecker(): Service
     {
         if ($this->timeout < 0 || $this->timeout > 300000) {
-            throw new ServiceException('timeout must between 1 and 30');
+            throw new ServiceException('Timeout must between 1 and 30');
         }
 
         return $this;
@@ -315,7 +340,7 @@ class Service
         $options = [];
 
         // https
-        if ($this->scheme == self::SCHEME_HTTPS) {
+        if ($this->scheme == Abs::SCHEME_HTTPS) {
             $options[CURLOPT_SSL_VERIFYPEER] = false;
             $options[CURLOPT_SSL_VERIFYHOST] = false;
         }
@@ -336,9 +361,9 @@ class Service
 
         // url
         $portString = ":{$this->port}";
-        if ($this->scheme == self::SCHEME_HTTP && $this->port == 80) {
+        if ($this->scheme == Abs::SCHEME_HTTP && $this->port == 80) {
             $portString = null;
-        } elseif ($this->scheme == self::SCHEME_HTTPS && $this->port == 443) {
+        } elseif ($this->scheme == Abs::SCHEME_HTTPS && $this->port == 443) {
             $portString = null;
         }
 
@@ -347,25 +372,35 @@ class Service
             $url = Helper::addParamsForUrl($this->get, $url);
         }
 
-        if ($this->method == self::METHOD_GET && $this->args) {
+        if ($this->method == Abs::REQ_GET && $this->args) {
             $url = Helper::addParamsForUrl($this->args, $url);
+        }
+
+        // content type
+        if ($this->contentType) {
+            $options[CURLOPT_HTTPHEADER] = ["Content-Type: {$this->contentType}"];
         }
 
         $options[CURLOPT_URL] = $url;
 
         // method
-        if ($this->method == self::METHOD_HEAD) { // HEAD
+        if ($this->method == Abs::REQ_HEAD) { // HEAD
+
             $options[CURLOPT_NOBODY] = true;
             $options[CURLOPT_HEADER] = true;
-        } elseif ($this->method == self::METHOD_POST) { // POST
-            $options[CURLOPT_POST] = true;
-            $this->args && $options[CURLOPT_POSTFIELDS] = http_build_query($this->args);
-        }
 
-        // use method POST
-        if ($this->method === self::METHOD_POST) {
+        } elseif ($this->method == Abs::REQ_POST) { // POST
+
             $options[CURLOPT_POST] = true;
-            !empty($params) && $options[CURLOPT_POSTFIELDS] = http_build_query($params);
+            if ($this->args) {
+                if ($this->contentType == Abs::CONTENT_TYPE_FORM) {
+                    $options[CURLOPT_POSTFIELDS] = http_build_query($this->args);
+                } elseif ($this->contentType == Abs::CONTENT_TYPE_JSON) {
+                    $options[CURLOPT_POSTFIELDS] = json_encode($this->args);
+                } else {
+                    $options[CURLOPT_POSTFIELDS] = $this->args;
+                }
+            }
         }
 
         // header
@@ -382,7 +417,7 @@ class Service
 
         if ($content === false) {
             $error = curl_error($curl);
-            throw new CurlException("curl error when request {$url}, {$error}");
+            throw new CurlException("cURL error when request {$url}, {$error}");
         }
 
         return $content;

@@ -50,7 +50,12 @@ trait Preview
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
                 ->setScene(Button::SCENE_IFRAME)
-                ->setArgs(['fill' => $this->getArgs('fill')]),
+                ->setArgs(
+                    [
+                        'repair'   => $this->getArgs('repair'),
+                        'selector' => 'id',
+                    ]
+                ),
 
             new Button('New record', 'app_bsw_admin_menu_persistence', 'a:plus'),
         ];

@@ -2,7 +2,7 @@
 
 {% block page %}
   {% include '@LeonBsw/limbs/filter.html.twig' %}
-  {% set fields = (preview.choice.fields ?? [])|array_map('${record.%s}')|join(preview.choice.split) %}
+  {% set fields = '{' ~ (preview.choice.fields ?? [])|array_map_double('"%s":"${record.%s}"')|join(',') ~ '}' %}
   <div class="bsw-preview">
     <a-table
       :columns="preview_columns"

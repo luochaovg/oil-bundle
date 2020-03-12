@@ -139,6 +139,9 @@ Activity still progress:                  '活动尚未结束'
 Error google captcha:                     '谷歌验证码错误'
 Authorized success:                       '授权成功'
 Authorized failed:                        '授权失败'
+Filter expression is not support:         '高级搜索模式不存在'
+Value for filter expression is required:  '高级搜索对应值不能为空'
+The filter arguments is not enough:       '高级搜索对应参数不足'
 
 # bsw validator
 

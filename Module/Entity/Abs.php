@@ -280,6 +280,9 @@ class Abs
     const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
     const CONTENT_TYPE_JSON = 'application/json;charset=utf-8';
 
+    const SCHEME_HTTP  = 'http';
+    const SCHEME_HTTPS = 'https';
+
     const APP_TYPE_API      = 'api';
     const APP_TYPE_WEB      = 'web';
     const APP_TYPE_FRONTEND = 'frontend';

@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Leon\BswBundle\Module\Filter\Filter;
 
 class Accurate extends Filter
@@ -33,7 +33,7 @@ class Accurate extends Filter
         return [
             "{$field} = :{$name}",
             [$name => $value],
-            [$name => is_numeric($value) ? Type::FLOAT : Type::STRING],
+            [$name => is_numeric($value) ? Types::FLOAT : Types::STRING],
         ];
     }
 
@@ -53,7 +53,7 @@ class Accurate extends Filter
         return [
             $this->expr->eq($field, ":{$name}"),
             [$name => $value],
-            [$name => is_numeric($value) ? Type::FLOAT : Type::STRING],
+            [$name => is_numeric($value) ? Types::FLOAT : Types::STRING],
         ];
     }
 }

@@ -88,7 +88,7 @@ class IpRegionIPDB
         }
 
         if (isset($this->meta['languages'][$language]) === false) {
-            throw new InvalidArgumentException("language : {$language} not support");
+            throw new InvalidArgumentException("Language {$language} is not support");
         }
 
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) === false) {
@@ -186,7 +186,7 @@ class IpRegionIPDB
             return $node;
         }
 
-        throw new Exception("find node failed");
+        throw new Exception("Find node failed");
     }
 
     /**

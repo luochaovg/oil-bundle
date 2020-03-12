@@ -89,8 +89,13 @@ class Module extends Bsw
     {
         $output = new Output();
 
-        $buttonScene = $choiceScene = [];
-        $scene = $this->input->iframe ? Button::SCENE_IFRAME : Button::SCENE_NORMAL;
+        $buttonScene = [];
+        $choiceScene = [
+            Button::SCENE_IFRAME => new Choice(),
+            Button::SCENE_NORMAL => new Choice(),
+        ];
+
+        $nowScene = $this->input->iframe ? Button::SCENE_IFRAME : Button::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
 
         // buttons handler
@@ -106,14 +111,14 @@ class Module extends Bsw
             }
 
             $button->setSize(Button::SIZE_MIDDLE);
-            $_scene = $button->getScene();
-            if ($_scene === Button::SCENE_COMMON) {
-                $_scene = $scene;
+            $scene = $button->getScene();
+            if ($scene === Button::SCENE_COMMON) {
+                $scene = $nowScene;
             }
 
             // choice
-            if ($button->getSelector()) {
-                $choiceScene[$_scene] = new Choice(true, $button->getSelector() === Abs::SELECTOR_CHECKBOX);
+            if ($selector = $button->getSelector()) {
+                $choiceScene[$scene]->setEnable()->setMultiple($selector === Abs::SELECTOR_CHECKBOX);
             }
 
             // script
@@ -125,11 +130,11 @@ class Module extends Bsw
             }
 
             $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
-            $buttonScene[$_scene][] = $button;
+            $buttonScene[$scene][] = $button;
         }
 
-        $output->choice = $choiceScene[$scene] ?? $output->choice;
-        $output->buttons = $buttonScene[$scene] ?? $output->buttons;
+        $output->choice = $choiceScene[$nowScene] ?? $output->choice;
+        $output->buttons = $buttonScene[$nowScene] ?? $output->buttons;
 
         if ($this->input->iframe) {
             $output->position = Abs::POS_BOTTOM;

@@ -10,6 +10,7 @@ use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Exception\AnnotationException;
+use Leon\BswBundle\Module\Exception\FilterException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
@@ -813,7 +814,12 @@ class Module extends Bsw
          * handle annotation
          */
 
-        $this->getQueryOptions();
+        try {
+            $this->getQueryOptions();
+        } catch (FilterException $e) {
+            return $this->showError($e->getMessage());
+        }
+
         $mixedAnnotation = [];
         if ($this->entity) {
             $mixedAnnotation = $this->web->getMixedAnnotation($this->entity, $this->input->enum);

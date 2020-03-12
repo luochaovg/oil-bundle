@@ -851,7 +851,7 @@ trait Mixed
 
         $beginLine = $offset + $dataBeginLine;
         if ($maxRow < $beginLine) {
-            throw new Exception('No data in the document.');
+            throw new Exception('No data in the document');
         }
 
         // list field
@@ -868,11 +868,11 @@ trait Mixed
         $diff = array_diff($fieldsMap, $field);
         if (!empty($diff)) {
             $diffField = current($diff);
-            throw new Exception("Field `{$diffField}` not exists in the document.");
+            throw new Exception("Field `{$diffField}` not exists in the document");
         }
 
         if (empty($field)) {
-            throw new Exception('No field in the document.');
+            throw new Exception('No field in the document');
         }
 
         // max col
@@ -958,7 +958,7 @@ trait Mixed
         $diff = array_diff($fields, array_keys($firstData));
         if (!empty($diff)) {
             $diffField = current($diff);
-            throw new Exception("Field `{$diffField}` not exists in the data.");
+            throw new Exception("Field `{$diffField}` not exists in the data");
         }
 
         foreach ($data as &$item) {

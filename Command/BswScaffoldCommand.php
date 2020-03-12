@@ -447,7 +447,7 @@ class BswScaffoldCommand extends Command implements CommandInterface
             'begin'      => "/**",
             'entity'     => " * @ORM\Entity(repositoryClass=\"{Namespace}\Repository\{Name}Repository\")",
             'name'       => " * @ORM\Table(name=\"{$table}\")",
-            'unique'     => " * @UniqueEntity(fields=%s, errorPath=\"%s\", message=\"Record exists.\"%s)",
+            'unique'     => " * @UniqueEntity(fields=%s, errorPath=\"%s\", message=\"Record exists\"%s)",
             'uniques'    => [],
             'property'   => " * @property-read %s %s",
             'properties' => [],

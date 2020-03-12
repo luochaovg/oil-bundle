@@ -1,6 +1,7 @@
 {% if form.previewRoute %}
   <a-button
     class="bsw-popup-select"
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
     bsw-data='{"location": "{{ path(form.previewRoute, form.previewArgs) }}"}'
     @click.navite="showIFrameByVue"
   >{{ 'b:icon-tag'|icon|raw }} {{ form.buttonLabel|trans({}, 'twig') }}</a-button>

@@ -196,7 +196,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     ): int {
 
         if ($limit < 2) {
-            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2.');
+            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2');
         }
 
         [$total, $items] = $this->csvReader($csv, $page, $limit);

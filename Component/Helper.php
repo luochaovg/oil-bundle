@@ -12,6 +12,7 @@ class Helper
 {
     /**
      * Regex for variable
+     *arrayMap
      *
      * @param string $add
      *
@@ -158,6 +159,25 @@ class Helper
                     continue;
                 }
                 $item = sprintf($handler, $item);
+            }
+        }
+
+        return $target;
+    }
+
+    /**
+     * Array map for handle items
+     *
+     * @param array  $target
+     * @param string $tpl
+     *
+     * @return array
+     */
+    public static function arrayMapDouble(array $target, string $tpl): array
+    {
+        foreach ($target as &$item) {
+            if (is_scalar($item)) {
+                $item = sprintf($tpl, $item, $item);
             }
         }
 

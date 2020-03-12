@@ -41,7 +41,7 @@ class Module extends Bsw
     const AFTER_HOOK        = 'AfterHook';         // 钩子后处理
     const BEFORE_RENDER     = 'BeforeRender';      // 渲染前处理
     const FORM_OPERATE      = 'FormOperates';      // 操作按钮
-    const AFTER_SUBMIT      = 'AfterSubmit';       // 提交后处理
+    const AFTER_SUBMIT      = 'AfterSubmit';       // 提交数据后处理
     const AFTER_PERSISTENCE = 'AfterPersistence';  // 持久化后处理
 
     /**

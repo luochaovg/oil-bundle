@@ -61,13 +61,15 @@ trait Persistence
             return $args;
         }
 
+        $ids = array_map('intval', array_column($args->ids, 'id'));
+
         /**
          * @var BswAdminMenuRepository $menu
          */
         $menu = $this->repo(BswAdminMenu::class);
         $effect = $menu->updater(
             [
-                'where' => [$this->expr->in('bam.id', $args->ids)],
+                'where' => [$this->expr->in('bam.id', $ids)],
                 'set'   => ["bam.state" => ':state'],
                 'args'  => ['state' => [Abs::CLOSE]],
             ]
