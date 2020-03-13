@@ -53,7 +53,7 @@
     "snc/redis-bundle": "^2.1",
     "spomky-labs/otphp": "^9.1",
     "symfony/profiler-pack": "^1.0",
-    "symfony/http-kernel": "v4.4.*",
+    "symfony/http-kernel": "5.0.*",
     "symfony/security": "^4.4",
     "symfony/security-csrf": "5.0.*",
     "symfony/serializer": "5.0.*",
