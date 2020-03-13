@@ -48,7 +48,7 @@
     "qcloudsms/qcloudsms_php": "^0.1.4",
     "respect/validation": "^1.1",
     "spomky-labs/otphp": "^9.1",
-    "ocramius/proxy-manager": "2.3.1",
+    "ocramius/proxy-manager": "2.7.0",
     "phpmailer/phpmailer": "^6.0",
     "kriswallsmith/buzz": "^1.0",
     "mailgun/mailgun-php": "^3.0",
