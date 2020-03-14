@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Exception;
 
 trait BswFoundation
 {
@@ -135,7 +136,11 @@ trait BswFoundation
             function () {
                 $config = $this->web->parameters('cnf');
                 $vgConfig = $this->web->parameters('vg_cnf');
-                $dbConfig = $this->repo(BswConfig::class)->kvp(['value'], 'key');
+                try {
+                    $dbConfig = $this->repo(BswConfig::class)->kvp(['value'], 'key');
+                } catch (Exception $e) {
+                    $dbConfig = [];
+                }
 
                 return (object)array_merge($config, $vgConfig, $dbConfig);
             }

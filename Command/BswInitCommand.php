@@ -63,61 +63,39 @@ class BswInitCommand extends Command implements CommandInterface
     /**
      * @return array
      */
-    protected function servicesCnf(): array
+    protected function devJmsSerializerCnf(): array
     {
-        $signSalt = Helper::randString(16, 'mixed');
-        $aesKey = Helper::randString(16, 'mixed');
-        $debugDevil = Helper::randString(16, 'mixed');
-
         return [
-            'parameters' => [
-                'locale'           => 'en',
-                'version'          => '1.0.0',
-                'salt'             => $signSalt,
-                'platform_sms'     => 'aws',
-                'platform_email'   => 'aws',
-                'aes_key'          => $aesKey,
-                'aes_iv'           => $aesKey,
-                'aes_method'       => 'AES-128-CBC',
-                'jwt_issuer'       => 'jwt-issuer',
-                'jwt_type'         => 'hmac',
-                'bd_dwz_token'     => 'baidu-dwz-token',
-                'ali_key'          => 'ali-key',
-                'ali_secret'       => 'ali-secret',
-                'ali_sms_key'      => '',
-                'ali_sms_secret'   => '',
-                'ali_sms_region'   => 'ali-sms-region',
-                'ali_oss_key'      => '',
-                'ali_oss_secret'   => '',
-                'ali_oss_bucket'   => 'ali-oss-bucket',
-                'ali_oss_endpoint' => 'ali-oss-endpoint',
-                'tx_key'           => 'tx-key',
-                'tx_secret'        => 'tx-secret',
-                'tx_sms_key'       => '',
-                'tx_sms_secret'    => '',
-                'aws_region'       => 'aws-region',
-                'aws_key'          => 'aws-key',
-                'aws_secret'       => 'aws-secret',
-                'aws_email'        => 'aws-sender@gmail.com',
-                'smtp_host'        => 'smtp.qq.com',
-                'smtp_port'        => 587,
-                'smtp_sender'      => 'smtp-sender@qq.com',
-                'smtp_secret'      => 'smtp-secret',
-                'component'        => [],
-                'cnf'              => [
-                    'app_logo'              => '/img/custom.svg',
-                    'app_ico'               => '/img/favicon.ico',
-                    'app_name'              => 'Custom Application',
-                    'host'                  => '//api.custom.com',
-                    'host_official'         => 'http://www.custom.com',
-                    'host_file'             => 'http://file.custom.com',
-                    'debug_devil'           => $debugDevil,
-                    'cache_default_expires' => 10,
-                    'debug_uuid'            => '_',
-                    'debug_cost'            => true,
+            'jms_serializer' => [
+                'visitors' => [
+                    'json' => [
+                        'options' => [
+                            'JSON_PRETTY_PRINT',
+                            'JSON_UNESCAPED_SLASHES',
+                            'JSON_PRESERVE_ZERO_FRACTION',
+                        ],
+                    ],
                 ],
             ],
-            'services'   => [],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function prodJmsSerializerCnf(): array
+    {
+        return [
+            'jms_serializer' => [
+                'visitors' => [
+                    'json' => [
+                        'options' => [
+                            'JSON_UNESCAPED_SLASHES',
+                            'JSON_PRESERVE_ZERO_FRACTION',
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -139,6 +117,16 @@ class BswInitCommand extends Command implements CommandInterface
     /**
      * @return array
      */
+    protected function fosRestCnf(): array
+    {
+        return [
+            'fos_rest' => null,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     protected function frameworkCnf(): array
     {
         return [
@@ -146,10 +134,161 @@ class BswInitCommand extends Command implements CommandInterface
                 'session'         => [
                     'gc_maxlifetime'  => 86400,
                     'cookie_lifetime' => 86400,
+                    'cookie_secure'   => 'auto',
+                    'cookie_samesite' => 'lax',
                 ],
                 'csrf_protection' => true,
                 'ide'             => 'phpstorm://open?file=%%f&line=%%l',
+                'secret'          => '%env(APP_SECRET)%',
+                'php_errors'      => ['log' => true],
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function sncRedisCnf(): array
+    {
+        return [
+            'snc_redis' => [
+                'clients' => [
+                    'default' => [
+                        'type'  => 'predis',
+                        'alias' => 'default',
+                        'dsn'   => '%env(REDIS_URL)%',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function translationCnf(): array
+    {
+        return [
+            'framework' => [
+                'default_locale' => '%locale%',
+                'translator'     => [
+                    'default_path' => '%kernel.project_dir%/translations',
+                    'fallbacks'    => ['%locale%'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function twigCnf(): array
+    {
+        return [
+            'twig' => [
+                'paths'                => [
+                    '%kernel.project_dir%/templates',
+                    '%kernel.project_dir%/vendor/jtleon/bsw-bundle/Resources/views',
+                ],
+                'default_path'         => '%kernel.project_dir%/templates',
+                'debug'                => '%kernel.debug%',
+                'strict_variables'     => '%kernel.debug%',
+                'exception_controller' => 'Leon\BswBundle\Controller\BswBackendController::showExceptionAction',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function annotationCnf(): array
+    {
+        return [
+            'controllers' => [
+                'resource' => '../../src/Controller/',
+                'type'     => 'annotation',
+            ],
+            'kernel'      => [
+                'resource' => '../../src/Kernel.php',
+                'type'     => 'annotation',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function routesCnf(): array
+    {
+        return [
+            'leon_bsw_bundle' => [
+                'resource' => '@LeonBswBundle/Controller',
+                'type'     => 'annotation',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function servicesCnf(): array
+    {
+        $signSalt = Helper::randString(16, 'mixed');
+        $aesKey = Helper::randString(16, 'mixed');
+        $debugDevil = Helper::randString(16, 'mixed');
+
+        return [
+            'parameters' => [
+                'locale'                     => 'en',
+                'version'                    => '1.0.0',
+                'salt'                       => $signSalt,
+                'platform_sms'               => 'aws',
+                'platform_email'             => 'aws',
+                'telegram_bot_token'         => '',
+                'telegram_hooks_host'        => '',
+                'backend_with_google_secret' => false,
+                'aes_key'                    => $aesKey,
+                'aes_iv'                     => $aesKey,
+                'aes_method'                 => 'AES-128-CBC',
+                'jwt_issuer'                 => 'jwt-issuer',
+                'jwt_type'                   => 'hmac',
+                'bd_dwz_token'               => 'baidu-dwz-token',
+                'ali_key'                    => 'ali-key',
+                'ali_secret'                 => 'ali-secret',
+                'ali_sms_key'                => '',
+                'ali_sms_secret'             => '',
+                'ali_sms_region'             => 'ali-sms-region',
+                'ali_oss_key'                => '',
+                'ali_oss_secret'             => '',
+                'ali_oss_bucket'             => 'ali-oss-bucket',
+                'ali_oss_endpoint'           => 'ali-oss-endpoint',
+                'tx_key'                     => 'tx-key',
+                'tx_secret'                  => 'tx-secret',
+                'tx_sms_key'                 => '',
+                'tx_sms_secret'              => '',
+                'aws_region'                 => 'aws-region',
+                'aws_key'                    => 'aws-key',
+                'aws_secret'                 => 'aws-secret',
+                'aws_email'                  => 'aws-sender@gmail.com',
+                'smtp_host'                  => 'smtp.qq.com',
+                'smtp_port'                  => 587,
+                'smtp_sender'                => 'smtp-sender@qq.com',
+                'smtp_secret'                => 'smtp-secret',
+                'component'                  => [],
+                'cnf'                        => [
+                    'app_logo'              => '/img/logo.svg',
+                    'app_ico'               => '/img/favicon.ico',
+                    'app_name'              => 'Custom Application',
+                    'host'                  => '//api.custom.com',
+                    'host_official'         => 'http://www.custom.com',
+                    'host_file'             => 'http://file.custom.com',
+                    'debug_devil'           => $debugDevil,
+                    'cache_default_expires' => 10,
+                    'debug_uuid'            => '_',
+                    'debug_cost'            => true,
+                ],
+            ],
+            'services'   => [],
         ];
     }
 
@@ -177,9 +316,17 @@ class BswInitCommand extends Command implements CommandInterface
          * Config
          */
         $config = [
-            'services'  => "{$project}/config/services.yaml",
-            'cache'     => "{$project}/config/packages/cache.yaml",
-            'framework' => "{$project}/config/packages/framework.yaml",
+            'devJmsSerializer'  => "{$project}/config/packages/dev/jms_serializer.yaml",
+            'prodJmsSerializer' => "{$project}/config/packages/prod/jms_serializer.yaml",
+            'cache'             => "{$project}/config/packages/cache.yaml",
+            'fosRest'           => "{$project}/config/packages/fos_rest.yaml",
+            'framework'         => "{$project}/config/packages/framework.yaml",
+            'sncRedis'          => "{$project}/config/packages/snc_redis.yaml",
+            'translation'       => "{$project}/config/packages/translation.yaml",
+            'twig'              => "{$project}/config/packages/twig.yaml",
+            'annotation'        => "{$project}/config/routes/annotations.yaml",
+            'routes'            => "{$project}/config/routes.yaml",
+            'services'          => "{$project}/config/services.yaml",
         ];
 
         foreach ($config as $name => $file) {
