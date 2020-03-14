@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -106,7 +106,7 @@ class Senior extends Filter
             return [
                 "{$field} = :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -114,7 +114,7 @@ class Senior extends Filter
             return [
                 "{$field} <> :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -122,7 +122,7 @@ class Senior extends Filter
             return [
                 "{$field} > :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -130,7 +130,7 @@ class Senior extends Filter
             return [
                 "{$field} >= :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -138,7 +138,7 @@ class Senior extends Filter
             return [
                 "{$field} < :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -146,7 +146,7 @@ class Senior extends Filter
             return [
                 "{$field} <= :{$targetKey}",
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -195,8 +195,8 @@ class Senior extends Filter
                     $secondKey => $second,
                 ],
                 [
-                    $firstKey  => is_numeric($first) ? Types::FLOAT : Types::STRING,
-                    $secondKey => is_numeric($second) ? Types::FLOAT : Types::STRING,
+                    $firstKey  => is_numeric($first) ? Type::FLOAT : Type::STRING,
+                    $secondKey => is_numeric($second) ? Type::FLOAT : Type::STRING,
                 ],
             ];
         }
@@ -225,7 +225,7 @@ class Senior extends Filter
             return [
                 $this->expr->eq($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -233,7 +233,7 @@ class Senior extends Filter
             return [
                 $this->expr->neq($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -241,7 +241,7 @@ class Senior extends Filter
             return [
                 $this->expr->gt($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -249,7 +249,7 @@ class Senior extends Filter
             return [
                 $this->expr->gte($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -257,7 +257,7 @@ class Senior extends Filter
             return [
                 $this->expr->lt($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -265,7 +265,7 @@ class Senior extends Filter
             return [
                 $this->expr->lte($field, ":{$targetKey}"),
                 [$targetKey => $target],
-                [$targetKey => is_numeric($target) ? Types::FLOAT : Types::STRING],
+                [$targetKey => is_numeric($target) ? Type::FLOAT : Type::STRING],
             ];
         }
 
@@ -314,8 +314,8 @@ class Senior extends Filter
                     $secondKey => $second,
                 ],
                 [
-                    $firstKey  => is_numeric($first) ? Types::FLOAT : Types::STRING,
-                    $secondKey => is_numeric($second) ? Types::FLOAT : Types::STRING,
+                    $firstKey  => is_numeric($first) ? Type::FLOAT : Type::STRING,
+                    $secondKey => is_numeric($second) ? Type::FLOAT : Type::STRING,
                 ],
             ];
         }

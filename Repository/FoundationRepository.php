@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Repository;
 
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Type;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\FoundationEntity;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -726,7 +726,7 @@ abstract class FoundationRepository extends SFRepository
             throw new RepositoryException('Variable `args` should be array if configured');
         }
 
-        $typeMode = [true => Types::INTEGER, false => Types::STRING];
+        $typeMode = [true => Type::INTEGER, false => Type::STRING];
         $args = array_filter($args);
 
         foreach ($args as $key => $item) {

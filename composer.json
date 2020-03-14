@@ -58,7 +58,7 @@
     "symfony/serializer": "^4.0",
     "symfony/webpack-encore-bundle": "*",
     "symfony/web-profiler-bundle": "^v4.2",
-    "ocramius/proxy-manager": "2.1.1",
+    "ocramius/proxy-manager": "2.3.1",
     "phpmailer/phpmailer": "^6.0",
     "kriswallsmith/buzz": "^1.0",
     "mailgun/mailgun-php": "^3.0",
@@ -78,7 +78,7 @@
   "extra": {
     "symfony": {
       "allow-contrib": false,
-      "require": "4.2.*"
+      "require": "4.3.*"
     }
   },
   "require-dev": {

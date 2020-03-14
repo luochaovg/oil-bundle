@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Type;
 use Leon\BswBundle\Module\Filter\Filter;
 
 class Like extends Filter
@@ -32,7 +32,7 @@ class Like extends Filter
         return [
             "{$field} LIKE %:{$name}%",
             [$name => current($item)],
-            [$name => Types::STRING],
+            [$name => Type::STRING],
         ];
     }
 
