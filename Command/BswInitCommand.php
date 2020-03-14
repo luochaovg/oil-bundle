@@ -18,6 +18,8 @@ class BswInitCommand extends Command implements CommandInterface
 {
     use BswFoundation;
 
+    protected $api = false;
+
     /**
      * @return array
      */
@@ -27,6 +29,7 @@ class BswInitCommand extends Command implements CommandInterface
             'doctrine'           => [null, InputOption::VALUE_OPTIONAL, 'Doctrine database flag'],
             'force'              => [null, InputOption::VALUE_OPTIONAL, 'Force init again'],
             'app'                => [null, InputOption::VALUE_OPTIONAL, 'App flag for scaffold suffix'],
+            'api'                => [null, InputOption::VALUE_OPTIONAL, 'Is api project?', 'no'],
             'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
             'scheme-extra'       => [null, InputOption::VALUE_OPTIONAL, 'Extra scheme path'],
             'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
@@ -119,8 +122,28 @@ class BswInitCommand extends Command implements CommandInterface
      */
     protected function fosRestCnf(): array
     {
+        if ($this->api) {
+            return ['fos_rest' => null];
+        }
+
         return [
-            'fos_rest' => null,
+            'fos_rest' => [
+                'service'         => ['serializer' => null],
+                'routing_loader'  => ['default_format' => 'json'],
+                'format_listener' => [
+                    'rules' => [
+                        [
+                            'path'             => '^/',
+                            'prefer_extension' => true,
+                            'fallback_format'  => 'json',
+                            'priorities'       => ['json'],
+                        ],
+                    ],
+                ],
+                'exception'       => [
+                    'exception_controller' => 'App\Controller\AcmeController::showExceptionAction',
+                ],
+            ],
         ];
     }
 
@@ -144,6 +167,27 @@ class BswInitCommand extends Command implements CommandInterface
             ],
         ];
     }
+
+    /**
+     * @return array
+     */
+    protected function jmsSerializerCnf(): array
+    {
+        return [
+            'jms_serializer' => [
+                'visitors' => [
+                    'json' => [
+                        'options' => [
+                            'JSON_PRETTY_PRINT',
+                            'JSON_UNESCAPED_UNICODE',
+                        ],
+                    ],
+                    'xml'  => ['format_output' => '%kernel.debug%'],
+                ],
+            ],
+        ];
+    }
+
 
     /**
      * @return array
@@ -307,6 +351,8 @@ class BswInitCommand extends Command implements CommandInterface
         $project = $this->kernel->getProjectDir();
         $dumper = new Dumper();
 
+        $this->api = $params['api'] === 'yes';
+
         $doneFile = "{$project}/.done-init";
         if (!$params['force'] && file_exists($doneFile)) {
             throw new CommandException('The command can only be executed once');
@@ -321,6 +367,7 @@ class BswInitCommand extends Command implements CommandInterface
             'cache'             => "{$project}/config/packages/cache.yaml",
             'fosRest'           => "{$project}/config/packages/fos_rest.yaml",
             'framework'         => "{$project}/config/packages/framework.yaml",
+            'jmsSerializer'     => "{$project}/config/packages/jms_serializer.yaml",
             'sncRedis'          => "{$project}/config/packages/snc_redis.yaml",
             'translation'       => "{$project}/config/packages/translation.yaml",
             'twig'              => "{$project}/config/packages/twig.yaml",
