@@ -650,7 +650,7 @@ class BswBackendController extends BswWebController
 
             if (!isset($annotation[$_key])) {
                 $annotation[$_key] = [
-                    'label' => $item['label'],
+                    'label' => $item['label'] ?: 'UnSetDescription',
                     'type'  => new Checkbox(),
                     'enum'  => [],
                     'value' => [],

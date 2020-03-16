@@ -303,7 +303,9 @@ trait Annotation
                     $access[$method] = current(current($item));
                 }
 
-                return [$annotation['document']['info'], $access];
+                $classify = $annotation['document']['info'] ?: Helper::clsName($class);
+
+                return [$classify, $access];
             }
         );
     }

@@ -45,7 +45,7 @@ class BswFrontendController extends BswWebController
      */
     protected function webShouldAuth(array $args)
     {
-        return new ErrorAuthorization();
+        return [];
     }
 
     /**
