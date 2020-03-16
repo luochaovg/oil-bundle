@@ -4063,4 +4063,63 @@ class Helper
 
         return [$min, $max];
     }
+
+    /**
+     * Get ip chunk
+     *
+     * @param string $ip
+     * @param int    $chunkNum
+     *
+     * @return string|array|null
+     */
+    public static function getIpChunk(string $ip, int $chunkNum = -1)
+    {
+        if ($ip == 32) {
+            return $ip;
+        }
+
+        $ip = explode('.', $ip);
+
+        $a = $ip[0];
+        $b = $ip[1] ?? null;
+        $c = $ip[2] ?? null;
+        $d = $ip[3] ?? null;
+
+        $chunk = [
+            0 => "",
+            1 => "{$a}",
+            2 => trim("{$a}.{$b}", '.'),
+            3 => trim("{$a}.{$b}.{$c}", '.'),
+            4 => trim("{$a}.{$b}.{$c}.{$d}", '.'),
+        ];
+
+        if ($chunkNum < 0) {
+            return $chunk;
+        }
+
+        return $chunk[$chunkNum] ?? null;
+    }
+
+    /**
+     * Validate ip in white list
+     *
+     * @param string $ip
+     * @param array  $whiteList
+     *
+     * @return bool
+     */
+    public static function ipInWhiteList(string $ip, array $whiteList): bool
+    {
+        $chunk = self::getIpChunk($ip);
+
+        foreach ($whiteList as $item) {
+            [$item, $mask] = explode('/', $item) + [1 => 32];
+            $index = $mask / 8;
+            if (self::getIpChunk($item, $index) == ($chunk[$index] ?? null)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

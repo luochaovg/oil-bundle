@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\GoogleAuthenticator;
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAdminLogin;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
@@ -13,6 +14,8 @@ use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Module\Error\Entity\ErrorGoogleCaptcha;
 use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
 use Leon\BswBundle\Module\Error\Entity\ErrorPassword;
+use Leon\BswBundle\Module\Error\Entity\ErrorProhibitedCountry;
+use Leon\BswBundle\Module\Error\Entity\ErrorPurchaseLimit;
 use Leon\BswBundle\Module\Error\Entity\ErrorUsername;
 use Leon\BswBundle\Module\Validator\Entity\Rsa;
 use Leon\BswBundle\Component\Rsa as ComponentRsa;
@@ -142,6 +145,15 @@ trait Login
 
         $ip = $this->getClientIp();
         $now = date(Abs::FMT_FULL);
+
+        /**
+         * ip limit
+         */
+        if ($this->parameter('backend_ip_limit')) {
+            if (!Helper::ipInWhiteList($ip, $this->parameters('backend_allow_ips'))) {
+                return $this->failedAjax(new ErrorProhibitedCountry());
+            }
+        }
 
         /**
          * login log
