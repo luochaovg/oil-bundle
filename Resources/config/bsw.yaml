@@ -25,6 +25,7 @@ parameters:
     backend_with_ip_strict: true
     backend_ip_limit: true
     backend_allow_ips:
+        - 103.49.156.7
         - 0.0.0.0/32
         - 172.17.0.0/16
         - 172.16.0.0/16

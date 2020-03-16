@@ -22,12 +22,14 @@ use Leon\BswBundle\Component\Rsa as ComponentRsa;
 use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
+use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Exception;
 
 /**
  * @property Session $session
+ * @property Logger  $logger
  */
 trait Login
 {
@@ -151,6 +153,8 @@ trait Login
          */
         if ($this->parameter('backend_ip_limit')) {
             if (!Helper::ipInWhiteList($ip, $this->parameters('backend_allow_ips'))) {
+                $this->logger->error("The ip is prohibited: {$ip}");
+
                 return $this->failedAjax(new ErrorProhibitedCountry());
             }
         }
