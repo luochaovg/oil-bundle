@@ -330,7 +330,7 @@ class Button extends Form
      *
      * @return $this
      */
-    public function setConfirm(string $confirm)
+    public function setConfirm(?string $confirm = null)
     {
         $this->confirm = $confirm;
 
