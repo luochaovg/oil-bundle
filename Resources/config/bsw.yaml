@@ -23,14 +23,13 @@ parameters:
 
     backend_with_google_secret: true
     backend_with_ip_strict: true
-    backend_ip_limit: true
+    backend_ip_limit: false
     backend_allow_ips:
-        - 103.49.156.7
-        - 0.0.0.0/32
-        - 172.17.0.0/16
-        - 172.16.0.0/16
-        - 127.0.0.1
         - 0.0.0.0
+        - 127.0.0.1
+        - 172.16.0.0/16
+        - 172.17.0.0/16
+        - 172.18.0.0/16
     backend_maintain_alone: true
     backend_with_login_log: true
     backend_captcha_digit: 4
