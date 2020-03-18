@@ -290,7 +290,7 @@ class BswInitCommand extends Command implements CommandInterface
         $aesKey = Helper::randString(16, 'mixed');
         $debugDevil = Helper::randString(16, 'mixed');
 
-        $project = Helper::underToCamel($this->project, false);
+        $project = Helper::underToCamel(str_replace("-", "_", $this->project), false);
 
         return [
             'parameters' => [
