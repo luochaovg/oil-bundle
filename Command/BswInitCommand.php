@@ -18,6 +18,14 @@ class BswInitCommand extends Command implements CommandInterface
 {
     use BswFoundation;
 
+    /**
+     * @var
+     */
+    protected $project;
+
+    /**
+     * @var bool
+     */
     protected $api = false;
 
     /**
@@ -27,14 +35,15 @@ class BswInitCommand extends Command implements CommandInterface
     {
         return [
             'doctrine'           => [null, InputOption::VALUE_OPTIONAL, 'Doctrine database flag'],
-            'force'              => [null, InputOption::VALUE_OPTIONAL, 'Force init again'],
+            'force'              => [null, InputOption::VALUE_OPTIONAL, 'Force init again', 'no'],
             'app'                => [null, InputOption::VALUE_OPTIONAL, 'App flag for scaffold suffix'],
-            'api'                => [null, InputOption::VALUE_OPTIONAL, 'Is api project?', 'no'],
+            'project'            => [null, InputOption::VALUE_OPTIONAL, 'App name for config', 'customer'],
+            'api'                => [null, InputOption::VALUE_OPTIONAL, 'App for RESTful api?', 'no'],
             'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
             'scheme-extra'       => [null, InputOption::VALUE_OPTIONAL, 'Extra scheme path'],
             'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
             'scheme-start-only'  => [null, InputOption::VALUE_OPTIONAL, 'Only scheme start with string'],
-            'scheme-force'       => [null, InputOption::VALUE_OPTIONAL, 'Force rebuild scheme'],
+            'scheme-force'       => [null, InputOption::VALUE_OPTIONAL, 'Force rebuild scheme', 'no'],
             'scaffold-need'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold need?', 'yes'],
             'scaffold-cover'     => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file rewrite?', 12],
             'scaffold-path'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file save path'],
@@ -281,6 +290,8 @@ class BswInitCommand extends Command implements CommandInterface
         $aesKey = Helper::randString(16, 'mixed');
         $debugDevil = Helper::randString(16, 'mixed');
 
+        $project = Helper::underToCamel($this->project, false);
+
         return [
             'parameters' => [
                 'locale'                     => 'en',
@@ -322,10 +333,10 @@ class BswInitCommand extends Command implements CommandInterface
                 'cnf'                        => [
                     'app_logo'              => '/img/logo.svg',
                     'app_ico'               => '/img/favicon.ico',
-                    'app_name'              => 'Custom Application',
-                    'host'                  => '//api.custom.com',
-                    'host_official'         => 'http://www.custom.com',
-                    'host_file'             => 'http://file.custom.com',
+                    'app_name'              => $project,
+                    'host'                  => "//www.{$this->api}.com",
+                    'host_official'         => "http://www.{$this->api}.com",
+                    'host_file'             => "http://file.{$this->api}.com",
                     'debug_devil'           => $debugDevil,
                     'cache_default_expires' => 10,
                     'debug_uuid'            => '_',
@@ -351,10 +362,11 @@ class BswInitCommand extends Command implements CommandInterface
         $project = $this->kernel->getProjectDir();
         $dumper = new Dumper();
 
+        $this->project = $params['project'];
         $this->api = $params['api'] === 'yes';
 
         $doneFile = "{$project}/.done-init";
-        if (!$params['force'] && file_exists($doneFile)) {
+        if ($params['force'] !== 'yes' && file_exists($doneFile)) {
             throw new CommandException('The command can only be executed once');
         }
 
