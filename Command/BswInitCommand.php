@@ -150,7 +150,7 @@ class BswInitCommand extends Command implements CommandInterface
                     ],
                 ],
                 'exception'       => [
-                    'exception_controller' => 'App\Controller\AcmeController::showExceptionAction',
+                    'exception_controller' => 'App\Controller\AcmeApiController::showExceptionAction',
                 ],
             ],
         ];
