@@ -131,7 +131,7 @@ class BswInitCommand extends Command implements CommandInterface
      */
     protected function fosRestCnf(): array
     {
-        if ($this->api) {
+        if (!$this->api) {
             return ['fos_rest' => null];
         }
 
@@ -334,9 +334,9 @@ class BswInitCommand extends Command implements CommandInterface
                     'app_logo'              => '/img/logo.svg',
                     'app_ico'               => '/img/favicon.ico',
                     'app_name'              => $project,
-                    'host'                  => "//www.{$this->api}.com",
-                    'host_official'         => "http://www.{$this->api}.com",
-                    'host_file'             => "http://file.{$this->api}.com",
+                    'host'                  => "//www.{$this->project}.com",
+                    'host_official'         => "http://www.{$this->project}.com",
+                    'host_file'             => "http://file.{$this->project}.com",
                     'debug_devil'           => $debugDevil,
                     'cache_default_expires' => 10,
                     'debug_uuid'            => '_',
