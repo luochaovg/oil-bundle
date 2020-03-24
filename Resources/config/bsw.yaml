@@ -30,6 +30,7 @@ parameters:
         - 172.16.0.0/16
         - 172.17.0.0/16
         - 172.18.0.0/16
+        - 172.19.0.0/16
     backend_maintain_alone: true
     backend_with_login_log: true
     backend_captcha_digit: 4

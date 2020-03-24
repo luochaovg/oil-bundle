@@ -61,7 +61,7 @@ class Dispatcher
         $index = 0;
         if ($useLabel) {
             $title = Helper::stringToLabel($field);
-            $title = $this->translator->trans($title, [], 'fields');
+            $title = $this->translator->trans($title, [], 'fields', $this->locale);
         } else {
             $title = $field;
         }
@@ -120,7 +120,9 @@ class Dispatcher
                     '{{ arg2 }}'  => $args[1] ?? null,
                     '{{ arg3 }}'  => $args[2] ?? null,
                     '{{ args }}'  => $validator->stringArgs(),
-                ]
+                ],
+                'messages',
+                $this->locale
             );
             $result->error($error);
         }

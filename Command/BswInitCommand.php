@@ -39,6 +39,7 @@ class BswInitCommand extends Command implements CommandInterface
             'app'                => [null, InputOption::VALUE_OPTIONAL, 'App flag for scaffold suffix'],
             'project'            => [null, InputOption::VALUE_OPTIONAL, 'App name for config', 'customer'],
             'api'                => [null, InputOption::VALUE_OPTIONAL, 'App for RESTful api?', 'no'],
+            'scheme-prefix'      => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix'],
             'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
             'scheme-extra'       => [null, InputOption::VALUE_OPTIONAL, 'Extra scheme path'],
             'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
@@ -226,7 +227,7 @@ class BswInitCommand extends Command implements CommandInterface
                 'default_locale' => '%locale%',
                 'translator'     => [
                     'default_path' => '%kernel.project_dir%/translations',
-                    'fallbacks'    => ['%locale%'],
+                    'fallbacks'    => ['en'],
                 ],
             ],
         ];
@@ -294,7 +295,7 @@ class BswInitCommand extends Command implements CommandInterface
 
         return [
             'parameters' => [
-                'locale'                     => 'en',
+                'locale'                     => 'cn',
                 'version'                    => '1.0.0',
                 'salt'                       => $signSalt,
                 'platform_sms'               => 'aws',
@@ -440,6 +441,7 @@ class BswInitCommand extends Command implements CommandInterface
         $schemeOnly = Helper::stringToArray($params['scheme-only']);
         $schemeStartOnly = $params['scheme-start-only'];
         $scaffoldNeed = ($params['scaffold-need'] === 'yes');
+        $schemePrefix = trim($params['scheme-prefix'], '_');
 
         foreach ($schemeFileList as $sqlFile) {
 
@@ -454,6 +456,7 @@ class BswInitCommand extends Command implements CommandInterface
 
             $output->write(Abs::ENTER);
 
+            $table = "{$schemePrefix}_{$table}";
             $exists = $this->pdo()->fetchArray("SHOW TABLES WHERE Tables_in_{$database} = '{$table}'");
             $record = $exists && current($pdo->fetchArray("SELECT COUNT(*) FROM {$table}"));
             if (!$record || $params['scheme-force'] === 'yes') {

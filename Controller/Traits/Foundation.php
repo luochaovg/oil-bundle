@@ -1278,8 +1278,8 @@ trait Foundation
                 return $repo->kvp(['value'], 'key');
             },
             $key,
-            $args('config_cache_default_expires'),
-            $args('config_cache_enabled')
+            $args('db_cache_default_expires'),
+            $args('db_cache_enabled')
         );
     }
 

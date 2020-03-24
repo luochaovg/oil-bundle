@@ -1189,24 +1189,26 @@ class Helper
      *
      * @param array  $args
      * @param string $salt
-     * @param int    $time
+     * @param int    $t
+     * @param array  $split
      *
      * @return array
      */
-    public static function signature(array $args, string $salt, int $time = null): array
+    public static function signature(array $args, string $salt, int $t = null, array $split = []): array
     {
-        $time = $time ?? time();
+        $time = $t ?? time();
+        [$kvSplit, $argsSplit, $saltSplit] = $split + [' is ', ' and ', ' & '];
 
         $args['time'] = $time;
         krsort($args);
 
         $sign = [];
         foreach ($args as $key => $value) {
-            array_push($sign, "{$key} is {$value}");
+            array_push($sign, "{$key}{$kvSplit}{$value}");
         }
 
-        $sign = implode(' and ', $sign) . " & {$salt}";
-        $sign = strtolower(md5($sign));
+        $sign = implode($argsSplit, $sign) . "{$saltSplit}{$salt}";
+        $sign = $t ? $sign : strtolower(md5($sign));
 
         return compact('time', 'sign');
     }

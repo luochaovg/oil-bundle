@@ -11,6 +11,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Component\Upload as Uploader;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Leon\BswBundle\Annotation\Entity\Input as I;
+use Leon\BswBundle\Annotation\Entity\Output as O;
 use Exception;
 
 /**

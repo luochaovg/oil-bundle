@@ -26,6 +26,11 @@ class Service
     /**
      * @var string
      */
+    protected $url;
+
+    /**
+     * @var string
+     */
     protected $host;
 
     /**
@@ -64,9 +69,14 @@ class Service
     protected $async = false;
 
     /**
+     * @var bool
+     */
+    protected $debug = false;
+
+    /**
      * @param string $method
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function method(string $method): Service
@@ -77,7 +87,7 @@ class Service
     }
 
     /**
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function methodChecker(): Service
@@ -98,7 +108,7 @@ class Service
     /**
      * @param string $type
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function contentType(string $type): Service
@@ -109,7 +119,7 @@ class Service
     }
 
     /**
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function contentTypeChecker(): Service
@@ -130,7 +140,7 @@ class Service
     /**
      * @param string $scheme
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function scheme(string $scheme): Service
@@ -144,7 +154,7 @@ class Service
     }
 
     /**
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function schemeChecker(): Service
@@ -164,12 +174,22 @@ class Service
     /**
      * @param string $host
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function host(string $host): Service
     {
-        $this->host = trim($host, '/ ');
+        $items = parse_url($host);
+
+        if (isset($items['scheme'])) {
+            $this->scheme($items['scheme']);
+        }
+
+        if (isset($items['port'])) {
+            $this->port($items['port']);
+        }
+
+        $this->host = trim($items['host'], '/ ');
 
         return $this->hostChecker();
     }
@@ -177,7 +197,7 @@ class Service
     /**
      * @param bool $strict
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function hostChecker(bool $strict = false): Service
@@ -196,7 +216,7 @@ class Service
     /**
      * @param int $port
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function port(int $port): Service
@@ -207,7 +227,7 @@ class Service
     }
 
     /**
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function portChecker(): Service
@@ -222,7 +242,7 @@ class Service
     /**
      * @param string $path
      *
-     * @return Service
+     * @return Service|static
      */
     public function path(string $path): Service
     {
@@ -234,7 +254,7 @@ class Service
     /**
      * @param array $args
      *
-     * @return Service
+     * @return Service|static
      */
     public function header(array $args): Service
     {
@@ -246,7 +266,7 @@ class Service
     /**
      * @param array $args
      *
-     * @return Service
+     * @return Service|static
      */
     public function args(array $args): Service
     {
@@ -258,7 +278,7 @@ class Service
     /**
      * @param array $args
      *
-     * @return Service
+     * @return Service|static
      */
     public function get(array $args): Service
     {
@@ -270,7 +290,7 @@ class Service
     /**
      * @param int $millisecond
      *
-     * @return Service
+     * @return Service|static
      * @throws
      */
     public function timeout(int $millisecond): Service
@@ -281,7 +301,7 @@ class Service
     }
 
     /**
-     * @return Service
+     * @return Service|static
      * @throws
      */
     protected function timeoutChecker(): Service
@@ -296,9 +316,9 @@ class Service
     /**
      * @param bool $async
      *
-     * @return Service
+     * @return Service|static
      */
-    public function async(bool $async): Service
+    public function async(bool $async = true): Service
     {
         $this->async = $async;
 
@@ -306,29 +326,15 @@ class Service
     }
 
     /**
-     * @return mixed
-     * @throws
+     * @param bool $debug
+     *
+     * @return Service|static
      */
-    public function request()
+    public function debug(bool $debug = true): Service
     {
-        $part = parse_url($this->host);
-        foreach (['scheme', 'host', 'port'] as $item) {
-            !empty($part[$item]) && $this->{$item}($part[$item]);
-        }
+        $this->debug = $debug;
 
-        $_result = $this
-            ->methodChecker()
-            ->schemeChecker()
-            ->hostChecker()
-            ->portChecker()
-            ->timeoutChecker()
-            ->curl();
-
-        if (!$result = json_decode($_result, true)) {
-            throw new ServiceException($_result);
-        }
-
-        return $result;
+        return $this;
     }
 
     /**
@@ -367,13 +373,13 @@ class Service
             $portString = null;
         }
 
-        $url = "{$this->scheme}://{$this->host}{$portString}/{$this->path}";
+        $this->url = "{$this->scheme}://{$this->host}{$portString}/{$this->path}";
         if ($this->get) {
-            $url = Helper::addParamsForUrl($this->get, $url);
+            $this->url = Helper::addParamsForUrl($this->get, $this->url);
         }
 
         if ($this->method == Abs::REQ_GET && $this->args) {
-            $url = Helper::addParamsForUrl($this->args, $url);
+            $this->url = Helper::addParamsForUrl($this->args, $this->url);
         }
 
         // content type
@@ -381,7 +387,7 @@ class Service
             $options[CURLOPT_HTTPHEADER] = ["Content-Type: {$this->contentType}"];
         }
 
-        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_URL] = $this->url;
 
         // method
         if ($this->method == Abs::REQ_HEAD) { // HEAD
@@ -410,6 +416,12 @@ class Service
         }
         $options[CURLOPT_HTTPHEADER] = $header;
 
+        // debug
+        if ($this->debug) {
+            dump($options);
+            exit(0);
+        }
+
         // request
         $curl = curl_init();
         curl_setopt_array($curl, $options);
@@ -417,9 +429,35 @@ class Service
 
         if ($content === false) {
             $error = curl_error($curl);
-            throw new CurlException("cURL error when request {$url}, {$error}");
+            throw new CurlException("cURL error when request {$this->url}, {$error}");
         }
 
         return $content;
+    }
+
+    /**
+     * @return mixed
+     * @throws
+     */
+    public function request()
+    {
+        $part = parse_url($this->host);
+        foreach (['scheme', 'host', 'port'] as $item) {
+            !empty($part[$item]) && $this->{$item}($part[$item]);
+        }
+
+        $_result = $this
+            ->methodChecker()
+            ->schemeChecker()
+            ->hostChecker()
+            ->portChecker()
+            ->timeoutChecker()
+            ->curl();
+
+        if (!$result = json_decode($_result, true)) {
+            throw new ServiceException($_result);
+        }
+
+        return $result;
     }
 }

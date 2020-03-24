@@ -126,7 +126,7 @@ class BswBackendController extends BswWebController
      */
     protected function extraConfig(array $cnf): array
     {
-        $pair = array_merge($cnf, $this->getDbConfig('app_extra_config'));
+        $pair = array_merge($cnf, $this->getDbConfig('app_database_config'));
         $pair = Helper::numericValues($pair);
 
         return $pair;

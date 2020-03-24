@@ -245,6 +245,27 @@ class Abs
     const USER_INTERNAL = 2;
     const USER_PEND     = 3;
 
+    const USER_TYPE_PHONE    = 1;
+    const USER_TYPE_EMAIL    = 2;
+    const USER_TYPE_WX       = 3;
+    const USER_TYPE_QQ       = 4;
+    const USER_TYPE_GITEE    = 5;
+    const USER_TYPE_GITHUB   = 6;
+    const USER_TYPE_SINA     = 7;
+    const USER_TYPE_DING     = 8;
+    const USER_TYPE_BAIDU    = 9;
+    const USER_TYPE_CODING   = 10;
+    const USER_TYPE_OSCHINA  = 11;
+    const USER_TYPE_ALIPAY   = 12;
+    const USER_TYPE_TAOBAO   = 13;
+    const USER_TYPE_GOOGLE   = 14;
+    const USER_TYPE_FACEBOOK = 15;
+    const USER_TYPE_DOUYIN   = 16;
+    const USER_TYPE_LINKED   = 17;
+    const USER_TYPE_MS       = 18;
+    const USER_TYPE_MI       = 19;
+    const USER_TYPE_DEVICE   = 99;
+
     const PERIOD_YEAR    = 1;
     const PERIOD_QUARTER = 2;
     const PERIOD_MONTH   = 3;
