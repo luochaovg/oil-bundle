@@ -32,7 +32,7 @@ trait NumberCaptcha
 
         $builder = new CaptchaBuilder(null, new PhraseBuilder($digit));
         $builder->setBackgroundColor(236, 245, 255);
-        $builder->build(120, 40);
+        $builder->build(150, 40);
 
         $this->session->set($this->skCaptcha, $builder->getPhrase());
         $builder->output();
