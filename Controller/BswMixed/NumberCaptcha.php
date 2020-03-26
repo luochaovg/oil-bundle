@@ -30,13 +30,23 @@ trait NumberCaptcha
             $digit = 4;
         }
 
-        $builder = new CaptchaBuilder(null, new PhraseBuilder($digit));
-        $builder->setBackgroundColor(236, 245, 255);
-        $builder->build(150, 40);
+        $colors = [
+            [236, 245, 255],
+            [255, 239, 213],
+            [255, 240, 245],
+            [230, 230, 250],
+            [245, 245, 220],
+            [255, 250, 250],
+        ];
 
+        $builder = new CaptchaBuilder(null, new PhraseBuilder($digit));
+        $builder->setBackgroundColor(...$colors[rand(0, 5)]);
+        $builder->build(150, 50);
         $this->session->set($this->skCaptcha, $builder->getPhrase());
+
+        header('Content-type: image/jpeg');
         $builder->output();
 
-        return new Response(null, 200, ['Content-type' => 'image/jpeg']);
+        return new Response('', 200, ['Content-type' => 'image/jpeg']);
     }
 }
