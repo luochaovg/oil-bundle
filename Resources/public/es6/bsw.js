@@ -39,8 +39,9 @@ $(function () {
 
         no_loading_once: false,
         spinning: false,
-        message: null,  // from v-init
         configure: {},  // from v-init
+        message: {},  // from v-init
+        tips: {}, // from v-init
         modal: {
             visible: false,
         },

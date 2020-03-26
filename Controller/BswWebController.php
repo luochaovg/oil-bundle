@@ -14,13 +14,11 @@ use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Entity\ErrorSession;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Controller\Traits as CT;
-use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Exception;
 use Throwable;
 
@@ -91,6 +89,11 @@ abstract class BswWebController extends AbstractController
             $url = $this->cnf->route_default;
         }
 
+        // prevent route to self
+        if ($this->route == $url) {
+            $url = $this->cnf->route_login;
+        }
+
         // args
         if (!empty($url)) {
             $args = (array)$this->sessionArrayGet(Abs::TAG_HISTORY, $url, true);
@@ -121,8 +124,10 @@ abstract class BswWebController extends AbstractController
      */
     protected function responseUrlMap(): array
     {
+        $reference = ($this->route == $this->cnf->route_default) ? null : $this->reference();
+
         return [
-            ErrorAjaxRequest::CODE   => $reference = $this->reference(),
+            ErrorAjaxRequest::CODE   => $reference,
             ErrorParameter::CODE     => $reference,
             ErrorAuthorization::CODE => $this->cnf->route_login,
             ErrorAccess::CODE        => $reference,
@@ -266,7 +271,7 @@ abstract class BswWebController extends AbstractController
             $data = [];
         }
 
-        [$code4http, $code4logic] = [HttpResponse::HTTP_OK, $code, null, null];
+        [$code4http, $code4logic] = [Response::HTTP_OK, $code, null, null];
 
         // instance of Error
         if ($code instanceof Error) {
@@ -479,6 +484,10 @@ abstract class BswWebController extends AbstractController
                     return $this->responseError($isAuth);
                 }
 
+            } elseif ($isAuth instanceof Response) {
+
+                return $isAuth;
+
             } else {
 
                 $this->usr = (object)$isAuth;
@@ -534,7 +543,7 @@ abstract class BswWebController extends AbstractController
      *
      * @param array $args
      *
-     * @return array|object|Error
+     * @return array|object|Error|Response
      */
     abstract protected function webShouldAuth(array $args);
 
@@ -711,7 +720,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return Response|string
      */
-    public function show(array $args, string $view = null)
+    public function show(array $args = [], string $view = null)
     {
         $this->iNeedCost(Abs::END_REQUEST);
         $this->iNeedLogger(Abs::END_REQUEST);

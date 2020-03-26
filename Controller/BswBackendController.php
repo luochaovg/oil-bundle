@@ -101,7 +101,8 @@ class BswBackendController extends BswWebController
         parent::bootstrap();
 
         if ($this->bswSrc) {
-            $this->appendSrcJs([Abs::JS_LANG[$this->request()->getLocale()], Abs::JS_BSW]);
+            $lang = $this->langLatest(['en' => 'en', 'cn' => 'cn']);
+            $this->appendSrcJs([Abs::JS_LANG[$lang], Abs::JS_BSW]);
             $this->appendSrcCss(Abs::CSS_BSW);
         }
 
@@ -162,7 +163,7 @@ class BswBackendController extends BswWebController
      *
      * @param array $args
      *
-     * @return array|object|Error
+     * @return array|object|Error|Response
      */
     protected function webShouldAuth(array $args)
     {

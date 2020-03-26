@@ -70,6 +70,16 @@ parameters:
     smtp_sender: smtp-sender@mail.com
     smtp_secret: smtp-secret
 
+    wx:
+        app_id: app-id
+        secret: secret
+        token: CCUUSSTTOOMMEERR
+        aes_key: aes-key
+        response_type: object
+        oauth:
+            scopes: [ snsapi_userinfo ]
+            callback: /wx/oauth
+
     bsw_component:
         Leon\BswBundle\Component\Aes:
             arguments: ['%aes_key%', '%aes_iv%', '%aes_method%']
@@ -108,11 +118,13 @@ parameters:
 
         route_default: app_site_index
         route_login: app_user_login
+        route_login_handler: app_user_login_handler
         route_logout: app_user_logout
         route_profile: app_user_profile
         route_clean_backend: app_clean_backend
         route_clean_frontend: app_clean_frontend
         route_upload: app_upload
+        route_captcha: app_captcha
 
         usr_account: name
         usr_uid: user_id

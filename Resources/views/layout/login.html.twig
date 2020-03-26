@@ -43,7 +43,7 @@
       >
         <b-icon slot="prefix" type="icon-yanzhengma1"></b-icon>
       </a-input>
-      <img class="bsw-captcha" src="{{ path('app_captcha') }}">
+      <img class="bsw-captcha" src="{{ path(scaffold.cnf.route_captcha) }}">
     </a-form-item>
     {% if google_captcha is defined %}
       <a-form-item>

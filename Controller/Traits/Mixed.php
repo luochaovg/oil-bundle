@@ -5,6 +5,8 @@ namespace Leon\BswBundle\Controller\Traits;
 use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
+use EasyWeChat\Factory;
+use EasyWeChat\OfficialAccount\Application;
 use Leon\BswBundle\Component\AwsSDK;
 use Leon\BswBundle\Component\Download;
 use Leon\BswBundle\Component\Helper;
@@ -1154,5 +1156,15 @@ trait Mixed
             $params,
             $telegram
         );
+    }
+
+    /**
+     * Get wechat instance
+     *
+     * @return Application
+     */
+    public function weChat(): Application
+    {
+        return Factory::officialAccount($this->parameters('wx'));
     }
 }

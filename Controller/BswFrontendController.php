@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
+use Symfony\Component\HttpFoundation\Response;
 
 class BswFrontendController extends BswWebController
 {
@@ -31,7 +32,8 @@ class BswFrontendController extends BswWebController
         parent::bootstrap();
 
         if ($this->webSrc) {
-            $this->appendSrcJs(Abs::JS_WEB);
+            $lang = $this->langLatest(['en' => 'en', 'cn' => 'cn']);
+            $this->appendSrcJs([Abs::JS_LANG[$lang], Abs::JS_WEB]);
             $this->appendSrcCss(Abs::CSS_WEB);
         }
     }
@@ -41,7 +43,7 @@ class BswFrontendController extends BswWebController
      *
      * @param array $args
      *
-     * @return array|object|Error
+     * @return array|object|Error|Response
      */
     protected function webShouldAuth(array $args)
     {

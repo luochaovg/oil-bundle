@@ -1,10 +1,14 @@
 {% extends '@LeonBsw/foundation/w3c.html.twig' %}
 
 {% block w3c %}
-  {% include '@LeonBsw/limbs/innocence.html.twig' %}
+  {% if limbs_innocence ?? true %}
+    {% include '@LeonBsw/limbs/innocence.html.twig' %}
+  {% endif %}
   <div class="{{ ['bsw-body', tpl_body_class ?? null]|filter(v => v)|join(' ') }}">
     <template>
-      {% include '@LeonBsw/limbs/init.html.twig' %}
+      {% if limbs_init ?? true %}
+        {% include '@LeonBsw/limbs/init.html.twig' %}
+      {% endif %}
       {{ (modal_html ?? null)|raw }}
       {% block body %}{% endblock %}
     </template>
