@@ -331,7 +331,7 @@ class BswInitCommand extends Command implements CommandInterface
                 'smtp_sender'                => 'smtp-sender@qq.com',
                 'smtp_secret'                => 'smtp-secret',
                 'component'                  => [],
-                'wx'                         => [
+                'wx_official'                => [
                     'app_id'        => 'app-id',
                     'secret'        => 'secret',
                     'token'         => 'CCUUSSTTOOMMEERR',
@@ -341,6 +341,13 @@ class BswInitCommand extends Command implements CommandInterface
                         'scopes'   => ['snsapi_userinfo'],
                         'callback' => '/wx/oauth',
                     ],
+                ],
+                'wx_payment'                 => [
+                    'app_id'    => 'app-id',
+                    'mch_id'    => 'mch-id',
+                    'key'       => 'key-for-signature',
+                    'cert_path' => 'path/to/your/cert.pem',
+                    'key_path'  => 'path/to/your/key',
                 ],
                 'cnf'                        => [
                     'app_logo'              => '/img/logo.svg',

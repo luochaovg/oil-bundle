@@ -70,7 +70,7 @@ parameters:
     smtp_sender: smtp-sender@mail.com
     smtp_secret: smtp-secret
 
-    wx:
+    wx_official:
         app_id: app-id
         secret: secret
         token: CCUUSSTTOOMMEERR
@@ -79,6 +79,13 @@ parameters:
         oauth:
             scopes: [ snsapi_userinfo ]
             callback: /wx/oauth
+
+    wx_payment:
+        app_id: app-id
+        mch_id: mch-id
+        key: key-for-signature
+        cert_path: path/to/your/cert.pem
+        key_path: path/to/your/key
 
     bsw_component:
         Leon\BswBundle\Component\Aes:

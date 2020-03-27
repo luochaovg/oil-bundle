@@ -628,24 +628,29 @@ class Module extends Bsw
          */
         $multiple = false;
         $recordList = [$record];
+        $recordCleanList = [$recordClean];
 
         if (isset($record[$multipleField])) {
             $multiple = true;
-            $recordList = [];
+            $recordList = $recordCleanList = [];
             foreach ($record[$multipleField] as $item) {
                 $record[$multipleField] = $item;
                 array_push($recordList, $record);
+            }
+            foreach ($recordClean[$multipleField] as $item) {
+                $recordClean[$multipleField] = $item;
+                array_push($recordCleanList, $recordClean);
             }
         }
 
         /**
          * Handler by validator type
          */
-        foreach ($recordList as &$item) {
+        foreach ($recordList as $key => $item) {
             foreach ($item as $field => $value) {
 
                 if (!$annotation[$field]['html']) {
-                    $value = $recordClean[$field];
+                    $value = $recordCleanList[$key][$field];
                 }
 
                 /**
@@ -653,9 +658,9 @@ class Module extends Bsw
                  */
                 $type = $annotation[$field]['validatorType'];
                 if (strpos($type, 'int') !== false) {
-                    $item[$field] = intval($value);
+                    $recordList[$key][$field] = intval($value);
                 } elseif (!is_null($value)) {
-                    $item[$field] = strval($value);
+                    $recordList[$key][$field] = strval($value);
                 }
             }
         }

@@ -6,7 +6,8 @@ use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
 use EasyWeChat\Factory;
-use EasyWeChat\OfficialAccount\Application;
+use EasyWeChat\OfficialAccount\Application as WxOfficial;
+use EasyWeChat\Payment\Application as WxPayment;
 use Leon\BswBundle\Component\AwsSDK;
 use Leon\BswBundle\Component\Download;
 use Leon\BswBundle\Component\Helper;
@@ -1159,12 +1160,22 @@ trait Mixed
     }
 
     /**
-     * Get wechat instance
+     * Get wechat official account
      *
-     * @return Application
+     * @return WxOfficial
      */
-    public function weChat(): Application
+    public function wxOfficial(): WxOfficial
     {
-        return Factory::officialAccount($this->parameters('wx'));
+        return Factory::officialAccount($this->parameters('wx_official'));
+    }
+
+    /**
+     * Get wechat payment
+     *
+     * @return WxPayment
+     */
+    public function wxPayment(): WxPayment
+    {
+        return Factory::payment($this->parameters('wx_payment'));
     }
 }

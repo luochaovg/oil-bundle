@@ -63,7 +63,7 @@ trait WebResponse
                 'demo'  => '"warning"',
                 'notes' => 'Message classify for frontend',
             ],
-            'type' => [
+            'type'       => [
                 'key'   => 'type',
                 'demo'  => '"message"',
                 'notes' => 'Popup type for frontend',
@@ -105,7 +105,7 @@ trait WebResponse
         ?int $duration = null
     ): JsonResponse {
 
-        if (strpos($message, Abs::FLAG_SQL_ERROR) !== false) {
+        if (!$this->debug && strpos($message, Abs::FLAG_SQL_ERROR) !== false) {
             throw new Exception($message);
         }
 
