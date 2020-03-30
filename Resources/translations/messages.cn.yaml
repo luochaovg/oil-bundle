@@ -143,6 +143,10 @@ Filter expression is not support:         '高级搜索模式不存在'
 Value for filter expression is required:  '高级搜索对应值不能为空'
 The filter arguments is not enough:       '高级搜索对应参数不足'
 Prohibited in current country:            '当前区域受限'
+WeChat pay failed:                        '微信支付失败'
+Ali pay failed:                           '支付宝支付失败'
+Pay action failed:                        '支付操作失败'
+Refund amount so much:                    '退款金额超实付金额'
 
 # bsw validator
 

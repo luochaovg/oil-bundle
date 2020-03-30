@@ -1162,20 +1162,28 @@ trait Mixed
     /**
      * Get wechat official account
      *
+     * @param string $flag
+     *
      * @return WxOfficial
      */
-    public function wxOfficial(): WxOfficial
+    public function wxOfficial(string $flag = 'default'): WxOfficial
     {
-        return Factory::officialAccount($this->parameters('wx_official'));
+        return Factory::officialAccount($this->parameters("wx_official_{$flag}"));
     }
 
     /**
      * Get wechat payment
      *
+     * @param string    $flag
+     * @param bool|null $sandbox
+     *
      * @return WxPayment
      */
-    public function wxPayment(): WxPayment
+    public function wxPayment(string $flag = 'default', ?bool $sandbox = false): WxPayment
     {
-        return Factory::payment($this->parameters('wx_payment'));
+        $config = $this->parameters("wx_payment_{$flag}");
+        $sandbox = ['sandbox' => $sandbox ?? $this->debug];
+
+        return Factory::payment(array_merge($config, $sandbox));
     }
 }

@@ -237,6 +237,7 @@ class Abs
     const PAY_STATE_CLOSE     = 0;
     const PAY_STATE_WAIT_USER = 1;
     const PAY_STATE_WAIT_CALL = 2;
+    const PAY_STATE_ERROR     = 48;
     const PAY_STATE_FAIL      = 49;
     const PAY_STATE_DONE      = 50;
     const PAY_STATE_REFUND    = 51;
@@ -265,6 +266,15 @@ class Abs
     const USER_TYPE_MS       = 18;
     const USER_TYPE_MI       = 19;
     const USER_TYPE_DEVICE   = 99;
+
+    const BIND_THIRD_TO_PHONE  = 1;
+    const BIND_THIRD_TO_EMAIL  = 2;
+    const BIND_DEVICE_TO_PHONE = 3;
+    const BIND_DEVICE_TO_EMAIL = 4;
+    const BIND_PHONE_TO_THIRD  = 5;
+    const BIND_PHONE_TO_DEVICE = 6;
+    const BIND_EMAIL_TO_THIRD  = 7;
+    const BIND_EMAIL_TO_DEVICE = 8;
 
     const PERIOD_YEAR    = 1;
     const PERIOD_QUARTER = 2;
