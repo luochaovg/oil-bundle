@@ -95,6 +95,36 @@ trait Telegram
     }
 
     /**
+     * Fetch commands
+     *
+     * @param string $path
+     * @param string $namespace
+     *
+     * @return array
+     */
+    private function fetchCommands(string $path, string $namespace): array
+    {
+        $commands = [];
+        Helper::directoryIterator(
+            $path,
+            $commands,
+            function ($_, $item) use ($path,$namespace) {
+
+                if (!Helper::strEndWith($item, 'Command.php')) {
+                    return false;
+                }
+
+                $command = str_replace('.php', null, $item);
+                $command = "{$namespace}\\{$command}";
+
+                return new $command;
+            }
+        );
+
+        return $commands;
+    }
+
+    /**
      * TG机器人.设置指令
      *
      * @Route("/tg/cmd", name="app_tg_cmd", methods={"GET", "POST"})
@@ -111,25 +141,13 @@ trait Telegram
             return $args;
         }
 
-        $commands = [];
-        $bundlePath = $this->kernel->getBundle('LeonBswBundle')->getPath();
-        $telegramPath = "{$bundlePath}/Module/Telegram";
+        $bswPath = $this->kernel->getBundle('LeonBswBundle')->getPath();
+        $bswCommands = $this->fetchCommands("{$bswPath}/Module/Telegram", "Leon\\BswBundle\\Module\\Telegram");
 
-        Helper::directoryIterator(
-            $telegramPath,
-            $commands,
-            function ($_, $item) {
+        $appPath = $this->kernel->getProjectDir();
+        $appCommands = $this->fetchCommands("{$appPath}/src/Module/Telegram", "App\\Module\\Telegram");
 
-                if (!Helper::strEndWith($item, 'Command.php')) {
-                    return false;
-                }
-
-                $command = str_replace('.php', null, $item);
-                $command = "Leon\\BswBundle\\Module\\Telegram\\{$command}";
-
-                return new $command;
-            }
-        );
+        $commands = array_merge($bswCommands, $appCommands);
 
         /**
          * @var Api $telegram
