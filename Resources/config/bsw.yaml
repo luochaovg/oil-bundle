@@ -87,6 +87,11 @@ parameters:
         cert_path: path/to/your/cert.pem
         key_path: path/to/your/key
 
+    ali_payment_default:
+        app_id: app-id
+        ali_public_key: public-key-string
+        private_key: privaet-key-string
+
     bsw_component:
         Leon\BswBundle\Component\Aes:
             arguments: ['%aes_key%', '%aes_iv%', '%aes_method%']

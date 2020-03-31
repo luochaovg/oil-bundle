@@ -5,7 +5,9 @@ namespace Leon\BswBundle\Controller\Traits;
 use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
-use EasyWeChat\Factory;
+use EasyWeChat\Factory as WxFactory;
+use Yansongda\Pay\Gateways\Alipay;
+use Yansongda\Pay\Pay as WxAliPayment;
 use EasyWeChat\OfficialAccount\Application as WxOfficial;
 use EasyWeChat\Payment\Application as WxPayment;
 use Leon\BswBundle\Component\AwsSDK;
@@ -1168,22 +1170,38 @@ trait Mixed
      */
     public function wxOfficial(string $flag = 'default'): WxOfficial
     {
-        return Factory::officialAccount($this->parameters("wx_official_{$flag}"));
+        return WxFactory::officialAccount($this->parameters("wx_official_{$flag}"));
     }
 
     /**
      * Get wechat payment
      *
-     * @param string    $flag
-     * @param bool|null $sandbox
+     * @param string $flag
+     * @param bool   $sandbox
      *
      * @return WxPayment
      */
-    public function wxPayment(string $flag = 'default', ?bool $sandbox = false): WxPayment
+    public function wxPayment(string $flag = 'default', bool $sandbox = false): WxPayment
     {
         $config = $this->parameters("wx_payment_{$flag}");
-        $sandbox = ['sandbox' => $sandbox ?? $this->debug];
+        $sandbox = $sandbox ? ['sandbox' => true] : [];
 
-        return Factory::payment(array_merge($config, $sandbox));
+        return WxFactory::payment(array_merge($config, $sandbox));
+    }
+
+    /**
+     * Get ali payment
+     *
+     * @param string $flag
+     * @param bool   $sandbox
+     *
+     * @return Alipay
+     */
+    public function aliPayment(string $flag = 'default', bool $sandbox = false): Alipay
+    {
+        $config = $this->parameters("ali_payment_{$flag}");
+        $sandbox = $sandbox ? ['mode' => 'dev'] : [];
+
+        return WxAliPayment::alipay(array_merge($config, $sandbox));
     }
 }

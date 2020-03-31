@@ -286,6 +286,11 @@ class Abs
     const PERIOD_SECOND  = 8;
     const PERIOD_MS      = 9;
 
+    const WX_PAY_INSIDE = 'JSAPI';
+    const WX_PAY_QR     = 'NATIVE';
+    const WX_PAY_APP    = 'APP';
+    const WX_PAY_H5     = 'MWEB';
+
     const CLD_ALI   = 1;
     const CLD_TX    = 2;
     const CLD_AWS   = 3;

@@ -827,4 +827,14 @@ class Enum
         3 => 'Mission success',
         4 => 'Mission failed',
     ];
+
+    /**
+     * @const array 微信吊起支付方式
+     */
+    const WX_PAY_CLASSIFY = [
+        Abs::WX_PAY_INSIDE,
+        Abs::WX_PAY_QR,
+        Abs::WX_PAY_H5,
+        Abs::WX_PAY_APP,
+    ];
 }

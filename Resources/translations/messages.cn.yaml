@@ -1,4 +1,3 @@
-
 # bsw logic
 
 Uploaded file exceeds the php directive:  '上传文件大小超过后端限制'
@@ -147,6 +146,7 @@ WeChat pay failed:                        '微信支付失败'
 Ali pay failed:                           '支付宝支付失败'
 Pay action failed:                        '支付操作失败'
 Refund amount so much:                    '退款金额超实付金额'
+Refunded in full:                         '已全额退款'
 
 # bsw validator
 
@@ -234,4 +234,6 @@ Truncate:                                 '截断'
 '{{ field }} Must be id string split by comma':                 '{{ field }}必须为ID字串，多个用逗号分隔'
 '{{ field }} Must be endpoint string':                          '{{ field }}必须为Endpoint字符串，格式(ip:port)'
 '{{ field }} Must be ip address':                               '{{ field }}必须为合法的IP地址'
-'Welcome {{ user }}, today is {{ today }}':                     '欢迎 {{ user }}，今天是 {{ today }}'
+
+'Welcome {{ user }}, today is {{ today }}':                         '欢迎 {{ user }}，今天是 {{ today }}'
+'Purchase refunded {{ already }}, max refund amount {{ surplus }}': '订单已退款 {{ already }}, 本次最高可申请 {{ surplus }}'

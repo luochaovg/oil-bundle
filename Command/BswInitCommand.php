@@ -349,6 +349,11 @@ class BswInitCommand extends Command implements CommandInterface
                     'cert_path' => 'path/to/your/cert.pem',
                     'key_path'  => 'path/to/your/key',
                 ],
+                'ali_payment_default'        => [
+                    'app_id'         => 'app-id',
+                    'ali_public_key' => 'public-key-string',
+                    'private_key'    => 'private-key-string',
+                ],
                 'cnf'                        => [
                     'app_logo'              => '/img/logo.svg',
                     'app_ico'               => '/img/favicon.ico',
