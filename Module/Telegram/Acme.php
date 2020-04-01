@@ -3,6 +3,8 @@
 namespace Leon\BswBundle\Module\Telegram;
 
 use Telegram\Bot\Commands\Command;
+use Envms\FluentPDO\Query as MysqlClient;
+use PDO;
 
 abstract class Acme extends Command
 {
@@ -14,14 +16,23 @@ abstract class Acme extends Command
         return explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
     }
 
-    public function pdo() {
+    /**
+     * @return MysqlClient
+     */
+    public function pdo(): MysqlClient
+    {
+        $cnf = parse_url($_ENV['DATABASE_URL']);
+        $dbname = trim($cnf['path'], '/');
+
         $pdo = new PDO(
-            "mysql:dbname={$cnf['dbname']};host={$cnf['host']};port={$cnf['port']}",
+            "mysql:dbname={$dbname};host={$cnf['host']};port={$cnf['port']}",
             $cnf['user'],
-            $cnf['password']
+            $cnf['pass']
         );
 
-        $fluent = new Query($pdo);
+        $fluent = new MysqlClient($pdo);
         $fluent->exceptionOnError = true;
+
+        return $fluent;
     }
 }
