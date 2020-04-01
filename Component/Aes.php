@@ -81,7 +81,7 @@ class Aes
      */
     public function PKCSUnPadding(string $text): string
     {
-        $pad = ord($text[strlen($text) - 1]);
+        $pad = ord($text{strlen($text) - 1});
 
         if ($pad > strlen($text)) {
             return false;

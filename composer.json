@@ -62,8 +62,7 @@
     "phpmailer/phpmailer": "^6.0",
     "kriswallsmith/buzz": "^1.0",
     "mailgun/mailgun-php": "^3.0",
-    "nyholm/psr7": "^1.2",
-    "yansongda/pay": "^2.9"
+    "nyholm/psr7": "^1.2"
   },
   "config": {
     "preferred-install": {

@@ -59,9 +59,6 @@ p {
     border-radius: 2px;
     background-color: #e7f2fa;
     border-left: 4px solid #6ab0de;
-    font-size: 14px;
-    line-height: 1.8;
-    opacity: .8;
 }
 
 .tippy-popper p {

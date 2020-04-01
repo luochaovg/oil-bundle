@@ -394,7 +394,6 @@ class Enum
         Abs::PAY_STATE_CLOSE     => 'Order closure',
         Abs::PAY_STATE_WAIT_USER => 'Waiting payment',
         Abs::PAY_STATE_WAIT_CALL => 'Waiting callback',
-        Abs::PAY_STATE_ERROR     => 'Pay error',
         Abs::PAY_STATE_FAIL      => 'Pay fail',
         Abs::PAY_STATE_DONE      => 'Pay success',
         Abs::PAY_STATE_REFUND    => 'Order refund',
@@ -406,55 +405,6 @@ class Enum
     const USER_BASE_STATE = [
         Abs::CLOSE  => 'Frozen',
         Abs::NORMAL => 'Normal',
-    ];
-
-    /**
-     * @const array 快递平台
-     */
-    const EXPRESS_PLATFORM = [
-        1  => 'Express SF',
-        2  => 'Express SF fast',
-        3  => 'Express EMS normal',
-        4  => 'Express YuanTong',
-        5  => 'Express ZhongTong',
-        6  => 'Express ShenTong',
-        7  => 'Express ZaiJiSong',
-        8  => 'Express DeBang',
-        9  => 'Express YunDa',
-        10 => 'Express JingDong',
-        11 => 'Express BaiShi',
-        12 => 'Express BaishiHuiTong',
-        13 => 'Express HuiTong',
-        14 => 'Express TianTian',
-        15 => 'Express LianHao',
-        16 => 'Express QuanFeng',
-        17 => 'Express QuanYi',
-        18 => 'Express SuEr',
-        19 => 'Express GuoTong',
-        20 => 'Express HuaQiang',
-        21 => 'Express ZhongTie',
-        22 => 'Express ZhongTie fast',
-        23 => 'Express HuaYu',
-        24 => 'Express UPS',
-        25 => 'Express FedEx',
-        26 => 'Express Panalpina',
-        27 => 'Express DHL',
-        28 => 'Express TNT',
-        29 => 'Express EMS',
-    ];
-
-    /**
-     * @const array 绑定类型
-     */
-    const BIND_TYPE = [
-        Abs::BIND_THIRD_TO_PHONE  => 'Third to phone',
-        Abs::BIND_THIRD_TO_EMAIL  => 'Third to email',
-        Abs::BIND_DEVICE_TO_PHONE => 'Device to phone',
-        Abs::BIND_DEVICE_TO_EMAIL => 'Device to email',
-        Abs::BIND_PHONE_TO_THIRD  => 'Phone to third',
-        Abs::BIND_PHONE_TO_DEVICE => 'Phone to device',
-        Abs::BIND_EMAIL_TO_THIRD  => 'Email to third',
-        Abs::BIND_EMAIL_TO_DEVICE => 'Email to device',
     ];
 
     /**
@@ -826,15 +776,5 @@ class Enum
         2 => 'Mission in progress',
         3 => 'Mission success',
         4 => 'Mission failed',
-    ];
-
-    /**
-     * @const array 微信吊起支付方式
-     */
-    const WX_PAY_CLASSIFY = [
-        Abs::WX_PAY_INSIDE,
-        Abs::WX_PAY_QR,
-        Abs::WX_PAY_H5,
-        Abs::WX_PAY_APP,
     ];
 }
