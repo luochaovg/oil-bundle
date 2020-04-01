@@ -106,7 +106,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
 
             @unlink($this->params->csv);
             fopen($this->params->csv, "w");
-            
+
             $instance->setCsvFile($this->params->csv);
         }
 
