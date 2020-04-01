@@ -4124,35 +4124,4 @@ class Helper
 
         return false;
     }
-
-    /**
-     * Load .evn file
-     *
-     * @param string $envFile
-     *
-     * @return int
-     */
-    public static function loadEnv(string $envFile): int
-    {
-        $count = 0;
-        $envs = file_get_contents($envFile);
-
-        foreach (explode("\n", $envs) as $env) {
-
-            $env = trim($env);
-            if (empty($env) || strpos($env, '#') === 0 || strpos($env, '=') === false) {
-                continue;
-            }
-
-            $index = strpos($env, '=');
-            $key = trim(substr($env, 0, $index));
-            $value = trim(substr($env, $index + 1));
-
-            putenv("{$key}={$value}");
-            $_ENV[$key] = $_SERVER[$key] = $value;
-            $count += 1;
-        }
-
-        return $count;
-    }
 }
