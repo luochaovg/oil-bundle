@@ -103,9 +103,10 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
             if (empty($this->params->csv)) {
                 $this->params->csv = Abs::TMP_PATH . '/' . time() . '.csv';
             }
-            if (!file_exists($this->params->csv)) {
-                fopen($this->params->csv, "w");
-            }
+
+            @unlink($this->params->csv);
+            fopen($this->params->csv, "w");
+            
             $instance->setCsvFile($this->params->csv);
         }
 
