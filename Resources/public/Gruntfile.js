@@ -5,7 +5,7 @@ module.exports = function (grunt) {
             common: {
                 options: {
                     sourceMap: true,
-                    sourceMapRootpath: '/public/dist/src-css'
+                    sourceMapRootpath: 'dist/src-css/'
                 },
                 files: [
                     {
