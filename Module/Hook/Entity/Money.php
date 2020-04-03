@@ -15,7 +15,7 @@ class Money extends MoneyStringify
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        $value /= self::REDOUBLE;
+        $value /= static::REDOUBLE;
 
         return Helper::numberFormat($value, 2);
     }

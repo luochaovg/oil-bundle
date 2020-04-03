@@ -16,13 +16,13 @@ class Timestamp extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        $filter = (($extraArgs['scene'] ?? false) === 'filter');
-        if ($filter && empty($value)) {
+        $scene = $extraArgs['scene'] ?? null;
+        if ($scene === 'filter' && empty($value)) {
             return null;
         }
 
-        if (empty($value) && !empty($extraArgs['empty'])) {
-            $value = $extraArgs['empty'];
+        if (empty($value) && !empty($extraArgs["{$scene}_empty"])) {
+            $value = $extraArgs["{$scene}_empty"];
         }
 
         return date(current($args) ?: Abs::FMT_FULL, $value);

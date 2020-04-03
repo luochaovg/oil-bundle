@@ -46,6 +46,10 @@ trait Message
      */
     public function pop(bool $needFlag = false)
     {
+        if ($this->message->isEmpty()) {
+            return null;
+        }
+
         $message = isset($this->message) ? $this->message->dequeue() : null;
         $flag = isset($this->messageFlag) ? $this->messageFlag->dequeue() : null;
 

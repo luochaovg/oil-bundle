@@ -840,12 +840,20 @@ class Helper
     /**
      * Print json code with format
      *
-     * @param mixed $json
+     * @param mixed  $json
+     * @param int    $tabBySpace
+     * @param string $split
+     * @param string $prefix
      *
      * @return string
      */
-    public static function formatPrintJson($json): string
-    {
+    public static function formatPrintJson(
+        $json,
+        int $tabBySpace = 2,
+        string $split = null,
+        string $prefix = null
+    ): string {
+
         if (is_array($json)) {
             $json = json_encode($json, JSON_UNESCAPED_UNICODE);
         }
@@ -853,8 +861,8 @@ class Helper
         $result = null;
         $pos = 0;
         $strLen = strlen($json);
-        $indentStr = self::enSpace(1, true);
-        $newLine = PHP_EOL;
+        $indentStr = self::enSpace(2);
+        $newLine = PHP_EOL . $prefix;
         $prevChar = null;
         $outOfQuotes = true;
 
@@ -892,7 +900,11 @@ class Helper
             $prevChar = $char;
         }
 
-        return $result;
+        if ($split) {
+            $result = str_replace(':', $split, $result);
+        }
+
+        return "{$prefix}{$result}";
     }
 
     /**
@@ -3361,6 +3373,27 @@ class Helper
     }
 
     /**
+     * Iteration array do something
+     *
+     * @param array    $target
+     * @param callable $handler
+     *
+     * @return array
+     */
+    public static function iterationArrayHandler(array $target, callable $handler): array
+    {
+        foreach ($target as $key => $item) {
+            if (is_iterable($item)) {
+                $target[$key] = self::iterationArrayHandler($item, $handler);
+            } else {
+                $target[$key] = call_user_func_array($handler, [$item, $key]);
+            }
+        }
+
+        return $target;
+    }
+
+    /**
      * N-dimension array to one
      *
      * @param array  $items
@@ -3396,14 +3429,35 @@ class Helper
     {
         $result = [];
         $build = function (&$target, $key, $value) use (&$build, $split) {
+
             if (empty($key)) {
                 return null;
             }
+
+            $md = false; // more-dimensional
             $_key = array_shift($key);
-            if (!isset($target[$_key])) {
-                $target[$_key] = empty($key) ? $value : [];
+
+            if (is_array($target)) {
+                $md = is_array(current($target));
+            } else {
+                if ($target == 'array[]' || $target == 'object[]') {
+                    $md = true;
+                    $target = [0 => []];
+                } else {
+                    $target = [];
+                }
             }
-            $build($target[$_key], $key, $value);
+
+            $item = &$target;
+            if ($md) {
+                $item = &$target[0];
+            }
+
+            if (!isset($item[$_key])) {
+                $item[$_key] = empty($key) ? $value : [];
+            }
+
+            $build($item[$_key], $key, $value);
         };
 
         foreach ($items as $key => $item) {

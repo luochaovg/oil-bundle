@@ -305,9 +305,7 @@ class Module extends Bsw
      */
     protected function getFilterData(array $annotation, array $hooks): array
     {
-        $extraArgs = [
-            '_acme' => ['scene' => $this->input->key],
-        ];
+        $extraArgs = ['_acme' => ['scene' => 'filter']];
 
         $filter = $this->web->getArgs($this->input->key) ?? [];
         $filter = Helper::numericValues($filter);

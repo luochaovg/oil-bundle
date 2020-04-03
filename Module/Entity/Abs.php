@@ -309,6 +309,7 @@ class Abs
     const REQ_GET    = 'GET';
     const REQ_POST   = 'POST';
     const REQ_PATCH  = 'PATCH';
+    const REQ_PUT    = 'PUT';
     const REQ_DELETE = 'DELETE';
     const REQ_HEAD   = 'HEAD';
     const REQ_ALL    = 'GET|POST|HEAD';

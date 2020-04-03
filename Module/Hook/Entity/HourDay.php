@@ -20,7 +20,7 @@ class HourDay extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        return $value / self::REDOUBLE;
+        return $value / static::REDOUBLE;
     }
 
     /**
@@ -32,6 +32,6 @@ class HourDay extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
-        return $value * self::REDOUBLE;
+        return $value * static::REDOUBLE;
     }
 }

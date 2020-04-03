@@ -151,7 +151,7 @@ class BswBackendController extends BswWebController
                     'trans' => $this->translator,
                 ],
                 Timestamp::class => [
-                    'empty' => time(),
+                    'persistence_newly_empty' => time(),
                 ],
             ],
             $args

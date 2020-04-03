@@ -409,9 +409,10 @@ class Module extends Bsw
         }
 
         $persistence = !empty($this->input->submit);
+        $extraArgs = ['_acme' => ['scene' => 'persistence_' . ($this->input->id ? 'modify' : 'newly')]];
 
         $original = $record;
-        $record = $this->web->hooker($hooks, $record, $persistence, $before, $after);
+        $record = $this->web->hooker($hooks, $record, $persistence, $before, $after, $extraArgs);
         $hooked = $record;
 
         if ($persistence) {

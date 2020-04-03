@@ -643,7 +643,7 @@ abstract class BswWebController extends AbstractController
             $json = $this->parameters('json');
             [$cls, $fn] = $this->getMCM('-');
             $getArgs = $this->getArgs();
-
+            
             $scaffold = [
                 'cnf'    => $this->cnf,
                 'usr'    => $this->usr,

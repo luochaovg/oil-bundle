@@ -15,6 +15,19 @@ use stdClass;
 trait EntityHint
 {
     /**
+     * Relation with keyword
+     *
+     * @param string $name
+     * @param array  $keywords
+     *
+     * @return bool
+     */
+    public static function relationWithKeyword(string $name, string $keyword)
+    {
+        return ($name === $keyword) || (strpos($name, "{$keyword}_") === 0) || Helper::strEndWith($name, "_{$keyword}");
+    }
+
+    /**
      * Entity preview hint
      *
      * @param object   $item
@@ -100,8 +113,7 @@ trait EntityHint
 
         // hook Timestamp
         if (
-            strpos($item->name, '_time') !== false &&
-            strpos($item->name, '_times') == false &&
+            (static::relationWithKeyword($item->name, 'time') || static::relationWithKeyword($item->name, 'period')) &&
             strpos($item->type, 'int') !== false
         ) {
             $options->hook[] = 'BswHook\\Timestamp::class';
@@ -136,15 +148,15 @@ trait EntityHint
 
         $needMoneyHook = false;
 
-        foreach (['money', 'amount', 'paid', 'cost'] as $keyword) {
-            if (strpos($item->name, $keyword) !== false) {
+        foreach (['money', 'amount', 'paid', 'cost', 'price'] as $keyword) {
+            if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = true;
                 break;
             }
         }
 
         foreach (['score', 'percent', 'times', 'count'] as $keyword) {
-            if (strpos($item->name, $keyword) !== false) {
+            if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = false;
                 unset($options->enum);
                 break;
@@ -254,8 +266,7 @@ trait EntityHint
 
         // hook Timestamp
         if (
-            strpos($item->name, '_time') !== false &&
-            strpos($item->name, '_times') == false &&
+            (static::relationWithKeyword($item->name, 'time') || static::relationWithKeyword($item->name, 'period')) &&
             strpos($item->type, 'int') !== false
         ) {
             $options->hook[] = 'BswHook\\Timestamp::class';
@@ -279,15 +290,15 @@ trait EntityHint
 
         $needMoneyHook = false;
 
-        foreach (['money', 'amount', 'paid', 'cost'] as $keyword) {
-            if (strpos($item->name, $keyword) !== false) {
+        foreach (['money', 'amount', 'paid', 'cost', 'price'] as $keyword) {
+            if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = true;
                 break;
             }
         }
 
         foreach (['score', 'percent', 'times', 'count'] as $keyword) {
-            if (strpos($item->name, $keyword) !== false) {
+            if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = false;
                 unset($options->enum);
                 break;
@@ -415,6 +426,8 @@ trait EntityHint
             'media_attachment_id',
             'screen_attachment_id',
             'tag_attachment_id',
+            'cover_attachment_id',
+            'photo_attachment_id',
         ];
 
         if (in_array($item->name, $imageFields)) {

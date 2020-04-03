@@ -168,7 +168,6 @@ class BswScaffoldCommand extends Command implements CommandInterface
         if (!empty($acme)) {
             $acme = trim($acme, '\\');
             $this->acme = strpos($acme, '\\') ? $acme : "{$this->namespace}\\{$acme}";
-
             if (!class_exists($this->acme)) {
                 throw new InvalidArgumentException("Acme controller {$this->acme} not exists");
             }

@@ -479,7 +479,7 @@ class BswInitCommand extends Command implements CommandInterface
 
             $output->write(Abs::ENTER);
 
-            $table = "{$schemePrefix}_{$table}";
+            $table = $schemePrefix ? "{$schemePrefix}_{$table}" : $table;
             $exists = $this->pdo()->fetchArray("SHOW TABLES WHERE Tables_in_{$database} = '{$table}'");
             $record = $exists && current($pdo->fetchArray("SELECT COUNT(*) FROM {$table}"));
             if (!$record || $params['scheme-force'] === 'yes') {

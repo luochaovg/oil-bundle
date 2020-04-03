@@ -21,7 +21,7 @@ class ByteMB extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        return Helper::numberFormat($value / self::REDOUBLE, 2);
+        return Helper::numberFormat($value / static::REDOUBLE, 2);
     }
 
     /**
@@ -33,6 +33,6 @@ class ByteMB extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
-        return $value * self::REDOUBLE;
+        return $value * static::REDOUBLE;
     }
 }

@@ -9,7 +9,7 @@ class ErrorAliPay extends Error
     /**
      * @const int
      */
-    const CODE = 4962;
+    const CODE = 4963;
 
     /**
      * @var string

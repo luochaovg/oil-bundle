@@ -15,7 +15,7 @@ class RateStringify extends MoneyStringify
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        $value /= self::REDOUBLE;
+        $value /= static::REDOUBLE;
         $tpl = $extraArgs['tpl'] ?? '%.2f %%';
 
         return sprintf($tpl, Helper::numberFormat($value, 2));

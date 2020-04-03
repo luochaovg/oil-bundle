@@ -9,7 +9,7 @@ class ErrorWxPay extends Error
     /**
      * @const int
      */
-    const CODE = 4961;
+    const CODE = 4962;
 
     /**
      * @var string

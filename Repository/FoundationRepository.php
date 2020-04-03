@@ -8,6 +8,7 @@ use Leon\BswBundle\Entity\FoundationEntity;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use Leon\BswBundle\Module\Exception\EntityException;
+use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Traits as MT;
 use Doctrine\ORM\AbstractQuery;
@@ -185,26 +186,28 @@ abstract class FoundationRepository extends SFRepository
      * @param ConstraintViolationListInterface $error
      * @param int                              $index
      *
-     * @return string
+     * @return array
      */
-    protected function error(ConstraintViolationListInterface $error, int $index = 0): string
+    protected function error(ConstraintViolationListInterface $error, int $index = 0): array
     {
-        $fields = $error->get($index)->getPropertyPath();
-        $fields = Helper::stringToArray($fields);
+        $message = $error->get($index)->getMessage();
+        $_message = $this->translator->trans($message, [], 'messages');
 
-        foreach ($fields as $key => $field) {
+        $fields = $error->get($index)->getPropertyPath();
+        $fields = $_fields = Helper::stringToArray($fields);
+
+        foreach ($_fields as $key => $field) {
             $field = Helper::stringToLabel($field);
             $field = $this->translator->trans($field, [], 'fields');
-            $fields[$key] = $field;
+            $_fields[$key] = $field;
         }
 
         $fields = implode(', ', $fields);
-        $message = $error->get($index)->getMessage();
-        $message = $this->translator->trans($message, [], 'messages');
+        $_fields = implode(', ', $_fields);
 
-        $this->logger->error("Persistence error with field `{$fields}` in {$this->entity}, {$message}");
+        $this->logger->error("Persistence error with field `{$fields}` in {$this->entity}, {$message}, {$_message}");
 
-        return "{$message} ({$fields})";
+        return ["{$_message} ({$_fields})", "{$message} ({$fields})"];
     }
 
     /**
@@ -224,7 +227,7 @@ abstract class FoundationRepository extends SFRepository
         // validator
         $error = $this->validator->validate($entity, null, $group);
         if (count($error)) {
-            return $this->push($this->error($error), ValidatorException::class);
+            return $this->push(...$this->error($error));
         }
 
         $em = $this->em();
@@ -235,7 +238,7 @@ abstract class FoundationRepository extends SFRepository
             $em->flush();
             $em->clear();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage());
+            return $this->push($e->getMessage(), 'persistence');
         }
 
         return $entity->{$this->pk};
@@ -279,7 +282,11 @@ abstract class FoundationRepository extends SFRepository
             $this->logger->warning("Transactional process failed, {$message}");
 
             if ($error instanceof ValidatorException) {
-                return $this->push($error->getMessage(), ValidatorException::class);
+                return $this->push($error->getMessage(), 'rollback.validator');
+            }
+
+            if ($error instanceof LogicException) {
+                return $this->push($error->getMessage(), "rollback.{$error->getCode()}");
             }
 
             if ($throw) {
@@ -332,7 +339,8 @@ abstract class FoundationRepository extends SFRepository
                     // validator
                     $error = $this->validator->validate($entity, null, [Abs::VG_NEWLY]);
                     if (count($error)) {
-                        throw new ValidatorException($this->error($error));
+                        $error = $this->error($error);
+                        throw new ValidatorException(current($error));
                     }
 
                     $i++;
@@ -447,7 +455,8 @@ abstract class FoundationRepository extends SFRepository
                     // validator
                     $error = $this->validator->validate($entity, null, [Abs::VG_MODIFY]);
                     if (count($error)) {
-                        throw new ValidatorException($this->error($error));
+                        $error = $this->error($error);
+                        throw new ValidatorException(current($error));
                     }
 
                     $i++;
@@ -964,7 +973,7 @@ abstract class FoundationRepository extends SFRepository
         try {
             return $query->getResult();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage());
+            return $this->push($e->getMessage(), 'update');
         }
     }
 
@@ -984,7 +993,7 @@ abstract class FoundationRepository extends SFRepository
         try {
             return $query->getResult();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage());
+            return $this->push($e->getMessage(), 'delete');
         }
     }
 }

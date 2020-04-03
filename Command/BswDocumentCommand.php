@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 use ReflectionMethod;
+use stdClass;
 
 class BswDocumentCommand extends Command implements CommandInterface
 {
@@ -64,6 +65,16 @@ class BswDocumentCommand extends Command implements CommandInterface
     private $lang;
 
     /**
+     * @var bool
+     */
+    private $jsonStrict;
+
+    /**
+     * @var array
+     */
+    private $routeStart = [];
+
+    /**
      * @return array
      */
     public function args(): array
@@ -72,6 +83,8 @@ class BswDocumentCommand extends Command implements CommandInterface
             'host-api'    => [null, InputOption::VALUE_OPTIONAL, 'Host for api'],
             'host-analog' => [null, InputOption::VALUE_OPTIONAL, 'Host for analog'],
             'lang'        => [null, InputOption::VALUE_OPTIONAL, 'Language for document', 'cn'],
+            'json-strict' => [null, InputOption::VALUE_OPTIONAL, 'Strict json response', 'yes'],
+            'route-start' => [null, InputOption::VALUE_OPTIONAL, 'Just route start with collect', 'api'],
         ];
     }
 
@@ -111,6 +124,8 @@ class BswDocumentCommand extends Command implements CommandInterface
         $this->hostApi = $params['host-api'];
         $this->hostAnalog = $params['host-analog'];
         $this->lang = $params['lang'];
+        $this->jsonStrict = $params['json-strict'] === 'yes';
+        $this->routeStart = Helper::stringToArray($params['route-start'] ?? '');
 
         $route = $this->web->getRouteCollection();
         $this->buildRstFile($route);
@@ -138,6 +153,11 @@ class BswDocumentCommand extends Command implements CommandInterface
 
         $list = [];
         foreach ($route as $item) {
+            foreach ($this->routeStart as $pos) {
+                if (strpos($item['route'], $pos) !== 0) {
+                    continue 2;
+                }
+            }
             $list[md5($item['class'])][] = $item;
         }
 
@@ -167,6 +187,7 @@ class BswDocumentCommand extends Command implements CommandInterface
         $moduleIndex = null;
         $moduleIndex .= "{$this->indent}/rst/api_request{$n}";
         $moduleIndex .= "{$this->indent}/rst/api_response{$n}";
+
         foreach ($list as $module => $api) {
             $moduleIndex .= "{$this->indent}{$this->source}/{$module}{$n}";
             $this->buildApiRstFile("{$this->path}/{$this->source}/{$module}.rst", $api);
@@ -355,7 +376,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             if (empty($input) && empty($api['param'])) {
 
                 // no input (warning)
-                $append(".. warning::");
+                $append(".. note::");
                 if (!empty($lr = $api['license-request'])) {
                     $n = count($lr) > 1;
                     foreach ($lr as $lc) {
@@ -450,7 +471,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                             /**
                              * @var Validator $validator
                              */
-                            list($fn, $arg, $validator) = array_values($rule);
+                            [$fn, $arg, $validator] = array_values($rule);
 
                             if (!$validator) {
                                 $required = false;
@@ -550,96 +571,142 @@ class BswDocumentCommand extends Command implements CommandInterface
 
             // output
             $property = $this->web->getOutputAnnotation($api['class'], $api['method']);
-            if (!$property) {
-                // no output (warning)
-                $append(".. warning::");
-                if (!empty($lr = $api['license-response'])) {
-                    $n = count($lr) > 1;
-                    foreach ($lr as $lc) {
-                        $prefix = $n ? '- ' : null;
-                        $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
-                    }
-                } else {
-                    $append($this->lang('Without response params'), 2, 1);
+
+            if (!empty($lr = $api['license-response'])) {
+                $append(".. note::");
+                $n = count($lr) > 1;
+                foreach ($lr as $lc) {
+                    $prefix = $n ? '- ' : null;
+                    $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
                 }
-            } else {
+            }
 
-                // output params (table)
-                $_property = [];
-                foreach ($property as $name => $item) {
-                    $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? self::TAG_TREE : null);
-                    $item['field'] = current(array_reverse(explode('.', $name)));
-                    $item['label'] = $item['label'] ?? $item['field'];
-                    $_property[$name] = $item;
+            // output params (table)
+            $_property = [];
+            foreach ($property as $name => $item) {
+                $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? self::TAG_TREE : null);
+                $item['field'] = current(array_reverse(explode('.', $name)));
+                $item['label'] = $item['label'] ?? $item['field'];
+                $_property[$name] = $item;
+            }
+
+            $propertyIndent = 0;
+            $propertyList = [];
+
+            foreach ($property = $_property as $name => $item) {
+
+                if ($item['field'] === '__line__') {
+                    $item['field'] = $item['type'] = self::TAG_LINE;
+                    $item['label'] = "**{$item['label']}**";
+                    $item['trans'] = false;
                 }
 
-                $propertyIndent = 0;
-                $propertyList = [];
-
-                foreach ($property = $_property as $name => $item) {
-
-                    if ($item['field'] === '__line__') {
-                        $item['field'] = $item['type'] = self::TAG_LINE;
-                        $item['label'] = "**{$item['label']}**";
-                        $item['trans'] = false;
-                    }
-
-                    $label = $item['label'];
-                    if ($item['trans']) {
-                        $label = Helper::stringToLabel($label);
-                        $label = $this->lang($label, 'fields');
-                    }
-                    $label = Helper::docVarReplace($label, $docFlag);
-                    $enumDocument = $this->enumDocument($item['enum']);
-                    $indent = $this->indent($propertyIndent + 3);
-                    $type = $item['type'];
-                    $propertyList[] = [
-                        "{$item['indent']}{$item['field']}",
-                        strpos($type, self::TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
-                        "{$item['indent']}{$label} {$enumDocument}",
-                    ];
+                $label = $item['label'];
+                if ($item['trans']) {
+                    $label = Helper::stringToLabel($label);
+                    $label = $this->lang($label, 'fields');
                 }
-                $appendTable(['Name' => 30, 'Type' => 20, 'Description' => 50], $propertyList, $propertyIndent);
-
-                // response params demo
-                $append($this->lang('Response params demo'));
-                $append($lineTitle, 2);
-                $append(".. code:: console", 2);
-
-                $setsTypeMap = [
-                    'object'   => ['begin' => '{', 'end' => '}'],
-                    'object[]' => ['begin' => '[{', 'end' => '}]'],
+                $label = Helper::docVarReplace($label, $docFlag);
+                $enumDocument = $this->enumDocument($item['enum']);
+                $indent = $this->indent($propertyIndent + 3);
+                $type = $item['type'];
+                $propertyList[] = [
+                    "{$item['indent']}{$item['field']}",
+                    strpos($type, self::TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
+                    "{$item['indent']}{$label} {$enumDocument}",
                 ];
+            }
 
-                if (!isset($setsTypeMap[$setsType])) {
-                    throw new CommandException(
-                        "`{$setsType}` is invalid type, must in " . implode('、', array_keys($setsTypeMap))
-                    );
+            if ($property) {
+                $appendTable(['Name' => 30, 'Type' => 20, 'Description' => 50], $propertyList, $propertyIndent);
+            } else {
+                $append(".. note::");
+                $append($this->lang('Without response params in sets'), 2, 1);
+            }
+
+            // response params demo
+            $append($this->lang('Response params demo'));
+            $append($lineTitle, 2);
+            $append(".. code:: console", 2);
+
+            $setsTypeMap = [
+                'array'    => ['begin' => '[', 'end' => ']'],
+                'array[]'  => ['begin' => '[[', 'end' => ']]'],
+                'object[]' => ['begin' => '[{', 'end' => '}]'],
+                'object'   => ['begin' => '{', 'end' => '}'],
+            ];
+
+            if (!isset($setsTypeMap[$setsType])) {
+                throw new CommandException(
+                    "`{$setsType}` is invalid type, must in " . implode('、', array_keys($setsTypeMap))
+                );
+            }
+
+            if ($property) {
+                $setsEnd = $setsTypeMap[$setsType]['end'];
+                $setsEndHalf = null;
+            } else {
+                $setsEnd = null;
+                $setsEndHalf = $setsTypeMap[$setsType]['end'];
+            }
+
+            $docString = null;
+            $docKeys = [];
+            $docKeysArgs = [];
+            $maxKeyLen = $maxDemoLen = 0;
+            $fn = ($ajaxRequest ? Abs::FN_RESPONSE_KEYS_AJAX : Abs::FN_RESPONSE_KEYS);
+
+            if (method_exists($className, $fn)) {
+
+                $docKeys = call_user_func([$className, $fn]);
+                $docKeysArgs = Helper::dig($docKeys, 'args');
+
+                $maxKeyLen = max(Helper::arrayLength($docKeys, true, 'key')) + 3;
+                $maxDemoLen = max(Helper::arrayLength($docKeys, true, 'demo')) + 3;
+                $docKeys['data']['demo'] = $setsTypeMap[$setsType]['begin'];
+            }
+
+            if ($this->jsonStrict) {
+
+                $json = [];
+                $dataKey = null;
+
+                foreach ($docKeys as $k => $item) {
+                    if ($k == 'data') {
+                        $dataKey = $item['key'];
+                        $json[$dataKey] = [];
+                    } elseif ($k == 'message') {
+                        $json[$item['key']] = "Message by logic";
+                    } else {
+                        $json[$item['key']] = $item['demo'];
+                    }
                 }
 
-                if ($property) {
-                    $setsEnd = $setsTypeMap[$setsType]['end'];
-                    $setsEndHalf = null;
-                } else {
-                    $setsEnd = null;
-                    $setsEndHalf = $setsTypeMap[$setsType]['end'];
+                foreach ($property as $k => $item) {
+                    $json[$dataKey][$k] = $item['type'];
                 }
 
-                $docString = null;
-                $docKeys = [];
-                $docKeysArgs = [];
-                $maxKeyLen = $maxDemoLen = 0;
-                $fn = ($ajaxRequest ? Abs::FN_RESPONSE_KEYS_AJAX : Abs::FN_RESPONSE_KEYS);
+                $json[$dataKey] = Helper::oneDimension2n($json[$dataKey]);
+                $json[$dataKey] = Helper::iterationArrayHandler(
+                    $json[$dataKey],
+                    function ($item, $key) {
+                        if ($item == Abs::T_INT || $item == Abs::T_INTEGER) {
+                            $item = rand(0, 32);
+                        } elseif ($item == Abs::T_FLOAT || $item == Abs::T_DOUBLE) {
+                            $item = rand(0, 32 * 100) / 100;
+                        } elseif ($item == Abs::T_STRING) {
+                            $item = $this->lang(Helper::stringToLabel($key), 'fields');
+                        } else {
+                            $item = new stdClass();
+                        }
 
-                if (method_exists($className, $fn)) {
+                        return $item;
+                    }
+                );
 
-                    $docKeys = call_user_func([$className, $fn]);
-                    $docKeysArgs = Helper::dig($docKeys, 'args');
+                $append(Helper::formatPrintJson($json, 2, ': ', $this->indent()));
 
-                    $maxKeyLen = max(Helper::arrayLength($docKeys, true, 'key')) + 3;
-                    $maxDemoLen = max(Helper::arrayLength($docKeys, true, 'demo')) + 3;
-                    $docKeys['data']['demo'] = $setsTypeMap[$setsType]['begin'];
-                }
+            } else {
 
                 foreach ($docKeys as $k => $item) {
                     if (empty($item)) {

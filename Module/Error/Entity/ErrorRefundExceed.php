@@ -9,7 +9,7 @@ class ErrorRefundExceed extends Error
     /**
      * @const int
      */
-    const CODE = 4964;
+    const CODE = 4965;
 
     /**
      * @var string

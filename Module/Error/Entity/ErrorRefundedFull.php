@@ -9,7 +9,7 @@ class ErrorRefundedFull extends Error
     /**
      * @const int
      */
-    const CODE = 4965;
+    const CODE = 4966;
 
     /**
      * @var string

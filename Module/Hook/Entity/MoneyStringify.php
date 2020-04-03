@@ -21,7 +21,7 @@ class MoneyStringify extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        $value /= self::REDOUBLE;
+        $value /= static::REDOUBLE;
         $tpl = $extraArgs['tpl'] ?? '%s';
 
         return Helper::money($value, $tpl);
@@ -36,6 +36,6 @@ class MoneyStringify extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
-        return intval(bcmul(Helper::numericValue($value), self::REDOUBLE));
+        return intval(bcmul(Helper::numericValue($value), static::REDOUBLE));
     }
 }

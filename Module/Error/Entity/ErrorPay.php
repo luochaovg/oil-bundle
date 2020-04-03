@@ -9,7 +9,7 @@ class ErrorPay extends Error
     /**
      * @const int
      */
-    const CODE = 4963;
+    const CODE = 4964;
 
     /**
      * @var string
