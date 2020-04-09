@@ -103,11 +103,12 @@ trait WebCrumbs
      * Crumb changer
      *
      * @param string $title
+     * @param string $icon
      * @param int    $index
      *
      * @return bool
      */
-    public function crumbsChanger(string $title, int $index = null): bool
+    public function crumbsChanger(string $title, ?string $icon = null, int $index = null): bool
     {
         if (empty($this->crumbs)) {
             return false;
@@ -131,6 +132,9 @@ trait WebCrumbs
         }
 
         $crumb->setLabel($title);
+        if ($icon) {
+            $crumb->setIcon($icon);
+        }
 
         return true;
     }

@@ -38,10 +38,10 @@
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
         <a-button @click="filter_toggle" type="dashed">
           <span v-if="filter_expand">
-            {{ 'a:left'|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
+            {{ scaffold.cnf.icon_left|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
           </span>
           <span v-else>
-            {{ filter.textShow|trans({}, 'twig') }} {{ 'a:right'|icon|raw }}
+            {{ filter.textShow|trans({}, 'twig') }} {{ scaffold.cnf.icon_right|icon|raw }}
           </span>
         </a-button>
       </a-form-item>

@@ -14,11 +14,7 @@
   height: 100%;
   position: fixed;
   z-index: 1000;
-  background-color: #ffffff;
   letter-spacing: 3px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 }
 .bsw-page-loading span {
   position: absolute;

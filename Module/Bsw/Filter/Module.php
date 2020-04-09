@@ -462,7 +462,7 @@ class Module extends Bsw
             ];
         }
 
-        $submit = new Button('Search', $this->input->route, 'b:icon-search');
+        $submit = new Button('Search', $this->input->route, $this->input->cnf->icon_search);
         $submit->setAttributes(['bsw-method' => 'submit']);
 
         $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, []);

@@ -4,13 +4,13 @@
 {% block body %}
   <a-spin
     :spinning="spinning"
-    {% if scaffold.cnf.spinning_label is not empty %}
-      tip="{{ scaffold.cnf.spinning_label|trans({}, 'twig') }}"
+    {% if scaffold.cnf.loading_label is not empty %}
+      tip="{{ scaffold.cnf.loading_label|trans({}, 'twig') }}"
     {% endif %}
     size="large"
     wrapper-class-name="bsw-loading">
-    {% if scaffold.cnf.spinning_icon is not empty %}
-      <b-icon slot="indicator" type="{{ scaffold.cnf.spinning_icon }}" spin></b-icon>
+    {% if scaffold.cnf.icon_loading is not empty %}
+      {{ scaffold.cnf.icon_loading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
     {% endif %}
     <a-back-top></a-back-top>
     {% block content %}{% endblock %}

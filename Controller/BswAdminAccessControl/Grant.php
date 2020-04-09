@@ -117,6 +117,9 @@ trait Grant
         }
 
         $this->appendSrcJs('diy;layout/grant');
+        if ($target = $this->getArgs('target')) {
+            $this->crumbsChanger("%s ({$target})");
+        }
 
         /**
          * Grant role
@@ -131,7 +134,7 @@ trait Grant
             $id = $id > 0 ? $id : null;
             $routes = $form ? array_merge(...array_values($form)) : [];
 
-            list($disabled) = $this->disabled($id);
+            [$disabled] = $this->disabled($id);
             $routes = array_diff($routes, array_keys($disabled));
 
             /**
@@ -171,7 +174,7 @@ trait Grant
                 ->setRoute('app_bsw_admin_user_preview');
         };
 
-        list($disabled, $dress) = $this->disabled($id);
+        [$disabled, $dress] = $this->disabled($id);
 
         return $this->showPersistence(
             [

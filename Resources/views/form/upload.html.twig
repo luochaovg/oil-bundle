@@ -42,7 +42,7 @@
       ></a-table>
     </template>
     <a-button>
-      <a-icon type="upload"></a-icon>
+      {{ scaffold.cnf.icon_upload|icon|raw }}
       {{ form.buttonLabel|trans({}, 'twig') }}
     </a-button>
   </a-popover>

@@ -540,7 +540,7 @@ class Module extends Bsw
 
             if (in_array(JsonStringify::class, $item['hook'])) {
                 $button = (new Button('Verify JSON format'))
-                    ->setIcon('b:icon-assessedbadge')
+                    ->setIcon($this->input->cnf->icon_badge)
                     ->setType(Button::THEME_LINK)
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')

@@ -39,14 +39,14 @@ trait Preview
     public function previewOperates()
     {
         return [
-            (new Button('Encase', null, 'b:icon-similarproduct'))
+            (new Button('Encase', null, $this->cnf->icon_two_box))
                 ->setType(Button::THEME_DANGER)
                 ->setSelector(Abs::SELECTOR_CHECKBOX)
                 ->setRoute('app_bsw_admin_menu_multiple_encase')
                 ->setClick('multipleAction')
                 ->setConfirm($this->translator->trans('Are you sure')),
 
-            (new Button('Sure', null, 'b:icon-rfq'))
+            (new Button('Sure', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
                 ->setScene(Button::SCENE_IFRAME)
@@ -79,7 +79,7 @@ trait Preview
                         'id'     => $current['id'],
                         'width'  => Abs::MEDIA_MIN,
                         'height' => 220,
-                        'title'  => $this->translator->trans('Sort record', [], 'twig'),
+                        'title'  => false,
                     ]
                 )
                 ->setClick('showIFrame'),

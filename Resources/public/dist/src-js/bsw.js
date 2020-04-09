@@ -344,7 +344,7 @@ $(function () {
             var options = {
                 visible: true,
                 width: data.width || size.width,
-                title: data.title || bsw.lang.please_select,
+                title: data.title === false ? data.title : data.title || bsw.lang.please_select,
                 centered: true,
                 wrapClassName: 'bsw-iframe-container',
                 content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'

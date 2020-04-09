@@ -85,6 +85,9 @@ trait Grant
         }
 
         $this->appendSrcJs('diy;layout/grant');
+        if ($target = $this->getArgs('target')) {
+            $this->crumbsChanger("%s ({$target})");
+        }
 
         /**
          * Grant role

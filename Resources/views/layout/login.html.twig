@@ -1,5 +1,9 @@
 {% extends '@LeonBsw/layout/empty.html.twig' %}
 
+{% block stylesheets %}
+  div.ant-spin-container {{ scaffold.cnf|image_style('login', true) }}
+{% endblock %}
+
 {% block content %}
   <div class="header">
     <a href="{{ void }}">
@@ -22,7 +26,7 @@
         placeholder="{{ account|trans({}, 'twig') }}"
         :size="size"
       >
-        <a-icon slot="prefix" type="user"></a-icon>
+        {{ scaffold.cnf.icon_user|icon(true, {}, {slot:'prefix'})|raw }}
       </a-input>
     </a-form-item>
     <a-form-item>
@@ -32,7 +36,7 @@
         placeholder="{{ password|trans({}, 'twig') }}"
         :size="size"
       >
-        <a-icon slot="prefix" type="lock"></a-icon>
+        {{ scaffold.cnf.icon_lock|icon(true, {}, {slot:'prefix'})|raw }}
       </a-input>
     </a-form-item>
     <a-form-item class="bsw-captcha-item">
@@ -41,7 +45,7 @@
         placeholder="{{ captcha|trans({}, 'twig') }}"
         :size="size"
       >
-        <b-icon slot="prefix" type="icon-yanzhengma1"></b-icon>
+        {{ scaffold.cnf.icon_captcha|icon(true, {}, {slot:'prefix'})|raw }}
       </a-input>
       <img class="bsw-captcha" src="{{ path(scaffold.cnf.route_captcha) }}">
     </a-form-item>
@@ -52,7 +56,7 @@
           placeholder="{{ google_captcha|trans({}, 'twig') }}"
           :size="size"
         >
-          <b-icon slot="prefix" type="icon-yanzhengma1"></b-icon>
+          {{ scaffold.cnf.icon_captcha|icon(true, {}, {slot:'prefix'})|raw }}
         </a-input>
       </a-form-item>
     {% endif %}

@@ -4,11 +4,6 @@
 </p>
 
 <!-- for loading vue -->
-<div
-  class="bsw-page-loading"
-  {% if scaffold.cnf.loading_background_image is not empty %}
-    style="background-image: url('{{ scaffold.cnf.loading_background_image }}')"
-  {% endif %}
->
+<div class="bsw-page-loading" style="{{ scaffold.cnf|image_style('loading') }}">
   <span>{{ 'Loading'|trans({}, 'twig') }}</span>
 </div>

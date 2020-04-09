@@ -1,6 +1,6 @@
 <a-modal
   v-model="modal.visible"
-  :title="modal.title || '{{ modal.title|trans({}, 'twig') }}'"
+  :title="modal.title === false ? '' : (modal.title || '{{ modal.title|trans({}, 'twig') }}')"
   :keyboard="false"
   :mask-closable="false"
   :destroy-on-close="true"

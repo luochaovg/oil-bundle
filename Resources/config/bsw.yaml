@@ -18,8 +18,8 @@ parameters:
     platform_sms: aws
     platform_email: aws
 
-    telegram_bot_token: ''
-    telegram_hooks_host: ''
+    telegram_bot_token: null
+    telegram_hooks_host: null
 
     backend_with_google_secret: true
     backend_with_ip_strict: true
@@ -31,6 +31,7 @@ parameters:
         - 172.17.0.0/16
         - 172.18.0.0/16
         - 172.19.0.0/16
+
     backend_maintain_alone: true
     backend_with_login_log: true
     backend_captcha_digit: 4
@@ -47,18 +48,18 @@ parameters:
 
     ali_key: ali-key
     ali_secret: ali-secret
-    ali_sms_key: ''
-    ali_sms_secret: ''
+    ali_sms_key: null
+    ali_sms_secret: null
     ali_sms_region: ali-sms-region
-    ali_oss_key: ''
-    ali_oss_secret: ''
+    ali_oss_key: null
+    ali_oss_secret: null
     ali_oss_bucket: ali-oss-bucket
     ali_oss_endpoint: ali-oss-endpoint
 
     tx_key: tx-key
     tx_secret: tx-secret
-    tx_sms_key: ''
-    tx_sms_secret: ''
+    tx_sms_key: null
+    tx_sms_secret: null
 
     aws_region: aws-region
     aws_key: aws-key
@@ -70,7 +71,7 @@ parameters:
     smtp_sender: smtp-sender@mail.com
     smtp_secret: smtp-secret
 
-    doctrine_prefix: ''
+    doctrine_prefix: null
 
     wx_official_default:
         app_id: app-id
@@ -149,12 +150,42 @@ parameters:
 
         app_online_date: '2019-07-01' # use string
         rm_local_file_when_oss: true
-        font_symbol: //at.alicdn.com/t/font_1199208_agya149chqt.js
-        loading_background_image: ''
-        spinning_icon: ''
-        spinning_label: ''
+        font_symbol: /bundles/leonbsw/font/iconfont/iconfont.js
+        loading_label: null
 
-        telegram_receiver_command_queue: ''
+        loading_background_image: null
+        loading_background_repeat: no-repeat
+        loading_background_color: rgba(255,255,255,1)
+        loading_background_position: center
+        loading_background_size: cover
+
+        login_background_image: /bundles/leonbsw/img/background.1.svg
+        login_background_repeat: no-repeat
+        login_background_color: rgba(240,242,245,1)
+        login_background_position: center
+        login_background_size: cover
+
+        icon_tag: b:icon-tag
+        icon_search: b:icon-search
+        icon_badge: b:icon-assessedbadge
+        icon_two_box: b:icon-similarproduct
+        icon_submit_form: b:icon-rfq
+        icon_theme: b:icon-theme
+        icon_bulb: a:bulb
+        icon_db: b:icon-jifen
+        icon_profile: a:profile
+        icon_logout: a:logout
+        icon_redis: b:icon-Redis
+        icon_upload: a:upload
+        icon_setting: a:setting
+        icon_user: a:user
+        icon_lock: a:lock
+        icon_captcha: b:icon-yanzhengma1
+        icon_left: a:left
+        icon_right: a:right
+        icon_loading: null
+
+        telegram_receiver_command_queue: null
 
     currency_code: CNY
     currency_char: ￥
@@ -185,6 +216,7 @@ parameters:
         import: b:icon-import1
         export: b:icon-export4
         sort: a:sort-descending
+        grant: b:icon-assessedbadge
 
     bsw_menus_same_current_map: []
 

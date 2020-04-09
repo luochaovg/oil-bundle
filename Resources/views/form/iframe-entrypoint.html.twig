@@ -4,5 +4,5 @@
     :disabled="{{ form.disabled ? 'true' : 'false' }}"
     bsw-data='{"location": "{{ path(form.previewRoute, form.previewArgs) }}"}'
     @click.navite="showIFrameByVue"
-  >{{ 'b:icon-tag'|icon|raw }} {{ form.buttonLabel|trans({}, 'twig') }}</a-button>
+  >{{ scaffold.cnf.icon_tag|icon|raw }} {{ form.buttonLabel|trans({}, 'twig') }}</a-button>
 {% endif %}

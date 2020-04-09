@@ -56,7 +56,7 @@ trait Preview
             (new Button('Grant authorization for role'))
                 ->setRoute('app_bsw_admin_role_access_control_grant')
                 ->setType(Button::THEME_DANGER)
-                ->setArgs(['id' => $current['id']]),
+                ->setArgs(['id' => $current['id'], 'target' => $current['name']]),
         ];
     }
 

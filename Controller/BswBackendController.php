@@ -281,8 +281,8 @@ class BswBackendController extends BswWebController
     public function moduleHeaderSetting(): array
     {
         return [
-            new Setting('Switch theme', 'b:icon-theme', 'themeSwitch'),
-            new Setting('Switch color weak', 'a:bulb', 'colorWeakSwitch'),
+            new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
+            new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
         ];
     }
 
@@ -300,9 +300,9 @@ class BswBackendController extends BswWebController
         }
 
         $links = [
-            new Links('Clean backend cache', 'b:icon-jifen', $this->cnf->route_clean_backend),
-            new Links('Profile', 'a:profile', $this->cnf->route_profile),
-            new Links('Logout', 'a:logout', $this->cnf->route_logout),
+            new Links('Clean backend cache', $this->cnf->icon_db, $this->cnf->route_clean_backend),
+            new Links('Profile', $this->cnf->icon_profile, $this->cnf->route_profile),
+            new Links('Logout', $this->cnf->icon_logout, $this->cnf->route_logout),
         ];
 
         if ($this->cnf->route_clean_frontend) {
@@ -312,7 +312,7 @@ class BswBackendController extends BswWebController
                 [
                     new Links(
                         'Clean frontend cache',
-                        'b:icon-Redis',
+                        $this->cnf->icon_redis,
                         $this->cnf->route_clean_frontend
                     ),
                 ]

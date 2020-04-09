@@ -22,6 +22,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('array_map_double', [Helper::class, 'arrayMapDouble']),
             new TwigFilter('icon', [$this, 'icon']),
             new TwigFilter('implode', [$this, 'implode']),
+            new TwigFilter('image_style', [$this, 'image_style']),
         ];
     }
 
@@ -31,10 +32,11 @@ class AppExtension extends AbstractExtension
      * @param string $icon
      * @param bool   $html
      * @param array  $class
+     * @param array  $queryArr
      *
      * @return string
      */
-    public static function icon(string $icon, bool $html = true, array $class = [])
+    public static function icon(string $icon, bool $html = true, array $class = [], array $queryArr = [])
     {
         $flag = 'a';
         $query = null;
@@ -57,6 +59,7 @@ class AppExtension extends AbstractExtension
             null,
             array_merge(
                 $query,
+                $queryArr,
                 [
                     'type'  => $icon,
                     'class' => $class,
@@ -76,5 +79,41 @@ class AppExtension extends AbstractExtension
     public static function implode(array $source, string $split = null): string
     {
         return implode($split, array_filter($source));
+    }
+
+    /**
+     * Image style
+     *
+     * @param array|object $config
+     * @param string       $flag
+     * @param bool         $boundary
+     *
+     * @return string
+     */
+    public static function image_style($config, string $flag, bool $boundary = false): string
+    {
+        $map = [
+            'image'    => 'url(%s) !important',
+            'repeat'   => '%s !important',
+            'color'    => '%s !important',
+            'position' => '%s !important',
+            'size'     => '%s !important',
+        ];
+
+        $attributes = [];
+        $config = (array)$config;
+
+        foreach ($map as $tag => $tpl) {
+            $key = "{$flag}_background_{$tag}";
+            if (!empty($config[$key])) {
+                $_key = "background-{$tag}";
+                $val = sprintf($tpl, $config[$key]);
+                array_push($attributes, "{$_key}: {$val}");
+            }
+        }
+
+        $attributes = implode('; ', $attributes);
+
+        return $boundary ? "{ {$attributes} }" : $attributes;
     }
 }
