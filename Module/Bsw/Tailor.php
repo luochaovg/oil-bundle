@@ -70,11 +70,47 @@ abstract class Tailor
     }
 
     /**
+     * @param string $salt
+     *
+     * @return string
+     */
+    protected function md1(string $salt): string
+    {
+        return substr(md5(strrev($salt)), 12, 6);
+    }
+
+    /**
      * @return mixed
      */
     protected function initial()
     {
         return null;
+    }
+
+    //
+    // == Filter ==
+    //
+
+    /**
+     * @param array $annotationExtra
+     * @param array $annotation
+     *
+     * @return array
+     */
+    public function tailorFilterAnnotation(array $annotationExtra, array $annotation): array
+    {
+        return $annotationExtra;
+    }
+
+    /**
+     * @param mixed $annotationExtra
+     * @param array $annotation
+     *
+     * @return mixed
+     */
+    public function tailorFilterAnnotationOnly($annotationExtra, array $annotation)
+    {
+        return $annotationExtra;
     }
 
     //
@@ -98,6 +134,17 @@ abstract class Tailor
      * @return array
      */
     public function tailorPreviewAnnotation(array $annotationExtra, array $annotation): array
+    {
+        return $annotationExtra;
+    }
+
+    /**
+     * @param mixed $annotationExtra
+     * @param array $annotation
+     *
+     * @return mixed
+     */
+    public function tailorPreviewAnnotationOnly($annotationExtra, array $annotation)
     {
         return $annotationExtra;
     }
@@ -159,6 +206,18 @@ abstract class Tailor
      * @return array
      */
     public function tailorPersistenceAnnotation(array $annotationExtra, array $annotation, int $id): array
+    {
+        return $annotationExtra;
+    }
+
+    /**
+     * @param mixed $annotationExtra
+     * @param array $annotation
+     * @param int   $id
+     *
+     * @return mixed
+     */
+    public function tailorPersistenceAnnotationOnly($annotationExtra, array $annotation, int $id)
     {
         return $annotationExtra;
     }

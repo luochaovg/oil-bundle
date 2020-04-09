@@ -5,7 +5,7 @@
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   size="{{ form.size }}"
-  :autosize="{ minRows: {{ form.minRows }}, maxRows: {{ form.maxRows }} }"
+  :auto-size="{ minRows: {{ form.minRows }}, maxRows: {{ form.maxRows }} }"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

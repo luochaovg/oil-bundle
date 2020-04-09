@@ -32,7 +32,7 @@ class Persistence extends Annotation
     /**
      * @var bool
      */
-    public $hide; // Has element but display none
+    public $hide; // Render to element but display none
 
     /**
      * @var string|array

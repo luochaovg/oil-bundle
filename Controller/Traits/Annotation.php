@@ -101,12 +101,28 @@ trait Annotation
                 $_list = [];
 
                 /**
+                 * @param string $position
+                 * @param array  $extra
+                 */
+                $merge = function (string $position, array $extra) use (&$_list) {
+                    if ($position == Abs::POS_BOTTOM) {
+                        $_list = array_merge($_list, $extra);
+                    } elseif ($position == Abs::POS_TOP) {
+                        $_list = array_merge($extra, $_list);
+                    } else {
+                        $_list = Helper::arrayInsertAssoc($_list, $position, $extra);
+                    }
+                };
+
+                /**
                  * @var Output $item
                  */
                 foreach ($list as $item) {
+
+                    $extra = [];
                     if (empty($item->extra)) {
                         $prefix = $item->prefix ? "{$item->prefix}." : null;
-                        $_list["{$prefix}{$item->field}"] = [
+                        $extra["{$prefix}{$item->field}"] = [
                             'type'   => $item->type,
                             'label'  => $item->label,
                             'trans'  => $item->trans,
@@ -114,6 +130,7 @@ trait Annotation
                             'enum'   => $item->enum,
                             'prefix' => $item->prefix,
                         ];
+                        $merge($item->position, $extra);
                         continue;
                     }
 
@@ -126,7 +143,6 @@ trait Annotation
                         continue;
                     }
 
-                    $extra = [];
                     $output = call_user_func([$class, $fn]) ?? [];
                     $item->tab = $item->tab ?? 0;
 
@@ -145,13 +161,7 @@ trait Annotation
                         $extra["{$prefix}{$field}"] = array_merge(['type' => Abs::T_STRING], $meta);
                     }
 
-                    if ($item->position == Abs::POS_BOTTOM) {
-                        $_list = array_merge($_list, $extra);
-                    } elseif ($item->position == Abs::POS_TOP) {
-                        $_list = array_merge($extra, $_list);
-                    } else {
-                        $_list = Helper::arrayInsertAssoc($_list, $item->position, $extra);
-                    }
+                    $merge($item->position, $extra);
                 }
 
                 return $_list;
@@ -163,20 +173,21 @@ trait Annotation
      * Preview annotation parse
      *
      * @param string $class
-     * @param string $enumClass
+     * @param array  $extraArgs
      * @param string $property
      *
      * @return array
      * @throws
      */
-    public function getPreviewAnnotation(string $class, string $enumClass, string $property = null): array
+    public function getPreviewAnnotation(string $class, array $extraArgs = [], string $property = null): array
     {
-        if (!Helper::extendClass($enumClass, Enum::class, true)) {
-            throw new AnnotationException("Enum class should extend " . Enum::class);
+        $enumClass = $extraArgs['enumClass'] ?? null;
+        if (!$enumClass || !Helper::extendClass($enumClass, Enum::class, true)) {
+            throw new AnnotationException("Enum class is required and should be extend " . Enum::class);
         }
 
         return $this->caching(
-            function () use ($class, $enumClass, $property) {
+            function () use ($class, $extraArgs, $property) {
 
                 $converter = $this->annotation(Preview::class);
                 $converter->setAnnotationClass(
@@ -186,7 +197,7 @@ trait Annotation
                     ]
                 );
 
-                $annotation = $converter->resolveProperty($class, $property, ['enumClass' => $enumClass]);
+                $annotation = $converter->resolveProperty($class, $property, $extraArgs);
                 $properties = [];
                 foreach ($annotation as $attribute => $item) {
                     if (empty($item[Preview::class])) {
@@ -204,20 +215,21 @@ trait Annotation
      * Persistence annotation parse
      *
      * @param string $class
-     * @param string $enumClass
+     * @param array  $extraArgs
      * @param string $property
      *
      * @return array
      * @throws
      */
-    public function getPersistenceAnnotation(string $class, string $enumClass, string $property = null): array
+    public function getPersistenceAnnotation(string $class, array $extraArgs = [], string $property = null): array
     {
-        if (!Helper::extendClass($enumClass, Enum::class, true)) {
-            throw new AnnotationException("Enum class should extend " . Enum::class);
+        $enumClass = $extraArgs['enumClass'] ?? null;
+        if (!$enumClass || !Helper::extendClass($enumClass, Enum::class, true)) {
+            throw new AnnotationException("Enum class is required and should be extend " . Enum::class);
         }
 
         return $this->caching(
-            function () use ($class, $enumClass, $property) {
+            function () use ($class, $extraArgs, $property) {
 
                 $converter = $this->annotation(Persistence::class);
                 $converter->setAnnotationClass(
@@ -226,7 +238,7 @@ trait Annotation
                     ]
                 );
 
-                $annotation = $converter->resolveProperty($class, $property, ['enumClass' => $enumClass]);
+                $annotation = $converter->resolveProperty($class, $property, $extraArgs);
                 $properties = [];
                 foreach ($annotation as $attribute => $item) {
                     if (empty($item[Persistence::class])) {
@@ -244,20 +256,21 @@ trait Annotation
      * Filter annotation parse
      *
      * @param string $class
-     * @param string $enumClass
+     * @param array  $extraArgs
      * @param string $property
      *
      * @return array
      * @throws
      */
-    public function getFilterAnnotation(string $class, string $enumClass, string $property = null): array
+    public function getFilterAnnotation(string $class, array $extraArgs = [], string $property = null): array
     {
-        if (!Helper::extendClass($enumClass, Enum::class, true)) {
-            throw new AnnotationException("Enum class should extend " . Enum::class);
+        $enumClass = $extraArgs['enumClass'] ?? null;
+        if (!$enumClass || !Helper::extendClass($enumClass, Enum::class, true)) {
+            throw new AnnotationException("Enum class is required and should be extend " . Enum::class);
         }
 
         return $this->caching(
-            function () use ($class, $enumClass, $property) {
+            function () use ($class, $extraArgs, $property) {
 
                 $converter = $this->annotation(Filter::class);
                 $converter->setAnnotationClass(
@@ -266,7 +279,7 @@ trait Annotation
                     ]
                 );
 
-                $annotation = $converter->resolveProperty($class, $property, ['enumClass' => $enumClass]);
+                $annotation = $converter->resolveProperty($class, $property, $extraArgs);
                 $properties = [];
                 foreach ($annotation as $attribute => $item) {
                     if (empty($item[Filter::class])) {
@@ -314,23 +327,24 @@ trait Annotation
      * Mixed annotation parse
      *
      * @param string $class
-     * @param string $enumClass
+     * @param array  $extraArgs
      * @param string $property
      *
      * @return array
      * @throws
      */
-    public function getMixedAnnotation(string $class, string $enumClass, string $property = null): array
+    public function getMixedAnnotation(string $class, array $extraArgs = [], string $property = null): array
     {
-        if (!Helper::extendClass($enumClass, Enum::class, true)) {
-            throw new AnnotationException("Enum class should extend " . Enum::class);
+        $enumClass = $extraArgs['enumClass'] ?? null;
+        if (!$enumClass || !Helper::extendClass($enumClass, Enum::class, true)) {
+            throw new AnnotationException("Enum class is required and should be extend " . Enum::class);
         }
 
         return $this->caching(
-            function () use ($class, $enumClass, $property) {
+            function () use ($class, $extraArgs, $property) {
 
                 $converter = $this->annotation(MixedAnnotation::class);
-                $annotation = $converter->resolveProperty($class, $property, ['enumClass' => $enumClass]);
+                $annotation = $converter->resolveProperty($class, $property, $extraArgs);
                 $properties = [];
 
                 foreach ($annotation as $attribute => $item) {

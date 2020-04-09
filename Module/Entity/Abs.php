@@ -26,16 +26,18 @@ class Abs
     const PERSISTENCE_TOTAL_COLUMN = 24;
     const PERSISTENCE_LABEL_COLUMN = 4;
 
-    const BEGIN_REQUEST = 'Begin request';
-    const BEGIN_VALID   = 'Begin valid';
-    const BEGIN_LOGIC   = 'Begin logic';
-    const BEGIN_API     = 'Begin third api';
-    const BEGIN_INIT    = 'Begin init';
-    const END_REQUEST   = 'End request';
-    const END_VALID     = 'End valid';
-    const END_LOGIC     = 'End logic';
-    const END_API       = 'End third api';
-    const END_INIT      = 'End init';
+    const BEGIN_REQUEST   = 'Begin request';
+    const BEGIN_CONSTRUCT = 'Begin construct';
+    const END_CONSTRUCT   = 'End construct';
+    const BEGIN_INIT      = 'Begin init';
+    const END_INIT        = 'End init';
+    const BEGIN_LOGIC     = 'Begin logic';
+    const BEGIN_VALID     = 'Begin valid';
+    const END_VALID       = 'End valid';
+    const END_LOGIC       = 'End logic';
+    const END_REQUEST     = 'End request';
+    const BEGIN_API       = 'Begin third api';
+    const END_API         = 'End third api';
 
     const TAG_MESSAGE     = 'message';
     const TAG_TIPS        = 'tips';
@@ -145,6 +147,7 @@ class Abs
     const AUTO                 = 'auto';
     const VERIFY_JSON          = 'http://www.bejson.com/kim.htm';
 
+    const MEDIA_MIN = 375;
     const MEDIA_XS  = 575;
     const MEDIA_SM  = 576;
     const MEDIA_MD  = 768;
@@ -510,7 +513,7 @@ class Abs
     const RENDER_CODE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 图标模板
-    const RENDER_ICON = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}.substring(0, 1) == \"a\"' :type='{:value}.substring(2)'></a-icon><b-icon v-else :type='{:value}.substring(2)'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_ICON = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}[0] == \"a\"' :type='{:value}.split(\":\")[1]'></a-icon><b-icon v-else :type='{:value}.split(\":\")[1]'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
 
     // 禁用状态模板
     const RENDER_DISABLE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";

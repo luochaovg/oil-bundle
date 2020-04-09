@@ -870,13 +870,17 @@ class Helper
 
             // Grab the next character in the string.
             $char = substr($json, $i, 1);
+            $nextChar = substr($json, $i + 1, 1);
+
             // Are we inside a quoted string?
             if ($char == '"' && $prevChar != '\\') {
                 $outOfQuotes = !$outOfQuotes;
-                // If this character is the end of an element,
-                // output a new line and indent the next line.
             } else {
-                if (($char == '}' || $char == ']') && $outOfQuotes) {
+
+                $aScene = ($char == '}' && $prevChar != '{');
+                $bScene = ($char == ']' && $prevChar != '[');
+
+                if (($aScene || $bScene) && $outOfQuotes) {
                     $result .= $newLine;
                     $pos--;
                     for ($j = 0; $j < $pos; $j++) {
@@ -884,11 +888,14 @@ class Helper
                     }
                 }
             }
+
             // Add the character to the result string.
             $result .= $char;
-            // If the last character was the beginning of an element,
-            // output a new line and indent the next line.
-            if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes) {
+
+            $aScene = ($char == '{' && $nextChar != '}');
+            $bScene = ($char == '[' && $nextChar != ']');
+
+            if (($char == ',' || $aScene || $bScene) && $outOfQuotes) {
                 $result .= $newLine;
                 if ($char == '{' || $char == '[') {
                     $pos++;
@@ -4208,5 +4215,21 @@ class Helper
         }
 
         return $count;
+    }
+
+    /**
+     * Table prefix handler
+     *
+     * @param string $prefix
+     * @param bool   $upper
+     *
+     * @return string
+     */
+    public static function tablePrefixHandler(string $prefix, bool $upper = false): string
+    {
+        $prefix = rtrim($prefix, '_');
+        $prefix = self::camelToUnder($prefix) . '_';
+        
+        return $upper ? strtoupper($prefix) : $prefix;
     }
 }

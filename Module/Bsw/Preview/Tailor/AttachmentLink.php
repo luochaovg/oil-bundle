@@ -96,9 +96,9 @@ class AttachmentLink extends Tailor
 
             if (!empty($item[$this->alias])) {
                 if (!empty($item['md5'])) {
-                    $item[$this->alias] .= "?" . md5($item['md5']);
+                    $item[$this->alias] .= "?" . $this->md1($item['md5']);
                 } elseif (!empty($item['sha1'])) {
-                    $item[$this->alias] .= "?" . md5($item['sha1']);
+                    $item[$this->alias] .= "?" . $this->md1($item['sha1']);
                 }
             }
 

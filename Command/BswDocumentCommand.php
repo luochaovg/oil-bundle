@@ -627,7 +627,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             // response params demo
             $append($this->lang('Response params demo'));
             $append($lineTitle, 2);
-            $append(".. code:: console", 2);
+            $append(".. code-block:: json", 2);
 
             $setsTypeMap = [
                 'array'    => ['begin' => '[', 'end' => ']'],
@@ -686,6 +686,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                     $json[$dataKey][$k] = $item['type'];
                 }
 
+                // handle the sets
                 $json[$dataKey] = Helper::oneDimension2n($json[$dataKey]);
                 $json[$dataKey] = Helper::iterationArrayHandler(
                     $json[$dataKey],
@@ -696,6 +697,8 @@ class BswDocumentCommand extends Command implements CommandInterface
                             $item = rand(0, 32 * 100) / 100;
                         } elseif ($item == Abs::T_STRING) {
                             $item = $this->lang(Helper::stringToLabel($key), 'fields');
+                        } elseif ($item === Abs::T_BOOL) {
+                            $item = (bool)rand(0, 1);
                         } else {
                             $item = new stdClass();
                         }
@@ -703,6 +706,14 @@ class BswDocumentCommand extends Command implements CommandInterface
                         return $item;
                     }
                 );
+
+                if ($setsType == 'object[]' || $setsType == 'array[]') {
+                    $json[$dataKey] = [$json[$dataKey]];
+                }
+
+                if ($setsType == 'object' && empty($json[$dataKey])) {
+                    $json[$dataKey] = new stdClass();
+                }
 
                 $append(Helper::formatPrintJson($json, 2, ': ', $this->indent()));
 

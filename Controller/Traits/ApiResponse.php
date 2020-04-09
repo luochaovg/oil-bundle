@@ -90,9 +90,6 @@ trait ApiResponse
      */
     protected function original(array $data, int $code4http = Response::HTTP_OK): Response
     {
-        $this->iNeedCost(Abs::END_REQUEST);
-        $this->iNeedLogger(Abs::END_REQUEST);
-
         $this->logger->debug('Response data as follow', $data);
 
         $fn = Abs::FN_BEFORE_RESPONSE;
@@ -109,8 +106,11 @@ trait ApiResponse
         if (is_string($content = $view->getContent())) {
             $view->setContent(trim($content, '"'));
         }
-        
+
         $this->logger->debug("-->> end: $this->route");
+
+        $this->iNeedCost(Abs::END_REQUEST);
+        $this->iNeedLogger(Abs::END_REQUEST);
 
         return $view;
     }
@@ -133,7 +133,7 @@ trait ApiResponse
 
         foreach ($backtrace as $item) {
 
-            list($class, $method) = [$item['class'] ?? null, $item['function']];
+            [$class, $method] = [$item['class'] ?? null, $item['function']];
             $key = "{$class}::{$method}";
 
             if ($class != static::class) {
@@ -183,7 +183,7 @@ trait ApiResponse
         }
 
         if (method_exists($this, $fn = Abs::FN_BEFORE_RESPONSE_CODE)) {
-            list($code4logic, $code4http, $message, $data) = $this->{$fn}($code4logic, $code4http, $message, $data);
+            [$code4logic, $code4http, $message, $data] = $this->{$fn}($code4logic, $code4http, $message, $data);
         }
 
         $responseKeys = $this->responseKeys();
@@ -258,11 +258,11 @@ trait ApiResponse
      */
     protected function failed($code, string $message = '', array $args = []): Response
     {
-        list($code4http, $code4logic, $tiny, $detail) = [Response::HTTP_OK, $code, null, null];
+        [$code4http, $code4logic, $tiny, $detail] = [Response::HTTP_OK, $code, null, null];
 
         // instance of Error
         if ($code instanceof Error) {
-            list($code4http, $code4logic, $tiny, $detail) = $code->all();
+            [$code4http, $code4logic, $tiny, $detail] = $code->all();
         }
 
         $message && $tiny = $detail = $message;

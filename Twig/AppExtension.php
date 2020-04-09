@@ -6,6 +6,7 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use function GuzzleHttp\Psr7\parse_query;
 
 class AppExtension extends AbstractExtension
 {
@@ -36,22 +37,31 @@ class AppExtension extends AbstractExtension
     public static function icon(string $icon, bool $html = true, array $class = [])
     {
         $flag = 'a';
+        $query = null;
 
         if (strpos($icon, ':') !== false) {
-            list($flag, $icon) = explode(':', $icon);
+            [$flag, $icon, $query] = explode(':', $icon) + [2 => null];
         }
 
         if (!$html) {
             return $icon;
         }
 
+        $query = parse_query($query);
+        foreach ($query as &$value) {
+            $value = is_null($value) ? true : $value;
+        }
+
         return Html::tag(
             "{$flag}-icon",
             null,
-            [
-                'type'  => $icon,
-                'class' => $class,
-            ]
+            array_merge(
+                $query,
+                [
+                    'type'  => $icon,
+                    'class' => $class,
+                ]
+            )
         );
     }
 

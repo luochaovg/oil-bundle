@@ -70,6 +70,8 @@ parameters:
     smtp_sender: smtp-sender@mail.com
     smtp_secret: smtp-secret
 
+    doctrine_prefix: ''
+
     wx_official_default:
         app_id: app-id
         secret: secret
@@ -182,6 +184,7 @@ parameters:
         persistence: b:icon-Editfolder
         import: b:icon-import1
         export: b:icon-export4
+        sort: a:sort-descending
 
     bsw_menus_same_current_map: []
 

@@ -226,9 +226,10 @@ trait Foundation
         $config = $this->dispatchMethod(Abs::FN_EXTRA_CONFIG, $config, [$config]);
         $this->cnf = (object)$config;
 
+        $this->iNeedCost(Abs::BEGIN_CONSTRUCT);
+
         $this->route = $this->request()->get('_route');
         $this->controller = $this->request()->get('_controller');
-
         $this->uuid = $this->getArgs('uuid') ?? ('_' . Helper::generateToken(8, 36));
 
         $args = $this->headArgs();
@@ -236,11 +237,13 @@ trait Foundation
         $this->header = (object)$args;
         $this->header->lang = $this->request()->getLocale();
 
-        $this->logger->debug("-->> begin: $this->route");
+        $this->iNeedCost(Abs::END_CONSTRUCT);
         $this->iNeedCost(Abs::BEGIN_INIT);
-        $this->init();
-        $this->iNeedCost(Abs::END_INIT);
 
+        $this->logger->debug("-->> begin: $this->route");
+        $this->init();
+
+        $this->iNeedCost(Abs::END_INIT);
         $this->iNeedCost(Abs::BEGIN_REQUEST);
     }
 

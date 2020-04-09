@@ -55,8 +55,9 @@ abstract class BswWebController extends AbstractController
         $this->ajax = $this->request()->isXmlHttpRequest();
 
         // history for last time
-        if (isset($this->route)) {
-            $this->sessionArraySet(Abs::TAG_HISTORY, $this->route, $this->getArgs());
+        $args = $this->getArgs();
+        if (isset($this->route) && !isset($args['iframe'])) {
+            $this->sessionArraySet(Abs::TAG_HISTORY, $this->route, $args);
         }
     }
 
@@ -643,7 +644,7 @@ abstract class BswWebController extends AbstractController
             $json = $this->parameters('json');
             [$cls, $fn] = $this->getMCM('-');
             $getArgs = $this->getArgs();
-            
+
             $scaffold = [
                 'cnf'    => $this->cnf,
                 'usr'    => $this->usr,
@@ -722,9 +723,6 @@ abstract class BswWebController extends AbstractController
      */
     public function show(array $args = [], string $view = null)
     {
-        $this->iNeedCost(Abs::END_REQUEST);
-        $this->iNeedLogger(Abs::END_REQUEST);
-
         $scaffold = $this->displayArgsScaffold(
             [
                 'seo'  => $this->seo(),
@@ -747,6 +745,9 @@ abstract class BswWebController extends AbstractController
         // for debug args
         $this->breakpointDebug(Abs::BK_DISPLAY_ARGS, $view, $params);
         $this->logger->debug("-->> end: $this->route");
+
+        $this->iNeedCost(Abs::END_REQUEST);
+        $this->iNeedLogger(Abs::END_REQUEST);
 
         if ($this->ajax) {
             return $this->renderView($view, $params);

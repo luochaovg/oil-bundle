@@ -62,9 +62,9 @@ class AttachmentFile extends Tailor
 
             if (!empty($item[$this->label])) {
                 if (!empty($item['md5'])) {
-                    $item[$this->label] .= "?" . md5($item['md5']);
+                    $item[$this->label] .= "?" . $this->md1($item['md5']);
                 } elseif (!empty($item['sha1'])) {
-                    $item[$this->label] .= "?" . md5($item['sha1']);
+                    $item[$this->label] .= "?" . $this->md1($item['sha1']);
                 }
             }
         }

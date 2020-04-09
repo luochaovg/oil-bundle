@@ -256,6 +256,11 @@ div.ant-modal-mask {
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
   padding: 60px 40px;
 }
+@media screen and (max-width: 992px) {
+  .ant-layout .ant-layout-content.iframe .bsw-persistence {
+    padding: 30px 20px;
+  }
+}
 .ant-layout .ant-layout-content .ant-breadcrumb {
   margin-bottom: 15px;
 }
@@ -367,7 +372,7 @@ div.ant-modal-mask {
 }
 @media screen and (max-width: 992px) {
   .bsw-persistence {
-    padding: 30px 20px;
+    padding: 40px 30px;
   }
 }
 .bsw-grant form {

@@ -109,9 +109,6 @@ trait WebResponse
             throw new Exception($message);
         }
 
-        $this->iNeedCost(Abs::END_REQUEST);
-        $this->iNeedLogger(Abs::END_REQUEST);
-
         $response = [];
         $responseKeys = $this->responseKeysAjax();
         unset($responseKeys['args']);
@@ -127,6 +124,9 @@ trait WebResponse
         $this->logger->debug('Response data as follow', $response);
         $this->logger->debug("-->> end: $this->route");
 
+        $this->iNeedCost(Abs::END_REQUEST);
+        $this->iNeedLogger(Abs::END_REQUEST);
+        
         return new JsonResponse($response, $code4http);
     }
 

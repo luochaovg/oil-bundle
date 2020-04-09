@@ -190,6 +190,8 @@ abstract class BswApiController extends AbstractFOSRestController
             }
         }
 
+        $this->iNeedCost(Abs::END_VALID);
+
         return (object)$args;
     }
 

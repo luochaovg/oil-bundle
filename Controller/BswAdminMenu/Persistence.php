@@ -6,6 +6,7 @@ use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminMenu;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
+use Leon\BswBundle\Module\Form\Entity\Number;
 use Leon\BswBundle\Repository\BswAdminMenuRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -43,6 +44,37 @@ trait Persistence
         }
 
         return $this->showPersistence(['id' => $id]);
+    }
+
+    /**
+     * @return string
+     */
+    public function sortEntity(): string
+    {
+        return $this->persistenceEntity();
+    }
+
+    /**
+     * @return array
+     */
+    public function sortAnnotationOnly(): array
+    {
+        return ['id' => true, 'sort' => true];
+    }
+
+    /**
+     * Sort record
+     *
+     * @Route("/bsw-admin-menu/sort/{id}", name="app_bsw_admin_menu_sort", requirements={"id": "\d+"})
+     * @Access(same="app_bsw_admin_menu_persistence")
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function sort(int $id = null): Response
+    {
+        return $this->persistence($id);
     }
 
     /**

@@ -12,16 +12,11 @@
   {% if form.circle %}
     shape="circle"
   {% endif %}
-  {% if form.iconTag is same as('a') %}
-    icon="{{ form.icon|icon(false) }}"
-  {% endif %}
   bsw-data="{{ form.data }}"
   @click="dispatcherByVue"
   {{ form.attributes|raw }}
 >
-  {% if form.iconTag is same as('b') %}
-    {{ form.icon|icon|raw }}
-  {% endif %}
+  {{ form.icon|icon|raw }}
   {{ form.label|trans({}, 'twig') }}
   {% if form.selector %}
     {% set var = 'preview_selected_row.length' %}

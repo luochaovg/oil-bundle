@@ -28,10 +28,11 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const QUERY             = 'Query';              // [全局配置] 列表查询
-    const FILTER_ANNOTATION = 'FilterAnnotation';   // [全局配置] 注释补充或覆盖
-    const FILTER_OPERATE    = 'FilterOperates';     // [全局配置] 操作按钮
-    const FILTER_CONDITION  = 'FilterCondition';    // [全局配置] 条件处理
+    const QUERY                  = 'Query';                 // [全局配置] 列表查询
+    const FILTER_ANNOTATION      = 'FilterAnnotation';      // [全局配置] 注释补充或覆盖
+    const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';  // [全局配置] 注释限制
+    const FILTER_OPERATE         = 'FilterOperates';        // [全局配置] 操作按钮
+    const FILTER_CONDITION       = 'FilterCondition';       // [全局配置] 条件处理
 
     /**
      * @var array
@@ -155,7 +156,13 @@ class Module extends Bsw
         $entityList = array_filter(array_unique($entityList));
 
         foreach ($entityList as $alias => $entity) {
-            $fields = $this->web->getFilterAnnotation($entity, $this->input->enum);
+            $fields = $this->web->getFilterAnnotation(
+                $entity,
+                [
+                    'enumClass'      => $this->input->enum,
+                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+                ]
+            );
             foreach ($fields as $key => $item) {
                 $fields[$key]['field'] = "{$alias}.{$item['field']}";
             }
@@ -180,7 +187,7 @@ class Module extends Bsw
      */
     protected function annotationExtraItemHandler(string $field, $item, array $annotationFull): array
     {
-        if ($item === false) {
+        if (is_bool($item)) {
             return [$field, []];
         }
 
@@ -198,11 +205,12 @@ class Module extends Bsw
         $item['field'] = "{$_table}.{$_field}";
         $_index = Helper::dig($item, 'index') ?? 0;
         $_field = "{$_field}_{$_index}";
+        $field = "{$field}_{$_index}";
 
         $clone = $annotationFull[$_table][$_field] ?? [];
         $item = empty($clone) ? [] : array_merge($clone, $item);
 
-        return [$_field, $item];
+        return [$field, $item];
     }
 
     /**
@@ -220,12 +228,32 @@ class Module extends Bsw
         [$annotation, $annotationFull] = $this->listEntityFields();
 
         /**
-         * filter extra annotation
+         * preview annotation only
          */
 
-        $fn = self::FILTER_ANNOTATION;
-        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+        $fn = self::FILTER_ANNOTATION_ONLY;
+        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
         $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
+
+        /**
+         * extra annotation handler
+         */
+
+        if (!is_null($annotationExtra)) {
+
+            $annotationOnlyKey = array_keys($annotationExtra);
+            $annotation = Helper::arrayPull($annotation, $annotationOnlyKey);
+
+        } else {
+
+            /**
+             * filter extra annotation
+             */
+
+            $fn = self::FILTER_ANNOTATION;
+            $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+            $annotationExtra = $this->tailor($this->method, $fn, null, $annotationExtra, $annotation);
+        }
 
         /**
          * annotation handler with extra
@@ -233,13 +261,14 @@ class Module extends Bsw
 
         foreach ($annotationExtra as $field => $item) {
 
+            $_item = $item;
             [$field, $item] = $this->annotationExtraItemHandler($field, $item, $annotationFull);
 
             if (!is_array($item)) {
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
-            if (empty($item)) {
+            if ($_item === false) {
                 $annotation[$field]['show'] = false;
             }
 

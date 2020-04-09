@@ -137,23 +137,51 @@ class Module extends Bsw
 
         $annotation = [];
         if ($this->entity) {
-            $annotation = $this->web->getPersistenceAnnotation($this->entity, $this->input->enum);
+            $annotation = $this->web->getPersistenceAnnotation(
+                $this->entity,
+                [
+                    'enumClass'      => $this->input->enum,
+                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+                ]
+            );
         }
 
         /**
-         * preview extra annotation
+         * preview annotation only
          */
 
-        $fn = self::ANNOTATION;
-        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], [$this->input->id]);
-        $annotationExtra = $this->tailor(
-            $this->methodTailor,
-            $fn,
-            Abs::T_ARRAY,
-            $annotationExtra,
-            $annotation,
-            $this->input->id
-        );
+        $fn = self::ANNOTATION_ONLY;
+        $id = $this->input->id;
+
+        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, [$id]);
+        $annotationExtra = $this->tailor($this->methodTailor, $fn, null, $annotationExtra, $annotation, $id);
+
+        /**
+         * extra annotation handler
+         */
+
+        if (!is_null($annotationExtra)) {
+
+            $annotationOnlyKey = array_keys($annotationExtra);
+            $annotation = Helper::arrayPull($annotation, $annotationOnlyKey);
+
+        } else {
+
+            /**
+             * preview extra annotation
+             */
+
+            $fn = self::ANNOTATION;
+            $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], [$id]);
+            $annotationExtra = $this->tailor(
+                $this->methodTailor,
+                $fn,
+                Abs::T_ARRAY,
+                $annotationExtra,
+                $annotation,
+                $id
+            );
+        }
 
         /**
          * annotation handler with extra
@@ -161,7 +189,8 @@ class Module extends Bsw
 
         foreach ($annotationExtra as $field => $item) {
 
-            if ($item === false) {
+            $_item = $item;
+            if (is_bool($item)) {
                 $item = [];
             }
 
@@ -169,7 +198,7 @@ class Module extends Bsw
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
-            if (empty($item)) {
+            if ($_item === false) {
                 $annotation[$field]['show'] = false;
             }
 
@@ -534,7 +563,7 @@ class Module extends Bsw
         $submit = new Button('Submit', $this->input->route, 'a:coffee');
         $submit->setAttributes(['bsw-method' => 'submit']);
 
-        $args = [$record, $hooked, $original, $this->input->id];
+        $args = [$record, $hooked, $original, $this->input->id, $submit];
         $operates = $this->caller($this->method, self::FORM_OPERATE, Abs::T_ARRAY, [], $args);
         $operates = array_merge(['submit' => $submit], $operates);
 

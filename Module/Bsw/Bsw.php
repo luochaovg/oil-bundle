@@ -17,6 +17,7 @@ abstract class Bsw
      */
     const ENTITY             = 'Entity';            // [全局配置] 表实体类
     const ANNOTATION         = 'Annotation';        // [全局配置] 注释补充或覆盖
+    const ANNOTATION_ONLY    = 'AnnotationOnly';    // [全局配置] 注释限制
     const TAILOR             = 'Tailor';            // [全局配置] 定制逻辑
     const ENUM_EXTRA         = 'EnumExtra';         // 额外枚举
     const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';  // 渲染前处理(输出)
@@ -40,6 +41,11 @@ abstract class Bsw
      * @var string
      */
     protected $method;
+
+    /**
+     * @var string
+     */
+    protected $methodTailorBasic = 'tailor';
 
     /**
      * @var array
@@ -216,6 +222,36 @@ abstract class Bsw
             return $argument;
         }
 
+        /**
+         * Tailor core
+         *
+         * @param string $class
+         * @param string $method
+         * @param mixed  $field
+         * @param string $type
+         *
+         * @return array
+         */
+        $tailorCore = function (string $class, string $method, $field) use ($type, &$args, $argument) {
+
+            $tailor = new $class($this->web, $field);
+            $argument = call_user_func_array([$tailor, $method], $args) ?? $argument;
+            $args[0] = $argument;
+
+            // check type
+            if ($type) {
+                if (class_exists($type)) {
+                    $_method = get_class($tailor) . "::{$method}():{$type}";
+                    Helper::objectInstanceOf($argument, $type, $_method);
+                } else {
+                    $_method = get_class($tailor) . "::{$method}():" . strtolower($type);
+                    Helper::callReturnType($argument, $type, $_method);
+                }
+            }
+
+            return $argument;
+        };
+
         foreach ($this->tailor as $class => $fields) {
 
             $fn = self::TAILOR;
@@ -229,9 +265,9 @@ abstract class Bsw
             }
 
             // check tailor return values
-            if (!is_array($fields)) {
+            if (!is_array($fields) && ($fields !== true)) {
                 throw new ModuleException(
-                    "{$this->class}::{$this->method}{$fn}() return must be array with array value"
+                    "{$this->class}::{$this->method}{$fn}() return must be array with array/true value"
                 );
             }
 
@@ -239,8 +275,12 @@ abstract class Bsw
                 continue;
             }
 
-            foreach ($fields as $field) {
+            if ($fields === true) {
+                $argument = $tailorCore($class, $method, true);
+                continue;
+            }
 
+            foreach ($fields as $field) {
                 // check tailor return fields
                 foreach ((array)$field as $f) {
                     if (!property_exists($this->entityInstance, $f)) {
@@ -249,21 +289,7 @@ abstract class Bsw
                         );
                     }
                 }
-
-                $tailor = new $class($this->web, $field);
-                $argument = call_user_func_array([$tailor, $method], $args) ?? $argument;
-                $args[0] = $argument;
-
-                // check type
-                if ($type) {
-                    if (class_exists($type)) {
-                        $_method = get_class($tailor) . "::{$method}():{$type}";
-                        Helper::objectInstanceOf($argument, $type, $_method);
-                    } else {
-                        $_method = get_class($tailor) . "::{$method}():" . strtolower($type);
-                        Helper::callReturnType($argument, $type, $_method);
-                    }
-                }
+                $argument = $tailorCore($class, $method, $field);
             }
         }
 

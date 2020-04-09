@@ -71,6 +71,18 @@ trait Preview
     public function previewRecordOperates(array $current, array $hooked, array $origin): array
     {
         return [
+            (new Button('Sort'))
+                ->setType(Button::THEME_DEFAULT)
+                ->setRoute('app_bsw_admin_menu_sort')
+                ->setArgs(
+                    [
+                        'id'     => $current['id'],
+                        'width'  => Abs::MEDIA_MIN,
+                        'height' => 220,
+                        'title'  => $this->translator->trans('Sort record', [], 'twig'),
+                    ]
+                )
+                ->setClick('showIFrame'),
             (new Button('Edit record', 'app_bsw_admin_menu_persistence'))->setArgs(['id' => $current['id']]),
         ];
     }

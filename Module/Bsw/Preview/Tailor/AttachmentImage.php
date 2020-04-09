@@ -100,9 +100,9 @@ class AttachmentImage extends Tailor
 
             if (!empty($item[$this->table])) {
                 if (!empty($item['md5'])) {
-                    $item[$this->table] .= "?" . md5($item['md5']);
+                    $item[$this->table] .= "?" . $this->md1($item['md5']);
                 } elseif (!empty($item['sha1'])) {
-                    $item[$this->table] .= "?" . md5($item['sha1']);
+                    $item[$this->table] .= "?" . $this->md1($item['sha1']);
                 }
             }
 

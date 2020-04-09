@@ -1,6 +1,6 @@
 
-div.code > div.highlight {
-    padding: 2px 4px 2px 10px;
+div.code > div.highlight, div.section > div.highlight-json {
+    padding: 2px 4px 2px 6px;
     background-color: #f3f6f6;
     border-left: 6px solid #6ab0de;
     margin: 20px 0;
@@ -43,11 +43,12 @@ p {
     font-size: 14px;
 }
 
-.highlight {
+.highlight, .highlight-json {
+    background: none;
     border-radius: 4px;
 }
 
-.highlight > pre {
+.highlight > pre, .highlight-json > pre {
     font-size: 12px !important;
     line-height: 1.8 !important;
     opacity: .8;

@@ -203,6 +203,7 @@ div.header span {
       flex: 1;
 }
 .bsw-captcha-item .ant-form-item-children > img.bsw-captcha {
+  height: 40px;
   margin-left: 10px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;

@@ -90,6 +90,8 @@ Grant authorization for role:             '授权角色'
 Grant authorization for user:             '授权用户'
 Dangerous permission, please be careful:  '危险权限，请谨慎分配'
 Verify JSON format:                       '验证JSON'
+Sort record:                              '排序'
+Sort:                                     '排序'
 
 # bsw tools
 
@@ -114,4 +116,4 @@ Http code:                                                      'http 状态码'
 Message classify for frontend:                                  '消息类型，方便前端使用相应样式提示'
 Popup type for frontend:                                        '弹窗类型，方便前端使用相应样式提示'
 Supplementary notes:                                            '补充说明'
-Without response params in sets:                                '没有需要响应的业务数据。'
+Without response params in sets:                                '没有需要响应的业务数据字段。'
