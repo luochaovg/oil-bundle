@@ -18,7 +18,7 @@ trait EntityHint
      * Relation with keyword
      *
      * @param string $name
-     * @param array  $keywords
+     * @param string $keyword
      *
      * @return bool
      */

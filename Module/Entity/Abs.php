@@ -39,24 +39,31 @@ class Abs
     const BEGIN_API       = 'Begin third api';
     const END_API         = 'End third api';
 
-    const TAG_MESSAGE     = 'message';
-    const TAG_TIPS        = 'tips';
-    const TAG_HISTORY     = 'history';
-    const TAG_FALLBACK    = 'fallback';
-    const TAG_PREVIEW     = 'preview';
-    const TAG_PERSISTENCE = 'persistence';
-    const TAG_FILTER      = 'filter';
-    const TAG_LOGIC       = 'logic';
+    const TAG_MESSAGE        = 'message';
+    const TAG_TIPS           = 'tips';
+    const TAG_HISTORY        = 'history';
+    const TAG_FALLBACK       = 'fallback';
+    const TAG_PREVIEW        = 'preview';
+    const TAG_PERSISTENCE    = 'persistence';
+    const TAG_FILTER         = 'filter';
+    const TAG_LOGIC          = 'logic';
+    const TAG_ROLL           = 'rollback:';
+    const TAG_ROLL_VALIDATOR = 'rollback:validator';
+    const TAG_VALIDATOR      = 'validator';
+    const TAG_UPDATE         = 'update';
+    const TAG_DELETE         = 'delete';
 
-    const TAG_TYPE_NOTICE      = 'notification';
-    const TAG_TYPE_MESSAGE     = 'message';
-    const TAG_TYPE_CONFIRM     = 'confirm';
+    const TAG_TYPE_NOTICE  = 'notification';
+    const TAG_TYPE_MESSAGE = 'message';
+    const TAG_TYPE_CONFIRM = 'confirm';
+
     const TAG_CLASSIFY_SUCCESS = 'success';
     const TAG_CLASSIFY_INFO    = 'info';
     const TAG_CLASSIFY_WARNING = 'warning';
     const TAG_CLASSIFY_ERROR   = 'error';
 
-    const FLAG_SQL_ERROR = 'An exception occurred while executing';
+    const TAG_SQL_ERROR = 'An exception occurred while executing';
+
     const IMAGE_SUFFIX   = ['gif', 'jpg', 'jpeg', 'png'];
     const IMAGE_SIZE_MAX = 'MAX';
 

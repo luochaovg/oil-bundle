@@ -307,7 +307,7 @@ abstract class BswWebController extends AbstractController
         string $type = Abs::TAG_TYPE_MESSAGE
     ) {
 
-        if (strpos($content, Abs::FLAG_SQL_ERROR) !== false) {
+        if (strpos($content, Abs::TAG_SQL_ERROR) !== false) {
             throw new Exception($content);
         }
 

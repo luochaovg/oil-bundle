@@ -14,25 +14,33 @@ trait Message
     /**
      * @var SplQueue
      */
-    protected $messageFlag;
+    protected $flag;
+
+    /**
+     * @var SplQueue
+     */
+    protected $object;
 
     /**
      * Push message
      *
      * @param string $message
      * @param string $flag
+     * @param object $object
      *
      * @return false
      */
-    protected function push(string $message, string $flag = null)
+    protected function push(string $message, string $flag = null, $object = null)
     {
         if (!isset($this->message)) {
             $this->message = new SplQueue();
-            $this->messageFlag = new SplQueue();
+            $this->flag = new SplQueue();
+            $this->object = new SplQueue();
         }
 
         $this->message->enqueue($message);
-        $this->messageFlag->enqueue($flag);
+        $this->flag->enqueue($flag);
+        $this->object->enqueue(serialize($object));
 
         return false;
     }
@@ -41,18 +49,24 @@ trait Message
      * Pop message
      *
      * @param bool $needFlag
+     * @param bool $needObject
      *
-     * @return mixed|null
+     * @return string|array|null
      */
-    public function pop(bool $needFlag = false)
+    public function pop(bool $needFlag = false, bool $needObject = false)
     {
         if ($this->message->isEmpty()) {
             return null;
         }
 
         $message = isset($this->message) ? $this->message->dequeue() : null;
-        $flag = isset($this->messageFlag) ? $this->messageFlag->dequeue() : null;
+        $flag = isset($this->flag) ? $this->flag->dequeue() : null;
+        $object = isset($this->object) ? $this->object->dequeue() : null;
 
-        return $needFlag ? [$message, $flag] : $message;
+        if (!$needFlag && !$needObject) {
+            return $message;
+        }
+
+        return [$message, $flag, unserialize($object)];
     }
 }

@@ -105,7 +105,7 @@ trait WebResponse
         ?int $duration = null
     ): JsonResponse {
 
-        if (!$this->debug && strpos($message, Abs::FLAG_SQL_ERROR) !== false) {
+        if (!$this->debug && strpos($message, Abs::TAG_SQL_ERROR) !== false) {
             throw new Exception($message);
         }
 

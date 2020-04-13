@@ -238,7 +238,7 @@ abstract class FoundationRepository extends SFRepository
             $em->flush();
             $em->clear();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage(), 'persistence');
+            return $this->push($e->getMessage(), Abs::TAG_PERSISTENCE);
         }
 
         return $entity->{$this->pk};
@@ -271,7 +271,7 @@ abstract class FoundationRepository extends SFRepository
             $em->flush();
             $em->commit();
 
-            return $result === false ? true : $result;
+            return $result === false ? null : $result;
 
         } catch (Throwable $error) {
 
@@ -282,11 +282,11 @@ abstract class FoundationRepository extends SFRepository
             $this->logger->warning("Transactional process failed, {$message}");
 
             if ($error instanceof ValidatorException) {
-                return $this->push($error->getMessage(), 'rollback.validator');
+                return $this->push($error->getMessage(), Abs::TAG_ROLL_VALIDATOR);
             }
 
             if ($error instanceof LogicException) {
-                return $this->push($error->getMessage(), "rollback.{$error->getCode()}");
+                return $this->push($error->getMessage(), Abs::TAG_ROLL . $error->getCode());
             }
 
             if ($throw) {
@@ -973,7 +973,7 @@ abstract class FoundationRepository extends SFRepository
         try {
             return $query->getResult();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage(), 'update');
+            return $this->push($e->getMessage(), Abs::TAG_UPDATE);
         }
     }
 
@@ -993,7 +993,7 @@ abstract class FoundationRepository extends SFRepository
         try {
             return $query->getResult();
         } catch (Throwable $e) {
-            return $this->push($e->getMessage(), 'delete');
+            return $this->push($e->getMessage(), Abs::TAG_DELETE);
         }
     }
 }

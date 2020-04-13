@@ -496,7 +496,7 @@ trait Foundation
             return $args[$field];
         }
 
-        $this->push(current(current($error)), 'validator');
+        $this->push(current(current($error)), Abs::TAG_VALIDATOR);
 
         return false;
     }

@@ -14,7 +14,9 @@ use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\AnnotationException;
+use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
@@ -42,7 +44,7 @@ class Module extends Bsw
     const BEFORE_RENDER     = 'BeforeRender';      // 渲染前处理
     const FORM_OPERATE      = 'FormOperates';      // 操作按钮
     const AFTER_SUBMIT      = 'AfterSubmit';       // 提交数据后处理
-    const AFTER_PERSISTENCE = 'AfterPersistence';  // 持久化后处理
+    const AFTER_PERSISTENCE = 'AfterPersistence';  // 持久化后处理 (事务级)
 
     /**
      * @var string
@@ -717,40 +719,68 @@ class Module extends Bsw
         $pk = $this->repository->pk();
         $newly = empty($record[$pk]);
 
-        if ($newly) {
+        $result = $this->repository->transactional(
+            function () use ($newly, $annotation, $record, $extraSubmit, $pk) {
 
-            /**
-             * Newly
-             */
+                if ($newly) {
 
-            $multiple = null;
-            foreach ($annotation as $field => $item) {
-                /**
-                 * @var Form $type
-                 */
-                $type = $item['type'];
-                if (get_class($type) == Select::class && $type->getMode() == Select::MODE_MULTIPLE) {
-                    $multiple = $field;
-                    break;
+                    /**
+                     * Newly record
+                     */
+
+                    $multiple = null;
+                    foreach ($annotation as $field => $item) {
+                        /**
+                         * @var Form $type
+                         */
+                        $type = $item['type'];
+                        if (get_class($type) == Select::class && $type->getMode() == Select::MODE_MULTIPLE) {
+                            $multiple = $field;
+                            break;
+                        }
+                    }
+
+                    $record = $this->recordHandler($record, $annotation, $extraSubmit, $multiple);
+                    if ($multiple) {
+                        $result = $this->repository->newlyMultiple($record);
+                    } else {
+                        $result = $this->repository->newly($record);
+                    }
+
+                } else {
+
+                    /**
+                     * Modify by id
+                     */
+
+                    $record = $this->recordHandler($record, $annotation, $extraSubmit);
+                    $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
                 }
+
+                if ($result === false) {
+                    [$error, $flag] = $this->repository->pop(true);
+                    if (strpos($flag, Abs::TAG_ROLL) === 0) {
+                        throw new LogicException($error);
+                    } else {
+                        throw new RepositoryException($error);
+                    }
+                }
+
+                $_result = $this->caller(
+                    $this->method,
+                    self::AFTER_PERSISTENCE,
+                    null,
+                    null,
+                    [$result, $record, $annotation]
+                );
+
+                if (is_string($_result)) {
+                    throw new LogicException($_result);
+                }
+
+                return [$result, $_result];
             }
-
-            $record = $this->recordHandler($record, $annotation, $extraSubmit, $multiple);
-            if ($multiple) {
-                $result = $this->repository->newlyMultiple($record);
-            } else {
-                $result = $this->repository->newly($record);
-            }
-
-        } else {
-
-            /**
-             * Modify by id
-             */
-
-            $record = $this->recordHandler($record, $annotation, $extraSubmit);
-            $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
-        }
+        );
 
         /**
          * Handle error
