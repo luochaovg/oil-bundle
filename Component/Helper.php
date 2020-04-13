@@ -1052,7 +1052,7 @@ class Helper
      * cURL
      *
      * @param string   $url
-     * @param string   $type
+     * @param string   $method
      * @param array    $params
      * @param callable $optionHandler
      * @param string   $contentType
@@ -1063,7 +1063,7 @@ class Helper
      */
     public static function cURL(
         string $url,
-        string $type = Abs::REQ_GET,
+        string $method = Abs::REQ_GET,
         array $params = null,
         callable $optionHandler = null,
         string $contentType = Abs::CONTENT_TYPE_FORM,
@@ -1086,7 +1086,7 @@ class Helper
         // enabled show header
         $options[CURLOPT_HEADER] = false;
 
-        if ($type === Abs::REQ_HEAD) {
+        if ($method === Abs::REQ_HEAD) {
             $options[CURLOPT_NOBODY] = true;
             $options[CURLOPT_HEADER] = true;
         }
@@ -1099,10 +1099,10 @@ class Helper
         $options[CURLOPT_FORBID_REUSE] = true;
 
         // method
-        $options[CURLOPT_CUSTOMREQUEST] = $type;
+        $options[CURLOPT_CUSTOMREQUEST] = $method;
 
         // url
-        if ($type === Abs::REQ_GET) {
+        if ($method === Abs::REQ_GET) {
             $options[CURLOPT_URL] = call_user_func_array([self::class, 'httpBuildQuery'], [$params, $url]);
         } else {
             $options[CURLOPT_URL] = $url;
@@ -1113,7 +1113,7 @@ class Helper
         }
 
         // use method POST
-        if (strtoupper($type === Abs::REQ_POST)) {
+        if (strtoupper($method === Abs::REQ_POST)) {
             $options[CURLOPT_POST] = true;
             if (!empty($params)) {
                 if ($contentType == Abs::CONTENT_TYPE_FORM) {
@@ -4229,7 +4229,7 @@ class Helper
     {
         $prefix = rtrim($prefix, '_');
         $prefix = self::camelToUnder($prefix) . '_';
-        
+
         return $upper ? strtoupper($prefix) : $prefix;
     }
 }

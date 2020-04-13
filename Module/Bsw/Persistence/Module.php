@@ -447,7 +447,7 @@ class Module extends Bsw
         $hooked = $record;
 
         if ($persistence) {
-            return [$record, [], []];
+            return [$record, [], [], $original];
         }
 
         /**
@@ -594,7 +594,7 @@ class Module extends Bsw
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
-        return [$_record, $operates, $format];
+        return [$_record, $operates, $format, $original];
     }
 
     /**
@@ -704,13 +704,14 @@ class Module extends Bsw
      * Persistence to MySQL
      *
      * @param array $record
+     * @param array $original
      * @param array $annotation
      * @param array $extraSubmit
      *
      * @return Output
      * @throws
      */
-    protected function persistence(array $record, array $annotation, array $extraSubmit): ArgsOutput
+    protected function persistence(array $record, array $original, array $annotation, array $extraSubmit): ArgsOutput
     {
         if (empty($this->entity)) {
             throw new ModuleException('Entity is required for persistence module');
@@ -720,7 +721,7 @@ class Module extends Bsw
         $newly = empty($record[$pk]);
 
         $result = $this->repository->transactional(
-            function () use ($newly, $annotation, $record, $extraSubmit, $pk) {
+            function () use ($newly, $annotation, $record, $original, $extraSubmit, $pk) {
 
                 if ($newly) {
 
@@ -771,7 +772,7 @@ class Module extends Bsw
                     self::AFTER_PERSISTENCE,
                     null,
                     null,
-                    [$result, $record, $annotation]
+                    [$newly, $result, $record, $original]
                 );
 
                 if (is_string($_result)) {
@@ -813,11 +814,11 @@ class Module extends Bsw
             [$record, $extraSubmit] = $result;
         }
 
-        [$record, $operates, $format] = $this->handlePersistenceData($annotation, $record, $hooks, $output);
+        [$record, $operates, $format, $original] = $this->handlePersistenceData($annotation, $record, $hooks, $output);
 
         if (!empty($this->input->submit)) {
             if ($this->entity) {
-                return $this->persistence($record, $_annotation, $extraSubmit);
+                return $this->persistence($record, $original, $_annotation, $extraSubmit);
             } else {
                 if (empty($this->input->handler) || !is_callable($this->input->handler)) {
                     throw new Exception(
