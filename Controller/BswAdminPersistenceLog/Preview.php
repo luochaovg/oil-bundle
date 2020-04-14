@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswAdminPersistenceLog;
 
 use Leon\BswBundle\Entity\BswAdminPersistenceLog;
+use Leon\BswBundle\Entity\BswAdminUser;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
@@ -19,12 +20,30 @@ trait Preview
     }
 
     /**
+     * @return array
+     */
+    public function previewQuery(): array
+    {
+        return [
+            'alias'  => 'pl',
+            'select' => ['pl', 'u.name AS userId'],
+            'join'   => [
+                'u' => [
+                    'entity' => BswAdminUser::class,
+                    'left'   => ['pl.userId'],
+                    'right'  => ['u.id'],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @return Button[]
      */
     public function previewOperates()
     {
         return [
-            new Button('New record', 'app_bsw_admin_persistence_log_persistence', 'a:plus'),
+            // new Button('New record', 'app_bsw_admin_persistence_log_persistence', 'a:plus'),
         ];
     }
 
@@ -38,7 +57,7 @@ trait Preview
     public function previewRecordOperates(array $current, array $hooked, array $origin): array
     {
         return [
-            (new Button('Edit record', 'app_bsw_admin_persistence_log_persistence'))->setArgs(['id' => $current['id']]),
+            // (new Button('Edit record', 'app_bsw_admin_persistence_log_persistence'))->setArgs(['id' => $current['id']]),
         ];
     }
 

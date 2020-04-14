@@ -136,11 +136,11 @@ class Links
     }
 
     /**
-     * @param string $url
+     * @param string|null $url
      *
      * @return $this
      */
-    public function setUrl(string $url)
+    public function setUrl(?string $url)
     {
         $this->url = $url;
 

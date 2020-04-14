@@ -63,10 +63,14 @@ class Enum
      * @const array 操作类型
      */
     const BSW_ADMIN_PERSISTENCE_LOG_TYPE = [
-        1 => 'CURD create',
-        2 => 'CURD update',
-        3 => 'CURD retrieve',
-        4 => 'CURD delete',
+        1 => 'CURD create one',
+        2 => 'CURD create any',
+        3 => 'CURD update one',
+        4 => 'CURD update any',
+        5 => 'CURD delete one',
+        6 => 'CURD delete any',
+        7 => 'CURD retrieve one',
+        8 => 'CURD retrieve any',
     ];
 
     /**

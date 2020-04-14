@@ -9,7 +9,6 @@ use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input                $input
@@ -73,8 +72,9 @@ class Module extends Bsw
     {
         $output = new Output();
 
-        if ($this->input->handler) {
-            $output->items = call_user_func_array($this->input->handler, [$this->input->condition]);
+        if ($this->input->itemsHandler) {
+            $args = [$output->items, $this->input->condition];
+            $output->items = call_user_func_array($this->input->itemsHandler, $args);
         } else {
             $output->items = $this->input->items;
         }
@@ -104,11 +104,7 @@ class Module extends Bsw
             if ($item->isScript()) {
                 $item->setUrl($item->getRoute());
             } else {
-                try {
-                    $item->setUrl($this->web->url($item->getRoute(), [], false));
-                } catch (RouteNotFoundException $e) {
-                    $this->input->logger->warning("Argument for chart tabs menu links error, {$e->getMessage()}");
-                }
+                $item->setUrl($this->web->urlSafe($item->getRoute(), [], 'Chart tabs links'));
             }
             array_push($output->tabsMenu, $item);
         }

@@ -794,9 +794,9 @@ trait Mixed
     /**
      * Get worksheet for excel
      *
-     * @param string  $file
-     * @param string  $sheet
-     * @param boolean $write
+     * @param string $file
+     * @param string $sheet
+     * @param bool   $write
      *
      * @return array
      * @throws
@@ -826,12 +826,12 @@ trait Mixed
     /**
      * Read data from excel
      *
-     * @param string  $file
-     * @param array   $fieldsMap
-     * @param integer $limit
-     * @param integer $offset
-     * @param integer $dataBeginLine
-     * @param string  $sheet
+     * @param string $file
+     * @param array  $fieldsMap
+     * @param int    $limit
+     * @param int    $offset
+     * @param int    $dataBeginLine
+     * @param string $sheet
      *
      * @return array
      * @throws
@@ -909,14 +909,14 @@ trait Mixed
     /**
      * Write data to excel
      *
-     * @param array   $data
-     * @param string  $file
-     * @param array   $fields
-     * @param array   $fieldsLabel
-     * @param array   $fieldsKvp
-     * @param integer $offset
-     * @param integer $dataBeginLine
-     * @param string  $sheet
+     * @param array  $data
+     * @param string $file
+     * @param array  $fields
+     * @param array  $fieldsLabel
+     * @param array  $fieldsKvp
+     * @param int    $offset
+     * @param int    $dataBeginLine
+     * @param string $sheet
      *
      * @return void
      * @throws

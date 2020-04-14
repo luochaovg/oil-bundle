@@ -55,7 +55,7 @@ trait Message
      */
     public function pop(bool $needFlag = false, bool $needObject = false)
     {
-        if ($this->message->isEmpty()) {
+        if (!$this->message || $this->message->isEmpty()) {
             return null;
         }
 

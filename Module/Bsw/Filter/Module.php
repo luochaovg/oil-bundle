@@ -17,7 +17,6 @@ use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Form;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input                $input
@@ -482,12 +481,7 @@ class Module extends Bsw
 
             $operate->setClick('setUrlToForm');
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
-
-            try {
-                $operate->setUrl($this->web->url($operate->getRoute(), $operate->getArgs(), false));
-            } catch (RouteNotFoundException $e) {
-                $this->input->logger->warning("Filter button route error, {$e->getMessage()}");
-            }
+            $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
             $operate->setHtmlType(Button::TYPE_SUBMIT);
             $operate->setSize(Button::SIZE_MIDDLE);
@@ -575,12 +569,12 @@ class Module extends Bsw
     }
 
     /**
-     * Handler show list
+     * Handle show list
      *
      * @param array  $annotation
      * @param Output $output
      */
-    protected function handlerShowList(array $annotation, Output $output)
+    protected function handleShowList(array $annotation, Output $output)
     {
         if ($this->input->iframe) {
             $output->maxShow = ceil($output->maxShow / 2);
@@ -595,11 +589,11 @@ class Module extends Bsw
     }
 
     /**
-     * Handler filter
+     * Handle filter
      *
      * @param Output $output
      */
-    protected function handlerFilter(Output $output)
+    protected function handleFilter(Output $output)
     {
         foreach ($output->group as $name => $members) {
             foreach ($members as $field) {
@@ -650,8 +644,8 @@ class Module extends Bsw
         $output->condition = $condition;
         $output->formatJson = $this->json($format);
 
-        $this->handlerShowList($annotation, $output);
-        $this->handlerFilter($output);
+        $this->handleShowList($annotation, $output);
+        $this->handleFilter($output);
 
         $output = $this->caller(
             $this->method . ucfirst($this->name()),

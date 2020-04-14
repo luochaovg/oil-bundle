@@ -26,9 +26,9 @@ class Dispatcher
     /**
      * Resolve array to expression
      *
-     * @param string  $field
-     * @param array   $item
-     * @param integer $mode
+     * @param string $field
+     * @param array  $item
+     * @param int    $mode
      *
      * @return mixed
      * @throws
@@ -84,10 +84,10 @@ class Dispatcher
     /**
      * Resolve array to expression for list
      *
-     * @param array   $list
-     * @param integer $mode
-     * @param boolean $append
-     * @param array   $fieldMap
+     * @param array $list
+     * @param int   $mode
+     * @param bool  $append
+     * @param array $fieldMap
      *
      * @return mixed
      * @throws

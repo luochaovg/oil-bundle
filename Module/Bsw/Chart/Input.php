@@ -10,7 +10,7 @@ class Input extends ArgsInput
     /**
      * @var callable
      */
-    public $handler;
+    public $itemsHandler;
 
     /**
      * @var Links[]

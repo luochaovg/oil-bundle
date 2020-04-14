@@ -12,6 +12,22 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 trait WebSession
 {
     /**
+     * Set session
+     *
+     * @param string $sessionKey
+     * @param mixed  $setValue
+     *
+     * @return array
+     */
+    public function sessionSet(string $sessionKey, $setValue)
+    {
+        $origin = is_array($setValue) ? json_encode($setValue, JSON_UNESCAPED_UNICODE) : $setValue;
+        $this->session->set($sessionKey, $origin);
+
+        return $origin;
+    }
+
+    /**
      * Set array item in session
      *
      * @param string $sessionKey
@@ -30,11 +46,31 @@ trait WebSession
     }
 
     /**
+     * Get session
+     *
+     * @param string $sessionKey
+     * @param bool   $delete
+     *
+     * @return mixed
+     */
+    public function sessionGet(string $sessionKey, bool $delete = false)
+    {
+        $origin = $this->session->get($sessionKey);
+        $origin = Helper::parseJsonString($origin);
+
+        if ($delete) {
+            $this->session->remove($sessionKey);
+        }
+
+        return $origin;
+    }
+
+    /**
      * Get array item in session
      *
-     * @param string  $sessionKey
-     * @param string  $getKey
-     * @param boolean $delete
+     * @param string $sessionKey
+     * @param string $getKey
+     * @param bool   $delete
      *
      * @return mixed
      */

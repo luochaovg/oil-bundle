@@ -3,14 +3,12 @@
 namespace Leon\BswBundle\Module\Bsw\Menu;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminMenu;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input $input
@@ -123,11 +121,7 @@ class Module extends Bsw
 
             // route path
             if ($route) {
-                try {
-                    $item->setUrl($this->web->url($route, $args, false));
-                } catch (RouteNotFoundException $e) {
-                    $this->input->logger->warning("Menu route error, {$e->getMessage()}");
-                }
+                $item->setUrl($this->web->urlSafe($route, $args, 'Menu route'));
             }
 
             // javascript

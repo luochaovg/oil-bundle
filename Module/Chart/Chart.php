@@ -834,9 +834,9 @@ abstract class Chart
     /**
      * Chart constructor.
      *
-     * @param array   $options
-     * @param boolean $mobile
-     * @param boolean $popup
+     * @param array $options
+     * @param bool  $mobile
+     * @param bool  $popup
      */
     public function __construct(array $options, bool $mobile, bool $popup = false)
     {
@@ -992,7 +992,7 @@ abstract class Chart
         // series
         $options['series'] = $this->getSeries();
         $options = Helper::merge($this->buildOptions($options), $this->getOptionExtra());
-        
+
         return $options;
     }
 

@@ -151,6 +151,14 @@ class Message
     }
 
     /**
+     * @return bool
+     */
+    public function isErrorClassify(): bool
+    {
+        return $this->getClassify() == Abs::TAG_CLASSIFY_ERROR;
+    }
+
+    /**
      * @return array
      */
     public function getArgs(): array

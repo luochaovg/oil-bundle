@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Bsw;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
+use Leon\BswBundle\Entity\BswAdminPersistenceLog;
 use Leon\BswBundle\Entity\FoundationEntity;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
@@ -174,29 +175,24 @@ abstract class Bsw
      *
      * @param string $prefix
      * @param string $call
-     * @param string $type
+     * @param mixed  $type
      * @param mixed  $default
      * @param array  $args
      *
      * @return mixed|null
      * @throws
      */
-    protected function caller(string $prefix, string $call, string $type = null, $default = null, array $args = [])
+    protected function caller(string $prefix, string $call, $type = null, $default = null, array $args = [])
     {
         if (!method_exists($this->web, $call = "{$prefix}{$call}")) {
             return $default;
         }
 
         $data = call_user_func_array([$this->web, $call], $args) ?? $default;
-
         if ($type) {
-            if (class_exists($type)) {
-                $method = get_class($this->web) . "::{$call}():{$type}";
-                Helper::objectInstanceOf($data, $type, $method);
-            } else {
-                $method = get_class($this->web) . "::{$call}():" . strtolower($type);
-                Helper::callReturnType($data, $type, $method);
-            }
+            $type = (array)$type;
+            $method = get_class($this->web) . "::{$call}():" . Helper::printArray($type, '[%s]', '');
+            Helper::callReturnType($data, $type, $method);
         }
 
         return $data;
@@ -499,5 +495,45 @@ abstract class Bsw
             },
             "bsw-entity-{$this->entity}"
         );
+    }
+
+    /**
+     * Database operation logger
+     *
+     * @param int    $type
+     * @param array  $before
+     * @param array  $later
+     * @param array  $effect
+     * @param string $entity
+     *
+     * @throws
+     */
+    public function databaseOperationLogger(
+        int $type,
+        array $before = [],
+        array $later = [],
+        array $effect = [],
+        string $entity = null
+    ) {
+
+        if (!$this->web->parameter('backend_db_logger')) {
+            return;
+        }
+
+        $loggerRepo = $this->web->repo(BswAdminPersistenceLog::class);
+        $result = $loggerRepo->newly(
+            [
+                'table'  => Helper::tableNameFromCls($entity ?? $this->entity),
+                'userId' => $this->input->usr->{$this->input->cnf->usr_uid} ?? 0,
+                'type'   => $type,
+                'before' => $this->json($before),
+                'later'  => $this->json($later),
+                'effect' => $this->json($effect),
+            ]
+        );
+
+        if ($result === false) {
+            $this->web->logger->error("Database operation logger error: {$loggerRepo->pop()}");
+        }
     }
 }

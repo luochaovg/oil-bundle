@@ -52,6 +52,9 @@ class Abs
     const TAG_VALIDATOR      = 'validator';
     const TAG_UPDATE         = 'update';
     const TAG_DELETE         = 'delete';
+    const TAG_TRANS          = 'transactional:';
+    const TAG_TRANS_BEFORE   = 'transactional:before';
+    const TAG_TRANS_AFTER    = 'transactional:after';
 
     const TAG_TYPE_NOTICE  = 'notification';
     const TAG_TYPE_MESSAGE = 'message';

@@ -36,6 +36,7 @@ parameters:
     backend_with_login_log: true
     backend_captcha_digit: 4
     backend_auth_root_id: 1
+    backend_db_logger: true
 
     aes_key: KHkBMKsNdc8Ttkjl
     aes_iv: KHkBMKsNdc8Ttkjl
@@ -213,9 +214,10 @@ parameters:
         home: b:icon-home2
         preview: b:icon-computer
         persistence: b:icon-Editfolder
-        import: b:icon-import1
-        export: b:icon-export4
+        away: b:icon-delete
         sort: a:sort-descending
+        export: b:icon-export4
+        import: b:icon-import1
         grant: b:icon-assessedbadge
 
     bsw_menus_same_current_map: []

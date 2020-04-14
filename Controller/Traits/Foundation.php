@@ -682,6 +682,29 @@ trait Foundation
     }
 
     /**
+     * Get url by safe mode
+     *
+     * @param string      $route
+     * @param array       $params
+     * @param string|null $scene
+     * @param bool        $abs
+     *
+     * @return string|null
+     */
+    public function urlSafe(string $route, array $params = [], ?string $scene = null, bool $abs = false): ?string
+    {
+        try {
+            $url = $this->url($route, $params, $abs);
+        } catch (Exception $e) {
+            $url = null;
+            $scene = $scene ? "[{$scene}] " : null;
+            $this->logger->warning("{$scene}Create url error: {$e->getMessage()}");
+        }
+
+        return $url;
+    }
+
+    /**
      * Perfect url
      *
      * @param string $url
@@ -966,10 +989,10 @@ trait Foundation
     /**
      * Get filter
      *
-     * @param array   $condition
-     * @param integer $mode
-     * @param boolean $append
-     * @param array   $fieldMap
+     * @param array $condition
+     * @param int   $mode
+     * @param bool  $append
+     * @param array $fieldMap
      *
      * @return array
      */

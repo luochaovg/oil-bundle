@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Component;
 
+use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
+use Leon\BswBundle\Module\Error\Error;
 use ZipArchive;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
@@ -860,8 +862,9 @@ class Helper
 
         $result = null;
         $pos = 0;
+        $quotaCount = 0;
         $strLen = strlen($json);
-        $indentStr = self::enSpace(2);
+        $indentStr = self::enSpace($tabBySpace);
         $newLine = PHP_EOL . $prefix;
         $prevChar = null;
         $outOfQuotes = true;
@@ -874,6 +877,7 @@ class Helper
 
             // Are we inside a quoted string?
             if ($char == '"' && $prevChar != '\\') {
+                $quotaCount += 1;
                 $outOfQuotes = !$outOfQuotes;
             } else {
 
@@ -881,6 +885,7 @@ class Helper
                 $bScene = ($char == ']' && $prevChar != '[');
 
                 if (($aScene || $bScene) && $outOfQuotes) {
+                    $quotaCount = 0;
                     $result .= $newLine;
                     $pos--;
                     for ($j = 0; $j < $pos; $j++) {
@@ -890,12 +895,17 @@ class Helper
             }
 
             // Add the character to the result string.
-            $result .= $char;
+            if ($char == ':' && ($quotaCount % 2 == 0)) {
+                $result .= $split;
+            } else {
+                $result .= $char;
+            }
 
             $aScene = ($char == '{' && $nextChar != '}');
             $bScene = ($char == '[' && $nextChar != ']');
 
             if (($char == ',' || $aScene || $bScene) && $outOfQuotes) {
+                $quotaCount = 0;
                 $result .= $newLine;
                 if ($char == '{' || $char == '[') {
                     $pos++;
@@ -905,10 +915,6 @@ class Helper
                 }
             }
             $prevChar = $char;
-        }
-
-        if ($split) {
-            $result = str_replace(':', $split, $result);
         }
 
         return "{$prefix}{$result}";
@@ -2198,13 +2204,25 @@ class Helper
     public static function callReturnType($data, $type, string $info = null)
     {
         $type = (array)$type;
-        $dataType = strtolower(gettype($data));
         $info = $info ?: 'the callback';
+        $dataType = is_object($data) ? get_class($data) : strtolower(gettype($data));
 
-        if (!in_array($dataType, $type)) {
-            $type = implode('/', $type);
-            throw new BadFunctionCallException("{$info} should return `{$type}` but got `{$dataType}`");
+        foreach ($type as $allowType) {
+            if ($data === $allowType) {
+                return;
+            }
+
+            if ($dataType === $allowType) {
+                return;
+            }
+
+            if (self::extendClass($dataType, $allowType, true)) {
+                return;
+            }
         }
+
+        $type = implode('/', $type);
+        throw new BadFunctionCallException("{$info} should return `{$type}` but got `{$dataType}`");
     }
 
     /**
@@ -2842,12 +2860,12 @@ class Helper
     /**
      * Parse json string
      *
-     * @param string $target
-     * @param mixed  $default
+     * @param string|null $target
+     * @param mixed       $default
      *
      * @return mixed
      */
-    public static function parseJsonString(string $target, $default = null)
+    public static function parseJsonString(?string $target, $default = null)
     {
         if (empty($target) || !is_string($target)) {
             return $default ?? $target;
@@ -3574,6 +3592,8 @@ class Helper
         foreach ($source as $key => $value) {
             if (is_array($value)) {
                 $value = $highOrder ?: self::printArray($value, $boundary, $indicate, $split, $highOrder);
+            } elseif (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
             }
             $key = $indicate ? "{$key}{$indicate}" : null;
             array_push($print, "{$key}{$value}");

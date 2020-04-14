@@ -25,7 +25,7 @@ class Download
     /**
      * Download constructor.
      *
-     * @param integer $speed
+     * @param int $speed
      */
     public function __construct(int $speed = null)
     {

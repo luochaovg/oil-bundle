@@ -26,7 +26,6 @@ use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Hook\Entity\JsonStringify;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Leon\BswBundle\Component\Upload as Uploader;
 use Exception;
 
@@ -39,12 +38,13 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK       = 'BeforeHook';        // 钩子前处理
-    const AFTER_HOOK        = 'AfterHook';         // 钩子后处理
-    const BEFORE_RENDER     = 'BeforeRender';      // 渲染前处理
-    const FORM_OPERATE      = 'FormOperates';      // 操作按钮
-    const AFTER_SUBMIT      = 'AfterSubmit';       // 提交数据后处理
-    const AFTER_PERSISTENCE = 'AfterPersistence';  // 持久化后处理 (事务级)
+    const BEFORE_HOOK        = 'BeforeHook';        // 钩子前处理
+    const AFTER_HOOK         = 'AfterHook';         // 钩子后处理
+    const BEFORE_RENDER      = 'BeforeRender';      // 渲染前处理
+    const FORM_OPERATE       = 'FormOperates';      // 操作按钮
+    const AFTER_SUBMIT       = 'AfterSubmit';       // 提交数据后处理
+    const BEFORE_PERSISTENCE = 'BeforePersistence'; // 持久化前处理 (事务级)
+    const AFTER_PERSISTENCE  = 'AfterPersistence';  // 持久化后处理 (事务级)
 
     /**
      * @var string
@@ -251,18 +251,23 @@ class Module extends Bsw
             return [[], []];
         }
 
+        $key = "{$this->input->route}:record:before";
+
         /**
          * @var FoundationEntity $record
          */
 
-        if (!empty($this->input->submit)) {
+        if ($this->input->submit) {
 
             $record = new $this->entity;
             $submit = $this->input->submit;
 
+            $recordBefore = $this->web->sessionGet($key) ?? [];
+            $recordDiff = array_diff_assoc($submit, $recordBefore);
+
             try {
 
-                $args = [$submit, []];
+                $args = [$submit, [], $recordDiff, $recordBefore];
                 $argsItem = array_merge($args, [$this->input->id]);
                 $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $argsItem);
 
@@ -283,7 +288,7 @@ class Module extends Bsw
 
             try {
 
-                $args = [$submit, $extraSubmit];
+                $args = [$submit, $extraSubmit, $recordDiff, $recordBefore];
                 $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $args, $this->input->id);
 
                 if ($result instanceof Error) {
@@ -307,8 +312,9 @@ class Module extends Bsw
 
             $this->input->submit = array_merge($submit, $extraSubmit);
             $record->attributes($this->input->submit, true);
+            $record = Helper::entityToArray($record);
 
-            return [Helper::entityToArray($record), $extraSubmit];
+            return [$record, $extraSubmit];
         }
 
         /**
@@ -322,6 +328,7 @@ class Module extends Bsw
         }
 
         $record = Helper::entityToArray($record);
+        $this->web->sessionSet($key, $record);
 
         return [$record, []];
     }
@@ -341,11 +348,7 @@ class Module extends Bsw
                 $form->setRoute($this->input->cnf->route_upload);
             }
 
-            try {
-                $form->setUrl($this->web->url($form->getRoute(), $form->getArgs(), false));
-            } catch (RouteNotFoundException $e) {
-                $this->input->logger->warning("Upload route error, {$e->getMessage()}");
-            }
+            $form->setUrl($this->web->urlSafe($form->getRoute(), $form->getArgs(), 'Upload route'));
 
             /**
              * File list key
@@ -439,7 +442,7 @@ class Module extends Bsw
             $after = [$this->web, $fn];
         }
 
-        $persistence = !empty($this->input->submit);
+        $persistence = !!$this->input->submit;
         $extraArgs = ['_acme' => ['scene' => 'persistence_' . ($this->input->id ? 'modify' : 'newly')]];
 
         $original = $record;
@@ -583,12 +586,7 @@ class Module extends Bsw
 
             $operate->setClick('setUrlToForm');
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
-
-            try {
-                $operate->setUrl($this->web->url($operate->getRoute(), $operate->getArgs(), false));
-            } catch (RouteNotFoundException $e) {
-                $this->input->logger->warning("Persistence button route error, {$e->getMessage()}");
-            }
+            $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
             $operate->setHtmlType(Button::TYPE_SUBMIT);
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
@@ -723,6 +721,26 @@ class Module extends Bsw
         $result = $this->repository->transactional(
             function () use ($newly, $annotation, $record, $original, $extraSubmit, $pk) {
 
+                /**
+                 * Before persistence
+                 */
+
+                $before = $this->caller(
+                    $this->method,
+                    self::BEFORE_PERSISTENCE,
+                    [Message::class, Error::class, true],
+                    null,
+                    [$newly, $record, $original]
+                );
+
+                if ($before instanceof Error) {
+                    throw new LogicException($before->tiny());
+                }
+
+                if (($before instanceof Message) && $before->isErrorClassify()) {
+                    throw new LogicException($before->getMessage());
+                }
+
                 if ($newly) {
 
                     /**
@@ -741,7 +759,10 @@ class Module extends Bsw
                         }
                     }
 
+                    $loggerBefore = [];
+                    $loggerType = $multiple ? 2 : 1;
                     $record = $this->recordHandler($record, $annotation, $extraSubmit, $multiple);
+
                     if ($multiple) {
                         $result = $this->repository->newlyMultiple($record);
                     } else {
@@ -755,7 +776,10 @@ class Module extends Bsw
                      */
 
                     $record = $this->recordHandler($record, $annotation, $extraSubmit);
-                    $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
+
+                    $loggerBefore = [$pk => Helper::dig($record, $pk)];
+                    $loggerType = 3;
+                    $result = $this->repository->modify($loggerBefore, $record);
                 }
 
                 if ($result === false) {
@@ -767,19 +791,29 @@ class Module extends Bsw
                     }
                 }
 
-                $_result = $this->caller(
+                $this->databaseOperationLogger($loggerType, $loggerBefore, $record, ['effect' => $result]);
+
+                /**
+                 * After persistence
+                 */
+
+                $after = $this->caller(
                     $this->method,
                     self::AFTER_PERSISTENCE,
+                    [Message::class, Error::class, true],
                     null,
-                    null,
-                    [$newly, $result, $record, $original]
+                    [$newly, $record, $original, $result]
                 );
 
-                if (is_string($_result)) {
-                    throw new LogicException($_result);
+                if ($after instanceof Error) {
+                    throw new LogicException($after->tiny());
                 }
 
-                return [$result, $_result];
+                if (($after instanceof Message) && $after->isErrorClassify()) {
+                    throw new LogicException($after->getMessage());
+                }
+
+                return [$result, $before, $after];
             }
         );
 
@@ -816,20 +850,25 @@ class Module extends Bsw
 
         [$record, $operates, $format, $original] = $this->handlePersistenceData($annotation, $record, $hooks, $output);
 
-        if (!empty($this->input->submit)) {
+        if ($this->input->submit) {
             if ($this->entity) {
                 return $this->persistence($record, $original, $_annotation, $extraSubmit);
             } else {
+
                 if (empty($this->input->handler) || !is_callable($this->input->handler)) {
                     throw new Exception(
                         "Persistence handler should be configured and callable when entity not configured"
                     );
                 }
+
                 $message = call_user_func_array(
                     $this->input->handler,
                     [$this->input->submit, $_annotation, $extraSubmit]
                 );
-                Helper::objectInstanceOf($message, Message::class, 'Persistence custom handler');
+
+                if ($message instanceof Error) {
+                    return $this->showError($message->tiny());
+                }
 
                 return $this->showMessage($message);
             }

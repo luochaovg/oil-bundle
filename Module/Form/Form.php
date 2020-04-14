@@ -149,11 +149,11 @@ abstract class Form
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStyleStringify(): string
+    public function getStyleStringify(): ?string
     {
-        return Html::renderTagAttributes($this->style);
+        return Html::cssStyleFromArray($this->style);
     }
 
     /**

@@ -9,7 +9,6 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input $input
@@ -92,11 +91,7 @@ class Module extends Bsw
             if ($item->isScript()) {
                 $item->setUrl($item->getRoute());
             } else {
-                try {
-                    $item->setUrl($this->web->url($item->getRoute(), [], false));
-                } catch (RouteNotFoundException $e) {
-                    $this->input->logger->warning("Header links error, {$e->getMessage()}");
-                }
+                $item->setUrl($this->web->urlSafe($item->getRoute(), [], 'Header links'));
             }
             array_push($output->links, $item);
         }

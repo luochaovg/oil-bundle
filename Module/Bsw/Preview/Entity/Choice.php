@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Bsw\Preview\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 class Choice
 {
     /**
@@ -17,7 +19,7 @@ class Choice
     /**
      * @var array
      */
-    private $fields = ['id'];
+    private $fields = [Abs::PK];
 
     /**
      * Choice constructor.

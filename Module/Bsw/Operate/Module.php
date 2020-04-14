@@ -12,7 +12,6 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input                $input
@@ -123,11 +122,7 @@ class Module extends Bsw
 
             // script
             $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
-            try {
-                $button->setUrl($this->web->url($button->getRoute(), $button->getArgs(), false));
-            } catch (RouteNotFoundException $e) {
-                $this->input->logger->warning("Operate button route error, {$e->getMessage()}");
-            }
+            $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Operate button'));
 
             $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
             $buttonScene[$scene][] = $button;

@@ -45,9 +45,9 @@ class BswAdminPersistenceLog extends FoundationEntity
      * @ORM\Column(type="integer", name="`user_id`")
      * @Assert\Type(type="integer", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=3, align="center", enumExtra=true)
-     * @BswAnnotation\Persistence(sort=3, type=BswForm\Select::class, enumExtra=true)
-     * @BswAnnotation\Filter(sort=3, type=BswForm\Select::class, enumExtra=true)
+     * @BswAnnotation\Preview(sort=3, align="center")
+     * @BswAnnotation\Persistence(sort=3, type=BswForm\Number::class)
+     * @BswAnnotation\Filter(sort=3, type=BswForm\Number::class)
      */
     protected $userId;
 
@@ -65,9 +65,9 @@ class BswAdminPersistenceLog extends FoundationEntity
      * @ORM\Column(type="string", name="`before`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=5)
-     * @BswAnnotation\Persistence(sort=5, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=5)
+     * @BswAnnotation\Preview(sort=5, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_PRE)
+     * @BswAnnotation\Persistence(sort=5, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=5, hook={0:BswHook\JsonStringify::class})
      */
     protected $before;
 
@@ -75,9 +75,9 @@ class BswAdminPersistenceLog extends FoundationEntity
      * @ORM\Column(type="string", name="`later`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=6)
-     * @BswAnnotation\Persistence(sort=6, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=6)
+     * @BswAnnotation\Preview(sort=6, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_PRE)
+     * @BswAnnotation\Persistence(sort=6, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=6, hook={0:BswHook\JsonStringify::class})
      */
     protected $later;
 
@@ -85,9 +85,9 @@ class BswAdminPersistenceLog extends FoundationEntity
      * @ORM\Column(type="string", name="`effect`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=7)
-     * @BswAnnotation\Persistence(sort=7, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=7)
+     * @BswAnnotation\Preview(sort=7, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_PRE)
+     * @BswAnnotation\Persistence(sort=7, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=7, hook={0:BswHook\JsonStringify::class})
      */
     protected $effect;
 

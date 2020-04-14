@@ -16,7 +16,6 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @property Input                $input
@@ -372,6 +371,8 @@ class Module extends Bsw
          */
 
         $fn = self::ANNOTATION_ONLY;
+        $operate = Abs::TR_ACT;
+
         $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
         $annotationExtra = $this->tailor($this->methodTailor, $fn, null, $annotationExtra, $annotation);
 
@@ -392,7 +393,6 @@ class Module extends Bsw
              */
 
             $fn = self::ANNOTATION;
-            $operate = Abs::TR_ACT;
 
             $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
             if (!isset($annotationExtra[$operate])) {
@@ -734,11 +734,7 @@ class Module extends Bsw
                 $button->setSize(Button::SIZE_SMALL);
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
-                try {
-                    $button->setUrl($this->web->url($button->getRoute(), $button->getArgs(), false));
-                } catch (RouteNotFoundException $e) {
-                    $this->input->logger->warning("Preview button route error, {$e->getMessage()}");
-                }
+                $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
 
                 $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
                 $item[$operate] .= $this->web->renderPart('@LeonBsw/form/button.native', ['form' => $button]);

@@ -293,9 +293,7 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderLinks(): array
     {
-        try {
-            $this->url($this->cnf->route_clean_frontend);
-        } catch (Exception $e) {
+        if (!$this->urlSafe($this->cnf->route_clean_frontend)) {
             $this->cnf->route_clean_frontend = false;
         }
 
@@ -325,14 +323,14 @@ class BswBackendController extends BswWebController
     /**
      * Render module
      *
-     * @param array  $moduleList
-     * @param string $view
-     * @param array  $logicArgs
+     * @param array       $moduleList
+     * @param string|null $view
+     * @param array       $logicArgs
      *
      * @return Response
      * @throws
      */
-    protected function showModule(array $moduleList, string $view, array $logicArgs = []): Response
+    protected function showModule(array $moduleList, ?string $view = null, array $logicArgs = []): Response
     {
         $ajaxShowArgs = [];
         $showArgs = [Abs::TAG_LOGIC => $logicArgs];
@@ -361,7 +359,7 @@ class BswBackendController extends BswWebController
             /**
              * @var Bsw $bsw
              */
-            $inputArgs = array_merge($inputArgs, $extraArgs, $extraBswArgs);
+            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
             [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
 
             /**
@@ -417,6 +415,10 @@ class BswBackendController extends BswWebController
 
             $showArgs["{$name}_html"] = $html;
             $ajaxShowArgs["{$name}_html"] = $html;
+        }
+
+        if (empty($view)) {
+            return $this->responseMessage('Module has not view for render');
         }
 
         $logic = &$showArgs[Abs::TAG_LOGIC];
@@ -479,9 +481,7 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [
-                BswModule\Filter\Module::class => $args,
-            ]
+            [BswModule\Filter\Module::class]
         );
 
         return $this->showModule($moduleList, $view, $args);
@@ -506,10 +506,7 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [
-                BswModule\Filter\Module::class  => $args,
-                BswModule\Preview\Module::class => $args,
-            ]
+            [BswModule\Filter\Module::class, BswModule\Preview\Module::class]
         );
 
         return $this->showModule($moduleList, $view, $args);
@@ -538,12 +535,28 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [
-                BswModule\Persistence\Module::class => $args,
-            ]
+            [BswModule\Persistence\Module::class]
         );
 
         return $this->showModule($moduleList, $view, $args);
+    }
+
+    /**
+     * Render away without view
+     *
+     * @param int   $id
+     * @param array $relation
+     *
+     * @return Response
+     * @throws
+     */
+    protected function doAway(int $id, array $relation = [])
+    {
+        return $this->showModule(
+            [BswModule\Away\Module::class],
+            null,
+            compact('id', 'relation')
+        );
     }
 
     /**
@@ -594,7 +607,7 @@ class BswBackendController extends BswWebController
             'style'  => $mobile ? null : Html::cssStyleFromArray($style),
             'theme'  => $theme,
             'map'    => $option['map'] ?? null,
-            'api'    => $this->generateUrl($this->route),
+            'api'    => $this->urlSafe($this->route, $this->getArgs(), 'Chart api'),
             'option' => json_encode($fullOption, JSON_UNESCAPED_UNICODE) ?: '{}',
         ];
     }
@@ -618,10 +631,7 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [
-                BswModule\Filter\Module::class => $args,
-                BswModule\Chart\Module::class  => $args,
-            ]
+            [BswModule\Filter\Module::class, BswModule\Chart\Module::class]
         );
 
         return $this->showModule($moduleList, $view, $args);
