@@ -39,9 +39,8 @@ $(function () {
 
         no_loading_once: false,
         spinning: false,
+        message: null,  // from v-init
         configure: {},  // from v-init
-        message: {},  // from v-init
-        tips: {}, // from v-init
         modal: {
             visible: false,
         },
@@ -167,8 +166,15 @@ $(function () {
                 number += 1;
             }
 
+            let effect = {};
             let url = bsw.unsetParamsBeginWith(['filter']);
+
+            url = bsw.unsetParams(['page'], url, false, effect);
             url = bsw.setParams({filter: _values}, url);
+
+            if (typeof effect.page && effect.page > 1) {
+                jump = true;
+            }
 
             if (jump) {
                 location.href = url;
@@ -315,21 +321,8 @@ $(function () {
             }));
         },
 
-        selectedRowHandler(field) {
-            let rows = [];
-            for (let i = 0; i < this.preview_selected_row.length; i++) {
-                if (bsw.isString(this.preview_selected_row[i])) {
-                    rows[i] = bsw.evalExpr(this.preview_selected_row[i]);
-                    if (field) {
-                        rows[i] = rows[i][field] || null;
-                    }
-                }
-            }
-            return rows;
-        },
-
         multipleAction(data, element) {
-            let ids = this.selectedRowHandler();
+            let ids = this.preview_selected_row;
             if (ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
             }
@@ -344,13 +337,13 @@ $(function () {
 
         showIFrame(data, element) {
             let size = bsw.popupCosySize();
-            let repair = $(element).prev().attr('id');
-            data.location = bsw.setParams({iframe: true, repair}, data.location);
+            let fill = $(element).prev().attr('id');
+            data.location = bsw.setParams({iframe: true, fill}, data.location);
 
             let options = {
                 visible: true,
                 width: data.width || size.width,
-                title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
+                title: data.title || bsw.lang.please_select,
                 centered: true,
                 wrapClassName: 'bsw-iframe-container',
                 content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
@@ -362,7 +355,7 @@ $(function () {
         },
 
         showIFrameWithChecked(data, element) {
-            let ids = this.selectedRowHandler(data.selector).join(',');
+            let ids = this.preview_selected_row.join(',');
             let args = {ids};
             if (typeof data.form !== "undefined") {
                 let key = `fill[${data.form}]`;
@@ -381,7 +374,7 @@ $(function () {
         },
 
         fillParentForm(data, element) {
-            data.ids = this.selectedRowHandler(data.selector).join(',');
+            data.ids = this.preview_selected_row;
             if (data.ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
             }
@@ -421,7 +414,7 @@ $(function () {
         fillParentFormInParent(data, element) {
             this.modal.visible = false;
             if (this.persistence_form) {
-                this.persistence_form.setFieldsValue({[data.repair]: data.ids});
+                this.persistence_form.setFieldsValue({[data.fill]: data.ids.join(',')});
             }
         },
 

@@ -1709,7 +1709,7 @@ var FoundationAntD = function (_FoundationTools) {
 
                 if (result.error) {
                     if (result.message) {
-                        var _duration = that.isNull(result.duration) ? undefined : result.duration;
+                        var _duration = bsw.isNull(result.duration) ? undefined : result.duration;
                         that[result.classify](result.message, _duration, null, result.type).then(function () {
                             failedHandler(result);
                         }).catch(function (reason) {
@@ -1722,7 +1722,7 @@ var FoundationAntD = function (_FoundationTools) {
                 } else {
 
                     if (result.message) {
-                        var _duration2 = that.isNull(result.duration) ? undefined : result.duration;
+                        var _duration2 = bsw.isNull(result.duration) ? undefined : result.duration;
                         that[result.classify](result.message, _duration2, null, result.type).then(function () {
                             successHandler(result);
                         }).catch(function (reason) {
@@ -1852,29 +1852,6 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             chart.setOption(o);
-        }
-
-        /**
-         * WeChat pay by js api
-         *
-         * @param config object
-         *
-         * @returns void
-         */
-
-    }, {
-        key: 'wxJsApiPay',
-        value: function wxJsApiPay(config) {
-            if (!window.WeixinJSBridge) {
-                console.log("Js api just work in WeiXin browser");
-                return;
-            }
-            WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
-                console.log(result);
-                if (result.err_msg === "get_brand_wcpay_request:ok") {
-                    console.log('success');
-                }
-            });
         }
     }]);
 

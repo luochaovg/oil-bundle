@@ -38,9 +38,8 @@ $(function () {
 
         no_loading_once: false,
         spinning: false,
+        message: null, // from v-init
         configure: {}, // from v-init
-        message: {}, // from v-init
-        tips: {}, // from v-init
         modal: {
             visible: false
         }
@@ -311,20 +310,8 @@ $(function () {
                 console.warn(reason);
             });
         },
-        selectedRowHandler: function selectedRowHandler(field) {
-            var rows = [];
-            for (var i = 0; i < this.preview_selected_row.length; i++) {
-                if (bsw.isString(this.preview_selected_row[i])) {
-                    rows[i] = bsw.evalExpr(this.preview_selected_row[i]);
-                    if (field) {
-                        rows[i] = rows[i][field] || null;
-                    }
-                }
-            }
-            return rows;
-        },
         multipleAction: function multipleAction(data, element) {
-            var ids = this.selectedRowHandler();
+            var ids = this.preview_selected_row;
             if (ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
             }
@@ -338,13 +325,13 @@ $(function () {
         },
         showIFrame: function showIFrame(data, element) {
             var size = bsw.popupCosySize();
-            var repair = $(element).prev().attr('id');
-            data.location = bsw.setParams({ iframe: true, repair: repair }, data.location);
+            var fill = $(element).prev().attr('id');
+            data.location = bsw.setParams({ iframe: true, fill: fill }, data.location);
 
             var options = {
                 visible: true,
                 width: data.width || size.width,
-                title: data.title === false ? data.title : data.title || bsw.lang.please_select,
+                title: data.title || bsw.lang.please_select,
                 centered: true,
                 wrapClassName: 'bsw-iframe-container',
                 content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
@@ -355,7 +342,7 @@ $(function () {
             });
         },
         showIFrameWithChecked: function showIFrameWithChecked(data, element) {
-            var ids = this.selectedRowHandler(data.selector).join(',');
+            var ids = this.preview_selected_row.join(',');
             var args = { ids: ids };
             if (typeof data.form !== "undefined") {
                 var key = 'fill[' + data.form + ']';
@@ -371,7 +358,7 @@ $(function () {
             this.showIFrameByNative($(event.target)[0]);
         },
         fillParentForm: function fillParentForm(data, element) {
-            data.ids = this.selectedRowHandler(data.selector).join(',');
+            data.ids = this.preview_selected_row;
             if (data.ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
             }
@@ -410,7 +397,7 @@ $(function () {
         fillParentFormInParent: function fillParentFormInParent(data, element) {
             this.modal.visible = false;
             if (this.persistence_form) {
-                this.persistence_form.setFieldsValue(_defineProperty({}, data.repair, data.ids));
+                this.persistence_form.setFieldsValue(_defineProperty({}, data.fill, data.ids.join(',')));
             }
         },
         handleResponseInParent: function handleResponseInParent(data, element) {
