@@ -21,13 +21,13 @@ abstract class Acme extends Command
      */
     public function pdo(): MysqlClient
     {
-        $cnf = parse_url($_ENV['DATABASE_URL']);
-        $dbname = trim($cnf['path'], '/');
+        $config = parse_url($_ENV['DATABASE_URL']);
+        $dbname = trim($config['path'], '/');
 
         $pdo = new PDO(
-            "mysql:dbname={$dbname};host={$cnf['host']};port={$cnf['port']}",
-            $cnf['user'],
-            $cnf['pass']
+            "mysql:dbname={$dbname};host={$config['host']};port={$config['port']}",
+            $config['user'],
+            $config['pass']
         );
 
         $fluent = new MysqlClient($pdo);

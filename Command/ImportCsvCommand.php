@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Command;
 
 use Leon\BswBundle\Component\Csv;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -132,6 +133,10 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if (method_exists($this, $fn = Abs::FN_INIT)) {
+            $this->{$fn}();
+        }
+
         $this->params = (object)$this->options($input);
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
@@ -139,9 +144,6 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         if ($this->forbid($this->params)) {
             return;
         }
-
-        ini_set('memory_limit', '2048M');
-        ini_set('xdebug.max_nesting_level', 2048);
 
         if ($this->logic($this->params->limit, $output, $this->params->csv)) {
             $this->done($output);

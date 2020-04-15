@@ -74,12 +74,29 @@ trait BswFoundation
         $this->expr = new Expr();
 
         ini_set('date.timezone', 'PRC');
-        if (method_exists($this, $fn = Abs::FN_INIT)) {
-            $this->{$fn}();
-        }
+        ini_set('memory_limit', '2048M');
+        ini_set('xdebug.max_nesting_level', 2048);
 
         parent::__construct();
     }
+
+    /**
+     * @return mixed
+     */
+    public function init()
+    {
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    abstract function base(): array;
+
+    /**
+     * @return array
+     */
+    abstract function args(): array;
 
     /**
      * Configure
@@ -123,7 +140,7 @@ trait BswFoundation
     }
 
     /**
-     * Get yml、db config
+     * Get yml/db config
      *
      * @param string $key
      *

@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Leon\BswBundle\Repository\FoundationRepository;
 use Symfony\Component\Console\Command\Command;
@@ -171,6 +172,10 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        if (method_exists($this, $fn = Abs::FN_INIT)) {
+            $this->{$fn}();
+        }
+
         $this->params = (object)$this->options($input);
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
@@ -178,9 +183,6 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         if ($this->forbid($this->params)) {
             return;
         }
-
-        ini_set('memory_limit', '2048M');
-        ini_set('xdebug.max_nesting_level', 2048);
 
         if ($this->logic($this->params->limit, $output)) {
             $this->done($output);
