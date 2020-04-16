@@ -195,6 +195,8 @@ Force version:          '強制更新'
 Ali cloud:              '阿裏雲'
 Tx cloud:               '騰訊雲'
 Aws cloud:              '亞馬遜雲'
+Gle cloud:              '谷歌雲'
+Hw cloud:               '華為雲'
 
 DEBUG:                  '調試'
 INFO:                   '信息'

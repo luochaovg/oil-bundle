@@ -195,6 +195,8 @@ Force version:          '强制更新'
 Ali cloud:              '阿里云'
 Tx cloud:               '腾讯云'
 Aws cloud:              '亚马逊云'
+Gle cloud:              '谷歌云'
+Hw cloud:               '华为云'
 
 DEBUG:                  '调试'
 INFO:                   '信息'

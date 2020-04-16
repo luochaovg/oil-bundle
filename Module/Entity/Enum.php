@@ -126,6 +126,8 @@ class Enum
         Abs::CLD_ALI => 'Ali cloud',
         Abs::CLD_TX  => 'Tx cloud',
         Abs::CLD_AWS => 'Aws cloud',
+        Abs::CLD_GLE => 'Gle cloud',
+        Abs::CLD_HW  => 'Hw cloud',
     ];
 
     /**

@@ -304,12 +304,17 @@ class Abs
     const WX_PAY_APP    = 'APP';
     const WX_PAY_H5     = 'MWEB';
 
-    const CLD_ALI   = 1;
-    const CLD_TX    = 2;
-    const CLD_AWS   = 3;
+    const CLD_ALI = 1;
+    const CLD_TX  = 2;
+    const CLD_AWS = 3;
+    const CLD_GLE = 4;
+    const CLD_HW  = 5;
+
     const CLOUD_ALI = 'ali';
     const CLOUD_TX  = 'tx';
     const CLOUD_AWS = 'aws';
+    const CLOUD_GLE = 'gle';
+    const CLOUD_HW  = 'hw';
 
     const DOMESTIC = 'domestic';
     const ABROAD   = 'abroad';
