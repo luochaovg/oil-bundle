@@ -137,6 +137,8 @@ class Enum
         Abs::CLD_ALI => Abs::CLOUD_ALI,
         Abs::CLD_TX  => Abs::CLOUD_TX,
         Abs::CLD_AWS => Abs::CLOUD_AWS,
+        Abs::CLD_GLE => Abs::CLOUD_GLE,
+        Abs::CLD_HW  => Abs::CLOUD_HW,
     ];
 
     /**

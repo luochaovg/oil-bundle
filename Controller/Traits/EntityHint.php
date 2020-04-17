@@ -148,7 +148,7 @@ trait EntityHint
 
         $needMoneyHook = false;
 
-        foreach (['money', 'amount', 'paid', 'cost', 'price'] as $keyword) {
+        foreach (['money', 'amount', 'paid', 'cost', 'price', 'balance'] as $keyword) {
             if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = true;
                 break;
@@ -290,7 +290,7 @@ trait EntityHint
 
         $needMoneyHook = false;
 
-        foreach (['money', 'amount', 'paid', 'cost', 'price'] as $keyword) {
+        foreach (['money', 'amount', 'paid', 'cost', 'price', 'balance'] as $keyword) {
             if (static::relationWithKeyword($item->name, $keyword)) {
                 $needMoneyHook = true;
                 break;

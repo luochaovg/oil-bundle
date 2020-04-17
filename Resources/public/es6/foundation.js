@@ -637,18 +637,16 @@ class FoundationTools extends FoundationPrototype {
      * @param items json
      * @param url string
      * @param needEncode bool
-     * @param effect json
      *
      * @return {string}
      */
-    unsetParams(items, url, needEncode = false, effect = {}) {
+    unsetParams(items, url, needEncode = false) {
 
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
         for (let v of items || []) {
             if (typeof queryParams[v] !== 'undefined') {
-                effect[v] = queryParams[v];
                 delete queryParams[v];
             }
         }
@@ -666,11 +664,10 @@ class FoundationTools extends FoundationPrototype {
      * @param items json
      * @param url string
      * @param needEncode bool
-     * @param effect json
      *
      * @return {string}
      */
-    unsetParamsBeginWith(items, url, needEncode = false, effect = {}) {
+    unsetParamsBeginWith(items, url, needEncode = false) {
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
@@ -680,7 +677,6 @@ class FoundationTools extends FoundationPrototype {
                     continue;
                 }
                 if (w.startsWith(v)) {
-                    effect[w] = queryParams[w];
                     delete queryParams[w];
                 }
             }
@@ -1307,7 +1303,7 @@ class FoundationAntD extends FoundationTools {
 
             if (result.error) {
                 if (result.message) {
-                    let duration = bsw.isNull(result.duration) ? undefined : result.duration;
+                    let duration = that.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(() => {
                         failedHandler(result);
                     }).catch((reason => {
@@ -1321,7 +1317,7 @@ class FoundationAntD extends FoundationTools {
             } else {
 
                 if (result.message) {
-                    let duration = bsw.isNull(result.duration) ? undefined : result.duration;
+                    let duration = that.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(function () {
                         successHandler(result);
                     }).catch((reason => {
@@ -1400,6 +1396,27 @@ class FoundationAntD extends FoundationTools {
         }
 
         chart.setOption(o);
+    }
+
+    /**
+     * WeChat pay by js api
+     *
+     * @param config object
+     *
+     * @returns void
+     */
+    wxJsApiPay(config) {
+        if (!window.WeixinJSBridge) {
+            console.log("Js api just work in WeiXin browser");
+            return;
+        }
+        WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
+                console.log(result);
+                if (result.err_msg === "get_brand_wcpay_request:ok") {
+                    console.log('success');
+                }
+            }
+        );
     }
 }
 

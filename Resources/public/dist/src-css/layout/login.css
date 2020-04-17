@@ -14,11 +14,7 @@
   height: 100%;
   position: fixed;
   z-index: 1000;
-  background-color: #ffffff;
   letter-spacing: 3px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 }
 .bsw-page-loading span {
   position: absolute;
@@ -143,10 +139,7 @@ div.ant-modal-mask {
 div.ant-spin-container {
   width: 100%;
   min-height: 100%;
-  background: #f0f2f5 url("/bundles/leonbsw/img/background.1.svg") no-repeat 50%;
-  background-size: 100%;
   padding: 110px 0 144px;
-  position: relative;
 }
 div.header {
   width: 100%;
@@ -203,6 +196,7 @@ div.header span {
       flex: 1;
 }
 .bsw-captcha-item .ant-form-item-children > img.bsw-captcha {
+  height: 40px;
   margin-left: 10px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;

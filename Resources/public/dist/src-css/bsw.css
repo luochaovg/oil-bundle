@@ -14,11 +14,7 @@
   height: 100%;
   position: fixed;
   z-index: 1000;
-  background-color: #ffffff;
   letter-spacing: 3px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 }
 .bsw-page-loading span {
   position: absolute;
@@ -166,7 +162,7 @@ div.ant-modal-mask {
 .ant-layout-sider .logo h1 {
   display: inline-block;
   margin: 0 4px;
-  font-weight: 600;
+  font-weight: 100;
   font-size: 20px;
   font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
   vertical-align: middle;
@@ -255,6 +251,11 @@ div.ant-modal-mask {
 }
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
   padding: 60px 40px;
+}
+@media screen and (max-width: 992px) {
+  .ant-layout .ant-layout-content.iframe .bsw-persistence {
+    padding: 30px 20px;
+  }
 }
 .ant-layout .ant-layout-content .ant-breadcrumb {
   margin-bottom: 15px;
@@ -367,7 +368,7 @@ div.ant-modal-mask {
 }
 @media screen and (max-width: 992px) {
   .bsw-persistence {
-    padding: 30px 20px;
+    padding: 40px 30px;
   }
 }
 .bsw-grant form {
