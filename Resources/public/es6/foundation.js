@@ -637,16 +637,18 @@ class FoundationTools extends FoundationPrototype {
      * @param items json
      * @param url string
      * @param needEncode bool
+     * @param effect json
      *
      * @return {string}
      */
-    unsetParams(items, url, needEncode = false) {
+    unsetParams(items, url, needEncode = false, effect = {}) {
 
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
         for (let v of items || []) {
             if (typeof queryParams[v] !== 'undefined') {
+                effect[v] = queryParams[v];
                 delete queryParams[v];
             }
         }
@@ -664,10 +666,11 @@ class FoundationTools extends FoundationPrototype {
      * @param items json
      * @param url string
      * @param needEncode bool
+     * @param effect json
      *
      * @return {string}
      */
-    unsetParamsBeginWith(items, url, needEncode = false) {
+    unsetParamsBeginWith(items, url, needEncode = false, effect = {}) {
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
@@ -677,6 +680,7 @@ class FoundationTools extends FoundationPrototype {
                     continue;
                 }
                 if (w.startsWith(v)) {
+                    effect[w] = queryParams[w];
                     delete queryParams[w];
                 }
             }

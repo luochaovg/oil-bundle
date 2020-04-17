@@ -167,8 +167,15 @@ $(function () {
                 number += 1;
             }
 
+            let effect = {};
             let url = bsw.unsetParamsBeginWith(['filter']);
+
+            url = bsw.unsetParams(['page'], url, false, effect);
             url = bsw.setParams({filter: _values}, url);
+
+            if (typeof effect.page && effect.page > 1) {
+                jump = true;
+            }
 
             if (jump) {
                 location.href = url;

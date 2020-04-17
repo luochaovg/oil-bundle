@@ -77,20 +77,20 @@ class BswBackendController extends BswWebController
      * @var array
      */
     protected $mapCdnSrcCss = [
-        'ant-d'   => 'https://cdn.jsdelivr.net/npm/ant-design-vue@1.3.16/dist/antd.min.css',
-        'animate' => 'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
+        // 'ant-d'   => 'https://cdn.jsdelivr.net/npm/ant-design-vue@1.3.16/dist/antd.min.css',
+        // 'animate' => 'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
     ];
 
     /**
      * @var array
      */
     protected $mapCdnSrcJs = [
-        'jquery'   => 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
-        'moment'   => 'https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js',
-        'vue'      => 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
-        'ant-d'    => 'https://cdn.jsdelivr.net/npm/ant-design-vue@1.3.16/dist/antd.min.js',
-        'rsa'      => 'https://cdn.jsdelivr.net/npm/jsencrypt@3.0.0-rc.1/bin/jsencrypt.min.js',
-        'e-charts' => 'https://cdn.jsdelivr.net/npm/echarts@4.3.0/dist/echarts.min.js',
+        // 'jquery'   => 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
+        // 'moment'   => 'https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js',
+        // 'vue'      => 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
+        // 'ant-d'    => 'https://cdn.jsdelivr.net/npm/ant-design-vue@1.3.16/dist/antd.min.js',
+        // 'rsa'      => 'https://cdn.jsdelivr.net/npm/jsencrypt@3.0.0-rc.1/bin/jsencrypt.min.js',
+        // 'e-charts' => 'https://cdn.jsdelivr.net/npm/echarts@4.3.0/dist/echarts.min.js',
     ];
 
     /**
