@@ -578,6 +578,30 @@ class Abs
     // html 灰色模板
     const HTML_GRAY = "<div class='ant-tag ant-tag-has-color' style='background-color: #d6d6d6;'>{value}</div>";
 
+    // html 粉色模板
+    const TEXT_PINK = "<div style='color: #eb2f96;'>{value}</div>";
+
+    // html 红色模板
+    const TEXT_RED = "<div style='color: #f5222d;'>{value}</div>";
+
+    // html 橙色模板
+    const TEXT_ORANGE = "<div style='color: #fa8c16;'>{value}</div>";
+
+    // html 绿色模板
+    const TEXT_GREEN = "<div style='color: #52c41a;'>{value}</div>";
+
+    // html 青色模板
+    const TEXT_CYAN = "<div style='color: #13c2c2;'>{value}</div>";
+
+    // html 蓝色模板
+    const TEXT_BLUE = "<div style='color: #1890ff;'>{value}</div>";
+
+    // html 紫色模板
+    const TEXT_PURPLE = "<div style='color: #722ed1;'>{value}</div>";
+
+    // html 灰色模板
+    const TEXT_GRAY = "<div style='color: #d6d6d6;'>{value}</div>";
+
     // 危险权限
     const DANGER_ACCESS = 'Dangerous permission, please be careful';
 }
