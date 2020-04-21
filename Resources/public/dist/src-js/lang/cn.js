@@ -18,5 +18,8 @@ window.lang = {
     captcha_required: '验证码不能为空',
     google_captcha_required: '谷歌验证码不能为空',
     select_item_first: '请选择至少一项',
-    please_select: '请选择'
+    please_select: '请选择',
+    theme: '主题',
+    color_weak: '色弱模式',
+    third_message: '第三方消息提示'
 };

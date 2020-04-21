@@ -141,6 +141,7 @@ parameters:
         route_clean_frontend: app_clean_frontend
         route_upload: app_upload
         route_captcha: app_captcha
+        route_thrid_message: app_third_message
 
         usr_account: name
         usr_uid: user_id
@@ -172,6 +173,7 @@ parameters:
         icon_two_box: b:icon-similarproduct
         icon_submit_form: b:icon-rfq
         icon_theme: b:icon-theme
+        icon_message: b:icon-remind1
         icon_bulb: a:bulb
         icon_db: b:icon-jifen
         icon_profile: a:profile
@@ -187,6 +189,7 @@ parameters:
         icon_loading: null
 
         telegram_receiver_command_queue: null
+        third_message_key: bsw_third_message
 
     currency_code: CNY
     currency_char: ￥
@@ -235,8 +238,8 @@ parameters:
         theme: dark
         menu_width: 256
         menu_collapsed: no
-        table_border: yes
-        table_padding: no
+        third_message: yes
+        third_message_second: 5
 
 services:
 

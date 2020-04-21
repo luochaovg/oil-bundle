@@ -283,6 +283,7 @@ class BswBackendController extends BswWebController
         return [
             new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
             new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
+            new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch')
         ];
     }
 

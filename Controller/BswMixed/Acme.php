@@ -21,4 +21,5 @@ class Acme extends BswBackendController
     use Profile;
     use SiteIndex;
     use Telegram;
+    use ThirdMessage;
 }

@@ -1,5 +1,9 @@
 {% extends '@LeonBsw/foundation/scaffold.html.twig' %}
-{% set tpl_api = {login: path(scaffold.cnf.route_login_handler), upload: path(scaffold.cnf.route_upload)} %}
+{% set tpl_api = {
+  login: path(scaffold.cnf.route_login_handler),
+  upload: path(scaffold.cnf.route_upload),
+  third_message: path(scaffold.cnf.route_thrid_message)
+} %}
 
 {% block body %}
   <a-spin

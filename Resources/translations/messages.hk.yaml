@@ -150,6 +150,7 @@ Ali pay failed:                           '支付寶支付失敗'
 Pay action failed:                        '支付操作失敗'
 Refund amount so much:                    '退款金額超實付金額'
 Refunded in full:                         '已全額退款'
+No record:                                '結果集為空'
 
 # bsw validator
 

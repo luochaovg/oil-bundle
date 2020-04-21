@@ -863,13 +863,19 @@ class FoundationTools extends FoundationPrototype {
      * @param map json
      * @param def mixed
      * @param set bool
+     * @param tips string
      *
      * @return mixed
      */
-    cookieMapNext(name, map, def, set = false) {
+    cookieMapNext(name, map, def, set = false, tips = null) {
         let ck = this.cookie();
         let current = ck.get(name, def);
         let next = map[current] || def;
+
+        if (tips) {
+            let _next = this.ucFirst(next);
+            this.message('success', `${tips}: ${_next}`);
+        }
 
         return set ? ck.set(name, next) : next;
     }

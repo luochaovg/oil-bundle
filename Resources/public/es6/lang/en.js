@@ -17,4 +17,7 @@ window.lang = {
     google_captcha_required: 'Google captcha is required',
     select_item_first: 'Please select item first',
     please_select: 'Please select',
+    theme: 'Theme',
+    color_weak: 'Color weak mode',
+    third_message: 'Third message',
 };

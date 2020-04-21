@@ -32,6 +32,7 @@ $(function () {
         theme: 'light',
         themeMap: {dark: 'light', light: 'dark'},
         weak: 'no',
+        third_message: 'yes',
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
@@ -313,7 +314,9 @@ $(function () {
             let that = this;
             bsw.request(data.location).then((res) => {
                 bsw.response(res).then(() => {
-                    that.preview_pagination_refresh();
+                    if (typeof data.refresh !== 'undefined' && data.refresh) {
+                        that.preview_pagination_refresh();
+                    }
                 }).catch((reason => {
                     console.warn(reason);
                 }));

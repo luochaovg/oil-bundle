@@ -830,6 +830,7 @@ var FoundationTools = function (_FoundationPrototype) {
          * @param items json
          * @param url string
          * @param needEncode bool
+         * @param effect json
          *
          * @return {string}
          */
@@ -838,6 +839,7 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'unsetParams',
         value: function unsetParams(items, url) {
             var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+            var effect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
 
             url = url || location.href;
@@ -852,6 +854,7 @@ var FoundationTools = function (_FoundationPrototype) {
                     var v = _step2.value;
 
                     if (typeof queryParams[v] !== 'undefined') {
+                        effect[v] = queryParams[v];
                         delete queryParams[v];
                     }
                 }
@@ -883,6 +886,7 @@ var FoundationTools = function (_FoundationPrototype) {
          * @param items json
          * @param url string
          * @param needEncode bool
+         * @param effect json
          *
          * @return {string}
          */
@@ -891,6 +895,7 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'unsetParamsBeginWith',
         value: function unsetParamsBeginWith(items, url) {
             var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+            var effect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
             url = url || location.href;
             var queryParams = this.parseQueryString(url, true);
@@ -908,6 +913,7 @@ var FoundationTools = function (_FoundationPrototype) {
                             continue;
                         }
                         if (w.startsWith(v)) {
+                            effect[w] = queryParams[w];
                             delete queryParams[w];
                         }
                     }
@@ -1146,6 +1152,7 @@ var FoundationTools = function (_FoundationPrototype) {
          * @param map json
          * @param def mixed
          * @param set bool
+         * @param tips string
          *
          * @return mixed
          */
@@ -1154,10 +1161,16 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'cookieMapNext',
         value: function cookieMapNext(name, map, def) {
             var set = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+            var tips = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
 
             var ck = this.cookie();
             var current = ck.get(name, def);
             var next = map[current] || def;
+
+            if (tips) {
+                var _next = this.ucFirst(next);
+                this.message('success', tips + ': ' + _next);
+            }
 
             return set ? ck.set(name, next) : next;
         }

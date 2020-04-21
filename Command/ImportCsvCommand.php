@@ -203,7 +203,9 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
 
         [$total, $items] = $this->csvReader($csv, $page, $limit);
         if ($page === 1 && empty($items)) {
-            return $this->empty($output);
+            $this->empty($output);
+
+            return 0;
         }
 
         $pageDone = 0;

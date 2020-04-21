@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -31,6 +33,7 @@ $(function () {
         theme: 'light',
         themeMap: { dark: 'light', light: 'dark' },
         weak: 'no',
+        third_message: 'yes',
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
@@ -165,8 +168,15 @@ $(function () {
                 number += 1;
             }
 
+            var effect = {};
             var url = bsw.unsetParamsBeginWith(['filter']);
+
+            url = bsw.unsetParams(['page'], url, false, effect);
             url = bsw.setParams({ filter: _values }, url);
+
+            if (_typeof(effect.page) && effect.page > 1) {
+                jump = true;
+            }
 
             if (jump) {
                 location.href = url;
@@ -303,7 +313,9 @@ $(function () {
             var that = this;
             bsw.request(data.location).then(function (res) {
                 bsw.response(res).then(function () {
-                    that.preview_pagination_refresh();
+                    if (typeof data.refresh !== 'undefined' && data.refresh) {
+                        that.preview_pagination_refresh();
+                    }
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
