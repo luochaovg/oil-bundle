@@ -159,6 +159,14 @@ class Message
     }
 
     /**
+     * @return bool
+     */
+    public function isSuccessClassify(): bool
+    {
+        return $this->getClassify() == Abs::TAG_CLASSIFY_SUCCESS;
+    }
+
+    /**
      * @return array
      */
     public function getArgs(): array

@@ -91,6 +91,26 @@ trait BackendPreset
     }
 
     /**
+     * @param array $filter
+     * @param array $index
+     *
+     * @return array
+     */
+    public function previewFilter(array $filter, array $index = []): array
+    {
+        $_filter = [];
+        foreach ($filter as $key => $value) {
+            $k = Helper::camelToUnder($key);
+            if (!is_numeric(Helper::arrayLatestItem($k))) {
+                $k = "{$k}_" . ($index[$key] ?? 0);
+            }
+            $_filter[$k] = $value;
+        }
+
+        return ['filter' => $_filter];
+    }
+
+    /**
      * @param string $field
      * @param string $content
      * @param array  $options

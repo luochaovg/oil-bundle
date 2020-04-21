@@ -36,9 +36,8 @@ use Leon\BswBundle\Module\Exception\ModuleException;
  * tpl                  = 子模板
  * dress                = dress 对应的字符串/JSON字符串
  * enum                 = enum 对应的JSON字符串
- * value                = enum 对应的JSON字符串
- * Abs::SLOT_NOT_BLANK  = enum 对应的JSON字符串
- *
+ * value                = value
+ * Abs::SLOT_NOT_BLANK  = 空模板
  */
 class Module extends Bsw
 {

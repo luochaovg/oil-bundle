@@ -47,7 +47,7 @@ trait BswFoundation
      */
     protected $kernel;
 
-    /***
+    /**
      * @var Expr
      */
     protected $expr;

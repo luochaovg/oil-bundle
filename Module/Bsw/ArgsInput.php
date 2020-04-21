@@ -89,6 +89,11 @@ abstract class ArgsInput
     public $uuid;
 
     /**
+     * @var string
+     */
+    public $entity;
+
+    /**
      * @var TranslatorInterface
      */
     public $translator;

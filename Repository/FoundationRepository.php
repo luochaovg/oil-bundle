@@ -547,6 +547,9 @@ abstract class FoundationRepository extends SFRepository
          */
 
         if (isset($group)) {
+            if (is_array($group)) {
+                $group = implode(', ', $group);
+            }
             $model->groupBy($group);
         }
 

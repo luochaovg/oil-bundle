@@ -144,7 +144,7 @@ abstract class Bsw
         $entityFlag = self::ENTITY;
         $method = $this->method . $entityFlag;
 
-        $this->entity = $this->caller($this->method, $entityFlag, Abs::T_STRING);
+        $this->entity = $this->input->entity ?? $this->caller($this->method, $entityFlag, Abs::T_STRING);
         if (empty($this->entity)) {
             return;
         }

@@ -238,8 +238,8 @@ parameters:
         theme: dark
         menu_width: 256
         menu_collapsed: no
-        third_message: yes
-        third_message_second: 5
+        third_message: no
+        third_message_second: 15
 
 services:
 

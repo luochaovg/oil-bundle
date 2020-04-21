@@ -4252,4 +4252,23 @@ class Helper
 
         return $upper ? strtoupper($prefix) : $prefix;
     }
+
+    /**
+     * Return array latest item
+     *
+     * @param string|array $target
+     * @param string       $split
+     *
+     * @return mixed
+     */
+    public static function arrayLatestItem($target, string $split = '_')
+    {
+        if (is_scalar($target)) {
+            $target = explode($split, $target);
+        }
+
+        $total = count($target);
+
+        return $target[$total - 1];
+    }
 }
