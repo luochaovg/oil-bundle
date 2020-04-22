@@ -24,6 +24,11 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     protected $params;
 
     /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * @return array
      */
     public function args(): array
@@ -59,11 +64,9 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     }
 
     /**
-     * @param object $params
-     *
      * @return bool
      */
-    public function forbid($params): bool
+    public function forbid(): bool
     {
         return false;
     }
@@ -76,11 +79,11 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     abstract public function handler(array $record): bool;
 
     /**
-     * @param OutputInterface $output
+     * @return void
      */
-    public function done(OutputInterface $output)
+    public function done()
     {
-
+        $this->output->writeln("<info> Csv import done\n </info>");
     }
 
     /**
@@ -113,16 +116,6 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     }
 
     /**
-     * @param OutputInterface $output
-     *
-     * @return mixed
-     */
-    public function empty(OutputInterface $output)
-    {
-        return $output->writeln('The csv file is empty');
-    }
-
-    /**
      * Execute
      *
      * @param InputInterface  $input
@@ -133,6 +126,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         if (method_exists($this, $fn = Abs::FN_INIT)) {
             $this->{$fn}();
         }
@@ -141,14 +135,12 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
-        if ($this->forbid($this->params)) {
+        if ($this->forbid()) {
             return;
         }
 
-        if ($this->logic($this->params->limit, $output, $this->params->csv)) {
-            $this->done($output);
-            $output->writeln("<info> \n import done\n </info>");
-        }
+        $this->logic($this->params->limit, $this->params->csv);
+        $this->done();
     }
 
     /**
@@ -180,31 +172,22 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     }
 
     /**
-     * @param int             $limit
-     * @param OutputInterface $output
-     * @param string          $csv
-     * @param int             $page
-     * @param int             $totalSuccess
+     * @param int    $limit
+     * @param string $csv
+     * @param int    $page
+     * @param int    $totalSuccess
      *
      * @return int
      * @throws
      */
-    protected function logic(
-        int $limit,
-        OutputInterface $output,
-        string $csv,
-        int $page = 1,
-        int $totalSuccess = 0
-    ): int {
-
+    protected function logic(int $limit, string $csv, int $page = 1, int $totalSuccess = 0): int
+    {
         if ($limit < 2) {
             throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2');
         }
 
         [$total, $items] = $this->csvReader($csv, $page, $limit);
         if ($page === 1 && empty($items)) {
-            $this->empty($output);
-
             return 0;
         }
 
@@ -215,7 +198,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
                 $pageDone += ($this->handler($record) ? 1 : 0);
             }
         } catch (Exception $e) {
-            $output->writeln("<error> {$e->getMessage()} </error>");
+            $this->output->writeln("<error> {$e->getMessage()} </error>");
 
             return 0;
         }
@@ -223,10 +206,10 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $totalSuccess += $pageDone;
         $pageCount = count($items);
 
-        $output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $total));
+        $this->output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $total));
 
         if ($limit == $pageCount) {
-            return $this->logic($limit, $output, $csv, ++$page, $totalSuccess);
+            return $this->logic($limit, $csv, ++$page, $totalSuccess);
         }
 
         return $page;

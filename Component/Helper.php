@@ -2181,6 +2181,7 @@ class Helper
      */
     public static function dateBeforeN(int $n, $date = null): array
     {
+        $n -= 1;
         $timestamp = $date ? strtotime($date) : time();
 
         $to = date(Abs::FMT_DAY, $timestamp);
@@ -2202,6 +2203,7 @@ class Helper
      */
     public static function dateAfterN(int $n, $date = null): array
     {
+        $n -= 1;
         $timestamp = $date ? strtotime($date) : time();
 
         $from = date(Abs::FMT_DAY, $timestamp);
@@ -4158,6 +4160,8 @@ class Helper
     }
 
     /**
+     * Boundary datetime
+     *
      * @param string ...$datetime
      *
      * @return array
@@ -4171,6 +4175,22 @@ class Helper
         $max = date(Abs::FMT_FULL, end($datetime));
 
         return [$min, $max];
+    }
+
+    /**
+     * Compare datetime
+     *
+     * @param string $left
+     * @param string $right
+     *
+     * @return int
+     */
+    public static function compareDateTime(string $left, string $right): int
+    {
+        $left = strtotime($left);
+        $right = strtotime($right);
+
+        return $left <=> $right;
     }
 
     /**

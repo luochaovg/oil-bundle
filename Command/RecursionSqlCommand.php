@@ -26,6 +26,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     protected $repo;
 
     /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * @var object
      */
     protected $params;
@@ -46,7 +51,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     public function args(): array
     {
         return [
-            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 10],
+            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 30],
             'args'  => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
         ];
     }
@@ -98,11 +103,9 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     }
 
     /**
-     * @param object $params
-     *
      * @return bool
      */
-    public function forbid($params): bool
+    public function forbid(): bool
     {
         return false;
     }
@@ -115,11 +118,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     abstract public function handler(array $record): bool;
 
     /**
-     * @param OutputInterface $output
+     * @return void
      */
-    public function done(OutputInterface $output)
+    public function done()
     {
-
+        $this->output->writeln("<info> Sql recursion done\n </info>");
     }
 
     /**
@@ -151,17 +154,6 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     }
 
     /**
-     * @param OutputInterface $output
-     *
-     * @return mixed
-     * @throws
-     */
-    public function empty(OutputInterface $output)
-    {
-        throw new Exception('The lister result is empty');
-    }
-
-    /**
      * Execute
      *
      * @param InputInterface  $input
@@ -172,6 +164,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         if (method_exists($this, $fn = Abs::FN_INIT)) {
             $this->{$fn}();
         }
@@ -180,32 +173,24 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
-        if ($this->forbid($this->params)) {
+        if ($this->forbid()) {
             return;
         }
 
-        if ($this->logic($this->params->limit, $output)) {
-            $this->done($output);
-            $output->writeln("<info> \n recursion done\n </info>");
-        }
+        $this->logic($this->params->limit);
+        $this->done();
     }
 
     /**
-     * @param int             $limit
-     * @param OutputInterface $output
-     * @param int             $page
-     * @param int             $totalSuccess
+     * @param int $limit
+     * @param int $page
+     * @param int $totalSuccess
      *
      * @return int
      * @throws
      */
-    protected function logic(
-        int $limit,
-        OutputInterface $output,
-        int $page = 1,
-        int $totalSuccess = 0
-    ): int {
-
+    protected function logic(int $limit, int $page = 1, int $totalSuccess = 0): int
+    {
         if ($limit < 2) {
             throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2');
         }
@@ -227,8 +212,6 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
         $this->page = $page;
         if ($page === 1 && empty($result['items'])) {
-            $this->empty($output);
-
             return 0;
         }
 
@@ -242,7 +225,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
                 }
             }
         } catch (Exception $e) {
-            $output->writeln("<error> {$e->getMessage()} </error>");
+            $this->output->writeln("<error> {$e->getMessage()} </error>");
 
             return 0;
         }
@@ -250,10 +233,12 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         $totalSuccess += $pageDone;
         $pageCount = count($result['items']);
 
-        $output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $result['total_item']));
+        $this->output->writeln(
+            $this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $result['total_item'])
+        );
 
         if ($limit == $pageCount) {
-            return $this->logic($limit, $output, ++$page, $totalSuccess);
+            return $this->logic($limit, ++$page, $totalSuccess);
         }
 
         return $page;
