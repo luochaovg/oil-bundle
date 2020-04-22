@@ -2,8 +2,6 @@
 
 namespace Leon\BswBundle\Component;
 
-use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
-use Leon\BswBundle\Module\Error\Error;
 use ZipArchive;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
@@ -1158,7 +1156,7 @@ class Helper
      *
      * @return array
      */
-    public static function newDifferenceOld(array $old, array $new)
+    public static function newDifferenceOld(array $old, array $new): array
     {
         $intersect = array_intersect($new, $old);
         $add = array_diff($new, $intersect);
@@ -1436,7 +1434,7 @@ class Helper
      *
      * @return string
      */
-    public static function gUid($hyphen = null)
+    public static function gUid($hyphen = null): string
     {
         $id = strtoupper(md5(uniqid(mt_rand(), true)));
         $hyphen = $hyphen ?: chr(45);
@@ -1723,10 +1721,10 @@ class Helper
             $mobile_browser++;
         }
 
-        if ((isset($_SERVER['HTTP_ACCEPT'])) and (strpos(
-                    strtolower($_SERVER['HTTP_ACCEPT'] ?? null),
-                    'application/vnd.wap.xhtml+xml'
-                ) !== false)) {
+        if (
+            (isset($_SERVER['HTTP_ACCEPT'])) and
+            (strpos(strtolower($_SERVER['HTTP_ACCEPT'] ?? null), 'application/vnd.wap.xhtml+xml') !== false)
+        ) {
             $mobile_browser++;
         }
 
@@ -1942,13 +1940,13 @@ class Helper
     }
 
     /**
-     * Get the minute begin and end timestamp
+     * Get time range of minute
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampMinute($date = null)
+    public static function timestampMinute($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_MINUTES . ':00', $timestamp);
@@ -1961,13 +1959,13 @@ class Helper
     }
 
     /**
-     * Get the hour begin and end timestamp
+     * Get time range of hour
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampHour($date = null)
+    public static function timestampHour($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_HOUR . ':00:00', $timestamp);
@@ -1980,13 +1978,13 @@ class Helper
     }
 
     /**
-     * Get the day begin and end timestamp
+     * Get time range of day
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampDay($date = null)
+    public static function timestampDay($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_DAY, $timestamp);
@@ -1999,13 +1997,13 @@ class Helper
     }
 
     /**
-     * Get the week begin and end day
+     * Get date range of week
      *
      * @param string $date
      *
      * @return array
      */
-    public static function dateWeek($date = null)
+    public static function dateWeek($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_WEEK, $timestamp);
@@ -2018,13 +2016,13 @@ class Helper
     }
 
     /**
-     * Get the week begin and end timestamp
+     * Get time range of week
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampWeek($date = null)
+    public static function timestampWeek($date = null): array
     {
         [$head, $tail] = self::dateWeek($date);
 
@@ -2035,13 +2033,13 @@ class Helper
     }
 
     /**
-     * Get the month begin and end day
+     * Get date range of month
      *
      * @param string $date
      *
      * @return array
      */
-    public static function dateMonth($date = null)
+    public static function dateMonth($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_MONTH_LAST_DAY, $timestamp);
@@ -2054,13 +2052,13 @@ class Helper
     }
 
     /**
-     * Get the month begin and end timestamp
+     * Get time range of month
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampMonth($date = null)
+    public static function timestampMonth($date = null): array
     {
         [$head, $tail] = self::dateMonth($date);
 
@@ -2071,13 +2069,13 @@ class Helper
     }
 
     /**
-     * Get the quarter begin and end day
+     * Get date range of quarter
      *
      * @param string $date
      *
      * @return array
      */
-    public static function dateQuarter($date = null)
+    public static function dateQuarter($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_MONTH, $timestamp);
@@ -2096,13 +2094,13 @@ class Helper
     }
 
     /**
-     * Get the quarter begin and end timestamp
+     * Get time range of quarter
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampQuarter($date = null)
+    public static function timestampQuarter($date = null): array
     {
         [$head, $tail] = self::dateQuarter($date);
 
@@ -2113,13 +2111,13 @@ class Helper
     }
 
     /**
-     * Get the year begin and end day
+     * Get date range of year
      *
      * @param string $date
      *
      * @return array
      */
-    public static function dateYear($date = null)
+    public static function dateYear($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $Y = date(Abs::FMT_YEAR_ONLY, $timestamp);
@@ -2131,13 +2129,13 @@ class Helper
     }
 
     /**
-     * Get the year begin and end timestamp
+     * Get time range of year
      *
      * @param string $date
      *
      * @return array
      */
-    public static function timestampYear($date = null)
+    public static function timestampYear($date = null): array
     {
         [$head, $tail] = self::dateYear($date);
 
@@ -2148,16 +2146,41 @@ class Helper
     }
 
     /**
-     * Get before N begin and end day
+     * Get date before N days
+     *
+     * @param int    $n
+     * @param string $date
+     *
+     * @return string
+     */
+    public static function dateBefore(int $n, $date = null): string
+    {
+        return date(Abs::FMT_DAY, strtotime("-{$n} days", $date ? strtotime($date) : time()));
+    }
+
+    /**
+     * Get date after N days
+     *
+     * @param int    $n
+     * @param string $date
+     *
+     * @return string
+     */
+    public static function dateAfter(int $n, $date = null): string
+    {
+        return date(Abs::FMT_DAY, strtotime("+{$n} days", $date ? strtotime($date) : time()));
+    }
+
+    /**
+     * Get date range before N days
      *
      * @param int    $n
      * @param string $date
      *
      * @return array
      */
-    public static function dateBeforeN(int $n, $date = null)
+    public static function dateBeforeN(int $n, $date = null): array
     {
-        $n -= 1;
         $timestamp = $date ? strtotime($date) : time();
 
         $to = date(Abs::FMT_DAY, $timestamp);
@@ -2170,16 +2193,15 @@ class Helper
     }
 
     /**
-     * Get after N begin and end day
+     * Get date range after N days
      *
      * @param int    $n
      * @param string $date
      *
      * @return array
      */
-    public static function dateAfterN(int $n, $date = null)
+    public static function dateAfterN(int $n, $date = null): array
     {
-        $n -= 1;
         $timestamp = $date ? strtotime($date) : time();
 
         $from = date(Abs::FMT_DAY, $timestamp);
@@ -2272,7 +2294,8 @@ class Helper
         string $format = Abs::FMT_DAY,
         int $step = Abs::TIME_DAY,
         bool $sort = true
-    ) {
+    ): array {
+
         if (!($from = strtotime($from)) || !($to = strtotime($to))) {
             throw new InvalidArgumentException('Param `from` and `to` must be date string');
         }
@@ -2315,7 +2338,8 @@ class Helper
         $default = 0,
         int $step = 1,
         bool $sort = true
-    ) {
+    ): array {
+
         if ($from >= $to) {
             throw new InvalidArgumentException('Param `from` must less than `to`');
         }
@@ -2590,6 +2614,7 @@ class Helper
         string $charset = 'utf-8',
         string $suffix = '..'
     ): string {
+
         if (function_exists('mb_substr')) {
             $slice = mb_substr($str, $start, $length, $charset);
         } else {
@@ -3236,7 +3261,7 @@ class Helper
      *
      * @return int
      */
-    public static function bytesToShort(array $bytes, int $position)
+    public static function bytesToShort(array $bytes, int $position): int
     {
         $val = $bytes[$position + 1] & 0xff;
         $val = $val << 8;
@@ -3317,6 +3342,7 @@ class Helper
         array $insertArray,
         bool $before = false
     ): array {
+
         $offset = array_search($position, array_keys($source));
         if ($offset === false) {
             return array_merge($source, $insertArray);
