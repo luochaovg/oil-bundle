@@ -11,6 +11,11 @@ use Leon\BswBundle\Module\Entity\Abs;
 class Mixed extends Annotation
 {
     /**
+     * @var string
+     */
+    public $field;
+
+    /**
      * @var bool
      */
     public $order = false;

@@ -55,26 +55,26 @@ class AttachmentLink extends Tailor
     }
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $previewAnnotationExtra
+     * @param array $previewAnnotation
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $annotationExtra, array $annotation): array
+    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
     {
-        $sort = $annotation[$this->fieldCamel]['sort'] + .01;
-        $annotationExtra[$this->alias] = [
+        $sort = $previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $previewAnnotationExtra[$this->alias] = [
             'label'  => $this->label,
             'render' => Abs::RENDER_LINK,
             'sort'   => $sort,
             'width'  => 400,
         ];
-        $annotationExtra["{$this->keyword}_size"] = [
+        $previewAnnotationExtra["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
             'show' => false,
         ];
 
-        return $annotationExtra;
+        return $previewAnnotationExtra;
     }
 
     /**

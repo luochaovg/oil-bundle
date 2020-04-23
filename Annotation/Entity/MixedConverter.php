@@ -21,5 +21,13 @@ use Leon\BswBundle\Module\Filter\Filter as BswFilter;
  */
 class MixedConverter extends AnnotationConverter
 {
-
+    /**
+     * @param $value
+     *
+     * @return mixed
+     */
+    protected function field($value)
+    {
+        return $value ?: $this->target;
+    }
 }

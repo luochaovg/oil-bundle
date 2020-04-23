@@ -33,6 +33,16 @@ class FilterConverter extends AnnotationConverter
      * @param $value
      *
      * @return mixed
+     */
+    protected function field($value)
+    {
+        return $value ?: $this->target;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return mixed
      * @throws
      */
     protected function filter($value)
@@ -83,16 +93,6 @@ class FilterConverter extends AnnotationConverter
         }
 
         return $value;
-    }
-
-    /**
-     * @param $value
-     *
-     * @return mixed
-     */
-    protected function field($value)
-    {
-        return $value ?: $this->target;
     }
 
     /**

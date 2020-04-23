@@ -181,6 +181,7 @@ class Abs
     const NOT_SET          = '(NotSet)';
     const NOT_FILE         = '(NotExists)';
     const SECRET           = '(Secret)';
+    const UNKNOWN          = '(UnKnown)';
     const SRC_CSS          = 'css';
     const SRC_JS           = 'js';
     const SELECT           = 'SELECT'; // doctrine QueryBuilder 0

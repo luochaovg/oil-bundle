@@ -92,25 +92,25 @@ abstract class Tailor
     //
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $filterAnnotationExtra
+     * @param array $filterAnnotation
      *
      * @return array
      */
-    public function tailorFilterAnnotation(array $annotationExtra, array $annotation): array
+    public function tailorFilterAnnotation(array $filterAnnotationExtra, array $filterAnnotation): array
     {
-        return $annotationExtra;
+        return $filterAnnotationExtra;
     }
 
     /**
-     * @param mixed $annotationExtra
-     * @param array $annotation
+     * @param mixed $filterAnnotationExtra
+     * @param array $filterAnnotation
      *
      * @return mixed
      */
-    public function tailorFilterAnnotationOnly($annotationExtra, array $annotation)
+    public function tailorFilterAnnotationOnly($filterAnnotationExtra, array $filterAnnotation)
     {
-        return $annotationExtra;
+        return $filterAnnotationExtra;
     }
 
     //
@@ -128,25 +128,25 @@ abstract class Tailor
     }
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $previewAnotationExtra
+     * @param array $previewAnnotation
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $annotationExtra, array $annotation): array
+    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
     {
-        return $annotationExtra;
+        return $previewAnnotationExtra;
     }
 
     /**
-     * @param mixed $annotationExtra
-     * @param array $annotation
+     * @param mixed $previewAnnotationExtra
+     * @param array $previewAnnotation
      *
      * @return mixed
      */
-    public function tailorPreviewAnnotationOnly($annotationExtra, array $annotation)
+    public function tailorPreviewAnnotationOnly($previewAnnotationExtra, array $previewAnnotation)
     {
-        return $annotationExtra;
+        return $previewAnnotationExtra;
     }
 
     /**
@@ -199,27 +199,27 @@ abstract class Tailor
     //
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $persistAnnotationExtra
+     * @param array $persistAnnotation
      * @param int   $id
      *
      * @return array
      */
-    public function tailorPersistenceAnnotation(array $annotationExtra, array $annotation, int $id): array
+    public function tailorPersistenceAnnotation(array $persistAnnotationExtra, array $persistAnnotation, int $id): array
     {
-        return $annotationExtra;
+        return $persistAnnotationExtra;
     }
 
     /**
-     * @param mixed $annotationExtra
-     * @param array $annotation
+     * @param mixed $persistAnnotationExtra
+     * @param array $persistAnnotation
      * @param int   $id
      *
      * @return mixed
      */
-    public function tailorPersistenceAnnotationOnly($annotationExtra, array $annotation, int $id)
+    public function tailorPersistenceAnnotationOnly($persistAnnotationExtra, array $persistAnnotation, int $id)
     {
-        return $annotationExtra;
+        return $persistAnnotationExtra;
     }
 
     /**

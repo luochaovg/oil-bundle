@@ -17,16 +17,16 @@ class NewPassword extends Tailor
     protected $newField = 'new_password';
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $persistAnnotationExtra
+     * @param array $persistAnnotation
      * @param int   $id
      *
      * @return array
      */
-    public function tailorPersistenceAnnotation(array $annotationExtra, array $annotation, int $id): array
+    public function tailorPersistenceAnnotation(array $persistAnnotationExtra, array $persistAnnotation, int $id): array
     {
-        $sort = $annotation[$this->fieldCamel]['sort'] + .01;
-        $annotationExtra[$this->newField] = [
+        $sort = $persistAnnotation[$this->fieldCamel]['sort'] + .01;
+        $persistAnnotationExtra[$this->newField] = [
             'sort'     => $sort,
             'column'   => 8,
             'type'     => Input::class,
@@ -35,10 +35,10 @@ class NewPassword extends Tailor
         ];
 
         if (empty($id)) {
-            $annotationExtra[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
+            $persistAnnotationExtra[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
         }
 
-        return $annotationExtra;
+        return $persistAnnotationExtra;
     }
 
     /**

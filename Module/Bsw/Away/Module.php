@@ -179,7 +179,11 @@ class Module extends Bsw
 
         $count = count($result) - 2;
         $type = $count > 1 ? 6 : 5;
-        $this->databaseOperationLogger($type, $this->input->relation, $result, ['effect' => $count]);
+
+        $relation = $this->input->relation;
+        $relation[$this->entity] = $this->repository->pk();
+
+        $this->web->databaseOperationLogger($this->entity, $type, $relation, $result, ['effect' => $count]);
 
         return $this->showSuccess($this->input->i18nAway);
     }

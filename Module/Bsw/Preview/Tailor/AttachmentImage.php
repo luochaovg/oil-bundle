@@ -58,27 +58,27 @@ class AttachmentImage extends Tailor
     }
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $previewAnnotationExtra
+     * @param array $previewAnnotation
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $annotationExtra, array $annotation): array
+    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
     {
-        $sort = $annotation[$this->fieldCamel]['sort'] + .01;
-        $annotationExtra[$this->table] = [
+        $sort = $previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $previewAnnotationExtra[$this->table] = [
             'label'  => $this->label,
             'render' => Abs::RENDER_IMAGE,
             'sort'   => $sort,
             'width'  => 200,
             'align'  => 'center',
         ];
-        $annotationExtra["{$this->keyword}_size"] = [
+        $previewAnnotationExtra["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
             'show' => false,
         ];
 
-        return $annotationExtra;
+        return $previewAnnotationExtra;
     }
 
     /**

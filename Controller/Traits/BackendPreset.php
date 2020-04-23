@@ -4,13 +4,17 @@ namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Entity\BswAdminPersistenceLog;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Repository\BswAdminPersistenceLogRepository;
+use Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @property TranslatorInterface $translator
+ * @property Logger              $logger
  */
 trait BackendPreset
 {
@@ -135,5 +139,47 @@ trait BackendPreset
         $button = $this->renderPart('@LeonBsw/form/button.native', ['form' => $button]);
 
         return new Charm($button);
+    }
+
+    /**
+     * Database operation logger
+     *
+     * @param string $entity
+     * @param int    $type
+     * @param array  $before
+     * @param array  $later
+     * @param array  $effect
+     *
+     * @throws
+     */
+    public function databaseOperationLogger(
+        string $entity,
+        int $type,
+        array $before = [],
+        array $later = [],
+        array $effect = []
+    ) {
+        if (!$this->parameter('backend_db_logger')) {
+            return;
+        }
+
+        /**
+         * @var BswAdminPersistenceLogRepository $loggerRepo
+         */
+        $loggerRepo = $this->repo(BswAdminPersistenceLog::class);
+        $result = $loggerRepo->newly(
+            [
+                'table'  => Helper::tableNameFromCls($entity),
+                'userId' => $this->usr->{$this->cnf->usr_uid} ?? 0,
+                'type'   => $type,
+                'before' => json_encode($before, JSON_UNESCAPED_UNICODE),
+                'later'  => json_encode($later, JSON_UNESCAPED_UNICODE),
+                'effect' => json_encode($effect, JSON_UNESCAPED_UNICODE),
+            ]
+        );
+
+        if ($result === false) {
+            $this->logger->error("Database operation logger error: {$loggerRepo->pop()}");
+        }
     }
 }

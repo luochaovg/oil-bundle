@@ -496,44 +496,4 @@ abstract class Bsw
             "bsw-entity-{$this->entity}"
         );
     }
-
-    /**
-     * Database operation logger
-     *
-     * @param int    $type
-     * @param array  $before
-     * @param array  $later
-     * @param array  $effect
-     * @param string $entity
-     *
-     * @throws
-     */
-    public function databaseOperationLogger(
-        int $type,
-        array $before = [],
-        array $later = [],
-        array $effect = [],
-        string $entity = null
-    ) {
-
-        if (!$this->web->parameter('backend_db_logger')) {
-            return;
-        }
-
-        $loggerRepo = $this->web->repo(BswAdminPersistenceLog::class);
-        $result = $loggerRepo->newly(
-            [
-                'table'  => Helper::tableNameFromCls($entity ?? $this->entity),
-                'userId' => $this->input->usr->{$this->input->cnf->usr_uid} ?? 0,
-                'type'   => $type,
-                'before' => $this->json($before),
-                'later'  => $this->json($later),
-                'effect' => $this->json($effect),
-            ]
-        );
-
-        if ($result === false) {
-            $this->web->logger->error("Database operation logger error: {$loggerRepo->pop()}");
-        }
-    }
 }

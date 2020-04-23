@@ -24,22 +24,22 @@ class AttachmentFile extends Tailor
     }
 
     /**
-     * @param array $annotationExtra
-     * @param array $annotation
+     * @param array $previewAnnotationExtra
+     * @param array $previewAnnotation
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $annotationExtra, array $annotation): array
+    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
     {
-        $sort = $annotation[$this->fieldCamel]['sort'] + .01;
-        $annotationExtra[$this->label] = [
+        $sort = $previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $previewAnnotationExtra[$this->label] = [
             'label'  => 'Url',
             'render' => Abs::RENDER_LINK,
             'sort'   => $sort,
             'width'  => 400,
         ];
 
-        return $annotationExtra;
+        return $previewAnnotationExtra;
     }
 
     /**

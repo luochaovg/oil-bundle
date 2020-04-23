@@ -185,25 +185,32 @@ class Module extends Bsw
             $entityList[$alias] = $item['entity'];
         }
 
-        $annotation = [];
-        $annotationFull = [];
+        $previewAnnotation = $previewAnnotationFull = [];
+        $mixedAnnotation = $mixedAnnotationFull = [];
         $entityList = array_filter(array_unique($entityList));
 
+        $extraArgs = [
+            'enumClass'      => $this->input->enum,
+            'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+        ];
+
         foreach ($entityList as $alias => $entity) {
-            $annotationFull[$alias] = $this->web->getPreviewAnnotation(
-                $entity,
-                [
-                    'enumClass'      => $this->input->enum,
-                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
-                ]
-            );
+            $previewAnnotationFull[$alias] = $this->web->getPreviewAnnotation($entity, $extraArgs);
+            $mixedAnnotationFull[$alias] = $this->web->getMixedAnnotation($entity, $extraArgs);
+            foreach ($mixedAnnotationFull[$alias] as $key => &$item) {
+                $item['field'] = "{$alias}.{$item['field']}";
+            }
         }
 
-        if ($annotationFull) {
-            $annotation = array_merge(...array_values(array_reverse($annotationFull)));
+        if ($previewAnnotationFull) {
+            $previewAnnotation = array_merge(...array_values(array_reverse($previewAnnotationFull)));
         }
 
-        return [$annotation, $annotationFull];
+        if ($mixedAnnotationFull) {
+            $mixedAnnotation = array_merge(...array_values(array_reverse($mixedAnnotationFull)));
+        }
+
+        return [$previewAnnotation, $previewAnnotationFull, $mixedAnnotation, $mixedAnnotationFull];
     }
 
     /**
@@ -211,11 +218,11 @@ class Module extends Bsw
      *
      * @param string $field
      * @param mixed  $item
-     * @param array  $annotationFull
+     * @param array  $previewAnnotationFull
      *
      * @return array
      */
-    protected function annotationExtraItemHandler(string $field, $item, array $annotationFull): array
+    protected function annotationExtraItemHandler(string $field, $item, array $previewAnnotationFull): array
     {
         if (is_bool($item)) {
             return [$field, []];
@@ -232,7 +239,7 @@ class Module extends Bsw
         $_table = Helper::dig($item, 'table');
         $_field = Helper::dig($item, 'field');
 
-        $clone = $annotationFull[$_table][$_field] ?? [];
+        $clone = $previewAnnotationFull[$_table][$_field] ?? [];
         $item = empty($clone) ? [] : array_merge($clone, $item);
 
         return [$field, $item];
@@ -352,18 +359,17 @@ class Module extends Bsw
      * Annotation handler
      *
      * @param Output $output
-     * @param array  $mixedAnnotation
      *
      * @return array
      * @throws
      */
-    protected function handleAnnotation(Output $output, array $mixedAnnotation): array
+    protected function handleAnnotation(Output $output): array
     {
         /**
          * preview annotation
          */
 
-        [$annotation, $annotationFull] = $this->listEntityFields();
+        [$previewAnnotation, $previewAnnotationFull, $mixedAnnotation] = $this->listEntityFields();
 
         /**
          * preview annotation only
@@ -372,20 +378,25 @@ class Module extends Bsw
         $fn = self::ANNOTATION_ONLY;
         $operate = Abs::TR_ACT;
 
-        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
-        $annotationExtra = $this->tailor($this->methodTailor, $fn, null, $annotationExtra, $annotation);
+        $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
+        $previewAnnotationExtra = $this->tailor(
+            $this->methodTailor,
+            $fn,
+            null,
+            $previewAnnotationExtra,
+            $previewAnnotation
+        );
 
         /**
          * extra annotation handler
          */
 
-        if (!is_null($annotationExtra)) {
+        if (!is_null($previewAnnotationExtra)) {
 
-            $annotationOnlyKey = array_keys($annotationExtra);
-            $annotation = Helper::arrayPull($annotation, $annotationOnlyKey);
+            $previewAnnotationOnlyKey = array_keys($previewAnnotationExtra);
+            $previewAnnotation = Helper::arrayPull($previewAnnotation, $previewAnnotationOnlyKey);
 
         } else {
-
 
             /**
              * preview extra annotation
@@ -393,33 +404,39 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
-            if (!isset($annotationExtra[$operate])) {
-                $annotationExtra[$operate] = ['show' => true];
+            $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+            if (!isset($previewAnnotationExtra[$operate])) {
+                $previewAnnotationExtra[$operate] = ['show' => true];
             }
 
-            $annotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
+            $previewAnnotationExtra = $this->tailor(
+                $this->methodTailor,
+                $fn,
+                Abs::T_ARRAY,
+                $previewAnnotationExtra,
+                $previewAnnotation
+            );
         }
 
         /**
          * annotation handler with extra
          */
 
-        foreach ($annotationExtra as $field => $item) {
+        foreach ($previewAnnotationExtra as $field => $item) {
 
             $_item = $item;
-            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $annotationFull);
+            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $previewAnnotationFull);
 
             if (!is_array($item)) {
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
             if ($_item === false) {
-                $annotation[$field]['show'] = false;
+                $previewAnnotation[$field]['show'] = false;
             }
 
-            if (isset($annotation[$field])) {
-                $item = array_merge($annotation[$field], $item);
+            if (isset($previewAnnotation[$field])) {
+                $item = array_merge($previewAnnotation[$field], $item);
             }
 
             $original = $this->web->annotation(Preview::class, true);
@@ -427,10 +444,10 @@ class Module extends Bsw
             $original->target = $field;
 
             $item = $original->converter([new Preview($item)]);
-            $annotation[$field] = (array)current($item[Preview::class]);
+            $previewAnnotation[$field] = (array)current($item[Preview::class]);
         }
 
-        $annotation = Helper::sortArray($annotation, 'sort');
+        $previewAnnotation = Helper::sortArray($previewAnnotation, 'sort');
 
         /**
          * hooks & columns
@@ -439,7 +456,7 @@ class Module extends Bsw
         $scroll = 0;
         $hooks = $columns = $dress = [];
 
-        foreach ($annotation as $field => $item) {
+        foreach ($previewAnnotation as $field => $item) {
 
             foreach ($item['hook'] as $hook) {
                 $hooks[$hook][] = $field;
@@ -463,7 +480,7 @@ class Module extends Bsw
                 if (is_null($column['fixed'])) {
                     $column['fixed'] = 'right';
                 }
-                if (!isset($annotationExtra[$operate]['width'])) {
+                if (!isset($previewAnnotationExtra[$operate]['width'])) {
                     unset($item['width']);
                 }
             }
@@ -511,7 +528,7 @@ class Module extends Bsw
         $output->dress = $dress;
         $output->columns = $columns;
 
-        return $hooks;
+        return [$hooks, $mixedAnnotation];
     }
 
     /**
@@ -560,10 +577,11 @@ class Module extends Bsw
                     continue;
                 }
 
-                $made = $mixedAnnotation[$key][Abs::ORDER] ? Abs::ORDER : Abs::SORT;
-                $unmade = $mixedAnnotation[$key][Abs::ORDER] ? Abs::SORT : Abs::ORDER;
+                $mixed = $mixedAnnotation[$key];
+                $made = $mixed[Abs::ORDER] ? Abs::ORDER : Abs::SORT;
+                $unmade = $mixed[Abs::ORDER] ? Abs::SORT : Abs::ORDER;
 
-                $this->query[$made] = ["{$this->query['alias']}.{$key}" => $this->long2sort[$direction]];
+                $this->query[$made] = [$mixed['field'] => $this->long2sort[$direction]];
                 unset($this->query[$unmade]);
                 break;
             }
@@ -597,9 +615,9 @@ class Module extends Bsw
 
         if ($this->entity) {
 
-            if (!isset($query['order'])) {
+            if (!isset($query[Abs::ORDER])) {
                 $pk = $this->repository->pk();
-                $query['order'] = ["{$query['alias']}.{$pk}" => Abs::SORT_DESC];
+                $query[Abs::ORDER] = ["{$query['alias']}.{$pk}" => Abs::SORT_DESC];
             }
 
             $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $query);
@@ -845,18 +863,7 @@ class Module extends Bsw
             return $this->showError($e->getMessage());
         }
 
-        $mixedAnnotation = [];
-        if ($this->entity) {
-            $mixedAnnotation = $this->web->getMixedAnnotation(
-                $this->entity,
-                [
-                    'enumClass'      => $this->input->enum,
-                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
-                ]
-            );
-        }
-
-        $hooks = $this->handleAnnotation($output, $mixedAnnotation);
+        [$hooks, $mixedAnnotation] = $this->handleAnnotation($output);
 
         $list = $this->getPreviewData($output, $mixedAnnotation);
         $list = $this->handlePreviewData($list, $hooks, $output);

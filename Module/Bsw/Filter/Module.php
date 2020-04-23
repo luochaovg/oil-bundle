@@ -150,29 +150,28 @@ class Module extends Bsw
             $entityList[$alias] = $item['entity'];
         }
 
-        $annotation = [];
-        $annotationFull = [];
+        $filterAnnotation = [];
+        $filterAnnotationFull = [];
         $entityList = array_filter(array_unique($entityList));
 
+        $extraArgs = [
+            'enumClass'      => $this->input->enum,
+            'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+        ];
+
         foreach ($entityList as $alias => $entity) {
-            $fields = $this->web->getFilterAnnotation(
-                $entity,
-                [
-                    'enumClass'      => $this->input->enum,
-                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
-                ]
-            );
-            foreach ($fields as $key => $item) {
-                $fields[$key]['field'] = "{$alias}.{$item['field']}";
+            $filterAnnotationFull[$alias] = $this->web->getFilterAnnotation($entity, $extraArgs);
+            foreach ($filterAnnotationFull[$alias] as $key => &$item) {
+                $item['field'] = "{$alias}.{$item['field']}";
             }
-            $annotationFull[$alias] = $fields;
         }
 
-        if ($annotationFull) {
-            $annotation = array_merge(...array_values(array_reverse($annotationFull)));
+        if ($filterAnnotationFull) {
+            // $filterAnnotation = array_merge(...array_values(array_reverse($filterAnnotationFull)));
+            $filterAnnotation = $filterAnnotationFull[$this->query['alias']];
         }
 
-        return [$annotation, $annotationFull];
+        return [$filterAnnotation, $filterAnnotationFull];
     }
 
     /**
@@ -180,11 +179,11 @@ class Module extends Bsw
      *
      * @param string $field
      * @param mixed  $item
-     * @param array  $annotationFull
+     * @param array  $filterAnnotationFull
      *
      * @return array
      */
-    protected function annotationExtraItemHandler(string $field, $item, array $annotationFull): array
+    protected function annotationExtraItemHandler(string $field, $item, array $filterAnnotationFull): array
     {
         if (is_bool($item)) {
             return [$field, []];
@@ -206,7 +205,7 @@ class Module extends Bsw
         $_field = "{$_field}_{$_index}";
         $field = "{$field}_{$_index}";
 
-        $clone = $annotationFull[$_table][$_field] ?? [];
+        $clone = $filterAnnotationFull[$_table][$_field] ?? [];
         $item = empty($clone) ? [] : array_merge($clone, $item);
 
         return [$field, $item];
@@ -224,24 +223,30 @@ class Module extends Bsw
          * filter annotation
          */
 
-        [$annotation, $annotationFull] = $this->listEntityFields();
+        [$filterAnnotation, $filterAnnotationFull] = $this->listEntityFields();
 
         /**
          * preview annotation only
          */
 
         $fn = self::FILTER_ANNOTATION_ONLY;
-        $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
-        $annotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $annotationExtra, $annotation);
+        $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
+        $filterAnnotationExtra = $this->tailor(
+            $this->method,
+            $fn,
+            Abs::T_ARRAY,
+            $filterAnnotationExtra,
+            $filterAnnotation
+        );
 
         /**
          * extra annotation handler
          */
 
-        if (!is_null($annotationExtra)) {
+        if (!is_null($filterAnnotationExtra)) {
 
-            $annotationOnlyKey = array_keys($annotationExtra);
-            $annotation = Helper::arrayPull($annotation, $annotationOnlyKey);
+            $filterAnnotationOnlyKey = array_keys($filterAnnotationExtra);
+            $filterAnnotation = Helper::arrayPull($filterAnnotation, $filterAnnotationOnlyKey);
 
         } else {
 
@@ -250,29 +255,29 @@ class Module extends Bsw
              */
 
             $fn = self::FILTER_ANNOTATION;
-            $annotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
-            $annotationExtra = $this->tailor($this->method, $fn, null, $annotationExtra, $annotation);
+            $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+            $filterAnnotationExtra = $this->tailor($this->method, $fn, null, $filterAnnotationExtra, $filterAnnotation);
         }
 
         /**
          * annotation handler with extra
          */
 
-        foreach ($annotationExtra as $field => $item) {
+        foreach ($filterAnnotationExtra as $field => $item) {
 
             $_item = $item;
-            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $annotationFull);
+            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull);
 
             if (!is_array($item)) {
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
             if ($_item === false) {
-                $annotation[$field]['show'] = false;
+                $filterAnnotation[$field]['show'] = false;
             }
 
-            if (isset($annotation[$field])) {
-                $item = array_merge($annotation[$field], $item);
+            if (isset($filterAnnotation[$field])) {
+                $item = array_merge($filterAnnotation[$field], $item);
             }
 
             $original = $this->web->annotation(Filter::class, true);
@@ -280,16 +285,16 @@ class Module extends Bsw
             $original->target = $field;
 
             $item = $original->converter([new Filter($item)]);
-            $annotation[$field] = (array)current($item[Filter::class]);
+            $filterAnnotation[$field] = (array)current($item[Filter::class]);
         }
 
         $allowFields = [];
-        foreach ($annotationFull as $alias => $item) {
+        foreach ($filterAnnotationFull as $alias => $item) {
             $allowFields = array_merge($allowFields, array_column($item, 'field'));
         }
 
         $_annotation = [];
-        foreach ($annotation as $key => $item) {
+        foreach ($filterAnnotation as $key => $item) {
             if (!$this->query) {
                 $_annotation[Helper::camelToUnder($key)] = $item;
                 continue;
@@ -301,37 +306,36 @@ class Module extends Bsw
             }
         }
 
-        $annotation = Helper::sortArray($_annotation, 'sort');
+        $filterAnnotation = Helper::sortArray($_annotation, 'sort');
 
         /**
          * hooks
          */
-
         $hooks = [];
-        foreach ($annotation as $field => $item) {
+        foreach ($filterAnnotation as $field => $item) {
 
             foreach ($item['hook'] as $hook) {
                 $hooks[$hook][] = $field;
             }
 
             if (!$item['show']) {
-                unset($annotation[$field]);
+                unset($filterAnnotation[$field]);
             }
         }
 
-        return [$annotation, $hooks];
+        return [$filterAnnotation, $hooks];
     }
 
     /**
      * Get filter data
      *
-     * @param array $annotation
+     * @param array $filterAnnotation
      * @param array $hooks
      *
      * @return array
      * @throws
      */
-    protected function getFilterData(array $annotation, array $hooks): array
+    protected function getFilterData(array $filterAnnotation, array $hooks): array
     {
         $extraArgs = ['_acme' => ['scene' => 'filter']];
 
@@ -340,18 +344,18 @@ class Module extends Bsw
         $filter = $this->web->hooker($hooks, $filter, true, null, null, $extraArgs);
 
         $condition = [];
-        foreach ($annotation as $key => $item) {
+        foreach ($filterAnnotation as $key => $item) {
             if (!isset($filter[$key]) && !isset($item['value'])) {
                 continue;
             }
 
             if (isset($filter[$key])) {
-                $annotation[$key]['value'] = $filter[$key];
+                $filterAnnotation[$key]['value'] = $filter[$key];
             }
 
             if (!$item['group']) {
                 $condition[$item['field']] = [
-                    'value'  => $annotation[$key]['value'],
+                    'value'  => $filterAnnotation[$key]['value'],
                     'filter' => $item['filter'],
                 ];
                 continue;
@@ -361,7 +365,7 @@ class Module extends Bsw
                 $condition[$item['field']] = ['value' => [], 'filter' => Senior::class];
             }
 
-            $condition[$item['field']]['value'][] = $annotation[$key]['value'];
+            $condition[$item['field']]['value'][] = $filterAnnotation[$key]['value'];
         }
 
         foreach ($hooks as $hook => $fields) {
@@ -375,14 +379,14 @@ class Module extends Bsw
             }
         }
 
-        $annotationValue = Helper::arrayColumn($annotation, 'value');
-        $annotationValue = $this->web->hooker($hooks, $annotationValue, false, null, null, $extraArgs);
+        $filterAnnotationValue = Helper::arrayColumn($filterAnnotation, 'value');
+        $filterAnnotationValue = $this->web->hooker($hooks, $filterAnnotationValue, false, null, null, $extraArgs);
 
-        foreach ($annotation as $key => $item) {
-            $annotation[$key]['value'] = $annotationValue[$key];
+        foreach ($filterAnnotation as $key => $item) {
+            $filterAnnotation[$key]['value'] = $filterAnnotationValue[$key];
         }
 
-        return [$annotation, $condition];
+        return [$filterAnnotation, $condition];
     }
 
     /**
@@ -494,15 +498,15 @@ class Module extends Bsw
     /**
      * Get show filter item list
      *
-     * @param array $annotation
+     * @param array $filterAnnotation
      * @param array $group
      * @param array $diffuse
      *
      * @return array
      */
-    protected function getShowFilterItemList(array $annotation, array $group, array $diffuse): array
+    protected function getShowFilterItemList(array $filterAnnotation, array $group, array $diffuse): array
     {
-        $showList = Helper::arrayColumn($annotation, 'showPriority');
+        $showList = Helper::arrayColumn($filterAnnotation, 'showPriority');
         foreach ($showList as $key => $priority) {
             if ($name = $diffuse[$key] ?? null) {
                 if (!isset($showList[$name])) {
@@ -547,16 +551,16 @@ class Module extends Bsw
     /**
      * Get filter group
      *
-     * @param array $annotation
+     * @param array $filterAnnotation
      *
      * @return array
      */
-    protected function getFilterGroup(array $annotation): array
+    protected function getFilterGroup(array $filterAnnotation): array
     {
         $group = [];
         $diffuse = [];
 
-        foreach ($annotation as $field => $item) {
+        foreach ($filterAnnotation as $field => $item) {
             if (!$item['group']) {
                 continue;
             }
@@ -571,17 +575,17 @@ class Module extends Bsw
     /**
      * Handle show list
      *
-     * @param array  $annotation
+     * @param array  $filterAnnotation
      * @param Output $output
      */
-    protected function handleShowList(array $annotation, Output $output)
+    protected function handleShowList(array $filterAnnotation, Output $output)
     {
         if ($this->input->iframe) {
             $output->maxShow = ceil($output->maxShow / 2);
         }
 
-        [$output->group, $output->diffuse] = $this->getFilterGroup($annotation);
-        $output->showFull = $this->getShowFilterItemList($annotation, $output->group, $output->diffuse);
+        [$output->group, $output->diffuse] = $this->getFilterGroup($filterAnnotation);
+        $output->showFull = $this->getShowFilterItemList($filterAnnotation, $output->group, $output->diffuse);
         $output->showList = array_slice($output->showFull, 0, $output->maxShow);
 
         $output->showFullJson = $this->json($output->showFull);
@@ -629,9 +633,9 @@ class Module extends Bsw
          */
 
         $this->getQueryOptions();
-        [$annotation, $hooks] = $this->handleAnnotation();
+        [$filterAnnotation, $hooks] = $this->handleAnnotation();
 
-        [$filter, $condition] = $this->getFilterData($annotation, $hooks);
+        [$filter, $condition] = $this->getFilterData($filterAnnotation, $hooks);
         $condition = $this->caller(
             $this->method,
             self::FILTER_CONDITION,
@@ -644,7 +648,7 @@ class Module extends Bsw
         $output->condition = $condition;
         $output->formatJson = $this->json($format);
 
-        $this->handleShowList($annotation, $output);
+        $this->handleShowList($filterAnnotation, $output);
         $this->handleFilter($output);
 
         $output = $this->caller(
