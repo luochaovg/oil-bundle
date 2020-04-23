@@ -21,14 +21,13 @@ trait ThirdMessage
      * Third message
      *
      * @Route("/third-message", name="app_third_message")
-     * @Access()
      *
      * @return Response
      * @throws
      */
     public function thirdMessageAction(): Response
     {
-        if (($args = $this->valid()) instanceof Response) {
+        if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
         }
 

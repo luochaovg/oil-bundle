@@ -4,13 +4,11 @@ namespace Leon\BswBundle\Controller\BswAdminAccessControl;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
-use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Repository\BswAdminAccessControlRepository;
-use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;

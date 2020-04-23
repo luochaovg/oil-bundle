@@ -270,7 +270,7 @@ class Module extends Bsw
             $submit = $this->input->submit;
 
             $recordBefore = $this->web->sessionGet($key) ?? [];
-            $recordDiff = array_diff_assoc($submit, $recordBefore);
+            $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
             try {
 

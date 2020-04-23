@@ -21,6 +21,11 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     /**
      * @var object
      */
+    protected $_params;
+
+    /**
+     * @var object
+     */
     protected $params;
 
     /**
@@ -131,7 +136,8 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             $this->{$fn}();
         }
 
-        $this->params = (object)$this->options($input);
+        $this->_params = $this->options($input);
+        $this->params = (object)$this->_params;
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 

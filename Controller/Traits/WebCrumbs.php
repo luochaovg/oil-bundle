@@ -27,7 +27,8 @@ trait WebCrumbs
 
                 $crumbsMap = $this->parameters('crumbs_map');
                 $routes = $this->getRouteCollection();
-                $routeMap = Helper::arrayColumn($routes, 'desc_fn', 'route');
+                $routeClsMap = Helper::arrayColumn($routes, 'desc_cls', 'route');
+                $routeFnMap = Helper::arrayColumn($routes, 'desc_fn', 'route');
 
                 $slaveMenuDetail = $menuAssist['slaveMenuDetail'] ?? [];
 
@@ -41,23 +42,34 @@ trait WebCrumbs
                  */
                 $inStack = function (string $route, array $stack = []) use (
                     $crumbsMap,
-                    $routeMap,
+                    $routeClsMap,
+                    $routeFnMap,
                     $slaveMenuDetail,
                     &$inStack
                 ) {
                     // manual
                     if (isset($crumbsMap[$route])) {
 
-                        $info = $this->labelWithMenu($slaveMenuDetail, $route, $routeMap[$route]);
+                        $info = $this->labelWithMenu(
+                            $slaveMenuDetail,
+                            $route,
+                            $routeFnMap[$route],
+                            $routeClsMap[$route]
+                        );
                         array_unshift($stack, new Crumb($info, $route));
 
                         return $inStack($crumbsMap[$route], $stack);
                     }
 
                     // auto
-                    if (!empty($routeMap[$route])) {
+                    if (!empty($routeFnMap[$route])) {
 
-                        $info = $this->labelWithMenu($slaveMenuDetail, $route, $routeMap[$route]);
+                        $info = $this->labelWithMenu(
+                            $slaveMenuDetail,
+                            $route,
+                            $routeFnMap[$route],
+                            $routeClsMap[$route]
+                        );
                         array_unshift($stack, new Crumb($info, $route));
 
                         foreach ($this->parameters('crumbs_preview_pre') as $keyword) {

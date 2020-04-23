@@ -2818,7 +2818,7 @@ class Helper
     {
         $data = array_map('serialize', $data);
         $data = array_unique($data);
-        $data = array_map('deSerialize', $data);
+        $data = array_map('unserialize', $data);
 
         return $data;
     }
@@ -4316,5 +4316,24 @@ class Helper
         $total = count($target);
 
         return $target[$total - 1];
+    }
+
+    /**
+     * Array diff assoc
+     *
+     * @param mixed ...$target
+     *
+     * @return array
+     */
+    public static function arrayDiffAssoc(...$target): array
+    {
+        foreach ($target as &$item) {
+            $item = array_map('serialize', $item);
+        }
+
+        $diff = array_diff_assoc(...$target);
+        $diff = array_map('unserialize', $diff);
+
+        return $diff;
     }
 }

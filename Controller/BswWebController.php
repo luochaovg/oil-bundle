@@ -378,36 +378,36 @@ abstract class BswWebController extends AbstractController
      *
      * @param array  $slaveMenuDetail
      * @param string $route
-     * @param string $info
+     * @param string $methodInfo
+     * @param string $classInfo
      *
      * @return string
      */
-    protected function labelWithMenu(array $slaveMenuDetail, string $route, string $info): string
-    {
+    protected function labelWithMenu(
+        array $slaveMenuDetail,
+        string $route,
+        string $methodInfo,
+        string $classInfo
+    ): string {
+
         $map = [
-            'Preview record'     => 'Preview record plus',
-            'Persistence record' => 'Persistence record plus',
+            'Preview record'     => 'Preview',
+            'Persistence record' => 'Persistence',
         ];
 
-        if ($new = $slaveMenuDetail[$route]['info'] ?? null) {
-
-            $new && ($info = $map[$info] ?? $info);
-            $old = $this->translator->trans($info, [], 'twig');
-            $info = "{$new} ({$old})";
-
-        } else {
-
-            // When persistence copy it from preview
-            $_route = str_replace(Abs::TAG_PERSISTENCE, Abs::TAG_PREVIEW, $route);
-            $new = $slaveMenuDetail[$_route]['info'] ?? null;
-
-            $new && ($info = $map[$info] ?? $info);
-            $old = $this->translator->trans($info, [], 'twig');
-
-            $info = $new ? "{$new} ({$old})" : $old;
+        if (!($menuSet = $slaveMenuDetail[$route]['info'] ?? null)) {
+            $route = str_replace(Abs::TAG_PERSISTENCE, Abs::TAG_PREVIEW, $route);
+            $menuSet = $slaveMenuDetail[$route]['info'] ?? null;
         }
 
-        return $info;
+        if (isset($map[$methodInfo])) {
+            $twig = $this->translator->trans($classInfo, [], 'twig');
+            $twig .= $this->translator->trans($map[$methodInfo], [], 'twig');
+        } else {
+            $twig = $this->translator->trans($methodInfo, [], 'twig');
+        }
+
+        return $menuSet ?? $twig;
     }
 
     /**
@@ -606,22 +606,27 @@ abstract class BswWebController extends AbstractController
         $slaveMenuDetail = $menuAssist['slaveMenuDetail'] ?? [];
         $masterMenu = $menuAssist['masterMenu'] ?? [];
 
-        foreach ($accessList as $info => $items) {
+        foreach ($accessList as $classInfo => $items) {
             foreach ($items as $route => $item) {
-                if (!isset($_accessList[$info])) {
-                    $_accessList[$info] = [
-                        'label' => $info,
+                if (!isset($_accessList[$classInfo])) {
+                    $_accessList[$classInfo] = [
+                        'label' => $classInfo,
                         'items' => [],
                     ];
                 }
 
-                $target = &$_accessList[$info]['items'];
+                $target = &$_accessList[$classInfo]['items'];
                 $target[$route] = $item;
-                $target[$route]['info'] = $this->labelWithMenu($slaveMenuDetail, $route, $target[$route]['info']);
+                $target[$route]['info'] = $this->labelWithMenu(
+                    $slaveMenuDetail,
+                    $route,
+                    $target[$route]['info'],
+                    $classInfo
+                );
 
                 $menuId = $slaveMenuDetail[$route]['menuId'] ?? -1;
                 if (isset($masterMenu[$menuId])) {
-                    $_accessList[$info]['label'] = $masterMenu[$menuId]->getValue();
+                    $_accessList[$classInfo]['label'] = $masterMenu[$menuId]->getValue();
                 }
             }
         }

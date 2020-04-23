@@ -33,6 +33,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @var object
      */
+    protected $_params;
+
+    /**
+     * @var object
+     */
     protected $params;
 
     /**
@@ -51,7 +56,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     public function args(): array
     {
         return [
-            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 30],
+            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 10],
             'args'  => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
         ];
     }
@@ -169,7 +174,8 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $this->{$fn}();
         }
 
-        $this->params = (object)$this->options($input);
+        $this->_params = $this->options($input);
+        $this->params = (object)$this->_params;
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
