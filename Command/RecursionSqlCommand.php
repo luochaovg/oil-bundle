@@ -56,7 +56,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     public function args(): array
     {
         return [
-            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 10],
+            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 30],
             'args'  => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
         ];
     }
