@@ -57,6 +57,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     {
         return [
             'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 30],
+            'force' => [null, InputOption::VALUE_OPTIONAL, 'Force command', 'no'],
             'args'  => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
         ];
     }
