@@ -26,6 +26,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     protected $repo;
 
     /**
+     * @var string
+     */
+    protected $alias;
+
+    /**
      * @var OutputInterface
      */
     protected $output;
@@ -49,6 +54,26 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      * @var bool
      */
     protected $handlerByMultiple = false;
+
+    /**
+     * @var bool
+     */
+    protected $fixPagination = false;
+
+    /**
+     * @var int
+     */
+    protected $fpMaxId = 0;
+
+    /**
+     * @var int
+     */
+    protected $fpRecordTotal;
+
+    /**
+     * @var bool
+     */
+    protected $process = 'page {PageNow}/{PageTotal}, round {RoundSuccess}/{RoundTotal}, total {RecordSuccess}/{RecordTotal}, process {Process}%';
 
     /**
      * @return array
@@ -119,9 +144,9 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @param array $record
      *
-     * @return bool
+     * @return int|bool
      */
-    abstract public function handler(array $record): bool;
+    abstract public function handler(array $record);
 
     /**
      * @return void
@@ -133,30 +158,44 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
     /**
      * @param int $limit
-     * @param int $page
-     * @param int $pageDone
-     * @param int $pageCount
-     * @param int $totalSuccess
-     * @param int $total
+     * @param int $pageTotal
+     * @param int $pageNow
+     * @param int $roundTotal
+     * @param int $roundSuccess
+     * @param int $recordTotal
+     * @param int $recordSuccess
      *
      * @return string
      */
     public function process(
         int $limit,
-        int $page,
-        int $pageDone,
-        int $pageCount,
-        int $totalSuccess,
-        int $total
+        int $pageTotal,
+        int $pageNow,
+        int $roundTotal,
+        int $roundSuccess,
+        int $recordTotal,
+        int $recordSuccess
     ): string {
-        $process = number_format($totalSuccess / $total * 100, 2);
 
-        $pageInfo = "page {$page}";
-        $currentInfo = "current done {$pageDone}/{$pageCount}";
-        $totalInfo = "total done {$totalSuccess}/{$total}";
-        $processInfo = "process {$process}%";
+        $recordDone = (($pageNow - 1) * $limit) + $roundTotal;
+        $process = number_format($recordDone / $recordTotal * 100, 2);
 
-        return "<info> {$pageInfo}, {$currentInfo}, {$totalInfo}, {$processInfo}. </info>";
+        $info = str_replace(
+            [
+                '{Limit}',
+                '{PageTotal}',
+                '{PageNow}',
+                '{RoundTotal}',
+                '{RoundSuccess}',
+                '{RecordTotal}',
+                '{RecordSuccess}',
+                '{Process}',
+            ],
+            [$limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess, $process],
+            $this->process
+        );
+
+        return "<info> {$info} </info>";
     }
 
     /**
@@ -190,26 +229,51 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
     /**
      * @param int $limit
-     * @param int $page
-     * @param int $totalSuccess
+     * @param int $pageNow
+     * @param int $recordSuccess
      *
      * @return int
      * @throws
      */
-    protected function logic(int $limit, int $page = 1, int $totalSuccess = 0): int
+    protected function logic(int $limit, int $pageNow = 1, int $recordSuccess = 0): int
     {
-        if ($limit < 2) {
-            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2');
+        if ($limit < 1) {
+            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 1');
         }
 
-        $paging = true;
-        $query = Helper::pageArgs(compact('paging', 'page', 'limit'));
+        $query = Helper::pageArgs(
+            [
+                'paging' => true,
+                'page'   => $pageNow,
+                'limit'  => $limit,
+            ],
+            );
 
         if ($entity = $this->entity()) {
 
+            $this->alias = Helper::tableNameToAlias($entity);
             $this->repo = $this->repo($entity);
+
+            $_filter = [];
+            if ($this->fixPagination) {
+                $pk = "{$this->alias}.{$this->repo->pk()}";
+                $_filter['order'] = [$pk => Abs::SORT_ASC];
+                if ($pageNow > 1) {
+                    $query = array_merge($query, ['page' => 1, 'offset' => 0]);
+                    $_filter = array_merge(
+                        $_filter,
+                        [
+                            'where'  => [$this->expr->gt($pk, ':pk')],
+                            'args'   => ['pk' => [$this->fpMaxId]],
+                            'hint'   => $this->fpRecordTotal,
+                            'offset' => 0,
+                        ]
+                    );
+                }
+            }
+
             $filter = array_merge($this->filter(), $query);
-            $result = $this->repo->lister($filter);
+            $result = $this->repo->filters($_filter)->lister($filter);
 
         } elseif ($result = $this->lister()) {
             $result = $this->web->manualListForPagination($result, $query);
@@ -217,18 +281,22 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $result = [];
         }
 
-        $this->page = $page;
-        if ($page === 1 && empty($result['items'])) {
-            return 0;
+        $this->page = $pageNow;
+        if (empty($result['items'])) {
+            return $pageNow === 1 ? 0 : $pageNow;
         }
 
-        $pageDone = 0;
+        $roundSuccess = 0;
+        $pageTotal = $result['total_page'];
+        $recordTotal = $result['total_item'];
+
         try {
             if ($this->handlerByMultiple) {
-                $pageDone += ($this->handler($result['items']) ? count($result['items']) : 0);
+                $total = $this->handler($result['items']);
+                $roundSuccess += (is_bool($total) ? (int)$total : $total);
             } else {
                 foreach ($result['items'] as $record) {
-                    $pageDone += ($this->handler($record) ? 1 : 0);
+                    $roundSuccess += ($this->handler($record) ? 1 : 0);
                 }
             }
         } catch (Exception $e) {
@@ -237,17 +305,24 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             return 0;
         }
 
-        $totalSuccess += $pageDone;
-        $pageCount = count($result['items']);
+        $recordSuccess += $roundSuccess;
+        $roundTotal = count($result['items']);
 
-        $this->output->writeln(
-            $this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $result['total_item'])
-        );
-
-        if ($limit == $pageCount) {
-            return $this->logic($limit, ++$page, $totalSuccess);
+        if ($this->fixPagination) {
+            $this->fpMaxId = $result['items'][$roundTotal - 1][$this->repo->pk()];
+            $this->fpRecordTotal = $recordTotal;
         }
 
-        return $page;
+        if ($this->process) {
+            $this->output->writeln(
+                $this->process($limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess)
+            );
+        }
+
+        if ($limit == $roundTotal) {
+            return $this->logic($limit, ++$pageNow, $recordSuccess);
+        }
+
+        return $pageNow;
     }
 }

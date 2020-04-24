@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use InvalidArgumentException;
 use Exception;
-use function GuzzleHttp\Psr7\parse_query;
 
 abstract class ImportCsvCommand extends Command implements CommandInterface
 {
@@ -32,6 +31,11 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
      * @var OutputInterface
      */
     protected $output;
+
+    /**
+     * @var bool
+     */
+    protected $process = 'page {PageNow}/{PageTotal}, round {RoundSuccess}/{RoundTotal}, total {RecordSuccess}/{RecordTotal}, process {Process}%';
 
     /**
      * @return array
@@ -79,9 +83,9 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     /**
      * @param array $record
      *
-     * @return bool
+     * @return int|bool
      */
-    abstract public function handler(array $record): bool;
+    abstract public function handler(array $record);
 
     /**
      * @return void
@@ -93,31 +97,41 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
 
     /**
      * @param int $limit
-     * @param int $page
-     * @param int $pageDone
-     * @param int $pageCount
-     * @param int $totalSuccess
-     * @param int $total
+     * @param int $pageTotal
+     * @param int $pageNow
+     * @param int $roundTotal
+     * @param int $roundSuccess
+     * @param int $recordTotal
+     * @param int $recordSuccess
      *
      * @return string
      */
     public function process(
         int $limit,
-        int $page,
-        int $pageDone,
-        int $pageCount,
-        int $totalSuccess,
-        int $total
+        int $pageTotal,
+        int $pageNow,
+        int $roundTotal,
+        int $roundSuccess,
+        int $recordTotal,
+        int $recordSuccess
     ): string {
+        $process = number_format(($pageNow * $limit) / $recordTotal * 100, 2);
+        $info = str_replace(
+            [
+                '{Limit}',
+                '{PageTotal}',
+                '{PageNow}',
+                '{RoundTotal}',
+                '{RoundSuccess}',
+                '{RecordTotal}',
+                '{RecordSuccess}',
+                '{Process}',
+            ],
+            [$limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess, $process],
+            $this->process
+        );
 
-        $process = number_format($totalSuccess / $total * 100, 2);
-
-        $pageInfo = "page {$page}";
-        $currentInfo = "current done {$pageDone}/{$pageCount}";
-        $totalInfo = "total done {$totalSuccess}/{$total}";
-        $processInfo = "process {$process}%";
-
-        return "<info> {$pageInfo}, {$currentInfo}, {$totalInfo}, {$processInfo}. </info>";
+        return "<info> {$info} </info>";
     }
 
     /**
@@ -180,28 +194,30 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     /**
      * @param int    $limit
      * @param string $csv
-     * @param int    $page
-     * @param int    $totalSuccess
+     * @param int    $pageNow
+     * @param int    $recordSuccess
      *
      * @return int
      * @throws
      */
-    protected function logic(int $limit, string $csv, int $page = 1, int $totalSuccess = 0): int
+    protected function logic(int $limit, string $csv, int $pageNow = 1, int $recordSuccess = 0): int
     {
-        if ($limit < 2) {
-            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 2');
+        if ($limit < 1) {
+            throw new InvalidArgumentException('Arguments `limit` should be integer and gte 1');
         }
 
-        [$total, $items] = $this->csvReader($csv, $page, $limit);
-        if ($page === 1 && empty($items)) {
-            return 0;
+        [$recordTotal, $items] = $this->csvReader($csv, $pageNow, $limit);
+        if (empty($items)) {
+            return $pageNow === 1 ? 0 : $pageNow;
         }
 
-        $pageDone = 0;
+        $roundSuccess = 0;
+        $pageTotal = ceil($recordTotal / $limit);
+
         try {
             foreach ($items as $record) {
                 $record = Helper::numericValues($record);
-                $pageDone += ($this->handler($record) ? 1 : 0);
+                $roundSuccess += ($this->handler($record) ? 1 : 0);
             }
         } catch (Exception $e) {
             $this->output->writeln("<error> {$e->getMessage()} </error>");
@@ -209,15 +225,19 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             return 0;
         }
 
-        $totalSuccess += $pageDone;
-        $pageCount = count($items);
+        $recordSuccess += $roundSuccess;
+        $roundTotal = count($items);
 
-        $this->output->writeln($this->process($limit, $page, $pageDone, $pageCount, $totalSuccess, $total));
-
-        if ($limit == $pageCount) {
-            return $this->logic($limit, $csv, ++$page, $totalSuccess);
+        if ($this->process) {
+            $this->output->writeln(
+                $this->process($limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess)
+            );
         }
 
-        return $page;
+        if ($limit == $roundTotal) {
+            return $this->logic($limit, $csv, ++$pageNow, $recordSuccess);
+        }
+
+        return $pageNow;
     }
 }

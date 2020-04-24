@@ -55,9 +55,9 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
      *
      * @param array $record
      *
-     * @return bool
+     * @return int|bool
      */
-    public function handler(array $record): bool
+    public function handler(array $record)
     {
         if ($this->hasCnText) {
             setlocale(LC_ALL, 'zh_CN');
