@@ -1040,6 +1040,10 @@ class FoundationAntD extends FoundationTools {
                 conf.directives = item;
                 return this;
             },
+            watch(item = {}) {
+                conf.watch = item;
+                return this;
+            },
             init(logic = self.blank) {
                 //that.cnf.v = (new (that.v.extend(conf))()).$mount(selector);
                 conf.el = selector;

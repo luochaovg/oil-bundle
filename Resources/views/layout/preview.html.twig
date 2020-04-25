@@ -28,8 +28,8 @@
     <a-pagination
       :show-quick-jumper="true"
       :hide-on-single-page="true"
-      :show-total="(total, range) => `Total ${total}`"
-      :page-size.sync="preview_pagination_data.pageSize"
+      :show-total="(total, range) => `${bsw.lang.total} ${total}`"
+      :page-size.sync="previewPageSize"
       :default-current="preview_pagination_data.currentPage"
       :total="preview_pagination_data.totalItem"
       :show-size-changer="true"
@@ -74,19 +74,22 @@ bsw.configure({
         preview_dynamic_refresh: {{ preview.dynamic }},
         preview_url: '{{ scaffold.url|raw }}',
         preview_pagination_data: {{ preview.pageJson|raw }},
-        preview_pagination_size_options: ['10', '20', '30', '40', '50', '100', '200', '300'],
+        previewPageSize: {{ preview.page.pageSize }},
+        preview_pagination_size_options: {{ preview.pageSizeOptionsJson|raw }},
         preview_page_number: 1,
     },
     watch: {
-
+        previewPageSize(pageSize) {
+            location.href = this.preview_get_url(null, {page: 1, page_size: pageSize});
+        }
     },
     method: {
         preview_selected_change(selectedRow) {
             this.preview_selected_row = selectedRow;
         },
-        preview_get_url(url) {
+        preview_get_url(url, params={}) {
             url = url || this.preview_url;
-            return bsw.setParams({page: this.preview_page_number}, url);
+            return bsw.setParams(Object.assign({page: this.preview_page_number}, params), url);
         },
         preview_pagination(page, pageSize) {
             this.pagination(this.preview_get_url(), page);

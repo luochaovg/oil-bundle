@@ -1,4 +1,5 @@
 window.lang = {
+    i18n: 'en_US',
     success: 'Success',
     info: 'Information',
     warning: 'Warning',
@@ -20,4 +21,5 @@ window.lang = {
     theme: 'Theme',
     color_weak: 'Color weak mode',
     third_message: 'Third message',
+    total: 'Total',
 };

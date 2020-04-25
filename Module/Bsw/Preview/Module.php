@@ -16,6 +16,7 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Repository\FoundationRepository;
 
 /**
  * @property Input                $input
@@ -601,10 +602,15 @@ class Module extends Bsw
          * list by query
          */
 
+        $page = intval($this->web->getArgs(Abs::PG_PAGE) ?? 1);
+        $limit = intval($this->web->getArgs(Abs::PG_PAGE_SIZE));
+        $limit = in_array($limit, Abs::PG_PAGE_SIZE_OPTIONS) ? $limit : FoundationRepository::PAGE_SIZE;
+
         $query = array_merge(
             [
                 'paging' => true,
-                'page'   => intval($this->web->getArgs('page') ?? 1),
+                'page'   => $page,
+                'limit'  => $limit,
             ],
             $this->query
         );
@@ -886,6 +892,9 @@ class Module extends Bsw
         $output->listJson = $this->json($output->list);
         $output->dressJson = $this->json($output->dress);
         $output->pageJson = $this->json($output->page);
+
+        $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);
+        $output->pageSizeOptionsJson = $this->json($output->pageSizeOptions);
 
         $output->dynamic = $this->input->dynamic;
         $output = $this->caller(

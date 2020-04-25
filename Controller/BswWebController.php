@@ -401,8 +401,9 @@ abstract class BswWebController extends AbstractController
         }
 
         if (isset($map[$methodInfo])) {
+            $split = ['cn' => ''][$this->header->lang] ?? ' ';
             $twig = $this->translator->trans($classInfo, [], 'twig');
-            $twig .= $this->translator->trans($map[$methodInfo], [], 'twig');
+            $twig = $twig . $split . $this->translator->trans($map[$methodInfo], [], 'twig');
         } else {
             $twig = $this->translator->trans($methodInfo, [], 'twig');
         }

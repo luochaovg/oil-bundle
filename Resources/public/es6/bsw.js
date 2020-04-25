@@ -24,6 +24,7 @@ $(function () {
     bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
 
         bsw,
+        locale: bsw.d.locales[bsw.lang.i18n],
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
         opposeMap: {yes: 'no', no: 'yes'},
         formUrl: null,
@@ -451,7 +452,7 @@ $(function () {
             }
         },
 
-    }, bsw.config.directive || {})).component(Object.assign({
+    }, bsw.config.directive || {})).watch(Object.assign({}, bsw.config.watch || {})).component(Object.assign({
 
         // component
         'b-icon': bsw.d.Icon.createFromIconfontCN({

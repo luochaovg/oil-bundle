@@ -724,7 +724,7 @@ abstract class FoundationRepository extends SFRepository
                 'page'   => $page ?? 1,
                 'limit'  => $limit ?? static::PAGE_SIZE,
             ],
-            self::PAGE_SIZE
+            static::PAGE_SIZE
         );
 
         extract($pageArgs);

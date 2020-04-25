@@ -12,6 +12,7 @@
         <img src="{{ scaffold.cnf.app_logo }}" alt="logo">
       {% endif %}
       {% set app_name = scaffold.cnf.app_name ?? 'Application' %}
+      {% set app_name = app_name|trans({}, 'twig') %}
       <h1 :style="`max-width:${menuWidth - 80}px;`" title="{{ app_name }}">{{ app_name }} <sup>{{ scaffold.env }}</sup></h1>
     </a>
   </div>

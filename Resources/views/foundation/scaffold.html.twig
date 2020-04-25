@@ -10,7 +10,9 @@
         {% include '@LeonBsw/limbs/init.html.twig' %}
       {% endif %}
       {{ (modal_html ?? null)|raw }}
-      {% block body %}{% endblock %}
+      <a-config-provider :locale="locale">
+        {% block body %}{% endblock %}
+      </a-config-provider>
     </template>
   </div>
 {% endblock %}

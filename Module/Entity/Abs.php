@@ -234,11 +234,13 @@ class Abs
     const FMT_MONTH_FIRST_DAY = 'Y-m-01';
     const FMT_MONTH_LAST_DAY  = 'Y-m-t';
 
-    const PG_CURRENT_PAGE = 'current_page';
-    const PG_PAGE_SIZE    = 'page_size';
-    const PG_TOTAL_PAGE   = 'total_page';
-    const PG_TOTAL_ITEM   = 'total_item';
-    const PG_ITEMS        = 'items';
+    const PG_PAGE              = 'page';
+    const PG_CURRENT_PAGE      = 'current_page';
+    const PG_PAGE_SIZE         = 'page_size';
+    const PG_TOTAL_PAGE        = 'total_page';
+    const PG_TOTAL_ITEM        = 'total_item';
+    const PG_ITEMS             = 'items';
+    const PG_PAGE_SIZE_OPTIONS = [10, 20, 30, 50, 100];
 
     const PAY_PLATFORM_SIN    = 1;
     const PAY_PLATFORM_WALL   = 2;
@@ -451,7 +453,7 @@ class Abs
 
     const JS_MOMENT_LANG = [
         'cn' => 'npm;moment/locale/zh-cn.js',
-        'en' => 'npm;moment/locale/es-us.js'
+        'en' => 'npm;moment/locale/es-us.js',
     ];
 
     const CSS_ANT_D     = 'npm;ant-design-vue/dist/antd.min.css';

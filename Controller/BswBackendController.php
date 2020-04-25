@@ -112,7 +112,7 @@ class BswBackendController extends BswWebController
             $this->mapCdnSrcJs = [];
 
             if (isset($this->initialSrcJs[$key = 'ant-d'])) {
-                $this->appendSrcJsWithKey($key, Abs::JS_ANT_D);
+                $this->appendSrcJsWithKey($key, Abs::JS_ANT_D_LANG);
             }
             if (isset($this->initialSrcJs[$key = 'vue'])) {
                 $this->appendSrcJsWithKey($key, Abs::JS_VUE);

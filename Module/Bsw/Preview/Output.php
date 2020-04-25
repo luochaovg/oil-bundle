@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Module\Bsw\Preview;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Page;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Output extends ArgsOutput
 {
@@ -67,6 +68,16 @@ class Output extends ArgsOutput
      * @var string
      */
     public $pageJson;
+
+    /**
+     * @var array
+     */
+    public $pageSizeOptions = Abs::PG_PAGE_SIZE_OPTIONS;
+
+    /**
+     * @var string
+     */
+    public $pageSizeOptionsJson;
 
     /**
      * @var int

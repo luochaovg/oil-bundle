@@ -1,6 +1,7 @@
 'use strict';
 
 window.lang = {
+    i18n: 'en_US',
     success: 'Success',
     info: 'Information',
     warning: 'Warning',
@@ -21,5 +22,6 @@ window.lang = {
     please_select: 'Please select',
     theme: 'Theme',
     color_weak: 'Color weak mode',
-    third_message: 'Third message'
+    third_message: 'Third message',
+    total: 'Total'
 };

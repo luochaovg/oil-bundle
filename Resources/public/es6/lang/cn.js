@@ -1,4 +1,5 @@
 window.lang = {
+    i18n: 'zh_CN',
     success: 'Success',
     info: 'Information',
     warning: 'Warning',
@@ -20,4 +21,5 @@ window.lang = {
     theme: '主题',
     color_weak: '色弱模式',
     third_message: '第三方消息提示',
+    total: '总计',
 };

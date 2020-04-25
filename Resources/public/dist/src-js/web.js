@@ -21,6 +21,7 @@ $(function () {
     web.vue('.bsw-body').template(web.config.template || null).data(Object.assign({
 
         web: web,
+        locale: web.d.locales[web.lang.i18n],
         no_loading_once: false,
         spinning: false,
         configure: {}, // from v-init
@@ -36,7 +37,7 @@ $(function () {
             }
         }
 
-    }, web.config.directive || {})).component(Object.assign({
+    }, web.config.directive || {})).watch(Object.assign({}, web.config.watch || {})).component(Object.assign({
 
         // component
         'b-icon': web.d.Icon.createFromIconfontCN({

@@ -1403,6 +1403,12 @@ var FoundationAntD = function (_FoundationTools) {
                     conf.directives = item;
                     return this;
                 },
+                watch: function watch() {
+                    var item = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+                    conf.watch = item;
+                    return this;
+                },
                 init: function init() {
                     var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.blank;
 
