@@ -160,11 +160,15 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
-        $this->output->writeln("<info>\n " . static::class . " => {$this->getName()}\n</info>");
+        $this->params->{'data-line'} -= 1;
 
         if ($this->forbid()) {
             return;
         }
+
+        $this->output->writeln(
+            "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
+        );
 
         $this->logic($this->params->limit, $this->params->csv);
         $this->done();
@@ -189,13 +193,15 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             $instance->setCsvFile($csv);
         }
 
-        $total = $instance->lines();
-        $beginLine = $this->params->{'data-line'};
-
+        $total = $instance->lines() + 1;
         $args = Helper::pageArgs(['page' => $page, 'limit' => $limit]);
-        $items = $instance->reader($args['limit'], $args['offset'] + $beginLine - 1, false);
+        $items = $instance->reader($args['limit'], $args['offset'] + $this->params->{'data-line'}, false);
 
-        return [$total - $beginLine + 1, $items];
+        // filter blank line
+        $items = array_map('array_filter', $items);
+        $items = array_filter($items);
+
+        return [$total - $this->params->{'data-line'} - 1, $items];
     }
 
     /**
@@ -212,6 +218,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         if ($limit < 1) {
             throw new InvalidArgumentException('Arguments `limit` should be integer and gte 1');
         }
+
 
         [$recordTotal, $items] = $this->csvReader($csv, $pageNow, $limit);
         if (empty($items)) {

@@ -221,11 +221,13 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
-        $this->output->writeln("<info>\n " . static::class . " => {$this->getName()}\n</info>");
-
         if ($this->forbid()) {
             return;
         }
+
+        $this->output->writeln(
+            "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
+        );
 
         $this->logic($this->params->limit);
         $this->done();
