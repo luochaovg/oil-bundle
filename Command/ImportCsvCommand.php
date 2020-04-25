@@ -35,7 +35,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     /**
      * @var bool
      */
-    protected $process = 'page {PageNow}/{PageTotal}, round {RoundSuccess}/{RoundTotal}, total {RecordSuccess}/{RecordTotal}, process {Process}%';
+    protected $process = '[{Time}] -> page {PageNow}/{PageTotal}, round {RoundSuccess}/{RoundTotal}, total {RecordSuccess}/{RecordTotal}, process {Process}%';
 
     /**
      * @return array
@@ -115,9 +115,14 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         int $recordTotal,
         int $recordSuccess
     ): string {
-        $process = number_format(($pageNow * $limit) / $recordTotal * 100, 2);
+
+        $time = Helper::date();
+        $recordDone = (($pageNow - 1) * $limit) + $roundTotal;
+        $process = number_format($recordDone / $recordTotal * 100, 2);
+
         $info = str_replace(
             [
+                '{Time}',
                 '{Limit}',
                 '{PageTotal}',
                 '{PageNow}',
@@ -127,7 +132,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
                 '{RecordSuccess}',
                 '{Process}',
             ],
-            [$limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess, $process],
+            [$time, $limit, $pageTotal, $pageNow, $roundTotal, $roundSuccess, $recordTotal, $recordSuccess, $process],
             $this->process
         );
 
@@ -154,6 +159,8 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $this->params = (object)$this->_params;
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
+
+        $this->output->writeln("<info>\n " . static::class . " => {$this->getName()}\n</info>");
 
         if ($this->forbid()) {
             return;

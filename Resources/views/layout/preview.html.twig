@@ -29,9 +29,11 @@
       :show-quick-jumper="true"
       :hide-on-single-page="true"
       :show-total="(total, range) => `Total ${total}`"
-      :page-size="preview_pagination_data.pageSize"
+      :page-size.sync="preview_pagination_data.pageSize"
       :default-current="preview_pagination_data.currentPage"
       :total="preview_pagination_data.totalItem"
+      :show-size-changer="true"
+      :page-size-options="preview_pagination_size_options"
       :simple="false"
       size="{{ preview.size }}"
       @change="preview_pagination"
@@ -72,7 +74,11 @@ bsw.configure({
         preview_dynamic_refresh: {{ preview.dynamic }},
         preview_url: '{{ scaffold.url|raw }}',
         preview_pagination_data: {{ preview.pageJson|raw }},
+        preview_pagination_size_options: ['10', '20', '30', '40', '50', '100', '200', '300'],
         preview_page_number: 1,
+    },
+    watch: {
+
     },
     method: {
         preview_selected_change(selectedRow) {
@@ -82,7 +88,7 @@ bsw.configure({
             url = url || this.preview_url;
             return bsw.setParams({page: this.preview_page_number}, url);
         },
-        preview_pagination(page) {
+        preview_pagination(page, pageSize) {
             this.pagination(this.preview_get_url(), page);
         },
         preview_pagination_refresh() {

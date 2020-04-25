@@ -93,7 +93,7 @@ trait WebSource
         'jquery' => Abs::JS_JQUERY,
         'moment' => Abs::JS_MOMENT,
         'vue'    => Abs::JS_VUE_MIN,
-        'ant-d'  => Abs::JS_ANT_D_MIN,
+        'ant-d'  => Abs::JS_ANT_D_LANG_MIN,
         'app'    => Abs::JS_FOUNDATION,
     ];
 

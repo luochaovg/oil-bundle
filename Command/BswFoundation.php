@@ -81,14 +81,6 @@ trait BswFoundation
     }
 
     /**
-     * @return mixed
-     */
-    public function init()
-    {
-        return null;
-    }
-
-    /**
      * @return array
      */
     abstract function base(): array;

@@ -408,7 +408,9 @@ class Abs
     const JS_VUE                  = 'npm;vue/dist/vue.js';
     const JS_VUE_MIN              = 'npm;vue/dist/vue.min.js';
     const JS_ANT_D                = 'npm;ant-design-vue/dist/antd.js';
+    const JS_ANT_D_LANG           = 'npm;ant-design-vue/dist/antd-with-locales.js';
     const JS_ANT_D_MIN            = 'npm;ant-design-vue/dist/antd.min.js';
+    const JS_ANT_D_LANG_MIN       = 'npm;ant-design-vue/dist/antd-with-locales.min.js';
     const JS_ELE                  = 'npm;element-ui/lib/index.js';
     const JS_TIP                  = 'npm;tippy.js/dist/tippy.all.min.js';
     const JS_JQUERY               = 'npm;jquery/dist/jquery.min.js';
@@ -445,6 +447,11 @@ class Abs
     const JS_LANG = [
         'cn' => 'diy;lang/cn.js',
         'en' => 'diy;lang/en.js',
+    ];
+
+    const JS_MOMENT_LANG = [
+        'cn' => 'npm;moment/locale/zh-cn.js',
+        'en' => 'npm;moment/locale/es-us.js'
     ];
 
     const CSS_ANT_D     = 'npm;ant-design-vue/dist/antd.min.css';
