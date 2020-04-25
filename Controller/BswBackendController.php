@@ -101,7 +101,7 @@ class BswBackendController extends BswWebController
         parent::bootstrap();
 
         if ($this->bswSrc) {
-            $lang = $this->langLatest(['en' => 'en', 'cn' => 'cn']);
+            $lang = $this->langLatest($this->langMap);
             $this->appendSrcJs([Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang], Abs::JS_BSW]);
             $this->appendSrcCss(Abs::CSS_BSW);
         }

@@ -21,7 +21,7 @@ $(function () {
     web.vue('.bsw-body').template(web.config.template || null).data(Object.assign({
 
         web: web,
-        locale: web.d.locales[web.lang.i18n],
+        locale: web.d.locales[web.lang.i18n_ant],
         no_loading_once: false,
         spinning: false,
         configure: {}, // from v-init

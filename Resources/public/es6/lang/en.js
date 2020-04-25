@@ -1,5 +1,6 @@
 window.lang = {
-    i18n: 'en_US',
+    i18n_ant: 'en_US',
+    i18n_editor: 'en-gb',
     success: 'Success',
     info: 'Information',
     warning: 'Warning',

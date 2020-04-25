@@ -442,7 +442,7 @@ class Abs
     const JS_FOUNDATION           = 'diy;foundation.js';
     const JS_BSW                  = 'diy;bsw.js';
     const JS_WEB                  = 'diy;web.js';
-    const JS_EDITOR               = 'npm;@ckeditor/ckeditor5-build-classic/build/ckeditor.js';
+    const JS_EDITOR               = 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js';
     const JS_EDITOR_CUSTOM        = 'diy;third/ckeditor5-custom.js';
     const CHART_DEFAULT_THEME     = 'westeros';
 
@@ -454,6 +454,11 @@ class Abs
     const JS_MOMENT_LANG = [
         'cn' => 'npm;moment/locale/zh-cn.js',
         'en' => 'npm;moment/locale/es-us.js',
+    ];
+
+    const JS_EDITOR_LANG = [
+        'cn' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn.js',
+        'en' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/en-gb.js',
     ];
 
     const CSS_ANT_D     = 'npm;ant-design-vue/dist/antd.min.css';

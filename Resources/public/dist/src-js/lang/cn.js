@@ -1,7 +1,8 @@
 'use strict';
 
 window.lang = {
-    i18n: 'zh_CN',
+    i18n_ant: 'zh_CN',
+    i18n_editor: 'zh-cn',
     success: 'Success',
     info: 'Information',
     warning: 'Warning',

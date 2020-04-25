@@ -19,10 +19,10 @@ use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
+use Leon\BswBundle\Module\Form\Entity\CkEditor;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
-use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Hook\Entity\JsonStringify;
@@ -930,7 +930,8 @@ class Module extends Bsw
             if (isset($fillData[$key])) {
                 $form->setValue($fillData[$key]);
             }
-            if (get_class($form) == TextArea::class && strpos($form->getClass(), 'bsw-ck-editor') !== false) {
+            if (get_class($form) == CkEditor::class) {
+                $this->web->appendSrcJs([Abs::JS_EDITOR_LANG[$this->web->langLatest($this->web->langMap)]]);
                 $this->web->appendSrcJsWithKey('ck-editor', Abs::JS_EDITOR);
                 $this->web->appendSrcJsWithKey('ck-editor-custom', Abs::JS_EDITOR_CUSTOM);
                 $this->web->appendSrcCssWithKey('ck-editor', Abs::CSS_EDITOR);

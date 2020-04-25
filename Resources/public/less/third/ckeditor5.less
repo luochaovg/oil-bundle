@@ -1,4 +1,29 @@
 
+.bsw-ck {
+  line-height: normal;
+  border: 1px solid var(--ck-color-base-border);
+  border-radius: var(--ck-border-radius);
+  max-height: 700px;
+  display: flex;
+  flex-flow: column nowrap;
+
+  .bsw-ck-toolbar {
+    z-index: 1;
+    box-shadow: 0 0 5px hsla(0, 0%, 0%, .2);
+    border-bottom: 1px solid var(--ck-color-toolbar-border);
+
+    .ck-toolbar {
+      border: 0;
+      border-radius: 0;
+    }
+  }
+
+  .bsw-ck-editor {
+    min-height: 220px;
+    overflow-y: scroll;
+  }
+}
+
 .ck-content ul {
   padding-left: 24px;
 

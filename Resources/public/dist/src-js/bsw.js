@@ -25,7 +25,7 @@ $(function () {
     bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
 
         bsw: bsw,
-        locale: bsw.d.locales[bsw.lang.i18n],
+        locale: bsw.d.locales[bsw.lang.i18n_ant],
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
         opposeMap: { yes: 'no', no: 'yes' },
         formUrl: null,
@@ -398,8 +398,9 @@ $(function () {
         initCkEditor: function initCkEditor() {
             var that = this;
             $('.bsw-persistence .bsw-ck-editor').each(function () {
-                var id = $(this).attr('id');
-                ClassicEditor.create(this, {}).then(function (editor) {
+                var id = $(this).parent().prev('textarea').attr('id');
+                var em = this;
+                DecoupledEditor.create(em, { language: bsw.lang.i18n_editor }).then(function (editor) {
                     that.ckEditor[id] = editor;
                     editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
@@ -409,6 +410,7 @@ $(function () {
                             that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
                         }
                     });
+                    $(em).prev('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
                 }).catch(function (err) {
                     console.warn(err.stack);
                 });
