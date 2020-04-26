@@ -397,11 +397,16 @@ $(function () {
         },
         initCkEditor: function initCkEditor() {
             var that = this;
-            $('.bsw-persistence .bsw-ck-editor').each(function () {
-                var id = $(this).parent().prev('textarea').attr('id');
+            $('.bsw-persistence .bsw-ck').each(function () {
                 var em = this;
-                DecoupledEditor.create(em, { language: bsw.lang.i18n_editor }).then(function (editor) {
+                var id = $(em).prev('textarea').attr('id');
+                var container = $(em).find('.bsw-ck-editor');
+                DecoupledEditor.create(container[0], {
+                    language: bsw.lang.i18n_editor,
+                    placeholder: $(em).attr('placeholder')
+                }).then(function (editor) {
                     that.ckEditor[id] = editor;
+                    editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
@@ -410,7 +415,7 @@ $(function () {
                             that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
                         }
                     });
-                    $(em).prev('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
+                    $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
                 }).catch(function (err) {
                     console.warn(err.stack);
                 });

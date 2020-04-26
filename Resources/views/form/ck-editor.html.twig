@@ -3,11 +3,13 @@
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
 ></a-textarea>
 
-<div class="bsw-ck">
+<div
+  class="bsw-ck {{ form.class }}"
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+>
   <div class="bsw-ck-toolbar"></div>
-  <div
-    class="bsw-ck-editor {{ form.class }}"
-    :style="{{ form.style }}"
-    {{ form.attributes|raw }}
-  >{{ form.value|raw }}</div>
+  <div class="bsw-ck-editor">{{ form.value|raw }}</div>
 </div>

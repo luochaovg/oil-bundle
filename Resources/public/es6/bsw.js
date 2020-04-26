@@ -407,11 +407,16 @@ $(function () {
 
         initCkEditor() {
             let that = this;
-            $('.bsw-persistence .bsw-ck-editor').each(function () {
-                let id = $(this).parent().prev('textarea').attr('id');
+            $('.bsw-persistence .bsw-ck').each(function () {
                 let em = this;
-                DecoupledEditor.create(em, {language: bsw.lang.i18n_editor}).then(editor => {
+                let id = $(em).prev('textarea').attr('id');
+                let container = $(em).find('.bsw-ck-editor');
+                DecoupledEditor.create(container[0], {
+                    language: bsw.lang.i18n_editor,
+                    placeholder: $(em).attr('placeholder'),
+                }).then(editor => {
                     that.ckEditor[id] = editor;
+                    editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                         return new FileUploadAdapter(editor, loader, that.api_upload);
                     };
@@ -420,7 +425,7 @@ $(function () {
                             that.persistence_form.setFieldsValue({[id]: that.ckEditor[id].getData()});
                         }
                     });
-                    $(em).prev('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
+                    $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
                 }).catch(err => {
                     console.warn(err.stack);
                 });

@@ -40,9 +40,11 @@
   color: #6889bc;
 }
 .ck.ck-content blockquote {
-  padding: 5px 10px;
+  padding: 6px 10px;
   font-style: normal;
   line-height: 1.5;
+  background-color: #fbfbfb;
+  border-radius: 2px;
 }
 .ck.ck-content blockquote p {
   margin: 8px 0 !important;
