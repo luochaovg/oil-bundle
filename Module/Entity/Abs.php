@@ -542,6 +542,9 @@ class Abs
     // 代码模板
     const RENDER_CODE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
 
+    // 代码模板 full
+    const RENDER_CODE_FULL = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code full bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
+
     // 图标模板
     const RENDER_ICON = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}[0] == \"a\"' :type='{:value}.split(\":\")[1]'></a-icon><b-icon v-else :type='{:value}.split(\":\")[1]'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
 
@@ -568,6 +571,12 @@ class Abs
 
     // html pre 标签
     const HTML_PRE = "<pre class='bsw-pre bsw-long-text'>{value}</pre>";
+
+    // html 代码模板
+    const HTML_CODE = "<div class='bsw-code bsw-long-text'>{value}</div>";
+
+    // html 代码模板 full
+    const HTML_CODE_FULL = "<div class='bsw-code full bsw-long-text'>{value}</div>";
 
     // html 粉色模板
     const HTML_PINK = "<div class='ant-tag ant-tag-has-color' style='background-color: #eb2f96;'>{value}</div>";

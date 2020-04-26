@@ -529,7 +529,7 @@ class Module extends Bsw
         $output->dress = $dress;
         $output->columns = $columns;
 
-        return [$hooks, $mixedAnnotation];
+        return [$hooks, $previewAnnotation, $mixedAnnotation];
     }
 
     /**
@@ -658,12 +658,13 @@ class Module extends Bsw
      *
      * @param array  $list
      * @param array  $hooks
+     * @param array  $previewAnnotation
      * @param Output $output
      *
      * @return array
      * @throws
      */
-    protected function handlePreviewData(array $list, array $hooks, Output $output): array
+    protected function handlePreviewData(array $list, array $hooks, array $previewAnnotation, Output $output): array
     {
         /**
          * before hook (row record)
@@ -776,11 +777,20 @@ class Module extends Bsw
                     continue;
                 }
 
-                $args = [$value, $hooked[$key][$field], $original[$key][$field], $item, $hooked, $original];
+                $fieldAnnotation = $previewAnnotation[$field] ?? [];
+                $args = [
+                    $value,
+                    $hooked[$key][$field],
+                    $original[$key][$field],
+                    $item,
+                    $hooked,
+                    $original,
+                    $fieldAnnotation,
+                ];
                 $_value = $this->caller($this->method, $charm, null, null, $args);
 
                 if (is_object($_value) && $_value instanceof Charm) {
-                    $value = $this->parseSlot($_value->getCharm(), '', ['value' => $_value->getValue($value)]);
+                    $value = $this->parseSlot($_value->getCharm(), '', ['value' => $_value->getValue()]);
                 } elseif (is_scalar($_value)) {
                     $value = $_value;
                 } else {
@@ -869,10 +879,10 @@ class Module extends Bsw
             return $this->showError($e->getMessage());
         }
 
-        [$hooks, $mixedAnnotation] = $this->handleAnnotation($output);
+        [$hooks, $previewAnnotation, $mixedAnnotation] = $this->handleAnnotation($output);
 
         $list = $this->getPreviewData($output, $mixedAnnotation);
-        $list = $this->handlePreviewData($list, $hooks, $output);
+        $list = $this->handlePreviewData($list, $hooks, $previewAnnotation, $output);
         $this->correctPreviewColumn($list, $output);
 
         /**

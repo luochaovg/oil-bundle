@@ -6,6 +6,7 @@
     <a-form
       id="persistence_form"
       :form="persistence_form"
+      :style='{{ persistence.styleJson|raw }}'
       @submit="persistence_submit"
     >
       {% set total_column = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}

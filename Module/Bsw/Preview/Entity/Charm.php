@@ -15,15 +15,22 @@ class Charm
     private $value;
 
     /**
+     * @var bool
+     */
+    private $html = false;
+
+    /**
      * Charm constructor.
      *
-     * @param string|null $charm
-     * @param null        $value
+     * @param string $charm
+     * @param null   $value
+     * @param bool   $html
      */
-    public function __construct(string $charm = null, $value = null)
+    public function __construct(string $charm = null, $value = null, bool $html = null)
     {
         isset($charm) && $this->charm = $charm;
         isset($value) && $this->value = $value;
+        isset($html) && $this->html = $html;
     }
 
     /**
@@ -47,13 +54,11 @@ class Charm
     }
 
     /**
-     * @param mixed $default
-     *
      * @return mixed
      */
-    public function getValue($default = null)
+    public function getValue()
     {
-        return $this->value ?? $default;
+        return $this->value;
     }
 
     /**
@@ -64,6 +69,26 @@ class Charm
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHtml(): bool
+    {
+        return $this->html;
+    }
+
+    /**
+     * @param bool $html
+     *
+     * @return $this
+     */
+    public function setHtml(bool $html)
+    {
+        $this->html = $html;
 
         return $this;
     }

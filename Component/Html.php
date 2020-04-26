@@ -291,11 +291,16 @@ class Html
      * Remove the html tag
      *
      * @param string $str
+     * @param bool   $entity
      *
      * @return string
      */
-    public static function cleanHtml(string $str)
+    public static function cleanHtml(string $str, bool $entity = false)
     {
+        if ($entity) {
+            return htmlentities($str);
+        }
+
         return strip_tags(preg_replace('/<\/?([a-z]+)[^>]*>/i', null, $str));
     }
 
@@ -303,16 +308,17 @@ class Html
      * Remove the html tag for array
      *
      * @param array $target
+     * @param bool  $entity
      *
      * @return array
      */
-    public static function cleanArrayHtml(array $target): array
+    public static function cleanArrayHtml(array $target, bool $entity = false): array
     {
         foreach ($target as &$item) {
             if (is_array($item)) {
-                $item = self::cleanArrayHtml($item);
+                $item = self::cleanArrayHtml($item, $entity);
             } elseif (is_string($item)) {
-                $item = self::cleanHtml($item);
+                $item = self::cleanHtml($item, $entity);
             }
         }
 

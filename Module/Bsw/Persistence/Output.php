@@ -46,4 +46,14 @@ class Output extends ArgsOutput
      * @var string
      */
     public $uploadTipsCollectJson;
+
+    /**
+     * @var array
+     */
+    public $style = [];
+
+    /**
+     * @var string
+     */
+    public $styleJson;
 }

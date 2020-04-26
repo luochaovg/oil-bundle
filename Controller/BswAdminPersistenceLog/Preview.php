@@ -74,8 +74,10 @@ trait Preview
      */
     protected function printJson(string $field, string $value): Charm
     {
+        $value = Html::cleanHtml($value, true);
+
         if (substr_count($value, "\n") + 1 < 25) {
-            return new Charm(Abs::HTML_TEXT, (new JsonStringify())->preview($value, []));
+            return new Charm(Abs::HTML_TEXT, $value);
         }
 
         return $this->charmShowContent(

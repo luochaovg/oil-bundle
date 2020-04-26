@@ -946,6 +946,9 @@ class Module extends Bsw
         $output->fileListKeyCollectJson = $this->json($output->fileListKeyCollect);
         $output->uploadTipsCollectJson = $this->json($output->uploadTipsCollect);
 
+        $output->style = array_merge($output->style, $this->input->style);
+        $output->styleJson = $this->json($output->style);
+
         $output = $this->caller(
             $this->method . ucfirst($this->name()),
             self::ARGS_BEFORE_RENDER,

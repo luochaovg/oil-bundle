@@ -32,6 +32,11 @@ class Input extends ArgsInput
     public $fill = 'fill';
 
     /**
+     * @var array
+     */
+    public $style = [];
+
+    /**
      * @var string
      */
     public $i18nNewly = 'Newly record done';
