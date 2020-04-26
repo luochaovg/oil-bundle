@@ -1883,10 +1883,11 @@ class Helper
      *
      * @param string $scene
      * @param string $tpl
+     * @param string $scenePre
      *
      * @return array
      */
-    public static function cost(string $scene, string $tpl = null): array
+    public static function cost(string $scene, string $tpl = null, string $scenePre = null): array
     {
         static $sceneFirst;
         static $scenePrevious = 'init';
@@ -1897,19 +1898,20 @@ class Helper
         }
 
         $costCurrent = $costHistory[$scene] = Helper::milliTime();
-        $costPrevious = $costHistory[$scenePrevious] ?? $costCurrent;
         $costFirst = $sceneFirst ? $costHistory[$sceneFirst] : $costCurrent;
 
+        $scenePre = $scenePre ?? $scenePrevious;
+        $costPrevious = $costHistory[$scenePre] ?? $costCurrent;
         $scenePrevious = $scene;
 
         $costMilli = $costCurrent - $costFirst;
         $chunkCostMilli = $costCurrent - $costPrevious;
         $chunkCostString = chunk_split($costCurrent, 10, '.');
 
-        $tpl = $tpl ?: '-->> {second} (cost: {cost}) in {scene}';
+        $tpl = $tpl ?: '-->> {second} (cost: {cost}) in [{scene_prev}, {scene}]';
         $tpl = str_replace(
-            ['{scene}', '{second}', '{cost}'],
-            [$scene, $chunkCostString, $chunkCostMilli],
+            ['{scene_prev}', '{scene}', '{second}', '{cost}'],
+            [$scenePre, $scene, $chunkCostString, $chunkCostMilli],
             $tpl
         );
 
