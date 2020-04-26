@@ -41,6 +41,10 @@
   font-size: 0.9em;
   border: 1px solid #eee;
 }
+.bsw-code.full {
+  padding: 8px 10px;
+  width: 99.6%;
+}
 /* Cover */
 .ant-spin-nested-loading > div > .ant-spin {
   z-index: 1000;
