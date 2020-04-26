@@ -109,7 +109,7 @@ class Module extends Bsw
                     self::BEFORE_AWAY,
                     [Message::class, Error::class, true],
                     null,
-                    [$this->input->id]
+                    [$this->input->id, $this->input->args]
                 );
 
                 if ($result instanceof Error) {
@@ -155,7 +155,7 @@ class Module extends Bsw
                     self::AFTER_AWAY,
                     [Message::class, Error::class, true],
                     null,
-                    [$this->input->id]
+                    [$this->input->id, $this->input->args]
                 );
 
                 if ($result instanceof Error) {

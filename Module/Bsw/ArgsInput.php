@@ -112,4 +112,9 @@ abstract class ArgsInput
      * @var array
      */
     public $render = [];
+
+    /**
+     * @var array
+     */
+    public $args = [];
 }
