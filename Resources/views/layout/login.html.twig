@@ -30,14 +30,14 @@
       </a-input>
     </a-form-item>
     <a-form-item>
-      <a-input
+      <a-input-password
         type="password"
         v-model.trim="password"
         placeholder="{{ password|trans({}, 'twig') }}"
         :size="size"
       >
         {{ scaffold.cnf.icon_lock|icon(true, {}, {slot:'prefix'})|raw }}
-      </a-input>
+      </a-input-password>
     </a-form-item>
     <a-form-item class="bsw-captcha-item">
       <a-input
