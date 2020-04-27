@@ -130,15 +130,15 @@ trait BackendPreset
             'centered' => true,
         ];
 
-        $button = (new Button($label))
+        $button = (new Button('{value}'))
             ->setSize(Button::SIZE_SMALL)
-            ->setType(Button::THEME_DASHED)
+            ->setType(Button::THEME_DEFAULT)
             ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 
         $button = $this->renderPart('@LeonBsw/form/button.native', ['form' => $button]);
 
-        return new Charm($button);
+        return new Charm($button, $label);
     }
 
     /**

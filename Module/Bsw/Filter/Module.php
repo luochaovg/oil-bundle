@@ -32,7 +32,7 @@ class Module extends Bsw
     const FILTER_ANNOTATION      = 'FilterAnnotation';      // [全局配置] 注释补充或覆盖
     const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';  // [全局配置] 注释限制
     const FILTER_OPERATE         = 'FilterOperates';        // [全局配置] 操作按钮
-    const FILTER_CONDITION       = 'FilterCondition';       // [全局配置] 条件处理
+    const FILTER_CORRECT         = 'FilterCorrect';         // [全局配置] 矫正条件
 
     /**
      * @var array
@@ -642,11 +642,11 @@ class Module extends Bsw
         [$filterAnnotation, $hooks] = $this->handleAnnotation();
 
         [$filter, $condition] = $this->getFilterData($filterAnnotation, $hooks);
-        $condition = $this->caller(
+        [$filter, $condition] = $this->caller(
             $this->method,
-            self::FILTER_CONDITION,
+            self::FILTER_CORRECT,
             Abs::T_ARRAY,
-            $condition,
+            [$filter, $condition],
             [$filter, $condition]
         );
 

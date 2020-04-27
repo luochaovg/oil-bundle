@@ -653,4 +653,7 @@ class Abs
 
     // 危险权限
     const DANGER_ACCESS = 'Dangerous permission, please be careful';
+
+    // 分割线 - 虚线
+    const LINE_DASHED = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
 }

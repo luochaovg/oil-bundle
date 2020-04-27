@@ -60,6 +60,7 @@ class Csv
         $this->spl->setFlags(SplFileObject::READ_CSV);
         $this->spl->seek(0);
         $field = $this->spl->current();
+        $field = array_map('trim', $field);
 
         $this->spl->seek($start);
         $fieldCount = count($field);
@@ -75,12 +76,13 @@ class Csv
                     $list[] = array_combine($field, $row);
                 }
             } else {
+                $lowField = $field;
                 if ($rowCount < $fieldCount) {
-                    $field = array_slice($field, 0, $rowCount);
+                    $lowField = array_slice($lowField, 0, $rowCount);
                 } elseif ($rowCount > $fieldCount) {
                     $row = array_slice($row, 0, $fieldCount);
                 }
-                $list[] = array_combine($field, $row);
+                $list[] = array_combine($lowField, $row);
             }
 
             $this->spl->next();
