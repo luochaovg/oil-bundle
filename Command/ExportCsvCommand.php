@@ -89,7 +89,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
 
         $this->csvWriter($record);
 
-        return true;
+        return count($record);
     }
 
     /**

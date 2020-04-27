@@ -2,14 +2,12 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Form;
 
 class Score extends Form
 {
-    /**
-     * @var bool
-     */
-    protected $allowClear = false;
+    use AllowClear;
 
     /**
      * @var bool
@@ -27,23 +25,11 @@ class Score extends Form
     protected $count = 10;
 
     /**
-     * @return bool
+     * Input constructor.
      */
-    public function isAllowClear(): bool
+    public function __construct()
     {
-        return $this->allowClear;
-    }
-
-    /**
-     * @param bool $allowClear
-     *
-     * @return $this
-     */
-    public function setAllowClear(bool $allowClear = true)
-    {
-        $this->allowClear = $allowClear;
-
-        return $this;
+        $this->setAllowClear(false);
     }
 
     /**

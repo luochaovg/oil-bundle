@@ -2,17 +2,14 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Form;
 
 class Datetime extends Form
 {
     use Size;
-
-    /**
-     * @var bool
-     */
-    protected $allowClear = true;
+    use AllowClear;
 
     /**
      * @var string
@@ -30,26 +27,6 @@ class Datetime extends Form
     public function getItemName(): string
     {
         return 'date-picker';
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAllowClear(): bool
-    {
-        return $this->allowClear;
-    }
-
-    /**
-     * @param bool $allowClear
-     *
-     * @return $this
-     */
-    public function setAllowClear(bool $allowClear)
-    {
-        $this->allowClear = $allowClear;
-
-        return $this;
     }
 
     /**

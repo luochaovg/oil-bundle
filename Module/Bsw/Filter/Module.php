@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Form;
+use Leon\BswBundle\Module\Form\Entity\Input as FormInput;
 
 /**
  * @property Input                $input
@@ -436,15 +437,20 @@ class Module extends Bsw
                         "{$exception} option `enum` must configure when type is {$enumClass}"
                     );
                 }
-
                 /**
                  * @var Select $form
                  */
                 $form->setEnum($this->web->enumLang($item['enum']));
             }
 
-            if (Helper::extendClass($form, Datetime::class, true)) {
+            if (get_class($form) === FormInput::class) {
+                /**
+                 * @var FormInput $form
+                 */
+                $form->setAllowClear();
+            }
 
+            if (Helper::extendClass($form, Datetime::class, true)) {
                 /**
                  * @var Datetime $form
                  */
