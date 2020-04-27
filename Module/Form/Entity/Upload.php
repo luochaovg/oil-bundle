@@ -2,9 +2,11 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
+use Leon\BswBundle\Module\Form\Form;
 
 class Upload extends Number
 {
@@ -68,6 +70,21 @@ class Upload extends Number
      * @var bool
      */
     protected $needId = true;
+
+    /**
+     * @var bool
+     */
+    protected $needTips = true;
+
+    /**
+     * @var array
+     */
+    protected $buttonStyle = [];
+
+    /**
+     * @var string
+     */
+    protected $buttonType = Button::THEME_DEFAULT;
 
     /**
      * Input constructor.
@@ -274,6 +291,74 @@ class Upload extends Number
     public function setNeedId(bool $needId = true)
     {
         $this->needId = $needId;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNeedTips(): bool
+    {
+        return $this->needTips;
+    }
+
+    /**
+     * @param bool $needTips
+     *
+     * @return $this
+     */
+    public function setNeedTips(bool $needTips = true)
+    {
+        $this->needTips = $needTips;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getButtonStyle(): string
+    {
+        return json_encode($this->buttonStyle, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getButtonStyleStringify(): ?string
+    {
+        return Html::cssStyleFromArray($this->buttonStyle);
+    }
+
+    /**
+     * @param array $buttonStyle
+     *
+     * @return $this
+     */
+    public function setButtonStyle(array $buttonStyle)
+    {
+        $this->buttonStyle = $buttonStyle;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getButtonType(): string
+    {
+        return $this->buttonType;
+    }
+
+    /**
+     * @param string $buttonType
+     *
+     * @return $this
+     */
+    public function setButtonType(string $buttonType)
+    {
+        $this->buttonType = $buttonType;
 
         return $this;
     }

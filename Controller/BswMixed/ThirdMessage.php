@@ -39,7 +39,7 @@ trait ThirdMessage
         }
 
         return $this->responseMessageWithAjax(
-            $message['code'] ?? 200,
+            $message['code'] ?? Response::HTTP_OK,
             $message['content'],
             $message['url'] ?? null,
             $message['args'] ?? [],

@@ -182,4 +182,28 @@ trait BackendPreset
             $this->logger->error("Database operation logger error: {$loggerRepo->pop()}");
         }
     }
+
+    /**
+     * @param string $flag
+     * @param array  $option
+     *
+     * @return array
+     */
+    public function uploadOptionsHandler(string $flag, array $option): array
+    {
+        if ($flag === 'mixed') {
+            return array_merge(
+                $option,
+                [
+                    'file_fn' => function ($file) {
+                        $file->href = 'app_bsw_attachment_preview';
+
+                        return $file;
+                    },
+                ]
+            );
+        }
+
+        return $option;
+    }
 }

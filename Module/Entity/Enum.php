@@ -46,6 +46,7 @@ class Enum
      * @const array 附件上传平台
      */
     const BSW_ATTACHMENT_PLATFORM = [
+        0 => Abs::UNKNOWN,
         1 => 'Frontend system',
         2 => 'Backend system',
     ];

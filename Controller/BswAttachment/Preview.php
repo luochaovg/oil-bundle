@@ -3,11 +3,16 @@
 namespace Leon\BswBundle\Controller\BswAttachment;
 
 use Leon\BswBundle\Entity\BswAttachment;
+use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @property TranslatorInterface $translator
+ */
 trait Preview
 {
     /**
@@ -39,6 +44,18 @@ trait Preview
     public function previewOperates()
     {
         return [
+            (new Button('Upload', null, $this->cnf->icon_upload))
+                ->setType(Button::THEME_BSW_DARK)
+                ->setRoute('app_bsw_attachment_upload_file')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'width'  => Abs::MEDIA_MIN,
+                        'height' => 202,
+                        'title'  => false,
+                    ]
+                ),
+
             new Button('New record', 'app_bsw_attachment_persistence', 'a:plus'),
         ];
     }

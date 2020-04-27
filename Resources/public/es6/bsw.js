@@ -279,9 +279,14 @@ $(function () {
             if (typeof file.response.code === 'undefined' || file.response.code === 500) {
                 this.spinning = false;
             }
-            bsw.response(file.response).catch((reason => {
-                console.warn(reason);
-            }));
+
+            if (file.response.sets.href) {
+                parent.postMessage({response: file.response, function: 'handleResponse'}, '*');
+            } else {
+                bsw.response(file.response).catch((reason => {
+                    console.warn(reason);
+                }));
+            }
         },
 
         showModal(options) {

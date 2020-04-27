@@ -1,4 +1,5 @@
-<a-input-number v-if="{{ form.needId ? 'true' : 'false' }}"
+<a-input-number
+  v-if="{{ form.needId ? 'true' : 'false' }}"
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
@@ -30,20 +31,33 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}FileList']"
 >
-  <a-popover>
-    <template slot="content">
-      <a-table
-        :columns="persistence_upload_tips_collect.{{ field }}.columns"
-        :data-source="persistence_upload_tips_collect.{{ field }}.list"
-        :pagination="false"
-        :scroll="{ x: 340 }"
-        bordered
-        size="small"
-      ></a-table>
-    </template>
-    <a-button>
+  {% if form.needTips %}
+    <a-popover>
+      <template slot="content">
+        <a-table
+          :columns="persistence_upload_tips_collect.{{ field }}.columns"
+          :data-source="persistence_upload_tips_collect.{{ field }}.list"
+          :pagination="false"
+          :scroll="{ x: 340 }"
+          bordered
+          size="small"
+        ></a-table>
+      </template>
+      <a-button
+        type="{{ form.buttonType }}"
+        :style="{{ form.buttonStyle }}"
+      >
+        {{ scaffold.cnf.icon_upload|icon|raw }}
+        {{ form.buttonLabel|trans({}, 'twig') }}
+      </a-button>
+    </a-popover>
+  {% else %}
+    <a-button
+      type="{{ form.buttonType }}"
+      :style="{{ form.buttonStyle }}"
+    >
       {{ scaffold.cnf.icon_upload|icon|raw }}
       {{ form.buttonLabel|trans({}, 'twig') }}
     </a-button>
-  </a-popover>
+  {% endif %}
 </a-upload>

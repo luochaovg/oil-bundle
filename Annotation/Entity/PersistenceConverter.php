@@ -72,6 +72,10 @@ class PersistenceConverter extends AnnotationConverter
      */
     protected function label($value)
     {
+        if ($value === false) {
+            return '';
+        }
+
         return $value ?: Helper::stringToLabel(Helper::camelToUnder($this->target));
     }
 

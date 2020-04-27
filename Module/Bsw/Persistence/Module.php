@@ -583,6 +583,7 @@ class Module extends Bsw
         $args = [$record, $hooked, $original, $this->input->id, $submit];
         $operates = $this->caller($this->method, self::FORM_OPERATE, Abs::T_ARRAY, [], $args);
         $operates = array_merge(['submit' => $submit], $operates);
+        $operates = array_filter($operates);
 
         foreach ($operates as $operate) {
 

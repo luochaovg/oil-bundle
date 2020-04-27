@@ -74,6 +74,7 @@ trait Preview
             (new Button('Sort'))
                 ->setType(Button::THEME_DEFAULT)
                 ->setRoute('app_bsw_admin_menu_sort')
+                ->setClick('showIFrame')
                 ->setArgs(
                     [
                         'id'     => $current['id'],
@@ -81,8 +82,7 @@ trait Preview
                         'height' => 220,
                         'title'  => false,
                     ]
-                )
-                ->setClick('showIFrame'),
+                ),
             (new Button('Edit record', 'app_bsw_admin_menu_persistence'))->setArgs(['id' => $current['id']]),
         ];
     }

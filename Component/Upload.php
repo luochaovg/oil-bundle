@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Component;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\UploadException;
 use Exception;
-use phpDocumentor\Reflection\Types\Array_;
 use stdClass;
 
 class Upload

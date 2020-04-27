@@ -100,6 +100,18 @@ trait Upload
             $file = call_user_func_array($options['file_fn'], [$file]);
         }
 
+        if ($href = $file->href ?? null) {
+            return $this->responseMessageWithAjax(
+                Response::HTTP_OK,
+                'File upload done, download {{ url }}',
+                $href,
+                ['{{ url }}' => $file->url],
+                Abs::TAG_CLASSIFY_SUCCESS,
+                Abs::TAG_TYPE_CONFIRM,
+                Abs::TIME_MINUTE
+            );
+        }
+
         return $this->okayAjax(
             [
                 'attachment_id'   => $file->id,
