@@ -221,6 +221,7 @@ class Abs
     const FMT_MINUTE_ONLY     = 'i';
     const FMT_SECOND_ONLY     = 's';
     const FMT_MONTH           = 'Y-m';
+    const FMT_MONTH_SIMPLE    = 'Ym';
     const FMT_DAY             = 'Y-m-d';
     const FMT_DAY_SIMPLE      = 'Ymd';
     const FMT_DAY2            = 'Y-n-j';

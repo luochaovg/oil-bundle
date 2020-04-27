@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\InputOption;
 abstract class ExportCsvCommand extends RecursionSqlCommand
 {
     /**
+     * @var int
+     */
+    protected $limit = 50;
+
+    /**
      * @var bool
      */
     protected $handlerByMultiple = true;

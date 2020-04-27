@@ -289,11 +289,11 @@ abstract class FoundationRepository extends SFRepository
                 return $this->push($error->getMessage(), Abs::TAG_ROLL . $error->getCode());
             }
 
-            if ($throw) {
-                throw new RepositoryException($error->getMessage());
+            if (!$throw) {
+                return $this->push($error->getMessage());
             }
 
-            return false;
+            throw new RepositoryException($error->getMessage());
         }
     }
 
@@ -315,11 +315,12 @@ abstract class FoundationRepository extends SFRepository
      *
      * @param array $batch
      * @param int   $per
+     * @param bool  $throw
      *
      * @return false|int
      * @throws
      */
-    public function newlyMultiple(array $batch, int $per = null)
+    public function newlyMultiple(array $batch, int $per = null, bool $throw = true)
     {
         return $this->transactional(
             function () use ($batch, $per) {
@@ -356,7 +357,8 @@ abstract class FoundationRepository extends SFRepository
                 $em->clear();
 
                 return count($batch);
-            }
+            },
+            $throw
         );
     }
 
@@ -400,11 +402,12 @@ abstract class FoundationRepository extends SFRepository
      * Away
      *
      * @param array $criteria
+     * @param bool  $throw
      *
      * @return false|int
      * @throws
      */
-    public function away(array $criteria)
+    public function away(array $criteria, bool $throw = true)
     {
         $batch = $this->findBy($criteria);
 
@@ -420,7 +423,8 @@ abstract class FoundationRepository extends SFRepository
                 $em->clear();
 
                 return count($batch);
-            }
+            },
+            $throw
         );
     }
 
@@ -430,11 +434,12 @@ abstract class FoundationRepository extends SFRepository
      * @param array $criteria
      * @param array $attributes
      * @param int   $per
+     * @param bool  $throw
      *
      * @return false|int
      * @throws
      */
-    public function modify(array $criteria, array $attributes, int $per = null)
+    public function modify(array $criteria, array $attributes, int $per = null, bool $throw = true)
     {
         $batch = $this->findBy($criteria);
 
@@ -472,7 +477,8 @@ abstract class FoundationRepository extends SFRepository
                 $em->clear();
 
                 return count($batch);
-            }
+            },
+            $throw
         );
     }
 
