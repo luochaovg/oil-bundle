@@ -479,13 +479,6 @@ $(function () {
             change = v.scaffoldInit();
         }
 
-        // change captcha
-        $('img.bsw-captcha').off('click').on('click', function () {
-            let src = $(this).attr('src');
-            src = bsw.setParams({t: bsw.timestamp()}, src);
-            $(this).attr('src', src);
-        });
-
         v.$nextTick(function () {
             // logic
             for (let fn in bsw.config.logic || []) {
@@ -496,9 +489,16 @@ $(function () {
             }
         });
 
-        let timeout = change ? 800 : 100;
+        // change captcha
+        $('img.bsw-captcha').off('click').on('click', function () {
+            let src = $(this).attr('src');
+            src = bsw.setParams({t: bsw.timestamp()}, src);
+            $(this).attr('src', src);
+        });
+
+        let timeout = change ? 1000 : 400;
         setTimeout(function () {
-            $('.bsw-page-loading').fadeOut(200, function () {
+            $('.bsw-page-loading').fadeOut(300, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
                     let duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;

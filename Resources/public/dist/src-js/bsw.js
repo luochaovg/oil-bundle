@@ -468,13 +468,6 @@ $(function () {
             change = v.scaffoldInit();
         }
 
-        // change captcha
-        $('img.bsw-captcha').off('click').on('click', function () {
-            var src = $(this).attr('src');
-            src = bsw.setParams({ t: bsw.timestamp() }, src);
-            $(this).attr('src', src);
-        });
-
         v.$nextTick(function () {
             // logic
             for (var fn in bsw.config.logic || []) {
@@ -485,9 +478,16 @@ $(function () {
             }
         });
 
-        var timeout = change ? 800 : 100;
+        // change captcha
+        $('img.bsw-captcha').off('click').on('click', function () {
+            var src = $(this).attr('src');
+            src = bsw.setParams({ t: bsw.timestamp() }, src);
+            $(this).attr('src', src);
+        });
+
+        var timeout = change ? 1000 : 400;
         setTimeout(function () {
-            $('.bsw-page-loading').fadeOut(200, function () {
+            $('.bsw-page-loading').fadeOut(300, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm
                     var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
