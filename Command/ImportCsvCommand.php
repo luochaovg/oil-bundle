@@ -73,14 +73,6 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     }
 
     /**
-     * @return bool
-     */
-    public function pass(): bool
-    {
-        return false;
-    }
-
-    /**
      * @param array $record
      *
      * @return int|bool
@@ -161,10 +153,6 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
         $this->params = $this->params($this->params);
 
         $this->params->{'data-line'} -= 1;
-
-        if (!$this->pass()) {
-            return;
-        }
 
         $this->output->writeln(
             "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
