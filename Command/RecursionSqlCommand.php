@@ -36,6 +36,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     protected $output;
 
     /**
+     * @var array
+     */
+    protected $moment = [];
+
+    /**
      * @var int
      */
     protected $limit = 30;
@@ -141,8 +146,20 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @return bool
      */
-    public function forbid(): bool
+    public function pass(): bool
     {
+        if ($this->params->force == 'yes') {
+            return true;
+        }
+
+        if (!empty($this->moment)) {
+            foreach ($this->moment as $moment => $format) {
+                if (date($format) == $moment) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -226,7 +243,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
         $this->params = $this->params($this->params);
 
-        if ($this->forbid()) {
+        if (!$this->pass()) {
             return;
         }
 

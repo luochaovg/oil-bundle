@@ -75,7 +75,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     /**
      * @return bool
      */
-    public function forbid(): bool
+    public function pass(): bool
     {
         return false;
     }
@@ -162,7 +162,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
 
         $this->params->{'data-line'} -= 1;
 
-        if ($this->forbid()) {
+        if (!$this->pass()) {
             return;
         }
 
