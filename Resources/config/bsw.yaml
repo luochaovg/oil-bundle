@@ -214,9 +214,9 @@ parameters:
         app_bsw_admin_access_control_grant: app_bsw_admin_user_preview
 
     bsw_crumbs_keyword_to_icon_map:
-        home: b:icon-home2
-        preview: b:icon-computer
-        persistence: b:icon-Editfolder
+        home: b:icon-rest
+        preview: b:icon-form
+        persistence: b:icon-edit
         away: b:icon-delete
         sort: a:sort-descending
         export: b:icon-export4

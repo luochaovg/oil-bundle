@@ -105,6 +105,10 @@ class Module extends Bsw
             return [$menu, $menu, $slaveMenuDetail, $parent, $current];
         }
 
+        // current and parent
+        $currentMap = $this->web->parameters('menus_same_current_map');
+        $parentMap = $this->web->parameters('menus_same_parent_map');
+
         foreach ($menuList as $item) {
 
             /**
@@ -132,28 +136,25 @@ class Module extends Bsw
             $menu[$item->getMenuId()][$item->getId()] = $item;
             if ($item->getMenuId() !== $masterIndex) {
                 $slaveMenuDetail[$item->getRouteName()] = [
-                    'info'   => $item->getValue(),
-                    'menuId' => $item->getMenuId(),
+                    'info'          => $item->getValue(),
+                    'parentMenuId'  => $item->getMenuId(),
+                    'currentMenuId' => $item->getId(),
                 ];
             }
 
-            // current and parent
-            $currentMap = $this->web->parameters('menus_same_current_map');
-            $parentMap = $this->web->parameters('menus_same_parent_map');
-
-            $_route = $this->input->route;
-            if (isset($currentMap[$_route])) {
-                $_route = $currentMap[$_route];
-            } elseif (isset($parentMap[$_route])) {
+            $currentRoute = $this->input->route;
+            if (isset($currentMap[$currentRoute])) {
+                $currentRoute = $currentMap[$currentRoute];
+            } elseif (isset($parentMap[$currentRoute])) {
                 $sameParentOnly = true;
-                $_route = $parentMap[$_route];
+                $currentRoute = $parentMap[$currentRoute];
             }
 
             foreach ($this->web->parameters('crumbs_preview_pre') as $keyword) {
-                $_route = str_replace("_{$keyword}", '_preview', $_route);
+                $currentRoute = preg_replace("/_{$keyword}$/i", '_preview', $currentRoute);
             }
 
-            if ($route == $_route) {
+            if ($route == $currentRoute) {
                 $parent = $item->getMenuId() ?: $masterIndex;
                 $current = empty($sameParentOnly) ? $item->getId() : 0;
             }
@@ -167,6 +168,16 @@ class Module extends Bsw
             if (!empty($slaveMenu[$index]) || !empty($item->getRouteName())) {
                 $_masterMenu[$index] = $item;
             }
+        }
+
+        // correct parent
+        if (empty($parent)) {
+            $parent = $slaveMenuDetail[$this->input->route]['parentMenuId'] ?? 0;
+        }
+
+        // correct current
+        if (empty($current)) {
+            $current = $slaveMenuDetail[$this->input->route]['currentMenuId'] ?? 0;
         }
 
         return [$_masterMenu, $slaveMenu, $slaveMenuDetail, $parent, $current];

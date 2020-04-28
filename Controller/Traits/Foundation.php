@@ -1345,6 +1345,8 @@ trait Foundation
         $query = array_merge($query, Helper::pageArgs($query, FoundationRepository::PAGE_SIZE));
         $total = count($list);
 
+        $query['limit'] = $query['limit'] ?: $total;
+
         return [
             Abs::PG_CURRENT_PAGE => $query['page'],
             Abs::PG_PAGE_SIZE    => $query['limit'],

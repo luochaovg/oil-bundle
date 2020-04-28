@@ -7,6 +7,7 @@ use Reflection as Ref;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use ReflectionClassConstant;
 use InvalidArgumentException;
 
 class Reflection
@@ -41,6 +42,9 @@ class Reflection
         ],
         'attribute' => [
             'var',
+        ],
+        'const'     => [
+            'const',
         ],
     ];
 
@@ -98,6 +102,8 @@ class Reflection
             $tagsReg,
         ];
     }
+
+    // ---
 
     /**
      * Resolve class document string
@@ -164,6 +170,8 @@ class Reflection
     {
         return $this->resolveClsDocStr($instance->getDocComment(), $prototype ? $instance : null);
     }
+
+    // ---
 
     /**
      * Resolve method document string
@@ -256,7 +264,7 @@ class Reflection
     }
 
     /**
-     * Get property document by instance
+     * Get method document by instance
      *
      * @param ReflectionMethod $instance
      * @param bool             $prototype
@@ -267,6 +275,8 @@ class Reflection
     {
         return $this->resolveFnDocStr($instance->getDocComment(), $prototype ? $instance : null);
     }
+
+    // ---
 
     /**
      * Resolve property document string
@@ -353,6 +363,112 @@ class Reflection
     {
         return $this->resolveAttrDocStr($instance->getDocComment(), $prototype ? $instance : null);
     }
+
+    // ---
+
+    /**
+     * Resolve const document string
+     *
+     * @param string                  $doc
+     * @param ReflectionClassConstant $instance
+     *
+     * @return array
+     */
+    public function resolveConstDocStr(string $doc, ReflectionClassConstant $instance = null): array
+    {
+        [$doc, $tagsReg] = $this->preProcessingDoc($doc, 'const');
+        $docArray = [];
+
+        foreach ($doc as $item) {
+            preg_match(sprintf($this->tagRegular, $tagsReg), $item, $result);
+            $result = array_filter($result);
+
+            if (empty($result) || count($result) < 2) {
+                continue;
+            }
+
+            [$tagName, $tagValue] = array_values(array_slice($result, 1) + [4 => null]);
+            $tagValue = trim($tagValue);
+
+            switch ($tagName) {
+                case 'var':
+                    if (empty($tagValue)) {
+                        break;
+                    }
+
+                    [$name, $value] = $this->handlerTagParamOrVarString($tagValue);
+                    $docArray[$tagName][$name] = $value;
+                    break;
+
+                default:
+                    $docArray[$tagName] = $tagValue;
+                    break;
+            }
+
+            if ($instance) {
+                $docArray['proto'] = $instance;
+            }
+        }
+
+        return $docArray;
+    }
+
+    /**
+     * Get const document
+     *
+     * @param string $cls
+     * @param string $const
+     * @param bool   $prototype
+     *
+     * @return array
+     * @throws
+     */
+    public function getConstDoc(string $cls, string $const, bool $prototype = false): array
+    {
+        if (!class_exists($cls)) {
+            throw new InvalidArgumentException("Class {$cls} does not exist");
+        }
+
+        $instance = new ReflectionClassConstant($cls, $const);
+
+        return $this->resolveConstDocStr($instance->getDocComment(), $prototype ? $instance : null);
+    }
+
+    /**
+     * Get cls const document
+     *
+     * @param string $cls
+     * @param bool   $prototype
+     *
+     * @return array
+     * @throws
+     */
+    public function getClsConstDoc(string $cls, bool $prototype = false): array
+    {
+        $document = [];
+        $const = new ReflectionClass($cls);
+
+        foreach ($const->getReflectionConstants() as $instance) {
+            $document[$instance->getName()] = $this->getConstDocByIS($instance, $prototype);
+        }
+
+        return $document;
+    }
+
+    /**
+     * Get const document by instance
+     *
+     * @param ReflectionClassConstant $instance
+     * @param bool                    $prototype
+     *
+     * @return array
+     */
+    public function getConstDocByIS(ReflectionClassConstant $instance, bool $prototype = false): array
+    {
+        return $this->resolveConstDocStr($instance->getDocComment(), $prototype ? $instance : null);
+    }
+
+    // ---
 
     /**
      * Handler param or var's tag string
