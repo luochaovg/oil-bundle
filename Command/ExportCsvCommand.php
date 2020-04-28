@@ -48,11 +48,39 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     }
 
     /**
+     * @return bool
+     */
+    public function pass(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return array
      */
     public function header(): array
     {
         return [];
+    }
+
+    /**
+     * @param array $record
+     *
+     * @return array
+     */
+    public function handleRecord(array $record): array
+    {
+        return $record;
+    }
+
+    /**
+     * @param array $records
+     *
+     * @return array
+     */
+    public function handleAnyRecord(array $records): array
+    {
+        return $records;
     }
 
     /**
@@ -66,6 +94,11 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     {
         if ($this->hasCnText) {
             setlocale(LC_ALL, 'zh_CN');
+        }
+
+        $record = $this->handleAnyRecord($record);
+        foreach ($record as &$item) {
+            $item = $this->handleRecord($item);
         }
 
         if ($this->page == 1) {
@@ -106,7 +139,11 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
         if (!isset($instance)) {
             $instance = new Csv();
             if (empty($this->params->csv)) {
-                $this->params->csv = Abs::TMP_PATH . '/' . time() . '.csv';
+                $this->params->csv = date('YmdHis') . '.csv';
+            }
+
+            if (strpos($this->params->csv, '/') === false) {
+                $this->params->csv = Abs::TMP_PATH . '/' . $this->params->csv;
             }
 
             @unlink($this->params->csv);
