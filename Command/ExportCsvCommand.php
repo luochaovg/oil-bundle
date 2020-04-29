@@ -48,14 +48,6 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     }
 
     /**
-     * @return bool
-     */
-    public function pass(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return array
      */
     public function header(): array
