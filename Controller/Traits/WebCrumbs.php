@@ -10,27 +10,25 @@ trait WebCrumbs
     /**
      * @var array
      */
-    protected $crumbs = [];
+    public $crumbs = [];
 
     /**
      * Crumbs builder
      *
      * @param string $route
-     * @param array  $menuAssist
+     * @param array  $allMenuDetail
      *
      * @return array
      */
-    public function crumbsBuilder(string $route, array $menuAssist = []): array
+    public function crumbsBuilder(string $route, array $allMenuDetail = []): array
     {
         return $this->caching(
-            function () use ($route, $menuAssist) {
+            function () use ($route, $allMenuDetail) {
 
                 $crumbsMap = $this->parameters('crumbs_map');
                 $routes = $this->getRouteCollection();
                 $routeClsMap = Helper::arrayColumn($routes, 'desc_cls', 'route');
                 $routeFnMap = Helper::arrayColumn($routes, 'desc_fn', 'route');
-
-                $slaveMenuDetail = $menuAssist['slaveMenuDetail'] ?? [];
 
                 /**
                  * In stack
@@ -44,14 +42,14 @@ trait WebCrumbs
                     $crumbsMap,
                     $routeClsMap,
                     $routeFnMap,
-                    $slaveMenuDetail,
+                    $allMenuDetail,
                     &$inStack
                 ) {
                     // manual
                     if (isset($crumbsMap[$route])) {
 
                         $info = $this->labelWithMenu(
-                            $slaveMenuDetail,
+                            $allMenuDetail,
                             $route,
                             $routeFnMap[$route],
                             $routeClsMap[$route]
@@ -65,7 +63,7 @@ trait WebCrumbs
                     if (!empty($routeFnMap[$route])) {
 
                         $info = $this->labelWithMenu(
-                            $slaveMenuDetail,
+                            $allMenuDetail,
                             $route,
                             $routeFnMap[$route],
                             $routeClsMap[$route]

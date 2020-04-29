@@ -97,12 +97,19 @@ class Module extends Bsw
      */
     protected function menuBuilder(): array
     {
-        $menu = $slaveMenuDetail = [];
+        $menu = $masterMenuDetail = $slaveMenuDetail = [];
         $parent = $current = $masterIndex = 0;
 
         $menuList = $this->listMenu();
         if (empty($menuList)) {
-            return [$menu, $menu, $slaveMenuDetail, $parent, $current];
+            return [
+                $menu,
+                $menu,
+                $masterMenuDetail,
+                $slaveMenuDetail,
+                $parent,
+                $current,
+            ];
         }
 
         // current and parent
@@ -160,13 +167,20 @@ class Module extends Bsw
             }
         }
 
-        $masterMenu = Helper::dig($menu, $masterIndex);
+        $masterMenuRough = Helper::dig($menu, $masterIndex);
         $slaveMenu = $menu;
 
-        $_masterMenu = [];
-        foreach ($masterMenu as $index => $item) {
+        $masterMenu = $masterMenuDetail = [];
+        foreach ($masterMenuRough as $index => $item) {
             if (!empty($slaveMenu[$index]) || !empty($item->getRouteName())) {
-                $_masterMenu[$index] = $item;
+                $masterMenu[$index] = $item;
+                if (!empty($item->getRouteName())) {
+                    $masterMenuDetail[$item->getRouteName()] = [
+                        'info'          => $item->getValue(),
+                        'parentMenuId'  => $item->getMenuId(),
+                        'currentMenuId' => $item->getId(),
+                    ];
+                }
             }
         }
 
@@ -180,7 +194,14 @@ class Module extends Bsw
             $current = $slaveMenuDetail[$this->input->route]['currentMenuId'] ?? 0;
         }
 
-        return [$_masterMenu, $slaveMenu, $slaveMenuDetail, $parent, $current];
+        return [
+            $masterMenu,
+            $slaveMenu,
+            $masterMenuDetail,
+            $slaveMenuDetail,
+            $parent,
+            $current,
+        ];
     }
 
     /**
@@ -192,6 +213,7 @@ class Module extends Bsw
         [
             $output->masterMenu,
             $output->slaveMenu,
+            $output->masterMenuDetail,
             $output->slaveMenuDetail,
             $output->parent,
             $output->current,

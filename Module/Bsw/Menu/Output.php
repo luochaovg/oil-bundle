@@ -20,6 +20,11 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
+    public $masterMenuDetail = [];
+
+    /**
+     * @var array
+     */
     public $slaveMenuDetail = [];
 
     /**
