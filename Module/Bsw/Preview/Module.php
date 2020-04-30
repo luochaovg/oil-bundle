@@ -699,7 +699,7 @@ class Module extends Bsw
             return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $hooked, $origin, $extraArgs);
         };
 
-        $extraArgs = ['_acme' => ['scene' => 'preview']];
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'preview']];
 
         $original = $list;
         $list = $this->web->hooker($hooks, $list, false, $before, $after, $extraArgs);

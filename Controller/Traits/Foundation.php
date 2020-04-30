@@ -1375,4 +1375,18 @@ trait Foundation
 
         return $output->fetch();
     }
+
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (in_array($name, ['session', 'kernel', 'translator', 'redis', 'cache', 'logger', 'expr', 'response'])) {
+            return $this->{$name};
+        }
+
+        throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+    }
 }

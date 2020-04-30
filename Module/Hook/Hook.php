@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Hook;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\HookException;
 
 abstract class Hook
@@ -68,7 +69,7 @@ abstract class Hook
         $fn = $persistence ? 'persistence' : 'preview';
 
         // keep origin value
-        if ($suffix = Helper::dig($extraArgs, '_suffix')) {
+        if ($suffix = Helper::dig($extraArgs, Abs::HOOKER_FLAG_ENUMS_SUFFIX)) {
             $key = "{$key}{$suffix}";
         }
 

@@ -65,6 +65,11 @@ class Abs
     const TAG_CLASSIFY_WARNING = 'warning';
     const TAG_CLASSIFY_ERROR   = 'error';
 
+    const HOOKER_FLAG_FIELDS       = '_fields';
+    const HOOKER_FLAG_ACME         = '_acme';
+    const HOOKER_FLAG_ENUMS_SUFFIX = '_suffix';
+    const HOOKER_FLAG_ENUMS_INFO   = '_info';
+
     const TAG_SQL_ERROR = 'An exception occurred while executing';
 
     const IMAGE_SUFFIX   = ['gif', 'jpg', 'jpeg', 'png'];

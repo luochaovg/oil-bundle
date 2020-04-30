@@ -113,7 +113,7 @@ class Dispatcher
         foreach ($fields as $field => $args) {
 
             if (is_numeric($field)) {
-                list($field, $args) = [$args, []];
+                [$field, $args] = [$args, []];
             }
 
             if (!is_array($args)) {
@@ -121,18 +121,18 @@ class Dispatcher
             }
 
             $extra = $extraArgs[$hooker] ?? [];
-            if (is_array($extra['_fields'][$field] ?? null)) {
-                $extra = $extra['_fields'][$field];
+            if (is_array($extra[Abs::HOOKER_FLAG_FIELDS][$field] ?? null)) {
+                $extra = $extra[Abs::HOOKER_FLAG_FIELDS][$field];
             } else {
-                unset($extra['_fields']);
+                unset($extra[Abs::HOOKER_FLAG_FIELDS]);
             }
 
-            if (isset($extraArgs['_acme']) && is_array($extraArgs['_acme'])) {
-                $extra = array_merge($extraArgs['_acme'], $extra);
+            if (isset($extraArgs[Abs::HOOKER_FLAG_ACME]) && is_array($extraArgs[Abs::HOOKER_FLAG_ACME])) {
+                $extra = array_merge($extraArgs[Abs::HOOKER_FLAG_ACME], $extra);
             }
 
-            if ($hooker === Enums::class && !isset($extra['_suffix'])) {
-                $extra['_suffix'] = '_info';
+            if ($hooker === Enums::class && !isset($extra[Abs::HOOKER_FLAG_ENUMS_SUFFIX])) {
+                $extra[Abs::HOOKER_FLAG_ENUMS_SUFFIX] = Abs::HOOKER_FLAG_ENUMS_INFO;
             }
 
             $item = $hook->hook($item, $field, $args, $persistence, $extra);
