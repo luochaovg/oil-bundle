@@ -320,7 +320,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
         try {
             if ($this->handlerByMultiple) {
-                $total = $this->handler($result['items']);
+                    $total = $this->handler($result['items']);
                 $roundSuccess += (is_bool($total) ? (int)$total : $total);
             } else {
                 foreach ($result['items'] as $record) {
