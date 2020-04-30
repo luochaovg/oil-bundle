@@ -163,7 +163,8 @@ class Module extends Bsw
         }
 
         $query = $this->web->filter($this->input->condition);
-        $this->query = Helper::merge2(true, false, true, $this->query, $query);
+        // $this->query = Helper::merge2(true, false, true, $this->query, $query);
+        $this->query = Helper::merge($this->query, $query);
 
         return $this->query;
     }
@@ -183,7 +184,11 @@ class Module extends Bsw
         }
 
         foreach (($this->query['join'] ?? []) as $alias => $item) {
-            $entityList[$alias] = $item['entity'];
+            if (is_string($item['entity'])) {
+                $entityList[$alias] = $item['entity'];
+            } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
+                $entityList[$alias] = $item['entity']['from'];
+            }
         }
 
         $previewAnnotation = $previewAnnotationFull = [];

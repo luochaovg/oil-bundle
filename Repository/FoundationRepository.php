@@ -592,6 +592,7 @@ abstract class FoundationRepository extends SFRepository
 
             $onLeft = $item['left'] ?? [];
             $onRight = $item['right'] ?? [];
+            $onOperator = $item['operator'] ?? [];
 
             if (!is_array($onLeft) || !is_array($onRight) || count($onLeft) != count($onRight)) {
                 throw new RepositoryException(
@@ -606,17 +607,20 @@ abstract class FoundationRepository extends SFRepository
             }
 
             $joinOn = [];
-            foreach (array_combine($onLeft, $onRight) as $left => $right) {
-                $joinOn[] = "{$left} = {$right}";
+            foreach ($onLeft as $index => $left) {
+                $operator = $onOperator[$index] ?? '=';
+                $right = $onRight[$index];
+                $joinOn[] = "{$left} {$operator} {$right}";
             }
 
             // join sub query
             if (is_array($entity)) {
                 $_model = $this->getQueryBuilder($entity);
-                $entity = " ({$_model->getDQL()}) ";
+                $entity = "({$_model->getDQL()})";
             }
 
-            $model->{$mode}($entity, $_alias, Expr\Join::WITH, implode(' AND ', $joinOn));
+            $joinOn = implode(' AND ', $joinOn);
+            $model->{$mode}($entity, $_alias, Expr\Join::WITH, "({$joinOn})");
         }
 
         /*
@@ -792,6 +796,14 @@ abstract class FoundationRepository extends SFRepository
         }
 
         /*
+         * Additional parameters
+         */
+
+        if (!empty($parameters)) {
+            $model->setParameters($parameters);
+        }
+
+        /*
          * Debug
          */
 
@@ -815,10 +827,10 @@ abstract class FoundationRepository extends SFRepository
                 'OFFSET',
             ];
             foreach ($keywords as $keyword) {
-                $dql = str_replace(" {$keyword}", "\n{$keyword}", $dql);
+                $dql = str_ireplace($keyword, "\n{$keyword}", $dql);
             }
 
-            dump($dql, $model->getParameters());
+            dump(ltrim($dql), $model->getParameters());
             exit(ErrorDebugExit::CODE);
         }
 
@@ -857,6 +869,23 @@ abstract class FoundationRepository extends SFRepository
         $this->filter = [];
 
         return $filter;
+    }
+
+    /**
+     * Get DQL and parameters
+     *
+     * @param array  $filter
+     * @param string $method
+     *
+     * @return array
+     * @throws
+     */
+    public function dql(array $filter, string $method = Abs::SELECT): array
+    {
+        $filter = $this->getFilters($filter, ['method' => $method]);
+        $query = $this->getQueryBuilder($filter);
+
+        return [$query->getDQL(), $query->getParameters()];
     }
 
     /**

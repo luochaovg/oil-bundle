@@ -148,7 +148,11 @@ class Module extends Bsw
         }
 
         foreach (($this->query['join'] ?? []) as $alias => $item) {
-            $entityList[$alias] = $item['entity'];
+            if (is_string($item['entity'])) {
+                $entityList[$alias] = $item['entity'];
+            } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
+                $entityList[$alias] = $item['entity']['from'];
+            }
         }
 
         $filterAnnotation = [];
