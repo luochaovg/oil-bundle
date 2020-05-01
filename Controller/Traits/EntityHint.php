@@ -200,7 +200,6 @@ trait EntityHint
     public static function entityPersistenceHint($item, string $table, array $fields, stdClass $options = null)
     {
         $options = $options ?? new stdClass();
-
         $isInt = (strpos($item->type, 'int') !== false);
 
         // numeric

@@ -846,4 +846,12 @@ class Enum
         Abs::WX_PAY_H5,
         Abs::WX_PAY_APP,
     ];
+
+    /**
+     * @const array 任务执行风格
+     */
+    const CRON_REUSE = [
+        0 => '用后即焚',
+        1 => '重复利用',
+    ];
 }

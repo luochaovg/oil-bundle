@@ -595,7 +595,7 @@ class BswScaffoldCommand extends Command implements CommandInterface
 
             // class property
             $default = null;
-            if (isset($item->default) && !preg_match('/[A-Z\_]+/', $item->default)) {
+            if (isset($item->default) && (!preg_match('/^[A-Z_ ]*$/', $item->default) || empty($item->default))) {
                 $default = is_numeric($item->default) ? " = {$item->default}" : " = \"{$item->default}\"";
             }
 
