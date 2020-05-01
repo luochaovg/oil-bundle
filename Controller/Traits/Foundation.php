@@ -1414,15 +1414,16 @@ trait Foundation
     }
 
     /**
-     * Render module and return
+     * Render module by simple mode
      *
      * @param array $moduleList
      * @param array $logicArgs
+     * @param bool  $directResponseMessage
      *
-     * @return Response|array
+     * @return Response|Message|array
      * @throws
      */
-    public function showModuleReturn(array $moduleList, array $logicArgs = [])
+    public function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
     {
         $showArgs = [Abs::TAG_LOGIC => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
@@ -1453,8 +1454,8 @@ trait Foundation
             /**
              * @var BswModule\Message $message
              */
-            if ($message = $output['message'] ?? null) {
-                return $this->messageToResponse($message);
+            if (($message = $output['message'] ?? null)) {
+                return $directResponseMessage ? $this->messageToResponse($message) : $message;
             }
 
             if ($name) {

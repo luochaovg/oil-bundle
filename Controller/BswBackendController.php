@@ -596,21 +596,23 @@ class BswBackendController extends BswWebController
      *
      * @param array $args
      * @param array $relation
+     * @param bool  $directResponseMessage
      *
-     * @return Response|array
+     * @return Response|BswModule\Message|array
      * @throws
      */
-    protected function doAway(array $args = [], array $relation = [])
+    protected function doAway(array $args = [], array $relation = [], bool $directResponseMessage = true)
     {
         $args['relation'] = $relation;
 
-        return $this->showModuleReturn(
+        return $this->showModuleSimple(
             [
                 BswModule\Menu\Module::class,
                 BswModule\Crumbs\Module::class => ['crumbs' => $this->crumbs],
                 BswModule\Away\Module::class,
             ],
-            $args
+            $args,
+            $directResponseMessage
         );
     }
 
