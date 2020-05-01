@@ -16,6 +16,14 @@ use Leon\BswBundle\Module\Entity\Abs;
 class Module extends Bsw
 {
     /**
+     * @return bool
+     */
+    public function allowAjax(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

@@ -39,7 +39,7 @@ class Dispatcher
         }
 
         /**
-         * @var Bsw $bsw ;
+         * @var Bsw $bsw
          */
         $bsw = new $moduleClass($this->web);
 

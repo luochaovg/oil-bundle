@@ -15,7 +15,6 @@ use Leon\BswBundle\Annotation\Entity\Output as O;
 class Acme extends BswBackendController
 {
     use CleanBackend;
-    use EnumDict;
     use Login;
     use Logout;
     use NumberCaptcha;

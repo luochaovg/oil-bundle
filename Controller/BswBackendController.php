@@ -15,7 +15,6 @@ use Leon\BswBundle\Module\Bsw as BswModule;
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
-use Leon\BswBundle\Module\Error\Entity\ErrorException;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
@@ -26,7 +25,6 @@ use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
-use Exception;
 
 class BswBackendController extends BswWebController
 {
@@ -324,21 +322,15 @@ class BswBackendController extends BswWebController
     /**
      * Render module
      *
-     * @param array       $moduleList
-     * @param string|null $view
-     * @param array       $logicArgs
-     * @param bool        $returnLatestModule
+     * @param array  $moduleList
+     * @param string $view
+     * @param array  $logicArgs
      *
-     * @return Response|array
+     * @return Response
      * @throws
      */
-    protected function showModule(
-        array $moduleList,
-        ?string $view = null,
-        array $logicArgs = [],
-        bool $returnLatestModule = false
-    ) {
-
+    protected function showModule(array $moduleList, string $view, array $logicArgs = []): Response
+    {
         $ajaxShowArgs = [];
         $showArgs = [Abs::TAG_LOGIC => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
@@ -349,13 +341,9 @@ class BswBackendController extends BswWebController
             'logger'     => $this->logger,
         ];
 
-        $i = 0;
-        $total = count($moduleList);
         $bswDispatcher = new BswModule\Dispatcher($this);
-
         foreach ($moduleList as $module => $extraArgs) {
 
-            $i += 1;
             if (is_numeric($module)) {
                 [$module, $extraArgs] = [$extraArgs, []];
             }
@@ -373,37 +361,11 @@ class BswBackendController extends BswWebController
             $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
             [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
 
-            if ($returnLatestModule && $i === $total) {
-                return $output;
-            }
-
             /**
              * @var BswModule\Message $message
              */
             if ($message = $output['message'] ?? null) {
-
-                $args = [
-                    $message->getMessage(),
-                    $message->getRoute(),
-                    $message->getArgs(),
-                    $message->getClassify(),
-                    $message->getType(),
-                    $message->getDuration(),
-                ];
-
-                if (!$this->ajax) {
-                    return $this->responseMessage(...$args);
-                }
-
-                $codeMap = [
-                    Abs::TAG_CLASSIFY_SUCCESS => $this->codeOkForLogic,
-                    Abs::TAG_CLASSIFY_ERROR   => new ErrorException(),
-                ];
-
-                $classify = $message->getClassify();
-                $code = $codeMap[$classify] ?? $this->codeOkForLogic;
-
-                return $this->responseMessageWithAjax($code, ...$args);
+                return $this->messageToResponse($message);
             }
 
             if (!$name) {
@@ -429,10 +391,6 @@ class BswBackendController extends BswWebController
 
             $showArgs["{$name}_html"] = $html;
             $ajaxShowArgs["{$name}_html"] = $html;
-        }
-
-        if (empty($view)) {
-            return $this->responseMessage('Module has not view for render');
         }
 
         $logic = &$showArgs[Abs::TAG_LOGIC];
@@ -482,7 +440,6 @@ class BswBackendController extends BswWebController
      * @param array  $args
      * @param array  $moduleList
      * @param string $view
-     * @param bool   $returnLatestModule
      *
      * @return Response|array
      * @throws
@@ -490,8 +447,7 @@ class BswBackendController extends BswWebController
     protected function showBlank(
         array $args = [],
         array $moduleList = [],
-        string $view = 'layout/blank',
-        bool $returnLatestModule = false
+        string $view = 'layout/blank'
     ): Response {
 
         $moduleList = array_merge(
@@ -500,7 +456,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args, $returnLatestModule);
+        return $this->showModule($moduleList, $view, $args);
     }
 
     /**
@@ -509,7 +465,6 @@ class BswBackendController extends BswWebController
      * @param array  $args
      * @param array  $moduleList
      * @param string $view
-     * @param bool   $returnLatestModule
      *
      * @return Response|array
      * @throws
@@ -517,8 +472,7 @@ class BswBackendController extends BswWebController
     protected function showPreview(
         array $args = [],
         array $moduleList = [],
-        string $view = 'layout/preview',
-        bool $returnLatestModule = false
+        string $view = 'layout/preview'
     ): Response {
 
         $moduleList = array_merge(
@@ -527,7 +481,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Preview\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args, $returnLatestModule);
+        return $this->showModule($moduleList, $view, $args);
     }
 
     /**
@@ -536,7 +490,6 @@ class BswBackendController extends BswWebController
      * @param array  $args
      * @param array  $moduleList
      * @param string $view
-     * @param bool   $returnLatestModule
      *
      * @return Response|array
      * @throws
@@ -544,8 +497,7 @@ class BswBackendController extends BswWebController
     protected function showPersistence(
         array $args = [],
         array $moduleList = [],
-        string $view = 'layout/persistence',
-        bool $returnLatestModule = false
+        string $view = 'layout/persistence'
     ): Response {
 
         if (!isset($args['submit'])) {
@@ -558,7 +510,7 @@ class BswBackendController extends BswWebController
             [BswModule\Persistence\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args, $returnLatestModule);
+        return $this->showModule($moduleList, $view, $args);
     }
 
     /**
@@ -620,7 +572,6 @@ class BswBackendController extends BswWebController
      * @param array  $args
      * @param array  $moduleList
      * @param string $view
-     * @param bool   $returnLatestModule
      *
      * @return Response|array
      * @throws
@@ -628,8 +579,7 @@ class BswBackendController extends BswWebController
     protected function showChart(
         array $args = [],
         array $moduleList = [],
-        string $view = 'layout/chart',
-        bool $returnLatestModule = false
+        string $view = 'layout/chart'
     ): Response {
 
         $moduleList = array_merge(
@@ -638,7 +588,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Chart\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args, $returnLatestModule);
+        return $this->showModule($moduleList, $view, $args);
     }
 
     /**
@@ -646,16 +596,22 @@ class BswBackendController extends BswWebController
      *
      * @param array $args
      * @param array $relation
-     * @param bool  $returnLatestModule
      *
      * @return Response|array
      * @throws
      */
-    protected function doAway(array $args = [], array $relation = [], bool $returnLatestModule = false)
+    protected function doAway(array $args = [], array $relation = [])
     {
         $args['relation'] = $relation;
 
-        return $this->showModule([BswModule\Away\Module::class], null, $args, $returnLatestModule);
+        return $this->showModuleReturn(
+            [
+                BswModule\Menu\Module::class,
+                BswModule\Crumbs\Module::class => ['crumbs' => $this->crumbs],
+                BswModule\Away\Module::class,
+            ],
+            $args
+        );
     }
 
     /**

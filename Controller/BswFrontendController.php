@@ -3,7 +3,6 @@
 namespace Leon\BswBundle\Controller;
 
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
 use Symfony\Component\HttpFoundation\Response;
 
