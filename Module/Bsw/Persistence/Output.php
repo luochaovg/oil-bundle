@@ -50,6 +50,16 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
+    public $fieldShapeCollect = [];
+
+    /**
+     * @var string
+     */
+    public $fieldShapeCollectJson;
+
+    /**
+     * @var array
+     */
     public $style = [];
 
     /**

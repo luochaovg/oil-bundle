@@ -141,6 +141,7 @@ parameters:
         route_clean_frontend: app_clean_frontend
         route_upload: app_upload
         route_captcha: app_captcha
+        route_export: app_export
         route_thrid_message: app_third_message
 
         usr_account: name
@@ -187,6 +188,8 @@ parameters:
         icon_left: a:left
         icon_right: a:right
         icon_loading: null
+        icon_export: b:icon-export4
+        icon_import: b:icon-import1
 
         telegram_receiver_command_queue: null
         third_message_key: bsw_third_message

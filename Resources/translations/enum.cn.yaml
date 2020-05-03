@@ -468,3 +468,9 @@ Express Panalpina:              'Panalpina'
 Express DHL:                    'DHL'
 Express TNT:                    'TNT'
 Express EMS:                    'EMS'
+
+Execute now:                    '立即执行'
+Execute manual:                 '手动指定'
+
+Away after execute:             '用后即焚'
+Reuse after execute:            '重复执行'

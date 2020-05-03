@@ -109,6 +109,25 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
+     * Get history route by index
+     *
+     * @param int $index
+     *
+     * @return null|string
+     */
+    protected function getHistoryRoute(int $index = -1): ?string
+    {
+        $history = array_keys($this->session->get(Abs::TAG_HISTORY));
+        $route = array_slice($history, $index, 1);
+
+        if (empty($route)) {
+            return null;
+        }
+
+        return current($route);
+    }
+
+    /**
      * Sek cookie
      *
      * @param string $key

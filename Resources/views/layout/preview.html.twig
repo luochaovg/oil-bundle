@@ -50,7 +50,7 @@ bsw.configure({
     },
     method: {
         filter_submit(e) {
-            this.filter(e);
+            this.filter(e, false, '{{ scaffold.route }}');
         },
         filter_toggle() {
           this.filter_expand = !this.filter_expand;

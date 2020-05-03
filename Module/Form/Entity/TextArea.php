@@ -7,12 +7,12 @@ class TextArea extends Input
     /**
      * @var int
      */
-    protected $minRows = 3;
+    protected $minRows = 4;
 
     /**
      * @var int
      */
-    protected $maxRows = 8;
+    protected $maxRows = 10;
 
     /**
      * @return int

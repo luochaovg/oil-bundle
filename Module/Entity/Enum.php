@@ -848,10 +848,18 @@ class Enum
     ];
 
     /**
+     * @const array 任务执行类型
+     */
+    const CRON_TYPE = [
+        1 => 'Execute now',
+        2 => 'Execute manual',
+    ];
+
+    /**
      * @const array 任务执行风格
      */
     const CRON_REUSE = [
-        0 => '用后即焚',
-        1 => '重复利用',
+        0 => 'Away after execute',
+        1 => 'Reuse after execute',
     ];
 }

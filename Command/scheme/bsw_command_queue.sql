@@ -6,6 +6,7 @@ CREATE TABLE `{TABLE_NAME}` (
   `resource_need` tinyint unsigned NOT NULL DEFAULT '1',
   `done_percent` float unsigned NOT NULL DEFAULT '0',
   `telegram_receiver` varchar(512) NOT NULL DEFAULT '',
+  `cron_type` tinyint(3) NOT NULL DEFAULT '1',
   `cron_date_format` varchar(32) NOT NULL DEFAULT 'd-H:i',
   `cron_date_value` varchar(32) NOT NULL DEFAULT '01-00:00',
   `cron_reuse` tinyint(3) NOT NULL DEFAULT '0',

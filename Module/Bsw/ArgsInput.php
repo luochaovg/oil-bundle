@@ -117,4 +117,9 @@ abstract class ArgsInput
      * @var array
      */
     public $args = [];
+
+    /**
+     * @var string
+     */
+    public $scene;
 }

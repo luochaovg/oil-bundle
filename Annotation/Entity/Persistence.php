@@ -119,4 +119,14 @@ class Persistence extends Annotation
      * @var bool
      */
     public $ignore = false;
+
+    /**
+     * @var string
+     */
+    public $watchHandler = 'disabled'; // display、disabled
+
+    /**
+     * @var array
+     */
+    public $watchMeta = [];
 }

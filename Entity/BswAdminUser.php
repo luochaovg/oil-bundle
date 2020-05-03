@@ -101,7 +101,7 @@ class BswAdminUser extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=8, align="center")
-     * @BswAnnotation\Persistence(sort=8, type=BswForm\Upload::class, typeArgs={"flag":"bsw-admin-user", "file_md5_key":"md5", "file_sha1_key":"sha1"})
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\Upload::class, typeArgs={"flag":"bsw-admin-user", "fileMd5Key":"md5", "fileSha1Key":"sha1"})
      * @BswAnnotation\Filter(sort=8, type=BswForm\Number::class)
      */
     protected $avatarAttachmentId = 0;

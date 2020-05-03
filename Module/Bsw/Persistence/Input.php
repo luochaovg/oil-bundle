@@ -45,4 +45,9 @@ class Input extends ArgsInput
      * @var string
      */
     public $i18nModify = 'Modify record done';
+
+    /**
+     * @var string
+     */
+    public $nextRoute = '';
 }

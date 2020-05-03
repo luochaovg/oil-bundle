@@ -416,6 +416,12 @@ class Module extends Bsw
                 $form->setAccept(ltrim($accept, ','));
             }
         }
+
+        if ($form instanceof Select) {
+            if ($meta = $form->getSwitchFieldShape()) {
+                $output->fieldShapeCollect[$field] = $meta;
+            }
+        }
     }
 
     /**
@@ -854,7 +860,11 @@ class Module extends Bsw
             return $this->showError($this->repository->pop());
         }
 
-        return $this->showSuccess($newly ? $this->input->i18nNewly : $this->input->i18nModify);
+        return $this->showSuccess(
+            $newly ? $this->input->i18nNewly : $this->input->i18nModify,
+            [],
+            $this->input->nextRoute
+        );
     }
 
     /**
@@ -946,6 +956,7 @@ class Module extends Bsw
 
         $output->fileListKeyCollectJson = $this->json($output->fileListKeyCollect);
         $output->uploadTipsCollectJson = $this->json($output->uploadTipsCollect);
+        $output->fieldShapeCollectJson = $this->json($output->fieldShapeCollect);
 
         $output->style = array_merge($output->style, $this->input->style);
         $output->styleJson = $this->json($output->style);

@@ -16,6 +16,12 @@
   mode="{{ form.value is same as(null) ? form.mode : 'default' }}"
   not-found-content="{{ form.notFoundContent }}"
   :dropdown-match-select-width="false"
+  {% if logic.scene == 'persistence' %}
+    @click.native="persistence_switch_field = '{{ field }}'"
+  {% endif %}
+  {% if form.switchFieldShape %}
+    @change="switchFieldShapeWithSelect"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { {{ initial }} rules: {{ form.rules }} }]"

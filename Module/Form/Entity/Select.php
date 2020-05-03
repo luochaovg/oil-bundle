@@ -65,6 +65,11 @@ class Select extends Form
     protected $tokenSeparators = [';', '；'];
 
     /**
+     * @var array
+     */
+    protected $switchFieldShape = [];
+
+    /**
      * Input constructor.
      */
     public function __construct()
@@ -210,5 +215,33 @@ class Select extends Form
         $this->tokenSeparators = $tokenSeparators;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSwitchFieldShape(): array
+    {
+        return $this->switchFieldShape;
+    }
+
+    /**
+     * @param array $switchFieldShape
+     *
+     * @return $this
+     */
+    public function setSwitchFieldShape(array $switchFieldShape)
+    {
+        $this->switchFieldShape = $switchFieldShape;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->getSwitchFieldShape() ? null : $this->value;
     }
 }

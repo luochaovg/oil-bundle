@@ -475,11 +475,18 @@ class Module extends Bsw
             ];
         }
 
-        $submit = new Button('Search', $this->input->route, $this->input->cnf->icon_search);
-        $submit->setAttributes(['bsw-method' => 'submit']);
+        $search = new Button('Search', $this->input->route, $this->input->cnf->icon_search);
+        $search->setAttributes(['bsw-method' => 'search']);
+
+        $export = null;
+        if ($this->input->scene === 'preview') {
+            $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Button::THEME_DEFAULT);
+            $export->setAttributes(['bsw-method' => 'export']);
+        }
 
         $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, []);
-        $operates = array_merge(['search' => $submit], $operates);
+        $operates = array_merge(['search' => $search, 'export' => $export], $operates);
+        $operates = array_filter($operates);
 
         foreach ($operates as $operate) {
 
