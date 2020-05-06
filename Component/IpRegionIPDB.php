@@ -61,7 +61,7 @@ class IpRegionIPDB
 
         $metaLength = unpack('N', fread($this->file, 4))[1];
         $text = fread($this->file, $metaLength);
-        $this->meta = json_decode($text, 1);
+        $this->meta = Helper::jsonArray($text);
         if (isset($this->meta['fields']) === false || isset($this->meta['languages']) === false) {
             throw new Exception('IP Database metadata error');
         }

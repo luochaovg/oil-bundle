@@ -34,7 +34,7 @@ trait Export
 
         return [
             'command'   => [
-                'value' => 'mission:export-csv',
+                'value' => 'mission:export-preview',
                 // 'disabled' => true,
             ],
             'condition' => [

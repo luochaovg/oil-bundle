@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\Icon;
@@ -353,6 +354,6 @@ class Button extends Form
             $args['confirm'] = $confirm;
         }
 
-        return json_encode(array_merge($data, $args), JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify(array_merge($data, $args));
     }
 }

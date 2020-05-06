@@ -952,14 +952,14 @@ class Module extends Bsw
         $output->id = $this->input->id;
         $output->record = $record;
         $output->operates = $operates;
-        $output->formatJson = $this->json($format);
+        $output->formatJson = Helper::jsonStringify($format, '{}');
 
-        $output->fileListKeyCollectJson = $this->json($output->fileListKeyCollect);
-        $output->uploadTipsCollectJson = $this->json($output->uploadTipsCollect);
-        $output->fieldShapeCollectJson = $this->json($output->fieldShapeCollect);
+        $output->fileListKeyCollectJson = Helper::jsonStringify($output->fileListKeyCollect, '{}');
+        $output->uploadTipsCollectJson = Helper::jsonStringify($output->uploadTipsCollect, '{}');
+        $output->fieldShapeCollectJson = Helper::jsonStringify($output->fieldShapeCollect, '{}');
 
         $output->style = array_merge($output->style, $this->input->style);
-        $output->styleJson = $this->json($output->style);
+        $output->styleJson = Helper::jsonStringify($output->style, '{}');
 
         $output = $this->caller(
             $this->method . ucfirst($this->name()),

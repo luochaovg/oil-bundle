@@ -558,7 +558,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                     'api'    => $analog,
                     'args'   => $args,
                 ];
-                $analog = $this->hostAnalog . '/api?s=' . base64_encode(json_encode($analog));
+                $analog = $this->hostAnalog . '/api?s=' . Helper::jsonStringify64($analog);
                 $debug = $this->lang('Analog debug interface');
                 $append("`{$debug}  ‹{$api['desc_fn']}› <{$analog}>`_", 2);
             }

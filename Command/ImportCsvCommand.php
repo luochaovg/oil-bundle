@@ -149,7 +149,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
 
         $this->_params = $this->options($input);
         $this->params = (object)$this->_params;
-        $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
+        $this->params->args = (object)Helper::jsonArray64($this->params->args);
         $this->params = $this->params($this->params);
 
         $this->params->{'data-line'} -= 1;

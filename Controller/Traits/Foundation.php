@@ -360,7 +360,7 @@ trait Foundation
 
         if (empty($key)) {
             $caller = Helper::backtrace(1);
-            $key = "{$caller['class']}::{$caller['function']}(" . json_encode($caller['args'] ?? []) . ")";
+            $key = "{$caller['class']}::{$caller['function']}(" . Helper::jsonStringify($caller['args'] ?? []) . ")";
         }
 
         $this->logger->debug("Using cache, ({$key})");
@@ -1244,18 +1244,6 @@ trait Foundation
     }
 
     /**
-     * Encode the enum
-     *
-     * @param array $enum
-     *
-     * @return string
-     */
-    public function enumEncode(array $enum): string
-    {
-        return json_encode($enum, JSON_UNESCAPED_UNICODE);
-    }
-
-    /**
      * Lang the enum
      *
      * @param array $enum
@@ -1269,7 +1257,7 @@ trait Foundation
             $label = $this->translator->trans($label, [], 'enum');
         }
 
-        return $encode ? $this->enumEncode($enum) : $enum;
+        return $encode ? Helper::jsonStringify($enum) : $enum;
     }
 
     /**

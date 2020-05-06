@@ -312,7 +312,7 @@ class Module extends Bsw
 
             $dressArray = false;
             if (is_array($item['dress'])) {
-                $dressStringify = $this->web->enumEncode($item['dress']);
+                $dressStringify = Helper::jsonStringify($item['dress']);
                 $item['dress'] = "{$dressStringify}[value]";
                 $dressArray = true;
             }
@@ -901,15 +901,15 @@ class Module extends Bsw
         $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $choice);
 
         $output->columns = array_values($output->columns);
-        $output->columnsJson = $this->json($output->columns);
+        $output->columnsJson = Helper::jsonStringify($output->columns, '{}');
 
         $output->list = $list;
-        $output->listJson = $this->json($output->list);
-        $output->dressJson = $this->json($output->dress);
-        $output->pageJson = $this->json($output->page);
+        $output->listJson = Helper::jsonStringify($output->list, '{}');
+        $output->dressJson = Helper::jsonStringify($output->dress, '{}');
+        $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
         $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);
-        $output->pageSizeOptionsJson = $this->json($output->pageSizeOptions);
+        $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
 
         $output->dynamic = $this->input->dynamic;
         $output = $this->caller(

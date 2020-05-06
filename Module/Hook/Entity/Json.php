@@ -37,9 +37,9 @@ class Json extends Hook
         }
 
         if (is_string($value)) {
-            $value = json_decode($value, true);
+            $value = Helper::jsonArray($value);
         }
 
-        return json_encode($value, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($value);
     }
 }

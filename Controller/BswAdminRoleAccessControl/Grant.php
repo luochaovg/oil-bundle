@@ -65,7 +65,7 @@ trait Grant
             $render[$key] = array_keys($checkbox->getEnum());
         }
 
-        return json_encode($render, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($render);
     }
 
     /**
@@ -150,7 +150,7 @@ trait Grant
                 'id'            => $id,
                 'dress'         => $dress,
                 'disabled'      => $disabled,
-                'disabled_json' => json_encode(array_keys($disabled), JSON_UNESCAPED_UNICODE),
+                'disabled_json' => Helper::jsonStringify(array_keys($disabled)),
                 'handler'       => $grantRole,
                 'afterModule'   => [
                     'form'   => function (array $logic) {

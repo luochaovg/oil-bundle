@@ -144,7 +144,7 @@ class Html
                 if (in_array($name, static::$dataAttributes)) {
                     foreach ($value as $n => $v) {
                         if (is_array($v)) {
-                            $html .= " $name-$n='" . json_encode($v) . "'";
+                            $html .= " $name-$n='" . Helper::jsonStringify($v) . "'";
                         } else {
                             $html .= " $name-$n=\"" . static::encode($v) . '"';
                         }
@@ -160,7 +160,7 @@ class Html
                     }
                     $html .= " $name=\"" . static::encode(static::cssStyleFromArray($value)) . '"';
                 } else {
-                    $html .= " $name='" . json_encode($value) . "'";
+                    $html .= " $name='" . Helper::jsonStringify($value) . "'";
                 }
             } elseif ($value !== null) {
                 $html .= " $name=\"" . static::encode($value) . '"';
@@ -347,7 +347,7 @@ class Html
         }
 
         if (Helper::typeofArray($params, Abs::T_ARRAY_ASSOC)) {
-            return json_encode($params, JSON_UNESCAPED_UNICODE);
+            return Helper::jsonStringify($params);
         }
 
         $items = [];
@@ -358,8 +358,7 @@ class Html
             } elseif (!is_array($item)) {
                 array_push($items, $item);
             } else {
-                $item = json_encode($item, JSON_UNESCAPED_UNICODE);
-                array_push($items, $item);
+                array_push($items, Helper::jsonStringify($items));
             }
         }
 

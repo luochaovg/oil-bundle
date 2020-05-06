@@ -264,6 +264,9 @@ services:
     Leon\BswBundle\Command\BswDocumentCommand:
         tags: ['console.command']
 
+    Leon\BswBundle\Command\BswExportPreviewCommand:
+        tags: ['console.command']
+
     Leon\BswBundle\Command\BswInitCommand:
         tags: ['console.command']
 

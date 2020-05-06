@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Form;
 
 class Slider extends Form
@@ -126,7 +127,7 @@ class Slider extends Form
      */
     public function getMarks(): string
     {
-        return json_encode($this->marks, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($this->marks);
     }
 
     /**

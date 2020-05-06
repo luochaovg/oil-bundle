@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
@@ -320,7 +321,7 @@ class Upload extends Number
      */
     public function getButtonStyle(): string
     {
-        return json_encode($this->buttonStyle, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($this->buttonStyle);
     }
 
     /**

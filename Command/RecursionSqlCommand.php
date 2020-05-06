@@ -240,7 +240,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
         $this->_params = $this->options($input);
         $this->params = (object)$this->_params;
-        $this->params->args = (object)Helper::parseJsonString(base64_decode($this->params->args));
+        $this->params->args = (object)Helper::jsonArray64($this->params->args);
         $this->params = $this->params($this->params);
 
         if (!$this->pass()) {
@@ -274,8 +274,8 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
                 'paging' => true,
                 'page'   => $pageNow,
                 'limit'  => $limit,
-            ],
-            );
+            ]
+        );
 
         if ($entity = $this->entity()) {
 
@@ -320,7 +320,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
         try {
             if ($this->handlerByMultiple) {
-                    $total = $this->handler($result['items']);
+                $total = $this->handler($result['items']);
                 $roundSuccess += (is_bool($total) ? (int)$total : $total);
             } else {
                 foreach ($result['items'] as $record) {

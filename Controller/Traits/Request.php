@@ -157,7 +157,7 @@ trait Request
             Abs::REQ_HEAD => $this->headArgs(),
         ];
 
-        return $jsonEncode ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
+        return $jsonEncode ? Helper::jsonStringify($data) : $data;
     }
 
     /**

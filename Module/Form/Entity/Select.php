@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
@@ -202,7 +203,7 @@ class Select extends Form
      */
     public function getTokenSeparators(): string
     {
-        return json_encode($this->tokenSeparators, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($this->tokenSeparators);
     }
 
     /**

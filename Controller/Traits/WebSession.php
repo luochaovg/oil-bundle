@@ -21,7 +21,7 @@ trait WebSession
      */
     public function sessionSet(string $sessionKey, $setValue)
     {
-        $origin = is_array($setValue) ? json_encode($setValue, JSON_UNESCAPED_UNICODE) : $setValue;
+        $origin = is_array($setValue) ? Helper::jsonStringify($setValue) : $setValue;
         $this->session->set($sessionKey, $origin);
 
         return $origin;

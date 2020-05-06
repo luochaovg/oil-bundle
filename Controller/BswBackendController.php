@@ -569,7 +569,7 @@ class BswBackendController extends BswWebController
             'theme'  => $theme,
             'map'    => $option['map'] ?? null,
             'api'    => $this->urlSafe($this->route, $this->getArgs(), 'Chart api'),
-            'option' => json_encode($fullOption, JSON_UNESCAPED_UNICODE) ?: '{}',
+            'option' => Helper::jsonStringify($fullOption, '{}'),
         ];
     }
 

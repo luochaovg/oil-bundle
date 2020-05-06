@@ -53,29 +53,66 @@ class BswMissionCommand extends Command implements CommandInterface
         $missionRepo = $this->repo(BswCommandQueue::class);
         $mission = $missionRepo->lister(
             [
-                'limit' => 1,
+                'limit' => 0,
                 'where' => [$this->expr->eq('bcq.state', ':state')],
                 'args'  => ['state' => [1]],
                 'order' => ['bcq.resourceNeed' => Abs::SORT_ASC],
             ]
         );
 
-        if (!$mission) {
-            $output->writeln("<info> None mission in queue </info>");
-
-            return;
+        $maxId = max(array_column($mission, 'id'));
+        foreach ($mission as $key => &$m) {
+            if ($m['cronType'] == 2) {
+                if (date($m['cronDateFormat']) == $m['cronDateValue']) {
+                    $m['level'] = 0 + $m['id'];
+                } else {
+                    unset($mission[$key]);
+                }
+            } else {
+                $m['level'] = $maxId + $m['id'];
+            }
         }
 
-        $condition = Helper::parseJsonString($mission['condition']);
-        $flag = $mission['remark'] ?: Helper::generateFixedToken(8);
-        $condition['--args'] = base64_encode(json_encode(['flag' => $flag]));
+        $queue = [];
+        $queueResourceNeed = 0;
 
-        $command = $this->getApplication()->find($mission['command']);
-        $command->run(new ArrayInput($condition), $output);
+        $mission = Helper::sortArray($mission, 'level');
+        foreach ($mission as $m) {
+            if ($m['cronType'] == 2) {
+                array_push($queue, $m);
+                $queueResourceNeed += $m['resourceNeed'];
+            } elseif ($queueResourceNeed < 30) {
+                array_push($queue, $m);
+                $queueResourceNeed += $m['resourceNeed'];
+            }
+        }
 
-        $receiver = $this->config('telegram_receiver_command_queue');
-        if ($receiver) {
-            $this->web->telegramSendMessage($receiver, "Mission in process, flag is {$flag}.");
+        if (!$queue) {
+            return $output->writeln("<info> None mission in queue </info>");
+        }
+
+        foreach ($queue as $m) {
+            $condition = Helper::parseJsonString($m['condition']);
+            $flag = $m['remark'] ?: Helper::generateFixedToken(8);
+            if (!empty($condition['args'])) {
+                $args = Helper::jsonArray64($condition['args']);
+            }
+            $condition['args'] = array_merge($args ?? [], ['flag' => $flag]);
+
+            $_condition = [];
+            foreach ($condition as $key => $value) {
+                $key = strpos($key, '-') === 0 ? $key : "--{$key}";
+                $value = is_array($value) ? Helper::jsonStringify64($value) : $value;
+                $_condition[$key] = $value;
+            }
+
+            $command = $this->getApplication()->find($m['command']);
+            $command->run(new ArrayInput($_condition), $output);
+
+            $receiver = $m['telegramReceiver'] ?: $this->config('telegram_receiver_command_queue');
+            if ($receiver) {
+                $this->web->telegramSendMessage($receiver, "Mission in process, flag is {$flag}.");
+            }
         }
     }
 }

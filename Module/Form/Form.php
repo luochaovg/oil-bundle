@@ -145,7 +145,7 @@ abstract class Form
      */
     public function getStyle(): string
     {
-        return json_encode($this->style, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($this->style);
     }
 
     /**
@@ -201,7 +201,7 @@ abstract class Form
      */
     public function getRules(): string
     {
-        return json_encode($this->rules, JSON_UNESCAPED_UNICODE);
+        return Helper::jsonStringify($this->rules);
     }
 
     /**

@@ -209,7 +209,7 @@ trait Mixed
                             'PhoneNumbers'  => "{$nationCode}{$phone}",
                             'SignName'      => $signature,
                             'TemplateCode'  => $tplCode,
-                            'TemplateParam' => json_encode($args, JSON_UNESCAPED_UNICODE),
+                            'TemplateParam' => Helper::jsonStringify($args),
                         ],
                     ]
                 )

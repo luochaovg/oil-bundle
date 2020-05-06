@@ -470,18 +470,6 @@ abstract class Bsw
     }
 
     /**
-     * Json the array
-     *
-     * @param array $source
-     *
-     * @return string
-     */
-    public function json(array $source): string
-    {
-        return json_encode($source, JSON_UNESCAPED_UNICODE) ?: '{}';
-    }
-
-    /**
      * @return array
      */
     public function entityDocument(): array

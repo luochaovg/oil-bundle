@@ -346,7 +346,7 @@ abstract class BswWebController extends AbstractController
         ];
 
         // message to flash
-        $this->addFlash(Abs::TAG_MESSAGE, json_encode($message, JSON_UNESCAPED_UNICODE));
+        $this->addFlash(Abs::TAG_MESSAGE, Helper::jsonStringify($message));
     }
 
     /**
@@ -374,7 +374,7 @@ abstract class BswWebController extends AbstractController
         }
 
         // message to flash
-        $this->addFlash(Abs::TAG_TIPS, json_encode($modalOptions, JSON_UNESCAPED_UNICODE));
+        $this->addFlash(Abs::TAG_TIPS, Helper::jsonStringify($modalOptions));
     }
 
     /**
@@ -394,7 +394,7 @@ abstract class BswWebController extends AbstractController
             return $jsonDecode ? [] : null;
         }
 
-        return $jsonDecode ? json_decode($latest, true) : $latest;
+        return $jsonDecode ? Helper::jsonArray($latest) : $latest;
     }
 
     /**
@@ -685,7 +685,7 @@ abstract class BswWebController extends AbstractController
                 'access' => $this->access,
                 'ajax'   => $this->ajax,
                 'iframe' => empty($getArgs['iframe']) ? false : true,
-                'json'   => $json ? json_encode($json) : null,
+                'json'   => $json ? Helper::jsonStringify($json) : null,
                 'abs'    => static::$abs,
                 'enum'   => static::$enum,
                 'uuid'   => $this->uuid,

@@ -76,7 +76,7 @@ class Helper
             $params = self::backtrace(1, ['function', 'args']);
         }
 
-        $key = md5(json_encode($params));
+        $key = md5(self::jsonStringify($params));
 
         if (!array_key_exists($key, $container)) {
             $container[$key] = call_user_func_array($logicHandler, [$params]);
@@ -855,7 +855,7 @@ class Helper
     ): string {
 
         if (is_array($json)) {
-            $json = json_encode($json, JSON_UNESCAPED_UNICODE);
+            $json = self::jsonStringify($json);
         }
 
         $result = null;
@@ -1123,7 +1123,7 @@ class Helper
                 if ($contentType == Abs::CONTENT_TYPE_FORM) {
                     $options[CURLOPT_POSTFIELDS] = http_build_query($params);
                 } elseif ($contentType == Abs::CONTENT_TYPE_JSON) {
-                    $options[CURLOPT_POSTFIELDS] = json_encode($params);
+                    $options[CURLOPT_POSTFIELDS] = self::jsonStringify($params);
                 } else {
                     $options[CURLOPT_POSTFIELDS] = $params;
                 }
@@ -1182,7 +1182,7 @@ class Helper
         parse_str($param, $params);
         ksort($params);
 
-        $params[$signKey] = strtoupper(sha1(self::strReverse(md5(json_encode($param)))));
+        $params[$signKey] = strtoupper(sha1(self::strReverse(md5(self::jsonStringify($params)))));
 
         return $params;
     }
@@ -2504,16 +2504,16 @@ class Helper
     /**
      * Sort for two-dimensional
      *
-     * @param array  $arr
-     * @param string $key
+     * @param array  $target
+     * @param mixed  $key
      * @param string $mode
      *
      * @return array
      */
-    public static function sortArray($arr, $key, string $mode = Abs::SORT_ASC): array
+    public static function sortArray(array $target, $key, string $mode = Abs::SORT_ASC): array
     {
         $keysValue = $newArray = [];
-        foreach ($arr as $k => $v) {
+        foreach ($target as $k => $v) {
             $keysValue[$k] = $v[$key];
         }
 
@@ -2529,7 +2529,7 @@ class Helper
 
         reset($keysValue);
         foreach ($keysValue as $k => $v) {
-            $newArray[$k] = $arr[$k];
+            $newArray[$k] = $target[$k];
         }
 
         return $newArray;
@@ -2719,6 +2719,56 @@ class Helper
     }
 
     /**
+     * Array to json string
+     *
+     * @param array  $target
+     * @param string $default
+     *
+     * @return string
+     */
+    public static function jsonStringify(array $target, string $default = ''): string
+    {
+        return json_encode($target, JSON_UNESCAPED_UNICODE) ?: $default;
+    }
+
+    /**
+     * Array to json string and base64 encode
+     *
+     * @param array  $target
+     * @param string $default
+     *
+     * @return string
+     */
+    public static function jsonStringify64(array $target, string $default = ''): string
+    {
+        return base64_encode(self::jsonStringify($target, $default));
+    }
+
+    /**
+     * Json string to array
+     *
+     * @param string $json
+     *
+     * @return array
+     */
+    public static function jsonArray(string $json): array
+    {
+        return json_decode($json, true) ?: [];
+    }
+
+    /**
+     * Json string to array after base64 decode
+     *
+     * @param string $json
+     *
+     * @return array
+     */
+    public static function jsonArray64(string $json): array
+    {
+        return self::parseJsonString(base64_decode($json), []);
+    }
+
+    /**
      * Object to array
      *
      * @param mixed $obj
@@ -2727,19 +2777,19 @@ class Helper
      */
     public static function objectToArray($obj): array
     {
-        return json_decode(json_encode($obj), true);
+        return self::jsonArray(self::jsonStringify($obj));
     }
 
     /**
      * Array to object
      *
-     * @param $arr
+     * @param $target
      *
      * @return mixed
      */
-    public static function arrayToObject($arr)
+    public static function arrayToObject(array $target)
     {
-        return json_decode(json_encode($arr));
+        return json_decode(self::jsonStringify($target));
     }
 
     /**
@@ -2900,7 +2950,7 @@ class Helper
             return $default ?? $target;
         }
 
-        $result = json_decode($target, true);
+        $result = Helper::jsonArray($target);
         $result = $result ?? ($default ?? $target);
 
         return $result;

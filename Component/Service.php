@@ -402,7 +402,7 @@ class Service
                 if ($this->contentType == Abs::CONTENT_TYPE_FORM) {
                     $options[CURLOPT_POSTFIELDS] = http_build_query($this->args);
                 } elseif ($this->contentType == Abs::CONTENT_TYPE_JSON) {
-                    $options[CURLOPT_POSTFIELDS] = json_encode($this->args);
+                    $options[CURLOPT_POSTFIELDS] = Helper::jsonStringify($this->args);
                 } else {
                     $options[CURLOPT_POSTFIELDS] = $this->args;
                 }
@@ -454,7 +454,7 @@ class Service
             ->timeoutChecker()
             ->curl();
 
-        if (!$result = json_decode($_result, true)) {
+        if (!$result = Helper::jsonArray($_result)) {
             throw new ServiceException($_result);
         }
 

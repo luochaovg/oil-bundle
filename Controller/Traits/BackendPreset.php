@@ -172,9 +172,9 @@ trait BackendPreset
                 'table'  => Helper::tableNameFromCls($entity),
                 'userId' => $this->usr->{$this->cnf->usr_uid} ?? 0,
                 'type'   => $type,
-                'before' => json_encode($before, JSON_UNESCAPED_UNICODE),
-                'later'  => json_encode($later, JSON_UNESCAPED_UNICODE),
-                'effect' => json_encode($effect, JSON_UNESCAPED_UNICODE),
+                'before' => Helper::jsonStringify($before),
+                'later'  => Helper::jsonStringify($later),
+                'effect' => Helper::jsonStringify($effect),
             ]
         );
 

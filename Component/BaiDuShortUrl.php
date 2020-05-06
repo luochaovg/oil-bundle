@@ -50,7 +50,7 @@ class BaiDuShortUrl
                     'Content-Type: application/json',
                     "Token: {$this->token}",
                 ];
-                $options[CURLOPT_POSTFIELDS] = json_encode(['url' => $url]);
+                $options[CURLOPT_POSTFIELDS] = Helper::jsonStringify(['url' => $url]);
                 $options[CURLOPT_TIMEOUT_MS] = $second * 1000;
 
                 return $options;
