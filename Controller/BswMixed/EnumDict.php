@@ -2,13 +2,13 @@
 
 namespace Leon\BswBundle\Controller\BswMixed;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Leon\BswBundle\Component\Reflection;
 use ReflectionClassConstant;
+use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
 /**
  * @property TranslatorInterface $translator
@@ -85,6 +85,7 @@ trait EnumDict
      * Enum dict
      *
      * @Route("/enum-dict", name="app_enum_dict")
+     * @Access()
      *
      * @return Response
      * @throws

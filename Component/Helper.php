@@ -2721,12 +2721,12 @@ class Helper
     /**
      * Array to json string
      *
-     * @param array  $target
-     * @param string $default
+     * @param array|object $target
+     * @param string       $default
      *
      * @return string
      */
-    public static function jsonStringify(array $target, string $default = ''): string
+    public static function jsonStringify($target, string $default = ''): string
     {
         return json_encode($target, JSON_UNESCAPED_UNICODE) ?: $default;
     }
