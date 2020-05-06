@@ -3,11 +3,11 @@
 window.lang = {
     i18n_ant: 'zh_CN',
     i18n_editor: 'zh-cn',
-    success: 'Success',
-    info: 'Information',
-    warning: 'Warning',
-    error: 'Error',
-    i_got_it: 'Got it',
+    success: '成功',
+    info: '信息',
+    warning: '警告',
+    error: '错误',
+    i_got_it: '知道了',
     modal_title: 'Modal page',
     response_error_message: 'Oops! something went wrong', // An error has occurred
     message_data_error: 'Some error happen in source data of message',
@@ -24,5 +24,6 @@ window.lang = {
     theme: '主题',
     color_weak: '色弱模式',
     third_message: '第三方消息提示',
-    total: '总计'
+    total: '总计',
+    export_mission: '导出任务'
 };

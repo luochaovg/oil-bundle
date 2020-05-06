@@ -123,7 +123,7 @@ $(function () {
         export(filter, route) {
             let data = {
                 title: bsw.lang.export_mission,
-                width: 575
+                width: 768,
             };
             data.location = bsw.setParams({filter, route}, this.api_export);
             this.showIFrame(data, $('body')[0]);

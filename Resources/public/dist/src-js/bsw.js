@@ -115,10 +115,19 @@ $(function () {
                 console.warn(reason);
             });
         },
+        export: function _export(filter, route) {
+            var data = {
+                title: bsw.lang.export_mission,
+                width: 768
+            };
+            data.location = bsw.setParams({ filter: filter, route: route }, this.api_export);
+            this.showIFrame(data, $('body')[0]);
+        },
         filter: function filter(event) {
             var _this = this;
 
             var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+            var route = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
             var that = this;
             event.preventDefault();
@@ -144,46 +153,42 @@ $(function () {
                         }
                     }
                 }
-                return _this[_this.formMethod + 'FilterForm'](values, jump);
+                var _values = {};
+                for (var _field in values) {
+                    if (!values.hasOwnProperty(_field)) {
+                        continue;
+                    }
+                    if (typeof values[_field] === 'undefined') {
+                        continue;
+                    }
+                    if (values[_field] == null) {
+                        continue;
+                    }
+                    if (values[_field].length === 0) {
+                        continue;
+                    }
+                    _values[_field] = values[_field];
+                }
+                if (_this.formMethod === 'export') {
+                    return _this.export(_values, route);
+                }
+                return _this[_this.formMethod + 'FilterForm'](_values, jump);
             });
         },
-        submitFilterForm: function submitFilterForm(values) {
+        searchFilterForm: function searchFilterForm(values) {
             var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-            var _values = {};
-            var number = 0;
-            for (var field in values) {
-                if (!values.hasOwnProperty(field)) {
-                    continue;
-                }
-                if (typeof values[field] === 'undefined') {
-                    continue;
-                }
-                if (values[field] == null) {
-                    continue;
-                }
-                if (values[field].length === 0) {
-                    continue;
-                }
-                _values[field] = values[field];
-                number += 1;
-            }
 
             var effect = {};
             var url = bsw.unsetParamsBeginWith(['filter']);
-
             url = bsw.unsetParams(['page'], url, false, effect);
-            url = bsw.setParams({ filter: _values }, url);
-
+            url = bsw.setParams({ filter: values }, url);
             if (_typeof(effect.page) && effect.page > 1) {
                 jump = true;
             }
-
             if (jump) {
                 location.href = url;
-            } else {
-                this.pagination(url);
             }
+            this.pagination(url);
         },
         persistence: function persistence(event) {
             var _this2 = this;
@@ -286,6 +291,17 @@ $(function () {
                 bsw.response(file.response).catch(function (reason) {
                     console.warn(reason);
                 });
+            }
+        },
+        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value) {
+            var field = this.persistence_switch_field;
+            var now = this.persistence_field_shape_now;
+            var collect = this.persistence_field_shape_collect[field];
+            for (var f in collect) {
+                if (!collect.hasOwnProperty(f)) {
+                    continue;
+                }
+                now[f] = collect[f] == value;
             }
         },
         showModal: function showModal(options) {
