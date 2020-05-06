@@ -23,4 +23,5 @@ window.lang = {
     color_weak: 'Color weak mode',
     third_message: 'Third message',
     total: 'Total',
+    export_mission: 'Export mission',
 };

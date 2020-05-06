@@ -120,7 +120,16 @@ $(function () {
             }));
         },
 
-        filter(event, jump = false) {
+        export(filter, route) {
+            let data = {
+                title: bsw.lang.export_mission,
+                width: 575
+            };
+            data.location = bsw.setParams({filter, route}, this.api_export);
+            this.showIFrame(data, $('body')[0]);
+        },
+
+        filter(event, jump = false, route = null) {
             let that = this;
             event.preventDefault();
             that.filter_form.validateFields((err, values) => {
@@ -145,45 +154,41 @@ $(function () {
                         }
                     }
                 }
-                return this[`${this.formMethod}FilterForm`](values, jump);
+                let _values = {};
+                for (let field in values) {
+                    if (!values.hasOwnProperty(field)) {
+                        continue;
+                    }
+                    if (typeof values[field] === 'undefined') {
+                        continue;
+                    }
+                    if (values[field] == null) {
+                        continue;
+                    }
+                    if (values[field].length === 0) {
+                        continue;
+                    }
+                    _values[field] = values[field];
+                }
+                if (this.formMethod === 'export') {
+                    return this.export(_values, route);
+                }
+                return this[`${this.formMethod}FilterForm`](_values, jump);
             });
         },
 
-        submitFilterForm(values, jump = false) {
-            let _values = {};
-            let number = 0;
-            for (let field in values) {
-                if (!values.hasOwnProperty(field)) {
-                    continue;
-                }
-                if (typeof values[field] === 'undefined') {
-                    continue;
-                }
-                if (values[field] == null) {
-                    continue;
-                }
-                if (values[field].length === 0) {
-                    continue;
-                }
-                _values[field] = values[field];
-                number += 1;
-            }
-
+        searchFilterForm(values, jump = false) {
             let effect = {};
             let url = bsw.unsetParamsBeginWith(['filter']);
-
             url = bsw.unsetParams(['page'], url, false, effect);
-            url = bsw.setParams({filter: _values}, url);
-
+            url = bsw.setParams({filter: values}, url);
             if (typeof effect.page && effect.page > 1) {
                 jump = true;
             }
-
             if (jump) {
                 location.href = url;
-            } else {
-                this.pagination(url);
             }
+            this.pagination(url);
         },
 
         persistence(event) {
@@ -286,6 +291,18 @@ $(function () {
                 bsw.response(file.response).catch((reason => {
                     console.warn(reason);
                 }));
+            }
+        },
+
+        switchFieldShapeWithSelect(value) {
+            let field = this.persistence_switch_field;
+            let now = this.persistence_field_shape_now;
+            let collect = this.persistence_field_shape_collect[field];
+            for (let f in collect) {
+                if (!collect.hasOwnProperty(f)) {
+                    continue;
+                }
+                now[f] = (collect[f] == value);
             }
         },
 
