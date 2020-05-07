@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 
 class DatetimeRange extends Datetime
@@ -20,6 +21,11 @@ class DatetimeRange extends Datetime
      * @var string
      */
     protected $timeTail = Abs::DAY_END;
+
+    /**
+     * @var string
+     */
+    protected $separator = '~';
 
     /**
      * @return string
@@ -101,6 +107,26 @@ class DatetimeRange extends Datetime
     public function setTimeTail(string $timeTail)
     {
         $this->timeTail = $timeTail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeparator(): string
+    {
+        return $this->separator;
+    }
+
+    /**
+     * @param string $separator
+     *
+     * @return $this
+     */
+    public function setSeparator(string $separator)
+    {
+        $this->separator = $separator;
 
         return $this;
     }

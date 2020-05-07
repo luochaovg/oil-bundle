@@ -1344,7 +1344,6 @@ class Helper
      * @param bool   $filter
      * @param string $handler
      * @param string $separator
-     * @param string $search
      *
      * @return array
      */
@@ -1353,17 +1352,16 @@ class Helper
         bool $unique = true,
         bool $filter = true,
         ?string $handler = 'trim',
-        string $separator = ',',
-        string $search = '，'
+        string $separator = ','
     ): array {
 
         $full = '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ－　：．，／％＃！＠＆（）＜＞＂＇？［］｛｝＼｜＋＝＿＾￥￣｀';
         $half = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- :.,/%#!@&()<>"\'?[]{}\\|+=_^￥~`';
 
-        $search = $search ?? self::split($full);
-        $separator = $separator ?? str_split($half);
-
-        $string = str_replace($search, $separator, $string);
+        if (($index = strpos($half, $separator)) !== -1) {
+            $full = self::split($full);
+            $string = str_replace($full[$index], $separator, $string);
+        }
 
         $result = explode($separator, $string);
         $result = $unique ? array_unique($result) : $result;

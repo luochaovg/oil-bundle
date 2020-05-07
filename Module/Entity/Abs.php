@@ -144,7 +144,7 @@ class Abs
     const ASSERT_EMPTY = 'empty';
     const ASSERT_ISSET = 'isset';
 
-    const FORM_DATA_SPLIT      = '~';
+    const FORM_DATA_SPLIT      = ',';
     const VALIDATION_IF_SET    = '~';
     const ENTITY_KEY_TRIM      = "\x00*";
     const ENTER                = "\n";

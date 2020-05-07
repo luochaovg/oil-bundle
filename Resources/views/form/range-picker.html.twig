@@ -15,6 +15,7 @@
   size="{{ form.size }}"
   :placeholder="['{{ form.placeholder }}', '{{ form.placeholder }}']"
   format="{{ form.format }}"
+  separator="{{ form.separator }}"
   :show-time="{ defaultValue: [moment('{{ form.timeHead }}', '{{ form.timeFormat }}'), moment('{{ form.timeTail }}', '{{ form.timeFormat }}')] }"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"

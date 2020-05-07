@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Filter\Entity;
 
 use Doctrine\DBAL\Types\Type;
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\FilterException;
 use Leon\BswBundle\Module\Filter\Filter;
@@ -43,7 +44,7 @@ class Between extends Filter
     public function parse($value)
     {
         if (is_string($value)) {
-            $value = explode(Abs::FORM_DATA_SPLIT, $value);
+            $value = Helper::stringToArray($value, false, false, 'trim', Abs::FORM_DATA_SPLIT);
         }
 
         if (!is_array($value) || count($value) < 2) {

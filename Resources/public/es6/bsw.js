@@ -104,6 +104,9 @@ $(function () {
             if (page) {
                 url = bsw.setParams({page}, url);
             }
+            if (that.preview_list.length === 0) {
+                return location.href = url;
+            }
             bsw.request(url).then((res) => {
                 bsw.response(res).then(() => {
                     that.preview_list = res.sets.preview.list;
@@ -144,12 +147,14 @@ $(function () {
                     if (moment.isMoment(values[field])) {
                         let format = values[field]._f || that.filter_format[field];
                         values[field] = values[field].format(format);
+                        jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
                                 let format = values[field][i]._f || that.filter_format[field];
                                 values[field][i] = values[field][i].format(format);
+                                jump = true; // fix bug for ant-d
                             }
                         }
                     }
@@ -186,7 +191,7 @@ $(function () {
                 jump = true;
             }
             if (jump) {
-                location.href = url;
+                return location.href = url;
             }
             this.pagination(url);
         },

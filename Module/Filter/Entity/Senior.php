@@ -79,7 +79,7 @@ class Senior extends Filter
             throw new FilterException("Value for filter expression is required");
         }
 
-        $value = explode(Abs::FORM_DATA_SPLIT, $value[1]);
+        $value = Helper::stringToArray($value[1], false, false, null, Abs::FORM_DATA_SPLIT);
         $value = Helper::numericValues($value);
 
         return $value;

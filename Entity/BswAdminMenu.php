@@ -102,8 +102,8 @@ class BswAdminMenu extends FoundationEntity
      * @BswAnnotation\Preview(sort=8, align="center", render=BswAbs::RENDER_CODE)
      * @BswAnnotation\Persistence(sort=8, type=BswForm\Number::class)
      * @BswAnnotation\Filter(sort=8, type=BswForm\Number::class)
-     * @BswAnnotation\Filter(sort=8.01, type=BswForm\Select::class, placeholder="Mode", group="sort", style={"width": "45%"}, enum=BswFilter\Senior::MODE, column=3)
-     * @BswAnnotation\Filter(sort=8.02, type=BswForm\Input::class, placeholder="Value", group="sort", style={"width": "55%"}, title="Split by ~")
+     * @BswAnnotation\Filter(sort=8.01, type=BswForm\Select::class, placeholder="Mode", group="sort", style={"width": "35%"}, enum=BswFilter\Senior::MODE, column=4)
+     * @BswAnnotation\Filter(sort=8.02, type=BswForm\Input::class, placeholder="Value", group="sort", style={"width": "65%"}, title="Split by comma")
      * @BswAnnotation\Mixed(sort=true)
      */
     protected $sort = 0;
