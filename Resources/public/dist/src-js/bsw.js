@@ -100,6 +100,9 @@ $(function () {
             if (page) {
                 url = bsw.setParams({ page: page }, url);
             }
+            if (that.preview_list.length === 0) {
+                return location.href = url;
+            }
             bsw.request(url).then(function (res) {
                 bsw.response(res).then(function () {
                     that.preview_list = res.sets.preview.list;
@@ -143,12 +146,14 @@ $(function () {
                     if (moment.isMoment(values[field])) {
                         var format = values[field]._f || that.filter_format[field];
                         values[field] = values[field].format(format);
+                        jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
                                 var _format = values[field][i]._f || that.filter_format[field];
                                 values[field][i] = values[field][i].format(_format);
+                                jump = true; // fix bug for ant-d
                             }
                         }
                     }
@@ -186,7 +191,7 @@ $(function () {
                 jump = true;
             }
             if (jump) {
-                location.href = url;
+                return location.href = url;
             }
             this.pagination(url);
         },
@@ -224,11 +229,12 @@ $(function () {
             });
         },
         submitPersistenceForm: function submitPersistenceForm(values) {
-            var data = { submit: values };
-            bsw.request(this.formUrl, data).then(function (res) {
+            bsw.request(this.formUrl, { submit: values }).then(function (res) {
                 var params = bsw.parseQueryString();
                 if (params.iframe) {
-                    parent.postMessage({ response: res, function: 'handleResponse' }, '*');
+                    res.sets.arguments = bsw.parseQueryString();
+                    var fn = res.sets.function || 'handleResponse';
+                    parent.postMessage({ response: res, function: fn }, '*');
                 } else {
                     bsw.response(res).catch(function (reason) {
                         console.warn(reason);
@@ -286,7 +292,8 @@ $(function () {
             }
 
             if (file.response.sets.href) {
-                parent.postMessage({ response: file.response, function: 'handleResponse' }, '*');
+                var fn = file.response.sets.function || 'handleResponse';
+                parent.postMessage({ response: file.response, function: fn }, '*');
             } else {
                 bsw.response(file.response).catch(function (reason) {
                     console.warn(reason);
@@ -450,9 +457,15 @@ $(function () {
 
         fillParentFormInParent: function fillParentFormInParent(data, element) {
             this.modal.visible = false;
-            if (this.persistence_form) {
+            if (this.persistence_form && data.repair) {
                 this.persistence_form.setFieldsValue(_defineProperty({}, data.repair, data.ids));
             }
+        },
+        fillParentFormAfterAjaxInParent: function fillParentFormAfterAjaxInParent(data, element) {
+            console.log(data);
+            data = data.response.sets;
+            data.repair = data.arguments.repair;
+            this.fillParentFormInParent(data, element);
         },
         handleResponseInParent: function handleResponseInParent(data, element) {
             this.modal.visible = false;

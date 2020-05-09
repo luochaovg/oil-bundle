@@ -229,11 +229,12 @@ $(function () {
         },
 
         submitPersistenceForm(values) {
-            let data = {submit: values};
-            bsw.request(this.formUrl, data).then((res) => {
+            bsw.request(this.formUrl, {submit: values}).then((res) => {
                 let params = bsw.parseQueryString();
                 if (params.iframe) {
-                    parent.postMessage({response: res, function: 'handleResponse'}, '*');
+                    res.sets.arguments = bsw.parseQueryString();
+                    let fn = res.sets.function || 'handleResponse';
+                    parent.postMessage({response: res, function: fn}, '*');
                 } else {
                     bsw.response(res).catch((reason => {
                         console.warn(reason);
@@ -291,7 +292,8 @@ $(function () {
             }
 
             if (file.response.sets.href) {
-                parent.postMessage({response: file.response, function: 'handleResponse'}, '*');
+                let fn = file.response.sets.function || 'handleResponse';
+                parent.postMessage({response: file.response, function: fn}, '*');
             } else {
                 bsw.response(file.response).catch((reason => {
                     console.warn(reason);
@@ -465,9 +467,15 @@ $(function () {
 
         fillParentFormInParent(data, element) {
             this.modal.visible = false;
-            if (this.persistence_form) {
+            if (this.persistence_form && data.repair) {
                 this.persistence_form.setFieldsValue({[data.repair]: data.ids});
             }
+        },
+
+        fillParentFormAfterAjaxInParent(res, element) {
+            let data = res.response.sets;
+            data.repair = data.arguments.repair;
+            this.fillParentFormInParent(data, element);
         },
 
         handleResponseInParent(data, element) {
