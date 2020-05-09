@@ -108,6 +108,7 @@ trait Upload
                 ['{{ url }}' => $file->url],
                 Abs::TAG_CLASSIFY_SUCCESS,
                 Abs::TAG_TYPE_CONFIRM,
+                [],
                 Abs::TIME_MINUTE
             );
         }

@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswAdminRole;
 
 use Leon\BswBundle\Entity\BswAdminRole;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -40,23 +41,21 @@ trait Preview
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $origin
+     * @param Arguments $args
      *
      * @return Button[]
      */
-    public function previewRecordOperates(array $current, array $hooked, array $origin): array
+    public function previewRecordOperates(Arguments $args): array
     {
         return [
             (new Button('Edit record'))
                 ->setRoute('app_bsw_admin_role_persistence')
-                ->setArgs(['id' => $current['id']]),
+                ->setArgs(['id' => $args->item['id']]),
 
             (new Button('Grant authorization for role'))
                 ->setRoute('app_bsw_admin_role_access_control_grant')
                 ->setType(Button::THEME_DANGER)
-                ->setArgs(['id' => $current['id'], 'target' => $current['name']]),
+                ->setArgs(['id' => $args->item['id'], 'target' => $args->item['name']]),
         ];
     }
 

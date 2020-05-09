@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Component\Html;
+
 trait PreviewRoute
 {
     /**
@@ -13,6 +15,11 @@ trait PreviewRoute
      * @var array
      */
     protected $previewArgs = [];
+
+    /**
+     * @var array
+     */
+    protected $previewIframeArgs = [];
 
     /**
      * @return string
@@ -50,6 +57,38 @@ trait PreviewRoute
     public function setPreviewArgs(array $previewArgs)
     {
         $this->previewArgs = $previewArgs;
+
+        return $this;
+    }
+
+    /**
+     * @param array $previewArgs
+     *
+     * @return $this
+     */
+    public function appendPreviewArgs(array $previewArgs)
+    {
+        $this->previewArgs = array_merge($this->previewArgs, $previewArgs);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreviewIframeArgs(): array
+    {
+        return $this->previewIframeArgs;
+    }
+
+    /**
+     * @param array $previewIframeArgs
+     *
+     * @return $this
+     */
+    public function setPreviewIframeArgs(array $previewIframeArgs)
+    {
+        $this->previewIframeArgs = $previewIframeArgs;
 
         return $this;
     }

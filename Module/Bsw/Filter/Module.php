@@ -236,13 +236,9 @@ class Module extends Bsw
 
         $fn = self::FILTER_ANNOTATION_ONLY;
         $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
-        $filterAnnotationExtra = $this->tailor(
-            $this->method,
-            $fn,
-            Abs::T_ARRAY,
-            $filterAnnotationExtra,
-            $filterAnnotation
-        );
+
+        $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
+        $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
 
         /**
          * extra annotation handler
@@ -261,7 +257,8 @@ class Module extends Bsw
 
             $fn = self::FILTER_ANNOTATION;
             $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
-            $filterAnnotationExtra = $this->tailor($this->method, $fn, null, $filterAnnotationExtra, $filterAnnotation);
+            $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
+            $filterAnnotationExtra = $this->tailor($this->method, $fn, null, $arguments);
         }
 
         /**
@@ -659,7 +656,7 @@ class Module extends Bsw
             self::FILTER_CORRECT,
             Abs::T_ARRAY,
             [$filter, $condition],
-            [$filter, $condition]
+            $this->arguments(compact('filter', 'condition'))
         );
 
         [$output->filter, $output->operates, $format] = $this->handleFilterData($filter);
@@ -674,7 +671,7 @@ class Module extends Bsw
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,
-            [$output]
+            $this->arguments(compact('output'))
         );
 
         return $output;

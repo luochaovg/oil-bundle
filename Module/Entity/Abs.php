@@ -333,13 +333,14 @@ class Abs
     const MESSAGE_NOTICE    = 3;
     const MESSAGE_POPUP     = 4;
 
-    const REQ_GET    = 'GET';
-    const REQ_POST   = 'POST';
-    const REQ_PATCH  = 'PATCH';
-    const REQ_PUT    = 'PUT';
-    const REQ_DELETE = 'DELETE';
-    const REQ_HEAD   = 'HEAD';
-    const REQ_ALL    = 'GET|POST|HEAD';
+    const REQ_GET     = 'GET';
+    const REQ_POST    = 'POST';
+    const REQ_PATCH   = 'PATCH';
+    const REQ_PUT     = 'PUT';
+    const REQ_DELETE  = 'DELETE';
+    const REQ_HEAD    = 'HEAD';
+    const REQ_SYMFONY = 'SYMFONY_ROUTE';
+    const REQ_ALL     = 'GET|POST|HEAD';
 
     const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
     const CONTENT_TYPE_JSON = 'application/json;charset=utf-8';

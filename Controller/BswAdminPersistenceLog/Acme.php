@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswAdminPersistenceLog;
 
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Annotation\Entity\Input as I;
@@ -18,11 +19,12 @@ class Acme extends BswBackendController
     use Persistence;
 
     /**
-     * @param array $enum
+     * @param Arguments $args
+     *
      * @return array
      * @throws
      */
-    public function acmeEnumExtraUserId(array $enum): array
+    public function acmeEnumExtraUserId(Arguments $args): array
     {
         $role = $this->repo(BswAdminUser::class)->kvp(['name']);
         $role = [0 => Abs::NIL] + $role;

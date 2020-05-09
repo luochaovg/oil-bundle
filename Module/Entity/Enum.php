@@ -470,13 +470,13 @@ class Enum
      * @const array 自然周期
      */
     const NATURAL_PERIOD = [
-        Abs::PERIOD_YEAR    => 'Year',
-        Abs::PERIOD_QUARTER => 'Quarter',
-        Abs::PERIOD_MONTH   => 'Month',
-        Abs::PERIOD_WEEK    => 'Week',
-        Abs::PERIOD_DAY     => 'Day',
-        Abs::PERIOD_HOUR    => 'Hour',
-        Abs::PERIOD_MINUTE  => 'Minute',
+        Abs::PERIOD_YEAR    => 'Every year',
+        Abs::PERIOD_QUARTER => 'Every quarter',
+        Abs::PERIOD_MONTH   => 'Every month',
+        Abs::PERIOD_WEEK    => 'Every week',
+        Abs::PERIOD_DAY     => 'Every day',
+        Abs::PERIOD_HOUR    => 'Every hour',
+        Abs::PERIOD_MINUTE  => 'Every minute',
     ];
 
     /**

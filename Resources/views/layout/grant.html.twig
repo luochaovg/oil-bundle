@@ -78,7 +78,7 @@
         :wrapper-col="{lg: { span: {{ total_column }}, offset: 0 }, xl: { span: {{ _column }}, offset: {{ label_column }} }}"
       >
         {% for form in persistence.operates %}
-          {% include '@LeonBsw/form/button.html.twig' %}
+          {% include 'button'|twig('form') %}
         {% endfor %}
       </a-form-item>
     </a-form>

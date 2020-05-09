@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,16 +35,16 @@ trait EnumDict
     }
 
     /**
-     * @param array $original
+     * @param Arguments $args
      *
      * @return array
      */
-    public function enumDictBeforeHook(array $original): array
+    public function enumDictBeforeHook(Arguments $args): array
     {
-        $key = Html::tag('div', $original['key'], ['class' => 'bsw-code bsw-long-text']);
+        $key = Html::tag('div', $args->original['key'], ['class' => 'bsw-code bsw-long-text']);
         $info = Html::tag(
             'span',
-            $original['info'],
+            $args->original['info'],
             [
                 'style' => [
                     'display' => 'block',
@@ -54,7 +55,7 @@ trait EnumDict
         );
 
         $enum = [];
-        foreach ($original['enum'] as $k => $v) {
+        foreach ($args->original['enum'] as $k => $v) {
             $k = Html::tag('div', $k, ['class' => 'ant-tag ant-tag-has-color', 'style' => ['color' => '#1890ff']]);
             $v = Html::tag('div', $v, ['class' => 'bsw-code bsw-long-text']);
             array_push($enum, "{$k} => {$v}");
@@ -67,7 +68,7 @@ trait EnumDict
         );
 
         return [
-            'id'   => $original['key'],
+            'id'   => $args->original['key'],
             'key'  => "{$key}<br>{$info}",
             'enum' => $enum,
         ];

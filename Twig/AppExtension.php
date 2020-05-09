@@ -23,6 +23,8 @@ class AppExtension extends AbstractExtension
             new TwigFilter('icon', [$this, 'icon']),
             new TwigFilter('implode', [$this, 'implode']),
             new TwigFilter('image_style', [$this, 'image_style']),
+            new TwigFilter('twig', [$this, 'twig']),
+            new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
         ];
     }
 
@@ -115,5 +117,24 @@ class AppExtension extends AbstractExtension
         $attributes = implode('; ', $attributes);
 
         return $boundary ? "{ {$attributes} }" : $attributes;
+    }
+
+    /**
+     * Get twig array
+     *
+     * @param string $part
+     * @param string $path
+     *
+     * @return array
+     */
+    public static function twig(string $part, string $path): array
+    {
+        $part = trim($part, '/.');
+        $path = trim($path, '/.') . '/';
+
+        return [
+            "./{$path}{$part}.html.twig",
+            "@LeonBsw/{$path}{$part}.html.twig",
+        ];
     }
 }

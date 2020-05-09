@@ -385,13 +385,9 @@ class Module extends Bsw
         $operate = Abs::TR_ACT;
 
         $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
-        $previewAnnotationExtra = $this->tailor(
-            $this->methodTailor,
-            $fn,
-            null,
-            $previewAnnotationExtra,
-            $previewAnnotation
-        );
+
+        $arguments = $this->arguments(['target' => $previewAnnotationExtra], compact('previewAnnotation'));
+        $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, null, $arguments);
 
         /**
          * extra annotation handler
@@ -415,13 +411,8 @@ class Module extends Bsw
                 $previewAnnotationExtra[$operate] = ['show' => true];
             }
 
-            $previewAnnotationExtra = $this->tailor(
-                $this->methodTailor,
-                $fn,
-                Abs::T_ARRAY,
-                $previewAnnotationExtra,
-                $previewAnnotation
-            );
+            $arguments = $this->arguments(['target' => $previewAnnotationExtra], compact('previewAnnotation'));
+            $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
 
         /**
@@ -631,11 +622,13 @@ class Module extends Bsw
                 $query[Abs::ORDER] = ["{$query['alias']}.{$pk}" => Abs::SORT_DESC];
             }
 
-            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $query);
+            $arguments = $this->arguments(['target' => $query]);
+            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
             $list = $this->repository->lister($query);
 
         } else {
-            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $query);
+            $arguments = $this->arguments(['target' => $query]);
+            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
             $list = $this->manualLister($query);
         }
 
@@ -674,34 +667,40 @@ class Module extends Bsw
         /**
          * before hook (row record)
          *
-         * @param array $origin
+         * @param array $original
          * @param array $extraArgs
          *
          * @return mixed
          */
-        $before = function (array $origin, array $extraArgs) {
+        $before = function (array $original, array $extraArgs) {
             if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
-                $origin = $this->web->{$fn}($origin, $extraArgs);
+                $arguments = $this->arguments(compact('original', 'extraArgs'));
+                $original = $this->web->{$fn}($arguments);
             }
 
-            return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $origin, $extraArgs);
+            $arguments = $this->arguments(['target' => $original], compact('extraArgs'));
+
+            return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         /**
          * after hook (row record)
          *
          * @param array $hooked
-         * @param array $origin
+         * @param array $original
          * @param array $extraArgs
          *
          * @return mixed
          */
-        $after = function (array $hooked, array $origin, array $extraArgs) {
+        $after = function (array $hooked, array $original, array $extraArgs) {
             if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
-                $hooked = $this->web->{$fn}($hooked, $origin, $extraArgs);
+                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs'));
+                $hooked = $this->web->{$fn}($arguments);
             }
 
-            return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $hooked, $origin, $extraArgs);
+            $arguments = $this->arguments(['target' => $hooked], compact('original', 'extraArgs'));
+
+            return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'preview']];
@@ -714,9 +713,13 @@ class Module extends Bsw
          * before render (all record)
          */
 
-        $args = [$hooked, $original];
-        $list = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $args);
-        $list = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $list, ...$args);
+        $args = compact('hooked', 'original');
+
+        $arguments = $this->arguments($args);
+        $list = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $arguments);
+
+        $arguments = $this->arguments(['target' => $list], $args);
+        $list = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $arguments);
 
         /**
          * field charm
@@ -742,8 +745,8 @@ class Module extends Bsw
              * record operate - prepare
              */
 
-            $args = [$item, $hooked[$key], $original[$key]];
-            $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $args);
+            $arguments = $this->arguments(['item' => $item, 'hooked' => $hooked[$key], 'original' => $original[$key]]);
+            $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
 
             $item[$operate] = null;
             $maxButtons = max($maxButtons, count($buttons));
@@ -783,16 +786,14 @@ class Module extends Bsw
                 }
 
                 $fieldAnnotation = $previewAnnotation[$field] ?? [];
-                $args = [
-                    $value,
-                    $hooked[$key][$field],
-                    $original[$key][$field],
-                    $item,
-                    $hooked,
-                    $original,
-                    $fieldAnnotation,
-                ];
-                $_value = $this->caller($this->method, $charm, null, null, $args);
+                $arguments = $this->arguments(
+                    compact('value', 'item', 'hooked', 'original', 'fieldAnnotation'),
+                    [
+                        'valueHooked'   => $hooked[$key][$field],
+                        'valueOriginal' => $original[$key][$field],
+                    ]
+                );
+                $_value = $this->caller($this->method, $charm, null, null, $arguments);
 
                 if (is_object($_value) && $_value instanceof Charm) {
                     $value = $this->parseSlot($_value->getCharm(), '', ['value' => $_value->getValue()]);
@@ -891,14 +892,15 @@ class Module extends Bsw
         $this->correctPreviewColumn($list, $output);
 
         /**
-         * assign variable to output
-         *
          * @var Choice $choice
          */
 
         $choice = $this->input->choice ?? new Choice();
-        $choice = $this->caller($this->method, self::CHOICE, Choice::class, $choice, [$choice]);
-        $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $choice);
+        $arguments = $this->arguments(compact('choice'));
+        $choice = $this->caller($this->method, self::CHOICE, Choice::class, $choice, $arguments);
+
+        $arguments = $this->arguments(['target' => $choice]);
+        $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $arguments);
 
         $output->columns = array_values($output->columns);
         $output->columnsJson = Helper::jsonStringify($output->columns, '{}');
@@ -917,7 +919,7 @@ class Module extends Bsw
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,
-            [$output]
+            $this->arguments(compact('output'))
         );
 
         return $output;

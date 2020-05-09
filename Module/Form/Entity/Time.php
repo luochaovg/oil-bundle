@@ -5,9 +5,12 @@ namespace Leon\BswBundle\Module\Form\Entity;
 class Time extends Datetime
 {
     /**
-     * @var string
+     * Time constructor.
      */
-    protected $format = 'HH:mm:ss';
+    public function __construct()
+    {
+        $this->setFormat('HH:mm:ss');
+    }
 
     /**
      * @return string

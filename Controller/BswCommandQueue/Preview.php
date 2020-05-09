@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswCommandQueue;
 
 use Leon\BswBundle\Entity\BswCommandQueue;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -43,16 +44,14 @@ trait Preview
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $origin
+     * @param Arguments $args
      *
      * @return Button[]
      */
-    public function previewRecordOperates(array $current, array $hooked, array $origin): array
+    public function previewRecordOperates(Arguments $args): array
     {
         return [
-            (new Button('Edit record', 'app_bsw_command_queue_persistence'))->setArgs(['id' => $current['id']]),
+            (new Button('Edit record', 'app_bsw_command_queue_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
     }
 

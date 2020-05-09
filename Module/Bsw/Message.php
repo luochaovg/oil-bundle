@@ -37,15 +37,20 @@ class Message
     private $args = [];
 
     /**
+     * @var array
+     */
+    private $sets = [];
+
+    /**
      * Message constructor.
      *
      * @param string $message
      * @param string $classify
      * @param string $route
      */
-    public function __construct(string $message, ?string $classify = null, ?string $route = null)
+    public function __construct(?string $message = null, ?string $classify = null, ?string $route = null)
     {
-        $this->message = $message;
+        isset($message) && $this->message = $message;
         isset($classify) && $this->classify = $classify;
         isset($route) && $this->route = $route;
     }
@@ -55,7 +60,7 @@ class Message
      */
     public function getMessage(): string
     {
-        return $this->message;
+        return $this->message ?? '';
     }
 
     /**
@@ -182,6 +187,26 @@ class Message
     public function setArgs(array $args)
     {
         $this->args = $args;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSets(): array
+    {
+        return $this->sets;
+    }
+
+    /**
+     * @param array $sets
+     *
+     * @return $this
+     */
+    public function setSets(array $sets)
+    {
+        $this->sets = $sets;
 
         return $this;
     }

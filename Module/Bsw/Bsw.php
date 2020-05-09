@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
-use Leon\BswBundle\Entity\BswAdminPersistenceLog;
 use Leon\BswBundle\Entity\FoundationEntity;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
@@ -171,23 +170,36 @@ abstract class Bsw
     }
 
     /**
+     * Set arguments
+     *
+     * @param array ...$target
+     *
+     * @return Arguments
+     */
+    protected function arguments(array ...$target): Arguments
+    {
+        return (new Arguments())->setAny(array_merge(...$target));
+    }
+
+    /**
      * Caller
      *
-     * @param string $prefix
-     * @param string $call
-     * @param mixed  $type
-     * @param mixed  $default
-     * @param array  $args
+     * @param string    $prefix
+     * @param string    $call
+     * @param mixed     $type
+     * @param mixed     $default
+     * @param Arguments $args
      *
      * @return mixed|null
      * @throws
      */
-    protected function caller(string $prefix, string $call, $type = null, $default = null, array $args = [])
+    protected function caller(string $prefix, string $call, $type = null, $default = null, Arguments $args = null)
     {
         if (!method_exists($this->web, $call = "{$prefix}{$call}")) {
             return $default;
         }
 
+        $args = $args ? [$args] : [];
         $data = call_user_func_array([$this->web, $call], $args) ?? $default;
         if ($type) {
             $type = (array)$type;
@@ -201,17 +213,17 @@ abstract class Bsw
     /**
      * Tailor handler
      *
-     * @param string $prefix
-     * @param string $call
-     * @param string $type
-     * @param mixed  ...$args
+     * @param string    $prefix
+     * @param string    $call
+     * @param string    $type
+     * @param Arguments $args
      *
      * @return mixed
      * @throws
      */
-    protected function tailor(string $prefix, string $call, string $type = null, ...$args)
+    protected function tailor(string $prefix, string $call, string $type = null, Arguments $args = null)
     {
-        $argument = current($args) ?? null;
+        $argument = $args->target;
         $method = "{$prefix}{$call}";
 
         if (empty($this->tailor)) {
@@ -224,15 +236,15 @@ abstract class Bsw
          * @param string $class
          * @param string $method
          * @param mixed  $field
-         * @param string $type
          *
          * @return array
          */
         $tailorCore = function (string $class, string $method, $field) use ($type, &$args, $argument) {
 
             $tailor = new $class($this->web, $field);
-            $argument = call_user_func_array([$tailor, $method], $args) ?? $argument;
-            $args[0] = $argument;
+            $_args = $args ? [$args] : [];
+            $argument = call_user_func_array([$tailor, $method], $_args) ?? $argument;
+            $args->target = $argument;
 
             // check type
             if ($type) {
@@ -390,14 +402,11 @@ abstract class Bsw
                     $method = self::ENUM_EXTRA . ucfirst($item['enumExtra']);
                     $enum = (array)$item['enum'];
 
-                    $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], array_merge([$enum], $args));
-                    $enumExtra = $this->caller(
-                        $this->method,
-                        $method,
-                        Abs::T_ARRAY,
-                        $enumExtra,
-                        array_merge([$enumExtra], $args)
-                    );
+                    $arguments = $this->arguments(compact('enum'), $args);
+                    $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], $arguments);
+
+                    $arguments = $this->arguments(compact('enumExtra', 'enum'), $args);
+                    $enumExtra = $this->caller($this->method, $method, Abs::T_ARRAY, $enumExtra, $arguments);
 
                     if (isset($enumExtra)) {
                         $item['enum'] = $enumExtra + $enum;

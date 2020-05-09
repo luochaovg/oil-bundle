@@ -30,7 +30,7 @@
           {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
           {% set end = title ? '</a-popover>' : null %}
           {{ begin|raw }}
-          {% include '@LeonBsw/form/' ~ form.itemName ~ '.html.twig' %}
+          {% include form.itemName|twig('form') %}
           {{ end|raw }}
         </a-form-item>
       {% endfor %}
@@ -42,7 +42,7 @@
         }"
       >
         {% for form in persistence.operates %}
-          {% include '@LeonBsw/form/button.html.twig' %}
+          {% include 'button'|twig('form') %}
         {% endfor %}
       </a-form-item>
     </a-form>

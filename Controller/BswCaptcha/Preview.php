@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswCaptcha;
 
 use Leon\BswBundle\Entity\BswCaptcha;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
@@ -29,16 +30,14 @@ trait Preview
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $origin
+     * @param Arguments $args
      *
      * @return Button[]
      */
-    public function previewRecordOperates(array $current, array $hooked, array $origin): array
+    public function previewRecordOperates(Arguments $args): array
     {
         return [
-            (new Button('Edit record', 'app_bsw_captcha_persistence'))->setArgs(['id' => $current['id']]),
+            (new Button('Edit record', 'app_bsw_captcha_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
     }
 

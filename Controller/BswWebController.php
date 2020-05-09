@@ -269,6 +269,7 @@ abstract class BswWebController extends AbstractController
      * @param array     $args
      * @param string    $classify
      * @param string    $type
+     * @param array     $data
      * @param int       $duration
      *
      * @return Response
@@ -281,6 +282,7 @@ abstract class BswWebController extends AbstractController
         array $args = [],
         string $classify = Abs::TAG_CLASSIFY_WARNING,
         string $type = Abs::TAG_TYPE_MESSAGE,
+        array $data = [],
         ?int $duration = null
     ): Response {
 
@@ -290,10 +292,9 @@ abstract class BswWebController extends AbstractController
         if (isset($url)) {
             $this->appendMessage($content, $duration, $classify, $type);
             $message = null;
-            $data = ['href' => $this->redirectUrl($url ?: null, $params)];
+            $data = array_merge($data, ['href' => $this->redirectUrl($url ?: null, $params)]);
         } else {
             $message = $content;
-            $data = [];
         }
 
         [$code4http, $code4logic] = [Response::HTTP_OK, $code, null, null];

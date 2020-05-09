@@ -28,4 +28,16 @@ trait Enum
 
         return $this;
     }
+
+    /**
+     * @param array $enum
+     *
+     * @return $this
+     */
+    public function appendEnum(array $enum)
+    {
+        $this->enum = array_merge($this->enum, $enum);
+
+        return $this;
+    }
 }

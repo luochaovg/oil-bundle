@@ -45,6 +45,7 @@ trait ThirdMessage
             $message['args'] ?? [],
             $message['classify'],
             $message['type'] ?? Abs::TAG_TYPE_MESSAGE,
+            $message['data'] ?? [],
             $message['duration'] ?? null
         );
     }

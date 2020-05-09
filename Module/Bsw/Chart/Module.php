@@ -114,7 +114,7 @@ class Module extends Bsw
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,
-            [$output]
+            $this->arguments(compact('output'))
         );
 
         return $output;

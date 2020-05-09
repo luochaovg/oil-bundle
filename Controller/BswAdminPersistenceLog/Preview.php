@@ -6,6 +6,7 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminPersistenceLog;
 use Leon\BswBundle\Entity\BswAdminUser;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Hook\Entity\JsonStringify;
@@ -53,16 +54,14 @@ trait Preview
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $origin
+     * @param Arguments $args
      *
      * @return Button[]
      */
-    public function previewRecordOperates(array $current, array $hooked, array $origin): array
+    public function previewRecordOperates(Arguments $args): array
     {
         return [
-            // (new Button('Edit record', 'app_bsw_admin_persistence_log_persistence'))->setArgs(['id' => $current['id']]),
+            // (new Button('Edit record', 'app_bsw_admin_persistence_log_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
     }
 
@@ -95,33 +94,33 @@ trait Preview
     }
 
     /**
-     * @param $value
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function previewCharmBefore($value)
+    public function previewCharmBefore(Arguments $args)
     {
-        return $this->printJson('before', $value);
+        return $this->printJson('before', $args->value);
     }
 
     /**
-     * @param $value
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function previewCharmLater($value)
+    public function previewCharmLater(Arguments $args)
     {
-        return $this->printJson('later', $value);
+        return $this->printJson('later', $args->value);
     }
 
     /**
-     * @param $value
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function previewCharmEffect($value)
+    public function previewCharmEffect(Arguments $args)
     {
-        return $this->printJson('effect', $value);
+        return $this->printJson('effect', $args->value);
     }
 
     /**

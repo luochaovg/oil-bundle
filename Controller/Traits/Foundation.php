@@ -1383,6 +1383,7 @@ trait Foundation
             $message->getArgs(),
             $message->getClassify(),
             $message->getType(),
+            $message->getSets(),
             $message->getDuration(),
         ];
 

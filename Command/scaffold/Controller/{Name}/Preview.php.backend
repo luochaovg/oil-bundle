@@ -4,6 +4,7 @@ namespace {Namespace}\Controller\{Name};
 
 use {Namespace}\Entity\{Name};
 use Symfony\Component\HttpFoundation\Response;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
@@ -31,16 +32,14 @@ trait Preview
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $origin
+     * @param Arguments $args
      *
      * @return Button[]
      */
-    public function previewRecordOperates(array $current, array $hooked, array $origin): array
+    public function previewRecordOperates(Arguments $args): array
     {
         return [
-            (new Button('Edit record', 'app_{Route}_persistence'))->setArgs(['id' => $current['id']]),
+            (new Button('Edit record', 'app_{Route}_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
     }
 

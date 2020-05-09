@@ -34,8 +34,8 @@ trait Export
 
         return [
             'command'   => [
-                'value' => 'mission:export-preview',
-                // 'disabled' => true,
+                'value'    => 'mission:export-preview',
+                'disabled' => true,
             ],
             'condition' => [
                 'value' => Helper::formatPrintJson($condition, 4, ': '),
@@ -57,7 +57,7 @@ trait Export
             return $args;
         }
 
-        $nextRoute = $this->getHistoryRoute(-1);
+        $nextRoute = $this->getHistoryRoute(-2);
 
         return $this->showPersistence(['nextRoute' => $nextRoute]);
     }

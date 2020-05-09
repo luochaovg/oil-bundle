@@ -3,10 +3,28 @@
 namespace Leon\BswBundle\Module\Form;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Module\Form\Entity\Traits\Attributes;
+use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
+use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
+use Leon\BswBundle\Module\Form\Entity\Traits\Field;
+use Leon\BswBundle\Module\Form\Entity\Traits\Key;
+use Leon\BswBundle\Module\Form\Entity\Traits\Placeholder;
+use Leon\BswBundle\Module\Form\Entity\Traits\Rules;
+use Leon\BswBundle\Module\Form\Entity\Traits\Style;
+use Leon\BswBundle\Module\Form\Entity\Traits\Value;
 
 abstract class Form
 {
+    use Value;
+    use ClassCss;
+    use Attributes;
+    use Disabled;
+    use Style;
+    use Placeholder;
+    use Rules;
+    use Key;
+    use Field;
+
     /**
      * @const string
      */
@@ -22,257 +40,10 @@ abstract class Form
     const SCENE_IFRAME = 'iframe';
 
     /**
-     * @var mixed
-     */
-    protected $value;
-
-    /**
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * @var bool
-     */
-    protected $disabled = false;
-
-    /**
-     * @var bool
-     */
-    protected $alreadyDisabled = false;
-
-    /**
-     * @var array
-     */
-    protected $style = [];
-
-    /**
-     * @var string
-     */
-    protected $placeholder;
-
-    /**
-     * @var array
-     */
-    protected $rules = [];
-
-    /**
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
-     * @var string
-     */
-    protected $key;
-
-    /**
-     * @var string
-     */
-    protected $field;
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClass(): ?string
-    {
-        return $this->class;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return $this
-     */
-    public function setClass(string $class)
-    {
-        $this->class = $class;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDisabled(): bool
-    {
-        return $this->disabled;
-    }
-
-    /**
-     * @param bool $disabled
-     * @param bool $coverAble
-     *
-     * @return $this
-     */
-    public function setDisabled(bool $disabled = true, bool $coverAble = false)
-    {
-        if ($this->alreadyDisabled) {
-            if ($coverAble) {
-                $this->disabled = $disabled;
-            }
-        } else {
-            $this->disabled = $disabled;
-        }
-
-        $this->alreadyDisabled = true;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStyle(): string
-    {
-        return Helper::jsonStringify($this->style);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getStyleStringify(): ?string
-    {
-        return Html::cssStyleFromArray($this->style);
-    }
-
-    /**
-     * @param array $style
-     *
-     * @return $this
-     */
-    public function setStyle(array $style)
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getItemName(): string
     {
         return Helper::camelToUnder(Helper::clsName(static::class), '-');
-    }
-
-    /**
-     * @return string
-     */
-    public function getPlaceholder(): ?string
-    {
-        return $this->placeholder;
-    }
-
-    /**
-     * @param string $placeholder
-     *
-     * @return $this
-     */
-    public function setPlaceholder(string $placeholder)
-    {
-        $this->placeholder = $placeholder;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRules(): string
-    {
-        return Helper::jsonStringify($this->rules);
-    }
-
-    /**
-     * @param array $rules
-     *
-     * @return $this
-     */
-    public function setRules(array $rules)
-    {
-        $this->rules = $rules;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttributes(): string
-    {
-        return Html::renderTagAttributes($this->attributes);
-    }
-
-    /**
-     * @param array $attributes
-     *
-     * @return $this
-     */
-    public function setAttributes(array $attributes)
-    {
-        $this->attributes = array_merge($this->attributes, $attributes);
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function setKey(string $key)
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getField(): string
-    {
-        return $this->field;
-    }
-
-    /**
-     * @param string $field
-     *
-     * @return $this
-     */
-    public function setField(string $field)
-    {
-        $this->field = $field;
-
-        return $this;
     }
 }

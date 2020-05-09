@@ -1,4 +1,8 @@
-{% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
+{% if form.valueMultiple %}
+  {% set initial = (form.value is same as(null)) ? null : ("initialValue: " ~ form.value ~ ",") %}
+{% else %}
+  {% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
+{% endif %}
 <a-select
   {% if form.class %}
     class="{{ form.class }}"
@@ -13,7 +17,7 @@
   option-filter-prop="{{ form.optionFilterProp }}"
   :show-arrow="{{ form.showArrow ? 'true' : 'false' }}"
   :token-separators="{{ form.tokenSeparators }}"
-  mode="{{ form.value is same as(null) ? form.mode : 'default' }}"
+  mode="{{ form.mode }}"
   not-found-content="{{ form.notFoundContent }}"
   :dropdown-match-select-width="false"
   {% if logic.scene == 'persistence' %}
@@ -30,4 +34,4 @@
     <a-select-option value="{{ value }}">{{ label }}</a-select-option>
   {% endfor %}
 </a-select>
-{% include '@LeonBsw/form/iframe-entrypoint.html.twig' %}
+{% include 'iframe-entrypoint'|twig('form') %}

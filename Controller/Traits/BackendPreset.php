@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\Traits;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminPersistenceLog;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -19,21 +20,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 trait BackendPreset
 {
     /**
-     * @param array $enum
+     * @param Arguments $args
      *
      * @return array
      */
-    public function acmeEnumExtraRouteName(array $enum): array
+    public function acmeEnumExtraRouteName(Arguments $args): array
     {
         return $this->routeKVP(false);
     }
 
     /**
-     * @param array $enum
+     * @param Arguments $args
      *
      * @return array
      */
-    public function acmeEnumExtraCommand(array $enum): array
+    public function acmeEnumExtraCommand(Arguments $args): array
     {
         $result = $this->commandCaller('list', ['--format' => 'json']);
         $result = Helper::parseJsonString($result);

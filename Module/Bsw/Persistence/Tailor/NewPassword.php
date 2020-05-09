@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Tailor;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
@@ -17,16 +18,14 @@ class NewPassword extends Tailor
     protected $newField = 'new_password';
 
     /**
-     * @param array $persistAnnotationExtra
-     * @param array $persistAnnotation
-     * @param int   $id
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPersistenceAnnotation(array $persistAnnotationExtra, array $persistAnnotation, int $id): array
+    public function tailorPersistenceAnnotation(Arguments $args): array
     {
-        $sort = $persistAnnotation[$this->fieldCamel]['sort'] + .01;
-        $persistAnnotationExtra[$this->newField] = [
+        $sort = $args->persistAnnotation[$this->fieldCamel]['sort'] + .01;
+        $args->target[$this->newField] = [
             'sort'     => $sort,
             'column'   => 8,
             'type'     => Input::class,
@@ -34,22 +33,21 @@ class NewPassword extends Tailor
             'tips'     => 'Do not fill if not need',
         ];
 
-        if (empty($id)) {
-            $persistAnnotationExtra[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
+        if (empty($args->id)) {
+            $args->target[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
         }
 
-        return $persistAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param array $submitItems
-     * @param int   $id
+     * @param Arguments $args
      *
      * @return Error|array
      */
-    public function tailorPersistenceAfterSubmit(array $submitItems, int $id)
+    public function tailorPersistenceAfterSubmit(Arguments $args)
     {
-        [$submit, $extraSubmit] = $submitItems;
+        [$submit, $extraSubmit] = $args->target;
         $newPassword = Helper::dig($submit, $this->newField);
 
         if (isset($newPassword) && strlen($newPassword) > 0) {

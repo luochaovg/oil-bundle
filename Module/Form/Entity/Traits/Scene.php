@@ -7,7 +7,7 @@ trait Scene
     /**
      * @var string
      */
-    public $scene = self::SCENE_NORMAL;
+    protected $scene = self::SCENE_NORMAL;
 
     /**
      * @return string

@@ -16,6 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 trait Request
 {
     /**
+     * Args for $_POST
+     *
+     * @param null $appoint
+     * @param bool $filterHtml
+     *
+     * @return mixed
+     */
+    public function postArgs($appoint = null, bool $filterHtml = true)
+    {
+        return $this->args(Abs::REQ_POST, $appoint, $filterHtml);
+    }
+
+    /**
      * Args for $_GET
      *
      * @param null $appoint
@@ -29,16 +42,16 @@ trait Request
     }
 
     /**
-     * Args for $_POST
+     * Args for symfony route
      *
      * @param null $appoint
      * @param bool $filterHtml
      *
      * @return mixed
      */
-    public function postArgs($appoint = null, bool $filterHtml = true)
+    public function routeArgs($appoint = null, bool $filterHtml = true)
     {
-        return $this->args(Abs::REQ_POST, $appoint, $filterHtml);
+        return $this->args(Abs::REQ_SYMFONY, $appoint, $filterHtml);
     }
 
     /**
@@ -98,8 +111,9 @@ trait Request
 
             switch ($type) {
 
-                case Abs::REQ_HEAD:
-                    $args[$type] = $header();
+                case Abs::REQ_POST:
+                case Abs::REQ_PATCH:
+                    $args[$type] = $request->request->all();
                     break;
 
                 case Abs::REQ_GET:
@@ -107,13 +121,21 @@ trait Request
                     $args[$type] = $request->query->all();
                     break;
 
-                case Abs::REQ_POST:
-                case Abs::REQ_PATCH:
-                    $args[$type] = $request->request->all();
+                case Abs::REQ_SYMFONY:
+                    $args[$type] = $request->attributes->get('_route_params');
+                    break;
+
+                case Abs::REQ_HEAD:
+                    $args[$type] = $header();
                     break;
 
                 case Abs::REQ_ALL:
-                    $args[$type] = array_merge($request->request->all(), $request->query->all(), $header());
+                    $args[$type] = array_merge(
+                        $request->request->all(),
+                        $request->query->all(),
+                        $request->attributes->get('_route_params'),
+                        $header()
+                    );
                     break;
 
                 default:

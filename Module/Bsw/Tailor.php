@@ -92,25 +92,23 @@ abstract class Tailor
     //
 
     /**
-     * @param array $filterAnnotationExtra
-     * @param array $filterAnnotation
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorFilterAnnotation(array $filterAnnotationExtra, array $filterAnnotation): array
+    public function tailorFilterAnnotation(Arguments $args): array
     {
-        return $filterAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param mixed $filterAnnotationExtra
-     * @param array $filterAnnotation
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function tailorFilterAnnotationOnly($filterAnnotationExtra, array $filterAnnotation)
+    public function tailorFilterAnnotationOnly(Arguments $args)
     {
-        return $filterAnnotationExtra;
+        return $args->target;
     }
 
     //
@@ -118,80 +116,73 @@ abstract class Tailor
     //
 
     /**
-     * @param array $query
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewQuery(array $query): array
+    public function tailorPreviewQuery(Arguments $args): array
     {
-        return $query;
+        return $args->target;
     }
 
     /**
-     * @param array $previewAnotationExtra
-     * @param array $previewAnnotation
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
+    public function tailorPreviewAnnotation(Arguments $args): array
     {
-        return $previewAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param mixed $previewAnnotationExtra
-     * @param array $previewAnnotation
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function tailorPreviewAnnotationOnly($previewAnnotationExtra, array $previewAnnotation)
+    public function tailorPreviewAnnotationOnly(Arguments $args)
     {
-        return $previewAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param array $original
-     * @param array $extraArgs
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewBeforeHook(array $original, array $extraArgs): array
+    public function tailorPreviewBeforeHook(Arguments $args): array
     {
-        return $original;
+        return $args->target;
     }
 
     /**
-     * @param array $hooked
-     * @param array $original
-     * @param array $extraArgs
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewAfterHook(array $hooked, array $original, array $extraArgs): array
+    public function tailorPreviewAfterHook(Arguments $args): array
     {
-        return $hooked;
+        return $args->target;
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $original
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewBeforeRender(array $current, array $hooked, array $original): array
+    public function tailorPreviewBeforeRender(Arguments $args): array
     {
-        return $current;
+        return $args->target;
     }
 
     /**
-     * @param Choice $choice
+     * @param Arguments $args
      *
      * @return Choice
      */
-    public function tailorPreviewChoice(Choice $choice): Choice
+    public function tailorPreviewChoice(Arguments $args): Choice
     {
-        return $choice;
+        return $args->target;
     }
 
     //
@@ -199,50 +190,42 @@ abstract class Tailor
     //
 
     /**
-     * @param array $persistAnnotationExtra
-     * @param array $persistAnnotation
-     * @param int   $id
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPersistenceAnnotation(array $persistAnnotationExtra, array $persistAnnotation, int $id): array
+    public function tailorPersistenceAnnotation(Arguments $args): array
     {
-        return $persistAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param mixed $persistAnnotationExtra
-     * @param array $persistAnnotation
-     * @param int   $id
+     * @param Arguments $args
      *
      * @return mixed
      */
-    public function tailorPersistenceAnnotationOnly($persistAnnotationExtra, array $persistAnnotation, int $id)
+    public function tailorPersistenceAnnotationOnly(Arguments $args)
     {
-        return $persistAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param array $submitItems
-     * @param int   $id
+     * @param Arguments $args
      *
      * @return Error|array
      */
-    public function tailorPersistenceAfterSubmit(array $submitItems, int $id)
+    public function tailorPersistenceAfterSubmit(Arguments $args)
     {
-        return $submitItems;
+        return $args->target;
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $original
-     * @param bool  $submit
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPersistenceBeforeRender(array $current, array $hooked, array $original, bool $submit): array
+    public function tailorPersistenceBeforeRender(Arguments $args): array
     {
-        return $current;
+        return $args->target;
     }
 }

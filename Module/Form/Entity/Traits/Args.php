@@ -38,4 +38,16 @@ trait Args
 
         return $this;
     }
+
+    /**
+     * @param array $args
+     *
+     * @return $this
+     */
+    public function appendArgs(array $args)
+    {
+        $this->args = array_merge($this->args, $args);
+
+        return $this;
+    }
 }

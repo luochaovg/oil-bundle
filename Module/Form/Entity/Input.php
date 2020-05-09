@@ -3,13 +3,17 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
+use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
+use Leon\BswBundle\Module\Form\Entity\Traits\Type;
 use Leon\BswBundle\Module\Form\Form;
 
 class Input extends Form
 {
     use Size;
+    use PreviewRoute;
     use AllowClear;
+    use Type;
 
     /**
      * @const string
@@ -40,35 +44,11 @@ class Input extends Form
     const TYPE_WEEK     = 'week';
 
     /**
-     * @var string
-     */
-    protected $type = self::TYPE_TEXT;
-
-    /**
      * Input constructor.
      */
     public function __construct()
     {
         $this->setAllowClear(false);
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return $this
-     */
-    public function setType(string $type)
-    {
-        $this->type = $type;
-
-        return $this;
+        $this->setType(self::TYPE_TEXT);
     }
 }

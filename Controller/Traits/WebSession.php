@@ -39,6 +39,8 @@ trait WebSession
     public function sessionArraySet(string $sessionKey, string $setKey, $setValue)
     {
         $origin = $this->session->get($sessionKey, []);
+        unset($origin[$setKey]);
+
         $origin[$setKey] = $setValue;
         $this->session->set($sessionKey, $origin);
 

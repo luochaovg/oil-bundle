@@ -5,12 +5,11 @@ namespace Leon\BswBundle\Module\Form\Entity;
 class Date extends Datetime
 {
     /**
-     * @var string
+     * Date constructor.
      */
-    protected $format = 'YYYY-MM-DD';
-
-    /**
-     * @var bool
-     */
-    protected $showTime = false;
+    public function __construct()
+    {
+        $this->setFormat('YYYY-MM-DD');
+        $this->setShowTime(false);
+    }
 }

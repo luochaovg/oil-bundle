@@ -220,6 +220,15 @@ Hour:                   '時'
 Minute:                 '分'
 Second:                 '秒'
 
+Every year:             '每年'
+Every quarter:          '每季度'
+Every month:            '每月'
+Every week:             '每周'
+Every day:              '每天'
+Every hour:             '每小時'
+Every minute:           '每分'
+Every second:           '每秒'
+
 Unavailable:            '不可用'
 Available:              '可用'
 

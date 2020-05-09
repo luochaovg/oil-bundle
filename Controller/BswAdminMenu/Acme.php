@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswAdminMenu;
 
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminMenu;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Annotation\Entity\Input as I;
@@ -18,15 +19,16 @@ class Acme extends BswBackendController
     use Persistence;
 
     /**
-     * @param array $enum
+     * @param Arguments $args
+     *
      * @return array
      * @throws
      */
-    public function acmeEnumExtraMenuId(array $enum): array
+    public function acmeEnumExtraMenuId(Arguments $args): array
     {
         $filter = [
             'where' => [$this->expr->eq('kvp.menuId', ':parent')],
-            'args' => ['parent' => [0]],
+            'args'  => ['parent' => [0]],
         ];
 
         $menu = $this->repo(BswAdminMenu::class)->kvp(['value'], Abs::PK, null, $filter);

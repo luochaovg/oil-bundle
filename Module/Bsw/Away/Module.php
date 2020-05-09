@@ -104,12 +104,13 @@ class Module extends Bsw
                  * Before away
                  */
 
+                $arguments = $this->arguments(['id' => $this->input->id], $this->input->args);
                 $effect[Abs::TAG_TRANS_BEFORE] = $result = $this->caller(
                     $this->method,
                     self::BEFORE_AWAY,
                     [Message::class, Error::class, true],
                     null,
-                    [$this->input->id, $this->input->args]
+                    $arguments
                 );
 
                 if ($result instanceof Error) {
@@ -155,7 +156,7 @@ class Module extends Bsw
                     self::AFTER_AWAY,
                     [Message::class, Error::class, true],
                     null,
-                    [$this->input->id, $this->input->args]
+                    $arguments
                 );
 
                 if ($result instanceof Error) {

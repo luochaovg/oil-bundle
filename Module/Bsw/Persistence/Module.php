@@ -155,15 +155,11 @@ class Module extends Bsw
         $fn = self::ANNOTATION_ONLY;
         $id = $this->input->id;
 
-        $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, [$id]);
-        $persistAnnotationExtra = $this->tailor(
-            $this->methodTailor,
-            $fn,
-            null,
-            $persistAnnotationExtra,
-            $persistAnnotation,
-            $id
-        );
+        $arguments = $this->arguments(compact('id'));
+        $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, $arguments);
+
+        $arguments = $this->arguments(['target' => $persistAnnotationExtra], compact('persistAnnotation', 'id'));
+        $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, null, $arguments);
 
         /**
          * extra annotation handler
@@ -181,15 +177,12 @@ class Module extends Bsw
              */
 
             $fn = self::ANNOTATION;
-            $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], [$id]);
-            $persistAnnotationExtra = $this->tailor(
-                $this->methodTailor,
-                $fn,
-                Abs::T_ARRAY,
-                $persistAnnotationExtra,
-                $persistAnnotation,
-                $id
-            );
+
+            $arguments = $this->arguments(compact('id'));
+            $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
+
+            $arguments = $this->arguments(['target' => $persistAnnotationExtra], compact('persistAnnotation', 'id'));
+            $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
 
         /**
@@ -267,23 +260,24 @@ class Module extends Bsw
         if ($this->input->submit) {
 
             $record = new $this->entity;
-            $submit = $this->input->submit;
+            [$submit, $extraSubmit] = $this->resolveSubmit($this->input->submit);
 
             $recordBefore = $this->web->sessionGet($key) ?? [];
             $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
             try {
 
-                $args = [$submit, [], $recordDiff, $recordBefore];
-                $argsItem = array_merge($args, [$this->input->id]);
-                $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $argsItem);
+                $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
+                $arguments = $this->arguments($args, ['id' => $this->input->id]);
+                $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $arguments);
+                $result = array_values($result);
 
                 if ($result instanceof Error) {
                     return $this->showError($result->tiny());
                 } elseif ($result instanceof Message) {
                     return $this->showMessage($result);
                 } else {
-                    [$submit, $extraSubmit] = $result;
+                    [$submit, $extraSubmit] = array_values($result);
                 }
 
             } catch (Exception $e) {
@@ -295,15 +289,16 @@ class Module extends Bsw
 
             try {
 
-                $args = [$submit, $extraSubmit, $recordDiff, $recordBefore];
-                $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $args, $this->input->id);
+                $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
+                $arguments = $this->arguments(['target' => $args, 'id' => $this->input->id]);
+                $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $arguments);
 
                 if ($result instanceof Error) {
                     return $this->showError($result->tiny());
                 } elseif ($result instanceof Message) {
                     return $this->showMessage($result);
                 } else {
-                    [$submit, $extraSubmit] = $result;
+                    [$submit, $extraSubmit] = array_values($result);
                 }
 
             } catch (Exception $e) {
@@ -314,11 +309,10 @@ class Module extends Bsw
             }
 
             if (!is_array($extraSubmit)) {
-                throw new ModuleException('After submit handler should be return array');
+                throw new ModuleException('After submit handler extra should be return array');
             }
 
-            $this->input->submit = array_merge($submit, $extraSubmit);
-            $record->attributes($this->input->submit, true);
+            $record->attributes($submit, true);
             $record = Helper::entityToArray($record);
 
             return [$record, $extraSubmit, $recordBefore, $recordDiff];
@@ -475,10 +469,13 @@ class Module extends Bsw
          * before render (all record)
          */
 
-        $args = [$hooked, $original, $persistence, $this->input->id];
+        $args = array_merge(compact('hooked', 'original', 'persistence'), ['id' => $this->input->id]);
 
-        $record = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $args);
-        $record = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $record, ...$args);
+        $arguments = $this->arguments($args);
+        $record = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $arguments);
+
+        $arguments = $this->arguments(['target' => $record], $args);
+        $record = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $arguments);
 
         $_record = [];
         $format = [];
@@ -557,8 +554,12 @@ class Module extends Bsw
             $this->formDefaultConfigure($form, $field, $item, $output);
 
             $tipsAuto = $titleAuto = null;
-            if (get_class($form) == Select::class && $form->getMode() == Select::MODE_MULTIPLE && !$this->input->id) {
-                $tipsAuto = $this->input->translator->trans('For multiple newly', [], 'twig');
+            if (get_class($form) == Select::class && $form->getMode() == Select::MODE_MULTIPLE) {
+                if (!$this->input->id || $form->isValueMultiple()) {
+                    $tipsAuto = $this->input->translator->trans('For multiple newly', [], 'twig');
+                } else {
+                    $form->setMode(Select::MODE_DEFAULT);
+                }
             }
 
             if (in_array(JsonStringify::class, $item['hook'])) {
@@ -586,8 +587,8 @@ class Module extends Bsw
         $submit = new Button('Submit', $this->input->route, 'a:coffee');
         $submit->setAttributes(['bsw-method' => 'submit']);
 
-        $args = [$record, $hooked, $original, $this->input->id, $submit];
-        $operates = $this->caller($this->method, self::FORM_OPERATE, Abs::T_ARRAY, [], $args);
+        $arguments = $this->arguments(compact('submit', 'record', 'hooked', 'original'), ['id' => $this->input->id]);
+        $operates = $this->caller($this->method, self::FORM_OPERATE, Abs::T_ARRAY, [], $arguments);
         $operates = array_merge(['submit' => $submit], $operates);
         $operates = array_filter($operates);
 
@@ -612,6 +613,29 @@ class Module extends Bsw
         }
 
         return [$_record, $operates, $format, $original];
+    }
+
+    /**
+     * Resolve submit
+     *
+     * @param array $submit
+     *
+     * @return array
+     */
+    protected function resolveSubmit(array $submit): array
+    {
+        $extraSubmit = [];
+        $document = $this->entityDocument();
+        foreach ($submit as $field => $value) {
+            $_field = Helper::camelToUnder($field);
+            if (!isset($document[$_field])) {
+                $extraSubmit[$field] = $value;
+                unset($submit[$field]);
+                continue;
+            }
+        }
+
+        return [$submit, $extraSubmit];
     }
 
     /**
@@ -663,9 +687,18 @@ class Module extends Bsw
 
         foreach ($extraSubmit as $field => $value) {
 
+            $_field = Helper::camelToUnder($field);
+
             // Field don't exists
             if (!isset($_persistAnnotation[$field])) {
                 unset($extraSubmit[$field]);
+                continue;
+            }
+
+            // Not field in entity
+            if (!isset($document[$_field])) {
+                unset($extraSubmit[$field]);
+                continue;
             }
         }
 
@@ -762,12 +795,16 @@ class Module extends Bsw
                  * Before persistence
                  */
 
+                $arguments = $this->arguments(
+                    compact('newly', 'record', 'original', 'extraSubmit', 'recordBefore', 'recordDiff')
+                );
+
                 $before = $this->caller(
                     $this->method,
                     self::BEFORE_PERSISTENCE,
                     [Message::class, Error::class, true],
                     null,
-                    [$newly, $record, $original]
+                    $arguments
                 );
 
                 if ($before instanceof Error) {
@@ -790,7 +827,11 @@ class Module extends Bsw
                          * @var Form $type
                          */
                         $type = $item['type'];
-                        if (get_class($type) == Select::class && $type->getMode() == Select::MODE_MULTIPLE) {
+                        if (
+                            get_class($type) == Select::class &&
+                            $type->getMode() == Select::MODE_MULTIPLE &&
+                            isset($record[$field])
+                        ) {
                             $multiple = $field;
                             break;
                         }
@@ -827,18 +868,23 @@ class Module extends Bsw
                 }
 
                 $recordDiff['__effect'] = $result;
+                $record['__extra'] = $extraSubmit;
                 $this->web->databaseOperationLogger($this->entity, $loggerType, $recordBefore, $record, $recordDiff);
 
                 /**
                  * After persistence
                  */
 
+                $arguments = $this->arguments(
+                    compact('newly', 'record', 'original', 'extraSubmit', 'recordBefore', 'recordDiff', 'result')
+                );
+
                 $after = $this->caller(
                     $this->method,
                     self::AFTER_PERSISTENCE,
                     [Message::class, Error::class, true],
                     null,
-                    [$newly, $record, $original, $result]
+                    $arguments
                 );
 
                 if ($after instanceof Error) {
@@ -905,25 +951,24 @@ class Module extends Bsw
                     $recordBefore,
                     $recordDiff
                 );
-            } else {
-
-                if (empty($this->input->handler) || !is_callable($this->input->handler)) {
-                    throw new Exception(
-                        "Persistence handler should be configured and callable when entity not configured"
-                    );
-                }
-
-                $message = call_user_func_array(
-                    $this->input->handler,
-                    [$this->input->submit, $_persistAnnotation, $extraSubmit]
-                );
-
-                if ($message instanceof Error) {
-                    return $this->showError($message->tiny());
-                }
-
-                return $this->showMessage($message);
             }
+
+            if (empty($this->input->handler) || !is_callable($this->input->handler)) {
+                throw new Exception(
+                    "Persistence handler should be configured and callable when entity not configured"
+                );
+            }
+
+            $message = call_user_func_array(
+                $this->input->handler,
+                [$this->input->submit, $_persistAnnotation]
+            );
+
+            if ($message instanceof Error) {
+                return $this->showError($message->tiny());
+            }
+
+            return $this->showMessage($message);
         }
 
         /**
@@ -966,7 +1011,7 @@ class Module extends Bsw
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,
-            [$output]
+            $this->arguments(compact('output'))
         );
 
         return $output;

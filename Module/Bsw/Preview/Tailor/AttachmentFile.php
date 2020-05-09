@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw\Preview\Tailor;
 
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Tailor;
 use Leon\BswBundle\Module\Entity\Abs;
 
@@ -24,34 +25,31 @@ class AttachmentFile extends Tailor
     }
 
     /**
-     * @param array $previewAnnotationExtra
-     * @param array $previewAnnotation
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
+    public function tailorPreviewAnnotation(Arguments $args): array
     {
-        $sort = $previewAnnotation[$this->fieldCamel]['sort'] + .01;
-        $previewAnnotationExtra[$this->label] = [
+        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $args->target[$this->label] = [
             'label'  => 'Url',
             'render' => Abs::RENDER_LINK,
             'sort'   => $sort,
             'width'  => 400,
         ];
 
-        return $previewAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $original
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewBeforeRender(array $current, array $hooked, array $original): array
+    public function tailorPreviewBeforeRender(Arguments $args): array
     {
-        foreach ($current as &$item) {
+        foreach ($args->target as &$item) {
 
             $item = $this->web->attachmentPreviewHandler(
                 $item,
@@ -69,6 +67,6 @@ class AttachmentFile extends Tailor
             }
         }
 
-        return $current;
+        return $args->target;
     }
 }

@@ -3,12 +3,19 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\Enum;
+use Leon\BswBundle\Module\Form\Entity\Traits\LabelInValue;
+use Leon\BswBundle\Module\Form\Entity\Traits\Mode;
+use Leon\BswBundle\Module\Form\Entity\Traits\NotFoundContent;
+use Leon\BswBundle\Module\Form\Entity\Traits\OptionFilterProp;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
+use Leon\BswBundle\Module\Form\Entity\Traits\ShowArrow;
+use Leon\BswBundle\Module\Form\Entity\Traits\ShowSearch;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
+use Leon\BswBundle\Module\Form\Entity\Traits\SwitchFieldShape;
+use Leon\BswBundle\Module\Form\Entity\Traits\TokenSeparators;
 use Leon\BswBundle\Module\Form\Form;
 
 class Select extends Form
@@ -18,6 +25,14 @@ class Select extends Form
     use PreviewRoute;
     use AllowClear;
     use ButtonLabel;
+    use NotFoundContent;
+    use LabelInValue;
+    use Mode;
+    use ShowSearch;
+    use ShowArrow;
+    use OptionFilterProp;
+    use TokenSeparators;
+    use SwitchFieldShape;
 
     /**
      * @const string
@@ -31,211 +46,21 @@ class Select extends Form
     const SEARCH_LABEL = 'children';
 
     /**
-     * @var bool
-     */
-    protected $labelInValue = false;
-
-    /**
-     * @var string
-     */
-    protected $mode = self::MODE_DEFAULT;
-
-    /**
-     * @var string
-     */
-    protected $notFoundContent = Abs::NIL;
-
-    /**
-     * @var bool
-     */
-    protected $showSearch = true;
-
-    /**
-     * @var bool
-     */
-    protected $showArrow = true;
-
-    /**
-     * @var string
-     */
-    protected $optionFilterProp = self::SEARCH_LABEL;
-
-    /**
-     * @var array
-     */
-    protected $tokenSeparators = [';', '；'];
-
-    /**
-     * @var array
-     */
-    protected $switchFieldShape = [];
-
-    /**
-     * Input constructor.
+     * Select constructor.
      */
     public function __construct()
     {
         $this->setButtonLabel('Popup for select');
+        $this->setMode(self::MODE_DEFAULT);
+        $this->setOptionFilterProp(self::SEARCH_LABEL);
     }
 
     /**
      * @return bool
      */
-    public function isLabelInValue(): bool
+    public function isValueMultiple(): bool
     {
-        return $this->labelInValue;
-    }
-
-    /**
-     * @param bool $labelInValue
-     *
-     * @return $this
-     */
-    public function setLabelInValue(bool $labelInValue = true)
-    {
-        $this->labelInValue = $labelInValue;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMode(): string
-    {
-        return $this->mode;
-    }
-
-    /**
-     * @param string $mode
-     *
-     * @return $this
-     */
-    public function setMode(string $mode)
-    {
-        $this->mode = $mode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNotFoundContent(): string
-    {
-        return $this->notFoundContent;
-    }
-
-    /**
-     * @param string $notFoundContent
-     *
-     * @return $this
-     */
-    public function setNotFoundContent(string $notFoundContent)
-    {
-        $this->notFoundContent = $notFoundContent;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isShowSearch(): bool
-    {
-        return $this->showSearch;
-    }
-
-    /**
-     * @param bool $showSearch
-     *
-     * @return $this
-     */
-    public function setShowSearch(bool $showSearch = true)
-    {
-        $this->showSearch = $showSearch;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isShowArrow(): bool
-    {
-        return $this->showArrow;
-    }
-
-    /**
-     * @param bool $showArrow
-     *
-     * @return $this
-     */
-    public function setShowArrow(bool $showArrow = true)
-    {
-        $this->showArrow = $showArrow;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOptionFilterProp(): string
-    {
-        return $this->optionFilterProp;
-    }
-
-    /**
-     * @param string $optionFilterProp
-     *
-     * @return $this
-     */
-    public function setOptionFilterProp(string $optionFilterProp)
-    {
-        $this->optionFilterProp = $optionFilterProp;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTokenSeparators(): string
-    {
-        return Helper::jsonStringify($this->tokenSeparators);
-    }
-
-    /**
-     * @param array $tokenSeparators
-     *
-     * @return $this
-     */
-    public function setTokenSeparators(array $tokenSeparators)
-    {
-        $this->tokenSeparators = $tokenSeparators;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSwitchFieldShape(): array
-    {
-        return $this->switchFieldShape;
-    }
-
-    /**
-     * @param array $switchFieldShape
-     *
-     * @return $this
-     */
-    public function setSwitchFieldShape(array $switchFieldShape)
-    {
-        $this->switchFieldShape = $switchFieldShape;
-
-        return $this;
+        return is_array($this->value) || is_object($this->value);
     }
 
     /**
@@ -243,6 +68,14 @@ class Select extends Form
      */
     public function getValue()
     {
-        return $this->getSwitchFieldShape() ? null : $this->value;
+        if ($this->getSwitchFieldShape()) {
+            return null;
+        }
+
+        if (is_array($this->value)) {
+            return Helper::jsonStringify(array_map('strval', $this->value));
+        }
+
+        return $this->value;
     }
 }

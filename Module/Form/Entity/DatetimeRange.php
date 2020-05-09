@@ -2,30 +2,16 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Traits\Separator;
+use Leon\BswBundle\Module\Form\Entity\Traits\TimeBoundary;
+use Leon\BswBundle\Module\Form\Entity\Traits\TimeFormat;
 
 class DatetimeRange extends Datetime
 {
-    /**
-     * @var string
-     */
-    protected $timeFormat = 'HH:mm:ss';
-
-    /**
-     * @var string
-     */
-    protected $timeHead = Abs::DAY_BEGIN;
-
-    /**
-     * @var string
-     */
-    protected $timeTail = Abs::DAY_END;
-
-    /**
-     * @var string
-     */
-    protected $separator = '~';
+    use TimeFormat;
+    use TimeBoundary;
+    use Separator;
 
     /**
      * @return string
@@ -49,85 +35,5 @@ class DatetimeRange extends Datetime
         }
 
         return [null, null];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimeFormat(): string
-    {
-        return $this->timeFormat;
-    }
-
-    /**
-     * @param string $timeFormat
-     *
-     * @return $this
-     */
-    public function setTimeFormat(string $timeFormat)
-    {
-        $this->timeFormat = $timeFormat;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimeHead(): string
-    {
-        return $this->timeHead;
-    }
-
-    /**
-     * @param string $timeHead
-     *
-     * @return $this
-     */
-    public function setTimeHead(string $timeHead)
-    {
-        $this->timeHead = $timeHead;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimeTail(): string
-    {
-        return $this->timeTail;
-    }
-
-    /**
-     * @param string $timeTail
-     *
-     * @return $this
-     */
-    public function setTimeTail(string $timeTail)
-    {
-        $this->timeTail = $timeTail;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSeparator(): string
-    {
-        return $this->separator;
-    }
-
-    /**
-     * @param string $separator
-     *
-     * @return $this
-     */
-    public function setSeparator(string $separator)
-    {
-        $this->separator = $separator;
-
-        return $this;
     }
 }

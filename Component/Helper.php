@@ -308,7 +308,7 @@ class Helper
         $_target = [];
         foreach ($target as $key => $item) {
             $_key = $keyKey ? ($item[$keyKey] ?? $key) : $key;
-            if (is_string($valueKeys)) {
+            if (is_string($valueKeys) || is_numeric($valueKeys)) {
                 $_target[$_key] = $item[$valueKeys] ?? null;
             } elseif (is_array($valueKeys)) {
                 $_target[$_key] = self::arrayPull($item, $valueKeys);
@@ -850,7 +850,7 @@ class Helper
     public static function formatPrintJson(
         $json,
         int $tabBySpace = 2,
-        string $split = null,
+        string $split = ':',
         string $prefix = null
     ): string {
 
@@ -3749,13 +3749,44 @@ class Helper
      */
     public static function humanTimes(int $times): string
     {
-        if ($times < 10000) {
-            return (string)$times;
-        } elseif ($times < 100000) {
-            return self::numberFormat($times / 1000, 1, ',') . 'k';
+        $map = [
+            'w' => 100000,
+            'k' => 10000,
+        ];
+
+        foreach ($map as $unit => $size) {
+            if ($times >= $size) {
+                return self::numberFormat($times / ($size / 10), 1, ',') . $unit;
+            }
         }
 
-        return self::numberFormat($times / 10000, 1, ',') . 'w';
+        return self::numberFormat($times, 1, ',');
+    }
+
+    /**
+     * Human duration
+     *
+     * @param int $duration
+     *
+     * @return string
+     */
+    public static function humanDuration(int $duration): string
+    {
+        $map = [
+            'y' => [Abs::TIME_YEAR * 3, Abs::TIME_YEAR],
+            'm' => [Abs::TIME_MONTH * 3, Abs::TIME_MONTH],
+            'd' => [Abs::TIME_DAY * 3, Abs::TIME_DAY],
+        ];
+
+        $duration *= Abs::TIME_HOUR;
+        foreach ($map as $unit => $item) {
+            [$size, $redouble] = $item;
+            if ($duration >= $size) {
+                return self::numberFormat($duration / $redouble, 1, ',') . $unit;
+            }
+        }
+
+        return self::numberFormat($duration / Abs::TIME_HOUR, 1, ',') . 'h';
     }
 
     /**
@@ -3771,19 +3802,17 @@ class Helper
         $byte = abs($byte);
 
         $map = [
+            'PB' => 5,
             'TB' => 4,
             'GB' => 3,
             'MB' => 2,
             'KB' => 1,
-            'B'  => 0,
         ];
 
         foreach ($map as $unit => $power) {
             $size = 1024 ** $power;
             if ($byte >= $size) {
-                $byte = self::numberFormat($byte / $size, 1, ',');
-
-                return "{$signed}{$byte}{$unit}";
+                return $signed . self::numberFormat($byte / $size, 1, ',') . $unit;
             }
         }
 
@@ -4203,6 +4232,10 @@ class Helper
      */
     public static function numberFormat($number, int $decimals = 2, string $thousandsSep = '')
     {
+        if (self::isIntNumeric($number)) {
+            $decimals = 0;
+        }
+
         $number = number_format($number, $decimals, '.', $thousandsSep);
         $number = $thousandsSep ? $number : floatval($number);
 
