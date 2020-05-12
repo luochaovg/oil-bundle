@@ -32,9 +32,8 @@ class BswExportPreviewCommand extends ExportCsvCommand
         return array_merge(
             parent::args(),
             [
-                'route'    => [null, InputOption::VALUE_REQUIRED, 'The route for export'],
-                'filter'   => [null, InputOption::VALUE_REQUIRED, 'Filter query'],
-                'receiver' => [null, InputOption::VALUE_OPTIONAL, 'Receiver telegram id, split by comma'],
+                'route'  => [null, InputOption::VALUE_REQUIRED, 'The route for export'],
+                'filter' => [null, InputOption::VALUE_REQUIRED, 'Filter query'],
             ]
         );
     }

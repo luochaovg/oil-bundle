@@ -113,8 +113,9 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
         }
 
         $this->csvWriter($record);
+        $total = count($record);
 
-        return count($record);
+        return $this->page == 1 ? $total - 1 : $total;
     }
 
     /**

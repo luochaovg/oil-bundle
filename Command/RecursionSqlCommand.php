@@ -91,9 +91,10 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     public function args(): array
     {
         return [
-            'limit' => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', $this->limit],
-            'force' => [null, InputOption::VALUE_OPTIONAL, 'Force command', 'no'],
-            'args'  => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
+            'limit'    => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', $this->limit],
+            'force'    => [null, InputOption::VALUE_OPTIONAL, 'Force command', 'no'],
+            'args'     => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
+            'receiver' => [null, InputOption::VALUE_OPTIONAL, 'Receiver telegram id, split by comma'],
         ];
     }
 
