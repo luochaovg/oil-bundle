@@ -21,24 +21,6 @@ use Leon\BswBundle\Repository\FoundationRepository;
 /**
  * @property Input                $input
  * @property BswBackendController $web
- *
- * @license variables
- *
- * 1.模板自动变量
- *
- * {uuid}           = 字段唯一标记
- * {:value}         = 字符串 "value"
- * {value}          = 字符串 "{{ value }}"
- * {Abs::TPL_XXX}   = "Abs:TPL_XXX" 常量对应的值 ("TPL_"开头的常量)
- * {Abs::SLOT_XXX}  = "Abs:SLOT_XXX" 常量对应的值 ("SLOT_"开头的常量)
- *
- * 2.可能被修改的变量
- *
- * tpl                  = 子模板
- * dress                = dress 对应的字符串/JSON字符串
- * enum                 = enum 对应的JSON字符串
- * value                = value
- * Abs::SLOT_NOT_BLANK  = 空模板
  */
 class Module extends Bsw
 {
@@ -787,8 +769,10 @@ class Module extends Bsw
 
                 $fieldAnnotation = $previewAnnotation[$field] ?? [];
                 $arguments = $this->arguments(
-                    compact('value', 'item', 'hooked', 'original', 'fieldAnnotation'),
+                    compact('value', 'item', 'fieldAnnotation'),
                     [
+                        'hooked'        => $hooked[$key],
+                        'original'      => $original[$key],
                         'valueHooked'   => $hooked[$key][$field],
                         'valueOriginal' => $original[$key][$field],
                     ]
@@ -796,7 +780,9 @@ class Module extends Bsw
                 $_value = $this->caller($this->method, $charm, null, null, $arguments);
 
                 if (is_object($_value) && $_value instanceof Charm) {
-                    $value = $this->parseSlot($_value->getCharm(), '', ['value' => $_value->getValue()]);
+                    $var = $_value->getVar();
+                    $var = array_merge($var, ['value' => $_value->getValue()]);
+                    $value = $this->parseSlot($_value->getCharm(), '', $var);
                 } elseif (is_scalar($_value)) {
                     $value = $_value;
                 } else {

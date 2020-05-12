@@ -38,7 +38,7 @@ class Timestamp extends Hook
     public function persistence($value, array $args, array $extraArgs = [])
     {
         if (!empty($value)) {
-            $value = strtotime($value);
+            return strtotime($value);
         }
 
         return $value ?: time();

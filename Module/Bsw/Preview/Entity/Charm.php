@@ -20,6 +20,11 @@ class Charm
     private $html = false;
 
     /**
+     * @var array
+     */
+    private $var = [];
+
+    /**
      * Charm constructor.
      *
      * @param string $charm
@@ -89,6 +94,26 @@ class Charm
     public function setHtml(bool $html)
     {
         $this->html = $html;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVar(): array
+    {
+        return $this->var;
+    }
+
+    /**
+     * @param array $var
+     *
+     * @return $this
+     */
+    public function setVar(array $var)
+    {
+        $this->var = $var;
 
         return $this;
     }

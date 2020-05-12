@@ -21,6 +21,10 @@ class ByteMB extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         return Helper::numberFormat($value / static::REDOUBLE, 2);
     }
 

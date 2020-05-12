@@ -586,76 +586,76 @@ class Abs
     const HTML_CODE_FULL = "<div class='bsw-code full bsw-long-text'>{value}</div>";
 
     // html 粉色模板
-    const HTML_PINK = "<div class='ant-tag ant-tag-has-color' style='background-color: #eb2f96;'>{value}</div>";
+    const HTML_PINK = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #eb2f96;'>{value}</div>";
 
     // html 红色模板
-    const HTML_RED = "<div class='ant-tag ant-tag-has-color' style='background-color: #f5222d;'>{value}</div>";
+    const HTML_RED = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #f5222d;'>{value}</div>";
 
     // html 橙色模板
-    const HTML_ORANGE = "<div class='ant-tag ant-tag-has-color' style='background-color: #fa8c16;'>{value}</div>";
+    const HTML_ORANGE = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #fa8c16;'>{value}</div>";
 
     // html 绿色模板
-    const HTML_GREEN = "<div class='ant-tag ant-tag-has-color' style='background-color: #52c41a;'>{value}</div>";
+    const HTML_GREEN = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #52c41a;'>{value}</div>";
 
     // html 青色模板
-    const HTML_CYAN = "<div class='ant-tag ant-tag-has-color' style='background-color: #13c2c2;'>{value}</div>";
+    const HTML_CYAN = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #13c2c2;'>{value}</div>";
 
     // html 蓝色模板
-    const HTML_BLUE = "<div class='ant-tag ant-tag-has-color' style='background-color: #1890ff;'>{value}</div>";
+    const HTML_BLUE = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #1890ff;'>{value}</div>";
 
     // html 紫色模板
-    const HTML_PURPLE = "<div class='ant-tag ant-tag-has-color' style='background-color: #722ed1;'>{value}</div>";
+    const HTML_PURPLE = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #722ed1;'>{value}</div>";
 
     // html 灰色模板
-    const HTML_GRAY = "<div class='ant-tag ant-tag-has-color' style='background-color: #d6d6d6;'>{value}</div>";
+    const HTML_GRAY = "<div class='ant-tag ant-tag-has-color' title='{title}' style='background-color: #d6d6d6;'>{value}</div>";
 
     // html 粉色模板
-    const HTML_PINK_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #eb2f96;'>{value}</div>";
+    const HTML_PINK_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #eb2f96;'>{value}</div>";
 
     // html 红色模板
-    const HTML_RED_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #f5222d;'>{value}</div>";
+    const HTML_RED_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #f5222d;'>{value}</div>";
 
     // html 橙色模板
-    const HTML_ORANGE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #fa8c16;'>{value}</div>";
+    const HTML_ORANGE_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #fa8c16;'>{value}</div>";
 
     // html 绿色模板
-    const HTML_GREEN_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #52c41a;'>{value}</div>";
+    const HTML_GREEN_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #52c41a;'>{value}</div>";
 
     // html 青色模板
-    const HTML_CYAN_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #13c2c2;'>{value}</div>";
+    const HTML_CYAN_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #13c2c2;'>{value}</div>";
 
     // html 蓝色模板
-    const HTML_BLUE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #1890ff;'>{value}</div>";
+    const HTML_BLUE_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #1890ff;'>{value}</div>";
 
     // html 紫色模板
-    const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #722ed1;'>{value}</div>";
+    const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #722ed1;'>{value}</div>";
 
     // html 灰色模板
-    const HTML_GRAY_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #d6d6d6;'>{value}</div>";
+    const HTML_GRAY_TEXT = "<div class='ant-tag ant-tag-has-color' title='{title}' style='color: #d6d6d6;'>{value}</div>";
 
     // html 粉色模板
-    const TEXT_PINK = "<div style='color: #eb2f96;'>{value}</div>";
+    const TEXT_PINK = "<div title='{title}' style='color: #eb2f96;'>{value}</div>";
 
     // html 红色模板
-    const TEXT_RED = "<div style='color: #f5222d;'>{value}</div>";
+    const TEXT_RED = "<div title='{title}' style='color: #f5222d;'>{value}</div>";
 
     // html 橙色模板
-    const TEXT_ORANGE = "<div style='color: #fa8c16;'>{value}</div>";
+    const TEXT_ORANGE = "<div title='{title}' style='color: #fa8c16;'>{value}</div>";
 
     // html 绿色模板
-    const TEXT_GREEN = "<div style='color: #52c41a;'>{value}</div>";
+    const TEXT_GREEN = "<div title='{title}' style='color: #52c41a;'>{value}</div>";
 
     // html 青色模板
-    const TEXT_CYAN = "<div style='color: #13c2c2;'>{value}</div>";
+    const TEXT_CYAN = "<div title='{title}' style='color: #13c2c2;'>{value}</div>";
 
     // html 蓝色模板
-    const TEXT_BLUE = "<div style='color: #1890ff;'>{value}</div>";
+    const TEXT_BLUE = "<div title='{title}' style='color: #1890ff;'>{value}</div>";
 
     // html 紫色模板
-    const TEXT_PURPLE = "<div style='color: #722ed1;'>{value}</div>";
+    const TEXT_PURPLE = "<div title='{title}' style='color: #722ed1;'>{value}</div>";
 
     // html 灰色模板
-    const TEXT_GRAY = "<div style='color: #d6d6d6;'>{value}</div>";
+    const TEXT_GRAY = "<div title='{title}' style='color: #d6d6d6;'>{value}</div>";
 
     // 危险权限
     const DANGER_ACCESS = 'Dangerous permission, please be careful';

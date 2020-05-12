@@ -323,9 +323,20 @@ abstract class Bsw
 
         if (!isset($constants)) {
             $_constants = (new ReflectionClass(Abs::class))->getConstants();
+            $beginWith = [
+                'NIL',
+                'DIRTY',
+                'NOT_SET',
+                'NOT_FILE',
+                'SECRET',
+                'TPL_',
+                'SLOT_',
+            ];
             foreach ($_constants as $key => $value) {
-                if (strpos($key, 'TPL_') === 0 || strpos($key, 'SLOT_') === 0) {
-                    $constants["Abs::{$key}"] = $value;
+                foreach ($beginWith as $target) {
+                    if (strpos($key, $target) === 0) {
+                        $constants["Abs::{$key}"] = $value;
+                    }
                 }
             }
         }
@@ -337,16 +348,10 @@ abstract class Bsw
         $variables = array_merge(
             $constants,
             [
-                'slot'          => "__{$field}",
-                'slot-scope'    => Abs::SLOT_VARIABLES,
-                'uuid'          => "__{$field}",
-                ':value'        => 'value',
-                'value'         => '{{ value }}',
-                'Abs::NIL'      => Abs::NIL,
-                'Abs::DIRTY'    => Abs::DIRTY,
-                'Abs::NOT_SET'  => Abs::NOT_SET,
-                'Abs::NOT_FILE' => Abs::NOT_FILE,
-                'Abs::SECRET'   => Abs::SECRET,
+                'uuid'   => "__{$field}",
+                ':value' => 'value',
+                'value'  => '{{ value }}',
+                'title'  => $var['title'] ?? null,
             ],
             $var
         );

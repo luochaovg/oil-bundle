@@ -19,6 +19,11 @@ abstract class Hook
     private $object = true;
 
     /**
+     * @var string
+     */
+    protected $field;
+
+    /**
      * For preview
      *
      * @param mixed $value
@@ -60,21 +65,22 @@ abstract class Hook
 
         $this->object = is_object($item);
         $this->item = (object)$item;
+        $this->field = $key;
 
-        if (!property_exists($this->item, $key)) {
+        if (!property_exists($this->item, $this->field)) {
             return $item;
         }
 
-        $value = $this->item->{$key};
+        $value = $this->item->{$this->field};
         $fn = $persistence ? 'persistence' : 'preview';
 
         // keep origin value
         if ($suffix = Helper::dig($extraArgs, Abs::HOOKER_FLAG_ENUMS_SUFFIX)) {
-            $key = "{$key}{$suffix}";
+            $this->field = "{$this->field}{$suffix}";
         }
 
         // to hook
-        $this->item->{$key} = $this->{$fn}($value, $args, $extraArgs);
+        $this->item->{$this->field} = $this->{$fn}($value, $args, $extraArgs);
 
         return $this->object ? $this->item : (array)$this->item;
     }

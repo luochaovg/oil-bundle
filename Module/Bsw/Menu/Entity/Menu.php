@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw\Menu\Entity;
 
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Exception\ModuleException;
-use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 
 class Menu
 {

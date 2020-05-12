@@ -153,12 +153,14 @@ class Module extends Bsw
          */
 
         $fn = self::ANNOTATION_ONLY;
-        $id = $this->input->id;
 
-        $arguments = $this->arguments(compact('id'));
+        $arguments = $this->arguments(['id' => $this->input->id]);
         $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, $arguments);
 
-        $arguments = $this->arguments(['target' => $persistAnnotationExtra], compact('persistAnnotation', 'id'));
+        $arguments = $this->arguments(
+            ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
+            compact('persistAnnotation')
+        );
         $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, null, $arguments);
 
         /**
@@ -178,10 +180,13 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $arguments = $this->arguments(compact('id'));
+            $arguments = $this->arguments(['id' => $this->input->id]);
             $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
 
-            $arguments = $this->arguments(['target' => $persistAnnotationExtra], compact('persistAnnotation', 'id'));
+            $arguments = $this->arguments(
+                ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
+                compact('persistAnnotation')
+            );
             $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
 
@@ -265,47 +270,44 @@ class Module extends Bsw
             $recordBefore = $this->web->sessionGet($key) ?? [];
             $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
-            try {
 
-                $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
-                $arguments = $this->arguments($args, ['id' => $this->input->id]);
-                $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $arguments);
-                $result = array_values($result);
+            $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
+            $arguments = $this->arguments($args, ['id' => $this->input->id]);
+            $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $arguments);
+            $result = array_values($result);
 
-                if ($result instanceof Error) {
-                    return $this->showError($result->tiny());
-                } elseif ($result instanceof Message) {
-                    return $this->showMessage($result);
-                } else {
+            if ($result instanceof Error) {
+                return $this->showError($result->tiny());
+            } elseif ($result instanceof Message) {
+                return $this->showMessage($result);
+            } else {
+                try {
                     [$submit, $extraSubmit] = array_values($result);
+                } catch (Exception $e) {
+                    $fn = $this->method . self::AFTER_SUBMIT;
+                    throw new ModuleException(
+                        "Method return illegal in {$this->class}::{$fn}():array, must return array with index 0 and 1"
+                    );
                 }
-
-            } catch (Exception $e) {
-                $fn = $this->method . self::AFTER_SUBMIT;
-                throw new ModuleException(
-                    "Method return illegal in {$this->class}::{$fn}():array, must return array with index 0 and 1"
-                );
             }
 
-            try {
+            $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
+            $arguments = $this->arguments(['target' => $args, 'id' => $this->input->id]);
+            $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $arguments);
 
-                $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
-                $arguments = $this->arguments(['target' => $args, 'id' => $this->input->id]);
-                $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $arguments);
-
-                if ($result instanceof Error) {
-                    return $this->showError($result->tiny());
-                } elseif ($result instanceof Message) {
-                    return $this->showMessage($result);
-                } else {
+            if ($result instanceof Error) {
+                return $this->showError($result->tiny());
+            } elseif ($result instanceof Message) {
+                return $this->showMessage($result);
+            } else {
+                try {
                     [$submit, $extraSubmit] = array_values($result);
+                } catch (Exception $e) {
+                    $fn = $this->method . self::AFTER_SUBMIT;
+                    throw new ModuleException(
+                        "Method return illegal in Module\Tailor::{$fn}():array, must return array with index 0 and 1"
+                    );
                 }
-
-            } catch (Exception $e) {
-                $fn = $this->method . self::AFTER_SUBMIT;
-                throw new ModuleException(
-                    "Method return illegal in Module\Tailor::{$fn}():array, must return array with index 0 and 1"
-                );
             }
 
             if (!is_array($extraSubmit)) {
@@ -585,6 +587,7 @@ class Module extends Bsw
         }
 
         $submit = new Button('Submit', $this->input->route, 'a:coffee');
+        $submit->setArgs(['id' => $this->input->id]);
         $submit->setAttributes(['bsw-method' => 'submit']);
 
         $arguments = $this->arguments(compact('submit', 'record', 'hooked', 'original'), ['id' => $this->input->id]);
