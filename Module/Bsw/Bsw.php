@@ -178,7 +178,7 @@ abstract class Bsw
      */
     protected function arguments(array ...$target): Arguments
     {
-        return (new Arguments())->setAny(array_merge(...$target));
+        return (new Arguments())->setMany(array_merge(...$target));
     }
 
     /**

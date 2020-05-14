@@ -23,13 +23,13 @@ class Arguments extends stdClass
     }
 
     /**
-     * Set any arguments
+     * Set many arguments
      *
      * @param array $target
      *
      * @return $this
      */
-    public function setAny(array $target)
+    public function setMany(array $target)
     {
         foreach ($target as $key => $value) {
             $this->set($key, $value);
