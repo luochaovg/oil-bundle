@@ -769,7 +769,7 @@ class Helper
     }
 
     /**
-     * Strong like self::merge
+     * Merges more arrays with weak into one recursively
      *
      * @param bool  $assocOnly
      * @param bool  $transpose
@@ -778,7 +778,7 @@ class Helper
      *
      * @return array
      */
-    public static function merge2(bool $assocOnly, bool $transpose, bool $lowerNull = true, ...$items): array
+    public static function mergeWeak(bool $assocOnly, bool $transpose, bool $lowerNull = true, ...$items): array
     {
         $target = array_shift($items);
 
@@ -800,7 +800,7 @@ class Helper
                     } else {
                         $_items = [$target[$k], $v];
                         $transpose && $_items = array_reverse($_items);
-                        $target[$k] = self::merge2($assocOnly, $transpose, $lowerNull, ...$_items);
+                        $target[$k] = self::mergeWeak($assocOnly, $transpose, $lowerNull, ...$_items);
                     }
                 } else {
                     if (!$lowerNull || ($lowerNull && !is_null($v))) {

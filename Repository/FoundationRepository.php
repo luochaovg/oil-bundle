@@ -827,7 +827,7 @@ abstract class FoundationRepository extends SFRepository
                 'OFFSET',
             ];
             foreach ($keywords as $keyword) {
-                $dql = str_ireplace($keyword, "\n{$keyword}", $dql);
+                $dql = str_replace("{$keyword} ", "\n{$keyword} ", $dql);
             }
 
             dump(ltrim($dql), $model->getParameters());

@@ -3,8 +3,6 @@
 namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor\AttachmentImage;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor\AttachmentLink;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use stdClass;

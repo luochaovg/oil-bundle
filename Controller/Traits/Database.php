@@ -2,14 +2,14 @@
 
 namespace Leon\BswBundle\Controller\Traits;
 
+use Doctrine\Persistence\ObjectRepository;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Repository\FoundationRepository;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;

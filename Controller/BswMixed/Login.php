@@ -15,7 +15,6 @@ use Leon\BswBundle\Module\Error\Entity\ErrorGoogleCaptcha;
 use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
 use Leon\BswBundle\Module\Error\Entity\ErrorPassword;
 use Leon\BswBundle\Module\Error\Entity\ErrorProhibitedCountry;
-use Leon\BswBundle\Module\Error\Entity\ErrorPurchaseLimit;
 use Leon\BswBundle\Module\Error\Entity\ErrorUsername;
 use Leon\BswBundle\Module\Validator\Entity\Rsa;
 use Leon\BswBundle\Component\Rsa as ComponentRsa;

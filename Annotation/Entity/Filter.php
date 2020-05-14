@@ -15,6 +15,11 @@ class Filter extends Annotation
     public $field;
 
     /**
+     * @var mixed
+     */
+    public $index;
+
+    /**
      * @var string
      */
     public $type;

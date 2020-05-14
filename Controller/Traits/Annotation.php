@@ -285,8 +285,10 @@ trait Annotation
                     if (empty($item[Filter::class])) {
                         continue;
                     }
+
                     foreach ($item[Filter::class] as $index => $filter) {
-                        $properties["{$attribute}_{$index}"] = (array)$filter;
+                        $filter->index = $filter->index ?? $index;
+                        $properties["{$attribute}_{$filter->index}"] = (array)$filter;
                     }
                 }
 

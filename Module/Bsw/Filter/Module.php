@@ -172,7 +172,6 @@ class Module extends Bsw
         }
 
         if ($filterAnnotationFull) {
-            // $filterAnnotation = array_merge(...array_values(array_reverse($filterAnnotationFull)));
             $filterAnnotation = $filterAnnotationFull[$this->query['alias']];
         }
 
@@ -355,19 +354,21 @@ class Module extends Bsw
                 $filterAnnotation[$key]['value'] = $filter[$key];
             }
 
+            $field = $item['field'];
             if (!$item['group']) {
-                $condition[$item['field']] = [
+                $condition[$field] = [
                     'value'  => $filterAnnotation[$key]['value'],
                     'filter' => $item['filter'],
                 ];
                 continue;
             }
 
-            if (!isset($condition[$item['field']]) || is_scalar($condition[$item['field']]['value'])) {
-                $condition[$item['field']] = ['value' => [], 'filter' => Senior::class];
+            if (!isset($condition[$field]) || is_scalar($condition[$field]['value'])) {
+                $condition[$field] = ['value' => [], 'filter' => Senior::class];
             }
 
-            $condition[$item['field']]['value'][] = $filterAnnotation[$key]['value'];
+            $index = $filterAnnotation[$key]['index'];
+            $condition[$field]['value'][$index] = $filterAnnotation[$key]['value'];
         }
 
         foreach ($hooks as $hook => $fields) {

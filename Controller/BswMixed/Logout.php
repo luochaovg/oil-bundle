@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Controller\BswMixed;
 
-use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 

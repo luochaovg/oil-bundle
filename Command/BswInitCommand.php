@@ -417,7 +417,7 @@ class BswInitCommand extends Command implements CommandInterface
             $fileContent = Yaml::parseFile($file) ?? [];
             $customContent = $this->{"{$name}Cnf"}();
 
-            $content = Helper::merge2(true, false, true, $customContent, $fileContent);
+            $content = Helper::mergeWeak(true, false, true, $customContent, $fileContent);
             file_put_contents($file, $dumper->dump($content, 4, 0, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE));
 
             $output->writeln("<info>  [Merge] {$file} </info>");

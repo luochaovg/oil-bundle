@@ -3,7 +3,6 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Controller\BswBackendController;
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Annotation\Entity\Input as I;

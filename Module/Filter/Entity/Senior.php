@@ -67,19 +67,25 @@ class Senior extends Filter
      */
     public function parse($value): array
     {
-        if (isset($value[0])) {
-            $this->expression = $value[0];
+        $this->expression = $value[0] ?? null;
+        $value = $value[1] ?? null;
+
+        if (empty($this->expression)) {
+            throw new FilterException("Give filter expression first");
         }
 
         if (!isset(self::MODE[$this->expression])) {
             throw new FilterException("Filter expression is not support");
         }
 
-        if (is_null($value[1] ?? null)) {
-            throw new FilterException("Value for filter expression is required");
+        if (is_null($value)) {
+            if (!in_array($this->expression, [self::IS_NULL, self::IS_NOT_NULL])) {
+                throw new FilterException("Value for filter expression is required");
+            }
+            $value = '';
         }
 
-        $value = Helper::stringToArray($value[1], false, false, null, Abs::FORM_DATA_SPLIT);
+        $value = Helper::stringToArray($value, false, false, null, Abs::FORM_DATA_SPLIT);
         $value = Helper::numericValues($value);
 
         return $value;
