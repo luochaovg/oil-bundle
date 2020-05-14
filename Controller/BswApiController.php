@@ -71,7 +71,7 @@ abstract class BswApiController extends AbstractFOSRestController
 
         $this->signDynamic = $this->header->{'sign-dynamic'};
         if (!empty($this->signDynamic)) {
-            list($dynamic) = $this->TOTPToken('sign');
+            [$dynamic] = $this->TOTPToken('sign');
             $this->signDynamic = ($this->signDynamic === md5($dynamic));
         }
 
@@ -82,7 +82,7 @@ abstract class BswApiController extends AbstractFOSRestController
         $caller = Helper::backtrace(1, ['class', 'function']);
         $annotation = $this->getInputAnnotation($caller['class'], $caller['function']);
 
-        list($error, $args, $sign, $validator) = $this->parametersValidator($annotation);
+        [$error, $args, $sign, $validator] = $this->parametersValidator($annotation);
 
         /**
          * show error
@@ -214,7 +214,8 @@ abstract class BswApiController extends AbstractFOSRestController
         }
 
         $message = $this->errorHandler(
-            "{$exception->getMessage()} in {$exception->getFile()} line {$exception->getLine()}"
+            "{$exception->getMessage()} in {$exception->getFile()} line {$exception->getLine()}",
+            $exception->getTrace()
         );
 
         // default http code

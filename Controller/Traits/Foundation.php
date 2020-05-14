@@ -1036,10 +1036,11 @@ trait Foundation
      * Handle error with diff env
      *
      * @param Exception|string $error
+     * @param array            $trace
      *
      * @return string
      */
-    public function errorHandler($error): ?string
+    public function errorHandler($error, array $trace = []): ?string
     {
         if ($error instanceof Exception) {
             $error = "{$error->getMessage()} in {$error->getFile()} line {$error->getLine()}";
@@ -1050,7 +1051,7 @@ trait Foundation
         }
 
         if ($this->debug) {
-            $this->logger->error("Unforeseen error, {$error}");
+            $this->logger->error("Unforeseen error, {$error}", $trace);
 
             return $error;
         }
@@ -1058,7 +1059,7 @@ trait Foundation
         $code = Helper::strPadLeftLength(rand(1, 9999), 4);
         $code = date('md') . $code;
 
-        $this->logger->error("Unforeseen error, [{$code}] {$error}");
+        $this->logger->error("Unforeseen error, [{$code}] {$error}", $trace);
 
         return $this->translator->trans('[{{ code }}] Unforeseen error', ['{{ code }}' => $code]);
     }

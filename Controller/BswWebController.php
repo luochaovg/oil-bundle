@@ -804,7 +804,8 @@ abstract class BswWebController extends AbstractController
         }
 
         $message = $this->errorHandler(
-            "{$exception->getMessage()} in {$exception->getFile()} line {$exception->getLine()}"
+            "{$exception->getMessage()} in {$exception->getFile()} line {$exception->getLine()}",
+            $exception->getTrace()
         );
 
         // default http code
