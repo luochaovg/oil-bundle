@@ -52,7 +52,7 @@ trait WebSeo
             $key = "{$this->route}_{$type}";
             $cnfKey = "{$key}_{$i18n}";
 
-            $message = $this->cnf->{$cnfKey} ?? $this->translator->trans($key, [], 'seo');
+            $message = $this->cnf->{$cnfKey} ?? $this->seoLang($key);
             $message = ($message == $key) ? null : $message;
             $appName = $this->cnf->app_name ?? 'UnsetAppName';
 

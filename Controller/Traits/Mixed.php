@@ -982,7 +982,7 @@ trait Mixed
         foreach ($fields as $value) {
             if (!$offset) {
                 $lang = $fieldsLabel[$value] ?? $value;
-                $lang = $this->translator->trans($lang, [], 'fields');
+                $lang = $this->fieldLang($lang);
                 $this->excelCellRender($worksheet->getCell("{$col}1"), $lang);
             }
             $_fields[$col] = $value;

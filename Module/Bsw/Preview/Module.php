@@ -445,7 +445,7 @@ class Module extends Bsw
             }
 
             $column = [
-                'title'     => $this->web->labelLang($item['label']),
+                'title'     => $this->web->fieldLang($item['label']),
                 'dataIndex' => $field,
                 'fixed'     => $item['fixed'],
             ];
@@ -808,7 +808,7 @@ class Module extends Bsw
 
             $output->columns[$operate] = array_merge(
                 [
-                    'title'       => $this->web->labelLang('Action'),
+                    'title'       => $this->web->fieldLang('Action'),
                     'dataIndex'   => $operate,
                     'width'       => $width,
                     'align'       => Abs::POS_CENTER,

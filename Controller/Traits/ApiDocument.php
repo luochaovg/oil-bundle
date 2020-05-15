@@ -74,7 +74,7 @@ trait ApiDocument
                         throw new Exception("Error code {$code} has repeat in {$error}");
                     }
 
-                    $description = $this->translator->trans($e->description(), [], 'messages', 'cn');
+                    $description = $this->messageLang($e->description());
                     $bill[$code] = [
                         'tiny'        => $e->tiny(),
                         'description' => $description,
@@ -112,7 +112,7 @@ trait ApiDocument
                     $v = new $validator(null, [], $this->translator, $lang);
 
                     $rule = Helper::camelToUnder(Helper::clsName($validator));
-                    $bill[$rule] = $this->translator->trans($v->description(), [], 'messages', 'cn');
+                    $bill[$rule] = $this->messageLang($v->description());
                 }
 
                 return $bill;

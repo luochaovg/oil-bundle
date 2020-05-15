@@ -169,7 +169,7 @@ trait WebResponse
         }
 
         if ($message) {
-            $message = $this->translator->trans($message, $args);
+            $message = $this->messageLang($message, $args);
         }
 
         return $this->responseAjax(
@@ -198,7 +198,7 @@ trait WebResponse
         [$data, $trans] = $this->resolveArgs($args);
 
         if ($message) {
-            $message = $this->translator->trans($message, $trans);
+            $message = $this->messageLang($message, $trans);
         }
 
         return $this->responseAjax(
@@ -237,7 +237,7 @@ trait WebResponse
 
         // lang for tiny
         if (($tiny && $this->langErrorTiny) || $message) {
-            $tiny = $this->translator->trans($tiny, $trans);
+            $tiny = $this->messageLang($tiny, $trans);
         }
 
         // error type
@@ -247,7 +247,7 @@ trait WebResponse
 
         // logger description
         if ($detail) {
-            $detail = $this->translator->trans($detail, $trans);
+            $detail = $this->messageLang($detail, $trans);
             $this->logger->warning("Ajax response failed, {$detail}");
         }
 

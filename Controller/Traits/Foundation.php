@@ -1061,7 +1061,7 @@ trait Foundation
 
         $this->logger->error("Unforeseen error, [{$code}] {$error}", $trace);
 
-        return $this->translator->trans('[{{ code }}] Unforeseen error', ['{{ code }}' => $code]);
+        return $this->messageLang('[{{ code }}] Unforeseen error', ['{{ code }}' => $code]);
     }
 
     /**
@@ -1249,28 +1249,85 @@ trait Foundation
      *
      * @param array $enum
      * @param bool  $encode
+     * @param array $args
      *
      * @return array|string
      */
-    public function enumLang(array $enum, bool $encode = false)
+    public function enumLang(array $enum, bool $encode = false, array $args = [])
     {
         foreach ($enum as &$label) {
-            $label = $this->translator->trans($label, [], 'enum');
+            $label = $this->translator->trans($label, $args, 'enum');
         }
 
         return $encode ? Helper::jsonStringify($enum) : $enum;
     }
 
     /**
-     * Lang the label
+     * Lang for field
      *
-     * @param string $label
+     * @param string|null $label
+     * @param array       $args
      *
-     * @return string
+     * @return string|null
      */
-    public function labelLang(string $label): string
+    public function fieldLang(?string $label, array $args = []): ?string
     {
-        return $this->translator->trans($label, [], 'fields');
+        if (empty($label)) {
+            return $label;
+        }
+
+        return $this->translator->trans($label, $args, 'fields');
+    }
+
+    /**
+     * Lang for message
+     *
+     * @param string|null $label
+     * @param array       $args
+     *
+     * @return string|null
+     */
+    public function messageLang(?string $label, array $args = []): ?string
+    {
+        if (empty($label)) {
+            return $label;
+        }
+
+        return $this->translator->trans($label, $args, 'messages');
+    }
+
+    /**
+     * Lang for twig
+     *
+     * @param string|null $label
+     * @param array       $args
+     *
+     * @return string|null
+     */
+    public function twigLang(?string $label, array $args = []): ?string
+    {
+        if (empty($label)) {
+            return $label;
+        }
+
+        return $this->translator->trans($label, $args, 'twig');
+    }
+
+    /**
+     * Lang for seo
+     *
+     * @param string|null $label
+     * @param array       $args
+     *
+     * @return string|null
+     */
+    public function seoLang(?string $label, array $args = []): ?string
+    {
+        if (empty($label)) {
+            return $label;
+        }
+
+        return $this->translator->trans($label, $args, 'seo');
     }
 
     /**

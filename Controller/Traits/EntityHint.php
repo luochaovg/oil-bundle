@@ -198,10 +198,12 @@ trait EntityHint
     public static function entityPersistenceHint($item, string $table, array $fields, stdClass $options = null)
     {
         $options = $options ?? new stdClass();
-        $isInt = (strpos($item->type, 'int') !== false);
+
+        $intType = [Abs::MYSQL_INT, Abs::MYSQL_SMALLINT, Abs::MYSQL_BIGINT];
+        $floatType = [Abs::MYSQL_FLOAT, Abs::MYSQL_DOUBLE, Abs::MYSQL_DECIMAL];
 
         // numeric
-        if (in_array($item->type, [Abs::MYSQL_INT, Abs::MYSQL_SMALLINT, Abs::MYSQL_BIGINT])) {
+        if (in_array($item->type, array_merge($intType, $floatType))) {
             $options->type = 'BswForm\\Number::class';
             if ($item->type == Abs::MYSQL_SMALLINT) {
                 $options->typeArgs['max'] = Abs::MYSQL_SMALLINT_UNS_MAX;
@@ -240,7 +242,7 @@ trait EntityHint
             $options->type = 'BswForm\\TextArea::class';
         }
 
-        if ($item->length > 64 || (!$isInt && empty($item->length))) {
+        if (!in_array($item->type, $intType) && !in_array($item->type, $floatType) && empty($item->length)) {
             $options->type = 'BswForm\\TextArea::class';
         }
 

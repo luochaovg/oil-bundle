@@ -376,20 +376,20 @@ class Module extends Bsw
             [$list, $suffix, $mime] = Uploader::optionTips(
                 $option,
                 function ($label) use ($trans) {
-                    return $trans->trans($label, [], 'twig');
+                    return $this->web->twigLang($label);
                 }
             );
 
             $output->uploadTipsCollect[$field] = [
                 'columns' => [
                     [
-                        'title'     => $trans->trans('Type', [], 'fields'),
+                        'title'     => $this->web->fieldLang('Type'),
                         'dataIndex' => 'type',
                         'align'     => 'right',
                         'width'     => 100,
                     ],
                     [
-                        'title'     => $trans->trans('Condition', [], 'fields'),
+                        'title'     => $this->web->fieldLang('Condition'),
                         'dataIndex' => 'condition',
                         'width'     => 240,
                     ],
@@ -498,9 +498,9 @@ class Module extends Bsw
                 if (!is_array($rule) || !$rule['message']) {
                     unset($item['rules'][$key]);
                 } else {
-                    $args = ['{{ field }}' => $trans->trans($label, [], 'fields')];
+                    $args = ['{{ field }}' => $this->web->fieldLang($label)];
                     $args = array_merge($args, $rule['args'] ?? []);
-                    $rule['message'] = $trans->trans($rule['message'], $args, 'messages');
+                    $rule['message'] = $this->web->messageLang($rule['message'], $args);
                 }
             }
 
@@ -558,7 +558,7 @@ class Module extends Bsw
             $tipsAuto = $titleAuto = null;
             if (get_class($form) == Select::class && $form->getMode() == Select::MODE_MULTIPLE) {
                 if (!$this->input->id || $form->isValueMultiple()) {
-                    $tipsAuto = $this->input->translator->trans('For multiple newly', [], 'twig');
+                    $tipsAuto = $this->web->twigLang('For multiple newly');
                 } else {
                     $form->setMode(Select::MODE_DEFAULT);
                 }
@@ -576,7 +576,7 @@ class Module extends Bsw
 
             $_record[$field] = [
                 'hide'      => $item['hide'],
-                'label'     => $item['trans'] ? $this->web->labelLang($label) : $label,
+                'label'     => $item['trans'] ? $this->web->fieldLang($label) : $label,
                 'tips'      => $item['tips'],
                 'tipsAuto'  => $tipsAuto,
                 'title'     => $item['title'],

@@ -39,7 +39,7 @@ trait SiteIndex
      */
     public function siteIndexWelcome(): string
     {
-        return $this->translator->trans(
+        return $this->messageLang(
             "Welcome {{ user }}, today is {{ today }}",
             [
                 '{{ user }}'  => $this->usr->{$this->cnf->usr_account},
@@ -68,7 +68,7 @@ trait SiteIndex
          * @return string
          */
         $lang = function (string $label): string {
-            return $this->translator->trans($label, [], 'twig');
+            return $this->twigLang($label);
         };
 
         /**

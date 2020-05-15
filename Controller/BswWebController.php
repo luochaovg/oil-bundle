@@ -176,7 +176,7 @@ abstract class BswWebController extends AbstractController
         }
 
         [$params, $trans] = $this->resolveArgs($args);
-        $message = $this->translator->trans($message, $trans);
+        $message = $this->messageLang($message, $trans);
         $url = $this->redirectUrl($url);
 
         return $this->responseMessage($message, $url, $params, Abs::TAG_CLASSIFY_SUCCESS);
@@ -210,12 +210,12 @@ abstract class BswWebController extends AbstractController
         // lang for tiny
         [$params, $trans] = $this->resolveArgs($args);
         if (($tiny && $this->langErrorTiny) || $message) {
-            $tiny = $this->translator->trans($tiny, $trans);
+            $tiny = $this->messageLang($tiny, $trans);
         }
 
         // logger description
         if ($detail) {
-            $detail = $this->translator->trans($detail, $trans);
+            $detail = $this->messageLang($detail, $trans);
             $this->logger->warning("Response error, [{$code4logic}] {$tiny}, {$detail}");
         }
 
@@ -255,7 +255,7 @@ abstract class BswWebController extends AbstractController
 
         [$params, $trans] = $this->resolveArgs($args);
 
-        $content = $this->translator->trans($content, $trans);
+        $content = $this->messageLang($content, $trans);
         $this->appendMessage($content, $duration, $classify, $type);
         $url = $this->redirectUrl($url, $params);
 
@@ -289,7 +289,7 @@ abstract class BswWebController extends AbstractController
     ): Response {
 
         [$params, $trans] = $this->resolveArgs($args);
-        $content = $this->translator->trans($content, $trans);
+        $content = $this->messageLang($content, $trans);
 
         if (isset($url)) {
             $this->appendMessage($content, $duration, $classify, $type);
@@ -338,7 +338,7 @@ abstract class BswWebController extends AbstractController
             throw new Exception($content);
         }
 
-        $content = $this->translator->trans($content);
+        $content = $this->messageLang($content);
         $content = str_replace(['"', "'"], null, $content);
 
         $message = [
@@ -429,10 +429,10 @@ abstract class BswWebController extends AbstractController
 
         if (isset($map[$methodInfo])) {
             $split = ['cn' => ''][$this->header->lang] ?? ' ';
-            $twig = $menuSet ?? $this->translator->trans($classInfo, [], 'twig');
-            $twig = $twig . $split . $this->translator->trans($map[$methodInfo], [], 'twig');
+            $twig = $menuSet ?? $this->twigLang($classInfo);
+            $twig = $twig . $split . $this->twigLang($map[$methodInfo]);
         } else {
-            $twig = $menuSet ?? $this->translator->trans($methodInfo, [], 'twig');
+            $twig = $menuSet ?? $this->twigLang($methodInfo);
         }
 
         return $twig;
@@ -507,7 +507,7 @@ abstract class BswWebController extends AbstractController
 
                 if (Helper::bitFlagAssert($type, Abs::V_MUST_AUTH)) {
 
-                    $this->logger->warning($this->translator->trans($isAuth->description()));
+                    $this->logger->warning($this->messageLang($isAuth->description()));
                     $this->iNeedCost(Abs::END_VALID);
 
                     return $this->responseError($isAuth);
@@ -538,7 +538,7 @@ abstract class BswWebController extends AbstractController
                     if ($_strict !== true) {
 
                         $error = ($_strict instanceof Error) ? $_strict : new ErrorSession();
-                        $this->logger->warning($this->translator->trans($error->description()));
+                        $this->logger->warning($this->messageLang($error->description()));
                         $this->iNeedCost(Abs::END_VALID);
 
                         return $this->responseError($error);
@@ -549,7 +549,7 @@ abstract class BswWebController extends AbstractController
                 if (Helper::bitFlagAssert($type, Abs::V_ACCESS) && $access !== true) {
 
                     $error = new ErrorAccess();
-                    $this->logger->warning($this->translator->trans($error->description()));
+                    $this->logger->warning($this->messageLang($error->description()));
                     $this->iNeedCost(Abs::END_VALID);
 
                     return $this->responseError($error);

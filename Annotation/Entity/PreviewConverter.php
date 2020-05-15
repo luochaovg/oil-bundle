@@ -80,8 +80,12 @@ class PreviewConverter extends AnnotationConverter
          * integer
          */
         $type = $this->items[Type::class]->type ?? null;
-        if ($type == Abs::T_INTEGER) {
+        if ($type == Abs::T_INTEGER || $type == Abs::T_NUMERIC) {
             return 140;
+        }
+
+        if ($type == Abs::T_INTEGER) {
+            return 160;
         }
 
         $min = 80;

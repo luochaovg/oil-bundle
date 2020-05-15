@@ -73,6 +73,7 @@ Max file size:            'Size'
 Picture sizes:            'Sizes'
 Allow suffix:             'Suffix'
 Allow mime:               'Mime'
+Split by comma:           '多个请使用逗号分隔'
 
 Bsw admin user:                           '管理员'
 Bsw admin access control:                 '管理员权限'

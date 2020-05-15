@@ -45,7 +45,7 @@ trait Preview
                 ->setSelector(Abs::SELECTOR_CHECKBOX)
                 ->setRoute('app_bsw_admin_menu_multiple_encase')
                 ->setClick('multipleAction')
-                ->setConfirm($this->translator->trans('Are you sure')),
+                ->setConfirm($this->messageLang('Are you sure')),
 
             (new Button('Sure', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)

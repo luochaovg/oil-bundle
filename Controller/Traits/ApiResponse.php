@@ -222,7 +222,7 @@ trait ApiResponse
         }
 
         if ($message) {
-            $message = $this->translator->trans($message, $args);
+            $message = $this->messageLang($message, $args);
         }
 
         return $this->response($this->codeOkForLogic, Response::HTTP_OK, $message, $data);
@@ -240,7 +240,7 @@ trait ApiResponse
     protected function success(string $message, array $args = []): Response
     {
         if ($message) {
-            $message = $this->translator->trans($message, $args);
+            $message = $this->messageLang($message, $args);
         }
 
         return $this->response($this->codeOkForLogic, Response::HTTP_OK, $message);
@@ -269,7 +269,7 @@ trait ApiResponse
 
         // lang for tiny
         if (($tiny && $this->langErrorTiny) || $message) {
-            $tiny = $this->translator->trans($tiny, $args);
+            $tiny = $this->messageLang($tiny, $args);
         }
 
         // error type
@@ -279,7 +279,7 @@ trait ApiResponse
 
         // logger description
         if ($detail) {
-            $detail = $this->translator->trans($detail, $args);
+            $detail = $this->messageLang($detail, $args);
             $this->logger->warning("Response failed, {$detail}");
         }
 

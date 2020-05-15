@@ -464,12 +464,12 @@ class Module extends Bsw
             }
 
             $record[$key] = [
-                'label'  => $item['trans'] ? $this->web->labelLang($label) : $label,
+                'label'  => $item['trans'] ? $this->web->fieldLang($label) : $label,
                 'column' => $item['column'],
                 'type'   => $form,
                 'sort'   => $item['sort'],
                 'group'  => $item['group'],
-                'title'  => $item['title'],
+                'title'  => $this->web->twigLang($item['title']),
             ];
         }
 

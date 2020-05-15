@@ -128,7 +128,7 @@ abstract class BswApiController extends AbstractFOSRestController
 
             if ($oldSign !== $newSign) {
 
-                $message = $this->translator->trans('Signature verification failed');
+                $message = $this->messageLang('Signature verification failed');
                 $this->logger->error($message, [compact('oldSign', 'newSign')]);
 
                 if (method_exists($this, $fn = Abs::FN_SIGN_FAILED)) {
@@ -161,7 +161,7 @@ abstract class BswApiController extends AbstractFOSRestController
 
                 if (Helper::bitFlagAssert($type, Abs::V_MUST_AUTH)) {
 
-                    $this->logger->warning($this->translator->trans($isAuth->description()));
+                    $this->logger->warning($this->messageLang($isAuth->description()));
                     $this->iNeedCost(Abs::END_VALID);
 
                     return $this->failed($isAuth);
@@ -181,7 +181,7 @@ abstract class BswApiController extends AbstractFOSRestController
                     if ($_strict !== true) {
 
                         $error = ($_strict instanceof Error) ? $_strict : new ErrorSession();
-                        $this->logger->warning($this->translator->trans($error->description()));
+                        $this->logger->warning($this->messageLang($error->description()));
                         $this->iNeedCost(Abs::END_VALID);
 
                         return $this->failed($error);

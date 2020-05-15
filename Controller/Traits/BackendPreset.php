@@ -126,7 +126,7 @@ trait BackendPreset
     {
         $label = Helper::stringToLabel($field);
         $args = [
-            'title'    => $this->translator->trans($label, [], 'twig'),
+            'title'    => $this->twigLang($label),
             'content'  => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
             'centered' => true,
         ];
