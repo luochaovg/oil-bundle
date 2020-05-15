@@ -309,7 +309,7 @@ $(function () {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
                 }
-                now[f] = (collect[f] == value);
+                now[f] = (collect[f].includes(value));
             }
         },
 

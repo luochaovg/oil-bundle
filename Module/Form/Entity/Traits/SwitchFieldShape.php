@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait SwitchFieldShape
 {
     /**
@@ -14,6 +16,10 @@ trait SwitchFieldShape
      */
     public function getSwitchFieldShape(): array
     {
+        foreach ($this->switchFieldShape as &$item) {
+            $item = array_map('strval', (array)$item);
+        }
+
         return $this->switchFieldShape;
     }
 

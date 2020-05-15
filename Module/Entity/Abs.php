@@ -298,6 +298,7 @@ class Abs
     const BIND_EMAIL_TO_THIRD  = 7;
     const BIND_EMAIL_TO_DEVICE = 8;
 
+    const PERIOD_AUTO    = 0;
     const PERIOD_YEAR    = 1;
     const PERIOD_QUARTER = 2;
     const PERIOD_MONTH   = 3;
@@ -511,6 +512,7 @@ class Abs
     const TPL_NOT_FILE = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
 
     // 普通 dress 模板
+    // pink red orange green cyan blue purple #color
     const TPL_DRESS = "<a-tag color='{dress}'>{value}</a-tag>";
 
     // 粉色 dress 模板
