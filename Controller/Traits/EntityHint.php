@@ -199,7 +199,7 @@ trait EntityHint
     {
         $options = $options ?? new stdClass();
 
-        $intType = [Abs::MYSQL_INT, Abs::MYSQL_SMALLINT, Abs::MYSQL_BIGINT];
+        $intType = [Abs::MYSQL_TINYINT, Abs::MYSQL_SMALLINT, Abs::MYSQL_INT, Abs::MYSQL_BIGINT];
         $floatType = [Abs::MYSQL_FLOAT, Abs::MYSQL_DOUBLE, Abs::MYSQL_DECIMAL];
 
         // numeric

@@ -15,6 +15,7 @@ use Leon\BswBundle\Annotation\Entity\Traits\TransConverter;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Score;
@@ -104,6 +105,10 @@ class PersistenceConverter extends AnnotationConverter
         $form = get_class($this->item->type);
         if (in_array($form, $this->fullWidthForm)) {
             return $max;
+        }
+
+        if ($form == Date::class) {
+            return $moderate;
         }
 
         $type = $this->items[Type::class]->type ?? null;
