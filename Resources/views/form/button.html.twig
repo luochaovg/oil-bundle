@@ -16,7 +16,9 @@
   @click="dispatcherByVue"
   {{ form.attributes|raw }}
 >
-  {{ form.icon|icon|raw }}
+  {% if form.icon %}
+    {{ form.icon|icon|raw }}
+  {% endif %}
   {{ form.label|trans({}, 'twig') }}
   {% if form.selector %}
     {% set var = 'preview_selected_row.length' %}

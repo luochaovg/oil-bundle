@@ -62,7 +62,11 @@ $(function () {
                 bsw.cookie().set('bsw_menu_collapsed', 'yes');
             }
             if (url.startsWith('http') || url.startsWith('/')) {
-                return location.href = url;
+                if (typeof data.window === 'undefined') {
+                    return location.href = url;
+                } else {
+                    return window.open(url);
+                }
             }
         },
         getBswData: function getBswData(object) {
@@ -308,7 +312,7 @@ $(function () {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
                 }
-                now[f] = collect[f] == value;
+                now[f] = collect[f].includes(value);
             }
         },
         showModal: function showModal(options) {
@@ -461,9 +465,8 @@ $(function () {
                 this.persistence_form.setFieldsValue(_defineProperty({}, data.repair, data.ids));
             }
         },
-        fillParentFormAfterAjaxInParent: function fillParentFormAfterAjaxInParent(data, element) {
-            console.log(data);
-            data = data.response.sets;
+        fillParentFormAfterAjaxInParent: function fillParentFormAfterAjaxInParent(res, element) {
+            var data = res.response.sets;
             data.repair = data.arguments.repair;
             this.fillParentFormInParent(data, element);
         },

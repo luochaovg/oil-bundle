@@ -154,6 +154,9 @@ parameters:
         app_online_date: '2019-07-01' # use string
         rm_local_file_when_oss: true
         font_symbol: /bundles/leonbsw/font/iconfont/iconfont.js
+        font_symbol_url: /bundles/leonbsw/font/iconfont/demo_index.html
+        ant_icon_url: https://www.antdv.com/components/icon-cn
+        verify_json_url: http://www.bejson.com/kim.htm
         loading_label: null
 
         loading_background_image: null

@@ -61,7 +61,11 @@ $(function () {
                 bsw.cookie().set('bsw_menu_collapsed', 'yes');
             }
             if (url.startsWith('http') || url.startsWith('/')) {
-                return location.href = url;
+                if (typeof data.window === 'undefined') {
+                    return location.href = url;
+                } else {
+                    return window.open(url);
+                }
             }
         },
 

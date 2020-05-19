@@ -160,7 +160,6 @@ class Abs
     const FORMAT_JSON          = 'json';
     const FORMAT_HTML          = 'html';
     const AUTO                 = 'auto';
-    const VERIFY_JSON          = 'http://www.bejson.com/kim.htm';
 
     const MEDIA_MIN = 375;
     const MEDIA_XS  = 575;

@@ -28,6 +28,30 @@ trait Persistence
     }
 
     /**
+     * @return array
+     */
+    public function persistenceAnnotation(): array
+    {
+        $iconA = (new Button('a:class'))
+            ->setType(Button::THEME_DEFAULT)
+            ->setSize(Button::SIZE_SMALL)
+            ->setArgs(['location' => $this->cnf->ant_icon_url, 'window' => true]);
+        $iconA = $this->renderPart('@LeonBsw/form/button', ['form' => $iconA]);
+
+        $iconB = (new Button('b:symbol'))
+            ->setType(Button::THEME_DEFAULT)
+            ->setSize(Button::SIZE_SMALL)
+            ->setArgs(['location' => $this->cnf->font_symbol_url, 'window' => true]);
+        $iconB = $this->renderPart('@LeonBsw/form/button', ['form' => $iconB]);
+
+        return [
+            'icon' => [
+                'title' => "{$iconA} / {$iconB}",
+            ],
+        ];
+    }
+
+    /**
      * Persistence record
      *
      * @Route("/bsw-admin-menu/persistence/{id}", name="app_bsw_admin_menu_persistence", requirements={"id": "\d+"})

@@ -570,7 +570,7 @@ class Module extends Bsw
                     ->setType(Button::THEME_LINK)
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
-                    ->setArgs(['field' => $field, 'url' => Abs::VERIFY_JSON, 'key' => 'json']);
+                    ->setArgs(['field' => $field, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
                 $titleAuto = $this->web->renderPart('@LeonBsw/form/button', ['form' => $button]);
             }
 
