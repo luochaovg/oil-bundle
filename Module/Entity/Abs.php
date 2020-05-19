@@ -12,6 +12,8 @@ class Abs
     const CODE_BASIC     = 1000024;
     const CODE_DIST      = 'gz8xjdt3h7rcypfvewkm4aun2'; // 25
     const CODE_DIST_FULL = 'mct63kg0il5bp9uv17eryzs2wnja4xfodqh8'; // 36
+    const CHAR_DIST_CN   = '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ－　：．，／％＃！＠＆（）＜＞＂＇？［］｛｝＼｜＋＝＿＾￥￣｀';
+    const CHAR_DIST_EN   = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- :.,/%#!@&()<>"\'?[]{}\\|+=_^￥~`';
 
     const POS_TOP    = 'top';
     const POS_RIGHT  = 'right';

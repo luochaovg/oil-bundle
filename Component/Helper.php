@@ -1355,12 +1355,9 @@ class Helper
         string $separator = ','
     ): array {
 
-        $full = '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ－　：．，／％＃！＠＆（）＜＞＂＇？［］｛｝＼｜＋＝＿＾￥￣｀';
-        $half = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- :.,/%#!@&()<>"\'?[]{}\\|+=_^￥~`';
-
-        if (($index = strpos($half, $separator)) !== -1) {
-            $full = self::split($full);
-            $string = str_replace($full[$index], $separator, $string);
+        if (($index = strpos(Abs::CHAR_DIST_EN, $separator)) !== -1) {
+            $dist = self::split(Abs::CHAR_DIST_CN);
+            $string = str_replace($dist[$index], $separator, $string);
         }
 
         $result = explode($separator, $string);
@@ -1372,6 +1369,36 @@ class Helper
         }
 
         return $result;
+    }
+
+    /**
+     * String Cn to En
+     *
+     * @param string $target
+     *
+     * @return string
+     */
+    public static function stringCnToEn(string $target): string
+    {
+        $cn = self::split(Abs::CHAR_DIST_CN);
+        $en = self::split(Abs::CHAR_DIST_EN);
+
+        return str_replace($cn, $en, $target);
+    }
+
+    /**
+     * String En to Cn
+     *
+     * @param string $target
+     *
+     * @return string
+     */
+    public static function stringEnToCn(string $target): string
+    {
+        $cn = self::split(Abs::CHAR_DIST_CN);
+        $en = self::split(Abs::CHAR_DIST_EN);
+
+        return str_replace($en, $cn, $target);
     }
 
     /**
