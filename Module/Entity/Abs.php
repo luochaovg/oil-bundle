@@ -455,16 +455,19 @@ class Abs
 
     const JS_LANG = [
         'cn' => 'diy;lang/cn.js',
+        'hk' => 'diy;lang/hk.js',
         'en' => 'diy;lang/en.js',
     ];
 
     const JS_MOMENT_LANG = [
         'cn' => 'npm;moment/locale/zh-cn.js',
+        'hk' => 'npm;moment/locale/zh-hk.js',
         'en' => 'npm;moment/locale/es-us.js',
     ];
 
     const JS_EDITOR_LANG = [
         'cn' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn.js',
+        'hk' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh.js',
         'en' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/en-gb.js',
     ];
 
