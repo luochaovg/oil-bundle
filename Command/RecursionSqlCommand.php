@@ -303,6 +303,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
             $filter = array_merge($this->filter(), $query);
             $result = $this->repo->filters($_filter)->lister($filter);
+            dd($result);
 
         } elseif ($result = $this->lister()) {
             $result = $this->web->manualListForPagination($result, $query);

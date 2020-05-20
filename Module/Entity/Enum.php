@@ -54,11 +54,16 @@ class Enum
     /**
      * @const array 性别
      */
-    const BSW_ADMIN_USER_SEX = [
+    const GENDER = [
         0 => 'Secret',
         1 => 'Male',
         2 => 'Female',
     ];
+
+    /**
+     * @cosnt array 性别
+     */
+    const BSW_ADMIN_USER_SEX = self::GENDER;
 
     /**
      * @const array 操作类型

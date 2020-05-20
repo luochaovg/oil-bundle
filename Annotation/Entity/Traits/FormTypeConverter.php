@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Annotation\Entity\Traits;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Form\Entity\Input;
+use Symfony\Component\Validator\Constraints\Length;
 
 trait FormTypeConverter
 {
@@ -21,7 +22,6 @@ trait FormTypeConverter
         if (is_object($value) && $value instanceof $class) {
             return $value;
         }
-
 
         if (!isset($value)) {
             return new Input();

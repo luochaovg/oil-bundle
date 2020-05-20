@@ -7,6 +7,9 @@
   type="{{ form.type }}"
   size="{{ form.size }}"
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  {% if form.maxLength %}
+    :max-length="{{ form.maxLength }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

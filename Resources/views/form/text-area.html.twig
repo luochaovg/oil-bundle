@@ -6,6 +6,9 @@
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   size="{{ form.size }}"
   :auto-size="{ minRows: {{ form.minRows }}, maxRows: {{ form.maxRows }} }"
+  {% if form.maxLength %}
+    :max-length="{{ form.maxLength }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

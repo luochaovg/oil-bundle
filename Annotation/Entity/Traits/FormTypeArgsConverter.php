@@ -3,6 +3,8 @@
 namespace Leon\BswBundle\Annotation\Entity\Traits;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Form\Entity\Input;
+use Symfony\Component\Validator\Constraints\Length;
 
 trait FormTypeArgsConverter
 {
@@ -14,12 +16,12 @@ trait FormTypeArgsConverter
      */
     protected function typeArgs($value)
     {
-        if (empty($value)) {
-            return [];
-        }
-
         if (!is_array($value)) {
             $this->exception('typeArgs', 'must be array type');
+        }
+
+        if (($this->item->type instanceof Input) && $length = ($this->items[Length::class]->max ?? null)) {
+            $value['maxLength'] = $length;
         }
 
         $form = $this->item->type;
