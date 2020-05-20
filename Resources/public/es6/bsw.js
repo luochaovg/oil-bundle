@@ -305,7 +305,7 @@ $(function () {
             }
         },
 
-        switchFieldShapeWithSelect(value) {
+        switchFieldShapeWithSelect(value, option) {
             let field = this.persistence_switch_field;
             let now = this.persistence_field_shape_now;
             let collect = this.persistence_field_shape_collect[field];

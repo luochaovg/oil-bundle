@@ -304,7 +304,7 @@ $(function () {
                 });
             }
         },
-        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value) {
+        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value, option) {
             var field = this.persistence_switch_field;
             var now = this.persistence_field_shape_now;
             var collect = this.persistence_field_shape_collect[field];

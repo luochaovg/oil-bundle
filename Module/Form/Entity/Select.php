@@ -74,4 +74,16 @@ class Select extends Form
 
         return $this->value;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAllowClear(): bool
+    {
+        if ($this->getSwitchFieldShape()) {
+            return false;
+        }
+
+        return $this->allowClear;
+    }
 }
