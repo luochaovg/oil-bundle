@@ -504,6 +504,7 @@ blockquote {
   margin: 10px 0;
   background-color: #fbfbfb;
   border-radius: 2px;
+
   p {
     margin: 8px 0 !important;
   }
@@ -524,6 +525,22 @@ blockquote {
 .bsw-preview table td p {
   margin-top: unset;
   margin-bottom: unset;
+}
+
+.bsw-enter-to {
+  opacity: 1;
+}
+
+.bsw-enter, .bsw-leave-to {
+  opacity: 0;
+}
+
+.bsw-enter-active {
+  transition: all 1s;
+}
+
+.bsw-leave-active {
+  transition: all .3s;
 }
 
 .ant-btn {

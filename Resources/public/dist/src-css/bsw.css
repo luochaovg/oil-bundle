@@ -568,6 +568,19 @@ blockquote p {
   margin-top: unset;
   margin-bottom: unset;
 }
+.bsw-enter-to {
+  opacity: 1;
+}
+.bsw-enter,
+.bsw-leave-to {
+  opacity: 0;
+}
+.bsw-enter-active {
+  transition: all 1s;
+}
+.bsw-leave-active {
+  transition: all .3s;
+}
 .ant-btn.bsw-btn {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);

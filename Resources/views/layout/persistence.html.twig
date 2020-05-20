@@ -74,6 +74,18 @@ bsw.configure({
             v.$nextTick(function () {
                 bsw.cnf.v.initCkEditor();
             });
+
+            v.$nextTick(function () {
+                for (let field in v.persistence_field_shape_collect) {
+                    if (!v.persistence_field_shape_collect.hasOwnProperty(field)) {
+                        continue;
+                    }
+                    v.persistence_switch_field = field;
+                    let value = v.persistence_form.getFieldValue(v.persistence_switch_field);
+                    v.persistence_form.setFieldsValue({[v.persistence_switch_field]: value});
+                    v.switchFieldShapeWithSelect(value);
+                }
+            });
         }
     }
 });
