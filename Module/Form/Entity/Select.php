@@ -68,10 +68,6 @@ class Select extends Form
      */
     public function getValue()
     {
-        if ($this->getSwitchFieldShape()) {
-            return null;
-        }
-
         if (is_array($this->value)) {
             return Helper::jsonStringify(array_map('strval', $this->value));
         }
