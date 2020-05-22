@@ -9,6 +9,7 @@ use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\FilterException;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -532,10 +533,10 @@ class Module extends Bsw
      * @param Output $output
      * @param array  $mixedAnnotation
      *
-     * @return array
+     * @return array|ArgsOutput
      * @throws ModuleException
      */
-    protected function getPreviewData(Output $output, array $mixedAnnotation): array
+    protected function getPreviewData(Output $output, array $mixedAnnotation)
     {
         /**
          * sequence for order
@@ -605,6 +606,14 @@ class Module extends Bsw
 
             $arguments = $this->arguments(['target' => $query]);
             $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
+            if ($this->web->getArgs('scene') === 'export') {
+                $entity = base64_encode($this->entity);
+                $query = base64_encode(serialize($query));
+                $message = (new Message())->setSets(compact('entity', 'query'));
+
+                return $this->showMessage($message);
+            }
+
             $list = $this->repository->lister($query);
 
         } else {
@@ -873,6 +882,10 @@ class Module extends Bsw
         [$hooks, $previewAnnotation, $mixedAnnotation] = $this->handleAnnotation($output);
 
         $list = $this->getPreviewData($output, $mixedAnnotation);
+        if ($list instanceof ArgsOutput) {
+            return $list;
+        }
+
         $list = $this->handlePreviewData($list, $hooks, $previewAnnotation, $output);
         $this->correctPreviewColumn($list, $output);
 

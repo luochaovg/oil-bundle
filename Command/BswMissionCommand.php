@@ -11,6 +11,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Exception;
 
 class BswMissionCommand extends Command implements CommandInterface
 {
@@ -60,6 +61,10 @@ class BswMissionCommand extends Command implements CommandInterface
             ]
         );
 
+        if (!$mission) {
+            return $output->writeln("<info> None mission in queue </info>");
+        }
+
         $maxId = max(array_column($mission, 'id'));
         foreach ($mission as $key => &$m) {
             if ($m['cronType'] == 2) {
@@ -88,16 +93,18 @@ class BswMissionCommand extends Command implements CommandInterface
         }
 
         if (!$queue) {
-            return $output->writeln("<info> None mission in queue </info>");
+            return $output->writeln("<info> None mission in queue after election </info>");
         }
 
         foreach ($queue as $m) {
+
             $condition = Helper::parseJsonString($m['condition']);
-            $flag = $m['remark'] ?: Helper::generateFixedToken(8);
             if (!empty($condition['args'])) {
                 $args = Helper::jsonArray64($condition['args']);
             }
-            $condition['args'] = array_merge($args ?? [], ['flag' => $flag]);
+
+            $condition['receiver'] = $m['telegramReceiver'];
+            $condition['args'] = array_merge($args ?? [], $m);
 
             $_condition = [];
             foreach ($condition as $key => $value) {
@@ -106,12 +113,52 @@ class BswMissionCommand extends Command implements CommandInterface
                 $_condition[$key] = $value;
             }
 
-            $command = $this->getApplication()->find($m['command']);
-            $command->run(new ArrayInput($_condition), $output);
+            if ($condition['receiver']) {
+                $now = date(Abs::FMT_FULL);
+                $this->web->telegramSendMessage(
+                    $condition['receiver'],
+                    "`[{$now}]` Mission *<ID:{$m['id']}>* running",
+                    ['mode' => 'Markdown']
+                );
+            }
 
-            $receiver = $m['telegramReceiver'] ?: $this->config('telegram_receiver_command_queue');
-            if ($receiver) {
-                $this->web->telegramSendMessage($receiver, "Mission in process, flag is {$flag}.");
+            $getRemark = function (string $remark) use ($m) {
+                return ltrim($m['remark'] . PHP_EOL . $remark);
+            };
+
+            // begin
+            $missionRepo->modify(['id' => $m['id']], ['state' => 2]);
+
+            // run command
+            $command = $this->getApplication()->find($m['command']);
+            try {
+                $date = date(Abs::FMT_FULL);
+                $status = $command->run(new ArrayInput($_condition), $output);
+                if ($status === 0) {
+                    if ($m['cronReuse']) {
+                        $remark = "[{$date}] execute and successful";
+                        $attributes = ['state' => 1, 'donePercent' => 0, 'remark' => $getRemark($remark)];
+                    } else {
+                        $attributes = ['state' => 3];
+                    }
+                } else {
+                    $remark = "[{$date}] exit status: {$status}";
+                    $attributes = ['state' => 4, 'remark' => $getRemark($remark)];
+                }
+            } catch (Exception $e) {
+                $attributes = ['state' => 4, 'remark' => $getRemark($e->getMessage())];
+            }
+
+            $missionRepo->modify(['id' => $m['id']], $attributes);
+
+            // send telegram message
+            if ($condition['receiver']) {
+                $now = date(Abs::FMT_FULL);
+                $this->web->telegramSendMessage(
+                    $condition['receiver'],
+                    "`[{$now}]` Mission *<ID:{$m['id']}>* done",
+                    ['mode' => 'Markdown']
+                );
             }
         }
     }

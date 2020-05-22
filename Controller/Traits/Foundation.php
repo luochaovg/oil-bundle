@@ -10,7 +10,6 @@ use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Entity\Enum;
 use Leon\BswBundle\Module\Error\Entity\ErrorException;
-use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Repository\FoundationRepository;
@@ -39,7 +38,6 @@ use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
 use Leon\BswBundle\Component\Aes;
 use Leon\BswBundle\Component\Service;
 use Leon\BswBundle\Module\Exception\ServiceException;
-use Leon\BswBundle\Module\Bsw as BswModule;
 use Leon\BswBundle\Module\Bsw\Message;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -111,6 +109,11 @@ trait Foundation
     //
     // ↓↓ For variable ↓↓
     //
+
+    /**
+     * @var bool
+     */
+    protected $ajax;
 
     /**
      * @var string
@@ -688,7 +691,7 @@ trait Foundation
     /**
      * Get url by safe mode
      *
-     * @param string      $route
+     * @param string|null $route
      * @param array       $params
      * @param string|null $scene
      * @param bool        $abs
@@ -881,6 +884,7 @@ trait Foundation
                             'app'    => Helper::cutString($class, '\\^1^desc'),
                             'class'  => $class,
                             'method' => $method,
+                            'path'   => "{$class}::{$method}",
                         ],
                         $getDoc($class, $method)
                     );
@@ -1458,59 +1462,6 @@ trait Foundation
         $code = $codeMap[$classify] ?? $this->codeOkForLogic;
 
         return $this->responseMessageWithAjax($code, ...$args);
-    }
-
-    /**
-     * Render module by simple mode
-     *
-     * @param array $moduleList
-     * @param array $logicArgs
-     * @param bool  $directResponseMessage
-     *
-     * @return Response|Message|array
-     * @throws
-     */
-    public function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
-    {
-        $showArgs = [Abs::TAG_LOGIC => $logicArgs];
-        $inputArgs = $this->displayArgsScaffold();
-
-        $extraBswArgs = [
-            'expr'       => $this->expr,
-            'translator' => $this->translator,
-            'logger'     => $this->logger,
-        ];
-
-        $bswDispatcher = new BswModule\Dispatcher($this);
-        foreach ($moduleList as $module => $extraArgs) {
-
-            if (is_numeric($module)) {
-                [$module, $extraArgs] = [$extraArgs, []];
-            }
-
-            /**
-             * validator extra
-             */
-            if (!is_array($extraArgs)) {
-                throw new ModuleException('The extra args must be array for ' . $module);
-            }
-
-            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
-
-            /**
-             * @var BswModule\Message $message
-             */
-            if (($message = $output['message'] ?? null)) {
-                return $directResponseMessage ? $this->messageToResponse($message) : $message;
-            }
-
-            if ($name) {
-                $showArgs[$name] = $output;
-            }
-        }
-
-        return $showArgs;
     }
 
     /**

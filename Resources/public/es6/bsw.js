@@ -127,16 +127,7 @@ $(function () {
             }));
         },
 
-        export(filter, route) {
-            let data = {
-                title: bsw.lang.export_mission,
-                width: 768,
-            };
-            data.location = bsw.setParams({filter, route}, this.api_export);
-            this.showIFrame(data, $('body')[0]);
-        },
-
-        filter(event, jump = false, route = null) {
+        filter(event, jump = false) {
             let that = this;
             event.preventDefault();
             that.filter_form.validateFields((err, values) => {
@@ -179,9 +170,6 @@ $(function () {
                     }
                     _values[field] = values[field];
                 }
-                if (this.formMethod === 'export') {
-                    return this.export(_values, route);
-                }
                 return this[`${this.formMethod}FilterForm`](_values, jump);
             });
         },
@@ -198,6 +186,27 @@ $(function () {
                 return location.href = url;
             }
             this.pagination(url);
+        },
+
+        exportFilterForm(values) {
+            let url = bsw.unsetParamsBeginWith(['filter']);
+            url = bsw.unsetParams(['page'], url);
+            url = bsw.setParams({filter: values, scene: 'export'}, url);
+
+            bsw.request(url).then((res) => {
+                bsw.response(res).then(() => {
+                    let data = {
+                        title: bsw.lang.export_mission,
+                        width: 768,
+                    };
+                    data.location = bsw.setParams(res.sets, this.api_export);
+                    this.showIFrame(data, $('body')[0]);
+                }).catch((reason => {
+                    console.warn(reason);
+                }));
+            }).catch((reason => {
+                console.warn(reason);
+            }));
         },
 
         persistence(event) {

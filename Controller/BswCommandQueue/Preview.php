@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswCommandQueue;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswCommandQueue;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -18,6 +19,18 @@ trait Preview
     public function previewEntity(): string
     {
         return BswCommandQueue::class;
+    }
+
+    /**
+     * @return array
+     */
+    public function previewTailor(): array
+    {
+        return [
+            Tailor\AttachmentLink::class => [
+                0 => 'fileAttachmentId',
+            ],
+        ];
     }
 
     /**
@@ -56,6 +69,21 @@ trait Preview
     }
 
     /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function previewAfterHook(Arguments $args): array
+    {
+        $condition = Helper::parseJsonString($args->original['condition']);
+        $condition['entity'] = base64_decode($condition['entity']);
+        $condition['query'] = '-- CONDITION FOR EXPORT --';
+        $args->hooked['condition'] = Helper::formatPrintJson($condition, 4, ': ');
+
+        return $args->hooked;
+    }
+
+    /**
      * Preview record
      *
      * @Route("/bsw-command-queue/preview", name="app_bsw_command_queue_preview")
@@ -69,6 +97,6 @@ trait Preview
             return $args;
         }
 
-        return $this->showPreview();
+        return $this->showPreview(['dynamic' => 5]);
     }
 }

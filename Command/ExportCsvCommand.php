@@ -48,11 +48,18 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     }
 
     /**
+     * @param array $fields
+     *
      * @return array
      */
-    public function header(): array
+    public function header(array $fields): array
     {
-        return [];
+        $fieldsLabel = [];
+        foreach ($fields as $field) {
+            $fieldsLabel[$field] = $this->web->fieldLang(Helper::stringToLabel($field));
+        }
+
+        return $fieldsLabel;
     }
 
     /**
@@ -70,7 +77,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
      *
      * @return array
      */
-    public function handleAnyRecord(array $records): array
+    public function handleAllRecord(array $records): array
     {
         return $records;
     }
@@ -84,30 +91,30 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
      */
     public function handler(array $record)
     {
+        static $keys, $_keys, $header;
+        if (!isset($header)) {
+            $keys = array_keys(current($record));
+            $header = $this->header($keys);
+            $_keys = array_keys($header);
+        }
+
         if ($this->hasCnText) {
             setlocale(LC_ALL, 'zh_CN');
         }
 
-        $record = $this->handleAnyRecord($record);
+        $record = $this->handleAllRecord($record);
         foreach ($record as &$item) {
+            $item = Helper::arrayPull($item, $_keys, false, '');
             $item = $this->handleRecord($item);
         }
 
         if ($this->page == 1) {
-            $header = $this->header();
-            $keys = array_keys(current($record));
-            if (empty($header)) {
-                $_header = Helper::arrayMap(
-                    $keys,
-                    function ($val) {
-                        return Helper::stringToLabel($val);
-                    }
-                );
-            } else {
-                $_header = [];
-                foreach ($keys as $key) {
-                    $_header[] = $header[$key] ?? Helper::stringToLabel($key);
+            $_header = [];
+            foreach ($keys as $key) {
+                if (!isset($header[$key])) {
+                    continue;
                 }
+                $_header[] = $header[$key];
             }
             array_unshift($record, $_header);
         }

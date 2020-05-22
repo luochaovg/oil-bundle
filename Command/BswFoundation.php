@@ -8,10 +8,10 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswFreeController;
 use Leon\BswBundle\Controller\Traits\Database;
 use Leon\BswBundle\Entity\BswConfig;
-use Leon\BswBundle\Module\Entity\Abs;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
+use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -21,6 +21,7 @@ trait BswFoundation
 {
     use ControllerTrait;
     use Database;
+    use LockableTrait;
 
     /**
      * @var BswFreeController

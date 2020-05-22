@@ -75,7 +75,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=128, groups={"modify"})
-     * @BswAnnotation\Preview(sort=6, render=BswAbs::HTML_PRE, width=360)
+     * @BswAnnotation\Preview(sort=10.1, render=BswAbs::HTML_PRE, width=360)
      * @BswAnnotation\Persistence(sort=6, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=6)
      */
@@ -96,7 +96,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=32, groups={"modify"})
-     * @BswAnnotation\Preview(sort=8, render=BswAbs::RENDER_CODE, align="center")
+     * @BswAnnotation\Preview(sort=8, width=160, render=BswAbs::RENDER_CODE, align="center")
      * @BswAnnotation\Persistence(sort=8, title="Date format (Y-m-d H:i) got value is (2019-01-01 19:30)")
      * @BswAnnotation\Filter(sort=8)
      */
@@ -107,7 +107,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=32, groups={"modify"})
-     * @BswAnnotation\Preview(sort=9, render=BswAbs::RENDER_CODE, align="center")
+     * @BswAnnotation\Preview(sort=9, width=160, render=BswAbs::RENDER_CODE, align="center")
      * @BswAnnotation\Persistence(sort=9)
      * @BswAnnotation\Filter(sort=9)
      */
@@ -124,13 +124,23 @@ class BswCommandQueue extends FoundationEntity
     protected $cronReuse = 0;
 
     /**
+     * @ORM\Column(type="integer", name="`file_attachment_id`")
+     * @Assert\Type(type="integer", groups={"modify"})
+     * @Assert\NotNull(groups={"modify"})
+     * @BswAnnotation\Preview(sort=11, align="center")
+     * @BswAnnotation\Persistence(sort=11, type=BswForm\Upload::class, typeArgs={"flag":"bsw-command-queue", "fileMd5Key":"md5", "fileSha1Key":"sha1"})
+     * @BswAnnotation\Filter(sort=11, type=BswForm\Number::class)
+     */
+    protected $fileAttachmentId = 0;
+
+    /**
      * @ORM\Column(type="string", name="`remark`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @Assert\Length(max=128, groups={"modify"})
-     * @BswAnnotation\Preview(sort=11, render=BswAbs::HTML_PRE, width=360)
-     * @BswAnnotation\Persistence(sort=11, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=11)
+     * @Assert\Length(max=2048, groups={"modify"})
+     * @BswAnnotation\Preview(sort=12, render=BswAbs::HTML_PRE, width=360)
+     * @BswAnnotation\Persistence(sort=12, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=12)
      */
     protected $remark = "";
 
@@ -138,9 +148,9 @@ class BswCommandQueue extends FoundationEntity
      * @ORM\Column(type="string", name="`add_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=12, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=12, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=12, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=13, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=13, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=13, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $addTime;
 
@@ -148,9 +158,9 @@ class BswCommandQueue extends FoundationEntity
      * @ORM\Column(type="string", name="`update_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=13, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=13, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=13, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=14, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=14, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=14, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $updateTime;
 
@@ -158,9 +168,9 @@ class BswCommandQueue extends FoundationEntity
      * @ORM\Column(type="smallint", name="`state`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=14, align="center", enum=true, dress={0:"default", 1:"processing"}, status=true)
-     * @BswAnnotation\Persistence(sort=14, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=14, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Preview(sort=3.1, align="center", enum=true, dress={1:"blue", 2:"orange", 3:"green", 4:"red"})
+     * @BswAnnotation\Persistence(sort=15, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Filter(sort=15, type=BswForm\Select::class, enum=true)
      */
     protected $state = 1;
 }

@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Bsw\Preview\Tailor;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAttachment;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Tailor;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Hook\Entity\FileSize;
@@ -24,17 +25,17 @@ class AttachmentLink extends Tailor
     }
 
     /**
-     * @param array $query
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewQuery(array $query): array
+    public function tailorPreviewQuery(Arguments $args): array
     {
-        $query = Helper::merge(
-            $query,
+        $args->target = Helper::merge(
+            $args->target,
             [
                 'select' => [
-                    empty($query['select']) ? $query['alias'] : null,
+                    empty($args->target['select']) ? $args->target['alias'] : null,
                     "{$this->alias}.deep AS {$this->keyword}_deep",
                     "{$this->alias}.filename AS {$this->keyword}_filename",
                     "{$this->alias}.size AS {$this->keyword}_size",
@@ -42,51 +43,48 @@ class AttachmentLink extends Tailor
                 'join'   => [
                     "{$this->alias}" => [
                         'entity' => BswAttachment::class,
-                        'left'   => ["{$query['alias']}.{$this->fieldCamel}", "{$this->alias}.state"],
+                        'left'   => ["{$args->target['alias']}.{$this->fieldCamel}", "{$this->alias}.state"],
                         'right'  => ["{$this->alias}.id", Abs::NORMAL],
                     ],
                 ],
             ]
         );
 
-        $query['select'] = array_unique($query['select']);
+        $args->target['select'] = array_unique($args->target['select']);
 
-        return $query;
+        return $args->target;
     }
 
     /**
-     * @param array $previewAnnotationExtra
-     * @param array $previewAnnotation
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewAnnotation(array $previewAnnotationExtra, array $previewAnnotation): array
+    public function tailorPreviewAnnotation(Arguments $args): array
     {
-        $sort = $previewAnnotation[$this->fieldCamel]['sort'] + .01;
-        $previewAnnotationExtra[$this->alias] = [
+        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $args->target[$this->alias] = [
             'label'  => $this->label,
             'render' => Abs::RENDER_LINK,
             'sort'   => $sort,
             'width'  => 400,
         ];
-        $previewAnnotationExtra["{$this->keyword}_size"] = [
+        $args->target["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
             'show' => false,
         ];
 
-        return $previewAnnotationExtra;
+        return $args->target;
     }
 
     /**
-     * @param array $current
-     * @param array $hooked
-     * @param array $original
+     * @param Arguments $args
      *
      * @return array
      */
-    public function tailorPreviewBeforeRender(array $current, array $hooked, array $original): array
+    public function tailorPreviewBeforeRender(Arguments $args): array
     {
-        foreach ($current as &$item) {
+        foreach ($args->target as &$item) {
 
             $item = $this->web->attachmentPreviewHandler(
                 $item,
@@ -108,6 +106,6 @@ class AttachmentLink extends Tailor
             }
         }
 
-        return $current;
+        return $args->target;
     }
 }

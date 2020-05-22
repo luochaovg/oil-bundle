@@ -180,6 +180,16 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     }
 
     /**
+     * @param float $percent
+     *
+     * @return bool
+     */
+    public function percent(float $percent): bool
+    {
+        return true;
+    }
+
+    /**
      * @param int $limit
      * @param int $pageTotal
      * @param int $pageNow
@@ -188,7 +198,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      * @param int $recordTotal
      * @param int $recordSuccess
      *
-     * @return string
+     * @return string|null
      */
     public function process(
         int $limit,
@@ -198,7 +208,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
         int $roundSuccess,
         int $recordTotal,
         int $recordSuccess
-    ): string {
+    ): ?string {
 
         $time = Helper::date();
         $recordDone = (($pageNow - 1) * $limit) + $roundTotal;
@@ -220,7 +230,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $this->process
         );
 
-        return "<info> {$info} </info>";
+        if ($this->percent($process)) {
+            return "<info> {$info} </info>";
+        }
+
+        return null;
     }
 
     /**
@@ -303,7 +317,6 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
 
             $filter = array_merge($this->filter(), $query);
             $result = $this->repo->filters($_filter)->lister($filter);
-            dd($result);
 
         } elseif ($result = $this->lister()) {
             $result = $this->web->manualListForPagination($result, $query);

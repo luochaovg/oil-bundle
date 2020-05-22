@@ -12,6 +12,7 @@ use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw as BswModule;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
@@ -320,6 +321,46 @@ class BswBackendController extends BswWebController
     }
 
     /**
+     * Get args for scaffold view
+     *
+     * @param array $extra
+     *
+     * @return array
+     */
+    protected function displayArgsScaffold(array $extra = []): array
+    {
+        static $scaffold;
+
+        if (!isset($scaffold)) {
+            $json = $this->parameters('json');
+            [$cls, $fn] = $this->getMCM('-');
+            $getArgs = $this->getArgs();
+
+            $scaffold = [
+                'cnf'    => $this->cnf,
+                'usr'    => $this->usr,
+                'env'    => $this->env,
+                'debug'  => $this->debug,
+                'route'  => $this->route,
+                'get'    => $getArgs,
+                'url'    => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
+                'ctrl'   => $this->controller,
+                'cls'    => $cls,
+                'fn'     => $fn,
+                'access' => $this->access,
+                'ajax'   => $this->ajax,
+                'iframe' => empty($getArgs['iframe']) ? false : true,
+                'json'   => $json ? Helper::jsonStringify($json) : null,
+                'abs'    => static::$abs,
+                'enum'   => static::$enum,
+                'uuid'   => $this->uuid,
+            ];
+        }
+
+        return array_merge($scaffold, $extra);
+    }
+
+    /**
      * Render module
      *
      * @param array  $moduleList
@@ -418,6 +459,59 @@ class BswBackendController extends BswWebController
         }
 
         return $this->show($showArgs, $view);
+    }
+
+    /**
+     * Render module by simple mode
+     *
+     * @param array $moduleList
+     * @param array $logicArgs
+     * @param bool  $directResponseMessage
+     *
+     * @return Response|Message|array
+     * @throws
+     */
+    public function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
+    {
+        $showArgs = [Abs::TAG_LOGIC => $logicArgs];
+        $inputArgs = $this->displayArgsScaffold();
+
+        $extraBswArgs = [
+            'expr'       => $this->expr,
+            'translator' => $this->translator,
+            'logger'     => $this->logger,
+        ];
+
+        $bswDispatcher = new BswModule\Dispatcher($this);
+        foreach ($moduleList as $module => $extraArgs) {
+
+            if (is_numeric($module)) {
+                [$module, $extraArgs] = [$extraArgs, []];
+            }
+
+            /**
+             * validator extra
+             */
+            if (!is_array($extraArgs)) {
+                throw new ModuleException('The extra args must be array for ' . $module);
+            }
+
+            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
+            [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
+
+            /**
+             * @var BswModule\Message $message
+             */
+            if (($message = $output['message'] ?? null)) {
+                return $directResponseMessage ? $this->messageToResponse($message) : $message;
+            }
+
+            if ($name) {
+                $showArgs[$name] = $output;
+            }
+        }
+
+        return $showArgs;
     }
 
     /**

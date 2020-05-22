@@ -23,19 +23,18 @@ trait Export
      */
     public function exportAnnotation(): array
     {
-        $route = $this->getArgs('route');
-        $filter = $this->getArgs('filter');
+        $entity = $this->getArgs('entity');
+        $query = $this->getArgs('query');
 
-        if (empty($route) || empty($filter)) {
+        if (empty($entity) || empty($query)) {
             $condition = null;
         } else {
-            $condition = compact('route', 'filter');
+            $condition = compact('entity', 'query');
         }
 
         return [
             'command'   => [
-                'value'    => 'mission:export-preview',
-                'disabled' => true,
+                'value' => 'mission:export-preview',
             ],
             'condition' => [
                 'value' => Helper::formatPrintJson($condition, 4, ': '),
@@ -59,6 +58,6 @@ trait Export
 
         $nextRoute = $this->getHistoryRoute(-2);
 
-        return $this->showPersistence(['nextRoute' => $nextRoute]);
+        return $this->showPersistence(['nextRoute' => $nextRoute, 'i18nNewly' => 'Newly mission queue done']);
     }
 }

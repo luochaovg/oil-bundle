@@ -2,7 +2,10 @@
 
 namespace Leon\BswBundle\Command;
 
+use App\Module\Entity\Enum;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Entity\BswCommandQueue;
+use Leon\BswBundle\Repository\BswCommandQueueRepository;
 use Symfony\Component\Console\Input\InputOption;
 
 class BswExportPreviewCommand extends ExportCsvCommand
@@ -10,7 +13,12 @@ class BswExportPreviewCommand extends ExportCsvCommand
     /**
      * @var int
      */
-    protected $limit = 300;
+    protected $limit = 100;
+
+    /**
+     * @var BswCommandQueueRepository
+     */
+    protected $missionRepo;
 
     /**
      * @return array
@@ -32,10 +40,18 @@ class BswExportPreviewCommand extends ExportCsvCommand
         return array_merge(
             parent::args(),
             [
-                'route'  => [null, InputOption::VALUE_REQUIRED, 'The route for export'],
-                'filter' => [null, InputOption::VALUE_REQUIRED, 'Filter query'],
+                'entity' => [null, InputOption::VALUE_REQUIRED, 'Entity namespace'],
+                'query'  => [null, InputOption::VALUE_REQUIRED, 'Filter query'],
             ]
         );
+    }
+
+    /**
+     * @throws
+     */
+    public function init()
+    {
+        $this->missionRepo = $this->repo(BswCommandQueue::class);
     }
 
     /**
@@ -47,23 +63,90 @@ class BswExportPreviewCommand extends ExportCsvCommand
     }
 
     /**
-     * @return array
-     */
-    public function header(): array
-    {
-        return [];
-    }
-
-    /**
      * @param object $params
      *
      * @return object
      */
     public function params($params)
     {
-        $params->filter = Helper::jsonArray64($params->filter);
+        $params->entity = base64_decode($params->entity);
+        $params->query = unserialize(base64_decode($params->query));
 
         return $params;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function entity(): ?string
+    {
+        return $this->params->entity;
+    }
+
+    /**
+     * @return array
+     * @throws
+     */
+    public function filter(): array
+    {
+        return $this->params->query;
+    }
+
+    /**
+     * @param array $record
+     *
+     * @return array
+     */
+    private function enumParser(array $record): array
+    {
+        $enum = [];
+        $enumClass = Enum::class;
+        $prefixTable = strtoupper(Helper::tableNameFromCls($this->entity()));
+
+        foreach ($record as $field => $value) {
+            $label = strtoupper(Helper::camelToUnder($field));
+            if (defined($first = "{$enumClass}::{$label}")) {
+                $enum[$field] = $this->web->enumLang(constant($first));
+                continue;
+            }
+            if (defined($second = "{$enumClass}::{$prefixTable}_{$label}")) {
+                $enum[$field] = $this->web->enumLang(constant($second));
+                continue;
+            }
+        }
+
+        return $enum;
+    }
+
+    /**
+     * @param array $record
+     *
+     * @return array
+     */
+    public function handleRecord(array $record): array
+    {
+        static $enum;
+        if (!isset($enum)) {
+            $enum = $this->enumParser($record);
+        }
+
+        foreach ($record as $field => $value) {
+            if (isset($enum[$field])) {
+                $record[$field] = $enum[$field][$value];
+            }
+        }
+
+        return $record;
+    }
+
+    /**
+     * @param float $percent
+     *
+     * @return bool
+     */
+    public function percent(float $percent): bool
+    {
+        return !!$this->missionRepo->modify(['id' => $this->params->args->id], ['donePercent' => $percent]);
     }
 
     /**
@@ -71,19 +154,8 @@ class BswExportPreviewCommand extends ExportCsvCommand
      */
     public function done()
     {
-        parent::done();
-
-        $receiver = $this->params->receiver ?: $this->config('telegram_receiver_export_traffic');
-        $this->web->telegramSendDocument($receiver, $this->params->csv);
-    }
-
-    /**
-     * @return array
-     */
-    public function lister(): array
-    {
-        dd($this->params);
-
-        return [];
+        if ($this->params->receiver && $this->params->csv) {
+            $this->web->telegramSendDocument($this->params->receiver, $this->params->csv);
+        }
     }
 }

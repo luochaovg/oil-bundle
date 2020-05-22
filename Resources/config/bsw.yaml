@@ -156,7 +156,7 @@ parameters:
         font_symbol: /bundles/leonbsw/font/iconfont/iconfont.js
         font_symbol_url: /bundles/leonbsw/font/iconfont/demo_index.html
         ant_icon_url: https://www.antdv.com/components/icon-cn
-        verify_json_url: http://www.bejson.com/kim.htm
+        verify_json_url: https://www.bejson.com/kim.htm
         loading_label: null
 
         loading_background_image: null
@@ -194,7 +194,6 @@ parameters:
         icon_export: b:icon-export4
         icon_import: b:icon-import1
 
-        telegram_receiver_command_queue: null
         third_message_key: bsw_third_message
 
     currency_code: CNY
