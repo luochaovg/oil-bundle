@@ -61,7 +61,7 @@ class Enum
     ];
 
     /**
-     * @cosnt array 性别
+     * @const array 性别
      */
     const BSW_ADMIN_USER_SEX = self::GENDER;
 

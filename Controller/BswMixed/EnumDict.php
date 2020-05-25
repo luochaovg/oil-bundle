@@ -102,11 +102,10 @@ trait EnumDict
 
         $list = [];
         foreach ($constant as $key => $item) {
-            /**
-             * @var ReflectionClassConstant $proto
-             */
-            $proto = $item['proto'];
-            $enum = $proto->getValue();
+            if (empty($item['proto'])) {
+                continue;
+            }
+            $enum = $item['proto']->getValue();
             $enum = $this->enumLang($enum);
             array_push(
                 $list,
