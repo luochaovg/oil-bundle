@@ -188,9 +188,9 @@ trait Upload
      * @param array $options
      * @param int   $platform
      *
-     * @return UploadItem
+     * @return object
      */
-    public function uploadCore(array $file, array $options, int $platform = 2): UploadItem
+    public function uploadCore(array $file, array $options, int $platform = 2)
     {
         // upload
         try {

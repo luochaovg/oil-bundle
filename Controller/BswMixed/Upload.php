@@ -47,6 +47,9 @@ trait Upload
         $file = $_FILES[$args->file_flag] ?? [];
         $options = $this->uploadOptionByFlag($args->file_flag);
 
+        /**
+         * @var UploadItem $file
+         */
         $file = $this->uploadCore($file, $options);
         $sets = [
             'attachment_id'   => $file->id,
