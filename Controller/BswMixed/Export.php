@@ -46,7 +46,7 @@ trait Export
      * Export record
      *
      * @Route("/export", name="app_export")
-     * @Access()
+     * @Access(same="app_bsw_command_queue_persistence")
      *
      * @return Response
      */

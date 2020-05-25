@@ -6,16 +6,25 @@ use Leon\BswBundle\Annotation\Entity\Input;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Component\MysqlDoc;
+use Leon\BswBundle\Component\Reflection;
+use Leon\BswBundle\Component\Aes;
+use Leon\BswBundle\Component\Service;
 use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Entity\Enum;
+use Leon\BswBundle\Module\Error\Entity\ErrorDevice;
 use Leon\BswBundle\Module\Error\Entity\ErrorException;
+use Leon\BswBundle\Module\Error\Entity\ErrorOS;
+use Leon\BswBundle\Module\Error\Entity\ErrorUA;
+use Leon\BswBundle\Module\Exception\FileNotExistsException;
 use Leon\BswBundle\Module\Traits as MT;
+use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
+use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
+use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
+use Leon\BswBundle\Module\Exception\ServiceException;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Repository\FoundationRepository;
-use Predis\Client;
-use Doctrine\ORM\Query\Expr;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application as CmdApplication;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -24,22 +33,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request as SfRequest;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Leon\BswBundle\Component\Reflection;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Route as RoutingRoute;
-use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
-use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
-use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
-use Leon\BswBundle\Component\Aes;
-use Leon\BswBundle\Component\Service;
-use Leon\BswBundle\Module\Exception\ServiceException;
-use Leon\BswBundle\Module\Bsw\Message;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\Query\Expr;
+use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
+use Predis\Client;
 use ReflectionClass;
 use Exception;
 
@@ -57,9 +61,13 @@ trait Foundation
         CT\Breakpoint,
         CT\Database,
         CT\DisCache,
+        CT\Excel,
         CT\FormRules,
-        CT\Mixed,
+        CT\IpRegion,
         CT\Request,
+        CT\Sns,
+        CT\Telegram,
+        CT\Third,
         CT\Upload;
 
     //
@@ -1408,6 +1416,145 @@ trait Foundation
             Abs::PG_TOTAL_ITEM   => $total,
             Abs::PG_ITEMS        => array_slice($list, $query['offset'], $query['limit']),
         ];
+    }
+
+    /**
+     * Valid device args
+     *
+     * @param int $type
+     *
+     * @return true|Response
+     * @throws
+     */
+    protected function validDevice(int $type = Abs::VD_ALL)
+    {
+        if (Helper::bitFlagAssert($type, Abs::VD_OS) && empty($this->header->os)) {
+            return $this->failed(new ErrorOS());
+        }
+
+        if (Helper::bitFlagAssert($type, Abs::VD_UA) && empty($this->header->ua)) {
+            return $this->failed(new ErrorUA());
+        }
+
+        if (Helper::bitFlagAssert($type, Abs::VD_DEVICE) && empty($this->header->device)) {
+            return $this->failed(new ErrorDevice());
+        }
+
+        return true;
+    }
+
+    /**
+     * Get correct region by special province
+     *
+     * @param array $location
+     * @param array $specialProvince
+     *
+     * @return string
+     */
+    public function getCorrectRegion(array $location, array $specialProvince = ['香港', '澳门', '台湾']): string
+    {
+        $region = $location['country'];
+        if ($specialProvince && in_array($location['province'], $specialProvince)) {
+            $region = $location['province'];
+        }
+
+        return $region;
+    }
+
+    /**
+     * Get file path (in order)
+     *
+     * @param string $fileName
+     * @param string $dirName
+     * @param string $bundle
+     *
+     * @return string
+     * @throws
+     */
+    public function getFilePathInOrder(string $fileName, string $dirName = 'mixed', string $bundle = 'LeonBswBundle')
+    {
+        $dirName = trim($dirName, '/');
+        $path = $this->kernel->getProjectDir();
+        $file = "{$path}/{$dirName}/{$fileName}";
+
+        if (file_exists($file)) {
+            return $file;
+        }
+
+        $path = $this->kernel->getBundle($bundle)->getPath();
+        $file = "{$path}/Resources/{$dirName}/{$fileName}";
+
+        if (file_exists($file)) {
+            return $file;
+        }
+
+        throw new FileNotExistsException("{$file} is not found");
+    }
+
+    /**
+     * Get file path
+     *
+     * @param string $fileName
+     * @param string $dirName
+     * @param string $bundle
+     *
+     * @return string
+     * @throws
+     */
+    public function getFilePath(string $fileName, string $dirName = 'mixed', ?string $bundle = 'LeonBswBundle')
+    {
+        $dirName = trim($dirName, '/');
+
+        if ($bundle) {
+            $path = $this->kernel->getBundle($bundle)->getPath();
+            $file = "{$path}/Resources/{$dirName}/{$fileName}";
+        } else {
+            $path = $this->kernel->getProjectDir();
+            $file = "{$path}/{$dirName}/{$fileName}";
+        }
+
+        if (file_exists($file)) {
+            return $file;
+        }
+
+        throw new FileNotExistsException("{$file} is not found");
+    }
+
+    /**
+     * Attachment handler for preview
+     *
+     * @param object|array $item
+     * @param string       $key
+     * @param array        $pull
+     * @param bool         $unsetPullKeys
+     *
+     * @return array|object
+     */
+    public function attachmentPreviewHandler(
+        $item,
+        string $key = 'file_url',
+        array $pull = ['deep', 'filename'],
+        bool $unsetPullKeys = true
+    ) {
+        if (empty($item)) {
+            return $item;
+        }
+
+        $isObject = is_object($item);
+        if ($isObject) {
+            $item = Helper::entityToArray($item);
+        }
+
+        $args = Helper::arrayPull($item, $pull, $unsetPullKeys);
+        $path = Helper::joinString('/', ...array_values($args));
+
+        if (!empty($path) && strpos($path, 'http') !== 0) {
+            $path = $this->perfectUrl($this->cnf->host_file) . $path;
+        }
+
+        $item[$key] = $path;
+
+        return $isObject ? (object)$item : $item;
     }
 
     /**

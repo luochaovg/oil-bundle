@@ -29,7 +29,7 @@ use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 
 class BswBackendController extends BswWebController
 {
-    use CT\EntityHint,
+    use CT\BackendEntityHint,
         CT\BackendPreset;
 
     /**

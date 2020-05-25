@@ -480,7 +480,7 @@ class Module extends Bsw
         if ($this->input->scene === 'preview') {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Button::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => 'export']);
-            $export->setRouteForAccess('app_export');
+            $export->setRouteForAccess($this->input->cnf->route_export);
         }
 
         $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, []);

@@ -3,7 +3,20 @@
 namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Upload as Uploader;
+use Leon\BswBundle\Component\UploadItem;
+use Leon\BswBundle\Entity\BswAttachment;
+use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorUpload;
+use Leon\BswBundle\Repository\BswAttachmentRepository;
+use Monolog\Logger;
+use OSS\Core\OssException;
+use OSS\OssClient;
+use Exception;
 
+/**
+ * @property Logger $logger
+ */
 trait Upload
 {
     /**
@@ -96,5 +109,142 @@ trait Upload
             'mime'   => array_filter(array_unique($mime)),
             'suffix' => array_filter(array_unique($suffix)),
         ];
+    }
+
+    /**
+     * Get upload option with flag
+     *
+     * @param string $flag
+     *
+     * @return array
+     */
+    public function uploadOptionByFlag(string $flag): array
+    {
+        $default = [
+            'max_size'     => 128 * 1024,
+            'suffix'       => [],
+            'mime'         => [],
+            'pic_sizes'    => [[10, 'max'], [10, 'max']],
+            'save_replace' => false,
+            'root_path'    => $this->parameter('file'),
+            'save_name_fn' => ['uniqid'],
+            'save_path_fn' => function () use ($flag) {
+                return $flag;
+            },
+        ];
+
+        return $this->dispatchMethod(Abs::FN_UPLOAD_OPTIONS, $default, [$flag, $default]);
+    }
+
+    /**
+     * @param UploadItem $file
+     *
+     * @return UploadItem
+     * @throws
+     */
+    public function ossUpload(UploadItem $file): UploadItem
+    {
+        $fileName = "{$file->savePath}/{$file->saveName}";
+        if (!$this->parameter('upload_to_oss')) {
+            return $file;
+        }
+
+        try {
+
+            $ossClient = new OssClient(
+                $this->parameterInOrderByEmpty(['ali_oss_key', 'ali_key']),
+                $this->parameterInOrderByEmpty(['ali_oss_secret', 'ali_secret']),
+                $this->parameter('ali_oss_endpoint')
+            );
+
+            $ossClient->setConnectTimeout($this->cnf->curl_timeout_second * 20);
+            $ossClient->setTimeout($this->cnf->curl_timeout_second * 20);
+
+            $ossClient->uploadFile(
+                $this->parameter('ali_oss_bucket'),
+                $fileName,
+                $file->file
+            );
+
+        } catch (OssException $e) {
+
+            $this->logger->error("Ali oss upload error: {$e->getMessage()}");
+
+            return $file;
+        }
+
+        // remove local file
+        if ($this->cnf->rm_local_file_when_oss ?? false) {
+            @unlink($file->file);
+        }
+
+        return $file;
+    }
+
+    /**
+     * Upload core
+     *
+     * @param array $file
+     * @param array $options
+     * @param int   $platform
+     *
+     * @return UploadItem
+     */
+    public function uploadCore(array $file, array $options, int $platform = 2): UploadItem
+    {
+        // upload
+        try {
+            $file = current((new Uploader($options))->upload([$file]));
+        } catch (Exception $e) {
+            return $this->failedAjax(new ErrorUpload(), $e->getMessage());
+        }
+
+        /**
+         * @var BswAttachmentRepository $bswAttachment
+         */
+        $bswAttachment = $this->repo(BswAttachment::class);
+        $exists = $bswAttachment->findOneBy(
+            $unique = [
+                'sha1'     => $file->sha1,
+                'platform' => $platform,
+                'userId'   => $this->usr->{$this->cnf->usr_uid},
+            ]
+        );
+
+        if ($exists) {
+
+            // The file already exists
+            if ($exists->state !== Abs::NORMAL) {
+                $bswAttachment->modify(['id' => $exists->id], ['state' => Abs::NORMAL]);
+            }
+
+            $file->savePath = $exists->deep;
+            $file->saveName = $exists->filename;
+            $file->id = $exists->id;
+
+        } else {
+
+            // The file is new and upload to oss
+            $file->id = $bswAttachment->newly(
+                [
+                    'platform' => $platform,
+                    'userId'   => $this->usr->{$this->cnf->usr_uid},
+                    'sha1'     => $file->sha1,
+                    'size'     => $file->size,
+                    'deep'     => $file->savePath,
+                    'filename' => $file->saveName,
+                    'state'    => Abs::NORMAL,
+                ]
+            );
+            $file = $this->ossUpload($file);
+        }
+
+        // file url
+        $file = $this->attachmentPreviewHandler($file, 'url', ['savePath', 'saveName'], false);
+        if (is_callable($options['file_fn'] ?? null)) {
+            $file = call_user_func_array($options['file_fn'], [$file]);
+        }
+
+        return $file;
     }
 }

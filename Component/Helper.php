@@ -3800,9 +3800,9 @@ class Helper
     public static function humanDuration(int $duration): string
     {
         $map = [
-            'y' => [Abs::TIME_YEAR * 3, Abs::TIME_YEAR],
-            'm' => [Abs::TIME_MONTH * 3, Abs::TIME_MONTH],
-            'd' => [Abs::TIME_DAY * 3, Abs::TIME_DAY],
+            'year'  => [Abs::TIME_YEAR * 3, Abs::TIME_YEAR],
+            'month' => [Abs::TIME_MONTH * 3, Abs::TIME_MONTH],
+            'day'   => [Abs::TIME_DAY * 3, Abs::TIME_DAY],
         ];
 
         $duration *= Abs::TIME_HOUR;
@@ -3813,7 +3813,7 @@ class Helper
             }
         }
 
-        return self::numberFormat($duration / Abs::TIME_HOUR, 1, ',') . 'h';
+        return self::numberFormat($duration / Abs::TIME_HOUR, 1, ',') . 'hour';
     }
 
     /**

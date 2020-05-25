@@ -55,7 +55,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=4, align="center", render="{value} %")
-     * @BswAnnotation\Persistence(sort=4, type=BswForm\Slider::class, tips="Higher percentage, than lower execution priority", typeArgs={"max":20, "marks": {2:"2%", 4:"4%", 6:"6%", 8:"8%", 10:"10%", 15:"15%"}})
+     * @BswAnnotation\Persistence(sort=9.1, type=BswForm\Slider::class, tips="Higher percentage, than lower execution priority", typeArgs={"max":20, "marks": {2:"2%", 4:"4%", 6:"6%", 8:"8%", 10:"10%", 15:"15%"}})
      * @BswAnnotation\Filter(sort=4, type=BswForm\Number::class)
      */
     protected $resourceNeed = 1;
@@ -86,7 +86,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=7, align="center", enum=true, dress="blue")
-     * @BswAnnotation\Persistence(sort=7, type=BswForm\Select::class, enum=true, typeArgs={"switchFieldShape":{"cronDateFormat":1, "cronDateValue":1}})
+     * @BswAnnotation\Persistence(sort=7, type=BswForm\Select::class, enum=true, typeArgs={"switchFieldShape":{"cronDateFormat":1, "cronDateValue":1, "resourceNeed":2}})
      * @BswAnnotation\Filter(sort=7, type=BswForm\Select::class, enum=true)
      */
     protected $cronType = 1;
@@ -128,7 +128,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=11, align="center")
-     * @BswAnnotation\Persistence(sort=11, type=BswForm\Upload::class, typeArgs={"flag":"bsw-command-queue", "fileMd5Key":"md5", "fileSha1Key":"sha1"})
+     * @BswAnnotation\Persistence(sort=11, type=BswForm\Upload::class, typeArgs={"flag":"bsw-command-queue", "fileMd5Key":"md5", "fileSha1Key":"sha1"}, show=false)
      * @BswAnnotation\Filter(sort=11, type=BswForm\Number::class)
      */
     protected $fileAttachmentId = 0;

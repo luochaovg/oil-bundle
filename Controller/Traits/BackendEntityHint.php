@@ -10,7 +10,7 @@ use stdClass;
 /**
  * @property AbstractController $container
  */
-trait EntityHint
+trait BackendEntityHint
 {
     /**
      * Relation with keyword
