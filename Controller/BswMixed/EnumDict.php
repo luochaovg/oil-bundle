@@ -107,9 +107,7 @@ trait EnumDict
              */
             $proto = $item['proto'];
             $enum = $proto->getValue();
-            foreach ($enum as &$value) {
-                $value = $this->enumLang($value);
-            }
+            $enum = $this->enumLang($enum);
             array_push(
                 $list,
                 [
