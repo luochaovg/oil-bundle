@@ -62,7 +62,7 @@ class BswMissionCommand extends Command implements CommandInterface
         );
 
         if (!$mission) {
-            return $output->writeln("<info> None mission in queue </info>");
+            return;
         }
 
         $maxId = max(array_column($mission, 'id'));
