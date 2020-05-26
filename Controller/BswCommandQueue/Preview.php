@@ -76,8 +76,15 @@ trait Preview
     public function previewAfterHook(Arguments $args): array
     {
         $condition = Helper::parseJsonString($args->original['condition']);
-        $condition['entity'] = base64_decode($condition['entity']);
-        $condition['query'] = '-- CONDITION FOR EXPORT --';
+
+        if (isset($condition['entity'])) {
+            $condition['entity'] = base64_decode($condition['entity']);
+        }
+
+        if (isset($condition['query'])) {
+            $condition['query'] = '-- CONDITION FOR EXPORT --';
+        }
+
         $args->hooked['condition'] = Helper::formatPrintJson($condition, 4, ': ');
 
         return $args->hooked;

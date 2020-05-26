@@ -19,12 +19,17 @@ class IPCommand extends Acme
     protected $description = "Show ip address.";
 
     /**
+     * @var string
+     */
+    protected $pattern = "{ip}";
+
+    /**
      * @inheritdoc
      * @return mixed
      */
     public function handle()
     {
-        $ip = $this->arguments();
+        $ip = $this->getArguments()['ip'];
 
         if (empty($ip)) {
             return $this->replyWithMessage(

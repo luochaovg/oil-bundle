@@ -25,11 +25,16 @@ class NewsCommand extends Acme
     protected $description = "Show BaiDu news in current day.";
 
     /**
+     * @var string
+     */
+    protected $pattern = "{limit}";
+
+    /**
      * @inheritdoc
      */
     public function handle()
     {
-        $limit = $this->arguments();
+        $limit = $this->getArguments()['limit'];
         if ($limit && $limit > 0 && $limit <= 50) {
             $this->limit = $limit;
         }

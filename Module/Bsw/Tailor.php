@@ -216,7 +216,7 @@ abstract class Tailor
      */
     public function tailorPersistenceAfterSubmit(Arguments $args)
     {
-        return $args->target;
+        return [$args->target, $args->extraSubmit ?? []];
     }
 
     /**

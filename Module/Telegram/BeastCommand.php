@@ -21,6 +21,11 @@ class BeastCommand extends Acme
     protected $description = "Show your hobbies.";
 
     /**
+     * @var string
+     */
+    protected $pattern = "{secret}";
+
+    /**
      * Get home url
      *
      * @param string $salt
@@ -33,10 +38,7 @@ class BeastCommand extends Acme
         $private = realpath('../certificate/rsa_private.pem');
         $public = realpath('../certificate/rsa_public.pem');
 
-        $rsa = new Rsa($private, $public);
-        $url = $rsa->decryptByPublicKey($text);
-
-        return $url;
+        return (new Rsa($private, $public))->decryptByPublicKey($text);
     }
 
     /**
@@ -45,7 +47,7 @@ class BeastCommand extends Acme
      */
     public function handle()
     {
-        $secret = $this->arguments();
+        $secret = $this->getArguments()['secret'];
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $telegram = $this->getTelegram();

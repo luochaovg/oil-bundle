@@ -9,14 +9,6 @@ use PDO;
 abstract class Acme extends Command
 {
     /**
-     * @return string
-     */
-    public function arguments(): string
-    {
-        return explode(' ', $this->getUpdate()->getMessage()->text)[1] ?? '';
-    }
-
-    /**
      * @return MysqlClient
      */
     public function pdo(): MysqlClient

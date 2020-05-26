@@ -274,7 +274,6 @@ class Module extends Bsw
             $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
             $arguments = $this->arguments($args, ['id' => $this->input->id]);
             $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $arguments);
-            $result = array_values($result);
 
             if ($result instanceof Error) {
                 return $this->showError($result->tiny());
@@ -291,8 +290,12 @@ class Module extends Bsw
                 }
             }
 
-            $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
-            $arguments = $this->arguments(['target' => $args, 'id' => $this->input->id]);
+            $args = compact('extraSubmit', 'recordDiff', 'recordBefore');
+            $arguments = $this->arguments(
+                ['target' => $submit],
+                $args,
+                ['id' => $this->input->id, 'default' => [$submit, $extraSubmit]]
+            );
             $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $arguments);
 
             if ($result instanceof Error) {

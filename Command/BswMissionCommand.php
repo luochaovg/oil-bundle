@@ -127,8 +127,9 @@ class BswMissionCommand extends Command implements CommandInterface
 
             // run command
             $command = $this->getApplication()->find($m['command']);
+            $date = date('Y-m-d H:i');
+
             try {
-                $date = date('Y-m-d H:i');
                 $status = $command->run(new ArrayInput($_condition), $output);
                 if ($status === 0) {
                     if ($m['cronReuse']) {
@@ -140,7 +141,7 @@ class BswMissionCommand extends Command implements CommandInterface
                     $attributes = ['state' => 4, 'remark' => "[{$date}] exit status: {$status}"];
                 }
             } catch (Exception $e) {
-                $attributes = ['state' => 4, 'remark' => $e->getMessage()];
+                $attributes = ['state' => 4, 'remark' => "[{$date}] {$e->getMessage()}"];
             }
 
             $missionRepo->modify(['id' => $m['id']], $attributes);

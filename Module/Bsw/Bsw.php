@@ -227,7 +227,7 @@ abstract class Bsw
         $method = "{$prefix}{$call}";
 
         if (empty($this->tailor)) {
-            return $argument;
+            return $args->default ?? $argument;
         }
 
         /**

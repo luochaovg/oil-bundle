@@ -47,6 +47,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             'limit'     => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', 100],
             'data-line' => [null, InputOption::VALUE_OPTIONAL, 'The line number of data', 2],
             'args'      => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
+            'receiver'  => [null, InputOption::VALUE_OPTIONAL, 'Receiver telegram id, split by comma'],
         ];
     }
 
