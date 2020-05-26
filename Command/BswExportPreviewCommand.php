@@ -70,7 +70,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
     public function params($params)
     {
         $params->entity = base64_decode($params->entity);
-        $params->query = unserialize(base64_decode($params->query));
+        $params->query = Helper::stringToObject($params->query);
 
         return $params;
     }

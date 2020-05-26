@@ -608,7 +608,7 @@ class Module extends Bsw
             $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
             if ($this->web->getArgs('scene') === 'export') {
                 $entity = base64_encode($this->entity);
-                $query = base64_encode(serialize($query));
+                $query = Helper::objectToString($query);
                 $message = (new Message())->setSets(compact('entity', 'query'));
 
                 return $this->showMessage($message);

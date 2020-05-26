@@ -2901,6 +2901,49 @@ class Helper
     }
 
     /**
+     * Array diff assoc
+     *
+     * @param mixed ...$target
+     *
+     * @return array
+     */
+    public static function arrayDiffAssoc(...$target): array
+    {
+        foreach ($target as &$item) {
+            $item = array_map('serialize', $item);
+        }
+
+        $diff = array_diff_assoc(...$target);
+        $diff = array_map('unserialize', $diff);
+
+        return $diff;
+    }
+
+    /**
+     * Object to string
+     *
+     * @param $target
+     *
+     * @return string
+     */
+    public static function objectToString($target): string
+    {
+        return base64_encode(gzdeflate(serialize($target)));
+    }
+
+    /**
+     * String to object
+     *
+     * @param string $target
+     *
+     * @return object
+     */
+    public static function stringToObject(string $target)
+    {
+        return unserialize(gzinflate(base64_decode($target)));
+    }
+
+    /**
      * Set key use value for two-dimensional
      *
      * @param array  $target
@@ -4426,24 +4469,5 @@ class Helper
         $total = count($target);
 
         return $target[$total - 1];
-    }
-
-    /**
-     * Array diff assoc
-     *
-     * @param mixed ...$target
-     *
-     * @return array
-     */
-    public static function arrayDiffAssoc(...$target): array
-    {
-        foreach ($target as &$item) {
-            $item = array_map('serialize', $item);
-        }
-
-        $diff = array_diff_assoc(...$target);
-        $diff = array_map('unserialize', $diff);
-
-        return $diff;
     }
 }

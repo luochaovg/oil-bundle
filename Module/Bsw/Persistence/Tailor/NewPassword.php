@@ -47,7 +47,10 @@ class NewPassword extends Tailor
      */
     public function tailorPersistenceAfterSubmit(Arguments $args)
     {
-        $newPassword = Helper::dig($args->extraSubmit, $this->newField);
+        $submit = $args->target['submit'];
+        $extraSubmit = $args->target['extraSubmit'];
+
+        $newPassword = Helper::dig($extraSubmit, $this->newField);
 
         if (isset($newPassword) && strlen($newPassword) > 0) {
             $result = $this->web->validator($this->newField, $newPassword, ['password']);
@@ -55,10 +58,10 @@ class NewPassword extends Tailor
                 return new ErrorParameter($this->web->pop());
             }
 
-            $salt = $args->target["{$this->field}Salt"] ?? null;
-            $args->extraSubmit[$this->fieldCamel] = $this->web->password($newPassword, $salt);
+            $salt = $submit["{$this->field}Salt"] ?? null;
+            $extraSubmit[$this->fieldCamel] = $this->web->password($newPassword, $salt);
         }
 
-        return [$args->target, $args->extraSubmit];
+        return [$submit, $extraSubmit];
     }
 }
