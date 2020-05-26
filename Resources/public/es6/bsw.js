@@ -198,6 +198,7 @@ $(function () {
                     let data = {
                         title: bsw.lang.export_mission,
                         width: 768,
+                        height: 800,
                     };
                     data.location = bsw.setParams(res.sets, this.api_export);
                     this.showIFrame(data, $('body')[0]);
