@@ -7002,7 +7002,7 @@ class Pinyin
      */
     public static function getPinyin(string $cnString, string $split = null, string $encoding = 'utf-8'): string
     {
-        return current(self::cnStringToPinyin($cnString, $split, $encoding));
+        return self::cnStringToPinyin($cnString, $split, $encoding)[0];
     }
 
     /**

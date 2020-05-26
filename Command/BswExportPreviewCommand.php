@@ -4,9 +4,11 @@ namespace Leon\BswBundle\Command;
 
 use App\Module\Entity\Enum;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Pinyin;
 use Leon\BswBundle\Entity\BswCommandQueue;
 use Leon\BswBundle\Repository\BswCommandQueueRepository;
 use Symfony\Component\Console\Input\InputOption;
+use Exception;
 
 class BswExportPreviewCommand extends ExportCsvCommand
 {
@@ -28,7 +30,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
         return [
             'prefix'  => 'mission',
             'keyword' => 'export-preview',
-            'info'    => 'Export preview for route',
+            'info'    => 'Export preview by filter',
         ];
     }
 
@@ -71,6 +73,10 @@ class BswExportPreviewCommand extends ExportCsvCommand
     {
         $params->entity = base64_decode($params->entity);
         $params->query = Helper::stringToObject($params->query);
+
+        $title = Pinyin::getPinyin($params->args->title, ' ');
+        $title = str_replace(' ', null, ucwords($title));
+        $params->csv = "{$title}.csv";
 
         return $params;
     }
@@ -154,8 +160,21 @@ class BswExportPreviewCommand extends ExportCsvCommand
      */
     public function done()
     {
+        // Send file to telegram
         if ($this->params->receiver && $this->params->csv) {
             $this->web->telegramSendDocument($this->params->receiver, $this->params->csv);
         }
+
+        // Upload by manual
+        $file = Helper::getFileForUpload($this->params->csv);
+        $options = $this->web->uploadOptionByFlag('bsw-export', true);
+
+        try {
+            $file = $this->web->uploadCore($file, $options);
+        } catch (Exception $e) {
+            $this->output->writeln("<error> Manual upload file error: {$e->getMessage()} </error>");
+        }
+
+        $this->missionRepo->modify(['id' => $this->params->args->id], ['fileAttachmentId' => $file->id]);
     }
 }

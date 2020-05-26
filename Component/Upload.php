@@ -6,6 +6,7 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\UploadException;
 use Exception;
 use stdClass;
+use finfo;
 
 class Upload
 {
@@ -65,6 +66,11 @@ class Upload
     protected $saveReplace = false;
 
     /**
+     * @var bool
+     */
+    protected $manual = false;
+
+    /**
      * Upload constructor.
      *
      * @param array $config
@@ -105,9 +111,7 @@ class Upload
         $this->checkRootPath($this->rootPath);
 
         // check file one by one
-        if (function_exists('finfo_open')) {
-            $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
-        }
+        $fileInfo = new finfo(FILEINFO_MIME_TYPE);
 
         $result = [];
 
@@ -117,12 +121,15 @@ class Upload
                 throw new UploadException('Unknown upload error', $item['error']);
             }
 
-            $file = new UploadItem($item['tmp_name'], $item['name'], $item['key'] ?? $key, $item['size']);
+            $file = new UploadItem(
+                $item['tmp_name'],
+                $item['name'],
+                $item['key'] ?? $key,
+                $item['size']
+            );
 
             // get suffix by extend for adobe.flash upload
-            if (isset($fileInfo)) {
-                $file->type = strtolower(finfo_file($fileInfo, $file->tmpName));
-            }
+            $file->type = strtolower($fileInfo->file($file->tmpName));
 
             // check file
             $this->check($file);
@@ -161,8 +168,6 @@ class Upload
                 $result[$key] = $file;
             }
         }
-
-        isset($fileInfo) && finfo_close($fileInfo);
 
         return $result;
     }
@@ -248,7 +253,7 @@ class Upload
             }
         }
 
-        if (!is_uploaded_file($file->tmpName)) {
+        if (!$this->manual && !is_uploaded_file($file->tmpName)) {
             throw new UploadException('File illegal');
         }
 
@@ -455,8 +460,13 @@ class Upload
         }
 
         // move file
-        if (!move_uploaded_file($file->tmpName, $fileName)) {
-            throw new UploadException('File move error');
+        if ($this->manual) {
+            copy($file->tmpName, $fileName);
+            unlink($file->tmpName);
+        } else {
+            if (!move_uploaded_file($file->tmpName, $fileName)) {
+                throw new UploadException('File move error');
+            }
         }
 
         return $fileName;

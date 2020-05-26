@@ -115,10 +115,11 @@ trait Upload
      * Get upload option with flag
      *
      * @param string $flag
+     * @param bool   $manual
      *
      * @return array
      */
-    public function uploadOptionByFlag(string $flag): array
+    public function uploadOptionByFlag(string $flag, bool $manual = false): array
     {
         $default = [
             'max_size'     => 128 * 1024,
@@ -127,6 +128,7 @@ trait Upload
             'pic_sizes'    => [[10, 'max'], [10, 'max']],
             'save_replace' => false,
             'root_path'    => $this->parameter('file'),
+            'manual'       => $manual,
             'save_name_fn' => ['uniqid'],
             'save_path_fn' => function () use ($flag) {
                 return $flag;
@@ -144,19 +146,18 @@ trait Upload
      */
     public function ossUpload(UploadItem $file): UploadItem
     {
-        $fileName = "{$file->savePath}/{$file->saveName}";
-        if (!$this->parameter('upload_to_oss')) {
+        $ossKey = $this->parameterInOrderByEmpty(['ali_oss_key', 'ali_key']);
+        $ossSecret = $this->parameterInOrderByEmpty(['ali_oss_secret', 'ali_secret']);
+
+        if (!$this->parameter('upload_to_oss') || empty($ossKey) || $ossSecret) {
             return $file;
         }
 
         try {
 
-            $ossClient = new OssClient(
-                $this->parameterInOrderByEmpty(['ali_oss_key', 'ali_key']),
-                $this->parameterInOrderByEmpty(['ali_oss_secret', 'ali_secret']),
-                $this->parameter('ali_oss_endpoint')
-            );
+            $fileName = "{$file->savePath}/{$file->saveName}";
 
+            $ossClient = new OssClient($ossKey, $ossSecret, $this->parameter('ali_oss_endpoint'));
             $ossClient->setConnectTimeout($this->cnf->curl_timeout_second * 20);
             $ossClient->setTimeout($this->cnf->curl_timeout_second * 20);
 
@@ -189,6 +190,7 @@ trait Upload
      * @param int   $platform
      *
      * @return object
+     * @throws
      */
     public function uploadCore(array $file, array $options, int $platform = 2)
     {
@@ -196,8 +198,14 @@ trait Upload
         try {
             $file = current((new Uploader($options))->upload([$file]));
         } catch (Exception $e) {
-            return $this->failedAjax(new ErrorUpload(), $e->getMessage());
+            if ($options['manual']) {
+                throw new Exception($e->getMessage());
+            } else {
+                return $this->failedAjax(new ErrorUpload(), $e->getMessage());
+            }
         }
+
+        $userId = $this->usr->{$this->cnf->usr_uid} ?? 0;
 
         /**
          * @var BswAttachmentRepository $bswAttachment
@@ -207,7 +215,7 @@ trait Upload
             $unique = [
                 'sha1'     => $file->sha1,
                 'platform' => $platform,
-                'userId'   => $this->usr->{$this->cnf->usr_uid},
+                'userId'   => $userId,
             ]
         );
 
@@ -228,7 +236,7 @@ trait Upload
             $file->id = $bswAttachment->newly(
                 [
                     'platform' => $platform,
-                    'userId'   => $this->usr->{$this->cnf->usr_uid},
+                    'userId'   => $userId,
                     'sha1'     => $file->sha1,
                     'size'     => $file->size,
                     'deep'     => $file->savePath,

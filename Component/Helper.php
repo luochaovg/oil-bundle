@@ -7,6 +7,7 @@ use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
 use InvalidArgumentException;
 use Exception;
+use finfo;
 
 class Helper
 {
@@ -4469,5 +4470,25 @@ class Helper
         $total = count($target);
 
         return $target[$total - 1];
+    }
+
+    /**
+     * Get file for upload
+     *
+     * @param string $filepath
+     *
+     * @return array
+     */
+    public static function getFileForUpload(string $filepath): array
+    {
+        clearstatcache();
+
+        return [
+            'name'     => pathinfo($filepath, PATHINFO_BASENAME),
+            'type'     => (new finfo(FILEINFO_MIME_TYPE))->file($filepath),
+            'tmp_name' => $filepath,
+            'error'    => 0,
+            'size'     => filesize($filepath),
+        ];
     }
 }

@@ -117,14 +117,10 @@ class BswMissionCommand extends Command implements CommandInterface
                 $now = date(Abs::FMT_FULL);
                 $this->web->telegramSendMessage(
                     $condition['receiver'],
-                    "`[{$now}]` Mission *<ID:{$m['id']}>* running",
+                    "`[{$now}]` Mission running {*id*: `{$m['id']}`, *title*: {$m['title']}}",
                     ['mode' => 'Markdown']
                 );
             }
-
-            $getRemark = function (string $remark) use ($m) {
-                return ltrim($m['remark'] . PHP_EOL . $remark);
-            };
 
             // begin
             $missionRepo->modify(['id' => $m['id']], ['state' => 2]);
@@ -132,21 +128,19 @@ class BswMissionCommand extends Command implements CommandInterface
             // run command
             $command = $this->getApplication()->find($m['command']);
             try {
-                $date = date(Abs::FMT_FULL);
+                $date = date('Y-m-d H:i');
                 $status = $command->run(new ArrayInput($_condition), $output);
                 if ($status === 0) {
                     if ($m['cronReuse']) {
-                        $remark = "[{$date}] execute and successful";
-                        $attributes = ['state' => 1, 'donePercent' => 0, 'remark' => $getRemark($remark)];
+                        $attributes = ['state' => 1, 'donePercent' => 0, 'remark' => "[{$date}] execute success"];
                     } else {
                         $attributes = ['state' => 3];
                     }
                 } else {
-                    $remark = "[{$date}] exit status: {$status}";
-                    $attributes = ['state' => 4, 'remark' => $getRemark($remark)];
+                    $attributes = ['state' => 4, 'remark' => "[{$date}] exit status: {$status}"];
                 }
             } catch (Exception $e) {
-                $attributes = ['state' => 4, 'remark' => $getRemark($e->getMessage())];
+                $attributes = ['state' => 4, 'remark' => $e->getMessage()];
             }
 
             $missionRepo->modify(['id' => $m['id']], $attributes);
@@ -156,7 +150,7 @@ class BswMissionCommand extends Command implements CommandInterface
                 $now = date(Abs::FMT_FULL);
                 $this->web->telegramSendMessage(
                     $condition['receiver'],
-                    "`[{$now}]` Mission *<ID:{$m['id']}>* done",
+                    "`[{$now}]` Mission done {*id*: `{$m['id']}`, *title*: {$m['title']}}",
                     ['mode' => 'Markdown']
                 );
             }

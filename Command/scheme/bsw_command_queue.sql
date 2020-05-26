@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `{TABLE_NAME}`;
 CREATE TABLE `{TABLE_NAME}` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL,
   `command` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `condition` json DEFAULT NULL,
   `resource_need` tinyint unsigned NOT NULL DEFAULT '1',
