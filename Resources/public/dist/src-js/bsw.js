@@ -122,19 +122,10 @@ $(function () {
                 console.warn(reason);
             });
         },
-        export: function _export(filter, route) {
-            var data = {
-                title: bsw.lang.export_mission,
-                width: 768
-            };
-            data.location = bsw.setParams({ filter: filter, route: route }, this.api_export);
-            this.showIFrame(data, $('body')[0]);
-        },
         filter: function filter(event) {
             var _this = this;
 
             var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-            var route = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
             var that = this;
             event.preventDefault();
@@ -178,9 +169,6 @@ $(function () {
                     }
                     _values[_field] = values[_field];
                 }
-                if (_this.formMethod === 'export') {
-                    return _this.export(_values, route);
-                }
                 return _this[_this.formMethod + 'FilterForm'](_values, jump);
             });
         },
@@ -199,8 +187,31 @@ $(function () {
             }
             this.pagination(url);
         },
-        persistence: function persistence(event) {
+        exportFilterForm: function exportFilterForm(values) {
             var _this2 = this;
+
+            var url = bsw.unsetParamsBeginWith(['filter']);
+            url = bsw.unsetParams(['page'], url);
+            url = bsw.setParams({ filter: values, scene: 'export' }, url);
+
+            bsw.request(url).then(function (res) {
+                bsw.response(res).then(function () {
+                    var data = {
+                        title: bsw.lang.export_mission,
+                        width: 768,
+                        height: 800
+                    };
+                    data.location = bsw.setParams(res.sets, _this2.api_export);
+                    _this2.showIFrame(data, $('body')[0]);
+                }).catch(function (reason) {
+                    console.warn(reason);
+                });
+            }).catch(function (reason) {
+                console.warn(reason);
+            });
+        },
+        persistence: function persistence(event) {
+            var _this3 = this;
 
             var that = this;
             event.preventDefault();
@@ -229,7 +240,7 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return _this2[_this2.formMethod + 'PersistenceForm'](values);
+                return _this3[_this3.formMethod + 'PersistenceForm'](values);
             });
         },
         submitPersistenceForm: function submitPersistenceForm(values) {
@@ -323,13 +334,13 @@ $(function () {
             this.modal = Object.assign(this.modal, options);
         },
         showModalAfterRequest: function showModalAfterRequest(data, element) {
-            var _this3 = this;
+            var _this4 = this;
 
             bsw.request(data.location).then(function (res) {
                 bsw.response(res).then(function () {
                     var sets = res.sets;
                     var logic = sets.logic || sets;
-                    _this3.showModal({
+                    _this4.showModal({
                         centered: true,
                         width: logic.width || data.width || bsw.popupCosySize().width,
                         title: logic.title || data.title || bsw.lang.modal_title,

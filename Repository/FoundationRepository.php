@@ -227,7 +227,9 @@ abstract class FoundationRepository extends SFRepository
         // validator
         $error = $this->validator->validate($entity, null, $group);
         if (count($error)) {
-            return $this->push(...$this->error($error));
+            $error = $this->error($error);
+
+            return $this->push(current($error), Abs::TAG_VALIDATOR);
         }
 
         $em = $this->em();

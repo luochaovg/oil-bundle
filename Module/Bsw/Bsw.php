@@ -492,6 +492,9 @@ abstract class Bsw
             function () {
                 $table = Helper::tableNameFromCls($this->entity);
                 $document = $this->web->mysqlSchemeDocument($table);
+                if (empty($document)) {
+                    return [];
+                }
 
                 return Helper::arrayColumn($document['fields'], true, 'name');
             },

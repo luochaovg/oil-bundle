@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Annotation;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Interfaces\AnnotationConverterInterface;
 use Leon\BswBundle\Component\Reflection;
@@ -31,6 +32,11 @@ class AnnotationConverter implements AnnotationConverterInterface
      * @var array
      */
     protected $extraArgs;
+
+    /**
+     * @var string
+     */
+    public $scene;
 
     /**
      * @var string
@@ -67,6 +73,9 @@ class AnnotationConverter implements AnnotationConverterInterface
         $this->reader = new AnnotationReader();
         $this->reflection = new Reflection();
         $this->annotationClass = [str_replace('Converter', null, static::class)];
+
+        $this->scene = str_replace('Converter', null, Helper::clsName(static::class));
+        $this->scene = Helper::camelToUnder($this->scene);
     }
 
     /**
@@ -93,8 +102,8 @@ class AnnotationConverter implements AnnotationConverterInterface
      * @param array $annotation
      * @param bool  $keep
      *
-     * @license The master annotation should be first
      * @return array
+     * @license The master annotation should be first
      */
     public function setAnnotationClass(array $annotation, bool $keep = true): array
     {

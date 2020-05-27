@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\CkEditor;
@@ -43,8 +44,8 @@ class Module extends Bsw
     const BEFORE_RENDER      = 'BeforeRender';      // 渲染前处理
     const FORM_OPERATE       = 'FormOperates';      // 操作按钮
     const AFTER_SUBMIT       = 'AfterSubmit';       // 提交数据后处理
-    const BEFORE_PERSISTENCE = 'BeforePersistence'; // 持久化前处理 (事务级)
-    const AFTER_PERSISTENCE  = 'AfterPersistence';  // 持久化后处理 (事务级)
+    const BEFORE_PERSISTENCE = 'BeforePersistence'; // 持久化前处理 (同级事务)
+    const AFTER_PERSISTENCE  = 'AfterPersistence';  // 持久化后处理 (同级事务)
 
     /**
      * @var string
@@ -827,27 +828,19 @@ class Module extends Bsw
                      * Newly record
                      */
 
-                    $multiple = null;
+                    $multipleField = null;
                     foreach ($_persistAnnotation as $field => $item) {
-                        /**
-                         * @var Form $type
-                         */
-                        $type = $item['type'];
-                        if (
-                            get_class($type) == Select::class &&
-                            $type->getMode() == Select::MODE_MULTIPLE &&
-                            isset($record[$field])
-                        ) {
-                            $multiple = $field;
-                            break;
+                        if (is_array($record[$field] ?? null)) {
+                            $multipleField = $field;
+                            break; // multiple allow one only
                         }
                     }
 
-                    $loggerType = $multiple ? 2 : 1;
+                    $loggerType = $multipleField ? 2 : 1;
                     $recordBefore = $recordDiff = [];
-                    $record = $this->recordHandler($record, $_persistAnnotation, $extraSubmit, $multiple);
+                    $record = $this->recordHandler($record, $_persistAnnotation, $extraSubmit, $multipleField);
 
-                    if ($multiple) {
+                    if ($multipleField) {
                         $result = $this->repository->newlyMultiple($record);
                     } else {
                         $result = $this->repository->newly($record);
@@ -868,6 +861,8 @@ class Module extends Bsw
                     [$error, $flag] = $this->repository->pop(true);
                     if (strpos($flag, Abs::TAG_ROLL) === 0) {
                         throw new LogicException($error);
+                    } elseif (strpos($flag, Abs::TAG_VALIDATOR) !== false) {
+                        throw new ValidatorException($error);
                     } else {
                         throw new RepositoryException($error);
                     }
@@ -912,9 +907,15 @@ class Module extends Bsw
             return $this->showError($this->repository->pop());
         }
 
+        [$result, $before, $after] = $result;
+
         return $this->showSuccess(
             $newly ? $this->input->i18nNewly : $this->input->i18nModify,
-            [],
+            [
+                '{{ result }}' => $result,
+                '{{ before }}' => $before,
+                '{{ after }}'  => $after,
+            ],
             $this->input->nextRoute
         );
     }

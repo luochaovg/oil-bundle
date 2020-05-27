@@ -22,41 +22,110 @@ class Senior extends Filter
     /**
      * @const int
      */
-    const EQ          = 1;
-    const NEQ         = 2;
-    const GT          = 3;
-    const GTE         = 4;
-    const LT          = 5;
-    const LTE         = 6;
-    const IN          = 7;
-    const NOT_IN      = 8;
-    const IS_NULL     = 9;
-    const IS_NOT_NULL = 10;
-    const LIKE        = 11;
-    const BEGIN_LIKE  = 12;
-    const END_LIKE    = 13;
-    const NOT_LIKE    = 14;
-    const BETWEEN     = 15;
+    const EQ       = 1;
+    const EQ_LABEL = 'Expr equal';
+
+    const NEQ       = 2;
+    const NEQ_LABEL = 'Expr not equal';
+
+    const GT       = 3;
+    const GT_LABEL = 'Expr greater than';
+
+    const GTE       = 4;
+    const GTE_LABEL = 'Expr greater than or equal to';
+
+    const LT       = 5;
+    const LT_LABEL = 'Expr less than';
+
+    const LTE       = 6;
+    const LTE_LABEL = 'Expr less than or equal to';
+
+    const IN       = 7;
+    const IN_LABEL = 'Expr in';
+
+    const NOT_IN       = 8;
+    const NOT_IN_LABEL = 'Expr not in';
+
+    const IS_NULL       = 9;
+    const IS_NULL_LABEL = 'Expr is null';
+
+    const IS_NOT_NULL       = 10;
+    const IS_NOT_NULL_LABEL = 'Expr is not null';
+
+    const LIKE       = 11;
+    const LIKE_LABEL = 'Expr contain';
+
+    const BEGIN_LIKE       = 12;
+    const BEGIN_LIKE_LABEL = 'Expr begin contain';
+
+    const END_LIKE       = 13;
+    const END_LIKE_LABEL = 'Expr end contain';
+
+    const NOT_LIKE       = 14;
+    const NOT_LIKE_LABEL = 'Expr not contain';
+
+    const BETWEEN       = 15;
+    const BETWEEN_LABEL = 'Expr between';
 
     /**
      * @cosnt array
      */
     const MODE = [
-        self::EQ          => 'Expr equal',
-        self::NEQ         => 'Expr not equal',
-        self::GT          => 'Expr greater than',
-        self::GTE         => 'Expr greater than or equal to',
-        self::LT          => 'Expr less than',
-        self::LTE         => 'Expr less than or equal to',
-        self::IN          => 'Expr in',
-        self::NOT_IN      => 'Expr not in',
-        self::IS_NULL     => 'Expr is null',
-        self::IS_NOT_NULL => 'Expr is not null',
-        self::LIKE        => 'Expr contain',
-        self::BEGIN_LIKE  => 'Expr begin contain',
-        self::END_LIKE    => 'Expr end contain',
-        self::NOT_LIKE    => 'Expr not contain',
-        self::BETWEEN     => 'Expr between',
+        self::EQ          => self::EQ_LABEL,
+        self::NEQ         => self::NEQ_LABEL,
+        self::GT          => self::GT_LABEL,
+        self::GTE         => self::GTE_LABEL,
+        self::LT          => self::LT_LABEL,
+        self::LTE         => self::LTE_LABEL,
+        self::IN          => self::IN_LABEL,
+        self::NOT_IN      => self::NOT_IN_LABEL,
+        self::IS_NULL     => self::IS_NULL_LABEL,
+        self::IS_NOT_NULL => self::IS_NOT_NULL_LABEL,
+        self::LIKE        => self::LIKE_LABEL,
+        self::BEGIN_LIKE  => self::BEGIN_LIKE_LABEL,
+        self::END_LIKE    => self::END_LIKE_LABEL,
+        self::NOT_LIKE    => self::NOT_LIKE_LABEL,
+        self::BETWEEN     => self::BETWEEN_LABEL,
+    ];
+
+    /**
+     * @cosnt array
+     */
+    const MODE_INTEGER = [
+        self::EQ      => self::EQ_LABEL,
+        self::NEQ     => self::NEQ_LABEL,
+        self::IN      => self::IN_LABEL,
+        self::NOT_IN  => self::NOT_IN_LABEL,
+        self::GT      => self::GT_LABEL,
+        self::GTE     => self::GTE_LABEL,
+        self::LT      => self::LT_LABEL,
+        self::LTE     => self::LTE_LABEL,
+        self::BETWEEN => self::BETWEEN_LABEL,
+    ];
+
+    /**
+     * @cosnt array
+     */
+    const MODE_NUMERIC = [
+        self::GT      => self::GT_LABEL,
+        self::GTE     => self::GTE_LABEL,
+        self::LT      => self::LT_LABEL,
+        self::LTE     => self::LTE_LABEL,
+        self::BETWEEN => self::BETWEEN_LABEL,
+    ];
+
+    /**
+     * @cosnt array
+     */
+    const MODE_STRING = [
+        self::EQ          => self::EQ_LABEL,
+        self::NEQ         => self::NEQ_LABEL,
+        self::IS_NULL     => self::IS_NULL_LABEL,
+        self::IS_NOT_NULL => self::IS_NOT_NULL_LABEL,
+        self::LIKE        => self::LIKE_LABEL,
+        self::BEGIN_LIKE  => self::BEGIN_LIKE_LABEL,
+        self::END_LIKE    => self::END_LIKE_LABEL,
+        self::NOT_LIKE    => self::NOT_LIKE_LABEL,
     ];
 
     /**

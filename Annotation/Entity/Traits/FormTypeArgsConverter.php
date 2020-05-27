@@ -20,7 +20,9 @@ trait FormTypeArgsConverter
             $this->exception('typeArgs', 'must be array type');
         }
 
-        if (($this->item->type instanceof Input) && $length = ($this->items[Length::class]->max ?? null)) {
+        $isInputItem = ($this->item->type instanceof Input);
+        $length = $this->items[Length::class]->max ?? null;
+        if (($this->scene != 'filter') && $isInputItem && !isset($value['maxLength']) && $length) {
             $value['maxLength'] = $length;
         }
 

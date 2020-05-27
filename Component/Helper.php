@@ -134,12 +134,13 @@ class Helper
      *
      * @param mixed  $number
      * @param string $tpl
+     * @param int    $decimals
      *
      * @return string
      */
-    public static function money($number, string $tpl = '￥%s'): string
+    public static function money($number, string $tpl = '￥%s', int $decimals = 1): string
     {
-        return sprintf($tpl, Helper::numberFormat($number, 2));
+        return sprintf($tpl, Helper::numberFormat($number, $decimals));
     }
 
     /**
@@ -3815,10 +3816,11 @@ class Helper
      * Human times
      *
      * @param int $times
+     * @param int $decimals
      *
      * @return string
      */
-    public static function humanTimes(int $times): string
+    public static function humanTimes(int $times, int $decimals = 1): string
     {
         $map = [
             'w' => 100000,
@@ -3827,21 +3829,22 @@ class Helper
 
         foreach ($map as $unit => $size) {
             if ($times >= $size) {
-                return self::numberFormat($times / ($size / 10), 1, ',') . $unit;
+                return self::numberFormat($times / ($size / 10), $decimals, ',') . $unit;
             }
         }
 
-        return self::numberFormat($times, 1, ',');
+        return self::numberFormat($times, $decimals, ',');
     }
 
     /**
      * Human duration
      *
      * @param int $duration
+     * @param int $decimals
      *
      * @return string
      */
-    public static function humanDuration(int $duration): string
+    public static function humanDuration(int $duration, int $decimals = 1): string
     {
         $map = [
             'year'  => [Abs::TIME_YEAR * 3, Abs::TIME_YEAR],
@@ -3853,21 +3856,22 @@ class Helper
         foreach ($map as $unit => $item) {
             [$size, $redouble] = $item;
             if ($duration >= $size) {
-                return self::numberFormat($duration / $redouble, 1, ',') . $unit;
+                return self::numberFormat($duration / $redouble, $decimals, ',') . $unit;
             }
         }
 
-        return self::numberFormat($duration / Abs::TIME_HOUR, 1, ',') . 'hour';
+        return self::numberFormat($duration / Abs::TIME_HOUR, $decimals, ',') . 'hour';
     }
 
     /**
      * Human size
      *
      * @param int $byte
+     * @param int $decimals
      *
      * @return string
      */
-    public static function humanSize(int $byte): string
+    public static function humanSize(int $byte, int $decimals = 1): string
     {
         $signed = $byte < 0 ? '-' : null;
         $byte = abs($byte);
@@ -3883,7 +3887,7 @@ class Helper
         foreach ($map as $unit => $power) {
             $size = 1024 ** $power;
             if ($byte >= $size) {
-                return $signed . self::numberFormat($byte / $size, 1, ',') . $unit;
+                return $signed . self::numberFormat($byte / $size, $decimals, ',') . $unit;
             }
         }
 
@@ -4301,7 +4305,7 @@ class Helper
      *
      * @return float|string
      */
-    public static function numberFormat($number, int $decimals = 2, string $thousandsSep = '')
+    public static function numberFormat($number, int $decimals = 1, string $thousandsSep = '')
     {
         if (self::isIntNumeric($number)) {
             $decimals = 0;
