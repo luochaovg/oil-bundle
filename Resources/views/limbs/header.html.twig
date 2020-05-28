@@ -3,7 +3,7 @@
     <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
   </span>
   <div class="user-wrapper">
-    <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
+    <a-dropdown placement="bottomLeft" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
         {{ scaffold.cnf.icon_setting|icon|raw }}
       </span>
@@ -18,7 +18,7 @@
         {% endfor %}
       </a-menu>
     </a-dropdown>
-    <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
+    <a-dropdown placement="bottomLeft" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
         {% set avatar = attribute(scaffold.usr, scaffold.cnf.usr_avatar) %}
         <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
