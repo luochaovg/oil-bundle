@@ -200,7 +200,7 @@ $(function () {
                         width: 768,
                         height: 800,
                     };
-                    data.location = bsw.setParams(res.sets, this.api_export);
+                    data.location = bsw.setParams(res.sets, this.api_export, true);
                     this.showIFrame(data, $('body')[0]);
                 }).catch((reason => {
                     console.warn(reason);
