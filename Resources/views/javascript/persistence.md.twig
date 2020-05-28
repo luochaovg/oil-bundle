@@ -1,0 +1,37 @@
+bsw.configure({
+    data: {
+        persistence_form: null,
+        persistence_format: {{ persistence.formatJson|raw }},
+        persistence_upload_field: null,
+        persistence_file_list_key_collect: {{ persistence.fileListKeyCollectJson|raw }},
+        persistence_upload_tips_collect: {{ persistence.uploadTipsCollectJson|raw }},
+        persistence_switch_field: null,
+        persistence_field_shape_now: {},
+        persistence_field_shape_collect: {{ persistence.fieldShapeCollectJson|raw }},
+    },
+    method: {
+        persistence_submit(e) {
+            this.persistence(e);
+        }
+    },
+    logic: {
+        persistence_init(v) {
+            v.persistence_form = v.$form.createForm(v);
+            v.$nextTick(function () {
+                bsw.cnf.v.initCkEditor();
+            });
+
+            v.$nextTick(function () {
+                for (let field in v.persistence_field_shape_collect) {
+                    if (!v.persistence_field_shape_collect.hasOwnProperty(field)) {
+                        continue;
+                    }
+                    v.persistence_switch_field = field;
+                    let value = v.persistence_form.getFieldValue(v.persistence_switch_field);
+                    v.persistence_form.setFieldsValue({[v.persistence_switch_field]: value});
+                    v.switchFieldShapeWithSelect(value);
+                }
+            });
+        }
+    }
+});

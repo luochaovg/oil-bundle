@@ -1,0 +1,19 @@
+bsw.configure({
+    data: {},
+    method: {
+        chat_tabs_switch(key) {
+            this.redirect(this.getBswData($(`#${key}`)));
+        },
+    },
+    logic: {
+        chart_init(v) {
+            {% for index, item in chart.items %}
+              bsw.chart({
+                  id: '{{ index }}',
+                  theme: '{{ item.theme }}',
+                  option: {{ item.option|raw }}
+              });
+            {% endfor %}
+        }
+    }
+});

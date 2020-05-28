@@ -1,0 +1,24 @@
+bsw.configure({
+    data: {
+        filter_form: null,
+        filter_expand: false,
+        filter_format: {{ filter.formatJson|raw }},
+    },
+    method: {
+        filter_submit(e) {
+            this.filter(e, {{ logic.scene == 'preview' ? 'false' : 'true' }});
+        },
+        filter_toggle() {
+          this.filter_expand = !this.filter_expand;
+        },
+        filter_display(key) {
+            let list = this.filter_expand ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
+            return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
+        },
+    },
+    logic: {
+        filter_form(v) {
+            v.filter_form = v.$form.createForm(v);
+        },
+    }
+});
