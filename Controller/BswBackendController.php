@@ -438,17 +438,15 @@ class BswBackendController extends BswWebController
             $ajaxShowArgs["{$name}_html"] = $html;
         }
 
-        $logic = &$showArgs[Abs::TAG_LOGIC];
-        $afterModule = Helper::dig($logic, 'afterModule');
+        $logic = $showArgs[Abs::TAG_LOGIC];
+        $afterModule = Helper::dig($logic, 'afterModule') ?? [];
+        Helper::callReturnType($afterModule, Abs::T_ARRAY, 'Handler after module');
 
-        if ($afterModule && is_array($afterModule)) {
-            foreach ($afterModule as $key => $handler) {
-                if (!is_callable($handler)) {
-                    $logic[$key] = $handler;
-                } else {
-                    $logic[$key] = call_user_func_array($handler, [$logic]);
-                }
+        foreach ($afterModule as $key => $handler) {
+            if (!is_callable($handler)) {
+                continue;
             }
+            $showArgs[Abs::TAG_LOGIC][$key] = call_user_func_array($handler, [$logic, $showArgs]);
         }
 
         if ($this->ajax) {

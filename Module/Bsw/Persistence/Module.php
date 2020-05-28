@@ -39,6 +39,7 @@ class Module extends Bsw
     /**
      * @const string
      */
+    const FORM_SIZE          = 'FormSize';          // 表单尺寸
     const BEFORE_HOOK        = 'BeforeHook';        // 钩子前处理
     const AFTER_HOOK         = 'AfterHook';         // 钩子后处理
     const BEFORE_RENDER      = 'BeforeRender';      // 渲染前处理
@@ -512,6 +513,7 @@ class Module extends Bsw
 
         $_record = [];
         $format = [];
+        $size = $this->caller($this->method, self::FORM_SIZE, Abs::T_STRING, Form::SIZE_LARGE);
 
         foreach ($persistAnnotation as $field => $item) {
 
@@ -541,6 +543,10 @@ class Module extends Bsw
 
             if (isset($item['value'])) {
                 $form->setValue($item['value']);
+            }
+
+            if (method_exists($form, 'setSize')) {
+                $form->setSize($size);
             }
 
             /**

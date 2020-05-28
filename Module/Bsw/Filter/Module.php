@@ -29,6 +29,7 @@ class Module extends Bsw
      * @const string
      */
     const QUERY                  = 'Query';                 // [全局配置] 列表查询
+    const FILTER_FORM_SIZE       = 'FilterFormSize';        // [全局配置] 表单尺寸
     const FILTER_ANNOTATION      = 'FilterAnnotation';      // [全局配置] 注释补充或覆盖
     const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';  // [全局配置] 注释限制
     const FILTER_OPERATE         = 'FilterOperates';        // [全局配置] 操作按钮
@@ -404,6 +405,7 @@ class Module extends Bsw
     {
         $record = [];
         $format = [];
+        $size = $this->caller($this->method, self::FILTER_FORM_SIZE, Abs::T_STRING, Form::SIZE_MIDDLE);
 
         foreach ($filter as $key => $item) {
 
@@ -422,7 +424,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize(Form::SIZE_MIDDLE);
+                $form->setSize($size);
             }
 
             /**
@@ -483,7 +485,8 @@ class Module extends Bsw
             $export->setRouteForAccess($this->input->cnf->route_export);
         }
 
-        $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, []);
+        $arguments = $this->arguments(compact('search', 'export'));
+        $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, [], $arguments);
         $operates = array_merge(['search' => $search, 'export' => $export], $operates);
         $operates = array_filter($operates);
 
@@ -504,7 +507,7 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
             $operate->setHtmlType(Button::TYPE_SUBMIT);
-            $operate->setSize(Button::SIZE_MIDDLE);
+            $operate->setSize($size);
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
