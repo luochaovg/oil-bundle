@@ -193,6 +193,10 @@ parameters:
         icon_loading: null
         icon_export: b:icon-export4
         icon_import: b:icon-import1
+        icon_warning: b:icon-warning
+        icon_sure: a:coffee
+        icon_newly: a:plus
+        icon_delete: b:icon-delete1
 
         third_message_key: bsw_third_message
 

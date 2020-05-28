@@ -145,7 +145,7 @@ class Module extends Bsw
             $this->query['alias'] = Helper::tableNameToAlias($this->entity);
         }
 
-        $query = $this->web->filter($this->input->condition);
+        $query = $this->web->parseFilter($this->input->condition);
         $this->query = Helper::merge($this->query, $query);
 
         return $this->query;
@@ -369,7 +369,7 @@ class Module extends Bsw
         $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
 
         $arguments = $this->arguments(['target' => $previewAnnotationExtra], compact('previewAnnotation'));
-        $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, null, $arguments);
+        $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
          * extra annotation handler
@@ -607,11 +607,14 @@ class Module extends Bsw
             $arguments = $this->arguments(['target' => $query]);
             $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
             if ($this->web->getArgs('scene') === 'export') {
-                $entity = base64_encode($this->entity);
-                $query = Helper::objectToString($query);
-                $message = (new Message())->setSets(compact('entity', 'query'));
-
-                return $this->showMessage($message);
+                return $this->showMessage(
+                    (new Message())->setSets(
+                        [
+                            'entity' => base64_encode($this->entity),
+                            'query'  => Helper::objectToString($query),
+                        ]
+                    )->setSignature()
+                );
             }
 
             $list = $this->repository->lister($query);
@@ -811,7 +814,7 @@ class Module extends Bsw
                 $width = $output->columns[$operate]['width'];
             } else {
                 $maxButtons = min($maxButtons, 4);
-                $width = 16 + ($maxButtons * (2 + 40 + 2) + ($maxButtons - 1) * 5) + 16;
+                $width = 16 + ($maxButtons * (2 + 42 + 2) + ($maxButtons - 1) * 5) + 16;
                 $output->scroll += $width;
             }
 

@@ -418,6 +418,7 @@ abstract class FoundationRepository extends SFRepository
 
                 $em = $this->em();
                 foreach ($batch as $entity) {
+                    $entity = $em->merge($entity);
                     $em->remove($entity);
                 }
 
@@ -678,7 +679,6 @@ abstract class FoundationRepository extends SFRepository
              */
 
             $model->update($table, $alias);
-
         }
 
         /*
@@ -959,16 +959,20 @@ abstract class FoundationRepository extends SFRepository
      * @param array           $valueFields
      * @param string          $key
      * @param callable|string $handler
-     * @param array           $filter
+     * @param array           ...$filter
      *
      * @return array
      */
-    public function kvp(array $valueFields, string $key = Abs::PK, $handler = null, array $filter = []): array
+    public function kvp(array $valueFields, string $key = Abs::PK, $handler = null, array ...$filter): array
     {
         $valueFields = Helper::arrayMap($valueFields, 'kvp.%s');
         array_push($valueFields, "kvp.{$key}");
 
-        $list = $this->filters($filter)->lister(
+        if ($filter) {
+            $this->filters(...$filter);
+        }
+
+        $list = $this->lister(
             [
                 'limit'  => 0,
                 'alias'  => 'kvp',

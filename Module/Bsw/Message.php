@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 
 class Message
@@ -207,6 +208,18 @@ class Message
     public function setSets(array $sets)
     {
         $this->sets = $sets;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setSignature()
+    {
+        $sets = $this->getSets();
+        $sets = Helper::createSign($sets);
+        $this->setSets($sets);
 
         return $this;
     }

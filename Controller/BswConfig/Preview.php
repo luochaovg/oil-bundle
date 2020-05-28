@@ -37,7 +37,7 @@ trait Preview
     public function previewOperates()
     {
         return [
-            new Button('New record', 'app_bsw_config_persistence', 'a:plus'),
+            new Button('New record', 'app_bsw_config_persistence', $this->cnf->icon_newly),
         ];
     }
 

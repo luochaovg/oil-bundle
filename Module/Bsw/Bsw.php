@@ -215,13 +215,13 @@ abstract class Bsw
      *
      * @param string    $prefix
      * @param string    $call
-     * @param string    $type
+     * @param mixed     $type
      * @param Arguments $args
      *
      * @return mixed
      * @throws
      */
-    protected function tailor(string $prefix, string $call, string $type = null, Arguments $args = null)
+    protected function tailor(string $prefix, string $call, $type = null, Arguments $args = null)
     {
         $argument = $args->target;
         $method = "{$prefix}{$call}";
@@ -246,15 +246,10 @@ abstract class Bsw
             $argument = call_user_func_array([$tailor, $method], $_args) ?? $argument;
             $args->target = $argument;
 
-            // check type
             if ($type) {
-                if (class_exists($type)) {
-                    $_method = get_class($tailor) . "::{$method}():{$type}";
-                    Helper::objectInstanceOf($argument, $type, $_method);
-                } else {
-                    $_method = get_class($tailor) . "::{$method}():" . strtolower($type);
-                    Helper::callReturnType($argument, $type, $_method);
-                }
+                $type = (array)$type;
+                $method = get_class($tailor) . "::{$method}():" . Helper::printArray($type, '[%s]', '');
+                Helper::callReturnType($argument, $type, $method);
             }
 
             return $argument;

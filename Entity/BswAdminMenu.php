@@ -99,10 +99,10 @@ class BswAdminMenu extends FoundationEntity
      * @ORM\Column(type="integer", name="`sort`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=8, align="center", render=BswAbs::RENDER_CODE)
+     * @BswAnnotation\Preview(sort=5.01, align="center", render=BswAbs::RENDER_CODE)
      * @BswAnnotation\Persistence(sort=8, type=BswForm\Number::class)
      * @BswAnnotation\Filter(sort=8, type=BswForm\Number::class)
-     * @BswAnnotation\Filter(sort=8.01, type=BswForm\Select::class, placeholder="Mode", group="sort", style={"width": "35%"}, enum=BswFilter\Senior::MODE, column=4)
+     * @BswAnnotation\Filter(sort=8.01, type=BswForm\Select::class, placeholder="Mode", group="sort", style={"width": "35%"}, enum=BswFilter\Senior::MODE_FULL, column=4)
      * @BswAnnotation\Filter(sort=8.02, type=BswForm\Input::class, placeholder="Value", group="sort", style={"width": "65%"}, title="Split by comma")
      * @BswAnnotation\Mixed(sort=true)
      */

@@ -162,7 +162,7 @@ class Module extends Bsw
             ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
             compact('persistAnnotation')
         );
-        $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, null, $arguments);
+        $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
          * extra annotation handler
@@ -274,7 +274,13 @@ class Module extends Bsw
 
             $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
             $arguments = $this->arguments($args, ['id' => $this->input->id]);
-            $result = $this->caller($this->method, self::AFTER_SUBMIT, null, $args, $arguments);
+            $result = $this->caller(
+                $this->method,
+                self::AFTER_SUBMIT,
+                [Message::class, Error::class, Abs::T_ARRAY],
+                $args,
+                $arguments
+            );
 
             if ($result instanceof Error) {
                 return $this->showError($result->tiny());
@@ -297,7 +303,12 @@ class Module extends Bsw
                 $args,
                 ['id' => $this->input->id, 'default' => [$submit, $extraSubmit]]
             );
-            $result = $this->tailor($this->methodTailor, self::AFTER_SUBMIT, null, $arguments);
+            $result = $this->tailor(
+                $this->methodTailor,
+                self::AFTER_SUBMIT,
+                [Message::class, Error::class, Abs::T_ARRAY],
+                $arguments
+            );
 
             if ($result instanceof Error) {
                 return $this->showError($result->tiny());
@@ -432,16 +443,11 @@ class Module extends Bsw
      * @param array  $hooks
      * @param Output $output
      *
-     * @return array
+     * @return array|ArgsOutput
      * @throws
      */
-    protected function handlePersistenceData(
-        array $persistAnnotation,
-        array $record,
-        array $hooks,
-        Output $output
-    ): array {
-
+    protected function handlePersistenceData(array $persistAnnotation, array $record, array $hooks, Output $output)
+    {
         /**
          * before hook (row record)
          */
@@ -478,14 +484,34 @@ class Module extends Bsw
         $args = array_merge(compact('hooked', 'original', 'persistence'), ['id' => $this->input->id]);
 
         $arguments = $this->arguments($args);
-        $record = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $arguments);
+        $record = $this->caller(
+            $this->method,
+            self::BEFORE_RENDER,
+            [Message::class, Error::class, Abs::T_ARRAY],
+            $hooked,
+            $arguments
+        );
+        if ($record instanceof Error) {
+            return $this->showError($record->tiny());
+        } elseif ($record instanceof Message) {
+            return $this->showMessage($record);
+        }
 
         $arguments = $this->arguments(['target' => $record], $args);
-        $record = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $arguments);
+        $record = $this->tailor(
+            $this->methodTailor,
+            self::BEFORE_RENDER,
+            [Message::class, Error::class, Abs::T_ARRAY],
+            $arguments
+        );
+        if ($record instanceof Error) {
+            return $this->showError($record->tiny());
+        } elseif ($record instanceof Message) {
+            return $this->showMessage($record);
+        }
 
         $_record = [];
         $format = [];
-        $trans = $this->input->translator;
 
         foreach ($persistAnnotation as $field => $item) {
 
@@ -590,7 +616,7 @@ class Module extends Bsw
             ];
         }
 
-        $submit = new Button('Submit', $this->input->route, 'a:coffee');
+        $submit = new Button('Submit', $this->input->route, $this->input->cnf->icon_sure);
         $submit->setArgs(['id' => $this->input->id]);
         $submit->setAttributes(['bsw-method' => 'submit']);
 
@@ -941,12 +967,12 @@ class Module extends Bsw
             [$record, $extraSubmit, $recordBefore, $recordDiff] = $result;
         }
 
-        [$record, $operates, $format, $original] = $this->handlePersistenceData(
-            $persistAnnotation,
-            $record,
-            $hooks,
-            $output
-        );
+        $result = $this->handlePersistenceData($persistAnnotation, $record, $hooks, $output);
+        if ($result instanceof ArgsOutput) {
+            return $result;
+        } else {
+            [$record, $operates, $format, $original] = $result;
+        }
 
         if ($this->input->submit) {
             if ($this->entity) {

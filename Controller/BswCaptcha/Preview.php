@@ -25,7 +25,7 @@ trait Preview
     public function previewOperates()
     {
         return [
-            new Button('New record', 'app_bsw_captcha_persistence', 'a:plus'),
+            new Button('New record', 'app_bsw_captcha_persistence', $this->cnf->icon_newly),
         ];
     }
 

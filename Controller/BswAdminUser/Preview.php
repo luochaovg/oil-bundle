@@ -48,7 +48,18 @@ trait Preview
     public function previewOperates()
     {
         return [
-            new Button('New record', 'app_bsw_admin_user_persistence', 'a:plus'),
+            (new Button('Sure', null, $this->cnf->icon_submit_form))
+                ->setSelector(Abs::SELECTOR_RADIO)
+                ->setClick('fillParentForm')
+                ->setScene(Button::SCENE_IFRAME)
+                ->setArgs(
+                    [
+                        'repair'   => $this->getArgs('repair'),
+                        'selector' => 'id',
+                    ]
+                ),
+
+            new Button('New record', 'app_bsw_admin_user_persistence', $this->cnf->icon_newly),
         ];
     }
 

@@ -52,7 +52,7 @@ trait Preview
     public function previewOperates()
     {
         return [
-            new Button('New record', 'app_bsw_command_queue_persistence', 'a:plus'),
+            new Button('New record', 'app_bsw_command_queue_persistence', $this->cnf->icon_newly),
         ];
     }
 

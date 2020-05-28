@@ -13,6 +13,11 @@ trait WebCrumbs
     public $crumbs = [];
 
     /**
+     * @var array
+     */
+    public $correctCrumbs = [];
+
+    /**
      * Crumbs builder
      *
      * @param string $route
@@ -110,42 +115,91 @@ trait WebCrumbs
     }
 
     /**
-     * Crumb changer
+     * Change crumbs
      *
      * @param string $title
      * @param string $icon
      * @param int    $index
      *
-     * @return bool
+     * @return int
      */
-    public function crumbsChanger(string $title, ?string $icon = null, int $index = null): bool
+    public function changeCrumbs(string $title, ?string $icon = null, int $index = null): int
+    {
+        return array_push(
+            $this->correctCrumbs,
+            [
+                'mode'  => 'change',
+                'title' => $title,
+                'icon'  => $icon,
+                'index' => $index,
+            ]
+        );
+    }
+
+    /**
+     * Append crumbs
+     *
+     * @param string $title
+     * @param string $icon
+     *
+     * @return int
+     */
+    public function appendCrumbs(string $title, ?string $icon = null): int
+    {
+        return array_push(
+            $this->correctCrumbs,
+            [
+                'mode'  => 'append',
+                'title' => $title,
+                'icon'  => $icon,
+            ]
+        );
+    }
+
+    /**
+     * Correct crumbs
+     */
+    public function correctCrumbs()
     {
         if (empty($this->crumbs)) {
-            return false;
+            return;
         }
 
         $total = count($this->crumbs);
-        $index = $index ?? $total - 1;
-        $index = $index < 0 ? $total + $index : $index;
+        foreach ($this->correctCrumbs as $item) {
 
-        if (!isset($this->crumbs[$index])) {
-            return false;
+            /**
+             * @var string $mode
+             * @var string $title
+             * @var string $icon
+             * @var int    $index
+             */
+            extract($item);
+
+            if ($mode == 'append') {
+                array_push($this->crumbs, new Crumb($title, null, $icon));
+                continue;
+            }
+
+            $index = $index ?? $total - 1;
+            $index = $index < 0 ? $total + $index : $index;
+            if (!isset($this->crumbs[$index])) {
+                return;
+            }
+
+            /**
+             * @var Crumb $crumb
+             */
+            $crumb = $this->crumbs[$index];
+
+            if (strpos($title, '%s') !== false) {
+                $title = sprintf($title, $crumb->getLabel());
+            }
+
+            $crumb->setLabel($title);
+            if ($icon) {
+                $crumb->setIcon($icon);
+            }
         }
-
-        /**
-         * @var Crumb $crumb
-         */
-        $crumb = $this->crumbs[$index];
-
-        if (strpos($title, '%s') !== false) {
-            $title = sprintf($title, $crumb->getLabel());
-        }
-
-        $crumb->setLabel($title);
-        if ($icon) {
-            $crumb->setIcon($icon);
-        }
-
-        return true;
     }
 }

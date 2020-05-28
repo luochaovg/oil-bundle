@@ -105,10 +105,15 @@ trait BackendPreset
     {
         $_filter = [];
         foreach ($filter as $key => $value) {
+            if (is_array($value)) {
+                $value = implode(Abs::FORM_DATA_SPLIT, $value);
+            }
+
             $k = Helper::camelToUnder($key);
             if (!is_numeric(Helper::arrayLatestItem($k))) {
                 $k = "{$k}_" . ($index[$key] ?? 0);
             }
+            
             $_filter[$k] = $value;
         }
 

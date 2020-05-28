@@ -98,8 +98,22 @@ class BswMissionCommand extends Command implements CommandInterface
 
         foreach ($queue as $m) {
 
+            $date = date('Y-m-d H:i');
             $condition = Helper::parseJsonString($m['condition']);
-            if (!empty($condition['args'])) {
+
+            if (isset($condition['_signature'])) {
+                if (!Helper::validateSign($condition)) {
+                    $missionRepo->modify(
+                        ['id' => $m['id']],
+                        ['state' => 4, 'remark' => "[{$date}] validate signature failed"]
+                    );
+                    continue;
+                }
+            }
+
+            Helper::arrayPop($condition, ['time', '_signature']);
+
+            if (!empty($condition['args']) && !is_array($condition['args'])) {
                 $args = Helper::jsonArray64($condition['args']);
             }
 
@@ -127,7 +141,6 @@ class BswMissionCommand extends Command implements CommandInterface
 
             // run command
             $command = $this->getApplication()->find($m['command']);
-            $date = date('Y-m-d H:i');
 
             try {
                 $status = $command->run(new ArrayInput($_condition), $output);

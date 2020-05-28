@@ -237,7 +237,7 @@ class Module extends Bsw
         $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
 
         $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
-        $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
+        $filterAnnotationExtra = $this->tailor($this->method, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
          * extra annotation handler
@@ -257,7 +257,7 @@ class Module extends Bsw
             $fn = self::FILTER_ANNOTATION;
             $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
             $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
-            $filterAnnotationExtra = $this->tailor($this->method, $fn, null, $arguments);
+            $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
         }
 
         /**
@@ -268,6 +268,9 @@ class Module extends Bsw
 
             $_item = $item;
             [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull);
+            if (!is_numeric(Helper::arrayLatestItem($field))) {
+                $field = "{$field}_0";
+            }
 
             if (!is_array($item)) {
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
@@ -356,15 +359,12 @@ class Module extends Bsw
 
             $field = $item['field'];
             if (!$item['group']) {
-                $condition[$field] = [
-                    'value'  => $filterAnnotation[$key]['value'],
-                    'filter' => $item['filter'],
-                ];
+                $condition[$field] = $this->web->createFilter($item['filter'], $filterAnnotation[$key]['value']);
                 continue;
             }
 
             if (!isset($condition[$field]) || is_scalar($condition[$field]['value'])) {
-                $condition[$field] = ['value' => [], 'filter' => Senior::class];
+                $condition[$field] = $this->web->createFilter(Senior::class, []);
             }
 
             $index = $filterAnnotation[$key]['index'];

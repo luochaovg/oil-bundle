@@ -1178,8 +1178,12 @@ class Helper
      *
      * @return array
      */
-    public static function createSign(array $param, string $signKey = 'api_sign'): array
+    public static function createSign(array $param, string $signKey = '_signature'): array
     {
+        if (!isset($param['time'])) {
+            $param['time'] = time();
+        }
+
         $param = http_build_query($param);
         parse_str($param, $params);
         ksort($params);
@@ -1197,7 +1201,7 @@ class Helper
      *
      * @return bool
      */
-    public static function validateSign(array $param, string $signKey = 'api_sign'): bool
+    public static function validateSign(array $param, string $signKey = '_signature'): bool
     {
         if (empty($param[$signKey])) {
             return false;
@@ -2301,6 +2305,34 @@ class Helper
             $nowClass = get_class($object);
             throw new BadFunctionCallException("{$info} should be instance of `{$class}` but got `{$nowClass}`");
         }
+    }
+
+    /**
+     * Is extend class
+     *
+     * @param mixed  $target
+     * @param string $className
+     * @param bool   $allowSelf
+     *
+     * @return bool
+     */
+    public static function extendClass($target, string $className, bool $allowSelf = false): bool
+    {
+        $subClassName = is_object($target) ? get_class($target) : $target;
+
+        if (!class_exists($subClassName)) {
+            return false;
+        }
+
+        if ($allowSelf && $subClassName == $className) {
+            return true;
+        }
+
+        if (is_subclass_of($subClassName, $className)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -3962,34 +3994,6 @@ class Helper
         $offset = ($page - 1) * $limit;
 
         return compact('paging', 'page', 'limit', 'offset');
-    }
-
-    /**
-     * Is extend class
-     *
-     * @param mixed  $target
-     * @param string $className
-     * @param bool   $allowSelf
-     *
-     * @return bool
-     */
-    public static function extendClass($target, string $className, bool $allowSelf = false): bool
-    {
-        $subClassName = is_object($target) ? get_class($target) : $target;
-
-        if (!class_exists($subClassName)) {
-            return false;
-        }
-
-        if ($allowSelf && $subClassName == $className) {
-            return true;
-        }
-
-        if (is_subclass_of($subClassName, $className)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

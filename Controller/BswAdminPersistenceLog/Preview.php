@@ -49,7 +49,7 @@ trait Preview
     public function previewOperates()
     {
         return [
-            // new Button('New record', 'app_bsw_admin_persistence_log_persistence', 'a:plus'),
+            // new Button('New record', 'app_bsw_admin_persistence_log_persistence', $this->cnf->icon_newly),
         ];
     }
 

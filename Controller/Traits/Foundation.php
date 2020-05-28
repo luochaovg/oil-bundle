@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Error\Entity\ErrorException;
 use Leon\BswBundle\Module\Error\Entity\ErrorOS;
 use Leon\BswBundle\Module\Error\Entity\ErrorUA;
 use Leon\BswBundle\Module\Exception\FileNotExistsException;
+use Leon\BswBundle\Module\Filter\Filter;
 use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
 use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
@@ -1003,6 +1004,30 @@ trait Foundation
     }
 
     /**
+     * Create filter
+     *
+     * @param string $filter
+     * @param        $value
+     *
+     * @return array
+     */
+    public function createFilter($filter, $value)
+    {
+        if (!Helper::extendClass($filter, Filter::class)) {
+            throw new InvalidArgumentException("Filter should extend class " . Filter::class);
+        }
+
+        if (is_object($filter)) {
+            $filter = get_class($filter);
+        }
+
+        return [
+            'filter' => $filter,
+            'value'  => $value,
+        ];
+    }
+
+    /**
      * Get filter
      *
      * @param array $condition
@@ -1012,7 +1037,7 @@ trait Foundation
      *
      * @return array
      */
-    public function filter(
+    public function parseFilter(
         array $condition,
         int $mode = FilterDispatcher::DQL_MODE,
         bool $append = false,

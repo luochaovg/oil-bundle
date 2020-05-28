@@ -70,6 +70,7 @@ class Module extends Bsw
             array_merge($this->input->masterMenuDetail, $this->input->slaveMenuDetail)
         );
 
+        $this->web->correctCrumbs();
         $output->list = $this->web->crumbs;
 
         $output = $this->caller(
