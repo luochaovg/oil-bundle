@@ -3,142 +3,15 @@
 namespace Leon\BswBundle\Module\Chart\Entity;
 
 use Leon\BswBundle\Module\Chart\Chart;
+use Leon\BswBundle\Module\Chart\Traits;
 
 class Map extends Chart
 {
-    /**
-     * @var string
-     */
-    protected $map = 'china';
-
-    /**
-     * @var bool
-     */
-    protected $showVisualMap = true;
-
-    /**
-     * @var integer
-     */
-    protected $minValue = 0;
-
-    /**
-     * @var integer
-     */
-    protected $maxValue = 0;
-
-    /**
-     * @var array
-     */
-    protected $mapColor = ['white', '#009688'];
-
-    /**
-     * @return string
-     */
-    public function getMap(): string
-    {
-        return $this->map;
-    }
-
-    /**
-     * @param string $map
-     *
-     * @return $this
-     */
-    public function setMap(string $map)
-    {
-        $this->map = $map;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isShowVisualMap(): bool
-    {
-        return $this->showVisualMap;
-    }
-
-    /**
-     * @param bool $showVisualMap
-     */
-    public function setShowVisualMap(bool $showVisualMap): void
-    {
-        $this->showVisualMap = $showVisualMap;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMinValue(): int
-    {
-        return $this->minValue;
-    }
-
-    /**
-     * @param int $minValue
-     *
-     * @return $this
-     */
-    public function setMinValue(int $minValue)
-    {
-        $this->minValue = $minValue;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxValue(): int
-    {
-        return $this->maxValue;
-    }
-
-    /**
-     * @param int $maxValue
-     *
-     * @return $this
-     */
-    public function setMaxValue(int $maxValue)
-    {
-        $this->maxValue = $maxValue;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMapColor(): array
-    {
-        return $this->mapColor;
-    }
-
-    /**
-     * @param array $mapColor
-     *
-     * @return $this
-     */
-    public function setMapColor(array $mapColor)
-    {
-        $this->mapColor = $mapColor;
-
-        return $this;
-    }
-
-    /**
-     * @param string $field
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setMapColorField(string $field, $value)
-    {
-        $this->mapColor[$field] = $value;
-
-        return $this;
-    }
+    use Traits\MapKey,
+        Traits\MapVisual,
+        Traits\MapColor,
+        Traits\MinValue,
+        Traits\MaxValue;
 
     /**
      * @inheritdoc
@@ -148,7 +21,7 @@ class Map extends Chart
     {
         $this->setSelectedMode('single');
         $this->setTooltip(['trigger' => 'item']);
-        $this->setLegendTitle(array_keys($this->getData()));
+        $this->setLegendTitle(array_keys($this->getDataList()));
     }
 
     /**
@@ -167,7 +40,7 @@ class Map extends Chart
         $this->setMaxValue(max(max($values), $this->getMaxValue()));
 
         return [
-            'mapType'    => $this->getMap(),
+            'mapType'    => $this->getMapKey(),
             'roam'       => false,
             'zoom'       => 1,
             'scaleLimit' => [
@@ -200,7 +73,7 @@ class Map extends Chart
      */
     protected function buildOptions(array $options): array
     {
-        if ($this->isShowVisualMap()) {
+        if ($this->isMapVisual()) {
             $options['visualMap'] = [
                 'show'       => !$this->isMobile(),
                 'min'        => $this->getMinValue(),

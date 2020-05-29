@@ -3,131 +3,14 @@
 namespace Leon\BswBundle\Module\Chart\Entity;
 
 use Leon\BswBundle\Module\Chart\Chart;
+use Leon\BswBundle\Module\Chart\Traits;
 
 class Pie extends Chart
 {
-    /**
-     * @var bool
-     */
-    protected $showPieLabel = false;
-
-    /**
-     * @var string
-     */
-    protected $tipsPieTpl = "{a} <br/>{b}: {c} ({d}%)";
-
-    /**
-     * @var string
-     */
-    protected $labelPieTpl = "{a|{a}}\n{hr|}\n {b|{b}：}{c}  {per|{d}%} ";
-
-    /**
-     * @var array
-     */
-    protected $radius = [];
-
-    /**
-     * @var null
-     */
-    protected $xAxis = false;
-
-    /**
-     * @var null
-     */
-    protected $yAxis = false;
-
-    /**
-     * @return bool
-     */
-    public function isShowPieLabel(): bool
-    {
-        return $this->showPieLabel;
-    }
-
-    /**
-     * @param bool $showPieLabel
-     *
-     * @return $this
-     */
-    public function setShowPieLabel(bool $showPieLabel)
-    {
-        $this->showPieLabel = $showPieLabel;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTipsPieTpl(): string
-    {
-        return $this->tipsPieTpl;
-    }
-
-    /**
-     * @param string $tipsPieTpl
-     *
-     * @return $this
-     */
-    public function setTipsPieTpl(string $tipsPieTpl)
-    {
-        $this->tipsPieTpl = $tipsPieTpl;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabelPieTpl(): string
-    {
-        return $this->labelPieTpl;
-    }
-
-    /**
-     * @param string $labelPieTpl
-     *
-     * @return $this
-     */
-    public function setLabelPieTpl(string $labelPieTpl)
-    {
-        $this->labelPieTpl = $labelPieTpl;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRadius(): array
-    {
-        return $this->radius;
-    }
-
-    /**
-     * @param array $radius
-     *
-     * @return $this
-     */
-    public function setRadius(array $radius)
-    {
-        $this->radius = $radius;
-
-        return $this;
-    }
-
-    /**
-     * @param string $field
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setRadiusField(string $field, $value)
-    {
-        $this->radius[$field] = $value;
-
-        return $this;
-    }
+    use Traits\ShowLabel,
+        Traits\TipsTpl,
+        Traits\LabelTpl,
+        Traits\Radius;
 
     /**
      * @inheritdoc
@@ -137,18 +20,18 @@ class Pie extends Chart
     {
         $this->setTooltip(
             [
-                'trigger'   => 'item',
-                'formatter' => $this->getTipsPieTpl(),
+                'trigger' => 'item',
+                'formatter' => $this->getTipsTpl(),
             ]
         );
-        $this->setLegendTitle($this->getField());
+        $this->setLegendTitle($this->getDataField());
     }
 
     /**
      * @inheritdoc
      *
      * @param string $name
-     * @param array  $item
+     * @param array $item
      *
      * @return array
      */
@@ -156,47 +39,47 @@ class Pie extends Chart
     {
         return [
             'selectedMode' => 'single',
-            'center'       => ['50%', '50%'],
-            'radius'       => $this->getRadius() ?: [0, '80%'],
-            'label'        => [
+            'center' => ['50%', '50%'],
+            'radius' => $this->getRadius() ?: [0, '80%'],
+            'label' => [
                 'normal' => [
-                    'show'            => $this->isShowPieLabel(),
-                    'formatter'       => $this->getLabelPieTpl(),
+                    'show' => $this->isShowLabel(),
+                    'formatter' => $this->getLabelTpl(),
                     'backgroundColor' => '#fff',
-                    'borderColor'     => '#eee',
-                    'borderWidth'     => 1,
-                    'borderRadius'    => 4,
-                    'padding'         => [0, 7],
-                    'rich'            => [
-                        'a'   => [
-                            'color'      => '#aaa',
+                    'borderColor' => '#eee',
+                    'borderWidth' => 1,
+                    'borderRadius' => 4,
+                    'padding' => [0, 7],
+                    'rich' => [
+                        'a' => [
+                            'color' => '#aaa',
                             'lineHeight' => 22,
-                            'align'      => 'center',
+                            'align' => 'center',
                         ],
-                        'hr'  => [
+                        'hr' => [
                             'borderColor' => '#eee',
-                            'width'       => '100%',
+                            'width' => '100%',
                             'borderWidth' => 0.5,
-                            'height'      => 0,
+                            'height' => 0,
                         ],
-                        'b'   => [
-                            'fontSize'   => 16,
+                        'b' => [
+                            'fontSize' => 16,
                             'lineHeight' => 33,
                         ],
                         'per' => [
-                            'color'           => '#eee',
+                            'color' => '#eee',
                             'backgroundColor' => '#334455',
-                            'padding'         => [4, 4],
-                            'borderRadius'    => 4,
+                            'padding' => [4, 4],
+                            'borderRadius' => 4,
                         ],
                     ],
                 ],
             ],
-            'itemStyle'    => [
+            'itemStyle' => [
                 'emphasis' => [
-                    'shadowBlur'    => 10,
+                    'shadowBlur' => 10,
                     'shadowOffsetX' => 0,
-                    'shadowColor'   => 'rgba(0, 0, 0, 0.5)',
+                    'shadowColor' => 'rgba(0, 0, 0, 0.5)',
                 ],
             ],
         ];

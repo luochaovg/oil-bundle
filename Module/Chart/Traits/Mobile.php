@@ -22,7 +22,7 @@ trait Mobile
      *
      * @return $this
      */
-    public function setMobile(bool $mobile)
+    public function setMobile(bool $mobile = true)
     {
         $this->mobile = $mobile;
 

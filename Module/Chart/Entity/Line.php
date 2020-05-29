@@ -3,99 +3,13 @@
 namespace Leon\BswBundle\Module\Chart\Entity;
 
 use Leon\BswBundle\Module\Chart\Chart;
+use Leon\BswBundle\Module\Chart\Traits;
 
 class Line extends Chart
 {
-    /**
-     * @var bool
-     */
-    protected $smooth = true;
-
-    /**
-     * @var array
-     */
-    protected $point = [
-        'max' => [
-            'type'      => 'max',
-            'name'      => 'Max',
-            'itemStyle' => ['color' => '#5FB878'],
-        ],
-        'min' => [
-            'type'      => 'min',
-            'name'      => 'Min',
-            'itemStyle' => ['color' => '#FFB800'],
-        ],
-    ];
-
-    /**
-     * @var array
-     */
-    protected $line = [
-        'avg' => [
-            'type' => 'average',
-            'name' => 'avg',
-        ],
-    ];
-
-    /**
-     * @return bool
-     */
-    public function isSmooth(): bool
-    {
-        return $this->smooth;
-    }
-
-    /**
-     * @param bool $smooth
-     *
-     * @return $this
-     */
-    public function setSmooth(bool $smooth)
-    {
-        $this->smooth = $smooth;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPoint(): array
-    {
-        return $this->point;
-    }
-
-    /**
-     * @param array $point
-     *
-     * @return $this
-     */
-    public function setPoint(array $point)
-    {
-        $this->point = $point;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getLine(): array
-    {
-        return $this->line;
-    }
-
-    /**
-     * @param array $line
-     *
-     * @return $this
-     */
-    public function setLine(array $line)
-    {
-        $this->line = $line;
-
-        return $this;
-    }
+    use Traits\Smooth,
+        Traits\Point,
+        Traits\Line;
 
     /**
      * @inheritdoc
@@ -103,7 +17,7 @@ class Line extends Chart
      */
     protected function init()
     {
-        $this->setXAxis(
+        $this->setAxisX(
             [
                 'axisLine'    => [
                     'lineStyle' => [
@@ -114,7 +28,7 @@ class Line extends Chart
             ]
         );
 
-        $this->setYAxis(
+        $this->setAxisY(
             [
                 'axisLine' => [
                     'lineStyle' => [
@@ -169,14 +83,14 @@ class Line extends Chart
             )
         );
 
-        $this->setXAxisTitle($this->getField());
-        $this->setLegendTitle(array_keys($this->getData()));
+        $this->setAxisXTitle($this->getDataField());
+        $this->setLegendTitle(array_keys($this->getDataList()));
 
         foreach ($this->getLegendTitle() as $key => $val) {
             $this->setLegendTitleField($key, strval($val));
         }
 
-        $this->setTooltipField('formatter', $this->getTooltipFmt());
+        $this->setTooltipField('formatter', $this->getTooltipTpl());
         $this->setPoint(array_values($this->getPoint()));
         $this->setLine(array_values($this->getLine()));
     }

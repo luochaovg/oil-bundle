@@ -591,59 +591,6 @@ class BswBackendController extends BswWebController
     }
 
     /**
-     * Get chart option
-     *
-     * @param array  $option
-     * @param string $chart
-     * @param string $width
-     * @param string $height
-     * @param array  $style
-     * @param string $theme
-     *
-     * @return array
-     */
-    protected function createChartOption(
-        array $option,
-        string $chart,
-        string $width = null,
-        string $height = null,
-        array $style = null,
-        string $theme = Abs::CHART_DEFAULT_THEME
-    ) {
-
-        /**
-         * @var Chart $chart
-         */
-        $chart = new $chart($option, Helper::isMobile());
-
-        if (isset($option['beforeOption']) && is_callable($option['beforeOption'])) {
-            $chart = call_user_func_array($option['beforeOption'], [$chart]);
-        }
-
-        $fullOption = $chart->option();
-
-        if (isset($option['afterOption']) && is_callable($option['afterOption'])) {
-            $fullOption = call_user_func_array($option['afterOption'], [$fullOption]);
-        }
-
-        $width = is_null($width) ? '92%' : $width;
-        $height = is_null($height) ? '700px' : $height;
-        $style = is_null($style) ? ['margin' => '50px auto', 'float' => 'none'] : $style;
-
-        $mobile = Helper::isMobile();
-
-        return [
-            'width'  => $mobile ? '100%' : $width,
-            'height' => $mobile ? '400px' : $height,
-            'style'  => $mobile ? null : Html::cssStyleFromArray($style),
-            'theme'  => $theme,
-            'map'    => $option['map'] ?? null,
-            'api'    => $this->urlSafe($this->route, $this->getArgs(), 'Chart api'),
-            'option' => Helper::jsonStringify($fullOption, '{}'),
-        ];
-    }
-
-    /**
      * Render chart
      *
      * @param array       $args

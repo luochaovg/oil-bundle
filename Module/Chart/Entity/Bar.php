@@ -2,57 +2,12 @@
 
 namespace Leon\BswBundle\Module\Chart\Entity;
 
+use Leon\BswBundle\Module\Chart\Traits;
+
 class Bar extends Line
 {
-    /**
-     * @var string
-     */
-    protected $labelStackTpl = "{name|{a}} {c}";
-
-    /**
-     * @var int
-     */
-    protected $maxBarFixedWidth = 10;
-
-    /**
-     * @return string
-     */
-    public function getLabelStackTpl(): string
-    {
-        return $this->labelStackTpl;
-    }
-
-    /**
-     * @param string $labelStackTpl
-     *
-     * @return $this
-     */
-    public function setLabelStackTpl(string $labelStackTpl)
-    {
-        $this->labelStackTpl = $labelStackTpl;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxBarFixedWidth(): int
-    {
-        return $this->maxBarFixedWidth;
-    }
-
-    /**
-     * @param int $maxBarFixedWidth
-     *
-     * @return $this
-     */
-    public function setMaxBarFixedWidth(int $maxBarFixedWidth)
-    {
-        $this->maxBarFixedWidth = $maxBarFixedWidth;
-
-        return $this;
-    }
+    use Traits\LabelStackTpl,
+        Traits\MaxBarFixedWidth;
 
     /**
      * @inheritdoc
