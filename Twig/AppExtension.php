@@ -37,12 +37,12 @@ class AppExtension extends AbstractExtension
      * @param array  $class
      * @param array  $queryArr
      *
-     * @return string|null
+     * @return string
      */
     public static function icon(?string $icon, bool $html = true, array $class = [], array $queryArr = [])
     {
         if (!$icon) {
-            return null;
+            return '';
         }
 
         $flag = 'a';
