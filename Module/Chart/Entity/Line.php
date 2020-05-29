@@ -169,8 +169,8 @@ class Line extends Chart
             )
         );
 
-        $this->setXAxisTitle($this->getDataField());
-        $this->setLegendTitle(array_keys($this->getDataList()));
+        $this->setXAxisTitle($this->getField());
+        $this->setLegendTitle(array_keys($this->getData()));
 
         foreach ($this->getLegendTitle() as $key => $val) {
             $this->setLegendTitleField($key, strval($val));

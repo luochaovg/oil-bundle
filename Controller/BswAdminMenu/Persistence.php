@@ -6,7 +6,6 @@ use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminMenu;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
-use Leon\BswBundle\Module\Form\Entity\Number;
 use Leon\BswBundle\Repository\BswAdminMenuRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -36,13 +35,13 @@ trait Persistence
             ->setType(Button::THEME_DEFAULT)
             ->setSize(Button::SIZE_SMALL)
             ->setArgs(['location' => $this->cnf->ant_icon_url, 'window' => true]);
-        $iconA = $this->renderPart('@LeonBsw/form/button', ['form' => $iconA]);
+        $iconA = $this->renderPart($this->twigElection('button', 'form'), ['form' => $iconA]);
 
         $iconB = (new Button('b:symbol'))
             ->setType(Button::THEME_DEFAULT)
             ->setSize(Button::SIZE_SMALL)
             ->setArgs(['location' => $this->cnf->font_symbol_url, 'window' => true]);
-        $iconB = $this->renderPart('@LeonBsw/form/button', ['form' => $iconB]);
+        $iconB = $this->renderPart($this->twigElection('button', 'form'), ['form' => $iconB]);
 
         return [
             'icon' => [

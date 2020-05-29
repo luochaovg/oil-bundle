@@ -1,13 +1,13 @@
-{% extends '@LeonBsw/foundation/w3c.html.twig' %}
+{% extends 'w3c'|twig('foundation') %}
 
 {% block w3c %}
   {% if limbs_innocence ?? true %}
-    {% include '@LeonBsw/limbs/innocence.html.twig' %}
+    {% include 'innocence'|twig('limbs') %}
   {% endif %}
   <div class="{{ ['bsw-body', tpl_body_class ?? null]|filter(v => v)|join(' ') }}">
     <template>
       {% if limbs_init ?? true %}
-        {% include '@LeonBsw/limbs/init.html.twig' %}
+        {% include 'init'|twig('limbs') %}
       {% endif %}
       {{ (modal_html ?? null)|raw }}
       <a-config-provider :locale="locale">

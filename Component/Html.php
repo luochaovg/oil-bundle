@@ -2,9 +2,9 @@
 
 namespace Leon\BswBundle\Component;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use DOMDocument;
 use DOMNode;
-use Leon\BswBundle\Module\Entity\Abs;
 
 class Html
 {

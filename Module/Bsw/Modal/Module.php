@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw\Modal;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -21,10 +22,11 @@ class Module extends Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     public function twig(): ?string
     {
-        return '@LeonBsw/limbs/modal';
+        return $this->web->twigElection('modal', 'limbs');
     }
 
     /**
@@ -58,7 +60,7 @@ class Module extends Bsw
     {
         $output = new Output();
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

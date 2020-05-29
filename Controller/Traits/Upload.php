@@ -9,8 +9,8 @@ use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorUpload;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
-use Monolog\Logger;
 use OSS\Core\OssException;
+use Monolog\Logger;
 use OSS\OssClient;
 use Exception;
 

@@ -158,7 +158,7 @@ class Abs
     const SORT                 = 'sort';
     const ORDER                = 'order';
     const MIN_ADMIN_ROLE       = -10;
-    const TPL_SUFFIX           = '.html.twig';
+    const TPL_SUFFIX           = '.twig';
     const FORMAT_JSON          = 'json';
     const FORMAT_HTML          = 'html';
     const AUTO                 = 'auto';

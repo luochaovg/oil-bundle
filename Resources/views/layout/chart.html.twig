@@ -1,9 +1,9 @@
-{% extends '@LeonBsw/layout/blank.html.twig' %}
+{% extends 'blank'|twig('layout') %}
 {% set tpl_content_class = ['bsw-chart-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
-  {% include '@LeonBsw/limbs/filter.html.twig' %}
-  {% if chart.tabsMenu is not empty %}
+  {% include 'filter'|twig('limbs') %}
+  {% if chart.menu is not empty %}
     <a-tabs
       class="bsw-chart-tabs"
       default-active-key="{{ scaffold.route }}"
@@ -11,7 +11,7 @@
       :tab-bar-gutter="6"
       type="card"
     >
-      {% for index, link in chart.tabsMenu %}
+      {% for index, link in chart.menu %}
         <a-tab-pane key="{{ link.route }}">
           <span
             id="{{ link.route }}"
@@ -25,17 +25,13 @@
   {% endif %}
 
   <div class="bsw-chart-list">
-    {% for index, item in chart.items %}
-      <div
-        class="bsw-chart"
-        id="chart-{{ index }}"
-        style="width: {{ item.width }}; height: {{ item.height }}; {{ item.style }}"
-      ></div>
+    {% for key, item in chart.items %}
+      {% include 'chart'|twig('limbs') with {key: key, chart: item} %}
     {% endfor %}
   </div>
 {% endblock %}
 
 {% block javascript %}
-{% include '@LeonBsw/javascript/filter.md.twig' %}
-{% include '@LeonBsw/javascript/chart.md.twig' %}
+{% include 'filter'|twig('javascript', 'md') %}
+{% include 'chart'|twig('javascript', 'md') %}
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw\Crumbs;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -29,10 +30,11 @@ class Module extends Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     public function twig(): ?string
     {
-        return '@LeonBsw/limbs/crumbs';
+        return $this->web->twigElection('crumbs', 'limbs');
     }
 
     /**
@@ -74,7 +76,7 @@ class Module extends Bsw
         $output->list = $this->web->crumbs;
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

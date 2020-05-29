@@ -4,8 +4,8 @@ namespace Leon\BswBundle\Component;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-use Exception;
 use Leon\BswBundle\Module\Entity\Abs;
+use Exception;
 
 class Fetch
 {

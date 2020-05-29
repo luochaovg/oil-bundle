@@ -37,7 +37,7 @@ class PreviewConverter extends AnnotationConverter
     /**
      * @param $value
      *
-     * @return null|string
+     * @return string|null
      */
     protected function align($value)
     {

@@ -14,11 +14,13 @@ use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Entity\ErrorSession;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Controller\Traits as CT;
+use Leon\BswBundle\Twig\AppExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Twig\Error\LoaderError;
 use Exception;
 use Throwable;
 
@@ -112,7 +114,7 @@ abstract class BswWebController extends AbstractController
      *
      * @param int $index
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getHistoryRoute(int $index = -1): ?string
     {
@@ -658,18 +660,55 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
+     * Twig election
+     *
+     * @param string $part
+     * @param string $path
+     * @param string $suffix
+     *
+     * @return string
+     * @throws
+     */
+    public function twigElection(string $part, string $path, string $suffix = 'html'): string
+    {
+        $view = null;
+        $exception = null;
+        $twigs = AppExtension::twig($part, $path, $suffix);
+
+        foreach ($twigs as $twig) {
+            try {
+                $this->renderView($twig);
+                $view = $twig;
+            } catch (LoaderError $e) {
+                $exception = $e->getMessage();
+                continue;
+            } catch (Exception $e) {
+                $view = $twig;
+                break;
+            }
+        }
+
+        if (empty($view)) {
+            throw new LoaderError($exception);
+        }
+
+        return $view;
+    }
+
+    /**
      * View string handler
      *
      * @param array       $scaffold
-     * @param null|string $view
+     * @param string|null $view
      *
      * @return string
      */
-    public function viewHandler(array $scaffold, ?string $view): string
+    public function viewHandler(array $scaffold, ?string $view = null): string
     {
         $suffix = Abs::TPL_SUFFIX;
 
         if (!$view) {
+            $suffix = ".html{$suffix}";
             // view handler
             if (method_exists($this, $fn = Abs::FN_BLANK_VIEW)) {
                 $view = $this->{$fn}($suffix);

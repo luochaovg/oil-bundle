@@ -8,14 +8,22 @@ use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Error;
 
 /**
- * @property Input                $input
+ * @property Input $input
  * @property BswBackendController $web
  */
 class Module extends Bsw
 {
+    /**
+     * @const string
+     */
+    const CHART_ITEMS = 'ChartItems';   // 图表数据
+    const CHART_MENU  = 'ChartMenu';    // 图表菜单
+
     /**
      * @return bool
      */
@@ -72,26 +80,9 @@ class Module extends Bsw
     {
         $output = new Output();
 
-        if ($this->input->itemsHandler) {
-            $args = [$output->items, $this->input->condition];
-            $output->items = call_user_func_array($this->input->itemsHandler, $args);
-        } else {
-            $output->items = $this->input->items;
-        }
-
-        // source
-        $this->web->appendSrcJsWithKey('e-charts', Abs::JS_CHART);
-
-        $themes = array_column($output->items, 'theme');
-        $themes = array_unique($themes);
-        foreach ($themes as $theme) {
-            $theme = strtoupper($theme);
-            $theme = str_replace('-', '_', $theme);
-            $this->web->appendSrcJs(constant(Abs::class . '::JS_CHART_' . $theme));
-        }
-
-        foreach ($this->input->tabsMenu as $item) {
-
+        // menu
+        $menu = $this->caller($this->method, self::CHART_MENU, Abs::T_ARRAY, []);
+        foreach ($menu as $item) {
             Helper::objectInstanceOf(
                 $item,
                 Links::class,
@@ -106,11 +97,40 @@ class Module extends Bsw
             } else {
                 $item->setUrl($this->web->urlSafe($item->getRoute(), [], 'Chart tabs links'));
             }
-            array_push($output->tabsMenu, $item);
+            array_push($output->menu, $item);
+        }
+
+        // items
+        $arguments = $this->arguments(['condition' => $this->input->condition]);
+        $result = $this->caller(
+            $this->method,
+            self::CHART_ITEMS,
+            [Message::class, Error::class, Abs::T_ARRAY],
+            [],
+            $arguments
+        );
+
+        if ($result instanceof Error) {
+            return $this->showError($result->tiny());
+        } elseif ($result instanceof Message) {
+            return $this->showMessage($result);
+        } else {
+            $output->items = $result;
+        }
+
+        // resource
+        $this->web->appendSrcJsWithKey('e-charts', Abs::JS_CHART);
+
+        $themes = array_column($output->items, 'theme');
+        $themes = array_unique($themes);
+        foreach ($themes as $theme) {
+            $theme = strtoupper($theme);
+            $theme = str_replace('-', '_', $theme);
+            $this->web->appendSrcJs(constant(Abs::class . '::JS_CHART_' . $theme));
         }
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

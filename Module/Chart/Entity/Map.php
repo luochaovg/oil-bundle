@@ -148,7 +148,7 @@ class Map extends Chart
     {
         $this->setSelectedMode('single');
         $this->setTooltip(['trigger' => 'item']);
-        $this->setLegendTitle(array_keys($this->getDataList()));
+        $this->setLegendTitle(array_keys($this->getData()));
     }
 
     /**

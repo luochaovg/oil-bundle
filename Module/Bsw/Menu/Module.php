@@ -33,10 +33,11 @@ class Module extends Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     public function twig(): ?string
     {
-        return '@LeonBsw/limbs/menu';
+        return $this->web->twigElection('menu', 'limbs');
     }
 
     /**
@@ -228,7 +229,7 @@ class Module extends Bsw
         ] = $this->menuBuilder();
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

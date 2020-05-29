@@ -50,10 +50,11 @@ class Module extends Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     public function twig(): ?string
     {
-        return '@LeonBsw/limbs/operate';
+        return $this->web->twigElection('operate', 'limbs');
     }
 
     /**
@@ -136,7 +137,7 @@ class Module extends Bsw
         }
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

@@ -27,6 +27,16 @@ class Pie extends Chart
     protected $radius = [];
 
     /**
+     * @var null
+     */
+    protected $xAxis = false;
+
+    /**
+     * @var null
+     */
+    protected $yAxis = false;
+
+    /**
      * @return bool
      */
     public function isShowPieLabel(): bool
@@ -131,7 +141,7 @@ class Pie extends Chart
                 'formatter' => $this->getTipsPieTpl(),
             ]
         );
-        $this->setLegendTitle($this->getDataField());
+        $this->setLegendTitle($this->getField());
     }
 
     /**

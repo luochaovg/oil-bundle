@@ -1,4 +1,4 @@
-{% extends '@LeonBsw/layout/empty.html.twig' %}
+{% extends 'empty'|twig('layout') %}
 
 {% block stylesheets %}
   div.ant-spin-container {{ scaffold.cnf|image_style('login', true) }}

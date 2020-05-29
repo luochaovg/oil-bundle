@@ -191,7 +191,7 @@ trait Grant
                 ],
             ],
             [],
-            'layout/grant'
+            'layout/grant.html'
         );
     }
 }

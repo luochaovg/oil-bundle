@@ -255,7 +255,7 @@ class Module extends Bsw
     protected function getPersistenceData()
     {
         if (empty($this->entity)) {
-            return [[], [], [], []];
+            return [[], [], [], [], []];
         }
 
         $key = "{$this->input->route}:record:before";
@@ -333,7 +333,7 @@ class Module extends Bsw
             $record->attributes($submit, true);
             $record = Helper::entityToArray($record);
 
-            return [$record, $extraSubmit, $recordBefore, $recordDiff];
+            return [$submit, $record, $extraSubmit, $recordBefore, $recordDiff];
         }
 
         /**
@@ -349,7 +349,7 @@ class Module extends Bsw
         $record = Helper::entityToArray($record);
         $this->web->sessionSet($key, $record);
 
-        return [$record, [], $record, $record];
+        return [[], $record, [], $record, $record];
     }
 
     /**
@@ -607,7 +607,7 @@ class Module extends Bsw
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
                     ->setArgs(['field' => $field, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
-                $titleAuto = $this->web->renderPart('@LeonBsw/form/button', ['form' => $button]);
+                $titleAuto = $this->web->renderPart($this->web->twigElection('button', 'form'), ['form' => $button]);
             }
 
             $_record[$field] = [
@@ -680,6 +680,7 @@ class Module extends Bsw
     /**
      * Record handler
      *
+     * @param array  $submit
      * @param array  $record
      * @param array  $_persistAnnotation
      * @param array  $extraSubmit
@@ -688,6 +689,7 @@ class Module extends Bsw
      * @return array
      */
     protected function recordHandler(
+        array $submit,
         array $record,
         array $_persistAnnotation,
         array $extraSubmit,
@@ -705,8 +707,14 @@ class Module extends Bsw
                 continue;
             }
 
-            // Ignore strict
+            // Force ignore
             if ($_persistAnnotation[$field]['ignore']) {
+                unset($record[$field]);
+                continue;
+            }
+
+            // No show and not in submit
+            if (!$_persistAnnotation[$field]['show'] && !isset($submit[$field])) {
                 unset($record[$field]);
                 continue;
             }
@@ -728,13 +736,13 @@ class Module extends Bsw
 
             $_field = Helper::camelToUnder($field);
 
-            // Field don't exists
+            // Field not in annotation
             if (!isset($_persistAnnotation[$field])) {
                 unset($extraSubmit[$field]);
                 continue;
             }
 
-            // Not field in entity
+            // Field not in entity
             if (!isset($document[$_field])) {
                 unset($extraSubmit[$field]);
                 continue;
@@ -792,6 +800,7 @@ class Module extends Bsw
     /**
      * Persistence to MySQL
      *
+     * @param array $submit
      * @param array $record
      * @param array $original
      * @param array $_persistAnnotation
@@ -803,6 +812,7 @@ class Module extends Bsw
      * @throws
      */
     protected function persistence(
+        array $submit,
         array $record,
         array $original,
         array $_persistAnnotation,
@@ -820,14 +830,15 @@ class Module extends Bsw
 
         $result = $this->repository->transactional(
             function () use (
-                $newly,
-                $_persistAnnotation,
+                $submit,
                 $record,
                 $original,
+                $_persistAnnotation,
                 $extraSubmit,
-                $pk,
                 $recordBefore,
-                $recordDiff
+                $recordDiff,
+                $newly,
+                $pk
             ) {
 
                 /**
@@ -870,7 +881,7 @@ class Module extends Bsw
 
                     $loggerType = $multipleField ? 2 : 1;
                     $recordBefore = $recordDiff = [];
-                    $record = $this->recordHandler($record, $_persistAnnotation, $extraSubmit, $multipleField);
+                    $record = $this->recordHandler($record, $record, $_persistAnnotation, $extraSubmit, $multipleField);
 
                     if ($multipleField) {
                         $result = $this->repository->newlyMultiple($record);
@@ -885,7 +896,7 @@ class Module extends Bsw
                      */
 
                     $loggerType = 3;
-                    $record = $this->recordHandler($record, $_persistAnnotation, $extraSubmit);
+                    $record = $this->recordHandler($submit, $record, $_persistAnnotation, $extraSubmit);
                     $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
                 }
 
@@ -970,7 +981,7 @@ class Module extends Bsw
         if ($result instanceof ArgsOutput) {
             return $result;
         } else {
-            [$record, $extraSubmit, $recordBefore, $recordDiff] = $result;
+            [$submit, $record, $extraSubmit, $recordBefore, $recordDiff] = $result;
         }
 
         $result = $this->handlePersistenceData($persistAnnotation, $record, $hooks, $output);
@@ -983,6 +994,7 @@ class Module extends Bsw
         if ($this->input->submit) {
             if ($this->entity) {
                 return $this->persistence(
+                    $submit,
                     $record,
                     $original,
                     $_persistAnnotation,
@@ -1046,7 +1058,7 @@ class Module extends Bsw
         $output->styleJson = Helper::jsonStringify($output->style, '{}');
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

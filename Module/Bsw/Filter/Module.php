@@ -671,7 +671,7 @@ class Module extends Bsw
         $this->handleFilter($output);
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

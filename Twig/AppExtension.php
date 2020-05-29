@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Twig;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Module\Entity\Abs;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use function GuzzleHttp\Psr7\parse_query;
@@ -124,17 +125,18 @@ class AppExtension extends AbstractExtension
      *
      * @param string $part
      * @param string $path
+     * @param string $suffix
      *
      * @return array
      */
-    public static function twig(string $part, string $path): array
+    public static function twig(string $part, string $path, string $suffix = 'html'): array
     {
         $part = trim($part, '/.');
         $path = trim($path, '/.') . '/';
 
         return [
-            "./{$path}{$part}.html.twig",
-            "@LeonBsw/{$path}{$part}.html.twig",
+            "./LeonBsw/{$path}{$part}.{$suffix}" . Abs::TPL_SUFFIX,
+            "@LeonBsw/{$path}{$part}.{$suffix}" . Abs::TPL_SUFFIX,
         ];
     }
 }

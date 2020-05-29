@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw\Welcome;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -27,10 +28,11 @@ class Module extends Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     public function twig(): ?string
     {
-        return '@LeonBsw/limbs/welcome';
+        return $this->web->twigElection('welcome', 'limbs');
     }
 
     /**
@@ -66,7 +68,7 @@ class Module extends Bsw
         $output->speech = $this->caller($this->method, self::WELCOME, Abs::T_STRING);
 
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,

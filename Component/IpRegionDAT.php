@@ -51,7 +51,7 @@ class IpRegionDAT
     /**
      * @param string $ip_address
      *
-     * @return bool|null|string
+     * @return bool|string|null
      */
     public function get(string $ip_address)
     {

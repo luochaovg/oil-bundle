@@ -2,10 +2,10 @@
 
 namespace Leon\BswBundle\Component;
 
-use ZipArchive;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
 use InvalidArgumentException;
+use ZipArchive;
 use Exception;
 use finfo;
 
@@ -1011,7 +1011,7 @@ class Helper
      * @param array  $params
      * @param string $url
      *
-     * @return null|string
+     * @return string|null
      */
     public static function httpBuildQuery(array $params = null, string $url = null)
     {
@@ -1031,7 +1031,7 @@ class Helper
      * @param array  $params
      * @param string $url
      *
-     * @return null|string
+     * @return string|null
      */
     public static function httpBuildQueryOrderly(array $params = null, string $url = null)
     {
@@ -1842,7 +1842,7 @@ class Helper
      *
      * @param string $table
      *
-     * @return null|string
+     * @return string|null
      */
     public static function tableNameFromCls(string $table): string
     {

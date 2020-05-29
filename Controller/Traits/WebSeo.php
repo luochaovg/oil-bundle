@@ -45,7 +45,7 @@ trait WebSeo
          *
          * @param string $type
          *
-         * @return null|string
+         * @return string|null
          */
         $get = function (string $type) use ($i18n) {
 

@@ -58,7 +58,7 @@ trait Login
             $args['google_captcha'] = 'Google captcha';
         }
 
-        return $this->show($args, 'layout/login');
+        return $this->show($args, 'layout/login.html');
     }
 
     /**

@@ -20,7 +20,7 @@ abstract class Bsw
     const ANNOTATION_ONLY    = 'AnnotationOnly';    // [全局配置] 注释限制
     const TAILOR             = 'Tailor';            // [全局配置] 定制逻辑
     const ENUM_EXTRA         = 'EnumExtra';         // 额外枚举
-    const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';  // 渲染前处理(输出)
+    const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';  // 渲染前参数处理
 
     /**
      * @var BswBackendController
@@ -100,6 +100,7 @@ abstract class Bsw
 
     /**
      * @return string|null
+     * @throws
      */
     abstract public function twig(): ?string;
 
@@ -166,7 +167,7 @@ abstract class Bsw
      */
     protected function method(): string
     {
-        return "module" . ucfirst($this->name());
+        return "module" . Helper::underToCamel($this->name(), false);
     }
 
     /**

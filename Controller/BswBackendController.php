@@ -58,16 +58,6 @@ class BswBackendController extends BswWebController
     protected $langErrorTiny = true;
 
     /**
-     * @var string
-     */
-    protected $layoutBsw = 'layout/blank';
-
-    /**
-     * @var string
-     */
-    protected $layoutDiy = 'layout/empty';
-
-    /**
      * @var bool
      */
     protected $plaintextSensitive = false;
@@ -438,7 +428,7 @@ class BswBackendController extends BswWebController
             $ajaxShowArgs["{$name}_html"] = $html;
         }
 
-        $logic = $showArgs[Abs::TAG_LOGIC];
+        $logic = &$showArgs[Abs::TAG_LOGIC];
         $afterModule = Helper::dig($logic, 'afterModule') ?? [];
         Helper::callReturnType($afterModule, Abs::T_ARRAY, 'Handler after module');
 
@@ -446,7 +436,7 @@ class BswBackendController extends BswWebController
             if (!is_callable($handler)) {
                 continue;
             }
-            $showArgs[Abs::TAG_LOGIC][$key] = call_user_func_array($handler, [$logic, $showArgs]);
+            $logic[$key] = call_user_func_array($handler, [$logic, $showArgs]);
         }
 
         if ($this->ajax) {
@@ -533,19 +523,15 @@ class BswBackendController extends BswWebController
     /**
      * Render blank
      *
+     * @param string $view
      * @param array  $args
      * @param array  $moduleList
-     * @param string $view
      *
      * @return Response|array
      * @throws
      */
-    protected function showBlank(
-        array $args = [],
-        array $moduleList = [],
-        string $view = 'layout/blank'
-    ): Response {
-
+    protected function showBlank(string $view, array $args = [], array $moduleList = []): Response
+    {
         $args['scene'] = 'blank';
         $moduleList = array_merge(
             $this->blankModule(),
@@ -559,19 +545,15 @@ class BswBackendController extends BswWebController
     /**
      * Render preview
      *
-     * @param array  $args
-     * @param array  $moduleList
-     * @param string $view
+     * @param array       $args
+     * @param array       $moduleList
+     * @param string|null $view
      *
      * @return Response|array
      * @throws
      */
-    protected function showPreview(
-        array $args = [],
-        array $moduleList = [],
-        string $view = 'layout/preview'
-    ): Response {
-
+    protected function showPreview(array $args = [], array $moduleList = [], ?string $view = null): Response
+    {
         $args['scene'] = 'preview';
         $moduleList = array_merge(
             $this->blankModule(),
@@ -579,25 +561,21 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Preview\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args);
+        return $this->showModule($moduleList, $view ?? $this->twigElection('preview', 'layout'), $args);
     }
 
     /**
      * Render persistence
      *
-     * @param array  $args
-     * @param array  $moduleList
-     * @param string $view
+     * @param array       $args
+     * @param array       $moduleList
+     * @param string|null $view
      *
      * @return Response|array
      * @throws
      */
-    protected function showPersistence(
-        array $args = [],
-        array $moduleList = [],
-        string $view = 'layout/persistence'
-    ): Response {
-
+    protected function showPersistence(array $args = [], array $moduleList = [], ?string $view = null): Response
+    {
         if (!isset($args['submit'])) {
             $args['submit'] = $this->postArgs('submit', false) ?? [];
         }
@@ -609,7 +587,7 @@ class BswBackendController extends BswWebController
             [BswModule\Persistence\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args);
+        return $this->showModule($moduleList, $view ?? $this->twigElection('persistence', 'layout'), $args);
     }
 
     /**
@@ -668,19 +646,15 @@ class BswBackendController extends BswWebController
     /**
      * Render chart
      *
-     * @param array  $args
-     * @param array  $moduleList
-     * @param string $view
+     * @param array       $args
+     * @param array       $moduleList
+     * @param string|null $view
      *
      * @return Response|array
      * @throws
      */
-    protected function showChart(
-        array $args = [],
-        array $moduleList = [],
-        string $view = 'layout/chart'
-    ): Response {
-
+    protected function showChart(array $args = [], array $moduleList = [], ?string $view = null): Response
+    {
         $args['scene'] = 'chart';
         $moduleList = array_merge(
             $this->blankModule(),
@@ -688,7 +662,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Chart\Module::class]
         );
 
-        return $this->showModule($moduleList, $view, $args);
+        return $this->showModule($moduleList, $view ?? $this->twigElection('chart', 'layout'), $args);
     }
 
     /**

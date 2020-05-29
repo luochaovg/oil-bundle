@@ -2,12 +2,12 @@
 
 namespace Leon\BswBundle\Component;
 
-use Aws\Ses\SesClient;
 use Aws\Ses\Exception\SesException;
-use Aws\Credentials\Credentials;
 use Aws\Sns\Exception\SnsException;
-use Aws\Sns\SnsClient;
+use Aws\Credentials\Credentials;
 use InvalidArgumentException;
+use Aws\Ses\SesClient;
+use Aws\Sns\SnsClient;
 
 class AwsSDK
 {

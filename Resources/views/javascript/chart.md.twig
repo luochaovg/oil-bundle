@@ -7,9 +7,9 @@ bsw.configure({
     },
     logic: {
         chart_init(v) {
-            {% for index, item in chart.items %}
+            {% for key, item in chart.items %}
               bsw.chart({
-                  id: '{{ index }}',
+                  id: '{{ key }}',
                   theme: '{{ item.theme }}',
                   option: {{ item.option|raw }}
               });

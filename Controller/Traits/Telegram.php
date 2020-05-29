@@ -3,9 +3,9 @@
 namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Component\Helper;
-use Monolog\Logger;
-use Telegram\Bot\Api;
 use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Api;
+use Monolog\Logger;
 use Exception;
 
 /**

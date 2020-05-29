@@ -1,4 +1,4 @@
-{% extends '@LeonBsw/layout/blank.html.twig' %}
+{% extends 'blank'|twig('layout') %}
 {% set tpl_content_class = ['bsw-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
@@ -52,5 +52,5 @@
 {% endblock %}
 
 {% block javascript %}
-{% include '@LeonBsw/javascript/persistence.md.twig' %}
+{% include 'persistence'|twig('javascript', 'md') %}
 {% endblock %}

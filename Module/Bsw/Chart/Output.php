@@ -10,7 +10,7 @@ class Output extends ArgsOutput
     /**
      * @var Links[]
      */
-    public $tabsMenu = [];
+    public $menu = [];
 
     /**
      * @var array

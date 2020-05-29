@@ -204,7 +204,7 @@ class IpRegionIPDB
     /**
      * @param int $node
      *
-     * @return bool|null|string
+     * @return bool|string|null
      * @throws Exception
      */
     private function resolve(int $node)

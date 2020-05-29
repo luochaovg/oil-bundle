@@ -10,8 +10,8 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Repository\BswAdminPersistenceLogRepository;
-use Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Monolog\Logger;
 
 /**
  * @property TranslatorInterface $translator
@@ -142,7 +142,7 @@ trait BackendPreset
             ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 
-        $button = $this->renderPart('@LeonBsw/form/button.native', ['form' => $button]);
+        $button = $this->renderPart($this->twigElection('button.native', 'form'), ['form' => $button]);
 
         return new Charm($button, $label);
     }

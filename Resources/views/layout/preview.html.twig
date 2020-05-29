@@ -1,7 +1,7 @@
-{% extends '@LeonBsw/layout/blank.html.twig' %}
+{% extends 'blank'|twig('layout') %}
 
 {% block page %}
-  {% include '@LeonBsw/limbs/filter.html.twig' %}
+  {% include 'filter'|twig('limbs') %}
   {% set fields = '{' ~ (preview.choice.fields ?? [])|array_map_double('"%s":"${record.%s}"')|join(',') ~ '}' %}
   <div class="bsw-preview">
     <a-table
@@ -42,6 +42,6 @@
 {% endblock %}
 
 {% block javascript %}
-{% include '@LeonBsw/javascript/filter.md.twig' %}
-{% include '@LeonBsw/javascript/preview.md.twig' %}
+{% include 'filter'|twig('javascript', 'md') %}
+{% include 'preview'|twig('javascript', 'md') %}
 {% endblock %}

@@ -5,9 +5,9 @@ namespace Leon\BswBundle\Controller\Traits;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Entity\Abs;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request as SfRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 
 /**
  * @property AbstractController $container

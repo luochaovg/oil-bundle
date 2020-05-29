@@ -762,7 +762,10 @@ class Module extends Bsw
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
 
                 $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
-                $item[$operate] .= $this->web->renderPart('@LeonBsw/form/button.native', ['form' => $button]);
+                $item[$operate] .= $this->web->renderPart(
+                    $this->web->twigElection('button.native', 'form'),
+                    ['form' => $button]
+                );
             }
 
             $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";
@@ -916,7 +919,7 @@ class Module extends Bsw
 
         $output->dynamic = $this->input->dynamic;
         $output = $this->caller(
-            $this->method . ucfirst($this->name()),
+            $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,
             Output::class,
             $output,
