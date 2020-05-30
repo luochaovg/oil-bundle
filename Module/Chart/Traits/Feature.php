@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Feature
 {
     /**
@@ -42,11 +44,7 @@ trait Feature
      */
     public function setFeatureField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->feature[$field]);
-        } else {
-            $this->feature[$field] = $value;
-        }
+        Helper::setArrayValue($this->feature, $field, $value);
 
         return $this;
     }

@@ -28,21 +28,4 @@ trait MapColor
 
         return $this;
     }
-
-    /**
-     * @param string $field
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setMapColorField(string $field, $value)
-    {
-        if (is_null($value)) {
-            unset($this->mapColor[$field]);
-        } else {
-            $this->mapColor[$field] = $value;
-        }
-
-        return $this;
-    }
 }

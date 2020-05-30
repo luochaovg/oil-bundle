@@ -55,7 +55,8 @@ trait Foundation
 {
     use MT\Init,
         MT\Magic,
-        MT\Message;
+        MT\Message,
+        MT\Variable;
 
     use CT\Annotation,
         CT\ApiDocument,

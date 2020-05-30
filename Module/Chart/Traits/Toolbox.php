@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Toolbox
 {
     /**
@@ -37,11 +39,7 @@ trait Toolbox
      */
     public function setToolboxField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->toolbox[$field]);
-        } else {
-            $this->toolbox[$field] = $value;
-        }
+        Helper::setArrayValue($this->toolbox, $field, $value);
 
         return $this;
     }

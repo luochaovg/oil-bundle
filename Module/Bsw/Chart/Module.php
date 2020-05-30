@@ -13,7 +13,7 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Error;
 
 /**
- * @property Input $input
+ * @property Input                $input
  * @property BswBackendController $web
  */
 class Module extends Bsw
@@ -101,7 +101,7 @@ class Module extends Bsw
         }
 
         // items
-        $arguments = $this->arguments(['condition' => $this->input->condition]);
+        $arguments = $this->arguments(['condition' => $this->input->condition, 'data' => $this->input->data]);
         $result = $this->caller(
             $this->method,
             self::CHART_ITEMS,
@@ -121,9 +121,12 @@ class Module extends Bsw
         // resource
         $this->web->appendSrcJsWithKey('e-charts', Abs::JS_CHART);
 
-        $themes = array_column($output->items, 'theme');
-        $themes = array_unique($themes);
-        foreach ($themes as $theme) {
+        $themes = [];
+        foreach ($output->items as $item) {
+            array_push($themes, $item->getTheme());
+        }
+
+        foreach (array_unique($themes) as $theme) {
             $theme = strtoupper($theme);
             $theme = str_replace('-', '_', $theme);
             $this->web->appendSrcJs(constant(Abs::class . '::JS_CHART_' . $theme));

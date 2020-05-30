@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait AxisX
 {
     /**
@@ -37,11 +39,7 @@ trait AxisX
      */
     public function setAxisXField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->axisX[$field]);
-        } else {
-            $this->axisX[$field] = $value;
-        }
+        Helper::setArrayValue($this->axisX, $field, $value);
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Grid
 {
     /**
@@ -37,11 +39,7 @@ trait Grid
      */
     public function setGridField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->grid[$field]);
-        } else {
-            $this->grid[$field] = $value;
-        }
+        Helper::setArrayValue($this->grid, $field, $value);
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait OptionExtra
 {
     /**
@@ -37,11 +39,7 @@ trait OptionExtra
      */
     public function setOptionExtraField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->optionExtra[$field]);
-        } else {
-            $this->optionExtra[$field] = $value;
-        }
+        Helper::setArrayValue($this->optionExtra, $field, $value);
 
         return $this;
     }

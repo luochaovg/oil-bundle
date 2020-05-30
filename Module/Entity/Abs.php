@@ -4,10 +4,11 @@ namespace Leon\BswBundle\Module\Entity;
 
 class Abs
 {
-    const NORMAL = 1;
-    const CLOSE  = 0;
-    const YES    = 1;
-    const NO     = 0;
+    const NORMAL   = 1;
+    const CLOSE    = 0;
+    const YES      = 1;
+    const NO       = 0;
+    const HEX_SIZE = 1024;
 
     const CODE_BASIC     = 1000024;
     const CODE_DIST      = 'gz8xjdt3h7rcypfvewkm4aun2'; // 25

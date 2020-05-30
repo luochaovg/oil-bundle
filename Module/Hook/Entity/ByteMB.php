@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Hook\Entity;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Hook\Hook;
 
 class ByteMB extends Hook
@@ -10,7 +11,7 @@ class ByteMB extends Hook
     /**
      * @const int
      */
-    const REDOUBLE = 1024 ** 2;
+    const REDOUBLE = Abs::HEX_SIZE ** 2;
 
     /**
      * @param mixed $value

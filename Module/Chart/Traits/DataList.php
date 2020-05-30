@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait DataList
 {
     /**
@@ -37,11 +39,7 @@ trait DataList
      */
     public function setDataListField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->dataList[$field]);
-        } else {
-            $this->dataList[$field] = $value;
-        }
+        Helper::setArrayValue($this->dataList, $field, $value);
 
         return $this;
     }

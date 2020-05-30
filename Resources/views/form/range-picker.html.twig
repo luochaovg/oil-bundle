@@ -16,7 +16,11 @@
   :placeholder="['{{ form.placeholder }}', '{{ form.placeholder }}']"
   format="{{ form.format }}"
   separator="{{ form.separator }}"
-  :show-time="{ defaultValue: [moment('{{ form.timeHead }}', '{{ form.timeFormat }}'), moment('{{ form.timeTail }}', '{{ form.timeFormat }}')] }"
+  {% if form.showTime %}
+    :show-time="{ defaultValue: [moment('{{ form.timeHead }}', '{{ form.timeFormat }}'), moment('{{ form.timeTail }}', '{{ form.timeFormat }}')] }"
+  {% else %}
+    :show-time="false"
+  {% endif %}
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
 ></a-range-picker>

@@ -10,6 +10,14 @@ class Bar extends Line
         Traits\MaxBarFixedWidth;
 
     /**
+     * @return string
+     */
+    protected function type(): string
+    {
+        return 'bar';
+    }
+
+    /**
      * @inheritdoc
      *
      * @param string $name
@@ -60,7 +68,7 @@ class Bar extends Line
      *
      * @return array
      */
-    protected function resetSeries(array $series, array $item): array
+    protected function rebuildSeries(array $series, array $item): array
     {
         if ($this->isMobile() || count($item) > $this->getMaxBarFixedWidth()) {
             unset($series['barWidth']);

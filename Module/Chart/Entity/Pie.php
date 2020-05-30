@@ -13,25 +13,35 @@ class Pie extends Chart
         Traits\Radius;
 
     /**
+     * @return string
+     */
+    protected function type(): string
+    {
+        return 'pie';
+    }
+
+    /**
      * @inheritdoc
      * @return void
      */
     protected function init()
     {
-        $this->setTooltip(
-            [
-                'trigger' => 'item',
-                'formatter' => $this->getTipsTpl(),
-            ]
-        );
-        $this->setLegendTitle($this->getDataField());
+        $this->setLegendTitle($this->getDataField())
+            ->moduleDisable('axisX')
+            ->moduleDisable('axisY')
+            ->setTooltip(
+                [
+                    'trigger'   => 'item',
+                    'formatter' => $this->getTipsTpl(),
+                ]
+            );
     }
 
     /**
      * @inheritdoc
      *
      * @param string $name
-     * @param array $item
+     * @param array  $item
      *
      * @return array
      */
@@ -39,47 +49,47 @@ class Pie extends Chart
     {
         return [
             'selectedMode' => 'single',
-            'center' => ['50%', '50%'],
-            'radius' => $this->getRadius() ?: [0, '80%'],
-            'label' => [
+            'center'       => ['50%', '50%'],
+            'radius'       => $this->getRadius(),
+            'label'        => [
                 'normal' => [
-                    'show' => $this->isShowLabel(),
-                    'formatter' => $this->getLabelTpl(),
+                    'show'            => $this->isShowLabel(),
+                    'formatter'       => $this->getLabelTpl(),
                     'backgroundColor' => '#fff',
-                    'borderColor' => '#eee',
-                    'borderWidth' => 1,
-                    'borderRadius' => 4,
-                    'padding' => [0, 7],
-                    'rich' => [
-                        'a' => [
-                            'color' => '#aaa',
+                    'borderColor'     => '#eee',
+                    'borderWidth'     => 1,
+                    'borderRadius'    => 4,
+                    'padding'         => [0, 7],
+                    'rich'            => [
+                        'a'   => [
+                            'color'      => '#aaa',
                             'lineHeight' => 22,
-                            'align' => 'center',
+                            'align'      => 'center',
                         ],
-                        'hr' => [
+                        'hr'  => [
                             'borderColor' => '#eee',
-                            'width' => '100%',
+                            'width'       => '100%',
                             'borderWidth' => 0.5,
-                            'height' => 0,
+                            'height'      => 0,
                         ],
-                        'b' => [
-                            'fontSize' => 16,
+                        'b'   => [
+                            'fontSize'   => 16,
                             'lineHeight' => 33,
                         ],
                         'per' => [
-                            'color' => '#eee',
+                            'color'           => '#eee',
                             'backgroundColor' => '#334455',
-                            'padding' => [4, 4],
-                            'borderRadius' => 4,
+                            'padding'         => [4, 4],
+                            'borderRadius'    => 4,
                         ],
                     ],
                 ],
             ],
-            'itemStyle' => [
+            'itemStyle'    => [
                 'emphasis' => [
-                    'shadowBlur' => 10,
+                    'shadowBlur'    => 10,
                     'shadowOffsetX' => 0,
-                    'shadowColor' => 'rgba(0, 0, 0, 0.5)',
+                    'shadowColor'   => 'rgba(0, 0, 0, 0.5)',
                 ],
             ],
         ];

@@ -25,8 +25,8 @@
   {% endif %}
 
   <div class="bsw-chart-list">
-    {% for key, item in chart.items %}
-      {% include 'chart'|twig('limbs') with {key: key, chart: item} %}
+    {% for item in chart.items %}
+      {% include 'chart'|twig('limbs') with {chart: item} %}
     {% endfor %}
   </div>
 {% endblock %}

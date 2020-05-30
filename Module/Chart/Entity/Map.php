@@ -14,14 +14,22 @@ class Map extends Chart
         Traits\MaxValue;
 
     /**
+     * @return string
+     */
+    protected function type(): string
+    {
+        return 'map';
+    }
+
+    /**
      * @inheritdoc
      * @return void
      */
     protected function init()
     {
-        $this->setSelectedMode('single');
-        $this->setTooltip(['trigger' => 'item']);
-        $this->setLegendTitle(array_keys($this->getDataList()));
+        $this->setSelectedMode('single')
+            ->setTooltip(['trigger' => 'item'])
+            ->setLegendTitle(array_keys($this->getDataList()));
     }
 
     /**
@@ -67,14 +75,14 @@ class Map extends Chart
     /**
      * @inheritdoc
      *
-     * @param array $options
+     * @param array $option
      *
      * @return array
      */
-    protected function buildOptions(array $options): array
+    protected function rebuildOption(array $option): array
     {
         if ($this->isMapVisual()) {
-            $options['visualMap'] = [
+            $option['visualMap'] = [
                 'show'       => !$this->isMobile(),
                 'min'        => $this->getMinValue(),
                 'max'        => $this->getMaxValue(),
@@ -85,6 +93,6 @@ class Map extends Chart
             ];
         }
 
-        return $options;
+        return $option;
     }
 }

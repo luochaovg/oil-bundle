@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 
 trait Style
@@ -10,8 +11,8 @@ trait Style
      * @var array
      */
     protected $style = [
-        'margin' => '50px auto',
-        'float' => 'none'
+        'margin' => '24px auto',
+        'float'  => 'none',
     ];
 
     /**
@@ -44,17 +45,13 @@ trait Style
 
     /**
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return $this
      */
     public function setStyleField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->style[$field]);
-        } else {
-            $this->style[$field] = $value;
-        }
+        Helper::setArrayValue($this->style, $field, $value);
 
         return $this;
     }

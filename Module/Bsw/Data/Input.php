@@ -6,8 +6,5 @@ use Leon\BswBundle\Module\Bsw\ArgsInput;
 
 class Input extends ArgsInput
 {
-    /**
-     * @var array
-     */
-    public $condition = [];
+
 }

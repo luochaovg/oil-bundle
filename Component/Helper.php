@@ -140,7 +140,7 @@ class Helper
      */
     public static function money($number, string $tpl = '￥%s', int $decimals = 1): string
     {
-        return sprintf($tpl, Helper::numberFormat($number, $decimals));
+        return sprintf($tpl, self::numberFormat($number, $decimals));
     }
 
     /**
@@ -797,7 +797,7 @@ class Helper
                         $target[$k] = $v;
                     }
                 } elseif (is_array($v) && isset($target[$k]) && is_array($target[$k])) {
-                    if ($assocOnly && Helper::typeofArray($v, Abs::T_ARRAY_INDEX)) {
+                    if ($assocOnly && self::typeofArray($v, Abs::T_ARRAY_INDEX)) {
                         $target[$k] = $v;
                     } else {
                         $_items = [$target[$k], $v];
@@ -1826,7 +1826,7 @@ class Helper
      */
     public static function tableNameToAlias(string $table): string
     {
-        $table = Helper::clsName($table);
+        $table = self::clsName($table);
         $words = explode('_', self::camelToUnder($table));
 
         $alias = '';
@@ -1846,7 +1846,7 @@ class Helper
      */
     public static function tableNameFromCls(string $table): string
     {
-        return self::camelToUnder(Helper::clsName($table));
+        return self::camelToUnder(self::clsName($table));
     }
 
     /**
@@ -1928,7 +1928,7 @@ class Helper
             $sceneFirst = $scene;
         }
 
-        $costCurrent = $costHistory[$scene] = Helper::milliTime();
+        $costCurrent = $costHistory[$scene] = self::milliTime();
         $costFirst = $sceneFirst ? $costHistory[$sceneFirst] : $costCurrent;
 
         $scenePre = $scenePre ?? $scenePrevious;
@@ -3052,7 +3052,7 @@ class Helper
             return $default ?? $target;
         }
 
-        $result = Helper::jsonArray($target);
+        $result = self::jsonArray($target);
         $result = $result ?? ($default ?? $target);
 
         return $result;
@@ -3676,63 +3676,16 @@ class Helper
     }
 
     /**
-     * Set/Get variable
+     * Set array value
      *
+     * @param array  $target
      * @param string $key
      * @param mixed  $value
      * @param string $split
-     *
-     * @return mixed
-     * @throws
      */
-    public static function variable(string $key, $value = null, string $split = '.')
+    public static function setArrayValue(array &$target, string $key, $value, string $split = '.')
     {
-        static $variable = [];
-
-        $keys = explode($split, $key);
-        $len = count($keys);
-
-        // for get
-        if (!isset($value)) {
-
-            $var = $variable;
-            for ($i = 0; $i < $len; $i++) {
-                $k = $keys[$i];
-                if (!isset($keys[$i + 1])) {
-                    $var = $var[$k] ?? null;
-                    break;
-                }
-                $var = $var[$k] ?? [];
-            }
-
-            return $var;
-        }
-
-        $var = &$variable;
-
-        // for set
-        for ($i = 0; $i < $len; $i++) {
-
-            $k = $keys[$i];
-            if (!isset($keys[$i + 1])) {
-                $var[$k] = $value;
-                break;
-            }
-
-            if (!isset($var[$k])) {
-                $var[$k] = [];
-                $var = &$var[$k];
-                continue;
-            }
-
-            if (!is_array($var[$k])) {
-                return false;
-            }
-
-            $var = &$var[$k];
-        }
-
-        return true;
+        $target = self::merge($target, self::oneDimension2n([$key => $value], $split));
     }
 
     /**
@@ -4132,133 +4085,106 @@ class Helper
     }
 
     /**
-     * Data handler for group by date and os
+     * Group by date and x for chart
      *
-     * @param array    $groupByDateAndOsList
-     * @param array    $map
-     * @param array    $osMap
-     * @param string   $fromDay
-     * @param string   $toDay
-     * @param callable $totalHandler
+     * @param array    $groupByDateAndX
+     * @param string   $xField
+     * @param string   $totalField
+     * @param array    $xMap
+     * @param callable $handler
+     * @param string   $from
+     * @param string   $to
+     * @param string   $titleField
+     * @param string   $valueField
      *
      * @return array
      */
-    public static function groupByDateAndOsDataHandler(
-        array $groupByDateAndOsList,
-        array $map,
-        array $osMap,
-        string $fromDay,
-        string $toDay,
-        callable $totalHandler = null
+    public static function groupByDateAndX4Chart(
+        array $groupByDateAndX,
+        string $xField,
+        string $totalField,
+        array $xMap,
+        ?callable $handler = null,
+        ?string $from = null,
+        ?string $to = null,
+        string $titleField = 'date',
+        string $valueField = 'total'
     ): array {
 
-        $map = array_merge(
-            [
-                'date'  => 'date',
-                'os'    => 'os',
-                'total' => ['default' => 'total'],
-            ],
-            $map
-        );
-
-        $deviceOsData = [];
-        $full = $osMap[Abs::OS_FULL];
-
-        foreach ($osMap as $os => $osInfo) {
-            foreach ($map['total'] as $line => $cnt) {
-                $deviceOsData[$line][$osMap[$os]] = [];
+        $data = [];
+        foreach ($groupByDateAndX as $item) {
+            $title = $item[$titleField];
+            $data[$xMap[$item[$xField]]][$title] = $item[$valueField];
+            if (!isset($data[$totalField][$title])) {
+                $data[$totalField][$title] = 0;
             }
+            $data[$totalField][$title] += $item[$valueField];
         }
 
-        foreach ($groupByDateAndOsList as $item) {
-
-            $os = $item[$map['os']];
-            $date = $item[$map['date']];
-
-            foreach ($map['total'] as $line => $cnt) {
-
-                $total = floatval($item[$cnt]);
-                $total = $totalHandler ? $totalHandler($total, $cnt) : $total;
-
-                if (!isset($deviceOsData[$line][$full][$date])) {
-                    $deviceOsData[$line][$full][$date] = 0;
-                }
-
-                $deviceOsData[$line][$full][$date] += $total;
-                $deviceOsData[$line][$osMap[$os]][$date] = $total;
+        Helper::sendToBothEnds($data, $totalField);
+        
+        foreach ($xMap as $type => $info) {
+            if (!isset($data[$xMap[$type]])) {
+                $data[$xMap[$type]] = [];
             }
         }
 
         $title = [];
-        $_deviceOsData = [];
-
-        foreach ($deviceOsData as $line => &$items) {
-            foreach ($items as $key => &$item) {
-                if ($fromDay !== $toDay) {
-                    $item = self::perfectDateKeys($item, $fromDay, $toDay);
+        $dataList = [];
+        foreach ($data as $type => $item) {
+            if ($from && $to) {
+                $item = self::perfectDateKeys($item, $from, $to);
+            }
+            if ($handler) {
+                foreach ($item as $key => $val) {
+                    $item[$key] = $handler($val, $key);
                 }
-                if ($key == $full) {
-                    $title = array_keys($item);
-                }
-                $_deviceOsData[$line][$key] = array_values($item);
+            }
+            $dataList[$type] = array_values($item);
+            if (empty($title)) {
+                $title = array_keys($item);
             }
         }
 
-        return [$title, $_deviceOsData, $deviceOsData];
+        return [$title, $dataList];
     }
 
     /**
-     * Data handler for group by os
+     * Group by date for chart
      *
-     * @param array    $groupByOsList
-     * @param array    $map
-     * @param array    $osMap
-     * @param callable $totalHandler
+     * @param array    $groupByDate
+     * @param callable $handler
+     * @param string   $from
+     * @param string   $to
+     * @param string   $titleField
+     * @param string   $valueField
      *
      * @return array
      */
-    public static function groupByOsDataHandler(
-        array $groupByOsList,
-        array $map,
-        array $osMap,
-        callable $totalHandler = null
+    public static function groupByDate4Chart(
+        array $groupByDate,
+        ?callable $handler = null,
+        ?string $from = null,
+        ?string $to = null,
+        string $titleField = 'date',
+        string $valueField = 'total'
     ): array {
 
-        $map = array_merge(
-            [
-                'os'    => 'os',
-                'total' => ['default' => 'total'],
-            ],
-            $map
-        );
+        $groupByDate = array_column($groupByDate, $valueField, $titleField);
+        if ($from && $to) {
+            $groupByDate = self::perfectDateKeys($groupByDate, $from, $to);
+        }
 
-        $deviceOsData = [];
-        $full = $osMap[Abs::OS_FULL];
-
-        foreach ($osMap as $os => $osInfo) {
-            foreach ($map['total'] as $line => $cnt) {
-                $deviceOsData[$line][$osMap[$os]] = 0;
+        if ($handler) {
+            foreach ($groupByDate as $key => $val) {
+                $groupByDate[$key] = $handler($val, $key);
             }
         }
 
-        foreach ($groupByOsList as $item) {
+        $title = array_keys($groupByDate);
+        $value = array_values($groupByDate);
 
-            $os = $item[$map['os']];
-            foreach ($map['total'] as $line => $cnt) {
-
-                $total = floatval($item[$cnt]);
-                $total = $totalHandler ? $totalHandler($total, $cnt) : $total;
-
-                if (!isset($deviceOsData[$line][$full])) {
-                    $deviceOsData[$line][$full] = 0;
-                }
-
-                $deviceOsData[$line][$full] += $total;
-                $deviceOsData[$line][$osMap[$os]] = $total;
-            }
-        }
-
-        return $deviceOsData;
+        return [$title, $value];
     }
 
     /**

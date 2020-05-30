@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait DataField
 {
     protected $dataField = [];
@@ -34,11 +36,7 @@ trait DataField
      */
     public function setDataFieldField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->dataField[$field]);
-        } else {
-            $this->dataField[$field] = $value;
-        }
+        Helper::setArrayValue($this->dataField, $field, $value);
 
         return $this;
     }

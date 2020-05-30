@@ -13,11 +13,6 @@ class Input extends ArgsInput
     public $preview = [];
 
     /**
-     * @var array
-     */
-    public $condition = [];
-
-    /**
      * @var Choice
      */
     public $choice;

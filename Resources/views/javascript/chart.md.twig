@@ -7,11 +7,11 @@ bsw.configure({
     },
     logic: {
         chart_init(v) {
-            {% for key, item in chart.items %}
+            {% for item in chart.items %}
               bsw.chart({
-                  id: '{{ key }}',
+                  id: '{{ item.name }}',
                   theme: '{{ item.theme }}',
-                  option: {{ item.option|raw }}
+                  option: {{ item.optionStringify|raw }}
               });
             {% endfor %}
         }

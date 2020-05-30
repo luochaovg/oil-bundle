@@ -122,4 +122,14 @@ abstract class ArgsInput
      * @var string
      */
     public $scene;
+
+    /**
+     * @var array
+     */
+    public $condition = [];
+
+    /**
+     * @var array
+     */
+    public $data = [];
 }

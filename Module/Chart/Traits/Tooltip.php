@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Tooltip
 {
     /**
@@ -37,11 +39,7 @@ trait Tooltip
      */
     public function setTooltipField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->tooltip[$field]);
-        } else {
-            $this->tooltip[$field] = $value;
-        }
+        Helper::setArrayValue($this->tooltip, $field, $value);
 
         return $this;
     }

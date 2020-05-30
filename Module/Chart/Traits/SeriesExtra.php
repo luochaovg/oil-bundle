@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait SeriesExtra
 {
     /**
@@ -37,11 +39,7 @@ trait SeriesExtra
      */
     public function setSeriesExtraField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->seriesExtra[$field]);
-        } else {
-            $this->seriesExtra[$field] = $value;
-        }
+        Helper::setArrayValue($this->seriesExtra, $field, $value);
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Selected
 {
     /**
@@ -37,11 +39,7 @@ trait Selected
      */
     public function setSelectedField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->selected[$field]);
-        } else {
-            $this->selected[$field] = $value;
-        }
+        Helper::setArrayValue($this->selected, $field, $value);
 
         return $this;
     }

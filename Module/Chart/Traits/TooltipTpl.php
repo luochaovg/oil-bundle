@@ -22,7 +22,7 @@ trait TooltipTpl
      *
      * @return $this
      */
-    public function setTooltipFormat(string $tooltipTpl)
+    public function setTooltipTpl(string $tooltipTpl)
     {
         $this->tooltipTpl = $tooltipTpl;
 

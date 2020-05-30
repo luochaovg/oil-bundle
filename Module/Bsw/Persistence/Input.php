@@ -22,11 +22,6 @@ class Input extends ArgsInput
     public $submit = [];
 
     /**
-     * @var array
-     */
-    public $condition = [];
-
-    /**
      * @var string
      */
     public $fill = 'fill';

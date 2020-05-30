@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Legend
 {
     /**
@@ -37,11 +39,7 @@ trait Legend
      */
     public function setLegendField(string $field, $value)
     {
-        if (is_null($value)) {
-            unset($this->legend[$field]);
-        } else {
-            $this->legend[$field] = $value;
-        }
+        Helper::setArrayValue($this->legend, $field, $value);
 
         return $this;
     }

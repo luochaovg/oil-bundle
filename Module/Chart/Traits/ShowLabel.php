@@ -7,7 +7,7 @@ trait ShowLabel
     /**
      * @var bool
      */
-    protected $showLabel = false;
+    protected $showLabel = true;
 
     /**
      * @return bool

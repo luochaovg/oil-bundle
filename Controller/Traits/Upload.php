@@ -122,7 +122,7 @@ trait Upload
     public function uploadOptionByFlag(string $flag, bool $manual = false): array
     {
         $default = [
-            'max_size'     => 128 * 1024,
+            'max_size'     => 128 * Abs::HEX_SIZE,
             'suffix'       => [],
             'mime'         => [],
             'pic_sizes'    => [[10, 'max'], [10, 'max']],

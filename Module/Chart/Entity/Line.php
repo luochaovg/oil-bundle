@@ -12,87 +12,99 @@ class Line extends Chart
         Traits\Line;
 
     /**
+     * @var array
+     */
+    protected $axisX = [
+        'axisLine'    => [
+            'lineStyle' => [
+                'color' => '#666',
+            ],
+        ],
+        'boundaryGap' => true,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $axisY = [
+        'axisLine' => [
+            'lineStyle' => [
+                'color' => '#666',
+            ],
+        ],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $tooltip = [
+        'trigger'     => 'axis',
+        'axisPointer' => [
+            'type'        => 'shadow', // cross、shadow
+            'label'       => [
+                'backgroundColor' => 'rgba(150,150,150,0.5)',
+            ],
+            'lineStyle'   => [
+                'color' => 'rgba(150,150,150,0.3)',
+                'type'  => 'dashed',
+            ],
+            'crossStyle'  => [
+                'color' => 'rgba(150,150,150,0.3)',
+            ],
+            'shadowStyle' => [
+                'color' => 'rgba(150,150,150,0.1)',
+            ],
+        ],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $featureLine = [
+        'dataZoom'  => [
+            'yAxisIndex' => 'none',
+            'title'      => [
+                'zoom' => 'Zoom',
+                'back' => 'Reset',
+            ],
+        ],
+        'magicType' => [
+            'type'  => ['line', 'bar'],
+            'title' => [
+                'line' => 'Line',
+                'bar'  => 'Bar',
+            ],
+        ],
+        'restore'   => ['title' => 'Reset'],
+    ];
+
+    /**
+     * @return string
+     */
+    protected function type(): string
+    {
+        return 'line';
+    }
+
+    /**
      * @inheritdoc
      * @return void
      */
     protected function init()
     {
-        $this->setAxisX(
-            [
-                'axisLine'    => [
-                    'lineStyle' => [
-                        'color' => '#666',
-                    ],
-                ],
-                'boundaryGap' => true,
-            ]
-        );
+        $this->setAxisXTitle($this->getDataField())
+            ->setLegendTitle(array_keys($this->getDataList()))
+            ->setTooltipField('formatter', $this->getTooltipTpl())
+            ->setPoint(array_values($this->getPoint()))
+            ->setLine(array_values($this->getLine()));
 
-        $this->setAxisY(
-            [
-                'axisLine' => [
-                    'lineStyle' => [
-                        'color' => '#666',
-                    ],
-                ],
-            ]
-        );
-
-        $this->setTooltip(
-            [
-                'trigger'     => 'axis',
-                'axisPointer' => [
-                    'type'        => 'shadow', // cross、shadow
-                    'label'       => [
-                        'backgroundColor' => 'rgba(150,150,150,0.5)',
-                    ],
-                    'lineStyle'   => [
-                        'color' => 'rgba(150,150,150,0.3)',
-                        'type'  => 'dashed',
-                    ],
-                    'crossStyle'  => [
-                        'color' => 'rgba(150,150,150,0.3)',
-                    ],
-                    'shadowStyle' => [
-                        'color' => 'rgba(150,150,150,0.1)',
-                    ],
-                ],
-            ]
-        );
-
-        $this->setFeature(
-            array_merge(
-                $this->mobile ? [] : [
-                    'dataZoom'  => [
-                        'yAxisIndex' => 'none',
-                        'title'      => [
-                            'zoom' => 'Zoom',
-                            'back' => 'Reset',
-                        ],
-                    ],
-                    'magicType' => [
-                        'type'  => ['line', 'bar'],
-                        'title' => [
-                            'line' => 'Line',
-                            'bar'  => 'Bar',
-                        ],
-                    ],
-                    'restore'   => ['title' => 'Reset'],
-                ],
-                $this->feature
-            )
-        );
-
-        $this->setAxisXTitle($this->getDataField());
-        $this->setLegendTitle(array_keys($this->getDataList()));
+        $feature = $this->mobile ? [] : $this->featureLine;
+        $feature = array_merge($feature, $this->getFeature());
+        $this->setFeature($feature);
 
         foreach ($this->getLegendTitle() as $key => $val) {
             $this->setLegendTitleField($key, strval($val));
         }
-
-        $this->setTooltipField('formatter', $this->getTooltipTpl());
-        $this->setPoint(array_values($this->getPoint()));
-        $this->setLine(array_values($this->getLine()));
     }
 
     /**
