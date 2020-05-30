@@ -762,10 +762,7 @@ class Module extends Bsw
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
 
                 $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
-                $item[$operate] .= $this->web->renderPart(
-                    $this->web->twigElection('button.native', 'form'),
-                    ['form' => $button]
-                );
+                $item[$operate] .= $this->web->renderPart('form/button.native.html', ['form' => $button]);
             }
 
             $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";

@@ -26,7 +26,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return $this->web->twigElection('modal', 'limbs');
+        return 'limbs/modal.html';
     }
 
     /**

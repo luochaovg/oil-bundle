@@ -1,4 +1,4 @@
-{% extends 'blank'|twig('layout') %}
+{% extends 'layout/blank.html.twig' %}
 {% set tpl_content_class = ['bsw-page-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
@@ -31,7 +31,7 @@
             {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
             {% set end = title ? '</a-popover>' : null %}
             {{ begin|raw }}
-            {% include form.itemName|twig('form') %}
+            {% include "form/" ~ form.itemName ~ ".html.twig" %}
             {{ end|raw }}
           </a-form-item>
         </transition>
@@ -44,7 +44,7 @@
         }"
       >
         {% for form in persistence.operates %}
-          {% include 'button'|twig('form') %}
+          {% include 'form/button.html.twig' %}
         {% endfor %}
       </a-form-item>
     </a-form>
@@ -52,5 +52,5 @@
 {% endblock %}
 
 {% block javascript %}
-{% include 'persistence'|twig('javascript', 'md') %}
+{% include 'javascript/persistence.md.twig' %}
 {% endblock %}

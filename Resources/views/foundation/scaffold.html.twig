@@ -1,13 +1,13 @@
-{% extends 'w3c'|twig('foundation') %}
+{% extends 'foundation/w3c.html.twig' %}
 
 {% block w3c %}
   {% if limbs_innocence ?? true %}
-    {% include 'innocence'|twig('limbs') %}
+    {% include 'limbs/innocence.html.twig' %}
   {% endif %}
   <div class="{{ ['bsw-body', tpl_body_class ?? null]|filter(v => v)|join(' ') }}">
     <template>
       {% if limbs_init ?? true %}
-        {% include 'init'|twig('limbs') %}
+        {% include 'limbs/init.html.twig' %}
       {% endif %}
       {{ (modal_html ?? null)|raw }}
       <a-config-provider :locale="locale">

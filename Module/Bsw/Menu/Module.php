@@ -37,7 +37,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return $this->web->twigElection('menu', 'limbs');
+        return 'limbs/menu.html';
     }
 
     /**

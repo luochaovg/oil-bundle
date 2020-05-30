@@ -1,5 +1,5 @@
 <div class="bsw-operate {{ operate.position }}" v-show="{{ operate.buttons ? 'true' : 'false' }}">
   {% for form in operate.buttons %}
-    {% include 'button'|twig('form') %}
+    {% include 'form/button.html.twig' %}
   {% endfor %}
 </div>

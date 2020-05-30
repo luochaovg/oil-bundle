@@ -32,7 +32,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return $this->web->twigElection('welcome', 'limbs');
+        return 'limbs/welcome.html';
     }
 
     /**

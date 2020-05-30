@@ -10,15 +10,15 @@
   {% set void = 'javascript:void(null);' %}
   {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
   {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}
-  {% include 'css'|twig('limbs') with {position: top} %}
+  {% include 'limbs/css.html.twig' with {position: top} %}
   <style>{% block stylesheets %}{% endblock %}</style>
-  {% include 'js'|twig('limbs') with {position: top} %}
+  {% include 'limbs/js.html.twig' with {position: top} %}
 </head>
 
 <body class="{{ ['bsw-foundation', tpl_foundation_class ?? null]|filter(v => v)|join(' ') }}">
 {% block w3c %}{% endblock %}
-{% include 'css'|twig('limbs') with {position: bottom} %}
-{% include 'js'|twig('limbs') with {position: bottom} %}
+{% include 'limbs/css.html.twig' with {position: bottom} %}
+{% include 'limbs/js.html.twig' with {position: bottom} %}
 <script>{% block javascript %}{% endblock %}</script>
 </body>
 </html>

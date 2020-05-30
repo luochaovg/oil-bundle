@@ -561,7 +561,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Preview\Module::class]
         );
 
-        return $this->showModule($moduleList, $view ?? $this->twigElection('preview', 'layout'), $args);
+        return $this->showModule($moduleList, $view ?? 'layout/preview.html', $args);
     }
 
     /**
@@ -587,7 +587,7 @@ class BswBackendController extends BswWebController
             [BswModule\Persistence\Module::class]
         );
 
-        return $this->showModule($moduleList, $view ?? $this->twigElection('persistence', 'layout'), $args);
+        return $this->showModule($moduleList, $view ?? 'layout/persistence.html', $args);
     }
 
     /**
@@ -609,7 +609,7 @@ class BswBackendController extends BswWebController
             [BswModule\Filter\Module::class, BswModule\Chart\Module::class]
         );
 
-        return $this->showModule($moduleList, $view ?? $this->twigElection('chart', 'layout'), $args);
+        return $this->showModule($moduleList, $view ?? 'layout/chart.html', $args);
     }
 
     /**

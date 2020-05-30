@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Twig;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
-use Leon\BswBundle\Module\Entity\Abs;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use function GuzzleHttp\Psr7\parse_query;
@@ -24,7 +23,6 @@ class AppExtension extends AbstractExtension
             new TwigFilter('icon', [$this, 'icon']),
             new TwigFilter('implode', [$this, 'implode']),
             new TwigFilter('image_style', [$this, 'image_style']),
-            new TwigFilter('twig', [$this, 'twig']),
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
         ];
     }
@@ -39,12 +37,8 @@ class AppExtension extends AbstractExtension
      *
      * @return string|null
      */
-    public static function icon(?string $icon, bool $html = true, array $class = [], array $queryArr = [])
+    public static function icon(string $icon, bool $html = true, array $class = [], array $queryArr = [])
     {
-        if (!$icon) {
-            return null;
-        }
-
         $flag = 'a';
         $query = null;
 
@@ -122,25 +116,5 @@ class AppExtension extends AbstractExtension
         $attributes = implode('; ', $attributes);
 
         return $boundary ? "{ {$attributes} }" : $attributes;
-    }
-
-    /**
-     * Get twig array
-     *
-     * @param string $part
-     * @param string $path
-     * @param string $suffix
-     *
-     * @return array
-     */
-    public static function twig(string $part, string $path, string $suffix = 'html'): array
-    {
-        $part = trim($part, '/.');
-        $path = trim($path, '/.') . '/';
-
-        return [
-            "./LeonBsw/{$path}{$part}.{$suffix}" . Abs::TPL_SUFFIX,
-            "@LeonBsw/{$path}{$part}.{$suffix}" . Abs::TPL_SUFFIX,
-        ];
     }
 }

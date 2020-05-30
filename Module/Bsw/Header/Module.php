@@ -35,7 +35,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return $this->web->twigElection('header', 'limbs');
+        return 'limbs/header.html';
     }
 
     /**

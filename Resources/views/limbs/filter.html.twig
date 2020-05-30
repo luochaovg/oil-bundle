@@ -22,13 +22,13 @@
           {{ begin|raw }}
           <a-input-group compact>
             {% for k,v in item.type %}
-              {% include v.itemName|twig('form') with {field: v.key, form: v} %}
+              {% include "form/" ~ v.itemName ~ ".html.twig" with {field: v.key, form: v} %}
             {% endfor %}
           </a-input-group>
           {{ end|raw }}
         {% else %}
           {{ begin|raw }}
-          {% include item.type.itemName|twig('form') with {field: key, form: item.type} %}
+          {% include "form/" ~ item.type.itemName ~ ".html.twig" with {field: key, form: item.type} %}
           {{ end|raw }}
         {% endif %}
       </a-form-item>
@@ -49,7 +49,7 @@
 
     {% for item in filter.operates %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
-        {% include 'button'|twig('form') with {form: item} %}
+        {% include 'form/button.html.twig' with {form: item} %}
       </a-form-item>
     {% endfor %}
   </a-form>

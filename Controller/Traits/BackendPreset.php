@@ -142,7 +142,7 @@ trait BackendPreset
             ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 
-        $button = $this->renderPart($this->twigElection('button.native', 'form'), ['form' => $button]);
+        $button = $this->renderPart('form/button.native.html', ['form' => $button]);
 
         return new Charm($button, $label);
     }

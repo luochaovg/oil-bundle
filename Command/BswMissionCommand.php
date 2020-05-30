@@ -117,7 +117,10 @@ class BswMissionCommand extends Command implements CommandInterface
                 $args = Helper::jsonArray64($condition['args']);
             }
 
-            $condition['receiver'] = $m['telegramReceiver'];
+            if ($m['telegramReceiver']) {
+                $condition['receiver'] = $m['telegramReceiver'];
+            }
+
             $condition['args'] = array_merge($args ?? [], $m);
 
             $_condition = [];

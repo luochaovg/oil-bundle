@@ -1,4 +1,4 @@
-{% extends 'persistence'|twig('layout') %}
+{% extends 'layout/persistence.html.twig' %}
 {% set tpl_content_class_diy = 'bsw-grant' %}
 
 {% block page %}
@@ -78,7 +78,7 @@
         :wrapper-col="{lg: { span: {{ total_column }}, offset: 0 }, xl: { span: {{ _column }}, offset: {{ label_column }} }}"
       >
         {% for form in persistence.operates %}
-          {% include 'button'|twig('form') %}
+          {% include 'form/button.html.twig' %}
         {% endfor %}
       </a-form-item>
     </a-form>

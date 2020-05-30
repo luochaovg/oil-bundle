@@ -34,7 +34,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return $this->web->twigElection('crumbs', 'limbs');
+        return 'limbs/crumbs.html';
     }
 
     /**

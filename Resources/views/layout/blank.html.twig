@@ -1,4 +1,4 @@
-{% extends 'empty'|twig('layout') %}
+{% extends 'layout/empty.html.twig' %}
 
 {% block content %}
   <a-layout class="{{ ['bsw-scaffold', tpl_scaffold_class ?? null]|filter(v => v)|join(' ') }}">
