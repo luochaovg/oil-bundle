@@ -101,7 +101,7 @@ class BswMissionCommand extends Command implements CommandInterface
             $date = date('Y-m-d H:i');
             $condition = Helper::parseJsonString($m['condition']);
 
-            if (isset($condition['_signature'])) {
+            if (!empty($condition['entity'])) {
                 if (!Helper::validateSign($condition)) {
                     $missionRepo->modify(
                         ['id' => $m['id']],
