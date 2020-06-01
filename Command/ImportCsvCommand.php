@@ -81,9 +81,11 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
     abstract public function handler(array $record);
 
     /**
+     * @param int $page
+     *
      * @return void
      */
-    public function done()
+    public function done(int $page)
     {
         $this->output->writeln("<info> Csv import done\n </info>");
     }

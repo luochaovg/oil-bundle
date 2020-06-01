@@ -172,9 +172,11 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     abstract public function handler(array $record);
 
     /**
+     * @param int $page
+     *
      * @return void
      */
-    public function done()
+    public function done(int $page)
     {
         $this->output->writeln("<info> Sql recursion done\n </info>");
     }
@@ -266,8 +268,8 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
         );
 
-        $this->logic($this->params->limit);
-        $this->done();
+        $page = $this->logic($this->params->limit);
+        $this->done($page);
     }
 
     /**

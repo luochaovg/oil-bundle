@@ -156,12 +156,14 @@ class BswExportPreviewCommand extends ExportCsvCommand
     }
 
     /**
+     * @param int $page
+     *
      * @return void
      */
-    public function done()
+    public function done(int $page)
     {
         // Send file to telegram
-        if ($this->params->receiver && $this->params->csv) {
+        if ($this->params->receiver && $page) {
             $this->web->telegramSendDocument($this->params->receiver, $this->params->csv);
         }
 
