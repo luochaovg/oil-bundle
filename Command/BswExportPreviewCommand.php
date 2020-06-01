@@ -15,7 +15,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
     /**
      * @var int
      */
-    protected $limit = 100;
+    protected $limit = 1000;
 
     /**
      * @var BswCommandQueueRepository

@@ -12,7 +12,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     /**
      * @var int
      */
-    protected $limit = 50;
+    protected $limit = 100;
 
     /**
      * @var bool
