@@ -2039,12 +2039,11 @@ class Helper
     public static function dateWeek($date = null): array
     {
         $timestamp = $date ? strtotime($date) : time();
-        $date = date(Abs::FMT_WEEK, $timestamp);
-        [$Y, $m, $d, $w] = explode('-', $date);
+        $w = date('w', $timestamp);
 
         return [
-            "{$Y}-{$m}-" . ($d - $w + 1),
-            "{$Y}-{$m}-" . ($d - $w + 7),
+            self::dateDayDiff($w ? -$w + 1 : -6, $date),
+            self::dateDayDiff($w ? -$w + 7 : 0, $date),
         ];
     }
 
@@ -2116,9 +2115,9 @@ class Helper
 
         $season = ceil((date('n', strtotime($date))) / 3);
 
-        $headMonth = $season * 3 - 3 + 1;
-        $tailMonth = $season * 3;
-        $tailDay = date('t', strtotime("{$Y}-{$m}-01"));
+        $headMonth = ($season - 1) * 3 + 1;
+        $tailMonth = $headMonth + 2;
+        $tailDay = date('t', strtotime("{$Y}-{$tailMonth}-01"));
 
         return [
             "{$Y}-{$headMonth}-01",
@@ -2179,29 +2178,18 @@ class Helper
     }
 
     /**
-     * Get date before N days
+     * Get date day difference
      *
      * @param int    $n
      * @param string $date
      *
      * @return string
      */
-    public static function dateBefore(int $n, $date = null): string
+    public static function dateDayDiff(int $n, $date = null): string
     {
-        return date(Abs::FMT_DAY, strtotime("-{$n} days", $date ? strtotime($date) : time()));
-    }
+        $n = ($n > 0 ? "+{$n}" : $n);
 
-    /**
-     * Get date after N days
-     *
-     * @param int    $n
-     * @param string $date
-     *
-     * @return string
-     */
-    public static function dateAfter(int $n, $date = null): string
-    {
-        return date(Abs::FMT_DAY, strtotime("+{$n} days", $date ? strtotime($date) : time()));
+        return date(Abs::FMT_DAY, strtotime("{$n} days", $date ? strtotime($date) : time()));
     }
 
     /**
@@ -2212,40 +2200,15 @@ class Helper
      *
      * @return array
      */
-    public static function dateBeforeN(int $n, $date = null): array
+    public static function dateDayDiffN(int $n, $date = null): array
     {
-        $n -= 1;
+        $n = ($n > 0 ? "+{$n}" : $n);
         $timestamp = $date ? strtotime($date) : time();
 
+        $from = date(Abs::FMT_DAY, strtotime("{$n} days", $timestamp));
         $to = date(Abs::FMT_DAY, $timestamp);
-        $from = date(Abs::FMT_DAY, strtotime("-{$n} days", $timestamp));
 
-        return [
-            $from,
-            $to,
-        ];
-    }
-
-    /**
-     * Get date range after N days
-     *
-     * @param int    $n
-     * @param string $date
-     *
-     * @return array
-     */
-    public static function dateAfterN(int $n, $date = null): array
-    {
-        $n -= 1;
-        $timestamp = $date ? strtotime($date) : time();
-
-        $from = date(Abs::FMT_DAY, $timestamp);
-        $to = date(Abs::FMT_DAY, strtotime("+{$n} days", $timestamp));
-
-        return [
-            $from,
-            $to,
-        ];
+        return $n > 0 ? [$to, $from] : [$from, $to];
     }
 
     /**
@@ -4122,7 +4085,7 @@ class Helper
         }
 
         Helper::sendToBothEnds($data, $totalField);
-        
+
         foreach ($xMap as $type => $info) {
             if (!isset($data[$xMap[$type]])) {
                 $data[$xMap[$type]] = [];
