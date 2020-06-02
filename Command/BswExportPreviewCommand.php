@@ -15,7 +15,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
     /**
      * @var int
      */
-    protected $limit = 1000;
+    protected $limit = 5000;
 
     /**
      * @var BswCommandQueueRepository
@@ -127,9 +127,9 @@ class BswExportPreviewCommand extends ExportCsvCommand
     /**
      * @param array $record
      *
-     * @return array
+     * @return array|false
      */
-    public function handleRecord(array $record): array
+    public function handleRecord(array $record)
     {
         static $enum;
         if (!isset($enum)) {

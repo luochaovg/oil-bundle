@@ -43,7 +43,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @var int
      */
-    protected $limit = 30;
+    protected $limit = 500;
 
     /**
      * @var object

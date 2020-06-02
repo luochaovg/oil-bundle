@@ -12,7 +12,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     /**
      * @var int
      */
-    protected $limit = 100;
+    protected $limit = 1000;
 
     /**
      * @var bool
@@ -65,9 +65,9 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
     /**
      * @param array $record
      *
-     * @return array
+     * @return array|false
      */
-    public function handleRecord(array $record): array
+    public function handleRecord(array $record)
     {
         return $record;
     }
@@ -103,9 +103,12 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
         }
 
         $record = $this->handleAllRecord($record);
-        foreach ($record as &$item) {
+        foreach ($record as $key => &$item) {
             $item = Helper::arrayPull($item, $_keys, false, '');
             $item = $this->handleRecord($item);
+            if ($item === false) {
+                unset($record[$key]);
+            }
         }
 
         if ($this->page == 1) {

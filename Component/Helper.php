@@ -3240,20 +3240,34 @@ class Helper
     }
 
     /**
-     * Edit flag
+     * Addition flag for bit
      *
-     * @param int  $flags
-     * @param int  $flag
-     * @param bool $value
+     * @param int $flags
+     * @param int $flag
      *
      * @return int
      */
-    public static function bitFlagEdit(int $flags, int $flag, bool $value): int
+    public static function bitFlagAddition(int $flags, int $flag): int
     {
-        if ($value) {
-            $flags |= $flag;
-        } else {
-            $flags &= ~$flag;
+        if (self::bitFlagAssert($flags, $flag)) {
+            return $flags;
+        }
+
+        return $flags | $flag;
+    }
+
+    /**
+     * Subtraction flag for bit
+     *
+     * @param int $flags
+     * @param int $flag
+     *
+     * @return int
+     */
+    public static function bitFlagSubtraction(int $flags, int $flag): int
+    {
+        if (self::bitFlagAssert($flags, $flag)) {
+            return $flags ^ $flag;
         }
 
         return $flags;
