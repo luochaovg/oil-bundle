@@ -161,8 +161,8 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
         );
 
-        $this->logic($this->params->limit, $this->params->csv);
-        $this->done();
+        $page = $this->logic($this->params->limit, $this->params->csv);
+        $this->done($page);
     }
 
     /**
