@@ -155,7 +155,7 @@ class Helper
     {
         foreach ($target as &$item) {
             if (is_callable($handler)) {
-                $item = $handler($item);
+                $item = call_user_func_array($handler, [$item]);
             } else {
                 if (!is_scalar($item)) {
                     continue;
@@ -199,7 +199,7 @@ class Helper
         $_target = [];
         foreach ($target as $key => $item) {
             if (is_callable($handler)) {
-                $key = $handler($key);
+                $key = call_user_func_array($handler, [$key]);
             } else {
                 $key = sprintf($handler, $key);
             }
@@ -298,18 +298,27 @@ class Helper
      * @param array  $target
      * @param mixed  $valueKeys
      * @param string $keyKey
+     * @param bool   $keyKeyStrict
      *
      * @return array
      */
-    public static function arrayColumn(array $target, $valueKeys, string $keyKey = null): array
-    {
+    public static function arrayColumn(
+        array $target,
+        $valueKeys,
+        string $keyKey = null,
+        bool $keyKeyStrict = false
+    ): array {
+
         if (!is_null($keyKey) && is_string($valueKeys)) {
             return array_column($target, $valueKeys, $keyKey);
         }
 
         $_target = [];
         foreach ($target as $key => $item) {
-            $_key = $keyKey ? ($item[$keyKey] ?? $key) : $key;
+            $_key = $keyKey ? ($item[$keyKey] ?? ($keyKeyStrict ? null : $key)) : $key;
+            if (is_null($_key)) {
+                continue;
+            }
             if (is_string($valueKeys) || is_numeric($valueKeys)) {
                 $_target[$_key] = $item[$valueKeys] ?? null;
             } elseif (is_array($valueKeys)) {
@@ -4114,7 +4123,7 @@ class Helper
             }
             if ($handler) {
                 foreach ($item as $key => $val) {
-                    $item[$key] = $handler($val, $key);
+                    $item[$key] = call_user_func_array($handler, [$val, $key]);
                 }
             }
             $dataList[$type] = array_values($item);
@@ -4154,7 +4163,7 @@ class Helper
 
         if ($handler) {
             foreach ($groupByDate as $key => $val) {
-                $groupByDate[$key] = $handler($val, $key);
+                $groupByDate[$key] = call_user_func_array($handler, [$val, $key]);
             }
         }
 
@@ -4401,5 +4410,27 @@ class Helper
             'error'    => 0,
             'size'     => filesize($filepath),
         ];
+    }
+
+    /**
+     * Array value
+     *
+     * @param array    $target
+     * @param callable $assert
+     *
+     * @return array
+     */
+    public static function arrayValues(array $target, callable $assert = null): array
+    {
+        $doAssets = $assert ? call_user_func_array($assert, [$target]) : true;
+        $target = $doAssets ? array_values($target) : $target;
+
+        foreach ($target as $key => $value) {
+            if (is_array($value)) {
+                $target[$key] = self::arrayValues($value, $assert);
+            }
+        }
+
+        return $target;
     }
 }

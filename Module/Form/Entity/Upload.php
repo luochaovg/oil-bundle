@@ -15,7 +15,6 @@ use Leon\BswBundle\Module\Form\Entity\Traits\NeedId;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedTips;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
 use Leon\BswBundle\Module\Form\Entity\Traits\Url;
-use Leon\BswBundle\Module\Form\Form;
 
 class Upload extends Number
 {

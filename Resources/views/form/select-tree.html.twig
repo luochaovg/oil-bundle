@@ -1,0 +1,18 @@
+{% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
+
+<a-tree-select
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  :label-in-value="{{ form.labelInValue ? 'true' : 'false' }}"
+  :show-search="{{ form.showSearch ? 'true' : 'false' }}"
+  tree-node-filter-prop="{{ form.optionFilterProp }}"
+  :show-arrow="{{ form.showArrow ? 'true' : 'false' }}"
+  :dropdown-match-select-width="false"
+  :tree-data='{{ form.treeData|raw }}'
+  placeholder="{{ form.placeholder }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { {{ initial }} rules: {{ form.rules }} }]"
+  :tree-default-expand-all="{{ form.expandAll ? 'true' : 'false' }}"
+></a-tree-select>

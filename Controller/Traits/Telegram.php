@@ -49,7 +49,7 @@ trait Telegram
         foreach ($receiver as $user) {
             try {
                 $params = array_merge(['chat_id' => $user, 'parse_mode' => 'Markdown'], $params);
-                $logic($telegram, $params);
+                call_user_func_array($logic, [$telegram, $params]);
             } catch (Exception $e) {
                 $message = "BotError: [{$user}] {$e->getMessage()}";
                 $this->logger->error($message);
