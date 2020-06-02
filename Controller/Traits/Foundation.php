@@ -1018,10 +1018,6 @@ trait Foundation
             throw new InvalidArgumentException("Filter should extend class " . Filter::class);
         }
 
-        if (is_object($filter)) {
-            $filter = get_class($filter);
-        }
-
         return [
             'filter' => $filter,
             'value'  => $value,

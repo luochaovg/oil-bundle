@@ -211,7 +211,7 @@ class Module extends Bsw
         $field = "{$field}_{$_index}";
 
         $clone = $filterAnnotationFull[$_table][$_field] ?? [];
-        $item = empty($clone) ? [] : array_merge($clone, $item);
+        $item = empty($clone) ? $item : array_merge($clone, $item);
 
         return [$field, $item];
     }
@@ -257,6 +257,7 @@ class Module extends Bsw
 
             $fn = self::FILTER_ANNOTATION;
             $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+
             $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
             $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
         }
