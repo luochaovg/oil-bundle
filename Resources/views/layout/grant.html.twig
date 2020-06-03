@@ -1,5 +1,5 @@
 {% extends 'layout/persistence.html.twig' %}
-{% set tpl_content_class_diy = 'bsw-grant' %}
+{% set tplContentClassDiy = 'bsw-grant' %}
 
 {% block page %}
   <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
@@ -10,14 +10,14 @@
       :form="persistence_form"
       @submit="persistence_submit"
     >
-      {% set total_column = 24 %}
-      {% set label_column = 4 %}
+      {% set totalColumn = 24 %}
+      {% set labelColumn = 4 %}
       {% set dress = logic.dress %}
-      {% set _column = (total_column - label_column) %}
+      {% set realColumn = (totalColumn - labelColumn) %}
 
       <a-form-item
-        :label-col="{lg: { span: {{ total_column }} }, xl: { span: {{ label_column }} }}"
-        :wrapper-col="{lg: { span: {{ total_column }} }, xl: { span: {{ _column }} }}"
+        :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
+        :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
         label="{{ 'Action'|trans({}, 'twig') }}"
       >
         <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
@@ -30,8 +30,8 @@
 
       {% for field, item in logic.form %}
         <a-form-item
-          :label-col="{lg: { span: {{ total_column }} }, xl: { span: {{ label_column }} }}"
-          :wrapper-col="{lg: { span: {{ total_column }} }, xl: { span: {{ _column }} }}"
+          :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
+          :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
           label="{{ item.label|trans({}, 'twig') }}"
         >
           {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
@@ -48,14 +48,14 @@
             <a-row>
               {% for value, label in item.type.enum %}
                 {% set disabled = attribute(logic.disabled, value) ?? false %}
-                {% set _dress = attribute(dress, value) ?? null %}
+                {% set realDress = attribute(dress, value) ?? null %}
                 <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
-                  {% if _dress is not null %}
+                  {% if realDress is not null %}
                     <a-popover overlay-class-name="bsw-popover">
-                      <template slot="content">{{ _dress.title|trans({}, 'twig') }}</template>
+                      <template slot="content">{{ realDress.title|trans({}, 'twig') }}</template>
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
-                        class="{{ _dress.class }}"
+                        class="{{ realDress.class }}"
                         value="{{ value }}">
                         {{ label }}
                       </a-checkbox>
@@ -75,7 +75,7 @@
       {% endfor %}
 
       <a-form-item
-        :wrapper-col="{lg: { span: {{ total_column }}, offset: 0 }, xl: { span: {{ _column }}, offset: {{ label_column }} }}"
+        :wrapper-col="{lg: { span: {{ totalColumn }}, offset: 0 }, xl: { span: {{ realColumn }}, offset: {{ labelColumn }} }}"
       >
         {% for form in persistence.operates %}
           {% include 'form/button.html.twig' %}

@@ -1827,38 +1827,6 @@ class Helper
     }
 
     /**
-     * Table name to alias
-     *
-     * @param string $table
-     *
-     * @return string
-     */
-    public static function tableNameToAlias(string $table): string
-    {
-        $table = self::clsName($table);
-        $words = explode('_', self::camelToUnder($table));
-
-        $alias = '';
-        foreach ($words as $word) {
-            $alias .= $word[0];
-        }
-
-        return $alias;
-    }
-
-    /**
-     * Table name to alias
-     *
-     * @param string $table
-     *
-     * @return string|null
-     */
-    public static function tableNameFromCls(string $table): string
-    {
-        return self::camelToUnder(self::clsName($table));
-    }
-
-    /**
      * Remove alias for table field
      *
      * @param string $field
@@ -1883,6 +1851,55 @@ class Helper
         }
 
         return trim($field);
+    }
+
+    /**
+     * Table name to alias
+     *
+     * @param string $table
+     *
+     * @return string
+     */
+    public static function tableNameToAlias(string $table): string
+    {
+        $table = self::clsName($table);
+        $words = explode('_', self::camelToUnder($table));
+
+        $alias = '';
+        foreach ($words as $word) {
+            $alias .= $word[0];
+        }
+
+        return $alias;
+    }
+
+    /**
+     * Table name from class
+     *
+     * @param string $table
+     *
+     * @return string|null
+     */
+    public static function tableNameFromCls(string $table): string
+    {
+        return self::camelToUnder(self::clsName($table));
+    }
+
+    /**
+     * Get alias from field
+     *
+     * @param string $field
+     *
+     * @return string|null
+     */
+    public static function getAliasFromField(string $field): ?string
+    {
+        $item = explode('.', $field);
+        if (count($item) < 2) {
+            return null;
+        }
+
+        return current($item);
     }
 
     /**

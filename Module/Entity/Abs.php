@@ -4,11 +4,29 @@ namespace Leon\BswBundle\Module\Entity;
 
 class Abs
 {
-    const NORMAL   = 1;
-    const CLOSE    = 0;
-    const YES      = 1;
-    const NO       = 0;
-    const HEX_SIZE = 1024;
+    const FORM_DATA_SPLIT     = ',';
+    const VALIDATION_IF_SET   = '~';
+    const ENTITY_KEY_TRIM     = "\x00*";
+    const ENTER               = "\n";
+    const DOCTRINE_DEFAULT    = 'default';
+    const TMP_PATH            = '/tmp';
+    const PK                  = 'id';
+    const SORT                = 'sort';
+    const ORDER               = 'order';
+    const MIN_ADMIN_ROLE      = -10;
+    const TPL_SUFFIX          = '.twig';
+    const AUTO                = 'auto';
+    const CHART_DEFAULT_THEME = 'westeros';
+    const HEX_SIZE            = 1024;
+    const TAG_SQL_ERROR       = 'An exception occurred while executing';
+    const RULES_REQUIRED      = ['required' => true, 'message' => '{{ field }} Required'];
+    const LINE_DASHED         = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
+
+    const NORMAL = 1;
+    const CLOSE  = 0;
+
+    const YES = 1;
+    const NO  = 0;
 
     const CODE_BASIC     = 1000024;
     const CODE_DIST      = 'gz8xjdt3h7rcypfvewkm4aun2'; // 25
@@ -72,8 +90,6 @@ class Abs
     const HOOKER_FLAG_ACME         = '_acme';
     const HOOKER_FLAG_ENUMS_SUFFIX = '_suffix';
     const HOOKER_FLAG_ENUMS_INFO   = '_info';
-
-    const TAG_SQL_ERROR = 'An exception occurred while executing';
 
     const IMAGE_SUFFIX   = ['gif', 'jpg', 'jpeg', 'png'];
     const IMAGE_SIZE_MAX = 'MAX';
@@ -147,22 +163,11 @@ class Abs
     const ASSERT_EMPTY = 'empty';
     const ASSERT_ISSET = 'isset';
 
-    const FORM_DATA_SPLIT      = ',';
-    const VALIDATION_IF_SET    = '~';
-    const ENTITY_KEY_TRIM      = "\x00*";
-    const ENTER                = "\n";
     const OAUTH2_GRANT_TYPE_CC = 'client_credentials';
     const OAUTH2_TOKEN_TYPE    = 'bearer';
-    const DOCTRINE_DEFAULT     = 'default';
-    const TMP_PATH             = '/tmp';
-    const PK                   = 'id';
-    const SORT                 = 'sort';
-    const ORDER                = 'order';
-    const MIN_ADMIN_ROLE       = -10;
-    const TPL_SUFFIX           = '.twig';
-    const FORMAT_JSON          = 'json';
-    const FORMAT_HTML          = 'html';
-    const AUTO                 = 'auto';
+
+    const FORMAT_JSON = 'json';
+    const FORMAT_HTML = 'html';
 
     const MEDIA_MIN = 375;
     const MEDIA_XS  = 575;
@@ -172,29 +177,35 @@ class Abs
     const MEDIA_XL  = 1200;
     const MEDIA_XXL = 1600;
 
-    const DAY_BEGIN        = '00:00:00';
-    const DAY_END          = '23:59:59';
-    const TR_NO            = '_no';
-    const TR_ACT           = '_action';
+    const DAY_BEGIN = '00:00:00';
+    const DAY_END   = '23:59:59';
+
+    const TR_NO  = '_no';
+    const TR_ACT = '_action';
+
     const SELECT_ALL_KEY   = 'ALL';
     const SELECT_ALL_VALUE = 'ALL';
-    const SORT_ASC         = 'ASC';
-    const SORT_DESC        = 'DESC';
-    const SORT_AUTO        = 'AUTO';
-    const SORT_ASC_LONG    = 'ascend';
-    const SORT_DESC_LONG   = 'descend';
-    const NIL              = '(Nil)';
-    const DIRTY            = '(Dirty)';
-    const NOT_SET          = '(NotSet)';
-    const NOT_FILE         = '(NotExists)';
-    const SECRET           = '(Secret)';
-    const UNKNOWN          = '(UnKnown)';
-    const SRC_CSS          = 'css';
-    const SRC_JS           = 'js';
-    const SELECT           = 'SELECT'; // doctrine QueryBuilder 0
-    const DELETE           = 'DELETE'; // doctrine QueryBuilder 1
-    const UPDATE           = 'UPDATE'; // doctrine QueryBuilder 2
-    const INSERT           = 'INSERT';
+
+    const SORT_ASC       = 'ASC';
+    const SORT_DESC      = 'DESC';
+    const SORT_AUTO      = 'AUTO';
+    const SORT_ASC_LONG  = 'ascend';
+    const SORT_DESC_LONG = 'descend';
+
+    const NIL      = '(Nil)';
+    const DIRTY    = '(Dirty)';
+    const NOT_SET  = '(NotSet)';
+    const NOT_FILE = '(NotExists)';
+    const SECRET   = '(Secret)';
+    const UNKNOWN  = '(UnKnown)';
+
+    const SRC_CSS = 'css';
+    const SRC_JS  = 'js';
+
+    const SELECT = 'SELECT'; // doctrine QueryBuilder 0
+    const DELETE = 'DELETE'; // doctrine QueryBuilder 1
+    const UPDATE = 'UPDATE'; // doctrine QueryBuilder 2
+    const INSERT = 'INSERT';
 
     const FN_INIT                    = 'init';
     const FN_BEFORE_BOOTSTRAP        = 'beforeBootstrap';
@@ -401,8 +412,9 @@ class Abs
     const OS_ANDROID_TV   = 6;
     const OS_MAC_OFFICIAL = 7;
 
-    const CAPTCHA_SMS              = 1;
-    const CAPTCHA_EMAIL            = 2;
+    const CAPTCHA_SMS   = 1;
+    const CAPTCHA_EMAIL = 2;
+
     const SNS_SCENE_SIGN_IN        = 1;
     const SNS_SCENE_SIGN_UP        = 2;
     const SNS_SCENE_PASSWORD       = 3;
@@ -412,6 +424,20 @@ class Abs
     const SNS_SCENE_AGENT_PASSWORD = 7;
     const SNS_SCENE_AGENT_WITHDRAW = 8;
     const SNS_PEND_USER            = 100;
+
+    const MODULE_MENU_SORT        = 10;
+    const MODULE_HEADER_SORT      = 20;
+    const MODULE_CRUMBS_SORT      = 30;
+    const MODULE_FILTER_SORT      = 40;
+    const MODULE_WELCOME_SORT     = 50;
+    const MODULE_OPERATE_SORT     = 60;
+    const MODULE_DATA_SORT        = 70;
+    const MODULE_PREVIEW_SORT     = 80;
+    const MODULE_PERSISTENCE_SORT = 80;
+    const MODULE_CHART_SORT       = 80;
+    const MODULE_AWAY_SORT        = 80;
+    const MODULE_FOOTER_SORT      = 90;
+    const MODULE_MODAL_SORT       = 100;
 
     const VG_NEWLY  = 'newly';
     const VG_MODIFY = 'modify';
@@ -454,7 +480,6 @@ class Abs
     const JS_WEB                  = 'diy;web.js';
     const JS_EDITOR               = 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js';
     const JS_EDITOR_CUSTOM        = 'diy;third/ckeditor5-custom.js';
-    const CHART_DEFAULT_THEME     = 'westeros';
 
     const JS_LANG = [
         'cn' => 'diy;lang/cn.js',
@@ -484,7 +509,9 @@ class Abs
     const CSS_WEB       = 'diy;web.css';
     const CSS_EDITOR    = 'diy;third/ckeditor5.css';
 
-    const RULES_REQUIRED = ['required' => true, 'message' => '{{ field }} Required'];
+    /**
+     * TPL_ / RENDER_ 开头的渲染模板支持ANT-D语法
+     */
 
     // slot 变量模板
     const SLOT_VARIABLES = "value, record, index";
@@ -517,7 +544,6 @@ class Abs
     const TPL_NOT_FILE = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
 
     // 普通 dress 模板
-    // pink red orange green cyan blue purple #color
     const TPL_DRESS = "<a-tag color='{dress}'>{value}</a-tag>";
 
     // 粉色 dress 模板
@@ -579,6 +605,10 @@ class Abs
 
     // 密文 (标识空)
     const RENDER_SECRET_2 = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
+
+    /**
+     * HTML_ / TEXT_ 开头的渲染模板仅支持普通渲染
+     */
 
     // html 文本模板
     const HTML_TEXT = "<div class='bsw-long-text'>{value}</div>";
@@ -663,10 +693,4 @@ class Abs
 
     // html 灰色模板
     const TEXT_GRAY = "<div style='color: #d6d6d6;'>{value}</div>";
-
-    // 危险权限
-    const DANGER_ACCESS = 'Dangerous permission, please be careful';
-
-    // 分割线 - 虚线
-    const LINE_DASHED = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
 }

@@ -1,8 +1,11 @@
 {% extends 'layout/blank.html.twig' %}
 
 {% block page %}
+  {% block filter_before %}{% endblock %}
   {% include 'limbs/filter.html.twig' %}
+  {% block filter_after %}{% endblock %}
   {% set fields = '{' ~ (preview.choice.fields ?? [])|array_map_double('"%s":"${record.%s}"')|join(',') ~ '}' %}
+  {% block preview_before %}{% endblock %}
   <div class="bsw-preview">
     <a-table
       :columns="preview_columns"
@@ -39,6 +42,7 @@
       @change="preview_pagination"
     ></a-pagination>
   </div>
+  {% block preview_after %}{% endblock %}
 {% endblock %}
 
 {% block javascript %}

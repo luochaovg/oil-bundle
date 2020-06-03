@@ -72,7 +72,7 @@ trait Grant
      * Grant authorization for role
      *
      * @Route("/bsw-admin-role-access-control/grant/{id}", name="app_bsw_admin_role_access_control_grant", requirements={"id": "\d+"})
-     * @Access(class="danger", title=Abs::DANGER_ACCESS)
+     * @Access(class="danger", title="Dangerous permission, please be careful")
      *
      * @param int $id
      *

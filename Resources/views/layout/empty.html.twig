@@ -1,5 +1,5 @@
 {% extends 'foundation/scaffold.html.twig' %}
-{% set tpl_api = {
+{% set tplApi = {
   login: path(scaffold.cnf.route_login_handler),
   upload: path(scaffold.cnf.route_upload),
   export: path(scaffold.cnf.route_export),
@@ -18,6 +18,8 @@
       {{ scaffold.cnf.icon_loading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
     {% endif %}
     <a-back-top></a-back-top>
+    {% block content_before %}{% endblock %}
     {% block content %}{% endblock %}
+    {% block content_after %}{% endblock %}
   </a-spin>
 {% endblock %}

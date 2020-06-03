@@ -1,8 +1,10 @@
 {% extends 'layout/blank.html.twig' %}
-{% set tpl_content_class = ['bsw-chart-container', tpl_content_class_diy ?? null]|filter(v => v)|join(' ') %}
+{% set tplContentClass = ['bsw-chart-container', tplContentClassDiy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
+  {% block filter_before %}{% endblock %}
   {% include 'limbs/filter.html.twig' %}
+  {% block filter_after %}{% endblock %}
   {% if chart.menu is not empty %}
     <a-tabs
       class="bsw-chart-tabs"
@@ -23,12 +25,14 @@
       {% endfor %}
     </a-tabs>
   {% endif %}
-
+  <a-divider></a-divider>
+  {% block chart_before %}{% endblock %}
   <div class="bsw-chart-list">
     {% for item in chart.items %}
       {% include 'limbs/chart.html.twig' with {chart: item} %}
     {% endfor %}
   </div>
+  {% block chart_after %}{% endblock %}
 {% endblock %}
 
 {% block javascript %}

@@ -82,4 +82,9 @@ class Output extends ArgsOutput
      * @var int
      */
     public $dynamic = 0;
+
+    /**
+     * @var array
+     */
+    public $query = [];
 }

@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
+use Leon\BswBundle\Module\Form\Entity\Traits\DropdownStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\ExpandAll;
 use Leon\BswBundle\Module\Form\Entity\Traits\LabelInValue;
 use Leon\BswBundle\Module\Form\Entity\Traits\OptionFilterProp;
@@ -22,6 +23,7 @@ class SelectTree extends Form
     use ShowArrow;
     use ShowCheckedStrategy;
     use OptionFilterProp;
+    use DropdownStyle;
     use TreeData;
     use ExpandAll;
 

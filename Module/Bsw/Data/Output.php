@@ -10,4 +10,9 @@ class Output extends ArgsOutput
      * @var array
      */
     public $data = [];
+
+    /**
+     * @var array
+     */
+    public $query = [];
 }

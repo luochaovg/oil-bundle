@@ -11,14 +11,24 @@
   {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
   {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}
   {% include 'limbs/css.html.twig' with {position: top} %}
-  <style>{% block stylesheets %}{% endblock %}</style>
+  <style>
+    {% block stylesheets_before %}{% endblock %}
+    {% block stylesheets %}{% endblock %}
+    {% block stylesheets_after %}{% endblock %}
+  </style>
   {% include 'limbs/js.html.twig' with {position: top} %}
 </head>
 
-<body class="{{ ['bsw-foundation', tpl_foundation_class ?? null]|filter(v => v)|join(' ') }}">
+<body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|filter(v => v)|join(' ') }}">
+{% block w3c_before %}{% endblock %}
 {% block w3c %}{% endblock %}
+{% block w3c_after %}{% endblock %}
 {% include 'limbs/css.html.twig' with {position: bottom} %}
 {% include 'limbs/js.html.twig' with {position: bottom} %}
-<script>{% block javascript %}{% endblock %}</script>
+<script>
+  {% block javascript_before %}{% endblock %}
+  {% block javascript %}{% endblock %}
+  {% block javascript_after %}{% endblock %}
+</script>
 </body>
 </html>

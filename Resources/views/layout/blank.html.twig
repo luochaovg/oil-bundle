@@ -1,7 +1,7 @@
 {% extends 'layout/empty.html.twig' %}
 
 {% block content %}
-  <a-layout class="{{ ['bsw-scaffold', tpl_scaffold_class ?? null]|filter(v => v)|join(' ') }}">
+  <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|filter(v => v)|join(' ') }}">
     {% if menu_html is defined %}
       <a-drawer
         wrap-class-name="bsw-menu-mobile"
@@ -17,21 +17,35 @@
     {% endif %}
     {{ (menu_html ?? null)|raw }}
     <a-layout>
+      {% block header_before %}{% endblock %}
       {{ (header_html ?? null)|raw }}
+      {% block header_after %}{% endblock %}
       <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
+        {% block crumbs_before %}{% endblock %}
         {{ (crumbs_html ?? null)|raw }}
+        {% block curmbs_after %}{% endblock %}
+        {% block welcome_before %}{% endblock %}
         {{ (welcome_html ?? null)|raw }}
+        {% block welcome_after %}{% endblock %}
         {% if operate is defined and operate.position is same as(top) %}
+          {% block operate_top_before %}{% endblock %}
           {{ (operate_html ?? null)|raw }}
+          {% block operate_top_after %}{% endblock %}
         {% endif %}
-        <div class="{{ ['bsw-content', tpl_content_class ?? null]|filter(v => v)|join(' ') }}">
+        <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
+          {% block page_before %}{% endblock %}
           {% block page %}{% endblock %}
+          {% block page_after %}{% endblock %}
         </div>
         {% if operate is defined and operate.position is same as(bottom) %}
+          {% block operate_bottom_before %}{% endblock %}
           {{ (operate_html ?? null)|raw }}
+          {% block operate_bottom_after %}{% endblock %}
         {% endif %}
       </a-layout-content>
+      {% block footer_before %}{% endblock %}
       {{ (footer_html ?? null)|raw }}
+      {% block footer_after %}{% endblock %}
     </a-layout>
   </a-layout>
 {% endblock %}

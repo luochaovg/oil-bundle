@@ -79,7 +79,13 @@ class Module extends Bsw
         $output = new Output();
 
         // items
-        $arguments = $this->arguments(['condition' => $this->input->condition]);
+        $arguments = $this->arguments(
+            [
+                'condition' => $this->input->condition,
+                'query'     => $this->input->query,
+            ]
+        );
+
         $result = $this->caller(
             $this->method,
             self::DATA_GENERATOR,

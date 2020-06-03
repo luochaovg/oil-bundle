@@ -6,7 +6,11 @@ bsw.configure({
     },
     method: {
         filter_submit(e) {
+            {% if logic.filterJump is defined %}
+            this.filter(e, {{ logic.filterJump ? 'true' : 'false' }});
+            {% else %}
             this.filter(e, {{ logic.scene == 'preview' ? 'false' : 'true' }});
+            {% endif %}
         },
         filter_toggle() {
           this.filter_expand = !this.filter_expand;

@@ -625,6 +625,8 @@ class Module extends Bsw
             $list = $this->manualLister($query);
         }
 
+        $output->query = $query;
+
         /**
          * pagination
          */

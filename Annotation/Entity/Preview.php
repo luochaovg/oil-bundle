@@ -51,6 +51,7 @@ class Preview extends Annotation
 
     /**
      * @var array|string (Priority over render)
+     * @license Enum{"pink", "red", "orange", "green", "cyan", "blue", "purple", "#color"}
      */
     public $dress;
 

@@ -1,6 +1,6 @@
 <p class="bsw-hide" v-init:configure='{{ (scaffold.json ?? '{}')|raw }}'></p>
 <p class="bsw-hide" v-init:message='{{ (scaffold.msg ?? '{}')|raw }}'></p>
 <p class="bsw-hide" v-init:tips='{{ (scaffold.tips ?? '{}')|raw }}'></p>
-{% for key, url in tpl_api ?? [] %}
+{% for key, url in tplApi ?? [] %}
   <p class="bsw-hide" v-init:api_{{ key }}=`{{ url }}`></p>
 {% endfor %}

@@ -377,12 +377,9 @@ class BswBackendController extends BswWebController
         ];
 
         $bswDispatcher = new BswModule\Dispatcher($this);
+        $moduleList = Helper::sortArray($moduleList, 'sort');
+
         foreach ($moduleList as $module => $extraArgs) {
-
-            if (is_numeric($module)) {
-                [$module, $extraArgs] = [$extraArgs, []];
-            }
-
             /**
              * validator extra
              */
@@ -510,13 +507,13 @@ class BswBackendController extends BswWebController
     protected function blankModule(): array
     {
         return [
-            BswModule\Menu\Module::class,
-            BswModule\Header\Module::class,
-            BswModule\Crumbs\Module::class => ['crumbs' => $this->crumbs],
-            BswModule\Welcome\Module::class,
-            BswModule\Operate\Module::class,
-            BswModule\Footer\Module::class,
-            BswModule\Modal\Module::class,
+            BswModule\Menu\Module::class    => ['sort' => Abs::MODULE_MENU_SORT],
+            BswModule\Header\Module::class  => ['sort' => Abs::MODULE_HEADER_SORT],
+            BswModule\Crumbs\Module::class  => ['sort' => Abs::MODULE_CRUMBS_SORT, 'crumbs' => $this->crumbs],
+            BswModule\Welcome\Module::class => ['sort' => Abs::MODULE_WELCOME_SORT],
+            BswModule\Operate\Module::class => ['sort' => Abs::MODULE_OPERATE_SORT],
+            BswModule\Footer\Module::class  => ['sort' => Abs::MODULE_FOOTER_SORT],
+            BswModule\Modal\Module::class   => ['sort' => Abs::MODULE_MODAL_SORT],
         ];
     }
 
@@ -536,7 +533,9 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [BswModule\Filter\Module::class]
+            [
+                BswModule\Filter\Module::class => ['sort' => Abs::MODULE_FILTER_SORT],
+            ]
         );
 
         return $this->showModule($moduleList, $view, $args);
@@ -558,7 +557,10 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [BswModule\Filter\Module::class, BswModule\Preview\Module::class]
+            [
+                BswModule\Filter\Module::class  => ['sort' => Abs::MODULE_FILTER_SORT],
+                BswModule\Preview\Module::class => ['sort' => Abs::MODULE_PREVIEW_SORT],
+            ]
         );
 
         return $this->showModule($moduleList, $view ?? 'layout/preview.html', $args);
@@ -584,7 +586,7 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [BswModule\Persistence\Module::class]
+            [BswModule\Persistence\Module::class => ['sort' => Abs::MODULE_PERSISTENCE_SORT]]
         );
 
         return $this->showModule($moduleList, $view ?? 'layout/persistence.html', $args);
@@ -606,7 +608,10 @@ class BswBackendController extends BswWebController
         $moduleList = array_merge(
             $this->blankModule(),
             $moduleList,
-            [BswModule\Filter\Module::class, BswModule\Chart\Module::class]
+            [
+                BswModule\Filter\Module::class => ['sort' => Abs::MODULE_FILTER_SORT],
+                BswModule\Chart\Module::class  => ['sort' => Abs::MODULE_CHART_SORT],
+            ]
         );
 
         return $this->showModule($moduleList, $view ?? 'layout/chart.html', $args);
@@ -628,9 +633,9 @@ class BswBackendController extends BswWebController
 
         return $this->showModuleSimple(
             [
-                BswModule\Menu\Module::class,
-                BswModule\Crumbs\Module::class => ['crumbs' => $this->crumbs],
-                BswModule\Away\Module::class,
+                BswModule\Menu\Module::class   => ['sort' => Abs::MODULE_MENU_SORT],
+                BswModule\Crumbs\Module::class => ['sort' => Abs::MODULE_CRUMBS_SORT, 'crumbs' => $this->crumbs],
+                BswModule\Away\Module::class   => ['sort' => Abs::MODULE_AWAY_SORT],
             ],
             $args,
             $directResponseMessage

@@ -4,14 +4,16 @@
   {% if limbs_innocence ?? true %}
     {% include 'limbs/innocence.html.twig' %}
   {% endif %}
-  <div class="{{ ['bsw-body', tpl_body_class ?? null]|filter(v => v)|join(' ') }}">
+  <div class="{{ ['bsw-body', tplBodyClass ?? null]|filter(v => v)|join(' ') }}">
     <template>
       {% if limbs_init ?? true %}
         {% include 'limbs/init.html.twig' %}
       {% endif %}
       {{ (modal_html ?? null)|raw }}
       <a-config-provider :locale="locale">
+        {% block body_before %}{% endblock %}
         {% block body %}{% endblock %}
+        {% block body_after %}{% endblock %}
       </a-config-provider>
     </template>
   </div>

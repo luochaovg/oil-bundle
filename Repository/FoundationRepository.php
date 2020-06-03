@@ -918,7 +918,7 @@ abstract class FoundationRepository extends SFRepository
             return $query->getResult($hydrationMode);
         }
 
-        $options = [];
+        $options = ['distinct' => $filter['distinct'] ?? false];
         if (!empty($filter['group'])) {
             $options = array_merge($options, ['distinct' => false, 'wrap-queries' => true]);
         }

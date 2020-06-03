@@ -22,7 +22,7 @@ trait Persistence
      * Persistence record
      *
      * @Route("/bsw-admin-role/persistence/{id}", name="app_bsw_admin_role_persistence", requirements={"id": "\d+"})
-     * @Access(class="danger", title=Abs::DANGER_ACCESS)
+     * @Access(class="danger", title="Dangerous permission, please be careful")
      *
      * @param int $id
      *
