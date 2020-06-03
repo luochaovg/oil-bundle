@@ -7,7 +7,7 @@ trait Radius
     /**
      * @var array
      */
-    protected $radius = [0, '80%'];
+    protected $radius = ['50%', '80%'];
 
     /**
      * @return array

@@ -11,7 +11,7 @@ trait Style
      * @var array
      */
     protected $style = [
-        'margin' => '24px auto',
+        'margin' => '30px auto 0',
         'float'  => 'none',
     ];
 

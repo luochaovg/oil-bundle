@@ -201,7 +201,7 @@ $(function () {
                         width: 768,
                         height: 800
                     };
-                    data.location = bsw.setParams(res.sets, _this2.api_export);
+                    data.location = bsw.setParams(res.sets, _this2.api_export, true);
                     _this2.showIFrame(data, $('body')[0]);
                 }).catch(function (reason) {
                     console.warn(reason);

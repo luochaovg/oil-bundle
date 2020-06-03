@@ -63,9 +63,9 @@ class FoundationPrototype {
         if (target.length >= length || !['left', 'right', 'both'].contains(type)) {
             return target;
         }
-        let last = (length - target.length) % padStr.length;
 
         let padNum, _padNum;
+        let last = (length - target.length) % padStr.length;
         padNum = _padNum = Math.floor((length - target.length) / padStr.length);
 
         if (last > 0) {
@@ -478,8 +478,7 @@ class FoundationTools extends FoundationPrototype {
      */
     jsonLength(json) {
         let length = 0;
-        let i;
-        for (i in json) {
+        for (let i in json) {
             length++;
         }
         return length;
@@ -523,7 +522,6 @@ class FoundationTools extends FoundationPrototype {
      * @returns {array}
      */
     parseQueryString(url = null, hostPart = false) {
-
         url = decodeURIComponent(url || location.href);
         if (url.indexOf('?') === -1) {
             url = url + '?';
@@ -563,7 +561,6 @@ class FoundationTools extends FoundationPrototype {
      * @return {string}
      */
     jsonBuildQuery(source, returnObject = false, needEncode = true) {
-
         let query = '', _query = {}, name, value, fullSubName, subName, subValue, innerObject, i;
         for (name in source) {
             if (!source.hasOwnProperty(name)) {
@@ -619,7 +616,6 @@ class FoundationTools extends FoundationPrototype {
      * @return {string}
      */
     setParams(items, url = null, needEncode = false) {
-
         let queryParams = this.parseQueryString(url, true);
         let host = queryParams.hostPart;
         delete queryParams.hostPart;
@@ -642,7 +638,6 @@ class FoundationTools extends FoundationPrototype {
      * @return {string}
      */
     unsetParams(items, url, needEncode = false, effect = {}) {
-
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
@@ -708,7 +703,6 @@ class FoundationTools extends FoundationPrototype {
         pos = pos || ['left', 'right'];
 
         let px = 0;
-
         type.each(function (m) {
             pos.each(function (n) {
                 px += parseInt(obj.css(m + '-' + n)) * length;
@@ -758,7 +752,6 @@ class FoundationTools extends FoundationPrototype {
      */
     rand(end, begin) {
         begin = begin || 0;
-
         let rank = begin;
         let _end = end - rank;
 
@@ -1064,7 +1057,6 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     notification(type, description, duration, onClose = self.blank) {
-
         if (typeof duration === 'undefined') {
             duration = this.cnf.notificationDuration;
         }
@@ -1096,7 +1088,6 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     message(type, description, duration, onClose = self.blank) {
-
         if (typeof duration === 'undefined') {
             duration = this.cnf.messageDuration;
         }
@@ -1116,7 +1107,6 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     confirm(type, description, duration, onClose = self.blank, options = {}) {
-
         let title = options.title || {
             success: this.lang.success,
             info: this.lang.info,
@@ -1293,7 +1283,6 @@ class FoundationAntD extends FoundationTools {
      * @param duration int
      */
     response(result, successSameHandler, failedSameHandler, duration) {
-
         if (typeof result.code === 'undefined') {
             return this.error(this.lang.response_error_message);
         }
@@ -1355,6 +1344,7 @@ class FoundationAntD extends FoundationTools {
         let height = document.body.clientHeight;
         width *= (width < 1285 ? 1 : .7);
         height *= (height < 666 ? .9 : .75);
+
         return {width, height};
     }
 
@@ -1410,6 +1400,11 @@ class FoundationAntD extends FoundationTools {
         }
 
         chart.setOption(o);
+        this.cnf.v.$nextTick(function () {
+            chart.resize();
+        });
+
+        $(window).resize(() => chart.resize());
     }
 
     /**

@@ -128,8 +128,8 @@ class Line extends Chart
             ],
             'smooth'     => $this->isSmooth(),
             'symbolSize' => 8,
-            'markPoint'  => ['data' => $this->getPoint()],
-            'markLine'   => ['data' => $this->getLine()],
+            'markPoint'  => ['data' => $this->moduleState('point') ? $this->getPoint() : null],
+            'markLine'   => ['data' => $this->moduleState('line') ? $this->getLine() : null],
         ];
     }
 }

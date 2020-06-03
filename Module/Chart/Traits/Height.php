@@ -7,7 +7,7 @@ trait Height
     /**
      * @var string
      */
-    protected $height = '500px';
+    protected $height = '560px';
 
     /**
      * @var string

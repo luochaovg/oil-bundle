@@ -17,16 +17,20 @@ trait Module
         'axisY'   => true,
         'zoom'    => true,
         'series'  => true,
+        'line'    => true,
+        'point'   => true,
     ];
 
     /**
-     * @param string $name
+     * @param string ...$names
      *
      * @return $this
      */
-    public function moduleDisable(string $name)
+    public function moduleDisable(string ...$names)
     {
-        $this->module[$name] = false;
+        foreach ($names as $name) {
+            $this->module[$name] = false;
+        }
 
         return $this;
     }

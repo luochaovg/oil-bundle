@@ -453,7 +453,7 @@ span.ant-calendar-picker {
   text-align: center;
 }
 .bsw-chart-list {
-  margin: 30px;
+  margin: 50px 30px 30px;
 }
 .bsw-filter-form {
   padding: 16px 20px;
@@ -484,7 +484,12 @@ span.ant-calendar-picker {
 }
 .bsw-chart-container .bsw-filter-form {
   border: none;
-  border-bottom: 1px solid #e8e8e8;
+}
+.bsw-chart-container .bsw-filter-form {
+  margin-bottom: 0;
+}
+.bsw-chart-container .ant-divider {
+  margin: 0;
 }
 div.modal-container-center div.ant-modal-body > div {
   text-align: center;

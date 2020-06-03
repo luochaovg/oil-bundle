@@ -91,10 +91,10 @@ var FoundationPrototype = function () {
             if (target.length >= length || !['left', 'right', 'both'].contains(type)) {
                 return target;
             }
-            var last = (length - target.length) % padStr.length;
 
             var padNum = void 0,
                 _padNum = void 0;
+            var last = (length - target.length) % padStr.length;
             padNum = _padNum = Math.floor((length - target.length) / padStr.length);
 
             if (last > 0) {
@@ -616,8 +616,7 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'jsonLength',
         value: function jsonLength(json) {
             var length = 0;
-            var i = void 0;
-            for (i in json) {
+            for (var i in json) {
                 length++;
             }
             return length;
@@ -674,7 +673,6 @@ var FoundationTools = function (_FoundationPrototype) {
         value: function parseQueryString() {
             var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
             var hostPart = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
 
             url = decodeURIComponent(url || location.href);
             if (url.indexOf('?') === -1) {
@@ -741,7 +739,6 @@ var FoundationTools = function (_FoundationPrototype) {
         value: function jsonBuildQuery(source) {
             var returnObject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
             var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
 
             var query = '',
                 _query = {},
@@ -812,7 +809,6 @@ var FoundationTools = function (_FoundationPrototype) {
             var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
             var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-
             var queryParams = this.parseQueryString(url, true);
             var host = queryParams.hostPart;
             delete queryParams.hostPart;
@@ -840,7 +836,6 @@ var FoundationTools = function (_FoundationPrototype) {
         value: function unsetParams(items, url) {
             var needEncode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
             var effect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
 
             url = url || location.href;
             var queryParams = this.parseQueryString(url, true);
@@ -958,7 +953,6 @@ var FoundationTools = function (_FoundationPrototype) {
             pos = pos || ['left', 'right'];
 
             var px = 0;
-
             type.each(function (m) {
                 pos.each(function (n) {
                     px += parseInt(obj.css(m + '-' + n)) * length;
@@ -1018,7 +1012,6 @@ var FoundationTools = function (_FoundationPrototype) {
         key: 'rand',
         value: function rand(end, begin) {
             begin = begin || 0;
-
             var rank = begin;
             var _end = end - rank;
 
@@ -1436,7 +1429,6 @@ var FoundationAntD = function (_FoundationTools) {
         value: function notification(type, description, duration) {
             var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
 
-
             if (typeof duration === 'undefined') {
                 duration = this.cnf.notificationDuration;
             }
@@ -1473,7 +1465,6 @@ var FoundationAntD = function (_FoundationTools) {
         value: function message(type, description, duration) {
             var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
 
-
             if (typeof duration === 'undefined') {
                 duration = this.cnf.messageDuration;
             }
@@ -1498,7 +1489,6 @@ var FoundationAntD = function (_FoundationTools) {
         value: function confirm(type, description, duration) {
             var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
             var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-
 
             var title = options.title || {
                 success: this.lang.success,
@@ -1704,7 +1694,6 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'response',
         value: function response(result, successSameHandler, failedSameHandler, duration) {
-
             if (typeof result.code === 'undefined') {
                 return this.error(this.lang.response_error_message);
             }
@@ -1768,6 +1757,7 @@ var FoundationAntD = function (_FoundationTools) {
             var height = document.body.clientHeight;
             width *= width < 1285 ? 1 : .7;
             height *= height < 666 ? .9 : .75;
+
             return { width: width, height: height };
         }
 
@@ -1871,6 +1861,13 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             chart.setOption(o);
+            this.cnf.v.$nextTick(function () {
+                chart.resize();
+            });
+
+            $(window).resize(function () {
+                return chart.resize();
+            });
         }
 
         /**
