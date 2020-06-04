@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Leon\BswBundle\Annotation\Entity\Input as I;
 
 trait Grant
 {
@@ -101,14 +102,14 @@ trait Grant
     /**
      * Grant authorization for user
      *
-     * @Route("/bsw-admin-access-control/grant/{id}", name="app_bsw_admin_access_control_grant", requirements={"id": "\d+"})
+     * @Route("/bsw-admin-access-control/grant", name="app_bsw_admin_access_control_grant")
      * @Access(class="danger", title="Dangerous permission, please be careful")
      *
-     * @param int $id
+     * @I("id", rules="mysqlInt")
      *
      * @return Response
      */
-    public function grant(int $id = null): Response
+    public function grant(): Response
     {
         if (($args = $this->valid()) instanceof Response) {
             return $args;
@@ -116,6 +117,7 @@ trait Grant
 
         $this->appendSrcJs('diy;layout/grant');
         if ($target = $this->getArgs('target')) {
+            $this->changeCrumbs(null, null, '');
             $this->appendCrumbs($target, $this->cnf->icon_warning);
         }
 
@@ -172,11 +174,11 @@ trait Grant
                 ->setRoute('app_bsw_admin_user_preview');
         };
 
-        [$disabled, $dress] = $this->disabled($id);
+        [$disabled, $dress] = $this->disabled($args->id);
 
         return $this->showPersistence(
             [
-                'id'            => $id,
+                'id'            => $args->id,
                 'dress'         => $dress,
                 'disabled'      => $disabled,
                 'disabled_json' => Helper::jsonStringify(array_keys($disabled)),

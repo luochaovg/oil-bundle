@@ -625,9 +625,9 @@ abstract class BswWebController extends AbstractController
         }
 
         $_accessList = [];
-        $masterMenuDetail = $menuAssist['masterMenuDetail'] ?? [];
-        $slaveMenuDetail = $menuAssist['slaveMenuDetail'] ?? [];
-        $masterMenu = $menuAssist['masterMenu'] ?? [];
+        $masterMenuDetail = $menuAssist['masterMenuDetailForRender'] ?? [];
+        $slaveMenuDetail = $menuAssist['slaveMenuDetailForRender'] ?? [];
+        $masterMenu = $menuAssist['masterMenuForRender'] ?? [];
 
         foreach ($accessList as $classInfo => $items) {
             foreach ($items as $route => $item) {

@@ -102,9 +102,11 @@ class Module extends Bsw
     }
 
     /**
+     * @param bool $forceFull
+     *
      * @return array
      */
-    protected function menuBuilder(): array
+    protected function menuBuilder(bool $forceFull = false): array
     {
         $menu = $masterMenuDetail = $slaveMenuDetail = [];
         $parent = $current = $masterIndex = 0;
@@ -133,7 +135,7 @@ class Module extends Bsw
             $route = trim($item->getRouteName());
 
             // access control
-            if ($route && empty($this->input->access[$route])) {
+            if ($route && !$forceFull && empty($this->input->access[$route])) {
                 continue;
             }
 
@@ -227,6 +229,15 @@ class Module extends Bsw
             $output->parent,
             $output->current,
         ] = $this->menuBuilder();
+
+        if (strpos($this->input->route, 'grant') !== false) {
+            [
+                $output->masterMenuForRender,
+                $output->slaveMenuForRender,
+                $output->masterMenuDetailForRender,
+                $output->slaveMenuDetailForRender,
+            ] = $this->menuBuilder(true);
+        }
 
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),
