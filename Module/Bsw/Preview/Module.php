@@ -227,8 +227,8 @@ class Module extends Bsw
         $_table = Helper::dig($item, 'table');
         $_field = Helper::dig($item, 'field');
 
-        $clone = $previewAnnotationFull[$_table][$_field] ?? [];
-        $item = empty($clone) ? [] : array_merge($clone, $item);
+        $_item = $previewAnnotationFull[$_table][$_field] ?? [];
+        $item = array_merge($_item, $item);
 
         return [$field, $item];
     }

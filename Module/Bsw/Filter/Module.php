@@ -185,11 +185,17 @@ class Module extends Bsw
      * @param string $field
      * @param mixed  $item
      * @param array  $filterAnnotationFull
+     * @param int    $defaultIndex
      *
      * @return array
      */
-    protected function annotationExtraItemHandler(string $field, $item, array $filterAnnotationFull): array
-    {
+    protected function annotationExtraItemHandler(
+        string $field,
+        $item,
+        array $filterAnnotationFull,
+        int $defaultIndex
+    ): array {
+
         if (is_bool($item)) {
             return [$field, []];
         }
@@ -203,17 +209,16 @@ class Module extends Bsw
         }
 
         $_table = Helper::dig($item, 'table');
-        $_field = $item['field'];
+        $_field = Helper::dig($item, 'field');
+        $_index = Helper::dig($item, 'index') ?? $defaultIndex;
 
         $item['field'] = "{$_table}.{$_field}";
-        $_index = Helper::dig($item, 'index') ?? 0;
         $_field = "{$_field}_{$_index}";
-        $field = "{$field}_{$_index}";
 
-        $clone = $filterAnnotationFull[$_table][$_field] ?? [];
-        $item = empty($clone) ? $item : array_merge($clone, $item);
+        $_item = $filterAnnotationFull[$_table][$_field] ?? [];
+        $item = array_merge($_item, $item);
 
-        return [$field, $item];
+        return ["{$field}_{$_index}", $item];
     }
 
     /**
@@ -269,9 +274,10 @@ class Module extends Bsw
         foreach ($filterAnnotationExtra as $field => $item) {
 
             $_item = $item;
-            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull);
+            $defaultIndex = 0;
+            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull, $defaultIndex);
             if (!is_numeric(Helper::arrayLatestItem($field))) {
-                $field = "{$field}_0";
+                $field = "{$field}_{$defaultIndex}";
             }
 
             if (!is_array($item)) {
