@@ -74,7 +74,7 @@ class Senior extends Filter
     /**
      * @cosnt array
      */
-    const MODE_FULL = self::MODE_RANGE + self::MODE_LIKE + self::MODE_ROUTINE;
+    const MODE_FULL = self::MODE_ROUTINE + self::MODE_RANGE + self::MODE_LIKE;
 
     /**
      * @param mixed $value

@@ -12,6 +12,7 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Form;
 
 /**
  * @property Input                $input
@@ -22,7 +23,9 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const OPERATES = 'Operates';
+    const OPERATES          = 'Operates';
+    const OPERATES_SIZE     = 'OperatesSize';
+    const OPERATES_POSITION = 'OperatesPosition';
 
     /**
      * @return bool
@@ -97,6 +100,7 @@ class Module extends Bsw
 
         $nowScene = $this->input->iframe ? Button::SCENE_IFRAME : Button::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
+        $size = $this->caller($this->method, self::OPERATES_SIZE, Abs::T_STRING, Form::SIZE_MIDDLE);
 
         // buttons handler
         foreach ($buttons as $button) {
@@ -110,7 +114,7 @@ class Module extends Bsw
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be {$buttonCls}[]");
             }
 
-            $button->setSize(Button::SIZE_MIDDLE);
+            $button->setSize($size);
             $scene = $button->getScene();
             if ($scene === Button::SCENE_COMMON) {
                 $scene = $nowScene;
@@ -132,6 +136,7 @@ class Module extends Bsw
         $output->choice = $choiceScene[$nowScene] ?? $output->choice;
         $output->buttons = $buttonScene[$nowScene] ?? $output->buttons;
 
+        $output->position = $this->caller($this->method, self::OPERATES_POSITION, Abs::T_STRING, Abs::POS_TOP);
         if ($this->input->iframe) {
             $output->position = Abs::POS_BOTTOM;
         }

@@ -335,6 +335,39 @@ class Helper
     }
 
     /**
+     * Reverse array_column
+     *
+     * @param array  $target
+     * @param string $keyKey
+     * @param string $valueKey
+     * @param string $indexKey
+     * @param array  $extra
+     *
+     * @return array
+     */
+    public static function reverseArrayColumn(
+        array $target,
+        string $keyKey = 'index',
+        string $valueKey = 'value',
+        string $indexKey = 'index',
+        array $extra = []
+    ): array {
+
+        $_target = [];
+        $index = 0;
+        foreach ($target as $key => $value) {
+            $index += 1;
+            $itemIndex = $indexKey ? [$indexKey => $index] : [];
+            $itemKey = [$keyKey => $key];
+            $itemValue = is_array($value) ? $value : [$valueKey => $value];
+            
+            $_target[] = array_merge($itemIndex, $itemKey, $itemValue, $extra);
+        }
+
+        return $_target;
+    }
+
+    /**
      * Cover default with manual
      *
      * @param array $default

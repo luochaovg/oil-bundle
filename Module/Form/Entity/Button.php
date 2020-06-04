@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
+use Leon\BswBundle\Module\Form\Entity\Traits\BindVariable;
 use Leon\BswBundle\Module\Form\Entity\Traits\Block;
 use Leon\BswBundle\Module\Form\Entity\Traits\Circle;
 use Leon\BswBundle\Module\Form\Entity\Traits\Click;
@@ -39,6 +40,7 @@ class Button extends Form
     use Confirm;
     use Type;
     use HtmlType;
+    use BindVariable;
 
     /**
      * @const string

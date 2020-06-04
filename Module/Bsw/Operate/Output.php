@@ -22,5 +22,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $position = Abs::POS_TOP;
+    public $position;
 }

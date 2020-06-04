@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Repository\FoundationRepository;
 
 /**
@@ -28,13 +29,14 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK   = 'BeforeHook';     // [单行数据] 钩子前处理
-    const AFTER_HOOK    = 'AfterHook';      // [单行数据] 钩子后处理
-    const QUERY         = 'Query';          // [全局配置] 列表查询
-    const CHOICE        = 'Choice';         // [全局配置] 列表选择
-    const BEFORE_RENDER = 'BeforeRender';   // [全量数据] 渲染前处理
-    const CHARM         = 'Charm';          // [字段的值] 个性化装饰
-    const OPERATES      = 'RecordOperates'; // [单行数据] 操作按钮组
+    const BEFORE_HOOK   = 'BeforeHook';         // [单行数据] 钩子前处理
+    const AFTER_HOOK    = 'AfterHook';          // [单行数据] 钩子后处理
+    const QUERY         = 'Query';              // [全局配置] 列表查询
+    const CHOICE        = 'Choice';             // [全局配置] 列表选择
+    const BEFORE_RENDER = 'BeforeRender';       // [全量数据] 渲染前处理
+    const CHARM         = 'Charm';              // [字段的值] 个性化装饰
+    const OPERATES      = 'RecordOperates';     // [单行数据] 操作按钮组
+    const OPERATES_SIZE = 'RecordOperatesSize'; // [单行数据] 操作按钮大小
 
     /**
      * @var array
@@ -745,6 +747,7 @@ class Module extends Bsw
 
             $item[$operate] = null;
             $maxButtons = max($maxButtons, count($buttons));
+            $size = $this->caller($this->method, self::OPERATES_SIZE, Abs::T_STRING, Form::SIZE_SMALL);
 
             foreach ($buttons as $index => $button) {
 
@@ -758,7 +761,7 @@ class Module extends Bsw
                  * @var Button $button
                  */
 
-                $button->setSize(Button::SIZE_SMALL);
+                $button->setSize($size);
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));

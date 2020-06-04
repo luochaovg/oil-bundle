@@ -24,4 +24,7 @@
     {% set var = 'preview_selected_row.length' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
+  {% if form.bindVariable %}
+    {{ '{{ ' ~ form.bindVariable ~ ' }}' }}
+  {% endif %}
 </a-button>
