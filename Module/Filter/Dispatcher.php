@@ -80,7 +80,6 @@ class Dispatcher
         return null;
     }
 
-
     /**
      * Resolve array to expression for list
      *

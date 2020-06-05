@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
+use Leon\BswBundle\Module\Form\Entity\Traits\BindLoading;
 use Leon\BswBundle\Module\Form\Entity\Traits\BindVariable;
 use Leon\BswBundle\Module\Form\Entity\Traits\Block;
 use Leon\BswBundle\Module\Form\Entity\Traits\Circle;
@@ -41,6 +42,7 @@ class Button extends Form
     use Type;
     use HtmlType;
     use BindVariable;
+    use BindLoading;
 
     /**
      * @const string

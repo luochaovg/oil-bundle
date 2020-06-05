@@ -14,7 +14,7 @@ class AttachmentImage extends Tailor
     /**
      * @var string
      */
-    private $table;
+    protected $table;
 
     /**
      * @return mixed|void

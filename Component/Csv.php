@@ -10,12 +10,12 @@ class Csv
     /**
      * @var string
      */
-    private $file;
+    protected $file;
 
     /**
      * @var SplFileObject
      */
-    private $spl;
+    protected $spl;
 
     /**
      * Set csv file

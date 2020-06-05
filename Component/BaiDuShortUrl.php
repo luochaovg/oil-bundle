@@ -9,12 +9,12 @@ class BaiDuShortUrl
     /**
      * @var string
      */
-    private $token;
+    protected $token;
 
     /**
      * @var string
      */
-    private $url = 'https://dwz.cn/admin/v2/create';
+    protected $url = 'https://dwz.cn/admin/v2/create';
 
     /**
      * BaiDuSDK constructor.

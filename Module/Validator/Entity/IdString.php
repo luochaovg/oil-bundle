@@ -10,7 +10,7 @@ class IdString extends Validator
     /**
      * @var array
      */
-    private $ids = [];
+    protected $ids = [];
 
     /**
      * @inheritdoc

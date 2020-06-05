@@ -15,28 +15,28 @@ class IpRegionDB
     /**
      * db file handler
      */
-    private $dbFileHandler = null;
+    protected $dbFileHandler = null;
 
     /**
      * header block info
      */
-    private $HeaderSip = null;
-    private $HeaderPtr = null;
-    private $headerLen = 0;
+    protected $HeaderSip = null;
+    protected $HeaderPtr = null;
+    protected $headerLen = 0;
 
     /**
      * super block index info
      */
-    private $firstIndexPtr = 0;
-    private $lastIndexPtr = 0;
-    private $totalBlocks = 0;
+    protected $firstIndexPtr = 0;
+    protected $lastIndexPtr = 0;
+    protected $totalBlocks = 0;
 
     /**
      * for memory mode only
      * the original db binary string
      */
-    private $dbBinStr = null;
-    private $dbFile = null;
+    protected $dbBinStr = null;
+    protected $dbFile = null;
 
     /**
      * IpRegion constructor.

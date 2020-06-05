@@ -10,47 +10,47 @@ class Menu
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      */
-    private $menuId;
+    protected $menuId;
 
     /**
      * @var string
      */
-    private $routeName;
+    protected $routeName;
 
     /**
      * @var string
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
      */
-    private $javascript;
+    protected $javascript;
 
     /**
      * @var string
      */
-    private $jsonParams;
+    protected $jsonParams;
 
     /**
      * @var array
      */
-    private $args = [];
+    protected $args = [];
 
     /**
      * @return int

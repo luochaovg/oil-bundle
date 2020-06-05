@@ -10,7 +10,7 @@ class Json extends Validator
     /**
      * @var array
      */
-    private $jsonArray;
+    protected $jsonArray;
 
     /**
      * @inheritdoc

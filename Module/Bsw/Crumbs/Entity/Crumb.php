@@ -7,17 +7,17 @@ class Crumb
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      */
-    private $route;
+    protected $route;
 
     /**
      * Crumbs constructor.

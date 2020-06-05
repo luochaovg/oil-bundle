@@ -1608,18 +1608,8 @@ trait Foundation
      */
     public function messageToResponse(Message $message): Response
     {
-        $args = [
-            $message->getMessage(),
-            $message->getRoute(),
-            $message->getArgs(),
-            $message->getClassify(),
-            $message->getType(),
-            $message->getSets(),
-            $message->getDuration(),
-        ];
-
         if (!$this->ajax) {
-            return $this->responseMessage(...$args);
+            return $this->responseMessage($message);
         }
 
         $codeMap = [
@@ -1628,9 +1618,9 @@ trait Foundation
         ];
 
         $classify = $message->getClassify();
-        $code = $codeMap[$classify] ?? $this->codeOkForLogic;
+        $message->setCode($codeMap[$classify] ?? $this->codeOkForLogic);
 
-        return $this->responseMessageWithAjax($code, ...$args);
+        return $this->responseMessageWithAjax($message);
     }
 
     /**

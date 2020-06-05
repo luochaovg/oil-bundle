@@ -421,8 +421,8 @@ class BswBackendController extends BswWebController
              */
             $html = $this->renderPart($twig, [$name => $output]);
 
-            $showArgs["{$name}_html"] = $html;
-            $ajaxShowArgs["{$name}_html"] = $html;
+            $showArgs["{$name}Html"] = $html;
+            $ajaxShowArgs["{$name}Html"] = $html;
         }
 
         $logic = &$showArgs[Abs::TAG_LOGIC];

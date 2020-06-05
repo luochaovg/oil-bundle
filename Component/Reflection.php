@@ -15,7 +15,7 @@ class Reflection
     /**
      * @var array
      */
-    private $tags = [
+    protected $tags = [
         'common'    => [
             'access',
             'link',
@@ -51,12 +51,12 @@ class Reflection
     /**
      * @var string
      */
-    private $commentFilter = "\r\n\t *#";
+    protected $commentFilter = "\r\n\t *#";
 
     /**
      * @var string
      */
-    private $tagRegular = '/@(%s)([^\w].*)/i';
+    protected $tagRegular = '/@(%s)([^\w].*)/i';
 
     /**
      * Set tags

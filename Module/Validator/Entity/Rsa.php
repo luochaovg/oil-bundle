@@ -10,7 +10,7 @@ class Rsa extends Validator
     /**
      * @var string
      */
-    private $text;
+    protected $text;
 
     /**
      * @inheritdoc

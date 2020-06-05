@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\UploadItem;
 use Leon\BswBundle\Entity\BswAttachment;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorUpload;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
@@ -60,16 +61,17 @@ trait Upload
         ];
 
         if ($href = $file->href ?? null) {
-            return $this->responseMessageWithAjax(
-                Response::HTTP_OK,
-                'File upload done, download {{ url }}',
-                $href,
-                ['{{ url }}' => $file->url],
-                Abs::TAG_CLASSIFY_SUCCESS,
-                Abs::TAG_TYPE_CONFIRM,
-                $sets,
-                Abs::TIME_MINUTE
-            );
+            $message = (new Message())
+                ->setCode(Response::HTTP_OK)
+                ->setMessage('File upload done, download {{ url }}')
+                ->setRoute($href)
+                ->setArgs(['{{ url }}' => $file->url])
+                ->setClassify(Abs::TAG_CLASSIFY_SUCCESS)
+                ->setType(Abs::TAG_TYPE_CONFIRM)
+                ->setSets($sets)
+                ->setDuration(Abs::TIME_MINUTE);
+
+            return $this->responseMessageWithAjax($message);
         }
 
         return $this->okayAjax($sets, 'File upload done');

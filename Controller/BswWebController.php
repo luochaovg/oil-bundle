@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Crumbs\Entity\Crumb;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
 use Leon\BswBundle\Module\Error\Entity\ErrorAjaxRequest;
@@ -175,10 +176,14 @@ abstract class BswWebController extends AbstractController
         }
 
         [$params, $trans] = $this->resolveArgs($args);
-        $message = $this->messageLang($message, $trans);
-        $url = $this->redirectUrl($url);
 
-        return $this->responseMessage($message, $url, $params, Abs::TAG_CLASSIFY_SUCCESS);
+        $message = (new Message())
+            ->setMessage($this->messageLang($message, $trans))
+            ->setRoute($this->redirectUrl($url))
+            ->setArgs($params)
+            ->setClassify(Abs::TAG_CLASSIFY_SUCCESS);
+
+        return $this->responseMessage($message);
     }
 
     /**
@@ -220,43 +225,33 @@ abstract class BswWebController extends AbstractController
 
         // fallback url
         $this->session->set(Abs::TAG_FALLBACK, $this->currentUrl());
-
         // redirect url
         $url = $url ?? ($this->responseUrlMap()[$code4logic] ?? null);
-        $message = "[{$code4logic}] {$tiny}";
 
-        return $this->responseMessage($message, $url, $params, Abs::TAG_CLASSIFY_ERROR);
+        $message = (new Message())
+            ->setMessage("[{$code4logic}] {$tiny}")
+            ->setRoute($url)
+            ->setArgs($params)
+            ->setClassify(Abs::TAG_CLASSIFY_ERROR);
+
+        return $this->responseMessage($message);
     }
 
     /**
      * Response message (just latest message)
      *
-     * @param string $content
-     * @param string $url
-     * @param array  $args
-     * @param string $classify
-     * @param string $type
-     * @param array  $data
-     * @param int    $duration
+     * @param Message $message
      *
      * @return Response
      * @throws
      */
-    protected function responseMessage(
-        string $content,
-        ?string $url = null,
-        array $args = [],
-        string $classify = Abs::TAG_CLASSIFY_WARNING,
-        string $type = Abs::TAG_TYPE_MESSAGE,
-        array $data = [],
-        ?int $duration = null
-    ): Response {
+    protected function responseMessage(Message $message): Response
+    {
+        [$params, $trans] = $this->resolveArgs($message->getArgs());
 
-        [$params, $trans] = $this->resolveArgs($args);
-
-        $content = $this->messageLang($content, $trans);
-        $this->appendMessage($content, $duration, $classify, $type);
-        $url = $this->redirectUrl($url, $params);
+        $content = $this->messageLang($message->getMessage(), $trans);
+        $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
+        $url = $this->redirectUrl($message->getRoute(), $params);
 
         return $this->redirect($url);
     }
@@ -264,40 +259,37 @@ abstract class BswWebController extends AbstractController
     /**
      * Response message with ajax (just latest message)
      *
-     * @param int|Error $code
-     * @param string    $content
-     * @param string    $url
-     * @param array     $args
-     * @param string    $classify
-     * @param string    $type
-     * @param array     $data
-     * @param int       $duration
+     * @param Message $message
      *
      * @return Response
      * @throws
      */
-    protected function responseMessageWithAjax(
-        $code,
-        string $content,
-        ?string $url = null,
-        array $args = [],
-        string $classify = Abs::TAG_CLASSIFY_WARNING,
-        string $type = Abs::TAG_TYPE_MESSAGE,
-        array $data = [],
-        ?int $duration = null
-    ): Response {
-
-        [$params, $trans] = $this->resolveArgs($args);
-        $content = $this->messageLang($content, $trans);
+    protected function responseMessageWithAjax(Message $message): Response
+    {
+        [$params, $trans] = $this->resolveArgs($message->getArgs());
+        $content = $this->messageLang($message->getMessage(), $trans);
+        $url = $message->getRoute();
+        $data = $message->getSets();
 
         if (isset($url)) {
-            $this->appendMessage($content, $duration, $classify, $type);
-            $message = null;
+
+            $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
+            $content = null;
             $data = array_merge($data, ['href' => $this->redirectUrl($url ?: null, $params)]);
-        } else {
-            $message = $content;
+
+            if ($click = $message->getClick()) {
+                $data = array_merge(
+                    $data,
+                    [
+                        'function' => $click,
+                        'location' => $data['href'],
+                    ],
+                    $params
+                );
+            }
         }
 
+        $code = $message->getCode();
         [$code4http, $code4logic] = [Response::HTTP_OK, $code, null, null];
 
         // instance of Error
@@ -308,11 +300,11 @@ abstract class BswWebController extends AbstractController
         return $this->responseAjax(
             $code4logic,
             $code4http,
-            $message,
+            $content,
             $data,
-            $classify,
-            $type,
-            $duration
+            $message->getClassify(),
+            $message->getType(),
+            $message->getDuration()
         );
     }
 

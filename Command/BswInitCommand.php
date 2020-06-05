@@ -198,7 +198,6 @@ class BswInitCommand extends Command implements CommandInterface
         ];
     }
 
-
     /**
      * @return array
      */

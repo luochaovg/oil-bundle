@@ -272,7 +272,6 @@ class Module extends Bsw
             $recordBefore = $this->web->sessionGet($key) ?? [];
             $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
-
             $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
             $arguments = $this->arguments($args, ['id' => $this->input->id]);
             $result = $this->caller(

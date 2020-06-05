@@ -210,7 +210,6 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             throw new InvalidArgumentException('Arguments `limit` should be integer and gte 1');
         }
 
-
         [$recordTotal, $items] = $this->csvReader($csv, $pageNow, $limit);
         if (empty($items)) {
             return $pageNow === 1 ? 0 : $pageNow;

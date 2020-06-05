@@ -15,6 +15,9 @@
   bsw-data="{{ form.data }}"
   @click="dispatcherByVue"
   {{ form.attributes|raw }}
+  {% if form.bindLoading %}
+    :loading="{{ form.bindLoading }}"
+  {% endif %}
 >
   {% if form.icon %}
     {{ form.icon|icon|raw }}

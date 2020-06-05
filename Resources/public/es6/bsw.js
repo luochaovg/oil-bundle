@@ -499,6 +499,11 @@ $(function () {
             }));
         },
 
+        showIFrameInParent(data, element) {
+            this.modal.visible = false;
+            this.showIFrame(data.response.sets, element);
+        },
+
     }, bsw.config.method || {})).directive(Object.assign({
 
         // directive

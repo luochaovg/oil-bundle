@@ -11,12 +11,12 @@ abstract class Hook
     /**
      * @var mixed
      */
-    private $item;
+    protected $item;
 
     /**
      * @var bool
      */
-    private $object = true;
+    protected $object = true;
 
     /**
      * @var string

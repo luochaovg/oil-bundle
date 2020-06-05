@@ -3,7 +3,7 @@
 
 {% block page %}
   <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
-  <p class="bsw-hide" v-init:disabled_list='{{ logic.disabled_json|raw }}'></p>
+  <p class="bsw-hide" v-init:disabled_list='{{ logic.disabledJson|raw }}'></p>
   <div class="bsw-persistence">
     <a-form
       id="persistence_form"

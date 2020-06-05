@@ -15,15 +15,15 @@ class IpRegionIPDB
     const IPV4 = 1;
     const IPV6 = 2;
 
-    private $file       = null;
-    private $fileSize   = 0;
-    private $nodeCount  = 0;
-    private $nodeOffset = 0;
-    private $meta       = [];
-    private $database   = '';
+    protected $file       = null;
+    protected $fileSize   = 0;
+    protected $nodeCount  = 0;
+    protected $nodeOffset = 0;
+    protected $meta       = [];
+    protected $database   = '';
 
-    private $v4offset      = 0;
-    private $v6offsetCache = [];
+    protected $v4offset      = 0;
+    protected $v6offsetCache = [];
 
     /**
      * IpRegionIPDB constructor.

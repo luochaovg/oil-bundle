@@ -26,37 +26,37 @@ class BswScaffoldCommand extends Command implements CommandInterface
     /**
      * @var string
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      */
-    private $namespace;
+    protected $namespace;
 
     /**
      * @var string
      */
-    private $directory;
+    protected $directory;
 
     /**
      * @var string
      */
-    private $acme;
+    protected $acme;
 
     /**
      * @var string
      */
-    private $cover = 'no';
+    protected $cover = 'no';
 
     /**
      * @var array
      */
-    private $app = ['.all'];
+    protected $app = ['.all'];
 
     /**
      * @var string
      */
-    private $doctrine = Abs::DOCTRINE_DEFAULT;
+    protected $doctrine = Abs::DOCTRINE_DEFAULT;
 
     /**
      * @return array
@@ -94,7 +94,6 @@ class BswScaffoldCommand extends Command implements CommandInterface
             'info'    => 'Project scaffold builder',
         ];
     }
-
 
     /**
      * Logic

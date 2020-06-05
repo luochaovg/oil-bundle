@@ -55,7 +55,7 @@ trait Login
         ];
 
         if ($this->parameter('backend_with_google_secret')) {
-            $args['google_captcha'] = 'Google captcha';
+            $args['googleCaptcha'] = 'Google captcha';
         }
 
         return $this->show($args, 'layout/login.html');

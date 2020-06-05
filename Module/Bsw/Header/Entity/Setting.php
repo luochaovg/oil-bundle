@@ -7,17 +7,17 @@ class Setting
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      */
-    private $click;
+    protected $click;
 
     /**
      * Setting constructor.

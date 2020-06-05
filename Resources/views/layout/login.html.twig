@@ -49,11 +49,11 @@
       </a-input>
       <img class="bsw-captcha" src="{{ path(scaffold.cnf.route_captcha) }}">
     </a-form-item>
-    {% if google_captcha is defined %}
+    {% if googleCaptcha is defined %}
       <a-form-item>
         <a-input
           v-model.trim="google_captcha"
-          placeholder="{{ google_captcha|trans({}, 'twig') }}"
+          placeholder="{{ googleCaptcha|trans({}, 'twig') }}"
           :size="size"
         >
           {{ scaffold.cnf.icon_captcha|icon(true, {}, {slot:'prefix'})|raw }}

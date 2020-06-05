@@ -12,17 +12,17 @@ class Dispatcher
     /**
      * @var array
      */
-    private $hooks = [];
+    protected $hooks = [];
 
     /**
      * @var callable
      */
-    private $beforeHandler;
+    protected $beforeHandler;
 
     /**
      * @var callable
      */
-    private $afterHandler;
+    protected $afterHandler;
 
     /**
      * Set hooks

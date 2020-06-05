@@ -2,11 +2,11 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="keywords" content="{{ tpl_keyword ?? scaffold.seo.keyword }}">
-  <meta name="description" content="{{ tpl_description ?? scaffold.seo.description }}">
+  <meta name="keywords" content="{{ tplKeyword ?? scaffold.seo.keyword }}">
+  <meta name="description" content="{{ tplDescription ?? scaffold.seo.description }}">
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
   <link rel="shortcut icon" href="{{ scaffold.cnf.app_ico }}" type="image/x-icon"/>
-  <title>{{ tpl_title ?? scaffold.seo.title }}</title>
+  <title>{{ tplTitle ?? scaffold.seo.title }}</title>
   {% set void = 'javascript:void(null);' %}
   {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
   {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}

@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorNoRecord;
 use Predis\Client;
@@ -30,22 +31,23 @@ trait ThirdMessage
             return $args;
         }
 
-        $message = $this->redis->rpop($this->cnf->third_message_key);
-        $message = Helper::parseJsonString($message);
+        $target = $this->redis->rpop($this->cnf->third_message_key);
+        $target = Helper::parseJsonString($target);
 
-        if (empty($message) || empty($message['content']) || empty($message['classify'])) {
+        if (empty($target) || empty($target['content']) || empty($target['classify'])) {
             return $this->failedAjax(new ErrorNoRecord());
         }
 
-        return $this->responseMessageWithAjax(
-            $message['code'] ?? Response::HTTP_OK,
-            $message['content'],
-            $message['url'] ?? null,
-            $message['args'] ?? [],
-            $message['classify'],
-            $message['type'] ?? Abs::TAG_TYPE_MESSAGE,
-            $message['data'] ?? [],
-            $message['duration'] ?? null
-        );
+        $message = (new Message())
+            ->setCode($target['code'] ?? Response::HTTP_OK)
+            ->setMessage($target['content'])
+            ->setRoute($target['url'] ?? null)
+            ->setArgs($target['args'] ?? [])
+            ->setClassify($target['classify'])
+            ->setType($target['type'] ?? Abs::TAG_TYPE_MESSAGE)
+            ->setSets($target['data'] ?? [])
+            ->setDuration($target['duration'] ?? null);
+
+        return $this->responseMessageWithAjax($message);
     }
 }

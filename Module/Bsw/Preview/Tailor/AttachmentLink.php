@@ -14,7 +14,7 @@ class AttachmentLink extends Tailor
     /**
      * @var string
      */
-    private $alias;
+    protected $alias;
 
     /**
      * @return mixed|void

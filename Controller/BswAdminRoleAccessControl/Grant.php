@@ -149,12 +149,12 @@ trait Grant
 
         return $this->showPersistence(
             [
-                'id'            => $args->id,
-                'dress'         => $dress,
-                'disabled'      => $disabled,
-                'disabled_json' => Helper::jsonStringify(array_keys($disabled)),
-                'handler'       => $grantRole,
-                'afterModule'   => [
+                'id'           => $args->id,
+                'dress'        => $dress,
+                'disabled'     => $disabled,
+                'disabledJson' => Helper::jsonStringify(array_keys($disabled)),
+                'handler'      => $grantRole,
+                'afterModule'  => [
                     'form'   => function (array $logic) {
                         return $this->listForm($logic['id']);
                     },

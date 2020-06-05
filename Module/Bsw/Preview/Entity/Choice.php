@@ -9,17 +9,17 @@ class Choice
     /**
      * @var bool
      */
-    private $enable = false;
+    protected $enable = false;
 
     /**
      * @var bool
      */
-    private $multiple = false;
+    protected $multiple = false;
 
     /**
      * @var array
      */
-    private $fields = [Abs::PK];
+    protected $fields = [Abs::PK];
 
     /**
      * Choice constructor.

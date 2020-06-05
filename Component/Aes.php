@@ -7,17 +7,17 @@ class Aes
     /**
      * @var string
      */
-    private $key;
+    protected $key;
 
     /**
      * @var string
      */
-    private $iv;
+    protected $iv;
 
     /**
      * @var string
      */
-    private $method = 'AES-128-CBC';
+    protected $method = 'AES-128-CBC';
 
     /**
      * Aes constructor.

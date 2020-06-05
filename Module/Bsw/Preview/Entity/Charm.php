@@ -7,22 +7,22 @@ class Charm
     /**
      * @var string
      */
-    private $charm;
+    protected $charm;
 
     /**
      * @var mixed
      */
-    private $value;
+    protected $value;
 
     /**
      * @var bool
      */
-    private $html = false;
+    protected $html = false;
 
     /**
      * @var array
      */
-    private $var = [];
+    protected $var = [];
 
     /**
      * Charm constructor.

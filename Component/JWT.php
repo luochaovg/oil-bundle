@@ -16,22 +16,22 @@ class JWT
     /**
      * @var string
      */
-    private $privateFile;
+    protected $privateFile;
 
     /**
      * @var string
      */
-    private $publicFile;
+    protected $publicFile;
 
     /**
      * @var string
      */
-    private $issuer;
+    protected $issuer;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * JWT constructor.

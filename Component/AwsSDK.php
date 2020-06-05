@@ -14,29 +14,27 @@ class AwsSDK
     /**
      * @var string
      */
-    private $charset = 'UTF-8';
+    protected $charset = 'UTF-8';
 
     /**
      * @var string
      */
-    private $region;
+    protected $region;
 
     /**
      * @var string
      */
-    private $key;
+    protected $key;
 
     /**
      * @var string
      */
-    private $secret;
+    protected $secret;
 
     /**
      * @var array
      */
-    private $options = [
-        'charset' => 'UTF-8',
-    ];
+    protected $options = ['charset' => 'UTF-8'];
 
     /**
      * AwsSDK constructor.

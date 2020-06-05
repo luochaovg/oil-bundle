@@ -136,10 +136,16 @@ class Module extends Bsw
         $output->choice = $choiceScene[$nowScene] ?? $output->choice;
         $output->buttons = $buttonScene[$nowScene] ?? $output->buttons;
 
-        $output->position = $this->caller($this->method, self::OPERATES_POSITION, Abs::T_STRING, Abs::POS_TOP);
         if ($this->input->iframe) {
             $output->position = Abs::POS_BOTTOM;
         }
+
+        $output->position = $this->caller(
+            $this->method,
+            self::OPERATES_POSITION,
+            Abs::T_STRING,
+            $output->position
+        );
 
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),

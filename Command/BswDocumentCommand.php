@@ -32,47 +32,47 @@ class BswDocumentCommand extends Command implements CommandInterface
     /**
      * @var string
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      */
-    private $source = '_source';
+    protected $source = '_source';
 
     /**
      * @var string
      */
-    private $build = '_build';
+    protected $build = '_build';
 
     /**
      * @var string
      */
-    private $indent;
+    protected $indent;
 
     /**
      * @var string
      */
-    private $hostApi;
+    protected $hostApi;
 
     /**
      * @var string
      */
-    private $hostAnalog;
+    protected $hostAnalog;
 
     /**
      * @var string
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var bool
      */
-    private $jsonStrict;
+    protected $jsonStrict;
 
     /**
      * @var array
      */
-    private $routeStart = [];
+    protected $routeStart = [];
 
     /**
      * @return array

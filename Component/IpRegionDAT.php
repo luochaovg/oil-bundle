@@ -7,14 +7,14 @@ namespace Leon\BswBundle\Component;
  */
 class IpRegionDAT
 {
-    private $firstStartIpOffset;
-    private $lastStartIpOffset;
-    private $prefixStartOffset;
-    private $prefixEndOffset;
-    private $ipCount;
-    private $prefixCount;
-    private $fp;
-    private $prefix_array = [];
+    protected $firstStartIpOffset;
+    protected $lastStartIpOffset;
+    protected $prefixStartOffset;
+    protected $prefixEndOffset;
+    protected $ipCount;
+    protected $prefixCount;
+    protected $fp;
+    protected $prefix_array = [];
 
     /**
      * IpRegionQQ constructor.

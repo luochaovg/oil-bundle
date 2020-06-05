@@ -10,17 +10,17 @@ class Download
     /**
      * @var int
      */
-    private $minSpeed = 16;
+    protected $minSpeed = 16;
 
     /**
      * @var int
      */
-    private $maxSpeed = 1024 * 2;
+    protected $maxSpeed = 1024 * 2;
 
     /**
      * @var int
      */
-    private $speed = 128;
+    protected $speed = 128;
 
     /**
      * Download constructor.

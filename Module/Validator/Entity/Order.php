@@ -11,7 +11,7 @@ class Order extends Validator
     /**
      * @var array
      */
-    private $sortType = [Abs::SORT_ASC, Abs::SORT_DESC];
+    protected $sortType = [Abs::SORT_ASC, Abs::SORT_DESC];
 
     /**
      * @inheritdoc

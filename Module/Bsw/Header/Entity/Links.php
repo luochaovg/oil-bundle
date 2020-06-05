@@ -7,27 +7,27 @@ class Links
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @var string
      */
-    private $route;
+    protected $route;
 
     /**
      * @var bool
      */
-    private $script = false;
+    protected $script = false;
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * Links constructor.

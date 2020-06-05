@@ -4,43 +4,54 @@ namespace Leon\BswBundle\Module\Bsw;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Error;
 
 class Message
 {
     /**
-     * @var string
+     * @var Error|int
      */
-    private $message;
+    protected $code;
 
     /**
      * @var string
      */
-    private $classify = Abs::TAG_CLASSIFY_INFO;
+    protected $message;
 
     /**
      * @var string
      */
-    private $route;
+    protected $classify = Abs::TAG_CLASSIFY_WARNING;
 
     /**
      * @var string
      */
-    private $type = Abs::TAG_TYPE_MESSAGE;
+    protected $route;
+
+    /**
+     * @var string
+     */
+    protected $click;
+
+    /**
+     * @var string
+     */
+    protected $type = Abs::TAG_TYPE_MESSAGE;
 
     /**
      * @var int
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var array
      */
-    private $args = [];
+    protected $args = [];
 
     /**
      * @var array
      */
-    private $sets = [];
+    protected $sets = [];
 
     /**
      * Message constructor.
@@ -54,6 +65,26 @@ class Message
         isset($message) && $this->message = $message;
         isset($classify) && $this->classify = $classify;
         isset($route) && $this->route = $route;
+    }
+
+    /**
+     * @return Error|int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param Error|int $code
+     *
+     * @return $this
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
     }
 
     /**
@@ -92,6 +123,26 @@ class Message
     public function setRoute(?string $route)
     {
         $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClick(): ?string
+    {
+        return $this->click;
+    }
+
+    /**
+     * @param string $click
+     *
+     * @return $this
+     */
+    public function setClick(string $click)
+    {
+        $this->click = $click;
 
         return $this;
     }
