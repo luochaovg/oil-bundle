@@ -45,6 +45,7 @@ class BswInitCommand extends Command implements CommandInterface
             'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
             'scheme-start-only'  => [null, InputOption::VALUE_OPTIONAL, 'Only scheme start with string'],
             'scheme-force'       => [null, InputOption::VALUE_OPTIONAL, 'Force rebuild scheme', 'no'],
+            'scheme-reverse'     => [null, InputOption::VALUE_OPTIONAL, 'Reverse scheme split by comma'],
             'scaffold-need'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold need?', 'yes'],
             'scaffold-cover'     => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file rewrite?', 12],
             'scaffold-path'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file save path'],
@@ -464,23 +465,44 @@ class BswInitCommand extends Command implements CommandInterface
         $schemeStartOnly = $params['scheme-start-only'];
         $scaffoldNeed = ($params['scaffold-need'] === 'yes');
         $schemePrefix = trim($params['scheme-prefix'], '_');
+        $schemeReverse = Helper::stringToArray($params['scheme-reverse']);
+
+        foreach ($schemeReverse as $table) {
+            $output->write(Abs::ENTER);
+            $scheme = $pdo->fetchArray("SHOW CREATE TABLE {$table}")[1];
+            $scheme = str_replace(
+                "CREATE TABLE `{$table}`",
+                "DROP TABLE IF EXISTS `{TABLE_NAME}`;\nCREATE TABLE `{TABLE_NAME}`",
+                $scheme
+            );
+
+            $scheme = preg_replace("/AUTO_INCREMENT=([\d]+)\ /i", null, $scheme);
+            if (empty($params['scheme-extra']) || !is_dir($params['scheme-extra'])) {
+                $output->writeln("<error> Reverse:  [CreateFile] {$table} </error>");
+                continue;
+            }
+
+            file_put_contents($sqlFile = "{$params['scheme-extra']}/{$table}.sql", "{$scheme};");
+            $output->writeln("<info> Reverse:  [CreateFile] {$sqlFile} </info>");
+        }
 
         foreach ($schemeFileList as $sqlFile) {
-
             $table = pathinfo($sqlFile, PATHINFO_FILENAME);
             if ($schemeOnly && !in_array($table, $schemeOnly)) {
                 continue;
             }
-
             if ($schemeStartOnly && strpos($table, $schemeStartOnly) !== 0) {
                 continue;
             }
 
             $output->write(Abs::ENTER);
+            if (!in_array($table, $schemeReverse)) {
+                $table = $schemePrefix ? "{$schemePrefix}_{$table}" : $table;
+            }
 
-            $table = $schemePrefix ? "{$schemePrefix}_{$table}" : $table;
-            $exists = $this->pdo()->fetchArray("SHOW TABLES WHERE Tables_in_{$database} = '{$table}'");
+            $exists = $pdo->fetchArray("SHOW TABLES WHERE Tables_in_{$database} = '{$table}'");
             $record = $exists && current($pdo->fetchArray("SELECT COUNT(*) FROM {$table}"));
+
             if (!$record || $params['scheme-force'] === 'yes') {
                 $sql = file_get_contents($sqlFile);
                 $sql = str_replace('{TABLE_NAME}', $table, $sql);

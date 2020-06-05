@@ -311,46 +311,6 @@ class BswBackendController extends BswWebController
     }
 
     /**
-     * Get args for scaffold view
-     *
-     * @param array $extra
-     *
-     * @return array
-     */
-    protected function displayArgsScaffold(array $extra = []): array
-    {
-        static $scaffold;
-
-        if (!isset($scaffold)) {
-            $json = $this->parameters('json');
-            [$cls, $fn] = $this->getMCM('-');
-            $getArgs = $this->getArgs();
-
-            $scaffold = [
-                'cnf'    => $this->cnf,
-                'usr'    => $this->usr,
-                'env'    => $this->env,
-                'debug'  => $this->debug,
-                'route'  => $this->route,
-                'get'    => $getArgs,
-                'url'    => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
-                'ctrl'   => $this->controller,
-                'cls'    => $cls,
-                'fn'     => $fn,
-                'access' => $this->access,
-                'ajax'   => $this->ajax,
-                'iframe' => empty($getArgs['iframe']) ? false : true,
-                'json'   => $json ? Helper::jsonStringify($json) : null,
-                'abs'    => static::$abs,
-                'enum'   => static::$enum,
-                'uuid'   => $this->uuid,
-            ];
-        }
-
-        return array_merge($scaffold, $extra);
-    }
-
-    /**
      * Render module
      *
      * @param array  $moduleList
