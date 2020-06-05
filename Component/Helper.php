@@ -360,7 +360,7 @@ class Helper
             $itemIndex = $indexKey ? [$indexKey => $index] : [];
             $itemKey = [$keyKey => $key];
             $itemValue = is_array($value) ? $value : [$valueKey => $value];
-            
+
             $_target[] = array_merge($itemIndex, $itemKey, $itemValue, $extra);
         }
 
@@ -1974,11 +1974,17 @@ class Helper
      * @param string $scene
      * @param string $tpl
      * @param string $scenePre
+     * @param bool   $process
      *
      * @return array
      */
-    public static function cost(string $scene, string $tpl = null, string $scenePre = null): array
-    {
+    public static function cost(
+        string $scene,
+        string $tpl = null,
+        string $scenePre = null,
+        bool $process = false
+    ): array {
+
         static $sceneFirst;
         static $scenePrevious = 'init';
         static $costHistory = [];
@@ -1998,7 +2004,9 @@ class Helper
         $chunkCostMilli = $costCurrent - $costPrevious;
         $chunkCostString = chunk_split($costCurrent, 10, '.');
 
-        $tpl = $tpl ?: '-->> {second} (cost: {cost}) in [{scene_prev}, {scene}]';
+        $process = $process ? 'between ({scene_prev}, {scene})' : 'at {scene}';
+        $tpl = $tpl ?: "-->> {second} (cost: {cost}) {$process}";
+
         $tpl = str_replace(
             ['{scene_prev}', '{scene}', '{second}', '{cost}'],
             [$scenePre, $scene, $chunkCostString, $chunkCostMilli],
