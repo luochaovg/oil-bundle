@@ -115,7 +115,7 @@ trait Sns
             $result = $sender->send(0, $nationCode, $phone, $content);
             $result = Helper::parseJsonString($result);
 
-            $message = $result['errmsg'] ?? null;
+            $message = $result['errmsg'] ?? $result['ErrorInfo'] ?? 'Unknown error';
             if ($message != 'OK') {
                 $this->logger->error("Tx sms error, {$message}", $result);
 

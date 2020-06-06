@@ -197,7 +197,7 @@ class Abs
     const NOT_SET  = '(NotSet)';
     const NOT_FILE = '(NotExists)';
     const SECRET   = '(Secret)';
-    const UNKNOWN  = '(UnKnown)';
+    const UNKNOWN  = '(Unknown)';
 
     const SRC_CSS = 'css';
     const SRC_JS  = 'js';
