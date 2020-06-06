@@ -148,6 +148,10 @@ class Module extends Bsw
 
             // javascript
             if ($javascript = $item->getJavascript()) {
+                foreach ($args as &$value) {
+                    $value = str_replace('{ROUTE}', $item->getUrl(), $value);
+                }
+                $args = Helper::numericValues($args);
                 $item->setArgs(array_merge(['function' => $javascript], $args));
             }
 
