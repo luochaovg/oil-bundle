@@ -181,7 +181,7 @@ class FoundationPrototype {
      */
     bigHump(target, split = '_') {
         let reg = new RegExp(split, 'g');
-        return target.replace(reg, ' ').ucWords().replace(/ /g, '');
+        return this.ucWords(target.replace(reg, ' ')).replace(/ /g, '');
     };
 
     /**
@@ -952,20 +952,18 @@ class FoundationAntD extends FoundationTools {
     /**
      * Constructor
      *
-     * @param cnf json
      * @param jQuery object
      * @param Vue object
      * @param AntD object
      * @param lang object
      */
-    constructor(cnf, jQuery, Vue, AntD, lang = {}) {
+    constructor(jQuery, Vue, AntD, lang = {}) {
         super();
         this.v = Vue;
         this.d = AntD;
         this.config = {};
         this.lang = lang;
-        this.cnf = Object.assign({
-            rsaPublicKey: null,
+        this.cnf = {
             marginTop: '150px',
             loadingMarginTop: '250px',
             shade: .1,
@@ -981,7 +979,7 @@ class FoundationAntD extends FoundationTools {
                 get: 'GET',
                 post: 'POST'
             }
-        }, cnf);
+        };
     }
 
     /**
@@ -1237,8 +1235,8 @@ class FoundationAntD extends FoundationTools {
                 contentType: upload ? false : 'application/x-www-form-urlencoded',
                 timeout: that.cnf.requestTimeout * 1000 * (upload ? 10 : 1),
                 beforeSend: function () {
-                    if (that.cnf.v.no_loading_once) {
-                        that.cnf.v.no_loading_once = false;
+                    if (that.cnf.v.noLoadingOnce) {
+                        that.cnf.v.noLoadingOnce = false;
                     } else {
                         that.cnf.v.spinning = true;
                     }
@@ -1357,7 +1355,7 @@ class FoundationAntD extends FoundationTools {
      */
     rsaEncrypt(text) {
         let encrypt = new JSEncrypt();
-        encrypt.setPublicKey(this.cnf.rsaPublicKey);
+        encrypt.setPublicKey(this.cnf.v.rsaPublicKey);
 
         return encrypt.encrypt(text);
     }

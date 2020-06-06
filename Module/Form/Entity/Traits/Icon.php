@@ -8,7 +8,17 @@ trait Icon
      * @var string
      */
     protected $icon;
-    
+
+    /**
+     * @var array
+     */
+    protected $iconClass = [];
+
+    /**
+     * @var array
+     */
+    protected $iconAttribute = [];
+
     /**
      * @return string|null
      */
@@ -42,6 +52,58 @@ trait Icon
     public function setIcon(string $icon)
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIconClass(): array
+    {
+        return $this->iconClass;
+    }
+
+    /**
+     * @param array $iconClass
+     *
+     * @return $this
+     */
+    public function setIconClass(array $iconClass)
+    {
+        $this->iconClass = $iconClass;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIconAttribute(): array
+    {
+        return $this->iconAttribute;
+    }
+
+    /**
+     * @param array $iconAttribute
+     *
+     * @return $this
+     */
+    public function setIconAttribute(array $iconAttribute)
+    {
+        $this->iconAttribute = $iconAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @param array $iconAttribute
+     *
+     * @return $this
+     */
+    public function appendIconAttribute(array $iconAttribute)
+    {
+        $this->iconAttribute = array_merge($this->iconAttribute, $iconAttribute);
 
         return $this;
     }

@@ -2,13 +2,13 @@
 {% set tplContentClass = ['bsw-page-container', tplContentClassDiy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
-  {% block persistence_before %}{% endblock %}
+  {% block persistenceBefore %}{% endblock %}
   <div class="bsw-persistence">
     <a-form
-      id="persistence_form"
-      :form="persistence_form"
+      id="persistenceForm"
+      :form="persistenceForm"
       :style='{{ persistence.styleJson|raw }}'
-      @submit="persistence_submit"
+      @submit="persistenceSubmit"
     >
       {% set totalColumn = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
       {% set labelColumn = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
@@ -19,7 +19,7 @@
       {% for field, item in persistence.record %}
         {% set form = item.type %}
         {% set wrapperColumn = item.column ?: (totalColumn - labelColumn) %}
-        {% set meta = "persistence_field_shape_now." ~ field %}
+        {% set meta = "persistenceFieldShapeNow." ~ field %}
         <transition name="bsw">
           <a-form-item
             v-show="typeof {{ meta }} !== 'undefined' ? !{{ meta }} : {{ item.hide ? 'false' : 'true' }}"
@@ -50,7 +50,7 @@
       </a-form-item>
     </a-form>
   </div>
-  {% block persistence_after %}{% endblock %}
+  {% block persistenceAfter %}{% endblock %}
 {% endblock %}
 
 {% block javascript %}

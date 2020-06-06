@@ -2,6 +2,7 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
+  name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   type="{{ form.type }}"
@@ -20,11 +21,11 @@
   {% endif %}
 >
   {% if form.icon %}
-    {{ form.icon|icon|raw }}
+    {{ form.icon|icon(true, form.iconClass, form.iconAttribute)|raw }}
   {% endif %}
   {{ form.label|trans({}, 'twig') }}
   {% if form.selector %}
-    {% set var = 'preview_selected_row.length' %}
+    {% set var = 'previewSelectedRow.length' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {% if form.bindVariable %}

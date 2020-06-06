@@ -2,6 +2,7 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
+  name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   {{ form.attributes|raw }}

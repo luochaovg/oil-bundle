@@ -484,7 +484,7 @@ class Helper
      * Array key hello_world to helloWorld
      *
      * @param array  $source
-     * @param bool   $small Camel of case
+     * @param bool   $small
      * @param string $split
      *
      * @return array
@@ -503,7 +503,7 @@ class Helper
      * Array value hello_world to helloWorld
      *
      * @param array  $source
-     * @param bool   $small Camel of case
+     * @param bool   $small
      * @param string $split
      *
      * @return array

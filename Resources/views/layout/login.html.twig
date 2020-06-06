@@ -1,75 +1,40 @@
 {% extends 'layout/empty.html.twig' %}
 
 {% block stylesheets %}
-  div.ant-spin-container {{ scaffold.cnf|image_style('login', true) }}
+  div.ant-spin-container {{ scaffold.cnf|imageStyle('login', true) }}
 {% endblock %}
 
 {% block content %}
   <div class="header">
     <a href="{{ void }}">
-      <img src="{{ scaffold.cnf.app_logo }}">
-      {% set appName = scaffold.cnf.app_name ?? 'Application' %}
+      <img src="{{ scaffold.cnf.appLogo }}">
+      {% set appName = scaffold.cnf.appName ?? 'Application' %}
       <span>{{ appName }}</span>
     </a>
   </div>
 
   <a-form
-    :form="form"
+    :form="loginForm"
     class="login-form"
-    @submit="handleSubmit"
+    @submit="userLogin"
   >
     <a-form-item>
-      <a-input
-        v-model.trim="account"
-        name="account_4_{{ scaffold.cnf.app_name ?? 'bsw' }}"
-        autocomplete="on"
-        placeholder="{{ account|trans({}, 'twig') }}"
-        :size="size"
-      >
-        {{ scaffold.cnf.icon_user|icon(true, {}, {slot:'prefix'})|raw }}
-      </a-input>
+      {% include "form/" ~ account.itemName ~ ".html.twig" with {field: 'account', form: account} %}
     </a-form-item>
     <a-form-item>
-      <a-input-password
-        type="password"
-        v-model.trim="password"
-        placeholder="{{ password|trans({}, 'twig') }}"
-        :size="size"
-      >
-        {{ scaffold.cnf.icon_lock|icon(true, {}, {slot:'prefix'})|raw }}
-      </a-input-password>
+      {% include "form/" ~ password.itemName ~ ".html.twig" with {field: 'password', form: password} %}
     </a-form-item>
     <a-form-item class="bsw-captcha-item">
-      <a-input
-        v-model.trim="captcha"
-        placeholder="{{ captcha|trans({}, 'twig') }}"
-        :size="size"
-      >
-        {{ scaffold.cnf.icon_captcha|icon(true, {}, {slot:'prefix'})|raw }}
-      </a-input>
-      <img class="bsw-captcha" src="{{ path(scaffold.cnf.route_captcha) }}">
+      {% include "form/" ~ captcha.itemName ~ ".html.twig" with {field: 'captcha', form: captcha} %}
+      <img class="bsw-captcha" src="{{ path(scaffold.cnf.routeCaptcha) }}">
     </a-form-item>
     {% if googleCaptcha is defined %}
       <a-form-item>
-        <a-input
-          v-model.trim="google_captcha"
-          placeholder="{{ googleCaptcha|trans({}, 'twig') }}"
-          :size="size"
-        >
-          {{ scaffold.cnf.icon_captcha|icon(true, {}, {slot:'prefix'})|raw }}
-        </a-input>
+        {% include "form/" ~ googleCaptcha.itemName ~ ".html.twig" with {field: 'googleCaptcha', form: googleCaptcha} %}
       </a-form-item>
     {% endif %}
     <a-form-item>
-      <a-button
-        type="primary"
-        html-type="submit"
-        class="login-form-button"
-        :size="size"
-        :loading="btnLoading"
-      >
-        {{ 'Sign in'|trans({}, 'twig') }}
-      </a-button>
+      {% include "form/" ~ submit.itemName ~ ".html.twig" with {field: 'submit', form: submit} %}
     </a-form-item>
   </a-form>
 {% endblock %}

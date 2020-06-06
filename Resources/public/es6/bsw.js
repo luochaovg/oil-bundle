@@ -6,14 +6,7 @@
 // Register global
 //
 
-window.bsw = new FoundationAntD({
-    rsaPublicKey: `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc
-B4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5
-IZ18C43C4jhtcNncjY6HRDTykkgul8OX2t6eJrRhRcWFYI7ygoYMZZ7vEfHImsXH
-NydhxUEs0y8aMzWbGwIDAQAB
------END PUBLIC KEY-----`,
-}, jQuery, Vue, antd, window.lang || {});
+window.bsw = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 //
 // Init
@@ -27,19 +20,19 @@ $(function () {
         locale: bsw.d.locales[bsw.lang.i18n_ant],
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
         opposeMap: {yes: 'no', no: 'yes'},
-        formUrl: null,
-        formMethod: null,
+        submitFormUrl: null,
+        submitFormMethod: null,
 
         theme: 'light',
         themeMap: {dark: 'light', light: 'dark'},
         weak: 'no',
-        third_message: 'yes',
+        thirdMessage: 'yes',
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
         ckEditor: {},
 
-        no_loading_once: false,
+        noLoadingOnce: false,
         spinning: false,
         configure: {},  // from v-init
         message: {},  // from v-init
@@ -99,8 +92,8 @@ $(function () {
         },
 
         setUrlToForm(data, element) {
-            this.formUrl = data.location;
-            this.formMethod = $(element).attr('bsw-method');
+            this.submitFormUrl = data.location;
+            this.submitFormMethod = $(element).attr('bsw-method');
         },
 
         pagination(url, page) {
@@ -108,16 +101,16 @@ $(function () {
             if (page) {
                 url = bsw.setParams({page}, url);
             }
-            if (that.preview_list.length === 0) {
+            if (that.previewList.length === 0) {
                 return location.href = url;
             }
             bsw.request(url).then((res) => {
                 bsw.response(res).then(() => {
-                    that.preview_list = res.sets.preview.list;
-                    that.preview_page_number = page;
-                    that.preview_url = url;
-                    that.preview_pagination_data = res.sets.preview.page;
-                    that.preview_image_change();
+                    that.previewList = res.sets.preview.list;
+                    that.previewPageNumber = page;
+                    that.previewUrl = url;
+                    that.previewPaginationData = res.sets.preview.page;
+                    that.previewImageChange();
                     history.replaceState({}, "", url);
                 }).catch((reason => {
                     console.warn(reason);
@@ -127,10 +120,10 @@ $(function () {
             }));
         },
 
-        filter(event, jump = false) {
+        filterFormAction(event, jump = false, form = 'filterForm') {
             let that = this;
             event.preventDefault();
-            that.filter_form.validateFields((err, values) => {
+            that[form].validateFields((err, values) => {
                 if (err) {
                     return false;
                 }
@@ -140,14 +133,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        let format = values[field]._f || that.filter_format[field];
+                        let format = values[field]._f || that[form][field];
                         values[field] = values[field].format(format);
                         jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                let format = values[field][i]._f || that.filter_format[field];
+                                let format = values[field][i]._f || that[form][field];
                                 values[field][i] = values[field][i].format(format);
                                 jump = true; // fix bug for ant-d
                             }
@@ -170,7 +163,7 @@ $(function () {
                     }
                     _values[field] = values[field];
                 }
-                return this[`${this.formMethod}FilterForm`](_values, jump);
+                return this[`${this.submitFormMethod}FilterForm`](_values, jump);
             });
         },
 
@@ -200,7 +193,7 @@ $(function () {
                         width: 768,
                         height: 800,
                     };
-                    data.location = bsw.setParams(res.sets, this.api_export, true);
+                    data.location = bsw.setParams(res.sets, this.exportApiUrl, true);
                     this.showIFrame(data, $('body')[0]);
                 }).catch((reason => {
                     console.warn(reason);
@@ -210,10 +203,10 @@ $(function () {
             }));
         },
 
-        persistence(event) {
+        submitFormAction(event, form = 'persistenceForm') {
             let that = this;
             event.preventDefault();
-            that.persistence_form.validateFields((err, values) => {
+            that[form].validateFields((err, values) => {
                 if (err) {
                     return false;
                 }
@@ -223,13 +216,13 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        let format = values[field]._f || that.persistence_format[field];
+                        let format = values[field]._f || that[form][field];
                         values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                let format = values[field][i]._f || that.persistence_format[field];
+                                let format = values[field][i]._f || that[form][field];
                                 values[field][i] = values[field][i].format(format);
                             }
                         }
@@ -238,12 +231,12 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return this[`${this.formMethod}PersistenceForm`](values);
+                return this[`${this.submitFormMethod}PersistenceForm`](values);
             });
         },
 
         submitPersistenceForm(values) {
-            bsw.request(this.formUrl, {submit: values}).then((res) => {
+            bsw.request(this.submitFormUrl, {submit: values}).then((res) => {
                 let params = bsw.parseQueryString();
                 if (params.iframe) {
                     res.sets.arguments = bsw.parseQueryString();
@@ -259,15 +252,15 @@ $(function () {
             }));
         },
 
-        uploaderChange({file, fileList, event}) {
+        uploaderChange({file, fileList, event}, form = 'persistenceForm') {
             if (file.status === 'done') {
                 this.spinning = false;
             } else if (file.status === 'uploading') {
                 this.spinning = true;
             }
 
-            let field = this.persistence_upload_field;
-            let collect = this.persistence_file_list_key_collect[field];
+            let field = this.persistenceUploadField;
+            let collect = this.persistenceFileListKeyCollect[field];
 
             if (!file.response) {
                 collect.list = fileList;
@@ -294,8 +287,8 @@ $(function () {
                         if ($(`#${key}`).length === 0) {
                             continue;
                         }
-                        if (this.persistence_form) {
-                            this.persistence_form.setFieldsValue({[key]: sets[map[key]]});
+                        if (this[form]) {
+                            this[form].setFieldsValue({[key]: sets[map[key]]});
                         }
                     }
                 }
@@ -316,9 +309,9 @@ $(function () {
         },
 
         switchFieldShapeWithSelect(value, option) {
-            let field = this.persistence_switch_field;
-            let now = this.persistence_field_shape_now;
-            let collect = this.persistence_field_shape_collect[field];
+            let field = this.persistenceSwitchField;
+            let now = this.persistenceFieldShapeNow;
+            let collect = this.persistenceFieldShapeCollect[field];
             for (let f in collect) {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
@@ -359,7 +352,7 @@ $(function () {
             bsw.request(data.location).then((res) => {
                 bsw.response(res).then(() => {
                     if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.preview_pagination_refresh();
+                        that.previewPaginationRefresh();
                     }
                 }).catch((reason => {
                     console.warn(reason);
@@ -371,9 +364,9 @@ $(function () {
 
         selectedRowHandler(field) {
             let rows = [];
-            for (let i = 0; i < this.preview_selected_row.length; i++) {
-                if (bsw.isString(this.preview_selected_row[i])) {
-                    rows[i] = bsw.evalExpr(this.preview_selected_row[i]);
+            for (let i = 0; i < this.previewSelectedRow.length; i++) {
+                if (bsw.isString(this.previewSelectedRow[i])) {
+                    rows[i] = bsw.evalExpr(this.previewSelectedRow[i]);
                     if (field) {
                         rows[i] = rows[i][field] || null;
                     }
@@ -442,13 +435,13 @@ $(function () {
             parent.postMessage(data, '*');
         },
 
-        verifyJsonFormat(data, element) {
-            let json = this.persistence_form.getFieldValue(data.field);
+        verifyJsonFormat(data, element, form = 'persistenceForm') {
+            let json = this[form].getFieldValue(data.field);
             let url = bsw.setParams({[data.key]: json}, data.url);
             window.open(url);
         },
 
-        initCkEditor() {
+        initCkEditor(form = 'persistenceForm') {
             let that = this;
             $('.bsw-persistence .bsw-ck').each(function () {
                 let em = this;
@@ -461,11 +454,11 @@ $(function () {
                     that.ckEditor[id] = editor;
                     editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                        return new FileUploadAdapter(editor, loader, that.api_upload);
+                        return new FileUploadAdapter(editor, loader, that.uploadApiUrl);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        if (that.persistence_form) {
-                            that.persistence_form.setFieldsValue({[id]: that.ckEditor[id].getData()});
+                        if (that[form]) {
+                            that[form].setFieldsValue({[id]: that.ckEditor[id].getData()});
                         }
                     });
                     $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
@@ -479,10 +472,10 @@ $(function () {
         // for iframe exec in parent
         //
 
-        fillParentFormInParent(data, element) {
+        fillParentFormInParent(data, element, form = 'persistenceForm') {
             this.modal.visible = false;
-            if (this.persistence_form && data.repair) {
-                this.persistence_form.setFieldsValue({[data.repair]: data.ids});
+            if (this[form] && data.repair) {
+                this[form].setFieldsValue({[data.repair]: data.ids});
             }
         },
 
@@ -509,7 +502,8 @@ $(function () {
         // directive
         init: {
             bind: function (el, binding, vnode) {
-                vnode.context[binding.arg] = (binding.value || binding.expression);
+                let key = bsw.smallHump(binding.arg);
+                vnode.context[key] = (binding.value || binding.expression);
             }
         },
 

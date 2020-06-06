@@ -2,6 +2,7 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
+  name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   type="{{ form.type }}"
@@ -13,5 +14,9 @@
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
-></a-input>
+>
+  {% if form.icon %}
+    {{ form.icon|icon(true, form.iconClass, form.iconAttribute)|raw }}
+  {% endif %}
+</a-input>
 {% include 'form/iframe-entrypoint.html.twig' %}

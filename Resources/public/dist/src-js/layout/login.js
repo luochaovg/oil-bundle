@@ -2,63 +2,49 @@
 
 bsw.configure({
     data: {
-        size: 'large',
-        form: null,
+        loginForm: null,
         btnLoading: false,
-        account: null,
-        password: null,
-        captcha: null,
-        google_captcha: null
+        submitFormMethod: 'doLogin',
+        rsaPublicKey: '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc\nB4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5\nIZ18C43C4jhtcNncjY6HRDTykkgul8OX2t6eJrRhRcWFYI7ygoYMZZ7vEfHImsXH\nNydhxUEs0y8aMzWbGwIDAQAB\n-----END PUBLIC KEY-----'
     },
     method: {
-        handleSubmit: function handleSubmit(e) {
+        userLogin: function userLogin(e) {
+            this.submitFormAction(e, 'loginForm');
+        },
+        doLoginPersistenceForm: function doLoginPersistenceForm(login) {
             var _this = this;
 
-            e.preventDefault();
-            var login = {
-                account: this.account,
-                password: this.password,
-                captcha: this.captcha,
-                google_captcha: this.google_captcha
-            };
-
-            // account
-            if (typeof login.account === 'undefined' || !login.account) {
+            if (!login.account.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.username_required, 3).then(function () {
+                return bsw.error(bsw.lang.username_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-                return false;
             }
 
-            // password
-            if (typeof login.password === 'undefined' || !login.password) {
+            if (!login.password.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.password_required, 3).then(function () {
+                return bsw.error(bsw.lang.password_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-                return false;
             }
 
             if (login.password.length < 8 || login.password.length > 20) {
                 this.btnLoading = true;
-                bsw.warning(bsw.lang.password_length_error, 3).then(function () {
+                return bsw.warning(bsw.lang.password_length_error, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-                return false;
             }
 
-            // number captcha
-            if (typeof login.captcha === 'undefined' || !login.captcha) {
+            if (!login.captcha.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.captcha_required, 3).then(function () {
+                return bsw.error(bsw.lang.captcha_required, 3).then(function () {
                     return _this.btnLoading = false;
                 });
-                return false;
             }
 
             login.password = bsw.rsaEncrypt(login.password);
-            bsw.request(this.api_login, login).then(function (res) {
+            console.log(login);
+            bsw.request(this.loginApiUrl, login).then(function (res) {
                 _this.btnLoading = true;
                 bsw.response(res, null, null, 2).catch(function () {
                     _this.btnLoading = false;
@@ -67,8 +53,8 @@ bsw.configure({
         }
     },
     logic: {
-        form: function form(v) {
-            v.form = v.$form.createForm(v);
+        createForm: function createForm(v) {
+            v.loginForm = v.$form.createForm(v);
         }
     }
 });

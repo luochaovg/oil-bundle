@@ -11,9 +11,9 @@
       {% endif %}
       {{ (modalHtml ?? null)|raw }}
       <a-config-provider :locale="locale">
-        {% block body_before %}{% endblock %}
+        {% block bodyBefore %}{% endblock %}
         {% block body %}{% endblock %}
-        {% block body_after %}{% endblock %}
+        {% block bodyAfter %}{% endblock %}
       </a-config-provider>
     </template>
   </div>

@@ -17,35 +17,35 @@
     {% endif %}
     {{ (menuHtml ?? null)|raw }}
     <a-layout>
-      {% block header_before %}{% endblock %}
+      {% block headerBefore %}{% endblock %}
       {{ (headerHtml ?? null)|raw }}
-      {% block header_after %}{% endblock %}
+      {% block headerAfter %}{% endblock %}
       <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
-        {% block crumbs_before %}{% endblock %}
+        {% block crumbsBefore %}{% endblock %}
         {{ (crumbsHtml ?? null)|raw }}
-        {% block curmbs_after %}{% endblock %}
-        {% block welcome_before %}{% endblock %}
+        {% block curmbsAfter %}{% endblock %}
+        {% block welcomeBefore %}{% endblock %}
         {{ (welcomeHtml ?? null)|raw }}
-        {% block welcome_after %}{% endblock %}
+        {% block welcomeAfter %}{% endblock %}
         {% if operate is defined and operate.position is same as(top) %}
-          {% block operate_top_before %}{% endblock %}
+          {% block operateTopBefore %}{% endblock %}
           {{ (operateHtml ?? null)|raw }}
-          {% block operate_top_after %}{% endblock %}
+          {% block operateTopAfter %}{% endblock %}
         {% endif %}
         <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
-          {% block page_before %}{% endblock %}
+          {% block pageBefore %}{% endblock %}
           {% block page %}{% endblock %}
-          {% block page_after %}{% endblock %}
+          {% block pageAfter %}{% endblock %}
         </div>
         {% if operate is defined and operate.position is same as(bottom) %}
-          {% block operate_bottom_before %}{% endblock %}
+          {% block operateBottomBefore %}{% endblock %}
           {{ (operateHtml ?? null)|raw }}
-          {% block operate_bottom_after %}{% endblock %}
+          {% block operateBottomAfter %}{% endblock %}
         {% endif %}
       </a-layout-content>
-      {% block footer_before %}{% endblock %}
+      {% block footerBefore %}{% endblock %}
       {{ (footerHtml ?? null)|raw }}
-      {% block footer_after %}{% endblock %}
+      {% block footerAfter %}{% endblock %}
     </a-layout>
   </a-layout>
 {% endblock %}

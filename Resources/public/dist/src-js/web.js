@@ -8,9 +8,7 @@
 // Register global
 //
 
-window.web = new FoundationAntD({
-    rsaPublicKey: ''
-}, jQuery, Vue, antd, window.lang || {});
+window.web = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 //
 // Init
@@ -22,7 +20,7 @@ $(function () {
 
         web: web,
         locale: web.d.locales[web.lang.i18n_ant],
-        no_loading_once: false,
+        noLoadingOnce: false,
         spinning: false,
         configure: {}, // from v-init
         message: {}, // from v-init

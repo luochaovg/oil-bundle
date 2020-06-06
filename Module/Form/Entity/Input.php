@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
+use Leon\BswBundle\Module\Form\Entity\Traits\Icon;
 use Leon\BswBundle\Module\Form\Entity\Traits\MaxLength;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
@@ -16,6 +17,7 @@ class Input extends Form
     use AllowClear;
     use Type;
     use MaxLength;
+    use Icon;
 
     /**
      * @const string

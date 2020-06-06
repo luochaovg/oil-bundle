@@ -1,12 +1,12 @@
 bsw.configure({
     data: {},
     method: {
-        chat_tabs_switch(key) {
+        chatTabsSwitch(key) {
             this.redirect(this.getBswData($(`#${key}`)));
         },
     },
     logic: {
-        chart_init(v) {
+        chartInit(v) {
             {% for item in chart.items %}
               bsw.chart({
                   id: '{{ item.name }}',

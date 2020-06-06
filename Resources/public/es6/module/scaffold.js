@@ -8,7 +8,7 @@ bsw.configure({
             bsw.switchClass('bsw-weak', this.weak);
         },
         thirdMessageSwitch() {
-            this.third_message = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.third_message, true, bsw.lang.third_message);
+            this.thirdMessage = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.thirdMessage, true, bsw.lang.third_message);
         },
         menuTrigger() {
             let _collapsed = this.menuCollapsed ? 'yes' : 'no';
@@ -22,7 +22,7 @@ bsw.configure({
             this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, this.configure.weak || this.weak);
             bsw.switchClass('bsw-weak', this.weak);
             // third message
-            this.third_message = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, this.configure.third_message || this.third_message);
+            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, this.configure.third_message || this.third_message);
             // menu
             this.menuWidth = this.configure.menu_width || this.menuWidth;
             let collapsed = bsw.cookieMapCurrent(
@@ -45,12 +45,12 @@ bsw.configure({
             }
             v.$nextTick(function () {
                 setInterval(function () {
-                    let tm = bsw.cookieMapCurrent('bsw_third_message', v.opposeMap, v.third_message);
+                    let tm = bsw.cookieMapCurrent('bsw_third_message', v.opposeMap, v.thirdMessage);
                     if (tm === 'no') {
                         return;
                     }
-                    v.no_loading_once = true;
-                    bsw.request(v.api_third_message).then((res) => {
+                    v.noLoadingOnce = true;
+                    bsw.request(v.thirdMessageApiUrl).then((res) => {
                         if (res.error === 4967) {
                             return;
                         }

@@ -1,28 +1,28 @@
 bsw.configure({
     data: {
-        filter_form: null,
-        filter_expand: false,
-        filter_format: {{ filter.formatJson|raw }},
+        filterForm: null,
+        filterExpand: false,
+        filterFormat: {{ filter.formatJson|raw }},
     },
     method: {
-        filter_submit(e) {
+        filterSubmit(e) {
             {% if logic.filterJump is defined %}
-            this.filter(e, {{ logic.filterJump ? 'true' : 'false' }});
+            this.filterFormAction(e, {{ logic.filterJump ? 'true' : 'false' }});
             {% else %}
-            this.filter(e, {{ logic.scene == 'preview' ? 'false' : 'true' }});
+            this.filterFormAction(e, {{ logic.scene == 'preview' ? 'false' : 'true' }});
             {% endif %}
         },
-        filter_toggle() {
-          this.filter_expand = !this.filter_expand;
+        filterToggle() {
+          this.filterExpand = !this.filterExpand;
         },
-        filter_display(key) {
-            let list = this.filter_expand ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
+        filterDisplay(key) {
+            let list = this.filterExpand ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
             return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
         },
     },
     logic: {
-        filter_form(v) {
-            v.filter_form = v.$form.createForm(v);
+        createFilterForm(v) {
+            v.filterForm = v.$form.createForm(v);
         },
     }
 });

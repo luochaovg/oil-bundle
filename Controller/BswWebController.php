@@ -682,37 +682,43 @@ abstract class BswWebController extends AbstractController
      * Get args for scaffold view
      *
      * @param array $extra
+     * @param bool  $forView
      *
      * @return array
      */
-    protected function displayArgsScaffold(array $extra = []): array
+    protected function displayArgsScaffold(array $extra = [], bool $forView = false): array
     {
-        static $scaffold;
+        $json = $this->parameters('json');
+        [$cls, $fn] = $this->getMCM('-');
+        $getArgs = $this->getArgs();
 
-        if (!isset($scaffold)) {
-            $json = $this->parameters('json');
-            [$cls, $fn] = $this->getMCM('-');
-            $getArgs = $this->getArgs();
+        $scaffold = [
+            'cnf'    => $this->cnf,
+            'usr'    => $this->usr,
+            'env'    => $this->env,
+            'debug'  => $this->debug,
+            'route'  => $this->route,
+            'get'    => $getArgs,
+            'url'    => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
+            'ctrl'   => $this->controller,
+            'cls'    => $cls,
+            'fn'     => $fn,
+            'access' => $this->access,
+            'ajax'   => $this->ajax,
+            'iframe' => empty($getArgs['iframe']) ? false : true,
+            'json'   => $json ? Helper::jsonStringify($json) : null,
+            'abs'    => static::$abs,
+            'enum'   => static::$enum,
+            'uuid'   => $this->uuid,
+        ];
 
-            $scaffold = [
-                'cnf'    => $this->cnf,
-                'usr'    => $this->usr,
-                'env'    => $this->env,
-                'debug'  => $this->debug,
-                'route'  => $this->route,
-                'get'    => $getArgs,
-                'url'    => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
-                'ctrl'   => $this->controller,
-                'cls'    => $cls,
-                'fn'     => $fn,
-                'access' => $this->access,
-                'ajax'   => $this->ajax,
-                'iframe' => empty($getArgs['iframe']) ? false : true,
-                'json'   => $json ? Helper::jsonStringify($json) : null,
-                'abs'    => static::$abs,
-                'enum'   => static::$enum,
-                'uuid'   => $this->uuid,
-            ];
+        if ($forView) {
+            $scaffold = array_merge(
+                $scaffold,
+                [
+                    'cnf' => Helper::keyUnderToCamel((array)$scaffold['cnf']),
+                ]
+            );
         }
 
         return array_merge($scaffold, $extra);
@@ -728,7 +734,7 @@ abstract class BswWebController extends AbstractController
      */
     public function renderPart(string $view, array $parameters): string
     {
-        $parameters['scaffold'] = $this->displayArgsScaffold();
+        $parameters['scaffold'] = $this->displayArgsScaffold([], true);
         $view = $this->viewHandler($parameters['scaffold'], $view);
 
         return $this->renderView($view, $parameters);
@@ -750,7 +756,8 @@ abstract class BswWebController extends AbstractController
                 'src'  => $this->source(),
                 'msg'  => $this->latestMessage(Abs::TAG_MESSAGE),
                 'tips' => $this->latestMessage(Abs::TAG_TIPS),
-            ]
+            ],
+            true
         );
 
         $view = $this->viewHandler($scaffold, $view);

@@ -1,36 +1,36 @@
 bsw.configure({
     data: {
-        preview_columns: {{ preview.columnsJson|raw }},
-        preview_list: {{ preview.listJson|raw }},
-        preview_selected_row: [],
-        preview_dynamic_refresh: {{ preview.dynamic }},
-        preview_url: '{{ scaffold.url|raw }}',
-        preview_pagination_data: {{ preview.pageJson|raw }},
+        previewColumns: {{ preview.columnsJson|raw }},
+        previewList: {{ preview.listJson|raw }},
+        previewSelectedRow: [],
+        previewDynamicRefresh: {{ preview.dynamic }},
+        previewUrl: '{{ scaffold.url|raw }}',
+        previewPaginationData: {{ preview.pageJson|raw }},
         previewPageSize: {{ preview.page.pageSize }},
-        preview_pagination_size_options: {{ preview.pageSizeOptionsJson|raw }},
-        preview_page_number: 1
+        previewPaginationSizeOptions: {{ preview.pageSizeOptionsJson|raw }},
+        previewPageNumber: 1
     },
     watch: {
         previewPageSize(pageSize) {
-            location.href = this.preview_get_url(null, {page: 1, page_size: pageSize});
+            location.href = this.previewGetUrl(null, {page: 1, page_size: pageSize});
         }
     },
     method: {
-        preview_selected_change(selectedRow) {
-            this.preview_selected_row = selectedRow;
+        previewSelectedChange(selectedRow) {
+            this.previewSelectedRow = selectedRow;
         },
-        preview_get_url(url, params={}) {
-            url = url || this.preview_url;
-            return bsw.setParams(Object.assign({page: this.preview_page_number}, params), url);
+        previewGetUrl(url, params={}) {
+            url = url || this.previewUrl;
+            return bsw.setParams(Object.assign({page: this.previewPageNumber}, params), url);
         },
-        preview_pagination(page, pageSize) {
-            this.pagination(this.preview_get_url(), page);
+        previewPagination(page, pageSize) {
+            this.pagination(this.previewGetUrl(), page);
         },
-        preview_pagination_refresh() {
-            this.pagination(this.preview_get_url());
+        previewPaginationRefresh() {
+            this.pagination(this.previewGetUrl());
         },
-        preview_sort_data(pagination, filters, sorter) {
-            let url = this.preview_get_url();
+        previewSortData(pagination, filters, sorter) {
+            let url = this.previewGetUrl();
             url = bsw.unsetParamsBeginWith(['sequence'], url);
             if (typeof sorter.field !== 'undefined') {
                 let key = bsw.humpToUnder(sorter.field);
@@ -39,7 +39,7 @@ bsw.configure({
             }
             this.pagination(url);
         },
-        preview_image_change() {
+        previewImageChange() {
             let that = this;
             let doChecker = setInterval(() => checker(), 50);
             let checker = function() {
@@ -48,9 +48,9 @@ bsw.configure({
                 $('img').each(function() {
                     done += (this.complete ? 1 : 0);
                 });
-                let tmp = that.preview_columns[0].fixed;
-                that.preview_columns[0].fixed = !tmp;
-                that.preview_columns[0].fixed = tmp;
+                let tmp = that.previewColumns[0].fixed;
+                that.previewColumns[0].fixed = !tmp;
+                that.previewColumns[0].fixed = tmp;
                 if ((done >= total) || total === 0) {
                     clearInterval(doChecker);
                 }
@@ -58,9 +58,9 @@ bsw.configure({
         },
     },
     logic: {
-        preview_resize(v) {
+        previewResize(v) {
             let upper = {{ preview.scroll }};
-            let columns = v.preview_columns;
+            let columns = v.previewColumns;
             let fixed = [];
             for (let index in columns) {
                 if (!columns.hasOwnProperty(index)) {
@@ -83,17 +83,17 @@ bsw.configure({
             resize();
             $(window).resize(() => resize());
         },
-        preview_image_change(v) {
-            v.preview_image_change();
+        previewImageChange(v) {
+            v.previewImageChange();
         },
-        preview_dynamic_refresh(v) {
-            if (v.preview_dynamic_refresh < 3) {
+        previewDynamicRefresh(v) {
+            if (v.previewDynamicRefresh < 3) {
                 return;
             }
             setInterval(function() {
-                v.no_loading_once = true;
-                v.preview_pagination_refresh();
-            }, v.preview_dynamic_refresh * 1000);
+                v.noLoadingOnce = true;
+                v.previewPaginationRefresh();
+            }, v.previewDynamicRefresh * 1000);
         }
     }
 });

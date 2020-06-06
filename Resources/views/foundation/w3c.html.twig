@@ -5,30 +5,30 @@
   <meta name="keywords" content="{{ tplKeyword ?? scaffold.seo.keyword }}">
   <meta name="description" content="{{ tplDescription ?? scaffold.seo.description }}">
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-  <link rel="shortcut icon" href="{{ scaffold.cnf.app_ico }}" type="image/x-icon"/>
+  <link rel="shortcut icon" href="{{ scaffold.cnf.appIco }}" type="image/x-icon"/>
   <title>{{ tplTitle ?? scaffold.seo.title }}</title>
   {% set void = 'javascript:void(null);' %}
   {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
   {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}
   {% include 'limbs/css.html.twig' with {position: top} %}
   <style>
-    {% block stylesheets_before %}{% endblock %}
+    {% block stylesheetsBefore %}{% endblock %}
     {% block stylesheets %}{% endblock %}
-    {% block stylesheets_after %}{% endblock %}
+    {% block stylesheetsAfter %}{% endblock %}
   </style>
   {% include 'limbs/js.html.twig' with {position: top} %}
 </head>
 
 <body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|filter(v => v)|join(' ') }}">
-{% block w3c_before %}{% endblock %}
+{% block w3cBefore %}{% endblock %}
 {% block w3c %}{% endblock %}
-{% block w3c_after %}{% endblock %}
+{% block w3cAfter %}{% endblock %}
 {% include 'limbs/css.html.twig' with {position: bottom} %}
 {% include 'limbs/js.html.twig' with {position: bottom} %}
 <script>
-  {% block javascript_before %}{% endblock %}
+  {% block javascriptBefore %}{% endblock %}
   {% block javascript %}{% endblock %}
-  {% block javascript_after %}{% endblock %}
+  {% block javascriptAfter %}{% endblock %}
 </script>
 </body>
 </html>

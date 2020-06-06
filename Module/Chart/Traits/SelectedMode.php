@@ -7,7 +7,7 @@ trait SelectedMode
     /**
      * @var string
      */
-    protected $selectedMode = 'multiple';
+    protected $selectedMode;
 
     /**
      * @return string

@@ -5,7 +5,7 @@
   <div class="user-wrapper">
     <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
-        {{ scaffold.cnf.icon_setting|icon|raw }}
+        {{ scaffold.cnf.iconSetting|icon|raw }}
       </span>
       <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
         {% for item in header.setting %}
@@ -20,9 +20,9 @@
     </a-dropdown>
     <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
-        {% set avatar = attribute(scaffold.usr, scaffold.cnf.usr_avatar) %}
+        {% set avatar = attribute(scaffold.usr, scaffold.cnf.usrAvatar) %}
         <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
-        {% set account = scaffold.cnf.usr_account %}
+        {% set account = scaffold.cnf.usrAccount %}
         <span class="username">{{ attribute(scaffold.usr, account) ?? ('`' ~ account ~ '`') }}</span>
       </span>
       <a-menu

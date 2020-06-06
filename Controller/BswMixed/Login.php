@@ -16,6 +16,9 @@ use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
 use Leon\BswBundle\Module\Error\Entity\ErrorPassword;
 use Leon\BswBundle\Module\Error\Entity\ErrorProhibitedCountry;
 use Leon\BswBundle\Module\Error\Entity\ErrorUsername;
+use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Module\Form\Entity\Input;
+use Leon\BswBundle\Module\Form\Entity\Password;
 use Leon\BswBundle\Module\Validator\Entity\Rsa;
 use Leon\BswBundle\Component\Rsa as ComponentRsa;
 use Leon\BswBundle\Repository\BswAdminLoginRepository;
@@ -48,17 +51,38 @@ trait Login
         $this->currentSrc('diy;layout/login');
         $this->appendSrcJsWithKey('rsa', Abs::JS_RSA);
 
-        $args = [
-            'account'  => 'Phone number',
-            'password' => 'Password',
-            'captcha'  => 'Captcha',
+        $form = [
+            'account' => (new Input())
+                ->setPlaceholder('Phone number')
+                ->setIcon($this->cnf->icon_user)
+                ->setIconAttribute(['slot' => 'prefix'])
+                ->setName("account-4-" . ($this->cnf->app_name ?? 'bsw')),
+
+            'password' => (new Password())
+                ->setPlaceholder('Password')
+                ->setIcon($this->cnf->icon_lock)
+                ->setIconAttribute(['slot' => 'prefix']),
+
+            'captcha' => (new Input())
+                ->setPlaceholder('Captcha')
+                ->setIcon($this->cnf->icon_captcha)
+                ->setIconAttribute(['slot' => 'prefix']),
+
+            'submit' => (new Button())
+                ->setLabel('SIGN IN')
+                ->setHtmlType(Button::TYPE_SUBMIT)
+                ->setBlock(true)
+                ->setBindLoading('btnLoading'),
         ];
 
         if ($this->parameter('backend_with_google_secret')) {
-            $args['googleCaptcha'] = 'Google captcha';
+            $form['googleCaptcha'] = (new Input())
+                ->setPlaceholder('Google dynamic captcha')
+                ->setIcon($this->cnf->icon_captcha)
+                ->setIconAttribute(['slot' => 'prefix']);
         }
 
-        return $this->show($args, 'layout/login.html');
+        return $this->show($form, 'layout/login.html');
     }
 
     /**

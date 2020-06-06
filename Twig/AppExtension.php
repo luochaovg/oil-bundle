@@ -18,11 +18,11 @@ class AppExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('array_map', [Helper::class, 'arrayMap']),
-            new TwigFilter('array_map_double', [Helper::class, 'arrayMapDouble']),
+            new TwigFilter('arrayMap', [Helper::class, 'arrayMap']),
+            new TwigFilter('arrayMapDouble', [Helper::class, 'arrayMapDouble']),
             new TwigFilter('icon', [$this, 'icon']),
             new TwigFilter('implode', [$this, 'implode']),
-            new TwigFilter('image_style', [$this, 'image_style']),
+            new TwigFilter('imageStyle', [$this, 'imageStyle']),
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
         ];
     }
@@ -85,13 +85,13 @@ class AppExtension extends AbstractExtension
     /**
      * Image style
      *
-     * @param array|object $config
-     * @param string       $flag
-     * @param bool         $boundary
+     * @param array  $config
+     * @param string $flag
+     * @param bool   $boundary
      *
      * @return string
      */
-    public static function image_style($config, string $flag, bool $boundary = false): string
+    public static function imageStyle(array $config, string $flag, bool $boundary = false): string
     {
         $map = [
             'image'    => 'url(%s) !important',
@@ -102,10 +102,9 @@ class AppExtension extends AbstractExtension
         ];
 
         $attributes = [];
-        $config = (array)$config;
 
         foreach ($map as $tag => $tpl) {
-            $key = "{$flag}_background_{$tag}";
+            $key = Helper::underToCamel("{$flag}_background_{$tag}");
             if (!empty($config[$key])) {
                 $_key = "background-{$tag}";
                 $val = sprintf($tpl, $config[$key]);

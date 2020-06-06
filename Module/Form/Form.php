@@ -8,6 +8,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
 use Leon\BswBundle\Module\Form\Entity\Traits\Key;
+use Leon\BswBundle\Module\Form\Entity\Traits\Name;
 use Leon\BswBundle\Module\Form\Entity\Traits\Placeholder;
 use Leon\BswBundle\Module\Form\Entity\Traits\Rules;
 use Leon\BswBundle\Module\Form\Entity\Traits\Style;
@@ -24,6 +25,7 @@ abstract class Form
     use Rules;
     use Key;
     use Field;
+    use Name;
 
     /**
      * @const string

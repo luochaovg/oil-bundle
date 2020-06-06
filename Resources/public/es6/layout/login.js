@@ -1,52 +1,43 @@
 bsw.configure({
     data: {
-        size: 'large',
-        form: null,
+        loginForm: null,
         btnLoading: false,
-        account: null,
-        password: null,
-        captcha: null,
-        google_captcha: null,
+        submitFormMethod: 'doLogin',
+        rsaPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc
+B4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5
+IZ18C43C4jhtcNncjY6HRDTykkgul8OX2t6eJrRhRcWFYI7ygoYMZZ7vEfHImsXH
+NydhxUEs0y8aMzWbGwIDAQAB
+-----END PUBLIC KEY-----`,
     },
     method: {
-        handleSubmit(e) {
-            e.preventDefault();
-            let login = {
-                account: this.account,
-                password: this.password,
-                captcha: this.captcha,
-                google_captcha: this.google_captcha,
-            };
-
-            // account
-            if (typeof login.account === 'undefined' || !login.account) {
+        userLogin(e) {
+            this.submitFormAction(e, 'loginForm');
+        },
+        doLoginPersistenceForm(login) {
+            if (!login.account.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.username_required, 3).then(() => this.btnLoading = false);
-                return false;
+                return bsw.error(bsw.lang.username_required, 3).then(() => this.btnLoading = false);
             }
 
-            // password
-            if (typeof login.password === 'undefined' || !login.password) {
+            if (!login.password.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.password_required, 3).then(() => this.btnLoading = false);
-                return false;
+                return bsw.error(bsw.lang.password_required, 3).then(() => this.btnLoading = false);
             }
 
             if (login.password.length < 8 || login.password.length > 20) {
                 this.btnLoading = true;
-                bsw.warning(bsw.lang.password_length_error, 3).then(() => this.btnLoading = false);
-                return false;
+                return bsw.warning(bsw.lang.password_length_error, 3).then(() => this.btnLoading = false);
             }
 
-            // number captcha
-            if (typeof login.captcha === 'undefined' || !login.captcha) {
+            if (!login.captcha.length) {
                 this.btnLoading = true;
-                bsw.error(bsw.lang.captcha_required, 3).then(() => this.btnLoading = false);
-                return false;
+                return bsw.error(bsw.lang.captcha_required, 3).then(() => this.btnLoading = false);
             }
 
             login.password = bsw.rsaEncrypt(login.password);
-            bsw.request(this.api_login, login).then((res) => {
+            console.log(login);
+            bsw.request(this.loginApiUrl, login).then((res) => {
                 this.btnLoading = true;
                 bsw.response(res, null, null, 2).catch(() => {
                     this.btnLoading = false;
@@ -55,8 +46,8 @@ bsw.configure({
         },
     },
     logic: {
-        form: function (v) {
-            v.form = v.$form.createForm(v);
+        createForm: function (v) {
+            v.loginForm = v.$form.createForm(v);
         }
     }
 });

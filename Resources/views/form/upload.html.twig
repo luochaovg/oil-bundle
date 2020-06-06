@@ -3,6 +3,7 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
+  name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   size="{{ form.size }}"
@@ -26,7 +27,7 @@
   :file-list="{{ form.fileListKey }}"
   name="{{ form.flag }}"
   :data="{ file_flag: '{{ form.flag }}' }"
-  @click.native="persistence_upload_field = '{{ field }}'"
+  @click.native="persistenceUploadField = '{{ field }}'"
   @change="{{ form.change }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}FileList']"
@@ -35,8 +36,8 @@
     <a-popover>
       <template slot="content">
         <a-table
-          :columns="persistence_upload_tips_collect.{{ field }}.columns"
-          :data-source="persistence_upload_tips_collect.{{ field }}.list"
+          :columns="persistenceUploadTipsCollect.{{ field }}.columns"
+          :data-source="persistenceUploadTipsCollect.{{ field }}.list"
           :pagination="false"
           :scroll="{ x: 340 }"
           bordered
@@ -47,7 +48,7 @@
         type="{{ form.buttonType }}"
         :style="{{ form.buttonStyle }}"
       >
-        {{ scaffold.cnf.icon_upload|icon|raw }}
+        {{ scaffold.cnf.iconUpload|icon|raw }}
         {{ form.buttonLabel|trans({}, 'twig') }}
       </a-button>
     </a-popover>
@@ -56,7 +57,7 @@
       type="{{ form.buttonType }}"
       :style="{{ form.buttonStyle }}"
     >
-      {{ scaffold.cnf.icon_upload|icon|raw }}
+      {{ scaffold.cnf.iconUpload|icon|raw }}
       {{ form.buttonLabel|trans({}, 'twig') }}
     </a-button>
   {% endif %}

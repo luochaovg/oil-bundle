@@ -1,28 +1,28 @@
 {% extends 'layout/blank.html.twig' %}
 
 {% block page %}
-  {% block filter_before %}{% endblock %}
+  {% block filterBefore %}{% endblock %}
   {% include 'limbs/filter.html.twig' %}
-  {% block filter_after %}{% endblock %}
-  {% set fields = '{' ~ (preview.choice.fields ?? [])|array_map_double('"%s":"${record.%s}"')|join(',') ~ '}' %}
-  {% block preview_before %}{% endblock %}
+  {% block filterAfter %}{% endblock %}
+  {% set fields = '{' ~ (preview.choice.fields ?? [])|arrayMapDouble('"%s":"${record.%s}"')|join(',') ~ '}' %}
+  {% block previewBefore %}{% endblock %}
   <div class="bsw-preview">
     <a-table
-      :columns="preview_columns"
-      :data-source="preview_list"
+      :columns="previewColumns"
+      :data-source="previewList"
       :bordered="{{ preview.border ? 'true' : 'false' }}"
       :pagination="false"
       :row-key="record => `{{ fields }}`"
       {% if preview.choice.enable ?? false %}
         :row-selection="{
             type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
-            selectedRowKeys: preview_selected_row,
-            onChange: preview_selected_change,
+            selectedRowKeys: previewSelectedRow,
+            onChange: previewSelectedChange,
           }"
       {% endif %}
       :scroll="{x: {{ preview.scroll }}}"
       size="{{ preview.size }}"
-      @change="preview_sort_data"
+      @change="previewSortData"
     >
       {% for item in preview.dress %}
         {{ item|raw }}
@@ -33,16 +33,16 @@
       :hide-on-single-page="true"
       :show-total="(total, range) => `${bsw.lang.total} ${total}`"
       :page-size.sync="previewPageSize"
-      :default-current="preview_pagination_data.currentPage"
-      :total="preview_pagination_data.totalItem"
+      :default-current="previewPaginationData.currentPage"
+      :total="previewPaginationData.totalItem"
       :show-size-changer="true"
-      :page-size-options="preview_pagination_size_options"
+      :page-size-options="previewPaginationSizeOptions"
       :simple="false"
       size="{{ preview.size }}"
-      @change="preview_pagination"
+      @change="previewPagination"
     ></a-pagination>
   </div>
-  {% block preview_after %}{% endblock %}
+  {% block previewAfter %}{% endblock %}
 {% endblock %}
 
 {% block javascript %}

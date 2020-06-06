@@ -2,14 +2,14 @@
 {% set tplContentClass = ['bsw-chart-container', tplContentClassDiy ?? null]|filter(v => v)|join(' ') %}
 
 {% block page %}
-  {% block filter_before %}{% endblock %}
+  {% block filterBefore %}{% endblock %}
   {% include 'limbs/filter.html.twig' %}
-  {% block filter_after %}{% endblock %}
+  {% block filterAfter %}{% endblock %}
   {% if chart.menu is not empty %}
     <a-tabs
       class="bsw-chart-tabs"
       default-active-key="{{ scaffold.route }}"
-      @change="chat_tabs_switch"
+      @change="chatTabsSwitch"
       :tab-bar-gutter="6"
       type="card"
     >
@@ -26,13 +26,13 @@
     </a-tabs>
   {% endif %}
   <a-divider></a-divider>
-  {% block chart_before %}{% endblock %}
+  {% block chartBefore %}{% endblock %}
   <div class="bsw-chart-list">
     {% for item in chart.items %}
       {% include 'limbs/chart.html.twig' with {chart: item} %}
     {% endfor %}
   </div>
-  {% block chart_after %}{% endblock %}
+  {% block chartAfter %}{% endblock %}
 {% endblock %}
 
 {% block javascript %}

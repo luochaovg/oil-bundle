@@ -7,6 +7,7 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
+  name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   size="{{ form.size }}"
@@ -21,7 +22,7 @@
   not-found-content="{{ form.notFoundContent }}"
   :dropdown-match-select-width="false"
   {% if logic.scene == 'persistence' %}
-    @click.native="persistence_switch_field = '{{ field }}'"
+    @click.native="persistenceSwitchField = '{{ field }}'"
   {% endif %}
   {% if form.switchFieldShape %}
     @change="switchFieldShapeWithSelect"

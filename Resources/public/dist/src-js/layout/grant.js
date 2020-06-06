@@ -1,18 +1,19 @@
-"use strict";
+'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 bsw.configure({
     data: {
-        selected_list: {},
-        disabled_list: []
+        selectedList: {},
+        disabledList: []
     },
     method: {
         selectAll: function selectAll() {
             var that = this;
-            $.each(this.selected_list, function (key, meta) {
-                var disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                var selected = that.persistence_form.getFieldValue(key);
+            var form = 'persistenceForm';
+            $.each(this.selectedList, function (key, meta) {
+                var disabled = bsw.arrayIntersect(meta, that.disabledList);
+                var selected = that[form].getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
@@ -45,14 +46,15 @@ bsw.configure({
                     }
                 }
 
-                that.persistence_form.setFieldsValue(_defineProperty({}, key, values));
+                that[form].setFieldsValue(_defineProperty({}, key, values));
             });
         },
         unSelectAll: function unSelectAll() {
             var that = this;
-            $.each(this.selected_list, function (key, meta) {
-                var disabled = bsw.arrayIntersect(meta, that.disabled_list);
-                var selected = that.persistence_form.getFieldValue(key);
+            var form = 'persistenceForm';
+            $.each(this.selectedList, function (key, meta) {
+                var disabled = bsw.arrayIntersect(meta, that.disabledList);
+                var selected = that[form].getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
@@ -81,7 +83,7 @@ bsw.configure({
                     }
                 }
 
-                that.persistence_form.setFieldsValue(_defineProperty({}, key, values));
+                that[form].setFieldsValue(_defineProperty({}, key, values));
             });
         }
     }

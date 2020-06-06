@@ -49,9 +49,9 @@ p {
 }
 
 .highlight > pre, .highlight-json > pre {
-    font-size: 12px !important;
+    font-size: 14px !important;
     line-height: 1.8 !important;
-    opacity: .8;
+    opacity: .7;
 }
 
 .tippy-popper p {

@@ -1,9 +1,9 @@
 {% if filter.filter is not empty %}
   <a-form
     class="bsw-filter-form"
-    :form="filter_form"
+    :form="filterForm"
     layout="vertical"
-    @submit="filter_submit"
+    @submit="filterSubmit"
   >
     {% for key, item in filter.filter %}
       {% set extra = 0 %}
@@ -14,7 +14,7 @@
       <a-form-item
         label="{{ item.label }}"
         class="bsw-filter-item"
-        :style="{ width: '{{ width }}px', display: filter_display('{{ key }}') }"
+        :style="{ width: '{{ width }}px', display: filterDisplay('{{ key }}') }"
       >
         {% set begin = item.title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ item.title ~ '</template>' : null %}
         {% set end = item.title ? '</a-popover>' : null %}
@@ -36,12 +36,12 @@
 
     {% if filter.filter|length > filter.maxShow %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
-        <a-button @click="filter_toggle" type="dashed">
-          <span v-if="filter_expand">
-            {{ scaffold.cnf.icon_left|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
+        <a-button @click="filterToggle" type="dashed">
+          <span v-if="filterExpand">
+            {{ scaffold.cnf.iconLeft|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
           </span>
           <span v-else>
-            {{ filter.textShow|trans({}, 'twig') }} {{ scaffold.cnf.icon_right|icon|raw }}
+            {{ filter.textShow|trans({}, 'twig') }} {{ scaffold.cnf.iconRight|icon|raw }}
           </span>
         </a-button>
       </a-form-item>

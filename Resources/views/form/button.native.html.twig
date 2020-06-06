@@ -8,6 +8,7 @@
 
 <button
   class="{{ ['ant-btn']|merge(class)|filter(v => v)|join(' ') }}"
+  name="{{ form.name }}"
   {% if form.styleStringify %}
     style="{{ form.styleStringify }}"
   {% endif %}
@@ -18,7 +19,7 @@
   bsw-data="{{ form.data }}"
   onclick="bsw.cnf.v.dispatcherByNative(this)"
   {% if form.selector %}
-    {% set var = 'preview_selected_row.length' %}
+    {% set var = 'previewSelectedRow.length' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {{ form.attributes|raw }}

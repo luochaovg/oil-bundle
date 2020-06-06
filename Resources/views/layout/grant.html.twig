@@ -6,9 +6,9 @@
   <p class="bsw-hide" v-init:disabled_list='{{ logic.disabledJson|raw }}'></p>
   <div class="bsw-persistence">
     <a-form
-      id="persistence_form"
-      :form="persistence_form"
-      @submit="persistence_submit"
+      id="persistenceForm"
+      :form="persistenceForm"
+      @submit="persistenceSubmit"
     >
       {% set totalColumn = 24 %}
       {% set labelColumn = 4 %}

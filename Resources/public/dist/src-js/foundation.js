@@ -230,7 +230,7 @@ var FoundationPrototype = function () {
             var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
 
             var reg = new RegExp(split, 'g');
-            return target.replace(reg, ' ').ucWords().replace(/ /g, '');
+            return this.ucWords(target.replace(reg, ' ')).replace(/ /g, '');
         }
     }, {
         key: 'smallHump',
@@ -1288,14 +1288,13 @@ var FoundationAntD = function (_FoundationTools) {
     /**
      * Constructor
      *
-     * @param cnf json
      * @param jQuery object
      * @param Vue object
      * @param AntD object
      * @param lang object
      */
-    function FoundationAntD(cnf, jQuery, Vue, AntD) {
-        var lang = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+    function FoundationAntD(jQuery, Vue, AntD) {
+        var lang = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
         _classCallCheck(this, FoundationAntD);
 
@@ -1305,8 +1304,7 @@ var FoundationAntD = function (_FoundationTools) {
         _this2.d = AntD;
         _this2.config = {};
         _this2.lang = lang;
-        _this2.cnf = Object.assign({
-            rsaPublicKey: null,
+        _this2.cnf = {
             marginTop: '150px',
             loadingMarginTop: '250px',
             shade: .1,
@@ -1322,7 +1320,7 @@ var FoundationAntD = function (_FoundationTools) {
                 get: 'GET',
                 post: 'POST'
             }
-        }, cnf);
+        };
         return _this2;
     }
 
@@ -1645,8 +1643,8 @@ var FoundationAntD = function (_FoundationTools) {
                     contentType: upload ? false : 'application/x-www-form-urlencoded',
                     timeout: that.cnf.requestTimeout * 1000 * (upload ? 10 : 1),
                     beforeSend: function beforeSend() {
-                        if (that.cnf.v.no_loading_once) {
-                            that.cnf.v.no_loading_once = false;
+                        if (that.cnf.v.noLoadingOnce) {
+                            that.cnf.v.noLoadingOnce = false;
                         } else {
                             that.cnf.v.spinning = true;
                         }
@@ -1773,7 +1771,7 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'rsaEncrypt',
         value: function rsaEncrypt(text) {
             var encrypt = new JSEncrypt();
-            encrypt.setPublicKey(this.cnf.rsaPublicKey);
+            encrypt.setPublicKey(this.cnf.v.rsaPublicKey);
 
             return encrypt.encrypt(text);
         }

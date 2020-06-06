@@ -12,9 +12,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // Register global
 //
 
-window.bsw = new FoundationAntD({
-    rsaPublicKey: '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyhl+6jZ/ENQvs24VpT4+o7Ltc\nB4nFBZ9zYSeVbqYHaXMVpFSZTpAKkgqoy2R9kg7lM6QWnpDcVIPlbE6iqzzJ4Zm5\nIZ18C43C4jhtcNncjY6HRDTykkgul8OX2t6eJrRhRcWFYI7ygoYMZZ7vEfHImsXH\nNydhxUEs0y8aMzWbGwIDAQAB\n-----END PUBLIC KEY-----'
-}, jQuery, Vue, antd, window.lang || {});
+window.bsw = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 //
 // Init
@@ -28,19 +26,19 @@ $(function () {
         locale: bsw.d.locales[bsw.lang.i18n_ant],
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
         opposeMap: { yes: 'no', no: 'yes' },
-        formUrl: null,
-        formMethod: null,
+        submitFormUrl: null,
+        submitFormMethod: null,
 
         theme: 'light',
         themeMap: { dark: 'light', light: 'dark' },
         weak: 'no',
-        third_message: 'yes',
+        thirdMessage: 'yes',
         menuWidth: 256,
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
         ckEditor: {},
 
-        no_loading_once: false,
+        noLoadingOnce: false,
         spinning: false,
         configure: {}, // from v-init
         message: {}, // from v-init
@@ -96,24 +94,24 @@ $(function () {
             this.dispatcherByNative($(event.target)[0]);
         },
         setUrlToForm: function setUrlToForm(data, element) {
-            this.formUrl = data.location;
-            this.formMethod = $(element).attr('bsw-method');
+            this.submitFormUrl = data.location;
+            this.submitFormMethod = $(element).attr('bsw-method');
         },
         pagination: function pagination(url, page) {
             var that = this;
             if (page) {
                 url = bsw.setParams({ page: page }, url);
             }
-            if (that.preview_list.length === 0) {
+            if (that.previewList.length === 0) {
                 return location.href = url;
             }
             bsw.request(url).then(function (res) {
                 bsw.response(res).then(function () {
-                    that.preview_list = res.sets.preview.list;
-                    that.preview_page_number = page;
-                    that.preview_url = url;
-                    that.preview_pagination_data = res.sets.preview.page;
-                    that.preview_image_change();
+                    that.previewList = res.sets.preview.list;
+                    that.previewPageNumber = page;
+                    that.previewUrl = url;
+                    that.previewPaginationData = res.sets.preview.page;
+                    that.previewImageChange();
                     history.replaceState({}, "", url);
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -122,14 +120,15 @@ $(function () {
                 console.warn(reason);
             });
         },
-        filter: function filter(event) {
+        filterFormAction: function filterFormAction(event) {
             var _this = this;
 
             var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'filterForm';
 
             var that = this;
             event.preventDefault();
-            that.filter_form.validateFields(function (err, values) {
+            that[form].validateFields(function (err, values) {
                 if (err) {
                     return false;
                 }
@@ -139,14 +138,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        var format = values[field]._f || that.filter_format[field];
+                        var format = values[field]._f || that[form][field];
                         values[field] = values[field].format(format);
                         jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                var _format = values[field][i]._f || that.filter_format[field];
+                                var _format = values[field][i]._f || that[form][field];
                                 values[field][i] = values[field][i].format(_format);
                                 jump = true; // fix bug for ant-d
                             }
@@ -169,7 +168,7 @@ $(function () {
                     }
                     _values[_field] = values[_field];
                 }
-                return _this[_this.formMethod + 'FilterForm'](_values, jump);
+                return _this[_this.submitFormMethod + 'FilterForm'](_values, jump);
             });
         },
         searchFilterForm: function searchFilterForm(values) {
@@ -201,7 +200,7 @@ $(function () {
                         width: 768,
                         height: 800
                     };
-                    data.location = bsw.setParams(res.sets, _this2.api_export, true);
+                    data.location = bsw.setParams(res.sets, _this2.exportApiUrl, true);
                     _this2.showIFrame(data, $('body')[0]);
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -210,12 +209,14 @@ $(function () {
                 console.warn(reason);
             });
         },
-        persistence: function persistence(event) {
+        submitFormAction: function submitFormAction(event) {
             var _this3 = this;
+
+            var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'persistenceForm';
 
             var that = this;
             event.preventDefault();
-            that.persistence_form.validateFields(function (err, values) {
+            that[form].validateFields(function (err, values) {
                 if (err) {
                     return false;
                 }
@@ -225,13 +226,13 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        var format = values[field]._f || that.persistence_format[field];
+                        var format = values[field]._f || that[form][field];
                         values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                var _format2 = values[field][i]._f || that.persistence_format[field];
+                                var _format2 = values[field][i]._f || that[form][field];
                                 values[field][i] = values[field][i].format(_format2);
                             }
                         }
@@ -240,11 +241,11 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return _this3[_this3.formMethod + 'PersistenceForm'](values);
+                return _this3[_this3.submitFormMethod + 'PersistenceForm'](values);
             });
         },
         submitPersistenceForm: function submitPersistenceForm(values) {
-            bsw.request(this.formUrl, { submit: values }).then(function (res) {
+            bsw.request(this.submitFormUrl, { submit: values }).then(function (res) {
                 var params = bsw.parseQueryString();
                 if (params.iframe) {
                     res.sets.arguments = bsw.parseQueryString();
@@ -263,6 +264,7 @@ $(function () {
             var file = _ref.file,
                 fileList = _ref.fileList,
                 event = _ref.event;
+            var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'persistenceForm';
 
             if (file.status === 'done') {
                 this.spinning = false;
@@ -270,8 +272,8 @@ $(function () {
                 this.spinning = true;
             }
 
-            var field = this.persistence_upload_field;
-            var collect = this.persistence_file_list_key_collect[field];
+            var field = this.persistenceUploadField;
+            var collect = this.persistenceFileListKeyCollect[field];
 
             if (!file.response) {
                 collect.list = fileList;
@@ -295,8 +297,8 @@ $(function () {
                         if ($('#' + key).length === 0) {
                             continue;
                         }
-                        if (this.persistence_form) {
-                            this.persistence_form.setFieldsValue(_defineProperty({}, key, sets[map[key]]));
+                        if (this[form]) {
+                            this[form].setFieldsValue(_defineProperty({}, key, sets[map[key]]));
                         }
                     }
                 }
@@ -316,9 +318,9 @@ $(function () {
             }
         },
         switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value, option) {
-            var field = this.persistence_switch_field;
-            var now = this.persistence_field_shape_now;
-            var collect = this.persistence_field_shape_collect[field];
+            var field = this.persistenceSwitchField;
+            var now = this.persistenceFieldShapeNow;
+            var collect = this.persistenceFieldShapeCollect[field];
             for (var f in collect) {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
@@ -358,7 +360,7 @@ $(function () {
             bsw.request(data.location).then(function (res) {
                 bsw.response(res).then(function () {
                     if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.preview_pagination_refresh();
+                        that.previewPaginationRefresh();
                     }
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -369,9 +371,9 @@ $(function () {
         },
         selectedRowHandler: function selectedRowHandler(field) {
             var rows = [];
-            for (var i = 0; i < this.preview_selected_row.length; i++) {
-                if (bsw.isString(this.preview_selected_row[i])) {
-                    rows[i] = bsw.evalExpr(this.preview_selected_row[i]);
+            for (var i = 0; i < this.previewSelectedRow.length; i++) {
+                if (bsw.isString(this.previewSelectedRow[i])) {
+                    rows[i] = bsw.evalExpr(this.previewSelectedRow[i]);
                     if (field) {
                         rows[i] = rows[i][field] || null;
                     }
@@ -434,11 +436,15 @@ $(function () {
             parent.postMessage(data, '*');
         },
         verifyJsonFormat: function verifyJsonFormat(data, element) {
-            var json = this.persistence_form.getFieldValue(data.field);
+            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
+
+            var json = this[form].getFieldValue(data.field);
             var url = bsw.setParams(_defineProperty({}, data.key, json), data.url);
             window.open(url);
         },
         initCkEditor: function initCkEditor() {
+            var form = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'persistenceForm';
+
             var that = this;
             $('.bsw-persistence .bsw-ck').each(function () {
                 var em = this;
@@ -451,11 +457,11 @@ $(function () {
                     that.ckEditor[id] = editor;
                     editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
-                        return new FileUploadAdapter(editor, loader, that.api_upload);
+                        return new FileUploadAdapter(editor, loader, that.uploadApiUrl);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
-                        if (that.persistence_form) {
-                            that.persistence_form.setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
+                        if (that[form]) {
+                            that[form].setFieldsValue(_defineProperty({}, id, that.ckEditor[id].getData()));
                         }
                     });
                     $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
@@ -471,9 +477,11 @@ $(function () {
         //
 
         fillParentFormInParent: function fillParentFormInParent(data, element) {
+            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
+
             this.modal.visible = false;
-            if (this.persistence_form && data.repair) {
-                this.persistence_form.setFieldsValue(_defineProperty({}, data.repair, data.ids));
+            if (this[form] && data.repair) {
+                this[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
             }
         },
         fillParentFormAfterAjaxInParent: function fillParentFormAfterAjaxInParent(res, element) {
@@ -486,13 +494,18 @@ $(function () {
             bsw.response(data.response).catch(function (reason) {
                 console.warn(reason);
             });
+        },
+        showIFrameInParent: function showIFrameInParent(data, element) {
+            this.modal.visible = false;
+            this.showIFrame(data.response.sets, element);
         }
     }, bsw.config.method || {})).directive(Object.assign({
 
         // directive
         init: {
             bind: function bind(el, binding, vnode) {
-                vnode.context[binding.arg] = binding.value || binding.expression;
+                var key = bsw.smallHump(binding.arg);
+                vnode.context[key] = binding.value || binding.expression;
             }
         }
 

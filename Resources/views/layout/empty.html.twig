@@ -1,25 +1,25 @@
 {% extends 'foundation/scaffold.html.twig' %}
-{% set tplApi = {
-  login: path(scaffold.cnf.route_login_handler),
-  upload: path(scaffold.cnf.route_upload),
-  export: path(scaffold.cnf.route_export),
-  third_message: path(scaffold.cnf.route_thrid_message),
+{% set tplApiUrl = {
+  login: path(scaffold.cnf.routeLoginHandler),
+  upload: path(scaffold.cnf.routeUpload),
+  export: path(scaffold.cnf.routeExport),
+  third_message: path(scaffold.cnf.routeThridMessage),
 } %}
 
 {% block body %}
   <a-spin
     :spinning="spinning"
-    {% if scaffold.cnf.loading_label is not empty %}
-      tip="{{ scaffold.cnf.loading_label|trans({}, 'twig') }}"
+    {% if scaffold.cnf.loadingLabel is not empty %}
+      tip="{{ scaffold.cnf.loadingLabel|trans({}, 'twig') }}"
     {% endif %}
     size="large"
     wrapper-class-name="bsw-loading">
-    {% if scaffold.cnf.icon_loading is not empty %}
-      {{ scaffold.cnf.icon_loading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
+    {% if scaffold.cnf.iconLoading is not empty %}
+      {{ scaffold.cnf.iconLoading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
     {% endif %}
     <a-back-top></a-back-top>
-    {% block content_before %}{% endblock %}
+    {% block contentBefore %}{% endblock %}
     {% block content %}{% endblock %}
-    {% block content_after %}{% endblock %}
+    {% block contentAfter %}{% endblock %}
   </a-spin>
 {% endblock %}
