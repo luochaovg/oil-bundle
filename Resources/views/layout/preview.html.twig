@@ -20,7 +20,7 @@
             onChange: previewSelectedChange,
           }"
       {% endif %}
-      :scroll="{x: {{ preview.scroll }}}"
+      :scroll="{{ {x: preview.scrollX}|merge(preview.scroll)|stringify }}"
       size="{{ preview.size }}"
       @change="previewSortData"
     >

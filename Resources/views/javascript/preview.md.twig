@@ -59,7 +59,7 @@ bsw.configure({
     },
     logic: {
         previewResize(v) {
-            let upper = {{ preview.scroll }};
+            let upper = {{ preview.scrollX }};
             let columns = v.previewColumns;
             let fixed = [];
             for (let index in columns) {

@@ -35,6 +35,7 @@ class Module extends Bsw
     const CHOICE        = 'Choice';             // [全局配置] 列表选择
     const BEFORE_RENDER = 'BeforeRender';       // [全量数据] 渲染前处理
     const CHARM         = 'Charm';              // [字段的值] 个性化装饰
+    const SCROLL        = 'Scroll';             // [全局设置] 滚动参数
     const OPERATES      = 'RecordOperates';     // [单行数据] 操作按钮组
     const OPERATES_SIZE = 'RecordOperatesSize'; // [单行数据] 操作按钮大小
 
@@ -434,7 +435,7 @@ class Module extends Bsw
          * hooks & columns
          */
 
-        $scroll = 0;
+        $scrollX = 0;
         $hooks = $columns = $dress = [];
 
         foreach ($previewAnnotation as $field => $item) {
@@ -468,7 +469,7 @@ class Module extends Bsw
 
             if ($width = ($item['width'] ?? false)) {
                 $column['width'] = $width;
-                $scroll += $width;
+                $scrollX += $width;
             }
 
             if ($align = $item['align']) {
@@ -505,7 +506,7 @@ class Module extends Bsw
             $columns[$field] = $column;
         }
 
-        $output->scroll = $scroll;
+        $output->scrollX = $scrollX;
         $output->dress = $dress;
         $output->columns = $columns;
 
@@ -820,7 +821,7 @@ class Module extends Bsw
             } else {
                 $maxButtons = min($maxButtons, 4);
                 $width = 16 + ($maxButtons * (2 + 42 + 2) + ($maxButtons - 1) * 5) + 16;
-                $output->scroll += $width;
+                $output->scrollX += $width;
             }
 
             $output->columns[$operate] = array_merge(
@@ -841,7 +842,7 @@ class Module extends Bsw
         }
 
         if ($this->input->iframe) {
-            $output->scroll -= ($output->columns[$operate]['width'] ?? 0);
+            $output->scrollX -= ($output->columns[$operate]['width'] ?? 0);
             unset($output->columns[$operate]);
         }
 
@@ -864,7 +865,7 @@ class Module extends Bsw
             if (array_key_exists($field, $item)) {
                 continue;
             }
-            $output->scroll -= ($preview['width'] ?? 0);
+            $output->scrollX -= ($preview['width'] ?? 0);
             unset($output->columns[$field]);
         }
     }
@@ -918,6 +919,9 @@ class Module extends Bsw
 
         $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
+
+        $arguments = $this->arguments(['x' => $output->scrollX]);
+        $output->scroll = $this->caller($this->method, self::SCROLL, Abs::T_ARRAY, $output->scroll, $arguments);
 
         $output->dynamic = $this->input->dynamic;
         $output = $this->caller(

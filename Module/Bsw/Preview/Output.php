@@ -46,7 +46,12 @@ class Output extends ArgsOutput
     /**
      * @var int
      */
-    public $scroll = 2000;
+    public $scrollX = 2000;
+
+    /**
+     * @var array
+     */
+    public $scroll = [];
 
     /**
      * @var bool
