@@ -5,8 +5,10 @@
 .bsw-hide {
   display: none;
 }
+.bsw-foundation,
 .bsw-body,
-.bsw-loading {
+.bsw-loading,
+.bsw-loading > .ant-spin-container {
   height: 100%;
 }
 .bsw-page-loading {

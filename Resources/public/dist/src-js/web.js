@@ -26,12 +26,53 @@ $(function () {
         message: {}, // from v-init
         tips: {} // from v-init
 
-    }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({}, web.config.method || {})).directive(Object.assign({
+    }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({
+        getBswData: function getBswData(object) {
+            return web.evalExpr(object.attr('bsw-data'));
+        },
+        redirect: function redirect(data) {
+            if (data.function && data.function !== 'redirect') {
+                return this.dispatcher(data, $('body'));
+            }
+            var url = data.location;
+            if (url.startsWith('http') || url.startsWith('/')) {
+                if (typeof data.window === 'undefined') {
+                    return location.href = url;
+                } else {
+                    return window.open(url);
+                }
+            }
+        },
+        redirectByVue: function redirectByVue(event) {
+            this.redirect(this.getBswData($(event.item.$el).find('span')));
+        },
+        dispatcher: function dispatcher(data, element) {
+            var that = this;
+            var action = function action() {
+                var fn = data.function || 'console.log';
+                that[fn](data, element);
+            };
+            if (typeof data.confirm === 'undefined') {
+                action();
+            } else {
+                web.showConfirm(data.confirm, web.lang.confirm_title, { onOk: function onOk() {
+                        return action();
+                    } });
+            }
+        },
+        dispatcherByNative: function dispatcherByNative(element) {
+            this.dispatcher(this.getBswData($(element)), element);
+        },
+        dispatcherByVue: function dispatcherByVue(event) {
+            this.dispatcherByNative($(event.target)[0]);
+        }
+    }, web.config.method || {})).directive(Object.assign({
 
         // directive
         init: {
             bind: function bind(el, binding, vnode) {
-                vnode.context[binding.arg] = binding.value || binding.expression;
+                var key = web.smallHump(binding.arg);
+                vnode.context[key] = binding.value || binding.expression;
             }
         }
 

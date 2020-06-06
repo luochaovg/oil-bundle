@@ -24,12 +24,58 @@ $(function () {
         message: {},  // from v-init
         tips: {}, // from v-init
 
-    }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({}, web.config.method || {})).directive(Object.assign({
+    }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({
+
+        getBswData(object) {
+            return web.evalExpr(object.attr('bsw-data'));
+        },
+
+        redirect(data) {
+            if (data.function && data.function !== 'redirect') {
+                return this.dispatcher(data, $('body'));
+            }
+            let url = data.location;
+            if (url.startsWith('http') || url.startsWith('/')) {
+                if (typeof data.window === 'undefined') {
+                    return location.href = url;
+                } else {
+                    return window.open(url);
+                }
+            }
+        },
+
+        redirectByVue(event) {
+            this.redirect(this.getBswData($(event.item.$el).find('span')));
+        },
+
+        dispatcher(data, element) {
+            let that = this;
+            let action = function () {
+                let fn = data.function || 'console.log';
+                that[fn](data, element);
+            };
+            if (typeof data.confirm === 'undefined') {
+                action();
+            } else {
+                web.showConfirm(data.confirm, web.lang.confirm_title, {onOk: () => action()});
+            }
+        },
+
+        dispatcherByNative(element) {
+            this.dispatcher(this.getBswData($(element)), element);
+        },
+
+        dispatcherByVue(event) {
+            this.dispatcherByNative($(event.target)[0])
+        },
+
+    }, web.config.method || {})).directive(Object.assign({
 
         // directive
         init: {
             bind: function (el, binding, vnode) {
-                vnode.context[binding.arg] = (binding.value || binding.expression);
+                let key = web.smallHump(binding.arg);
+                vnode.context[key] = (binding.value || binding.expression);
             }
         },
 
