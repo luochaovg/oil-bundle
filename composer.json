@@ -63,7 +63,7 @@
     "symfony/webpack-encore-bundle": "*",
     "symfony/web-profiler-bundle": "^v4.2",
     "ocramius/proxy-manager": "2.3.1",
-    "phpmailer/phpmailer": "^6.0",
+    "phpmailer/phpmailer": "6.1.6",
     "kriswallsmith/buzz": "^1.0",
     "mailgun/mailgun-php": "^3.0",
     "nyholm/psr7": "^1.2",
