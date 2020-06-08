@@ -144,8 +144,9 @@ class Module extends Bsw
             $persistAnnotation = $this->web->getPersistenceAnnotation(
                 $this->entity,
                 [
-                    'enumClass'      => $this->input->enum,
-                    'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+                    'enumClass'          => $this->input->enum,
+                    'doctrinePrefix'     => $this->web->parameter('doctrine_prefix'),
+                    'doctrinePrefixMode' => $this->web->parameter('doctrine_prefix_mode'),
                 ]
             );
         }
@@ -371,7 +372,7 @@ class Module extends Bsw
             /**
              * File list key
              */
-            $key = 'persistence_file_list_key_collect';
+            $key = 'persistenceFileListKeyCollect';
             $form->setFileListKey("${key}.${field}.list");
             $form->setDisabled(!$this->web->routeIsAccess($form->getRouteForAccess()));
             $output->fileListKeyCollect[$field] = [

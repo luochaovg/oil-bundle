@@ -483,3 +483,12 @@ Execute manual:                 '手动指定'
 
 Away after execute:             '用后即焚'
 Reuse after execute:            '重复执行'
+
+Third to phone:                 '第三方账号绑定手机'
+Third to email:                 '第三方账号绑定邮箱'
+Device to phone:                '游客账号绑定手机'
+Device to email:                '游客账号绑定邮箱'
+Phone to third:                 '手机账号绑定第三方登录'
+Phone to device:                '手机账号绑定游客登录'
+Email to third:                 '邮箱账号绑定第三方登录'
+Email to device:                '邮箱账号绑定游客登录'

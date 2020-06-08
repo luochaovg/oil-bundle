@@ -40,6 +40,7 @@ class BswInitCommand extends Command implements CommandInterface
             'project'            => [null, InputOption::VALUE_OPTIONAL, 'App name for config', 'customer'],
             'api'                => [null, InputOption::VALUE_OPTIONAL, 'App for RESTful api?', 'no'],
             'scheme-prefix'      => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix'],
+            'scheme-prefix-mode' => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix mode add or remove', 'add'],
             'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
             'scheme-extra'       => [null, InputOption::VALUE_OPTIONAL, 'Extra scheme path'],
             'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
@@ -497,7 +498,8 @@ class BswInitCommand extends Command implements CommandInterface
 
             $output->write(Abs::ENTER);
             if (!in_array($table, $schemeReverse)) {
-                $table = $schemePrefix ? "{$schemePrefix}_{$table}" : $table;
+                $remove = $params['scheme-prefix-mode'] === 'remove';
+                $table = $schemePrefix ? Helper::schemeNamePrefixHandler($table, $schemePrefix, $remove) : $table;
             }
 
             $exists = $pdo->fetchArray("SHOW TABLES WHERE Tables_in_{$database} = '{$table}'");

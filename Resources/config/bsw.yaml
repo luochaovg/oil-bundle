@@ -73,6 +73,7 @@ parameters:
     smtp_secret: smtp-secret
 
     doctrine_prefix: null
+    doctrine_prefix_mode: remove # add、remove
 
     wx_official_default:
         app_id: app-id

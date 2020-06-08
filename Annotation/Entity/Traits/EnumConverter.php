@@ -19,6 +19,7 @@ trait EnumConverter
 
         $EnumClass = $this->extraArgs['enumClass'] ?? 'UnknownEnumClass';
         $DoctrinePrefix = $this->extraArgs['doctrinePrefix'] ?? null;
+        $DoctrinePrefixMode = $this->extraArgs['doctrinePrefixMode'] ?? null;
 
         if (is_string($value)) {
             if (!defined($express = "{$EnumClass}::{$value}")) {
@@ -48,16 +49,24 @@ trait EnumConverter
         }
 
         if ($DoctrinePrefix) {
-            $DoctrinePrefix = Helper::tablePrefixHandler($DoctrinePrefix, true);
-            if (defined($express = "{$EnumClass}::{$DoctrinePrefix}{$secondary}")) {
+            $thirdly = Helper::schemeNamePrefixHandler(
+                strtolower($prefer),
+                $DoctrinePrefix,
+                $DoctrinePrefixMode === 'remove'
+            );
+            $thirdly = strtoupper($thirdly);
+            if (defined($express = "{$EnumClass}::{$thirdly}")) {
                 return constant($express);
             }
         }
 
-        $msg = "otherwise you should defined constant\n\n";
-        $msg .= "{$EnumClass}::{$prefer}; \n";
-        $msg .= "{$EnumClass}::{$secondary}; \n";
-        $msg .= "{$EnumClass}::{$DoctrinePrefix}{$secondary}";
+        $msg = "otherwise you should defined constant\n";
+        $msg .= "\n{$EnumClass}::{$prefer};";
+        $msg .= "\n{$EnumClass}::{$secondary};";
+
+        if (isset($thirdly)) {
+            $msg .= "\n{$EnumClass}::{$thirdly};";
+        }
 
         $this->exception('enum', "should be array.\n{$msg}");
     }

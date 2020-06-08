@@ -1785,7 +1785,7 @@ class Helper
     public static function isMobile(): bool
     {
         $_SERVER['ALL_HTTP'] = isset($_SERVER['ALL_HTTP']) ? $_SERVER['ALL_HTTP'] : '';
-        $mobile_browser = '0';
+        $mobile_browser = 0;
 
         if (preg_match(
             '/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i',
@@ -1830,20 +1830,22 @@ class Helper
      * Add tag for table field
      *
      * @param string $field
+     * @param string $dbTableSplit
+     * @param string $tag
      *
      * @return string
      */
-    public static function tableFieldAddTag(string $field): string
+    public static function tableFieldAddTag(string $field, string $dbTableSplit = '.', string $tag = '`'): string
     {
-        if (false !== strpos($field, '`')) {
+        if (false !== strpos($field, $tag)) {
             return $field;
         }
 
-        if (false !== strpos($field, '.')) {
-            $field = str_replace('.', '`.`', $field);
+        if (false !== strpos($field, $dbTableSplit)) {
+            $field = str_replace($dbTableSplit, "{$tag}{$dbTableSplit}{$tag}", $field);
         }
 
-        return "`{$field}`";
+        return "{$tag}{$field}{$tag}";
     }
 
     /**
@@ -1851,12 +1853,17 @@ class Helper
      *
      * @param string $field
      * @param string $alias
+     * @param string $dbTableSplit
      *
      * @return string
      */
-    public static function tableFieldAddAlias(string $field, string $alias): string
+    public static function tableFieldAddAlias(string $field, string $alias, string $dbTableSplit = '.'): string
     {
-        return strpos($field, '.') === false ? "{$alias}.{$field}" : trim($field, '.');
+        if (strpos($field, $dbTableSplit) === false) {
+            return "{$alias}{$dbTableSplit}{$field}";
+        }
+
+        return trim($field, $dbTableSplit);
     }
 
     /**
@@ -1864,14 +1871,21 @@ class Helper
      *
      * @param string $field
      * @param string $asKeyWord
+     * @param string $dbTableSplit
+     * @param string $tag
      *
      * @return string
      */
-    public static function tableFieldDelAlias(string $field, string $asKeyWord = ' AS '): string
-    {
-        $field = str_replace('`', null, $field);
-        if (false !== strpos($field, '.')) {
-            $field = explode('.', $field)[1];
+    public static function tableFieldDelAlias(
+        string $field,
+        string $asKeyWord = ' AS ',
+        string $dbTableSplit = '.',
+        string $tag = '`'
+    ): string {
+
+        $field = str_replace($tag, null, $field);
+        if (false !== strpos($field, $dbTableSplit)) {
+            $field = explode($dbTableSplit, $field)[1];
         }
 
         if (false !== strpos($field, $asKeyWord)) {
@@ -1922,17 +1936,61 @@ class Helper
      * Get alias from field
      *
      * @param string $field
+     * @param string $dbTableSplit
      *
      * @return string|null
      */
-    public static function getAliasFromField(string $field): ?string
+    public static function getAliasFromField(string $field, string $dbTableSplit = '.'): ?string
     {
-        $item = explode('.', $field);
+        $item = explode($dbTableSplit, $field);
         if (count($item) < 2) {
             return null;
         }
 
         return current($item);
+    }
+
+    /**
+     * Table prefix handler
+     *
+     * @param string $prefix
+     * @param bool   $under
+     * @param string $split
+     *
+     * @return string
+     */
+    public static function tablePrefixHandler(string $prefix, bool $under = true, string $split = '_'): string
+    {
+        $prefix = rtrim($prefix, $split);
+        $prefix = self::camelToUnder($prefix) . $split;
+
+        return $under ? $prefix : self::underToCamel($prefix);
+    }
+
+    /**
+     * Database/Table name prefix handler
+     *
+     * @param string $scheme
+     * @param string $prefix
+     * @param bool   $removeMode
+     *
+     * @return string
+     */
+    public static function schemeNamePrefixHandler(string $scheme, string $prefix, bool $removeMode = false): string
+    {
+        $scheme = self::camelToUnder($scheme);
+        $prefix = self::tablePrefixHandler($prefix);
+        $has = strpos($scheme, $prefix) === 0;
+
+        if ($has && $removeMode) {
+            $scheme = self::strReplaceOnce($prefix, null, $scheme);
+        }
+
+        if (!$has && !$removeMode) {
+            $scheme = "{$prefix}{$scheme}";
+        }
+
+        return $scheme;
     }
 
     /**
@@ -2135,14 +2193,15 @@ class Helper
      * Get date range of month
      *
      * @param string $date
+     * @param string $split
      *
      * @return array
      */
-    public static function dateMonth($date = null): array
+    public static function dateMonth($date = null, string $split = '-'): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_MONTH_LAST_DAY, $timestamp);
-        [$Y, $m, $t] = explode('-', $date);
+        [$Y, $m, $t] = explode($split, $date);
 
         return [
             "{$Y}-{$m}-01",
@@ -2171,14 +2230,15 @@ class Helper
      * Get date range of quarter
      *
      * @param string $date
+     * @param string $split
      *
      * @return array
      */
-    public static function dateQuarter($date = null): array
+    public static function dateQuarter($date = null, string $split = '-'): array
     {
         $timestamp = $date ? strtotime($date) : time();
         $date = date(Abs::FMT_MONTH, $timestamp);
-        [$Y, $m] = explode('-', $date);
+        [$Y] = explode($split, $date);
 
         $season = ceil((date('n', strtotime($date))) / 3);
 
@@ -3035,7 +3095,7 @@ class Helper
      *
      * @return string
      */
-    public static function strReplaceOnce(string $needle, string $replace, string $haystack): string
+    public static function strReplaceOnce(string $needle, ?string $replace, string $haystack): string
     {
         $pos = strpos($haystack, $needle);
         if ($pos === false) {
@@ -4165,7 +4225,7 @@ class Helper
             $data[$totalField][$title] += $item[$valueField];
         }
 
-        Helper::sendToBothEnds($data, $totalField);
+        self::sendToBothEnds($data, $totalField);
 
         foreach ($xMap as $type => $info) {
             if (!isset($data[$xMap[$type]])) {
@@ -4413,22 +4473,6 @@ class Helper
         }
 
         return $count;
-    }
-
-    /**
-     * Table prefix handler
-     *
-     * @param string $prefix
-     * @param bool   $upper
-     *
-     * @return string
-     */
-    public static function tablePrefixHandler(string $prefix, bool $upper = false): string
-    {
-        $prefix = rtrim($prefix, '_');
-        $prefix = self::camelToUnder($prefix) . '_';
-
-        return $upper ? strtoupper($prefix) : $prefix;
     }
 
     /**

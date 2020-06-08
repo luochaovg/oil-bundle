@@ -181,8 +181,9 @@ class Module extends Bsw
         $entityList = array_filter(array_unique($entityList));
 
         $extraArgs = [
-            'enumClass'      => $this->input->enum,
-            'doctrinePrefix' => $this->web->parameter('doctrine_prefix'),
+            'enumClass'          => $this->input->enum,
+            'doctrinePrefix'     => $this->web->parameter('doctrine_prefix'),
+            'doctrinePrefixMode' => $this->web->parameter('doctrine_prefix_mode'),
         ];
 
         foreach ($entityList as $alias => $entity) {

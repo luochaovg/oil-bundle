@@ -483,3 +483,12 @@ Execute manual:                 '手動指定'
 
 Away after execute:             '用後即焚'
 Reuse after execute:            '重復執行'
+
+Third to phone:                 '第三方賬號綁定手機'
+Third to email:                 '第三方賬號綁定郵箱'
+Device to phone:                '遊客賬號綁定手機'
+Device to email:                '遊客賬號綁定郵箱'
+Phone to third:                 '手機賬號綁定第三方登錄'
+Phone to device:                '手機賬號綁定遊客登錄'
+Email to third:                 '郵箱賬號綁定第三方登錄'
+Email to device:                '郵箱賬號綁定遊客登錄'
