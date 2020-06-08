@@ -49,7 +49,7 @@ class BswCaptcha extends FoundationEntity
      * @Assert\Length(max=64, groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=3, render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=3)
-     * @BswAnnotation\Filter(sort=3)
+     * @BswAnnotation\Filter(sort=3, filter=BswFilter\Accurate::class)
      */
     protected $account;
 

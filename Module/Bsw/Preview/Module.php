@@ -441,8 +441,18 @@ class Module extends Bsw
 
         foreach ($previewAnnotation as $field => $item) {
 
-            foreach ($item['hook'] as $hook) {
-                $hooks[$hook][] = $field;
+            foreach ($item['hook'] as $k => $v) {
+                if (is_numeric($k) && class_exists($v)) {
+                    $hook = $v;
+                    $hookArgs = [];
+                } elseif (class_exists($k) && is_array($v)) {
+                    $hook = $k;
+                    $hookArgs = $v;
+                }
+                if (isset($hook) && isset($hookArgs)) {
+                    $hooks[$hook]['fields'][] = $field;
+                    $hooks[$hook]['args'] = $hookArgs;
+                }
             }
 
             if (!$item['show']) {
@@ -703,9 +713,14 @@ class Module extends Bsw
         };
 
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'preview']];
+        $_hooks = [];
+        foreach ($hooks as $hook => $item) {
+            $_hooks[$hook] = $item['fields'];
+            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
+        }
 
         $original = $list;
-        $list = $this->web->hooker($hooks, $list, false, $before, $after, $extraArgs);
+        $list = $this->web->hooker($_hooks, $list, false, $before, $after, $extraArgs);
         $hooked = $list;
 
         /**

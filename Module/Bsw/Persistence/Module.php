@@ -235,8 +235,18 @@ class Module extends Bsw
 
         foreach ($persistAnnotation as $field => $item) {
 
-            foreach ($item['hook'] as $hook) {
-                $hooks[$hook][] = $field;
+            foreach ($item['hook'] as $k => $v) {
+                if (is_numeric($k) && class_exists($v)) {
+                    $hook = $v;
+                    $hookArgs = [];
+                } elseif (class_exists($k) && is_array($v)) {
+                    $hook = $k;
+                    $hookArgs = $v;
+                }
+                if (isset($hook) && isset($hookArgs)) {
+                    $hooks[$hook]['fields'][] = $field;
+                    $hooks[$hook]['args'] = $hookArgs;
+                }
             }
 
             if (!$item['show']) {
@@ -469,9 +479,14 @@ class Module extends Bsw
 
         $persistence = !!$this->input->submit;
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'persistence_' . ($this->input->id ? 'modify' : 'newly')]];
+        $_hooks = [];
+        foreach ($hooks as $hook => $item) {
+            $_hooks[$hook] = $item['fields'];
+            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
+        }
 
         $original = $record;
-        $record = $this->web->hooker($hooks, $record, $persistence, $before, $after, $extraArgs);
+        $record = $this->web->hooker($_hooks, $record, $persistence, $before, $after, $extraArgs);
         $hooked = $record;
 
         if ($persistence) {

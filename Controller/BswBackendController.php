@@ -132,9 +132,10 @@ class BswBackendController extends BswWebController
         return Helper::merge(
             [
                 Aes::class       => [
-                    'aes_iv'    => $this->parameter('aes_iv'),
-                    'aes_key'   => $this->parameter('aes_key'),
-                    'plaintext' => $this->plaintextSensitive,
+                    'aes_iv'     => $this->parameter('aes_iv'),
+                    'aes_key'    => $this->parameter('aes_key'),
+                    'aes_method' => $this->parameter('aes_method'),
+                    'plaintext'  => $this->plaintextSensitive,
                 ],
                 Enums::class     => [
                     'trans' => $this->translator,

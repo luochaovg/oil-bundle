@@ -22,7 +22,7 @@ class Aes extends Hook
             return $value;
         }
 
-        $aes = new ComponentAes($extraArgs['aes_iv'], $extraArgs['aes_key']);
+        $aes = new ComponentAes($extraArgs['aes_iv'], $extraArgs['aes_key'], $extraArgs['aes_method'] ?? null);
         $text = $aes->AESDecode($value);
 
         $plaintext = $extraArgs['plaintext'] ?? false;
@@ -30,7 +30,7 @@ class Aes extends Hook
             if (v::phone()->validate($text)) { // phone
                 $text = Helper::secretString($text, '*', [strlen($text) => [4, 4]]);
             } elseif (v::email()->validate($text)) { // email
-                list($name, $domain) = explode('@', $text);
+                [$name, $domain] = explode('@', $text);
                 $text = Helper::secretString($name) . "@{$domain}";
             } else { // others
                 $text = Helper::secretString($text);

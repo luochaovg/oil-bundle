@@ -327,8 +327,18 @@ class Module extends Bsw
         $hooks = [];
         foreach ($filterAnnotation as $field => $item) {
 
-            foreach ($item['hook'] as $hook) {
-                $hooks[$hook][] = $field;
+            foreach ($item['hook'] as $k => $v) {
+                if (is_numeric($k) && class_exists($v)) {
+                    $hook = $v;
+                    $hookArgs = [];
+                } elseif (class_exists($k) && is_array($v)) {
+                    $hook = $k;
+                    $hookArgs = $v;
+                }
+                if (isset($hook) && isset($hookArgs)) {
+                    $hooks[$hook]['fields'][] = $field;
+                    $hooks[$hook]['args'] = $hookArgs;
+                }
             }
 
             if (!$item['show']) {
@@ -351,10 +361,15 @@ class Module extends Bsw
     protected function getFilterData(array $filterAnnotation, array $hooks): array
     {
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'filter']];
+        $_hooks = [];
+        foreach ($hooks as $hook => $item) {
+            $_hooks[$hook] = $item['fields'];
+            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
+        }
 
         $filter = $this->web->getArgs($this->input->key) ?? [];
         $filter = Helper::numericValues($filter);
-        $filter = $this->web->hooker($hooks, $filter, true, null, null, $extraArgs);
+        $filter = $this->web->hooker($_hooks, $filter, true, null, null, $extraArgs);
 
         $condition = [];
         foreach ($filterAnnotation as $key => $item) {
@@ -380,19 +395,19 @@ class Module extends Bsw
             $condition[$field]['value'][$index] = $filterAnnotation[$key]['value'];
         }
 
-        foreach ($hooks as $hook => $fields) {
+        foreach ($_hooks as $hook => $fields) {
             foreach ($fields as $index => $field) {
                 if (!isset($filter[$field])) {
-                    unset($hooks[$hook][$index]);
+                    unset($_hooks[$hook][$index]);
                 }
             }
-            if (empty($hooks[$hook])) {
-                unset($hooks[$hook]);
+            if (empty($_hooks[$hook])) {
+                unset($_hooks[$hook]);
             }
         }
 
         $filterAnnotationValue = Helper::arrayColumn($filterAnnotation, 'value');
-        $filterAnnotationValue = $this->web->hooker($hooks, $filterAnnotationValue, false, null, null, $extraArgs);
+        $filterAnnotationValue = $this->web->hooker($_hooks, $filterAnnotationValue, false, null, null, $extraArgs);
 
         foreach ($filterAnnotation as $key => $item) {
             $filterAnnotation[$key]['value'] = $filterAnnotationValue[$key];
