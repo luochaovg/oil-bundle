@@ -130,7 +130,7 @@ class BswMissionCommand extends Command implements CommandInterface
                 $_condition[$key] = $value;
             }
 
-            if ($condition['receiver']) {
+            if (isset($condition['receiver'])) {
                 $now = date(Abs::FMT_FULL);
                 $this->web->telegramSendMessage(
                     $condition['receiver'],
@@ -163,7 +163,7 @@ class BswMissionCommand extends Command implements CommandInterface
             $missionRepo->modify(['id' => $m['id']], $attributes);
 
             // send telegram message
-            if ($condition['receiver']) {
+            if (isset($condition['receiver'])) {
                 $now = date(Abs::FMT_FULL);
                 $this->web->telegramSendMessage(
                     $condition['receiver'],
