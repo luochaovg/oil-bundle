@@ -140,11 +140,14 @@ abstract class Chart
 
         // grid
         if ($this->moduleState('grid')) {
+            if (!$this->getTitle() && !$this->getSubTitle()) {
+                $this->setGridField('bottom', 0);
+            }
             $option['grid'] = Helper::merge(
                 [
-                    'top'          => 50,
+                    'top'          => 60,
                     'right'        => $this->isMobile() ? 0 : 50,
-                    'bottom'       => 50,
+                    'bottom'       => 45,
                     'left'         => $this->isMobile() ? 0 : 40,
                     'containLabel' => true,
                 ],

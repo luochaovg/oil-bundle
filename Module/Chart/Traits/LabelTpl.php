@@ -7,7 +7,7 @@ trait LabelTpl
     /**
      * @var string
      */
-    protected $labelTpl = "{a|{a}}\n{hr|}\n {b|{b}：}{c}  {per|{d}%} ";
+    protected $labelTpl = "\n{b}\n\n{hr|}\n\n{c} ({d}%)\n";
 
     /**
      * @return string

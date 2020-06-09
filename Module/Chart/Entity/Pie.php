@@ -8,7 +8,6 @@ use Leon\BswBundle\Module\Chart\Traits;
 class Pie extends Chart
 {
     use Traits\ShowLabel,
-        Traits\TipsTpl,
         Traits\LabelTpl,
         Traits\Radius;
 
@@ -29,12 +28,7 @@ class Pie extends Chart
         $this->setLegendTitle($this->getDataField())
             ->moduleDisable('axisX')
             ->moduleDisable('axisY')
-            ->setTooltip(
-                [
-                    'trigger'   => 'item',
-                    'formatter' => $this->getTipsTpl(),
-                ]
-            );
+            ->setTooltip(['trigger' => 'item']);
     }
 
     /**
