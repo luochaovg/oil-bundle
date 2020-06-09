@@ -120,7 +120,7 @@ $(function () {
             }));
         },
 
-        filterFormAction(event, jump = false, form = 'filterForm') {
+        filterFormAction(event, jump = false, form, dateFormat) {
             let that = this;
             event.preventDefault();
             that[form].validateFields((err, values) => {
@@ -133,14 +133,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        let format = values[field]._f || that[form][field];
+                        let format = values[field]._f || that[dateFormat][field];
                         values[field] = values[field].format(format);
                         jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                let format = values[field][i]._f || that[form][field];
+                                let format = values[field][i]._f || that[dateFormat][field];
                                 values[field][i] = values[field][i].format(format);
                                 jump = true; // fix bug for ant-d
                             }
@@ -203,7 +203,7 @@ $(function () {
             }));
         },
 
-        submitFormAction(event, form = 'persistenceForm') {
+        submitFormAction(event, form, dateFormat) {
             let that = this;
             event.preventDefault();
             that[form].validateFields((err, values) => {
@@ -216,13 +216,13 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        let format = values[field]._f || that[form][field];
+                        let format = values[field]._f || that[dateFormat][field];
                         values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (let i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                let format = values[field][i]._f || that[form][field];
+                                let format = values[field][i]._f || that[dateFormat][field];
                                 values[field][i] = values[field][i].format(format);
                             }
                         }

@@ -121,10 +121,12 @@ $(function () {
             });
         },
         filterFormAction: function filterFormAction(event) {
+            var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
             var _this = this;
 
-            var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'filterForm';
+            var form = arguments[2];
+            var dateFormat = arguments[3];
 
             var that = this;
             event.preventDefault();
@@ -138,14 +140,14 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        var format = values[field]._f || that[form][field];
+                        var format = values[field]._f || that[dateFormat][field];
                         values[field] = values[field].format(format);
                         jump = true; // fix bug for ant-d
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                var _format = values[field][i]._f || that[form][field];
+                                var _format = values[field][i]._f || that[dateFormat][field];
                                 values[field][i] = values[field][i].format(_format);
                                 jump = true; // fix bug for ant-d
                             }
@@ -209,10 +211,8 @@ $(function () {
                 console.warn(reason);
             });
         },
-        submitFormAction: function submitFormAction(event) {
+        submitFormAction: function submitFormAction(event, form, dateFormat) {
             var _this3 = this;
-
-            var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'persistenceForm';
 
             var that = this;
             event.preventDefault();
@@ -226,13 +226,13 @@ $(function () {
                         continue;
                     }
                     if (moment.isMoment(values[field])) {
-                        var format = values[field]._f || that[form][field];
+                        var format = values[field]._f || that[dateFormat][field];
                         values[field] = values[field].format(format);
                     }
                     if (bsw.isArray(values[field])) {
                         for (var i = 0; i < values[field].length; i++) {
                             if (moment.isMoment(values[field][i])) {
-                                var _format2 = values[field][i]._f || that[form][field];
+                                var _format2 = values[field][i]._f || that[dateFormat][field];
                                 values[field][i] = values[field][i].format(_format2);
                             }
                         }
