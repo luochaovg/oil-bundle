@@ -98,23 +98,31 @@ trait BackendPreset
     /**
      * @param array $filter
      * @param array $index
+     * @param bool  $arrayValueToString
      *
      * @return array
      */
-    public function previewFilter(array $filter, array $index = []): array
+    public function previewFilter(array $filter, array $index = [], bool $arrayValueToString = true): array
     {
         $_filter = [];
         foreach ($filter as $key => $value) {
-            if (is_array($value)) {
-                $value = implode(Abs::FORM_DATA_SPLIT, $value);
-            }
 
-            $k = Helper::camelToUnder($key);
+            $k = Helper::camelToUnderWithNumeric($key);
             if (!is_numeric(Helper::arrayLatestItem($k))) {
                 $k = "{$k}_" . ($index[$key] ?? 0);
             }
-            
-            $_filter[$k] = $value;
+
+            if (is_scalar($value)) {
+                $_filter[$k] = $value;
+            } elseif (is_array($value)) {
+                if ($arrayValueToString) {
+                    $_filter[$k] = implode(Abs::FORM_DATA_SPLIT, $value);
+                } else {
+                    foreach ($value as $index => $item) {
+                        $_filter[$k][$index] = $item;
+                    }
+                }
+            }
         }
 
         return ['filter' => $_filter];

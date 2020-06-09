@@ -673,21 +673,29 @@ class Module extends Bsw
      */
     protected function handlePreviewData(array $list, array $hooks, array $previewAnnotation, Output $output): array
     {
+        $basicNumber = ($output->query['page'] - 1) * $output->query['limit'] + 1;
+
         /**
          * before hook (row record)
          *
          * @param array $original
          * @param array $extraArgs
+         * @param int   $index
          *
          * @return mixed
          */
-        $before = function (array $original, array $extraArgs) {
+        $before = function (array $original, array $extraArgs, int $index) use ($basicNumber) {
+
+            $number = $basicNumber + $index;
             if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
-                $arguments = $this->arguments(compact('original', 'extraArgs'));
+                $arguments = $this->arguments(compact('original', 'extraArgs', 'number'));
                 $original = $this->web->{$fn}($arguments);
             }
 
-            $arguments = $this->arguments(['target' => $original], compact('extraArgs'));
+            $arguments = $this->arguments(
+                ['target' => $original],
+                compact('extraArgs', 'number')
+            );
 
             return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $arguments);
         };
@@ -698,16 +706,22 @@ class Module extends Bsw
          * @param array $hooked
          * @param array $original
          * @param array $extraArgs
+         * @param int   $index
          *
          * @return mixed
          */
-        $after = function (array $hooked, array $original, array $extraArgs) {
+        $after = function (array $hooked, array $original, array $extraArgs, int $index) use ($basicNumber) {
+
+            $number = $basicNumber + $index;
             if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
-                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs'));
+                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs', 'number'));
                 $hooked = $this->web->{$fn}($arguments);
             }
 
-            $arguments = $this->arguments(['target' => $hooked], compact('original', 'extraArgs'));
+            $arguments = $this->arguments(
+                ['target' => $hooked],
+                compact('original', 'extraArgs', 'number')
+            );
 
             return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $arguments);
         };
@@ -759,7 +773,14 @@ class Module extends Bsw
              * record operate - prepare
              */
 
-            $arguments = $this->arguments(['item' => $item, 'hooked' => $hooked[$key], 'original' => $original[$key]]);
+            $arguments = $this->arguments(
+                [
+                    'item'      => $item,
+                    'hooked'    => $hooked[$key],
+                    'original'  => $original[$key],
+                    'condition' => $this->input->condition,
+                ]
+            );
             $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
 
             $item[$operate] = null;

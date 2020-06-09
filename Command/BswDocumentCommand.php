@@ -102,8 +102,10 @@ class BswDocumentCommand extends Command implements CommandInterface
 
     /**
      * init
+     *
+     * @param array $params
      */
-    public function init()
+    public function init(array $params)
     {
         $this->indent = Helper::enSpace(1, true);
         $this->path = $this->kernel->getProjectDir() . '/document';
@@ -120,6 +122,7 @@ class BswDocumentCommand extends Command implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $params = $input->getOptions();
+        $this->init($params);
 
         $this->hostApi = $params['host-api'];
         $this->hostAnalog = $params['host-analog'];
@@ -430,8 +433,14 @@ class BswDocumentCommand extends Command implements CommandInterface
                             /**
                              * @var Validator $validator
                              */
-                            $validator = Helper::underToCamel($fn, false);
-                            $validator = "\\Leon\\BswBundle\\Module\\Validator\\Entity\\{$validator}";
+                            if (class_exists($fn)) {
+                                $validator = $fn;
+                                $fn = Helper::clsName($fn);
+                            } else {
+                                $validator = Helper::underToCamel($fn, false);
+                                $validator = "\\Leon\\BswBundle\\Module\\Validator\\Entity\\{$validator}";
+                            }
+
                             $handler = $item->rulesArgsHandler[$fn] ?? null;
                             $validator = new $validator(null, $params, $this->translator, $this->lang, $handler);
                         }

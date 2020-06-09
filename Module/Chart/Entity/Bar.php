@@ -70,7 +70,7 @@ class Bar extends Line
      */
     protected function rebuildSeries(array $series, array $item): array
     {
-        if ($this->isMobile() || count($item) > $this->getMaxBarFixedWidth()) {
+        if ($this->isMobile() || (count($item) > $this->getMaxBarFixedWidth())) {
             unset($series['barWidth']);
         }
 

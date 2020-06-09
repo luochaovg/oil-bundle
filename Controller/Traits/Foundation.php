@@ -891,7 +891,7 @@ trait Foundation
                             'route'  => $key,
                             'uri'    => $item->getPath(),
                             'http'   => $item->getMethods(),
-                            'app'    => Helper::cutString($class, '\\^1^desc'),
+                            'app'    => Helper::cutString($class, ['\\^-2']),
                             'class'  => $class,
                             'method' => $method,
                             'path'   => "{$class}::{$method}",

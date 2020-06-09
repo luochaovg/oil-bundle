@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use ZipArchive;
 use Exception;
 use finfo;
+use function GuzzleHttp\Psr7\str;
 
 class Helper
 {
@@ -412,6 +413,26 @@ class Helper
         }
 
         return $backTrance[$index] ?? false;
+    }
+
+    /**
+     * helloWorld2020 to hello_world_2020
+     *
+     * @param string $str
+     * @param bool   $onlyNumeric
+     * @param string $split
+     *
+     * @return string
+     */
+    public static function camelToUnderWithNumeric(string $str, bool $onlyNumeric = false, string $split = '_'): string
+    {
+        if (!$onlyNumeric) {
+            $str = self::camelToUnder($str, $split);
+        }
+
+        $chunk = preg_split("/([a-zA-Z\{$split}]+)/", $str, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        return implode($split, $chunk);
     }
 
     /**
@@ -1714,6 +1735,18 @@ class Helper
     }
 
     /**
+     * Is date string
+     *
+     * @param string $date
+     *
+     * @return bool
+     */
+    public static function isDateString(string $date): bool
+    {
+        return strtotime($date) !== false;
+    }
+
+    /**
      * Is int numeric
      *
      * @param mixed $num
@@ -2513,35 +2546,54 @@ class Helper
     /**
      * Recursion cut string
      *
-     * @param string       $string
-     * @param array|string $rule
-     * @param string       $splitBy
+     * @param string $string
+     * @param array  $rules
+     * @param string $expressionSplit
      *
      * @return string
      * @example :
-     *          string: $url = http://www.w3school.com.cn/php/func_array_slice.asp
+     *          string: $url = 'http://www.w3school.com.cn/php/func_array_slice.asp'
      *          one: get the `func`
-     *          $result = $obj->cutString($url, ['/^0^desc', '_^0']);
+     *          $result = Helper::cutString($url, ['/^-1', '_^0']);
      *          two: get the `asp`
-     *          $result = $obj->cutString($url, '.^0^desc');
+     *          $result = Helper::cutString($url, '.^-1');
      */
-    public static function cutString(string $string, $rule, string $splitBy = '^'): string
+    public static function cutString(string $string, array $rules, string $expressionSplit = '^'): string
     {
-        foreach ((array)$rule as $val) {
-            $detail = explode($splitBy, $val);
-            $string = explode($detail[0], $string);
-            if (!empty($detail[2]) && strtolower($detail[2]) == 'desc') {
-                $key = count($string) - $detail[1] - 1;
-                $string = $string[$key] ?? false;
-            } else {
-                $string = $string[$detail[1]] ?? false;
+        foreach ($rules as $rule) {
+            if (empty($rule)) {
+                continue;
             }
+
+            [$split, $index] = explode($expressionSplit, $rule) + [1 => 0];
+            $stringArr = explode($split, $string);
+
+            $string = array_slice($stringArr, $index, 1);
+            $string = current($string);
+
             if ($string === false) {
                 break;
             }
         }
 
         return $string;
+    }
+
+    /**
+     * Return array latest item
+     *
+     * @param string|array $target
+     * @param string       $split
+     *
+     * @return mixed
+     */
+    public static function arrayLatestItem($target, string $split = '_')
+    {
+        if (is_scalar($target)) {
+            $target = explode($split, $target);
+        }
+
+        return $target[count($target) - 1];
     }
 
     /**
@@ -4206,7 +4258,7 @@ class Helper
     public static function groupByDateAndX4Chart(
         array $groupByDateAndX,
         string $xField,
-        string $totalField,
+        ?string $totalField,
         array $xMap,
         ?callable $handler = null,
         ?string $from = null,
@@ -4219,13 +4271,19 @@ class Helper
         foreach ($groupByDateAndX as $item) {
             $title = $item[$titleField];
             $data[$xMap[$item[$xField]]][$title] = $item[$valueField];
+
+            if (!isset($totalField)) {
+                continue;
+            }
             if (!isset($data[$totalField][$title])) {
                 $data[$totalField][$title] = 0;
             }
             $data[$totalField][$title] += $item[$valueField];
         }
 
-        self::sendToBothEnds($data, $totalField);
+        if (isset($totalField)) {
+            self::sendToBothEnds($data, $totalField);
+        }
 
         foreach ($xMap as $type => $info) {
             if (!isset($data[$xMap[$type]])) {
@@ -4236,9 +4294,13 @@ class Helper
         $title = [];
         $dataList = [];
         foreach ($data as $type => $item) {
-            if ($from && $to) {
+
+            if (self::isIntNumeric($from) && self::isIntNumeric($to)) {
+                $item = self::perfectIntKeys($item, $from, $to);
+            } elseif (self::isDateString($from) && self::isDateString($to)) {
                 $item = self::perfectDateKeys($item, $from, $to);
             }
+
             if ($handler) {
                 foreach ($item as $key => $val) {
                     $item[$key] = call_user_func_array($handler, [$val, $key]);
@@ -4336,17 +4398,20 @@ class Helper
      * @param number $number
      * @param int    $decimals
      * @param string $thousandsSep
+     * @param string $decPoint
      *
      * @return float|string
      */
-    public static function numberFormat($number, int $decimals = 1, string $thousandsSep = '')
+    public static function numberFormat($number, int $decimals = 1, string $thousandsSep = '', string $decPoint = '.')
     {
-        if (self::isIntNumeric($number)) {
-            $decimals = 0;
-        }
-
-        $number = number_format($number, $decimals, '.', $thousandsSep);
+        $number = number_format($number, $decimals, $decPoint, $thousandsSep);
         $number = $thousandsSep ? $number : floatval($number);
+
+        // handler the last zero
+        if (strpos($number, $decPoint) !== false) {
+            $number = rtrim($number, "0");
+            $number = rtrim($number, "{$decPoint}{$thousandsSep}");
+        }
 
         return $number;
     }
@@ -4473,25 +4538,6 @@ class Helper
         }
 
         return $count;
-    }
-
-    /**
-     * Return array latest item
-     *
-     * @param string|array $target
-     * @param string       $split
-     *
-     * @return mixed
-     */
-    public static function arrayLatestItem($target, string $split = '_')
-    {
-        if (is_scalar($target)) {
-            $target = explode($split, $target);
-        }
-
-        $total = count($target);
-
-        return $target[$total - 1];
     }
 
     /**

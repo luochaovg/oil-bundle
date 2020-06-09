@@ -214,12 +214,12 @@ class Module extends Bsw
         $_index = Helper::dig($item, 'index') ?? $defaultIndex;
 
         $item['field'] = "{$_table}.{$_field}";
-        $_field = "{$_field}_{$_index}";
+        $_field = "{$_field}{$_index}";
 
         $_item = $filterAnnotationFull[$_table][$_field] ?? [];
         $item = array_merge($_item, $item);
 
-        return ["{$field}_{$_index}", $item];
+        return ["{$field}{$_index}", $item];
     }
 
     /**
@@ -277,8 +277,10 @@ class Module extends Bsw
             $_item = $item;
             $defaultIndex = 0;
             [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull, $defaultIndex);
-            if (!is_numeric(Helper::arrayLatestItem($field))) {
-                $field = "{$field}_{$defaultIndex}";
+
+            $_field = Helper::camelToUnderWithNumeric($field, true);
+            if (!is_numeric(Helper::arrayLatestItem($_field))) {
+                $field = "{$field}{$defaultIndex}";
             }
 
             if (!is_array($item)) {
@@ -308,14 +310,15 @@ class Module extends Bsw
 
         $_annotation = [];
         foreach ($filterAnnotation as $key => $item) {
+            $key = Helper::camelToUnderWithNumeric($key);
             if (!$this->query) {
-                $_annotation[Helper::camelToUnder($key)] = $item;
+                $_annotation[$key] = $item;
                 continue;
             }
 
             $item['field'] = Helper::tableFieldAddAlias($item['field'], $this->query['alias']);
             if (in_array($item['field'], $allowFields)) {
-                $_annotation[Helper::camelToUnder($key)] = $item;
+                $_annotation[$key] = $item;
             }
         }
 

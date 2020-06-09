@@ -120,14 +120,14 @@ class Line extends Chart
         return [
             'lineStyle'  => [
                 'normal' => [
-                    'width'         => 2,
-                    'shadowColor'   => 'rgba(0,0,0,0.4)',
-                    'shadowBlur'    => 8,
-                    'shadowOffsetY' => 8,
+                    'width'         => 1.2,
+                    'shadowColor'   => 'rgba(0, 0, 0, .4)',
+                    'shadowBlur'    => 4,
+                    'shadowOffsetY' => 4,
                 ],
             ],
             'smooth'     => $this->isSmooth(),
-            'symbolSize' => 8,
+            'symbolSize' => 6,
             'markPoint'  => ['data' => $this->moduleState('point') ? $this->getPoint() : null],
             'markLine'   => ['data' => $this->moduleState('line') ? $this->getLine() : null],
         ];

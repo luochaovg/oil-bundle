@@ -145,13 +145,14 @@ class Dispatcher
      * Execute
      *
      * @param mixed $item
+     * @param int   $index
      * @param bool  $persistence
      * @param array $extraArgs
      *
      * @return mixed
      * @throws
      */
-    public function execute($item, bool $persistence = true, array $extraArgs = [])
+    public function execute($item, int $index, bool $persistence = true, array $extraArgs = [])
     {
         static $instance = [];
 
@@ -160,7 +161,7 @@ class Dispatcher
         if ($this->beforeHandler) {
 
             $type = gettype($item);
-            $item = call_user_func_array($this->beforeHandler, [$item, $extraArgs]);
+            $item = call_user_func_array($this->beforeHandler, [$item, $extraArgs, $index]);
 
             if (is_array($this->beforeHandler) && isset($this->beforeHandler[1])) {
                 $info = "{$this->beforeHandler[1]}():{$type}";
@@ -184,7 +185,7 @@ class Dispatcher
         if ($this->afterHandler) {
 
             $type = gettype($item);
-            $item = call_user_func_array($this->afterHandler, [$item, $original, $extraArgs]);
+            $item = call_user_func_array($this->afterHandler, [$item, $original, $extraArgs, $index]);
 
             if (is_array($this->afterHandler) && isset($this->afterHandler[1])) {
                 $info = "{$this->afterHandler[1]}():{$type}";
@@ -213,7 +214,7 @@ class Dispatcher
     {
         $_items = [];
         foreach ($items as $key => $item) {
-            $item = $this->execute($item, $persistence, $extraArgs);
+            $item = $this->execute($item, $key, $persistence, $extraArgs);
             if ($item) {
                 $_items[$key] = $item;
             }

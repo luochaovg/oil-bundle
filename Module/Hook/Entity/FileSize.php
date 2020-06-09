@@ -20,7 +20,7 @@ class FileSize extends Hook
             return null;
         }
 
-        return Helper::humanSize($value);
+        return Helper::humanSize($value, $extraArgs['decimals'] ?? 1);
     }
 
     /**

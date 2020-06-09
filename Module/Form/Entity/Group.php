@@ -24,15 +24,16 @@ class Group extends Form
         $memberCol = $this->getMemberCol();
         if (empty($memberCol)) {
             $percent = floor(100 / count($this->member));
-            foreach ($this->member as $index => $item) {
+            foreach ($this->member as $item) {
                 array_push($memberCol, $percent - 5);
                 array_push($memberCol, '8px');
             }
         }
 
-        foreach ($this->member as $index => $item) {
+        $index = 0;
+        foreach ($this->member as $field => $item) {
             if (!$item->getKey()) {
-                $item->setField("_{$index}");
+                $item->setField("_{$field}");
             }
             if (!$item->getPlaceholder()) {
                 $item->setPlaceholder($this->getPlaceholder());
@@ -47,6 +48,7 @@ class Group extends Form
             if (!$item->hasStyle('margin-right') && $col = ($memberCol[$marginIndex] ?? null)) {
                 $item->appendStyle(['margin-right' => is_numeric($col) ? "{$col}%" : $col]);
             }
+            $index += 1;
         }
 
         return $this->member;
