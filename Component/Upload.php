@@ -394,7 +394,7 @@ class Upload
 
         $subPath = $this->createName($this->savePathFn);
         $fullPath = Helper::joinString(DIRECTORY_SEPARATOR, $this->rootPath, $subPath);
-        if (!empty($subPath) && !is_dir($fullPath) && !mkdir($fullPath, 0777, true)) {
+        if (!empty($subPath) && !is_dir($fullPath) && !@mkdir($fullPath, 0777, true)) {
             throw new UploadException('Create directory fail');
         }
 
@@ -434,7 +434,7 @@ class Upload
             throw new UploadException('Root path is required');
         }
 
-        if (!is_dir($rootPath) && !mkdir($rootPath, 0777, true)) {
+        if (!is_dir($rootPath) && !@mkdir($rootPath, 0777, true)) {
             throw new UploadException('Create directory fail');
         }
 

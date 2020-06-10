@@ -52,6 +52,10 @@ trait Upload
          * @var UploadItem $file
          */
         $file = $this->uploadCore($upload, $options);
+        if ($file instanceof Response) {
+            return $file;
+        }
+
         $sets = [
             'attachment_id'   => $file->id,
             'attachment_url'  => $file->url,

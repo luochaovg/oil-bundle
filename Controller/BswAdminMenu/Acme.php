@@ -27,8 +27,15 @@ class Acme extends BswBackendController
     public function acmeEnumExtraMenuId(Arguments $args): array
     {
         $filter = [
-            'where' => [$this->expr->eq('kvp.menuId', ':parent')],
-            'args'  => ['parent' => [0]],
+            'where' => [
+                $this->expr->eq('kvp.menuId', ':parent'),
+                $this->expr->eq('kvp.routeName', ':route'),
+            ],
+            'args'  => [
+                'parent' => [0],
+                'route'  => ['', false],
+            ],
+            'sort'  => ['kvp.sort' => Abs::SORT_ASC],
         ];
 
         $menu = $this->repo(BswAdminMenu::class)->kvp(['value'], Abs::PK, null, $filter);

@@ -41,8 +41,8 @@ class Abs
     const POS_CENTER = 'center';
     const POS_MIDDLE = 'middle';
 
-    const BK_DISPLAY_ARGS = 1;
-    const BK_TWIG_ARGS    = 2;
+    const BK_RENDER_ARGS = 1;
+    const BK_TWIG_ARGS   = 2;
 
     const PERSISTENCE_TOTAL_COLUMN = 24;
     const PERSISTENCE_LABEL_COLUMN = 4;
@@ -224,7 +224,7 @@ class Abs
     const FN_SIGN_FAILED             = 'signFailedLogger';
     const FN_BEFORE_RESPONSE         = 'beforeResponse';
     const FN_BEFORE_RESPONSE_CODE    = 'beforeResponseCode';
-    const FN_BEFORE_DISPLAY          = 'beforeDisplay';
+    const FN_BEFORE_RENDER           = 'beforeRender';
     const FN_STRICT_AUTH             = 'strictAuthorization';
     const FN_EXTRA_CONFIG            = 'extraConfig';
     const FN_HOOKER_ARGS             = 'hookerExtraArgs';

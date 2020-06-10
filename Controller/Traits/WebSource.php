@@ -26,7 +26,7 @@ trait WebSource
      */
     protected $srcPrefixMap = [
 
-        // for project
+        // for your project
         'odd:' => [
             'tpl' => '/%s',
             'var' => ['src'],
@@ -40,7 +40,7 @@ trait WebSource
             'var' => ['src'],
         ],
 
-        // for bsw
+        // for bsw-bundle
         'odd;' => [
             'tpl' => '/bundles/leonbsw/%s',
             'var' => ['src'],

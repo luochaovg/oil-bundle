@@ -766,12 +766,12 @@ abstract class BswWebController extends AbstractController
         $params = array_merge($args, ['scaffold' => $scaffold]);
 
         // params before display
-        if (method_exists($this, $fn = Abs::FN_BEFORE_DISPLAY)) {
+        if (method_exists($this, $fn = Abs::FN_BEFORE_RENDER)) {
             $params = $this->{$fn}($params);
         }
 
         // for debug args
-        $this->breakpointDebug(Abs::BK_DISPLAY_ARGS, $view, $params);
+        $this->breakpointDebug(Abs::BK_RENDER_ARGS, $view, $params);
         $this->logger->debug("-->> end: $this->route");
 
         $this->iNeedCost(Abs::END_REQUEST);
