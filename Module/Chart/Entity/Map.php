@@ -27,7 +27,7 @@ class Map extends Chart
     protected function init()
     {
         $this->setSelectedMode(self::SELECTED_MODE_SINGLE)
-            ->setTooltip(['trigger' => 'item'])
+            ->setTooltipField('trigger', 'item')
             ->setLegendTitle(array_keys($this->getDataList()));
     }
 

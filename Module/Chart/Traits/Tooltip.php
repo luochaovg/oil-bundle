@@ -9,7 +9,33 @@ trait Tooltip
     /**
      * @var array
      */
-    protected $tooltip = [];
+    protected $tooltip = [
+        'trigger'         => 'axis',
+        'backgroundColor' => 'rgba(245, 245, 245, .8)',
+        'borderWidth'     => 1,
+        'borderColor'     => '#ccc',
+        'padding'         => 10,
+        'textStyle'       => [
+            'color' => '#666',
+        ],
+        'axisPointer'     => [
+            'type'        => 'shadow', // cross、shadow
+            'label'       => [
+                'backgroundColor' => 'rgba(150, 150, 150, .5)',
+            ],
+            'lineStyle'   => [
+                'color' => 'rgba(150, 150, 150, .3)',
+                'type'  => 'dashed',
+            ],
+            'crossStyle'  => [
+                'color' => 'rgba(150, 150, 150, .3)',
+                'type'  => 'dashed',
+            ],
+            'shadowStyle' => [
+                'color' => 'rgba(150, 150, 150, .1)',
+            ],
+        ],
+    ];
 
     /**
      * @return array

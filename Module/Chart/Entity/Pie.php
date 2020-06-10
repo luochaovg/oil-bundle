@@ -26,9 +26,8 @@ class Pie extends Chart
     protected function init()
     {
         $this->setLegendTitle($this->getDataField())
-            ->moduleDisable('axisX')
-            ->moduleDisable('axisY')
-            ->setTooltip(['trigger' => 'item']);
+            ->setTooltipField('trigger', 'item')
+            ->moduleDisable('axisX', 'axisY');
     }
 
     /**

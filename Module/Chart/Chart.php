@@ -13,7 +13,6 @@ abstract class Chart
         Traits\AxisY,
         Traits\DataField,
         Traits\DataList,
-        Traits\Feature,
         Traits\Grid,
         Traits\Height,
         Traits\Legend,
@@ -39,6 +38,7 @@ abstract class Chart
         Traits\Toolbox,
         Traits\Tooltip,
         Traits\TooltipTpl,
+        Traits\TooltipPosition,
         Traits\Type,
         Traits\Width;
 
@@ -110,22 +110,8 @@ abstract class Chart
 
         // tooltip
         if ($this->moduleState('tooltip')) {
+            $this->setTooltipField('position', $this->getTooltipPosition());
             $option['tooltip'] = $this->getTooltip();
-        }
-
-        // toolbox
-        if ($this->moduleState('toolbox')) {
-            $this->setFeatureField('saveAsImage.name', $this->getSaveName() ?: $this->getTitleText());
-            $option['toolbox'] = Helper::merge(
-                [
-                    'orient'   => 'vertical',
-                    'top'      => 20,
-                    'right'    => $this->isMobile() ? 0 : 20,
-                    'itemSize' => 10,
-                    'feature'  => $this->getFeature(),
-                ],
-                $this->getToolbox()
-            );
         }
 
         // legend
@@ -151,13 +137,33 @@ abstract class Chart
             }
             $option['grid'] = Helper::merge(
                 [
-                    'top'          => 60,
+                    'top'          => 50,
                     'right'        => $this->isMobile() ? 0 : 50,
                     'bottom'       => 45,
                     'left'         => $this->isMobile() ? 0 : 40,
                     'containLabel' => true,
                 ],
                 $this->getGrid()
+            );
+        }
+
+        // toolbox
+        if ($this->moduleState('toolbox')) {
+            $option['toolbox'] = Helper::merge(
+                [
+                    'orient'   => 'vertical',
+                    'top'      => ($option['grid']['top'] ?? 50) - 6,
+                    'right'    => $this->isMobile() ? 0 : 10,
+                    'itemSize' => 10,
+                    'feature'  => [
+                        'saveAsImage' => [
+                            'title'      => 'Download',
+                            'pixelRatio' => 2,
+                            'name'       => $this->getSaveName() ?: $this->getTitleText(),
+                        ],
+                    ],
+                ],
+                $this->getToolbox()
             );
         }
 

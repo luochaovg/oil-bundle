@@ -38,45 +38,26 @@ class Line extends Chart
     /**
      * @var array
      */
-    protected $tooltip = [
-        'trigger'     => 'axis',
-        'axisPointer' => [
-            'type'        => 'shadow', // cross、shadow
-            'label'       => [
-                'backgroundColor' => 'rgba(150, 150, 150, .5)',
+    protected $toolbox = [
+        'feature' => [
+            'dataZoom'  => [
+                'yAxisIndex' => 'none',
+                'title'      => [
+                    'zoom' => 'Zoom',
+                    'back' => 'Reset',
+                ],
             ],
-            'lineStyle'   => [
-                'color' => 'rgba(150, 150, 150, .3)',
-                'type'  => 'dashed',
+            'magicType' => [
+                'type'  => ['line', 'bar'],
+                'title' => [
+                    'line' => 'Line',
+                    'bar'  => 'Bar',
+                ],
             ],
-            'crossStyle'  => [
-                'color' => 'rgba(150, 150, 150, .3)',
-            ],
-            'shadowStyle' => [
-                'color' => 'rgba(150, 150, 150, .1)',
-            ],
-        ],
-    ];
-
-    /**
-     * @var array
-     */
-    protected $featureLine = [
-        'dataZoom'  => [
-            'yAxisIndex' => 'none',
-            'title'      => [
-                'zoom' => 'Zoom',
-                'back' => 'Reset',
+            'restore'   => [
+                'title' => 'Reset',
             ],
         ],
-        'magicType' => [
-            'type'  => ['line', 'bar'],
-            'title' => [
-                'line' => 'Line',
-                'bar'  => 'Bar',
-            ],
-        ],
-        'restore'   => ['title' => 'Reset'],
     ];
 
     /**
@@ -93,15 +74,25 @@ class Line extends Chart
      */
     protected function init()
     {
+        if ($seriesExtra = current($this->getSeriesExtra())) {
+            if (isset($seriesExtra['stack'])) {
+                $this->setTooltipTpl('fn:TooltipStack');
+            }
+        }
+
+        if ($this->isPointSenseReverse()) {
+            $this->setPointField('max.itemStyle.color', $this->getPointBad());
+            $this->setPointField('min.itemStyle.color', $this->getPointGood());
+        } else {
+            $this->setPointField('max.itemStyle.color', $this->getPointGood());
+            $this->setPointField('min.itemStyle.color', $this->getPointBad());
+        }
+
         $this->setAxisXTitle($this->getDataField())
             ->setLegendTitle(array_keys($this->getDataList()))
             ->setTooltipField('formatter', $this->getTooltipTpl())
             ->setPoint(array_values($this->getPoint()))
             ->setLine(array_values($this->getLine()));
-
-        $feature = $this->mobile ? [] : $this->featureLine;
-        $feature = Helper::merge($feature, $this->getFeature());
-        $this->setFeature($feature);
 
         foreach ($this->getLegendTitle() as $key => $val) {
             $this->setLegendTitleField($key, strval($val));

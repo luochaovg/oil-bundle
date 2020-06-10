@@ -229,6 +229,9 @@ class FoundationPrototype {
         }
 
         for (let k in o) {
+            if (!o.hasOwnProperty(k)) {
+                continue;
+            }
             if (new RegExp('(' + k + ')').test(fmt)) {
                 fmt = fmt.replace(
                     RegExp.$1,
@@ -479,6 +482,9 @@ class FoundationTools extends FoundationPrototype {
     jsonLength(json) {
         let length = 0;
         for (let i in json) {
+            if (!json.hasOwnProperty(i)) {
+                continue;
+            }
             length++;
         }
         return length;
@@ -562,7 +568,7 @@ class FoundationTools extends FoundationPrototype {
      */
     jsonBuildQuery(source, returnObject = false, needEncode = true) {
         let query = '', _query = {}, name, value, fullSubName, subName, subValue, innerObject, i;
-        for (name in source) {
+        for (let name in source) {
             if (!source.hasOwnProperty(name)) {
                 continue;
             }
@@ -641,7 +647,7 @@ class FoundationTools extends FoundationPrototype {
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
-        for (let v of items || []) {
+        for (let v of (items || [])) {
             if (typeof queryParams[v] !== 'undefined') {
                 effect[v] = queryParams[v];
                 delete queryParams[v];
@@ -669,7 +675,7 @@ class FoundationTools extends FoundationPrototype {
         url = url || location.href;
         let queryParams = this.parseQueryString(url, true);
 
-        for (let v of items || []) {
+        for (let v of (items || [])) {
             for (let w in queryParams) {
                 if (!queryParams.hasOwnProperty(w)) {
                     continue;
@@ -1368,41 +1374,76 @@ class FoundationAntD extends FoundationTools {
      * @returns void
      */
     chart(option) {
-        let chart = echarts.init(document.getElementById(`chart-${option.id}`), option.theme);
+        let that = this;
         let o = option.option;
+        let chart = echarts.init(document.getElementById(`chart-${option.id}`), option.theme);
 
-        if (this.checkJsonDeep(o, 'tooltip.formatter')) {
-            if (o.tooltip.formatter === ':stackBar') {
-                o.tooltip.formatter = function (params) {
-                    let total = 0;
-                    for (let item of params) {
-                        total += Math.floor(Number.parseFloat(item.data) * 100);
-                    }
-
-                    total /= 100;
-
-                    let tpl = `${params[0].name} (${total})<br>`;
-                    for (let item of params) {
-                        let percent = ((Number.parseFloat(item.data) / total) || 0) * 100;
-                        percent = percent.toFixed(2);
-                        tpl += `${item.marker} ${item.seriesName}: ${item.data} (${percent}%)<br>`;
-                    }
-
-                    return tpl;
-                };
-            } else if (o.tooltip.formatter === ':pictorialBar') {
-                o.tooltip.formatter = function (params) {
-                    return params[0].name + ': ' + params[0].value;
-                };
+        let replaceHandler = function (target) {
+            for (let key in target) {
+                if (!target.hasOwnProperty(key)) {
+                    continue;
+                }
+                let item = target[key];
+                if (that.isJson(item)) {
+                    target[key] = replaceHandler(item);
+                } else if (that.isString(item) && item.startsWith('fn:')) {
+                    let fn = that.ucFirst(item.split(':')[1]);
+                    target[key] = that[`chartHandler${fn}`];
+                }
             }
-        }
+            return target;
+        };
 
-        chart.setOption(o);
+        chart.setOption(replaceHandler(o));
         this.cnf.v.$nextTick(function () {
             chart.resize();
         });
 
         $(window).resize(() => chart.resize());
+    }
+
+    /**
+     * @param params
+     * @returns {string}
+     */
+    chartHandlerTooltipStack(params) {
+        let total = 0;
+        for (let item of params) {
+            total += Math.floor(Number.parseFloat(item.data) * 100);
+        }
+
+        total /= 100;
+
+        let tpl = `${params[0].name} (${total})<br>`;
+        for (let item of params) {
+            let percent = ((Number.parseFloat(item.data) / total) || 0) * 100;
+            percent = percent.toFixed(2);
+            tpl += `${item.marker} ${item.seriesName}: ${item.data} (${percent}%)<br>`;
+        }
+
+        return tpl;
+    }
+
+    /**
+     * @param params
+     * @returns {string}
+     */
+    chartHandlerTooltipNormal(params) {
+        return params[0].name + ': ' + params[0].value;
+    }
+
+    /**
+     * @param pos
+     * @param params
+     * @param dom
+     * @param rect
+     * @param size
+     * @returns {{top: number}}
+     */
+    chartHandlerTooltipPositionFixed(pos, params, dom, rect, size) {
+        let obj = {top: 20};
+        obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 10;
+        return obj;
     }
 
     /**
