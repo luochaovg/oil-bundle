@@ -129,8 +129,21 @@ class Line extends Chart
             ],
             'smooth'     => $this->isSmooth(),
             'symbolSize' => 6,
-            'markPoint'  => ['data' => $this->moduleState('point') ? $this->getPoint() : null],
-            'markLine'   => ['data' => $this->moduleState('line') ? $this->getLine() : null],
+            'markPoint'  => [
+                'data' => $this->moduleState('point') ? $this->getPoint() : null,
+            ],
+            'markLine'   => [
+                'data'     => $this->moduleState('line') ? $this->getLine() : null,
+                'symbol'   => ['none', 'none'],
+                'label'    => [
+                    'position' => 'insideStartTop',
+                ],
+                'emphasis' => [
+                    'lineStyle' => [
+                        'width' => 1,
+                    ],
+                ],
+            ],
         ];
     }
 }
