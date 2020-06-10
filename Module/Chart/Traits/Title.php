@@ -2,29 +2,44 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
+
 trait Title
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $title;
+    protected $title = [];
 
     /**
-     * @return string
+     * @return array
      */
-    public function getTitle(): ?string
+    public function getTitle(): array
     {
         return $this->title;
     }
 
     /**
-     * @param string $title
+     * @param array $title
      *
      * @return $this
      */
-    public function setTitle(string $title)
+    public function setTitle(array $title)
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function setTitleField(string $field, $value)
+    {
+        Helper::setArrayValue($this->title, $field, $value);
 
         return $this;
     }

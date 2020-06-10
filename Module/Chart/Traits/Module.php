@@ -8,17 +8,18 @@ trait Module
      * @var bool[]
      */
     protected $module = [
-        'title'   => true,
-        'tooltip' => true,
-        'toolbox' => true,
-        'legend'  => true,
-        'grid'    => true,
-        'axisX'   => true,
-        'axisY'   => true,
-        'zoom'    => true,
-        'series'  => true,
-        'line'    => true,
-        'point'   => true,
+        'title'     => true,
+        'tooltip'   => true,
+        'toolbox'   => true,
+        'legend'    => true,
+        'grid'      => true,
+        'axisX'     => true,
+        'axisY'     => true,
+        'zoom'      => true,
+        'series'    => true,
+        'line'      => true,
+        'point'     => true,
+        'mapVisual' => true,
     ];
 
     /**

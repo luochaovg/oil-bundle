@@ -30,10 +30,12 @@ abstract class Chart
         Traits\Series,
         Traits\SeriesExtra,
         Traits\Style,
-        Traits\SubTitle,
+        Traits\SubTitleText,
         Traits\SubTitleLink,
         Traits\Theme,
         Traits\Title,
+        Traits\TitleText,
+        Traits\TitleLink,
         Traits\Toolbox,
         Traits\Tooltip,
         Traits\TooltipTpl,
@@ -84,21 +86,26 @@ abstract class Chart
     final public function buildOption()
     {
         $this->init();
+        $titleNumber = (($this->getTitleText() ? 1 : 0) + ($this->getSubTitleText() ? 1 : 0));
 
         // title
         if ($this->moduleState('title')) {
-            $option['title'] = [
-                'text'      => $this->getTitle(),
-                'textStyle' => [
-                    'fontSize'   => 14,
-                    'fontWeight' => 'lighter',
+            $option['title'] = Helper::merge(
+                [
+                    'text'      => $this->getTitleText(),
+                    'link'      => $this->getTitleLink(),
+                    'textStyle' => [
+                        'fontSize'   => 14,
+                        'fontWeight' => 'lighter',
+                    ],
+                    'subtext'   => $this->getSubTitleText(),
+                    'sublink'   => $this->getSubTitleLink(),
+                    'x'         => 'center',
+                    'itemGap'   => 8,
+                    'bottom'    => $titleNumber == 2 ? 0 : 8,
                 ],
-                'subtext'   => $this->getSubTitle(),
-                'sublink'   => $this->getSubTitleLink(),
-                'x'         => 'center',
-                'itemGap'   => 8,
-                'bottom'    => ($this->getTitle() && $this->getSubTitle()) ? 0 : 8,
-            ];
+                $this->getTitle()
+            );
         }
 
         // tooltip
@@ -108,10 +115,9 @@ abstract class Chart
 
         // toolbox
         if ($this->moduleState('toolbox')) {
-            $this->setFeatureField('saveAsImage.name', $this->getSaveName() ?: $this->getTitle());
+            $this->setFeatureField('saveAsImage.name', $this->getSaveName() ?: $this->getTitleText());
             $option['toolbox'] = Helper::merge(
                 [
-                    'show'     => true,
                     'orient'   => 'vertical',
                     'top'      => 20,
                     'right'    => $this->isMobile() ? 0 : 20,
@@ -140,7 +146,7 @@ abstract class Chart
 
         // grid
         if ($this->moduleState('grid')) {
-            if (!$this->getTitle() && !$this->getSubTitle()) {
+            if ($titleNumber == 0) {
                 $this->setGridField('bottom', 0);
             }
             $option['grid'] = Helper::merge(

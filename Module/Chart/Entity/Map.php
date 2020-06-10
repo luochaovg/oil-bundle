@@ -8,7 +8,6 @@ use Leon\BswBundle\Module\Chart\Traits;
 class Map extends Chart
 {
     use Traits\MapKey,
-        Traits\MapVisual,
         Traits\MapColor,
         Traits\MinValue,
         Traits\MaxValue;
@@ -27,7 +26,7 @@ class Map extends Chart
      */
     protected function init()
     {
-        $this->setSelectedMode('single')
+        $this->setSelectedMode(self::SELECTED_MODE_SINGLE)
             ->setTooltip(['trigger' => 'item'])
             ->setLegendTitle(array_keys($this->getDataList()));
     }
@@ -66,7 +65,7 @@ class Map extends Chart
                     'shadowOffsetY' => 0,
                     'shadowBlur'    => 20,
                     'borderWidth'   => 0,
-                    'shadowColor'   => 'rgba(0, 0, 0, 0.5)',
+                    'shadowColor'   => 'rgba(0, 0, 0, .5)',
                 ],
             ],
         ];
@@ -81,7 +80,7 @@ class Map extends Chart
      */
     protected function rebuildOption(array $option): array
     {
-        if ($this->isMapVisual()) {
+        if ($this->moduleState('mapVisual')) {
             $option['visualMap'] = [
                 'show'       => !$this->isMobile(),
                 'min'        => $this->getMinValue(),

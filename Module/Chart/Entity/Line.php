@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Chart\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Chart\Traits;
 
@@ -42,17 +43,17 @@ class Line extends Chart
         'axisPointer' => [
             'type'        => 'shadow', // cross、shadow
             'label'       => [
-                'backgroundColor' => 'rgba(150,150,150,0.5)',
+                'backgroundColor' => 'rgba(150, 150, 150, .5)',
             ],
             'lineStyle'   => [
-                'color' => 'rgba(150,150,150,0.3)',
+                'color' => 'rgba(150, 150, 150, .3)',
                 'type'  => 'dashed',
             ],
             'crossStyle'  => [
-                'color' => 'rgba(150,150,150,0.3)',
+                'color' => 'rgba(150, 150, 150, .3)',
             ],
             'shadowStyle' => [
-                'color' => 'rgba(150,150,150,0.1)',
+                'color' => 'rgba(150, 150, 150, .1)',
             ],
         ],
     ];
@@ -99,7 +100,7 @@ class Line extends Chart
             ->setLine(array_values($this->getLine()));
 
         $feature = $this->mobile ? [] : $this->featureLine;
-        $feature = array_merge($feature, $this->getFeature());
+        $feature = Helper::merge($feature, $this->getFeature());
         $this->setFeature($feature);
 
         foreach ($this->getLegendTitle() as $key => $val) {
