@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Traits;
 
+use Leon\BswBundle\Component\Helper;
 use SplQueue;
 
 trait Message
@@ -66,6 +67,8 @@ trait Message
         if (!$needFlag && !$needObject) {
             return $message;
         }
+
+        $flag = Helper::numericValue($flag);
 
         return [$message, $flag, unserialize($object)];
     }

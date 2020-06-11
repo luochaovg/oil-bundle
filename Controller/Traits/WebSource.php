@@ -21,8 +21,8 @@ trait WebSource
     /**
      * @var array
      * @license
-     *   split : for project
-     *   split ; for bsw
+     *   split : for you project
+     *   split ; for bsw bundle
      */
     protected $srcPrefixMap = [
 
@@ -76,10 +76,15 @@ trait WebSource
     /**
      * @var array
      */
-    protected $positionSrcCss = [
+    protected $initialPositionSrcCss = [
         'ant-d'   => Abs::POS_TOP,
         'animate' => Abs::POS_TOP,
     ];
+
+    /**
+     * @var array
+     */
+    protected $currentPositionSrcCss = [];
 
     /**
      * @var array
@@ -105,13 +110,18 @@ trait WebSource
     /**
      * @var array
      */
-    protected $positionSrcJs = [
+    protected $initialPositionSrcJs = [
         'jquery' => Abs::POS_TOP,
         'moment' => Abs::POS_TOP,
         'vue'    => Abs::POS_TOP,
         'ant-d'  => Abs::POS_TOP,
         'app'    => Abs::POS_BOTTOM,
     ];
+
+    /**
+     * @var array
+     */
+    protected $currentPositionSrcJs = [];
 
     /**
      * Source handler
@@ -129,19 +139,21 @@ trait WebSource
         foreach ([Abs::SRC_CSS, Abs::SRC_JS] as $suffix) {
 
             $type = ucfirst($suffix);
-            $name = "currentSrc{$type}";
-            $position = "positionSrc{$type}";
+            $initialSrc = "initialSrc{$type}";
+            $currentSrc = "currentSrc{$type}";
+            $initialPosition = "initialPositionSrc{$type}";
+            $currentPosition = "currentPositionSrc{$type}";
 
-            $this->{$name} = array_merge($this->{"initialSrc{$type}"}, $this->{$name});
-            $this->{$name} = array_unique($this->{$name});
-            $this->{$name} = array_filter($this->{$name});
+            $this->{$currentSrc} = array_merge($this->{$initialSrc}, $this->{$currentSrc});
+            $this->{$currentSrc} = array_filter(array_unique($this->{$currentSrc}));
 
-            foreach ($this->{$name} as $key => &$src) {
+            $this->{$currentPosition} = array_merge($this->{$initialPosition}, $this->{$currentPosition});
+
+            foreach ($this->{$currentSrc} as $key => &$src) {
                 $posKey = is_numeric($key) ? $src : $key;
                 $src = ($src === true) ? $default : $src;
                 $src = $this->perfectSourceUrl($key, $src, $suffix, $version);
-
-                $pos = $this->{$position}[$posKey] ?? Abs::POS_TOP;
+                $pos = $this->{$currentPosition}[$posKey] ?? Abs::POS_TOP;
                 $source[$suffix][$pos][] = $src;
             }
         }
@@ -212,17 +224,23 @@ trait WebSource
      *
      * @param array|string $css
      * @param string       $position
+     * @param string       $insert
+     * @param bool         $before
      *
      * @return void
      */
-    public function appendSrcCss($css, string $position = Abs::POS_TOP)
+    public function appendSrcCss($css, string $position = Abs::POS_TOP, ?string $insert = null, bool $before = false)
     {
         $css = (array)$css;
 
         $position = Helper::arrayValuesSetTo($css, $position, true);
-        $this->positionSrcCss = array_merge($position, $this->positionSrcCss);
+        $this->currentPositionSrcCss = array_merge($position, $this->currentPositionSrcCss);
 
-        $this->currentSrcCss = array_merge($this->currentSrcCss, $css);
+        if (isset($insert)) {
+            $this->currentSrcCss = Helper::arrayInsertAssoc($this->currentSrcCss, $insert, $css, $before);
+        } else {
+            $this->currentSrcCss = array_merge($this->currentSrcCss, $css);
+        }
     }
 
     /**
@@ -231,14 +249,26 @@ trait WebSource
      * @param string      $key
      * @param string|bool $css
      * @param string      $position
+     * @param string      $insert
+     * @param bool        $before
      *
      * @return void
      */
-    public function appendSrcCssWithKey(string $key, $css, string $position = Abs::POS_TOP)
-    {
-        $this->currentSrcCss[$key] = $css;
+    public function appendSrcCssWithKey(
+        string $key,
+        $css,
+        string $position = Abs::POS_TOP,
+        ?string $insert = null,
+        bool $before = false
+    ) {
+        if (isset($insert)) {
+            $this->currentSrcCss = Helper::arrayInsertAssoc($this->currentSrcCss, $insert, [$key => $css], $before);
+        } else {
+            $this->currentSrcCss[$key] = $css;
+        }
+
         if (!isset($this->positionSrcCss[$key])) {
-            $this->positionSrcCss[$key] = $position;
+            $this->currentPositionSrcCss[$key] = $position;
         }
     }
 
@@ -247,17 +277,23 @@ trait WebSource
      *
      * @param array|string $js
      * @param string       $position
+     * @param string       $insert
+     * @param bool         $before
      *
      * @return void
      */
-    public function appendSrcJs($js, string $position = Abs::POS_BOTTOM)
+    public function appendSrcJs($js, string $position = Abs::POS_BOTTOM, ?string $insert = null, bool $before = false)
     {
         $js = (array)$js;
 
         $position = Helper::arrayValuesSetTo($js, $position, true);
-        $this->positionSrcJs = array_merge($position, $this->positionSrcJs);
+        $this->currentPositionSrcJs = array_merge($position, $this->currentPositionSrcJs);
 
-        $this->currentSrcJs = array_merge($this->currentSrcJs, $js);
+        if (isset($insert)) {
+            $this->currentSrcJs = Helper::arrayInsertAssoc($this->currentSrcJs, $insert, $js, $before);
+        } else {
+            $this->currentSrcJs = array_merge($this->currentSrcJs, $js);
+        }
     }
 
     /**
@@ -266,14 +302,26 @@ trait WebSource
      * @param string      $key
      * @param string|bool $js
      * @param string      $position
+     * @param string      $insert
+     * @param bool        $before
      *
      * @return void
      */
-    public function appendSrcJsWithKey(string $key, $js, string $position = Abs::POS_BOTTOM)
-    {
-        $this->currentSrcJs[$key] = $js;
+    public function appendSrcJsWithKey(
+        string $key,
+        $js,
+        string $position = Abs::POS_BOTTOM,
+        ?string $insert = null,
+        bool $before = false
+    ) {
+        if (isset($insert)) {
+            $this->currentSrcJs = Helper::arrayInsertAssoc($this->currentSrcJs, $insert, [$key => $js], $before);
+        } else {
+            $this->currentSrcJs[$key] = $js;
+        }
+
         if (!isset($this->positionSrcJs[$key])) {
-            $this->positionSrcJs[$key] = $position;
+            $this->currentPositionSrcJs[$key] = $position;
         }
     }
 
@@ -283,26 +331,33 @@ trait WebSource
      * @param array|string|bool $value
      * @param string            $key
      * @param string            $position
+     * @param string            $insert
+     * @param bool              $before
      *
      * @return void
      */
-    public function currentSrc($value, ?string $key = null, string $position = Abs::POS_BOTTOM)
-    {
+    public function currentSrc(
+        $value,
+        ?string $key = null,
+        string $position = Abs::POS_BOTTOM,
+        ?string $insert = null,
+        bool $before = false
+    ) {
         if (is_bool($value)) {
-            $this->appendSrcCSS($value, $position);
-            $this->appendSrcJs($value, $position);
+            $this->appendSrcCSS($value, $position, $insert, $before);
+            $this->appendSrcJs($value, $position, $insert, $before);
 
             return;
         }
 
         if (is_string($value) && $key) {
-            $this->appendSrcCssWithKey($key, $value, $position);
-            $this->appendSrcJsWithKey($key, $value, $position);
+            $this->appendSrcCssWithKey($key, $value, $position, $insert, $before);
+            $this->appendSrcJsWithKey($key, $value, $position, $insert, $before);
 
             return;
         }
 
-        $this->appendSrcCss($value, $position);
-        $this->appendSrcJs($value, $position);
+        $this->appendSrcCss($value, $position, $insert, $before);
+        $this->appendSrcJs($value, $position, $insert, $before);
     }
 }

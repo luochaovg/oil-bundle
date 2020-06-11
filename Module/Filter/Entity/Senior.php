@@ -22,21 +22,25 @@ class Senior extends Filter
     /**
      * @const int
      */
-    const EQ          = 1;
-    const NEQ         = 2;
-    const GT          = 3;
-    const GTE         = 4;
-    const LT          = 5;
-    const LTE         = 6;
-    const IN          = 7;
-    const NOT_IN      = 8;
-    const IS_NULL     = 9;
-    const IS_NOT_NULL = 10;
-    const LIKE        = 11;
-    const BEGIN_LIKE  = 12;
-    const END_LIKE    = 13;
-    const NOT_LIKE    = 14;
-    const BETWEEN     = 15;
+    const EQ           = 1;
+    const NEQ          = 2;
+    const GT           = 3;
+    const GTE          = 4;
+    const LT           = 5;
+    const LTE          = 6;
+    const IN           = 7;
+    const NOT_IN       = 8;
+    const IS_NULL      = 9;
+    const IS_NOT_NULL  = 10;
+    const IS_BLANK     = 11;
+    const IS_NOT_BLANK = 12;
+    const IS_EMPTY     = 13;
+    const IS_NOT_EMPTY = 14;
+    const LIKE         = 15;
+    const BEGIN_LIKE   = 16;
+    const END_LIKE     = 17;
+    const NOT_LIKE     = 18;
+    const BETWEEN      = 19;
 
     /**
      * @cosnt array
@@ -63,12 +67,16 @@ class Senior extends Filter
      * @cosnt array
      */
     const MODE_ROUTINE = [
-        self::EQ          => 'Expr equal',
-        self::NEQ         => 'Expr not equal',
-        self::IN          => 'Expr in',
-        self::NOT_IN      => 'Expr not in',
-        self::IS_NULL     => 'Expr is null',
-        self::IS_NOT_NULL => 'Expr is not null',
+        self::EQ           => 'Expr equal',
+        self::NEQ          => 'Expr not equal',
+        self::IN           => 'Expr in',
+        self::NOT_IN       => 'Expr not in',
+        self::IS_NULL      => 'Expr is null',
+        self::IS_NOT_NULL  => 'Expr is not null',
+        self::IS_BLANK     => 'Expr is blank',
+        self::IS_NOT_BLANK => 'Expr is not blank',
+        self::IS_EMPTY     => 'Expr is empty',
+        self::IS_NOT_EMPTY => 'Expr is not empty',
     ];
 
     /**
@@ -96,7 +104,17 @@ class Senior extends Filter
         }
 
         if (is_null($value)) {
-            if (!in_array($this->expression, [self::IS_NULL, self::IS_NOT_NULL])) {
+            if (!in_array(
+                $this->expression,
+                [
+                    self::IS_NULL,
+                    self::IS_NOT_NULL,
+                    self::IS_BLANK,
+                    self::IS_NOT_BLANK,
+                    self::IS_EMPTY,
+                    self::IS_NOT_EMPTY,
+                ]
+            )) {
                 throw new FilterException("Value for filter expression is required");
             }
             $value = '';
@@ -188,6 +206,22 @@ class Senior extends Filter
 
         if ($this->expression == self::IS_NOT_NULL) {
             return ["{$field} IS NOT NULL"];
+        }
+
+        if ($this->expression == self::IS_BLANK) {
+            return ["{$field} = ''"];
+        }
+
+        if ($this->expression == self::IS_NOT_BLANK) {
+            return ["{$field} <> ''"];
+        }
+
+        if ($this->expression == self::IS_EMPTY) {
+            return ["({$field} IS NULL OR {$field} = '')"];
+        }
+
+        if ($this->expression == self::IS_NOT_EMPTY) {
+            return ["({$field} IS NOT NULL AND {$field} <> '')"];
         }
 
         if ($this->expression == self::LIKE) {
@@ -307,6 +341,44 @@ class Senior extends Filter
 
         if ($this->expression == self::IS_NOT_NULL) {
             return [$this->expr->isNotNull($field)];
+        }
+
+        if ($this->expression == self::IS_BLANK) {
+            return [
+                $this->expr->eq($field, ":{$targetKey}"),
+                [$targetKey => ''],
+                [$targetKey => Type::STRING],
+            ];
+        }
+
+        if ($this->expression == self::IS_NOT_BLANK) {
+            return [
+                $this->expr->neq($field, ":{$targetKey}"),
+                [$targetKey => ''],
+                [$targetKey => Type::STRING],
+            ];
+        }
+
+        if ($this->expression == self::IS_EMPTY) {
+            return [
+                $this->expr->orX(
+                    $this->expr->isNull($field),
+                    $this->expr->eq($field, ":{$targetKey}")
+                ),
+                [$targetKey => ''],
+                [$targetKey => Type::STRING],
+            ];
+        }
+
+        if ($this->expression == self::IS_NOT_EMPTY) {
+            return [
+                $this->expr->andX(
+                    $this->expr->isNotNull($field),
+                    $this->expr->neq($field, ":{$targetKey}")
+                ),
+                [$targetKey => ''],
+                [$targetKey => Type::STRING],
+            ];
         }
 
         if ($this->expression == self::LIKE) {

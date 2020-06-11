@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Module\Form\Entity;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
+use Leon\BswBundle\Module\Form\Entity\Traits\DropdownStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\Enum;
 use Leon\BswBundle\Module\Form\Entity\Traits\LabelInValue;
 use Leon\BswBundle\Module\Form\Entity\Traits\Mode;
@@ -33,6 +34,7 @@ class Select extends Form
     use OptionFilterProp;
     use TokenSeparators;
     use SwitchFieldShape;
+    use DropdownStyle;
 
     /**
      * @const string

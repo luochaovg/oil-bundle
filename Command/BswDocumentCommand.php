@@ -696,7 +696,26 @@ class BswDocumentCommand extends Command implements CommandInterface
                 }
 
                 // handle the sets
-                $json[$dataKey] = Helper::oneDimension2n($json[$dataKey]);
+                $correctList = [];
+                $correctMap = array_combine(array_keys($setsTypeMap), array_fill(0, count($setsTypeMap), []));
+
+                foreach ($json[$dataKey] as $key => $value) {
+                    if (isset($correctMap[$value])) {
+                        $correctList[] = $key;
+                    }
+                }
+
+                $correctSets = [];
+                foreach ($json[$dataKey] as $key => $value) {
+                    $keys = explode('.', $key);
+                    $first = current($keys);
+                    if ((count($keys) > 1) && in_array($first, $correctList)) {
+                        $key = preg_replace("/{$first}\.(\w+)/", "{$first}.0.$1", $key);
+                    }
+                    $correctSets[$key] = $correctMap[$value] ?? $value;
+                }
+
+                $json[$dataKey] = Helper::oneDimension2n($correctSets);
                 $json[$dataKey] = Helper::iterationArrayHandler(
                     $json[$dataKey],
                     function ($item, $key) {

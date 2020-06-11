@@ -2924,12 +2924,13 @@ class Helper
      *
      * @param array|object $target
      * @param string       $default
+     * @param int          $jsonFlag
      *
      * @return string
      */
-    public static function jsonStringify($target, string $default = ''): string
+    public static function jsonStringify($target, string $default = '', int $jsonFlag = 0): string
     {
-        return json_encode($target, JSON_UNESCAPED_UNICODE) ?: $default;
+        return json_encode($target, JSON_UNESCAPED_UNICODE | $jsonFlag) ?: $default;
     }
 
     /**
@@ -3656,11 +3657,7 @@ class Helper
     ): array {
 
         $offset = array_search($position, array_keys($source));
-        if ($offset === false) {
-            return array_merge($source, $insertArray);
-        }
-
-        if (!$offset) {
+        if ($offset === false || !$offset) {
             return $before ? array_merge($insertArray, $source) : array_merge($source, $insertArray);
         }
 
@@ -3790,39 +3787,18 @@ class Helper
      */
     public static function oneDimension2n(array $items, string $split = '.'): array
     {
-        $result = [];
         $build = function (&$target, $key, $value) use (&$build, $split) {
-
             if (empty($key)) {
                 return null;
             }
-
-            $md = false; // more-dimensional
-            $_key = array_shift($key);
-
-            if (is_array($target)) {
-                $md = is_array(current($target));
-            } else {
-                if ($target == 'array[]' || $target == 'object[]') {
-                    $md = true;
-                    $target = [0 => []];
-                } else {
-                    $target = [];
-                }
+            $firstKey = array_shift($key);
+            if (!isset($target[$firstKey])) {
+                $target[$firstKey] = empty($key) ? $value : [];
             }
-
-            $item = &$target;
-            if ($md) {
-                $item = &$target[0];
-            }
-
-            if (!isset($item[$_key])) {
-                $item[$_key] = empty($key) ? $value : [];
-            }
-
-            $build($item[$_key], $key, $value);
+            $build($target[$firstKey], $key, $value);
         };
 
+        $result = [];
         foreach ($items as $key => $item) {
             $key = explode($split, $key);
             $build($result, $key, $item);

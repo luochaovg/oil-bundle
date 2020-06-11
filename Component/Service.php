@@ -51,7 +51,7 @@ class Service
     /**
      * @var array
      */
-    protected $get = [];
+    protected $query = [];
 
     /**
      * @var array
@@ -280,9 +280,9 @@ class Service
      *
      * @return Service|static
      */
-    public function get(array $args): Service
+    public function query(array $args): Service
     {
-        $this->get = $args;
+        $this->query = $args;
 
         return $this;
     }
@@ -374,8 +374,8 @@ class Service
         }
 
         $this->url = "{$this->scheme}://{$this->host}{$portString}/{$this->path}";
-        if ($this->get) {
-            $this->url = Helper::addParamsForUrl($this->get, $this->url);
+        if ($this->query) {
+            $this->url = Helper::addParamsForUrl($this->query, $this->url);
         }
 
         if ($this->method == Abs::REQ_GET && $this->args) {
