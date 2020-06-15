@@ -191,12 +191,13 @@ class Abs
     const SORT_ASC_LONG  = 'ascend';
     const SORT_DESC_LONG = 'descend';
 
-    const NIL      = '(Nil)';
-    const DIRTY    = '(Dirty)';
-    const NOT_SET  = '(NotSet)';
-    const NOT_FILE = '(NotExists)';
-    const SECRET   = '(Secret)';
-    const UNKNOWN  = '(Unknown)';
+    const NIL         = '(Nil)';
+    const DIRTY       = '(Dirty)';
+    const NOT_SET     = '(NotSet)';
+    const NOT_FILE    = '(NotExists)';
+    const SECRET      = '(Secret)';
+    const UNKNOWN     = '(Unknown)';
+    const UNALLOCATED = '(Unallocated)';
 
     const SRC_CSS = 'css';
     const SRC_JS  = 'js';

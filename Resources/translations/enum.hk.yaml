@@ -496,3 +496,8 @@ Phone to third:                 '手機賬號綁定第三方登錄'
 Phone to device:                '手機賬號綁定遊客登錄'
 Email to third:                 '郵箱賬號綁定第三方登錄'
 Email to device:                '郵箱賬號綁定遊客登錄'
+
+Task unopened:                  '未開始'
+Task in progress:               '進行中'
+Task done in contract:          '守約完成'
+Task done out contract:         '逾期完成'

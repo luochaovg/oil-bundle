@@ -496,3 +496,8 @@ Phone to third:                 '手机账号绑定第三方登录'
 Phone to device:                '手机账号绑定游客登录'
 Email to third:                 '邮箱账号绑定第三方登录'
 Email to device:                '邮箱账号绑定游客登录'
+
+Task unopened:                  '未开始'
+Task in progress:               '进行中'
+Task done in contract:          '守约完成'
+Task done out contract:         '逾期完成'

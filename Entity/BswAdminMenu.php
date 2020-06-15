@@ -35,7 +35,7 @@ class BswAdminMenu extends FoundationEntity
      * @ORM\Column(type="integer", name="`menu_id`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=2, align="center", enumExtra=true)
+     * @BswAnnotation\Preview(sort=2, align="center", enumExtra=true, width=200)
      * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true, typeArgs={"previewRoute": "app_bsw_admin_menu_preview", "previewArgs": {"filter": {"menu_id_0": 0}}})
      * @BswAnnotation\Filter(sort=2, type=BswForm\Select::class, enumExtra=true)
      */
@@ -58,7 +58,7 @@ class BswAdminMenu extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=64, groups={"modify"})
-     * @BswAnnotation\Preview(sort=4, render=BswAbs::RENDER_ICON)
+     * @BswAnnotation\Preview(sort=4, render=BswAbs::RENDER_ICON, width=240)
      * @BswAnnotation\Persistence(sort=4)
      * @BswAnnotation\Filter(sort=4)
      */
@@ -69,7 +69,7 @@ class BswAdminMenu extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=32, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT, width=200, align="center")
      * @BswAnnotation\Persistence(sort=5)
      * @BswAnnotation\Filter(sort=5)
      */

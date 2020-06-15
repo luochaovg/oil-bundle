@@ -867,4 +867,14 @@ class Enum
         0 => 'Away after execute',
         1 => 'Reuse after execute',
     ];
+
+    /**
+     * @const array 工作任务状态
+     */
+    const BSW_WORK_TASK_STATE = [
+        1 => 'Task unopened',
+        2 => 'Task in progress',
+        3 => 'Task done in contract',
+        4 => 'Task done out contract',
+    ];
 }

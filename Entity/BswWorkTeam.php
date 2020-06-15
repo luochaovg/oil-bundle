@@ -15,10 +15,10 @@ use Leon\BswBundle\Module\Filter\Entity as BswFilter;
 use Leon\BswBundle\Component\Helper as BswHelper;
 
 /**
- * @ORM\Entity(repositoryClass="Leon\BswBundle\Repository\BswAdminRoleRepository")
- * @UniqueEntity(fields="name", errorPath="name", message="Record exists.", groups={"modify", "newly"})
+ * @ORM\Entity(repositoryClass="Leon\BswBundle\Repository\BswWorkTeamRepository")
+ * @UniqueEntity(fields="name", errorPath="name", message="Record exists", groups={"modify", "newly"})
  */
-class BswAdminRole extends FoundationEntity
+class BswWorkTeam extends FoundationEntity
 {
     /**
      * @ORM\Id
@@ -37,7 +37,7 @@ class BswAdminRole extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=32, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=2, render=BswAbs::HTML_TEXT, width=200, align="center")
+     * @BswAnnotation\Preview(sort=2, render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=2)
      * @BswAnnotation\Filter(sort=2)
      */
