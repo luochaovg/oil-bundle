@@ -35,13 +35,13 @@ class BswFrontendController extends BswWebController
 
             $this->appendSrcJs(
                 [Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang], Abs::JS_WEB],
-                Abs::POS_BOTTOM,
+                Abs::POS_TOP,
                 '',
                 true
             );
             $this->appendSrcCss(
                 [Abs::CSS_WEB],
-                Abs::POS_BOTTOM,
+                Abs::POS_TOP,
                 '',
                 true
             );

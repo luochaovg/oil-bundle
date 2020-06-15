@@ -46,7 +46,7 @@ class Pie extends Chart
                 'normal' => [
                     'show'            => $this->isShowLabel(),
                     'formatter'       => $this->getLabelTpl(),
-                    'backgroundColor' => '#fff',
+                    'backgroundColor' => 'rgba(255, 255, 255, .8)',
                     'borderColor'     => '#eee',
                     'borderWidth'     => 1,
                     'borderRadius'    => 4,

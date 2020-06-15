@@ -11,12 +11,12 @@
   {% set top = constant(scaffold.abs ~ "::POS_TOP") %}
   {% set bottom = constant(scaffold.abs ~ "::POS_BOTTOM") %}
   {% include 'limbs/css.html.twig' with {position: top} %}
+  {% include 'limbs/js.html.twig' with {position: top} %}
   <style>
     {% block stylesheetsBefore %}{% endblock %}
     {% block stylesheets %}{% endblock %}
     {% block stylesheetsAfter %}{% endblock %}
   </style>
-  {% include 'limbs/js.html.twig' with {position: top} %}
 </head>
 
 <body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|filter(v => v)|join(' ') }}">

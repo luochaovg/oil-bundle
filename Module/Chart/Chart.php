@@ -11,6 +11,8 @@ abstract class Chart
         Traits\AxisX,
         Traits\AxisXTitle,
         Traits\AxisY,
+        Traits\BackgroundColor,
+        Traits\Color,
         Traits\DataField,
         Traits\DataList,
         Traits\Grid,
@@ -236,6 +238,14 @@ abstract class Chart
 
             $option['series'] = $series;
         }
+
+        // color
+        if ($this->moduleState('color')) {
+            $option['color'] = $this->getColor();
+        }
+
+        // background color
+        $option['backgroundColor'] = $this->getBackgroundColor();
 
         $option = $this->rebuildOption($option ?? []);
         $option = Helper::merge($option, $this->getOptionExtra());

@@ -15,7 +15,7 @@ bsw.configure({
                         {% endif %}
                         bsw.chart({
                             id: '{{ item.name }}',
-                            theme: '{{ item.theme }}',
+                            theme: '{{ item.themeName }}',
                             option: {{ item.optionStringify|raw }}
                         });
                         {% if item.type == 'map' %}

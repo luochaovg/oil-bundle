@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use ZipArchive;
 use Exception;
 use finfo;
-use function GuzzleHttp\Psr7\str;
 
 class Helper
 {
@@ -2342,14 +2341,16 @@ class Helper
      *
      * @param int    $n
      * @param string $date
+     * @param string $format
      *
      * @return string
      */
-    public static function dateDayDiff(int $n, $date = null): string
+    public static function dateDayDiff(int $n, ?string $date = null, string $format = Abs::FMT_DAY): string
     {
         $n = ($n > 0 ? "+{$n}" : $n);
+        $timestamp = $date ? strtotime($date) : time();
 
-        return date(Abs::FMT_DAY, strtotime("{$n} days", $date ? strtotime($date) : time()));
+        return date($format, strtotime("{$n} days", $timestamp));
     }
 
     /**
@@ -2357,16 +2358,17 @@ class Helper
      *
      * @param int    $n
      * @param string $date
+     * @param string $format
      *
      * @return array
      */
-    public static function dateDayDiffN(int $n, $date = null): array
+    public static function dateDayDiffN(int $n, ?string $date = null, string $format = Abs::FMT_DAY): array
     {
         $n = ($n > 0 ? "+{$n}" : $n);
         $timestamp = $date ? strtotime($date) : time();
 
-        $from = date(Abs::FMT_DAY, strtotime("{$n} days", $timestamp));
-        $to = date(Abs::FMT_DAY, $timestamp);
+        $from = date($format, strtotime("{$n} days", $timestamp));
+        $to = date($format, $timestamp);
 
         return $n > 0 ? [$to, $from] : [$from, $to];
     }
@@ -4431,10 +4433,6 @@ class Helper
      */
     public static function getIpChunk(string $ip, int $chunkNum = -1)
     {
-        if ($ip == 32) {
-            return $ip;
-        }
-
         $ip = explode('.', $ip);
 
         $a = $ip[0];
@@ -4470,9 +4468,9 @@ class Helper
         $chunk = self::getIpChunk($ip);
 
         foreach ($whiteList as $item) {
-            [$item, $mask] = explode('/', $item) + [1 => 32];
+            [$white, $mask] = explode('/', $item) + [1 => 32];
             $index = $mask / 8;
-            if (self::getIpChunk($item, $index) == ($chunk[$index] ?? null)) {
+            if (self::getIpChunk($white, $index) == ($chunk[$index] ?? null)) {
                 return true;
             }
         }
@@ -4532,7 +4530,7 @@ class Helper
     }
 
     /**
-     * Array value
+     * Array value strong for array_values
      *
      * @param array    $target
      * @param callable $assert

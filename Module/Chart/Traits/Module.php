@@ -20,6 +20,7 @@ trait Module
         'line'      => true,
         'point'     => true,
         'mapVisual' => true,
+        'color'     => false,
     ];
 
     /**

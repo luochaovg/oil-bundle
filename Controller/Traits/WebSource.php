@@ -115,7 +115,7 @@ trait WebSource
         'moment' => Abs::POS_TOP,
         'vue'    => Abs::POS_TOP,
         'ant-d'  => Abs::POS_TOP,
-        'app'    => Abs::POS_BOTTOM,
+        'app'    => Abs::POS_TOP,
     ];
 
     /**
@@ -146,7 +146,6 @@ trait WebSource
 
             $this->{$currentSrc} = array_merge($this->{$initialSrc}, $this->{$currentSrc});
             $this->{$currentSrc} = array_filter(array_unique($this->{$currentSrc}));
-
             $this->{$currentPosition} = array_merge($this->{$initialPosition}, $this->{$currentPosition});
 
             foreach ($this->{$currentSrc} as $key => &$src) {
@@ -242,7 +241,7 @@ trait WebSource
      *
      * @return void
      */
-    public function appendSrcCss($css, string $position = Abs::POS_TOP, ?string $insert = null, bool $before = false)
+    public function appendSrcCss($css, string $position = Abs::POS_BOTTOM, ?string $insert = null, bool $before = false)
     {
         $css = (array)$css;
 
@@ -270,7 +269,7 @@ trait WebSource
     public function appendSrcCssWithKey(
         string $key,
         $css,
-        string $position = Abs::POS_TOP,
+        string $position = Abs::POS_BOTTOM,
         ?string $insert = null,
         bool $before = false
     ) {

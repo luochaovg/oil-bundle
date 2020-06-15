@@ -143,24 +143,6 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * Response url map
-     *
-     * @return array
-     */
-    protected function responseUrlMap(): array
-    {
-        $reference = ($this->route == $this->cnf->route_default) ? null : $this->reference();
-
-        return [
-            ErrorAjaxRequest::CODE   => $reference,
-            ErrorParameter::CODE     => $reference,
-            ErrorAuthorization::CODE => $this->cnf->route_login,
-            ErrorAccess::CODE        => $reference,
-            ErrorSession::CODE       => $this->cnf->route_login,
-        ];
-    }
-
-    /**
      * Response success (auto ajax)
      *
      * @param string $message
@@ -184,6 +166,31 @@ abstract class BswWebController extends AbstractController
             ->setClassify(Abs::TAG_CLASSIFY_SUCCESS);
 
         return $this->responseMessage($message);
+    }
+
+    /**
+     * Response url map
+     *
+     * @param int $code
+     *
+     * @return string
+     */
+    protected function responseUrlMap(int $code): ?string
+    {
+        $reference = ($this->route == $this->cnf->route_default) ? null : $this->reference();
+        if (strpos($reference, 'login') !== false) {
+            $reference = null;
+        }
+
+        $map = [
+            ErrorAjaxRequest::CODE   => $reference,
+            ErrorParameter::CODE     => $reference,
+            ErrorAuthorization::CODE => $this->cnf->route_login,
+            ErrorAccess::CODE        => $reference,
+            ErrorSession::CODE       => $this->cnf->route_login,
+        ];
+
+        return $map[$code] ?? null;
     }
 
     /**
@@ -226,7 +233,7 @@ abstract class BswWebController extends AbstractController
         // fallback url
         $this->session->set(Abs::TAG_FALLBACK, $this->currentUrl());
         // redirect url
-        $url = $url ?? ($this->responseUrlMap()[$code4logic] ?? null);
+        $url = $url ?? $this->responseUrlMap($code4logic);
 
         $message = (new Message())
             ->setMessage("[{$code4logic}] {$tiny}")

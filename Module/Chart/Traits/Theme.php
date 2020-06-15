@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 
 trait Theme
@@ -9,7 +10,7 @@ trait Theme
     /**
      * @var string
      */
-    protected $theme = Abs::CHART_DEFAULT_THEME;
+    protected $theme = Abs::JS_CHART_THEME;
 
     /**
      * @return string
@@ -17,6 +18,14 @@ trait Theme
     public function getTheme(): string
     {
         return $this->theme;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThemeName(): string
+    {
+        return Helper::cutString($this->getTheme(), ['/^-1', '.^0']);
     }
 
     /**
