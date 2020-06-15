@@ -56,7 +56,6 @@ abstract class Chart
     public function __construct(string $name = null)
     {
         $this->setMobile(Helper::isMobile());
-        $this->setType($this->type());
         $this->setSelectedMode(self::SELECTED_MODE_MULTIPLE);
 
         if ($name) {
@@ -65,11 +64,19 @@ abstract class Chart
     }
 
     /**
-     * Type
-     *
-     * @return string
+     * Rebuild data and field
      */
-    abstract protected function type(): string;
+    protected function rebuildDataAndField()
+    {
+        $data = $this->getDataList();
+        foreach ($data as $key => &$item) {
+            if (!$this->getDataField()) {
+                $this->setDataField(array_keys($item));
+            }
+            $item = array_values($item);
+        }
+        $this->setDataList($data);
+    }
 
     /**
      * Init
@@ -85,6 +92,7 @@ abstract class Chart
      */
     final public function buildOption()
     {
+        $this->rebuildDataAndField();
         $this->init();
         $titleNumber = (($this->getTitleText() ? 1 : 0) + ($this->getSubTitleText() ? 1 : 0));
 

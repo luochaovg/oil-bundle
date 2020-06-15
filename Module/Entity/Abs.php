@@ -457,7 +457,6 @@ class Abs
     const JS_SORTABLE             = 'npm;sortablejs/Sortable.min.js';
     const JS_CROPPER              = 'npm;cropper/dist/cropper.min.js';
     const JS_CHART                = 'npm;echarts/dist/echarts.min.js';
-    const JS_CHART_MAP_CHINA      = 'npm;echarts/map/js/china.js';
     const JS_CHART_DARK           = 'npm;echarts/theme/dark.js';
     const JS_CHART_INFOGRAPHIC    = 'npm;echarts/theme/infographic.js';
     const JS_CHART_MACARONS       = 'npm;echarts/theme/macarons.js';

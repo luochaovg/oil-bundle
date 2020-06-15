@@ -7,7 +7,7 @@ trait Width
     /**
      * @var string
      */
-    protected $width = '98%';
+    protected $width = '100%';
 
     /**
      * @var string

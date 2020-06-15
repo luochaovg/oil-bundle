@@ -12,12 +12,9 @@ class Pie extends Chart
         Traits\Radius;
 
     /**
-     * @return string
+     * @var string
      */
-    protected function type(): string
-    {
-        return 'pie';
-    }
+    protected $type = 'pie';
 
     /**
      * @inheritdoc
@@ -27,6 +24,7 @@ class Pie extends Chart
     {
         $this->setLegendTitle($this->getDataField())
             ->setTooltipField('trigger', 'item')
+            ->setTooltipField('formatter', $this->getTooltipTpl())
             ->moduleDisable('axisX', 'axisY');
     }
 

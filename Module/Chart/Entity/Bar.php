@@ -10,12 +10,9 @@ class Bar extends Line
         Traits\MaxBarFixedWidth;
 
     /**
-     * @return string
+     * @var string
      */
-    protected function type(): string
-    {
-        return 'bar';
-    }
+    protected $type = 'bar';
 
     /**
      * @inheritdoc

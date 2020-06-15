@@ -8,11 +8,23 @@ bsw.configure({
     logic: {
         chartInit(v) {
             {% for item in chart.items %}
-              bsw.chart({
-                  id: '{{ item.name }}',
-                  theme: '{{ item.theme }}',
-                  option: {{ item.optionStringify|raw }}
-              });
+                try {
+                    {% if item.type == 'map' %}
+                    $.get('{{ item.mapJsonFile }}', function (mapJson) {
+                        echarts.registerMap('{{ item.mapKey }}', mapJson);
+                        {% endif %}
+                        bsw.chart({
+                            id: '{{ item.name }}',
+                            theme: '{{ item.theme }}',
+                            option: {{ item.optionStringify|raw }}
+                        });
+                        {% if item.type == 'map' %}
+                        });
+                    {% endif %}
+                } catch(e) {
+                    console.log("Build chart error when name = `{{ item.name }}`.");
+                    console.error(e);
+                }
             {% endfor %}
         }
     }

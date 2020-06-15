@@ -7,18 +7,21 @@ use Leon\BswBundle\Module\Chart\Traits;
 
 class Map extends Chart
 {
-    use Traits\MapKey,
+    use Traits\MapSource,
         Traits\MapColor,
+        Traits\MapNameAlias,
         Traits\MinValue,
         Traits\MaxValue;
 
     /**
-     * @return string
+     * @var string
      */
-    protected function type(): string
-    {
-        return 'map';
-    }
+    protected $type = 'map';
+
+    /**
+     * @var string
+     */
+    protected $tooltipTpl = '{b} - {c}';
 
     /**
      * @inheritdoc
@@ -27,6 +30,8 @@ class Map extends Chart
     protected function init()
     {
         $this->setSelectedMode(self::SELECTED_MODE_SINGLE)
+            ->moduleDisable('legend', 'grid', 'axisX', 'axisY')
+            ->setTooltipField('formatter', $this->getTooltipTpl())
             ->setTooltipField('trigger', 'item')
             ->setLegendTitle(array_keys($this->getDataList()));
     }
@@ -43,28 +48,32 @@ class Map extends Chart
     {
         $values = array_column($item, 'value');
 
-        $this->setMinValue(min(min($values), $this->getMinValue()));
         $this->setMaxValue(max(max($values), $this->getMaxValue()));
+        $this->setMinValue(min(min($values), $this->getMinValue()));
 
         return [
+            'map'        => $this->getMapKey(),
             'mapType'    => $this->getMapKey(),
-            'roam'       => false,
+            'roam'       => true,
             'zoom'       => 1,
             'scaleLimit' => [
                 'min' => 1,
-                'max' => 3,
+                'max' => 10,
             ],
             'label'      => [
                 'normal'   => ['show' => false],
                 'emphasis' => ['show' => false],
             ],
+            'nameMap'    => $this->getMapNameAlias(),
             'itemStyle'  => [
-                'emphasis' => [
-                    'areaColor'     => '#FFDEAD',
+                'areaColor'   => 'rgba(240, 240, 240, .2)',
+                'borderColor' => 'rgba(0, 0, 0, .5)',
+                'emphasis'    => [
+                    'areaColor'     => 'rgba(255, 165, 0, .3)',
                     'shadowOffsetX' => 0,
                     'shadowOffsetY' => 0,
-                    'shadowBlur'    => 20,
-                    'borderWidth'   => 0,
+                    'shadowBlur'    => 0,
+                    'borderWidth'   => .5,
                     'shadowColor'   => 'rgba(0, 0, 0, .5)',
                 ],
             ],
@@ -82,10 +91,11 @@ class Map extends Chart
     {
         if ($this->moduleState('mapVisual')) {
             $option['visualMap'] = [
+                'type'       => 'piecewise',
                 'show'       => !$this->isMobile(),
                 'min'        => $this->getMinValue(),
                 'max'        => $this->getMaxValue(),
-                'left'       => '10%',
+                'left'       => '5%',
                 'bottom'     => '10%',
                 'calculable' => true,
                 'inRange'    => ['color' => $this->getMapColor()],

@@ -7,7 +7,7 @@ trait MaxValue
     /**
      * @var integer
      */
-    protected $maxValue = 0;
+    protected $maxValue = PHP_INT_MIN;
 
     /**
      * @return int

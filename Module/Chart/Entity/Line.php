@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Module\Chart\Entity;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Chart\Traits;
 
@@ -11,6 +10,11 @@ class Line extends Chart
     use Traits\Smooth,
         Traits\Point,
         Traits\Line;
+
+    /**
+     * @var string
+     */
+    protected $type = 'line';
 
     /**
      * @var array
@@ -22,6 +26,10 @@ class Line extends Chart
             ],
         ],
         'boundaryGap' => true,
+        'axisLabel'   => [
+            'rotate' => 30,
+            'margin' => 15,
+        ],
     ];
 
     /**
@@ -61,32 +69,22 @@ class Line extends Chart
     ];
 
     /**
-     * @return string
-     */
-    protected function type(): string
-    {
-        return 'line';
-    }
-
-    /**
      * @inheritdoc
      * @return void
      */
     protected function init()
     {
+        // stack tooltip tpl
         if ($seriesExtra = current($this->getSeriesExtra())) {
             if (isset($seriesExtra['stack'])) {
                 $this->setTooltipTpl('fn:TooltipStack');
             }
         }
 
-        if ($this->isPointSenseReverse()) {
-            $this->setPointField('max.itemStyle.color', $this->getPointBad());
-            $this->setPointField('min.itemStyle.color', $this->getPointGood());
-        } else {
-            $this->setPointField('max.itemStyle.color', $this->getPointGood());
-            $this->setPointField('min.itemStyle.color', $this->getPointBad());
-        }
+        // reverse the point color
+        $reverse = $this->isPointSenseReverse();
+        $this->setPointField('max.itemStyle.color', $reverse ? $this->getPointBad() : $this->getPointGood());
+        $this->setPointField('min.itemStyle.color', $reverse ? $this->getPointGood() : $this->getPointBad());
 
         $this->setAxisXTitle($this->getDataField())
             ->setLegendTitle(array_keys($this->getDataList()))

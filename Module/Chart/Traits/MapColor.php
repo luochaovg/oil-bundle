@@ -7,7 +7,7 @@ trait MapColor
     /**
      * @var array
      */
-    protected $mapColor = ['white', '#009688'];
+    protected $mapColor = ['rgba(24, 114, 255, .1)', 'rgba(24, 114, 255, .7)'];
 
     /**
      * @return array

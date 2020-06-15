@@ -152,7 +152,7 @@ trait WebSource
             foreach ($this->{$currentSrc} as $key => &$src) {
                 $posKey = is_numeric($key) ? $src : $key;
                 $src = ($src === true) ? $default : $src;
-                $src = $this->perfectSourceUrl($key, $src, $suffix, $version);
+                $src = $this->perfectSourceUrl($src, $suffix, $key, $version);
                 $pos = $this->{$currentPosition}[$posKey] ?? Abs::POS_TOP;
                 $source[$suffix][$pos][] = $src;
             }
@@ -164,16 +164,20 @@ trait WebSource
     /**
      * Perfect source url
      *
-     * @param mixed  $cdnKey
      * @param string $src
      * @param string $suffix
+     * @param mixed  $cdnKey
      * @param string $version
      *
      * @return string
      */
-    protected function perfectSourceUrl(string $cdnKey, string $src, string $suffix, ?string $version)
-    {
-        if (!Helper::strEndWith($src, ".{$suffix}")) {
+    protected function perfectSourceUrl(
+        string $src,
+        ?string $suffix = null,
+        ?string $cdnKey = null,
+        ?string $version = null
+    ) {
+        if ($suffix && !Helper::strEndWith($src, ".{$suffix}")) {
             $src = "{$src}.{$suffix}";
         }
 
@@ -185,7 +189,11 @@ trait WebSource
             $cdnKey = $src;
         }
 
-        $cdn = "mapCdnSrc" . ucfirst($suffix);
+        $cdn = 'mapCdnSrc';
+        if ($suffix) {
+            $cdn .= ucfirst($suffix);
+        }
+
         if (isset($this->{$cdn}[$cdnKey])) {
             return $this->{$cdn}[$cdnKey];
         }
@@ -193,7 +201,12 @@ trait WebSource
         return $this->caching(
             function () use ($src, $suffix, $version) {
 
-                $dist = $this->debug ? "src-{$suffix}/" : "{$suffix}/";
+                if ($suffix) {
+                    $dist = $this->debug ? "src-{$suffix}/" : "{$suffix}/";
+                } else {
+                    $dist = 'src/';
+                }
+
                 if ($version) {
                     $version = "?version={$version}";
                 }

@@ -4245,6 +4245,7 @@ class Helper
 
         $data = [];
         foreach ($groupByDateAndX as $item) {
+
             $title = $item[$titleField];
             $data[$xMap[$item[$xField]]][$title] = $item[$valueField];
 
@@ -4254,6 +4255,7 @@ class Helper
             if (!isset($data[$totalField][$title])) {
                 $data[$totalField][$title] = 0;
             }
+
             $data[$totalField][$title] += $item[$valueField];
         }
 
@@ -4267,7 +4269,6 @@ class Helper
             }
         }
 
-        $title = [];
         $dataList = [];
         foreach ($data as $type => $item) {
 
@@ -4282,13 +4283,10 @@ class Helper
                     $item[$key] = call_user_func_array($handler, [$val, $key]);
                 }
             }
-            $dataList[$type] = array_values($item);
-            if (empty($title)) {
-                $title = array_keys($item);
-            }
+            $dataList[$type] = $item;
         }
 
-        return [$title, $dataList];
+        return $dataList;
     }
 
     /**
@@ -4323,10 +4321,7 @@ class Helper
             }
         }
 
-        $title = array_keys($groupByDate);
-        $value = array_values($groupByDate);
-
-        return [$title, $value];
+        return $groupByDate;
     }
 
     /**
