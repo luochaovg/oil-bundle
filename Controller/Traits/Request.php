@@ -183,6 +183,25 @@ trait Request
     }
 
     /**
+     * Logger -> classify
+     *
+     * @param string $classify
+     * @param string $message
+     * @param array  $args
+     */
+    protected function logClassify(string $classify, string $message, array $args = [])
+    {
+        $requestArgs = $this->requestRecord();
+        $this->logger->{$classify}($message, $args);
+
+        $this->logger->debug('Args $_CHECK', $requestArgs['CHECK']);
+        $this->logger->debug('Args $_FILES', $requestArgs['FILES']);
+        $this->logger->debug('Args $_GET', $requestArgs[Abs::REQ_GET]);
+        $this->logger->debug('Args $_POST', $requestArgs[Abs::REQ_POST]);
+        $this->logger->debug('Args $_HEAD', $requestArgs[Abs::REQ_HEAD]);
+    }
+
+    /**
      * Logger warning
      *
      * @param string $message
@@ -190,14 +209,7 @@ trait Request
      */
     public function logWarning(string $message, array $args = [])
     {
-        $requestArgs = $this->requestRecord();
-        $this->logger->warning($message, $args);
-
-        $this->logger->debug('Args $_CHECK', $requestArgs['CHECK']);
-        $this->logger->debug('Args $_FILES', $requestArgs['FILES']);
-        $this->logger->debug('Args $_GET', $requestArgs[Abs::REQ_GET]);
-        $this->logger->debug('Args $_POST', $requestArgs[Abs::REQ_POST]);
-        $this->logger->debug('Args $_HEAD', $requestArgs[Abs::REQ_HEAD]);
+        $this->logClassify('warning', $message, $args);
     }
 
     /**
@@ -208,33 +220,28 @@ trait Request
      */
     public function logError(string $message, array $args = [])
     {
-        $requestArgs = $this->requestRecord();
-        $this->logger->error($message, $args);
-
-        $this->logger->debug('Args $_CHECK', $requestArgs['CHECK']);
-        $this->logger->debug('Args $_FILES', $requestArgs['FILES']);
-        $this->logger->debug('Args $_GET', $requestArgs[Abs::REQ_GET]);
-        $this->logger->debug('Args $_POST', $requestArgs[Abs::REQ_POST]);
-        $this->logger->debug('Args $_HEAD', $requestArgs[Abs::REQ_HEAD]);
+        $this->logClassify('error', $message, $args);
     }
 
     /**
      * List route key value pair
      *
      * @param bool $sortByKey
+     * @param bool $labelUseUri
      *
      * @return array
      */
-    public function routeKVP(bool $sortByKey = null): array
+    public function routeKVP(bool $sortByKey = null, bool $labelUseUri = false): array
     {
         $route = $this->getRouteCollection();
-        $route = array_column($route, 'uri', 'route');
+        $routeList = array_column($route, $labelUseUri ? 'uri' : 'route', 'route');
+
         if ($sortByKey === true) {
-            ksort($route);
+            ksort($routeList);
         } elseif ($sortByKey === false) {
-            asort($route);
+            asort($routeList);
         }
 
-        return $route;
+        return $routeList;
     }
 }

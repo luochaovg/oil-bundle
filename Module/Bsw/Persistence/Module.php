@@ -568,7 +568,7 @@ class Module extends Bsw
              * extra enum
              */
 
-            $item = $this->handleForEnum($item, [$this->input->id]);
+            $item = $this->handleForEnum($item, ['scene' => $this->input->scene, 'id' => $this->input->id]);
 
             $enumClass = [
                 Select::class,

@@ -35,7 +35,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=2, align="center", enumExtra=true)
-     * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true)
+     * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true, show=false)
      * @BswAnnotation\Filter(sort=2, type=BswForm\Select::class, enumExtra=true)
      */
     protected $userId;
@@ -56,7 +56,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=4, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
-     * @BswAnnotation\Persistence(sort=4, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class})
+     * @BswAnnotation\Persistence(sort=4, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
      * @BswAnnotation\Filter(sort=4, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
      */
     protected $startTime;
@@ -66,7 +66,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=5, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
-     * @BswAnnotation\Persistence(sort=5, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class})
+     * @BswAnnotation\Persistence(sort=5, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
      * @BswAnnotation\Filter(sort=5, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
      */
     protected $endTime;
@@ -76,7 +76,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=6, align="center")
-     * @BswAnnotation\Persistence(sort=6, type=BswForm\Number::class, typeArgs={"min":0, "max":100})
+     * @BswAnnotation\Persistence(sort=6, type=BswForm\Number::class, typeArgs={"min":0, "max":100}, show=false)
      * @BswAnnotation\Filter(sort=6, type=BswForm\Number::class)
      */
     protected $weight = 0;
@@ -117,8 +117,8 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=3.1, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
-     * @BswAnnotation\Persistence(sort=3.1, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=3.1, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Persistence(sort=10, type=BswForm\Select::class, enum=true, show=false)
+     * @BswAnnotation\Filter(sort=10, type=BswForm\Select::class, enum=true)
      */
     protected $state = 1;
 }
