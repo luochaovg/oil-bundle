@@ -2847,7 +2847,7 @@ class Helper
      * Get the rand string
      *
      * @param int    $len
-     * @param string $type alphabet/number/upper-alphabet/lower-alphabet/mixed/captcha
+     * @param string $type alphabet/number/upper/upper-number/lower/lower-number/mixed/captcha
      * @param string $addChars
      *
      * @return string
@@ -2862,11 +2862,17 @@ class Helper
             case 'number' :
                 $chars = str_repeat('0123456789', 3);
                 break;
-            case 'upper-alphabet' :
+            case 'upper' :
                 $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{$addChars}";
                 break;
-            case 'lower-alphabet' :
+            case 'upper-number' :
+                $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{$addChars}";
+                break;
+            case 'lower' :
                 $chars = "abcdefghijklmnopqrstuvwxyz{$addChars}";
+                break;
+            case 'lower-number' :
+                $chars = "abcdefghijklmnopqrstuvwxyz0123456789{$addChars}";
                 break;
             case 'mixed' :
                 $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789{$addChars}";
