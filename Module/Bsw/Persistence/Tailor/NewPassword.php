@@ -30,11 +30,12 @@ class NewPassword extends Tailor
             'column'   => 8,
             'type'     => Input::class,
             'typeArgs' => ['type' => Input::TYPE_PASSWORD],
-            'tips'     => 'Do not fill if not need',
         ];
 
         if (empty($args->id)) {
-            $args->target[$this->newField]['rules'][] = Abs::RULES_REQUIRED;
+            $args->target[$this->newField]['rules'] = [$this->web->formRuleRequired()];
+        } else {
+            $args->target[$this->newField]['tips'] = 'Do not fill if not need';
         }
 
         return $args->target;

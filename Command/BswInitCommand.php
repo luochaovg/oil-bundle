@@ -38,7 +38,6 @@ class BswInitCommand extends Command implements CommandInterface
             'force'              => [null, InputOption::VALUE_OPTIONAL, 'Force init again', 'no'],
             'app'                => [null, InputOption::VALUE_OPTIONAL, 'App flag for scaffold suffix'],
             'project'            => [null, InputOption::VALUE_OPTIONAL, 'App name for config', 'customer'],
-            'api'                => [null, InputOption::VALUE_OPTIONAL, 'App for RESTful api?', 'no'],
             'scheme-prefix'      => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix'],
             'scheme-prefix-mode' => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix mode add or remove', 'add'],
             'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
@@ -388,7 +387,7 @@ class BswInitCommand extends Command implements CommandInterface
         $dumper = new Dumper();
 
         $this->project = $params['project'];
-        $this->api = $params['api'] === 'yes';
+        $this->api = $params['app'] === 'api';
 
         $doneFile = "{$project}/.done-init";
         if ($params['force'] !== 'yes' && file_exists($doneFile)) {
@@ -473,7 +472,7 @@ class BswInitCommand extends Command implements CommandInterface
             $scheme = $pdo->fetchArray("SHOW CREATE TABLE {$table}")[1];
             $scheme = str_replace(
                 "CREATE TABLE `{$table}`",
-                "DROP TABLE IF EXISTS `{TABLE_NAME}`;\nCREATE TABLE `{TABLE_NAME}`",
+                "CREATE TABLE `{TABLE_NAME}`",
                 $scheme
             );
 
@@ -508,6 +507,7 @@ class BswInitCommand extends Command implements CommandInterface
             if (!$record || $params['scheme-force'] === 'yes') {
                 $sql = file_get_contents($sqlFile);
                 $sql = str_replace('{TABLE_NAME}', $table, $sql);
+                $pdo->exec("DROP TABLE IF EXISTS `{$table}`");
                 $pdo->exec($sql);
                 $output->writeln("<info>  Scheme:  [ReBuild] {$database}.{$table} </info>");
             } else {

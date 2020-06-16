@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS `{TABLE_NAME}`;
 CREATE TABLE `{TABLE_NAME}` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `phone` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -7,6 +6,7 @@ CREATE TABLE `{TABLE_NAME}` (
   `role_id` int(10) unsigned NOT NULL DEFAULT '0',
   `team_id` int(10) unsigned NOT NULL DEFAULT '0',
   `sex` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `telegram_id` bigint(20) NOT NULL DEFAULT '0',
   `google_auth_secret` char(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `avatar_attachment_id` int(10) unsigned NOT NULL DEFAULT '0',
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

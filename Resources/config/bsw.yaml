@@ -281,6 +281,9 @@ services:
     Leon\BswBundle\Command\BswInitCommand:
         tags: ['console.command']
 
+    Leon\BswBundle\Command\BswInitRecordCommand:
+        tags: ['console.command']
+
     Leon\BswBundle\Command\BswMissionCommand:
         tags: ['console.command']
 

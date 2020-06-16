@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS `{TABLE_NAME}`;
 CREATE TABLE `{TABLE_NAME}` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,

@@ -206,9 +206,19 @@ trait BackendEntityHint
         if (in_array($item->type, array_merge($intType, $floatType))) {
             $options->type = 'BswForm\\Number::class';
             if ($item->type == Abs::MYSQL_SMALLINT) {
-                $options->typeArgs['max'] = Abs::MYSQL_SMALLINT_UNS_MAX;
+                if ($item->unsigned) {
+                    $options->typeArgs['max'] = Abs::MYSQL_SMALLINT_UNS_MAX;
+                } else {
+                    $options->typeArgs['min'] = Abs::MYSQL_SMALLINT_MIN;
+                    $options->typeArgs['max'] = Abs::MYSQL_SMALLINT_MAX;
+                }
             } elseif ($item->type == Abs::MYSQL_BIGINT) {
-                $options->typeArgs['max'] = Abs::MYSQL_BIGINT_UNS_MAX;
+                if ($item->unsigned) {
+                    $options->typeArgs['max'] = Abs::MYSQL_BIGINT_UNS_MAX;
+                } else {
+                    $options->typeArgs['min'] = Abs::MYSQL_BIGINT_MIN;
+                    $options->typeArgs['max'] = Abs::MYSQL_BIGINT_MAX;
+                }
             }
         }
 

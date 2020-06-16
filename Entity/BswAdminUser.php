@@ -96,13 +96,23 @@ class BswAdminUser extends FoundationEntity
     protected $sex = 0;
 
     /**
+     * @ORM\Column(type="bigint", name="`telegram_id`")
+     * @Assert\Type(type="numeric", groups={"modify"})
+     * @Assert\NotNull(groups={"modify"})
+     * @BswAnnotation\Preview(sort=8, align="center", width=150)
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\Number::class, typeArgs={"min":-9.2233720368548E+18, "max":9.2233720368548E+18})
+     * @BswAnnotation\Filter(sort=8, type=BswForm\Number::class, typeArgs={"min":-9.2233720368548E+18, "max":9.2233720368548E+18})
+     */
+    protected $telegramId = 0;
+
+    /**
      * @ORM\Column(type="string", name="`google_auth_secret`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=16, groups={"modify"})
-     * @BswAnnotation\Preview(sort=8, align="center", render=BswAbs::RENDER_SECRET_2, width=150)
-     * @BswAnnotation\Persistence(sort=8, show=false, ignoreBlank=true)
-     * @BswAnnotation\Filter(sort=8, show=false)
+     * @BswAnnotation\Preview(sort=9, align="center", render=BswAbs::RENDER_SECRET_2, width=150)
+     * @BswAnnotation\Persistence(sort=9, show=false, ignoreBlank=true)
+     * @BswAnnotation\Filter(sort=9, show=false)
      */
     protected $googleAuthSecret = "";
 
@@ -110,9 +120,9 @@ class BswAdminUser extends FoundationEntity
      * @ORM\Column(type="integer", name="`avatar_attachment_id`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=9, align="center")
-     * @BswAnnotation\Persistence(sort=9, type=BswForm\Upload::class, typeArgs={"flag":"bsw-admin-user", "fileMd5Key":"md5", "fileSha1Key":"sha1"})
-     * @BswAnnotation\Filter(sort=9, type=BswForm\Number::class)
+     * @BswAnnotation\Preview(sort=10, align="center")
+     * @BswAnnotation\Persistence(sort=10, type=BswForm\Upload::class, typeArgs={"flag":"bsw-admin-user", "fileMd5Key":"md5", "fileSha1Key":"sha1"})
+     * @BswAnnotation\Filter(sort=10, type=BswForm\Number::class)
      */
     protected $avatarAttachmentId = 0;
 
@@ -120,9 +130,9 @@ class BswAdminUser extends FoundationEntity
      * @ORM\Column(type="string", name="`add_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=10, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=10, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=10, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=11, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=11, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=11, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $addTime;
 
@@ -130,9 +140,9 @@ class BswAdminUser extends FoundationEntity
      * @ORM\Column(type="string", name="`update_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=11, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=11, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=11, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=12, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=12, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=12, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $updateTime;
 
@@ -140,9 +150,9 @@ class BswAdminUser extends FoundationEntity
      * @ORM\Column(type="smallint", name="`state`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=12, align="center", enum=true, dress={0:"default", 1:"processing"}, status=true)
-     * @BswAnnotation\Persistence(sort=12, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=12, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Preview(sort=13, align="center", enum=true, dress={0:"default", 1:"processing"}, status=true)
+     * @BswAnnotation\Persistence(sort=13, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Filter(sort=13, type=BswForm\Select::class, enum=true)
      */
     protected $state = 1;
 }

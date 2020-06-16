@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS `{TABLE_NAME}`;
 CREATE TABLE `{TABLE_NAME}` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `platform` tinyint(3) unsigned NOT NULL DEFAULT '0',
