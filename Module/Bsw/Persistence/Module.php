@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
+use Leon\BswBundle\Module\Form\Entity\Group;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
@@ -397,11 +398,11 @@ class Module extends Bsw
             /**
              * Upload tips
              */
-            $trans = $this->input->translator;
+
             $option = $this->web->uploadOptionByFlag($form->getFlag());
             [$list, $suffix, $mime] = Uploader::optionTips(
                 $option,
-                function ($label) use ($trans) {
+                function ($label) {
                     return $this->web->twigLang($label);
                 }
             );
@@ -442,6 +443,35 @@ class Module extends Bsw
         if ($form instanceof Select) {
             if ($meta = $form->getSwitchFieldShape()) {
                 $output->fieldShapeCollect[$field] = $meta;
+            }
+        }
+    }
+
+    /**
+     * Get datetime format
+     *
+     * @param string $field
+     * @param Form   $form
+     * @param array  $format
+     */
+    protected function datetimeFormat(string $field, Form $form, array &$format = [])
+    {
+        if (Helper::extendClass($form, Datetime::class, true)) {
+
+            /**
+             * @var Datetime $form
+             */
+            $format[$field] = $form->getFormat();
+        }
+
+        if (Helper::extendClass($form, Group::class, true)) {
+            /**
+             * @var Group $form
+             */
+            foreach ($form->getMember() as $key => $groupForm) {
+                $groupField = $groupForm->getField() ?? $key;
+                $groupField = "{$field}_{$groupField}";
+                $this->datetimeFormat($groupField, $groupForm, $format);
             }
         }
     }
@@ -592,13 +622,7 @@ class Module extends Bsw
                 $form->setEnum($this->web->enumLang($item['enum']));
             }
 
-            if (Helper::extendClass($form, Datetime::class, true)) {
-
-                /**
-                 * @var Datetime $form
-                 */
-                $format[$field] = $form->getFormat();
-            }
+            $this->datetimeFormat($field, $form, $format);
 
             if (!$form->getPlaceholder()) {
                 $form->setPlaceholder($item['placeholder'] ?: $label);

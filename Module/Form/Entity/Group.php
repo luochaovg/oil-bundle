@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Form;
 
 class Group extends Form
@@ -14,43 +15,18 @@ class Group extends Form
     /**
      * @var array
      */
-    protected $memberCol = [];
+    protected $column = [];
+
+    /**
+     * @var int|array
+     */
+    protected $gutter = 8;
 
     /**
      * @return Form[]
      */
     public function getMember(): array
     {
-        $memberCol = $this->getMemberCol();
-        if (empty($memberCol)) {
-            $percent = floor(100 / count($this->member));
-            foreach ($this->member as $item) {
-                array_push($memberCol, $percent - 5);
-                array_push($memberCol, '8px');
-            }
-        }
-
-        $index = 0;
-        foreach ($this->member as $field => $item) {
-            if (!$item->getKey()) {
-                $item->setField("_{$field}");
-            }
-            if (!$item->getPlaceholder()) {
-                $item->setPlaceholder($this->getPlaceholder());
-            }
-
-            $itemIndex = $index * 2;
-            $marginIndex = $itemIndex + 1;
-
-            if (!$item->hasStyle('width') && $col = ($memberCol[$itemIndex] ?? null)) {
-                $item->appendStyle(['width' => is_numeric($col) ? "{$col}%" : $col]);
-            }
-            if (!$item->hasStyle('margin-right') && $col = ($memberCol[$marginIndex] ?? null)) {
-                $item->appendStyle(['margin-right' => is_numeric($col) ? "{$col}%" : $col]);
-            }
-            $index += 1;
-        }
-
         return $this->member;
     }
 
@@ -62,18 +38,6 @@ class Group extends Form
     public function setMember(array $member)
     {
         $this->member = $member;
-
-        return $this;
-    }
-
-    /**
-     * @param Form[] $member
-     *
-     * @return $this
-     */
-    public function appendMember(array $member)
-    {
-        $this->member = array_merge($this->member, $member);
 
         return $this;
     }
@@ -93,31 +57,58 @@ class Group extends Form
     /**
      * @return array
      */
-    public function getMemberCol(): array
+    public function getColumn(): array
     {
-        return $this->memberCol;
+        $count = count($this->member);
+        $default = array_fill(0, $count, floor(24 / $count));
+
+        if (empty($this->column)) {
+            return $default;
+        }
+
+        if (array_sum($this->column) !== 24) {
+            return $default;
+        }
+
+        if (count($this->column) != count($this->member)) {
+            return $default;
+        }
+
+        return $this->column;
     }
 
     /**
-     * @param array $memberCol
+     * @param array $column
      *
      * @return $this
      */
-    public function setMemberCol(array $memberCol)
+    public function setColumn(array $column)
     {
-        $this->memberCol = $memberCol;
+        $this->column = $column;
 
         return $this;
     }
 
     /**
-     * @param array $memberCol
+     * @return int|string
+     */
+    public function getGutter()
+    {
+        if (is_int($this->gutter)) {
+            return $this->gutter;
+        }
+
+        return Helper::jsonStringify($this->gutter);
+    }
+
+    /**
+     * @param array|int $gutter
      *
      * @return $this
      */
-    public function appendMemberCol(array $memberCol)
+    public function setGutter($gutter)
     {
-        $this->memberCol = array_merge($this->memberCol, $memberCol);
+        $this->gutter = $gutter;
 
         return $this;
     }

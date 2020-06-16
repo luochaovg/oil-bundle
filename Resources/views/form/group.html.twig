@@ -1,3 +1,10 @@
-{% for item in form.member %}
-  {% include "form/" ~ item.itemName ~ ".html.twig" with {field: field ~ item.field, form: item} %}
-{% endfor %}
+<a-row :gutter="{{ form.gutter }}">
+  {% for key, item in form.member %}
+    <a-col :span="{{ attribute(form.column, key) }}">
+      <a-form-item>
+        {% set _field = field ~ '_' ~ (item.field ?? key) %}
+        {% include "form/" ~ item.itemName ~ ".html.twig" with {field: _field, form: item} %}
+      </a-form-item>
+    </a-col>
+  {% endfor %}
+</a-row>
