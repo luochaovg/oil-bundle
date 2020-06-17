@@ -3,7 +3,9 @@
 
 {% block page %}
   {% block filterBefore %}{% endblock %}
-  {% include 'limbs/filter.html.twig' %}
+  {% if 'filter' not in logic.display ?? [] %}
+    {% include 'limbs/filter.html.twig' %}
+  {% endif %}
   {% block filterAfter %}{% endblock %}
   {% if chart.menu is not empty %}
     <a-tabs
@@ -36,6 +38,8 @@
 {% endblock %}
 
 {% block javascript %}
-{% include 'javascript/filter.md.twig' %}
+{% if 'filter' not in logic.display ?? [] %}
+  {% include 'javascript/filter.md.twig' %}
+{% endif %}
 {% include 'javascript/chart.md.twig' %}
 {% endblock %}

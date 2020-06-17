@@ -66,12 +66,13 @@ class Abs
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
     const TAG_FILTER         = 'filter';
-    const TAG_LOGIC          = 'logic';
     const TAG_ROLL           = 'rollback:';
     const TAG_ROLL_VALIDATOR = 'rollback:validator';
     const TAG_VALIDATOR      = 'validator';
-    const TAG_UPDATE         = 'update';
+    const TAG_INSERT         = 'insert';
     const TAG_DELETE         = 'delete';
+    const TAG_UPDATE         = 'update';
+    const TAG_SELECT         = 'select';
     const TAG_TRANS          = 'transactional:';
     const TAG_TRANS_BEFORE   = 'transactional:before';
     const TAG_TRANS_AFTER    = 'transactional:after';

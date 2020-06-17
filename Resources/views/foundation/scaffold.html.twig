@@ -9,7 +9,9 @@
       {% if limbsInit ?? true %}
         {% include 'limbs/init.html.twig' %}
       {% endif %}
-      {{ (modalHtml ?? null)|raw }}
+      {% if 'modal' not in logic.display ?? [] %}
+        {{ (modalHtml ?? null)|raw }}
+      {% endif %}
       <a-config-provider :locale="locale">
         {% block bodyBefore %}{% endblock %}
         {% block body %}{% endblock %}

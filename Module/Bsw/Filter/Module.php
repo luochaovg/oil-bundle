@@ -626,7 +626,7 @@ class Module extends Bsw
     protected function handleShowList(array $filterAnnotation, Output $output)
     {
         if ($this->input->iframe) {
-            $output->maxShow = ceil($output->maxShow / 2);
+            $output->maxShow = $output->maxShowInIframe;
         }
 
         [$output->group, $output->diffuse] = $this->getFilterGroup($filterAnnotation);

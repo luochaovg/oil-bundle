@@ -79,6 +79,8 @@ Open:                     '開啟'
 Close records:            '批量關閉'
 Open records:             '批量開啟'
 Detail:                   '詳情'
+Weight:                   '權重'
+Progress:                 '進度'
 
 Bsw admin user:                           '管理員'
 Bsw admin access control:                 '管理員權限'

@@ -40,6 +40,30 @@ trait Preview
     public function previewRecordOperates(Arguments $args): array
     {
         return [
+            (new Button('Weight'))
+                ->setType(Button::THEME_DEFAULT)
+                ->setRoute('app_bsw_work_task_weight')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'id'     => $args->item['id'],
+                        'width'  => 500,
+                        'height' => 204,
+                        'title'  => $this->twigLang('Weight'),
+                    ]
+                ),
+            (new Button('Progress'))
+                ->setType(Button::THEME_BSW_WARNING)
+                ->setRoute('app_bsw_work_task_progress')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'id'     => $args->item['id'],
+                        'width'  => 500,
+                        'height' => 204,
+                        'title'  => $this->twigLang('Progress'),
+                    ]
+                ),
             (new Button('Edit record', 'app_bsw_work_task_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
     }

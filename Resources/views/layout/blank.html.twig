@@ -12,24 +12,36 @@
         :width="menuWidth"
         @close="menuTrigger"
       >
-        {{ (menuHtml ?? null)|raw }}
+        {% if 'menu' not in logic.display ?? [] %}
+          {{ (menuHtml ?? null)|raw }}
+        {% endif %}
       </a-drawer>
     {% endif %}
-    {{ (menuHtml ?? null)|raw }}
+    {% if 'menu' not in logic.display ?? [] %}
+      {{ (menuHtml ?? null)|raw }}
+    {% endif %}
     <a-layout>
       {% block headerBefore %}{% endblock %}
-      {{ (headerHtml ?? null)|raw }}
+      {% if 'header' not in logic.display ?? [] %}
+        {{ (headerHtml ?? null)|raw }}
+      {% endif %}
       {% block headerAfter %}{% endblock %}
       <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
         {% block crumbsBefore %}{% endblock %}
-        {{ (crumbsHtml ?? null)|raw }}
+        {% if 'crumbs' not in logic.display ?? [] %}
+          {{ (crumbsHtml ?? null)|raw }}
+        {% endif %}
         {% block curmbsAfter %}{% endblock %}
         {% block welcomeBefore %}{% endblock %}
-        {{ (welcomeHtml ?? null)|raw }}
+        {% if 'welcome' not in logic.display ?? [] %}
+          {{ (welcomeHtml ?? null)|raw }}
+        {% endif %}
         {% block welcomeAfter %}{% endblock %}
         {% if operate is defined and operate.position is same as(top) %}
           {% block operateTopBefore %}{% endblock %}
-          {{ (operateHtml ?? null)|raw }}
+          {% if 'operate' not in logic.display ?? [] %}
+            {{ (operateHtml ?? null)|raw }}
+          {% endif %}
           {% block operateTopAfter %}{% endblock %}
         {% endif %}
         <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
@@ -39,12 +51,16 @@
         </div>
         {% if operate is defined and operate.position is same as(bottom) %}
           {% block operateBottomBefore %}{% endblock %}
-          {{ (operateHtml ?? null)|raw }}
+          {% if 'operate' not in logic.display ?? [] %}
+            {{ (operateHtml ?? null)|raw }}
+          {% endif %}
           {% block operateBottomAfter %}{% endblock %}
         {% endif %}
       </a-layout-content>
       {% block footerBefore %}{% endblock %}
-      {{ (footerHtml ?? null)|raw }}
+      {% if 'footer' not in logic.display ?? [] %}
+        {{ (footerHtml ?? null)|raw }}
+      {% endif %}
       {% block footerAfter %}{% endblock %}
     </a-layout>
   </a-layout>

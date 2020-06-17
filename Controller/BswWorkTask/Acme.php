@@ -26,6 +26,11 @@ class Acme extends BswBackendController
      */
     public function acmeEnumExtraUserId(Arguments $args): array
     {
-        return $this->repo(BswAdminUser::class)->kvp(['name']);
+        $filter = [
+            'where' => [$this->expr->eq('kvp.roleId', ':role')],
+            'args'  => ['role' => [$this->cnf->work_role_id]],
+        ];
+
+        return $this->repo(BswAdminUser::class)->kvp(['name'], Abs::PK, null, $filter);
     }
 }

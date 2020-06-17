@@ -2,12 +2,10 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
@@ -29,6 +27,18 @@ trait Persistence
     }
 
     /**
+     * @return array
+     */
+    protected function weightTypeArgs(): array
+    {
+        $weekendDays = floor($this->cnf->work_lifecycle_max_day / 7) * 2;
+        $workDays = $this->cnf->work_lifecycle_max_day - $weekendDays;
+        $maxHours = ceil($workDays * $this->cnf->work_lifecycle_day_hours);
+
+        return ['min' => 1, 'max' => $maxHours];
+    }
+
+    /**
      * @param Arguments $args
      *
      * @return array
@@ -42,6 +52,7 @@ trait Persistence
 
         return [
             'title'     => ['label' => 'Mission title'],
+            'weight'    => ['typeArgs' => $this->weightTypeArgs()],
             'lifecycle' => [
                 'type'     => Group::class,
                 'sort'     => 3,
@@ -103,7 +114,6 @@ trait Persistence
                 ->setArgs(['{{ day }}' => $this->cnf->work_lifecycle_max_day]);
         }
 
-        $args->submit['userId'] = $this->usr->{$this->cnf->usr_uid};
         $args->submit['startTime'] = date(Abs::FMT_FULL, $startTime);
         $args->submit['endTime'] = date(Abs::FMT_FULL, $endTime);
 
@@ -127,5 +137,107 @@ trait Persistence
         }
 
         return $this->showPersistence(['id' => $id]);
+    }
+
+    /**
+     * @return string
+     */
+    public function weightEntity(): string
+    {
+        return $this->persistenceEntity();
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function weightFormOperates(Arguments $args)
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit->setBlock();
+
+        return ['submit' => $submit];
+    }
+
+    /**
+     * @return array
+     */
+    public function weightAnnotationOnly(): array
+    {
+        return [
+            'id'     => true,
+            'weight' => [
+                'label'    => false,
+                'typeArgs' => $this->weightTypeArgs(),
+            ],
+        ];
+    }
+
+    /**
+     * Adjustment weight
+     *
+     * @Route("/bsw-work-task/weight/{id}", name="app_bsw_work_task_weight", requirements={"id": "\d+"})
+     * @Access(same="app_bsw_work_task_persistence")
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function weight(int $id = null): Response
+    {
+        return $this->persistence($id);
+    }
+
+    /**
+     * @return string
+     */
+    public function progressEntity(): string
+    {
+        return $this->persistenceEntity();
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function progressFormOperates(Arguments $args)
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit->setBlock();
+
+        return ['submit' => $submit];
+    }
+
+    /**
+     * @return array
+     */
+    public function progressAnnotationOnly(): array
+    {
+        return [
+            'id'          => true,
+            'donePercent' => ['label' => false],
+        ];
+    }
+
+    /**
+     * Adjustment progress
+     *
+     * @Route("/bsw-work-task/progress/{id}", name="app_bsw_work_task_progress", requirements={"id": "\d+"})
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function progress(int $id = null): Response
+    {
+        return $this->persistence($id);
     }
 }

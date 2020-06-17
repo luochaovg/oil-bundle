@@ -328,7 +328,7 @@ class BswBackendController extends BswWebController
         }
 
         $ajaxShowArgs = [];
-        $showArgs = [Abs::TAG_LOGIC => $logicArgs];
+        $showArgs = ['logic' => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
 
         $extraBswArgs = [
@@ -386,7 +386,7 @@ class BswBackendController extends BswWebController
             $ajaxShowArgs["{$name}Html"] = $html;
         }
 
-        $logic = &$showArgs[Abs::TAG_LOGIC];
+        $logic = &$showArgs['logic'];
         $afterModule = Helper::dig($logic, 'afterModule') ?? [];
         Helper::callReturnType($afterModule, Abs::T_ARRAY, 'Handler after module');
 
