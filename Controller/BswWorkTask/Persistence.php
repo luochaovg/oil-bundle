@@ -35,14 +35,14 @@ trait Persistence
      */
     public function persistenceAnnotation(Arguments $args): array
     {
-        if ($args->id) {
+        if ($args->id && !$args->persistence) {
             [$dateStart, $timeStart] = explode(' ', date(Abs::FMT_FULL, $args->record['startTime']));
             [$dateEnd, $timeEnd] = explode(' ', date(Abs::FMT_FULL, $args->record['endTime']));
         }
 
         return [
+            'title'     => ['label' => 'Mission title'],
             'lifecycle' => [
-                'label'    => '生命周期',
                 'type'     => Group::class,
                 'sort'     => 3,
                 'typeArgs' => [

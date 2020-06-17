@@ -27,6 +27,7 @@ class BswWorkTask extends FoundationEntity
      * @BswAnnotation\Preview(sort=1, align="center", width=90, render=BswAbs::RENDER_CODE)
      * @BswAnnotation\Persistence(sort=1, type=BswForm\Number::class)
      * @BswAnnotation\Filter(sort=1, type=BswForm\Number::class)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $id;
 
@@ -58,6 +59,7 @@ class BswWorkTask extends FoundationEntity
      * @BswAnnotation\Preview(sort=4, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
      * @BswAnnotation\Persistence(sort=4, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
      * @BswAnnotation\Filter(sort=4, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $startTime;
 
@@ -68,16 +70,29 @@ class BswWorkTask extends FoundationEntity
      * @BswAnnotation\Preview(sort=5, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
      * @BswAnnotation\Persistence(sort=5, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
      * @BswAnnotation\Filter(sort=5, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $endTime;
+
+    /**
+     * @ORM\Column(type="float", name="`done_percent`")
+     * @Assert\Type(type="numeric", groups={"modify"})
+     * @Assert\NotNull(groups={"modify"})
+     * @BswAnnotation\Preview(sort=3.2, width=140, align="center", render=BswAbs::RENDER_ROUND_PERCENT)
+     * @BswAnnotation\Persistence(sort=6, type=BswForm\Number::class)
+     * @BswAnnotation\Filter(sort=6)
+     * @BswAnnotation\Mixed(sort=true)
+     */
+    protected $donePercent = 0;
 
     /**
      * @ORM\Column(type="smallint", name="`weight`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=6, align="center")
-     * @BswAnnotation\Persistence(sort=6, type=BswForm\Number::class, typeArgs={"min":0, "max":100}, show=false)
-     * @BswAnnotation\Filter(sort=6, type=BswForm\Number::class)
+     * @BswAnnotation\Preview(sort=3.3, align="center")
+     * @BswAnnotation\Persistence(sort=7, type=BswForm\Number::class, typeArgs={"min":0, "max":100}, show=false)
+     * @BswAnnotation\Filter(sort=7, type=BswForm\Number::class)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $weight = 0;
 
@@ -86,9 +101,9 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=2048, groups={"modify"})
-     * @BswAnnotation\Preview(sort=7, render=BswAbs::HTML_PRE, width=360)
-     * @BswAnnotation\Persistence(sort=7, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=7)
+     * @BswAnnotation\Preview(sort=11.1, render=BswAbs::HTML_PRE, width=360)
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=8)
      */
     protected $remark = "";
 
@@ -96,9 +111,10 @@ class BswWorkTask extends FoundationEntity
      * @ORM\Column(type="string", name="`add_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=8, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=8, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=8, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=9, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=9, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=9, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $addTime;
 
@@ -106,9 +122,10 @@ class BswWorkTask extends FoundationEntity
      * @ORM\Column(type="string", name="`update_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=9, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=9, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=9, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=10, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=10, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=10, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $updateTime;
 
@@ -117,8 +134,9 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=3.1, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
-     * @BswAnnotation\Persistence(sort=10, type=BswForm\Select::class, enum=true, show=false)
-     * @BswAnnotation\Filter(sort=10, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Persistence(sort=11, type=BswForm\Select::class, enum=true, show=false)
+     * @BswAnnotation\Filter(sort=11, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $state = 1;
 }

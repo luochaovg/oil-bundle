@@ -92,4 +92,9 @@ class Output extends ArgsOutput
      * @var array
      */
     public $query = [];
+
+    /**
+     * @var string
+     */
+    public $clsName;
 }

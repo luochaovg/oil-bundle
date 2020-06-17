@@ -21,4 +21,9 @@ class Input extends ArgsInput
      * @var int
      */
     public $dynamic = 0;
+
+    /**
+     * @var string
+     */
+    public $clsName;
 }

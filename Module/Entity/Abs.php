@@ -507,10 +507,10 @@ class Abs
     const SLOT_NOT_BLANK = '(({:value} !== "") && ({:value} !== null) && ({:value} !== false))';
 
     // slot 包裹容器模板
-    const SLOT_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
+    const SLOT_CONTAINER = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
 
     // slot 包裹容器模板 (支持html)
-    const SLOT_HTML_CONTAINER = "<div slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
+    const SLOT_HTML_CONTAINER = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
     // 空数据展示模板
     const TPL_NIL = "<div class='bsw-disable'>{Abs::NIL}</div>";
@@ -592,6 +592,12 @@ class Abs
 
     // 密文 (标识空)
     const RENDER_SECRET_2 = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
+
+    // 圆状百分比
+    const RENDER_ROUND_PERCENT = "<a-progress type='circle' :percent='{:value}' :width='50' :stroke-width='6'></a-progress>";
+
+    // 条状百分比
+    const RENDER_BAR_PERCENT = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='6' status='active' ></a-progress>";
 
     /**
      * HTML_ / TEXT_ 开头的渲染模板仅支持普通渲染

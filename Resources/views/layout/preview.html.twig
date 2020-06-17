@@ -12,6 +12,9 @@
       :data-source="previewList"
       :bordered="{{ preview.border ? 'true' : 'false' }}"
       :pagination="false"
+      {% if  preview.clsName is not null %}
+        row-class-name="{{ preview.clsName }}"
+      {% endif %}
       :row-key="record => `{{ fields }}`"
       {% if preview.choice.enable ?? false %}
         :row-selection="{

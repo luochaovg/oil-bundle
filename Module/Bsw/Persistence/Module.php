@@ -160,7 +160,10 @@ class Module extends Bsw
 
         $fn = self::ANNOTATION_ONLY;
 
-        $arguments = $this->arguments(['id' => $this->input->id], compact('record'));
+        $arguments = $this->arguments(
+            ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
+            compact('record')
+        );
         $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, $arguments);
 
         $arguments = $this->arguments(
@@ -186,7 +189,10 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $arguments = $this->arguments(['id' => $this->input->id], compact('record'));
+            $arguments = $this->arguments(
+                ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
+                compact('record')
+            );
             $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
 
             $arguments = $this->arguments(

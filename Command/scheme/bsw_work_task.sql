@@ -4,6 +4,7 @@ CREATE TABLE `{TABLE_NAME}` (
   `title` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_time` int(10) NOT NULL,
   `end_time` int(10) NOT NULL,
+  `done_percent` float unsigned NOT NULL DEFAULT '0',
   `weight` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `remark` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

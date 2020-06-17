@@ -348,6 +348,7 @@ abstract class Bsw
                 ':value' => 'value',
                 'value'  => '{{ value }}',
                 'title'  => $var['title'] ?? null,
+                'field'  => Helper::camelToUnder($field, '-'),
             ],
             $var
         );

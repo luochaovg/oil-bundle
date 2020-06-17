@@ -836,7 +836,7 @@ class Module extends Bsw
                 if (is_object($_value) && $_value instanceof Charm) {
                     $var = $_value->getVar();
                     $var = array_merge($var, ['value' => $_value->getValue()]);
-                    $value = $this->parseSlot($_value->getCharm(), '', $var);
+                    $value = $this->parseSlot($_value->getCharm(), $field, $var);
                 } elseif (is_scalar($_value)) {
                     $value = $_value;
                 } else {
@@ -961,6 +961,8 @@ class Module extends Bsw
         $output->scroll = $this->caller($this->method, self::SCROLL, Abs::T_ARRAY, $output->scroll, $arguments);
 
         $output->dynamic = $this->input->dynamic;
+        $output->clsName = $this->input->clsName;
+
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,

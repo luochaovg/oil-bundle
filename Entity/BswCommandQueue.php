@@ -76,7 +76,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="numeric", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=6, width=140, align="center", render="{value} %")
-     * @BswAnnotation\Persistence(sort=6, show=false)
+     * @BswAnnotation\Persistence(sort=6, type=BswForm\Number::class, show=false)
      * @BswAnnotation\Filter(sort=6)
      */
     protected $donePercent = 0;
