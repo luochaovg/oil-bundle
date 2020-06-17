@@ -6,10 +6,13 @@
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
-  :allow-empty="{{ form.allowClear ? 'true' : 'false' }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   size="{{ form.size }}"
   placeholder="{{ form.placeholder }}"
   format="{{ form.format }}"
+  :hour-step="{{ form.hourStep }}"
+  :minute-step="{{ form.minuteStep }}"
+  :second-step="{{ form.secondStep }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
 ></a-time-picker>

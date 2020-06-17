@@ -15,6 +15,11 @@
         label="{{ item.label }}"
         class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filterDisplay('{{ key }}') }"
+        {% if item.type is iterable %}
+          class="bsw-form-iterable"
+        {% else %}
+          class="bsw-form-{{ item.type.itemName }}"
+        {% endif %}
       >
         {% set begin = item.title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ item.title ~ '</template>' : null %}
         {% set end = item.title ? '</a-popover>' : null %}

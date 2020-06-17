@@ -22,6 +22,12 @@
   {% else %}
     :show-time="false"
   {% endif %}
+  {% if form.disabledDate is not null %}
+    :disabled-date="{{ form.disabledDate }}"
+  {% endif %}
+  {% if form.disabledTime is not null %}
+    :disabled-time="{{ form.disabledTime }}"
+  {% endif %}
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
 ></a-range-picker>

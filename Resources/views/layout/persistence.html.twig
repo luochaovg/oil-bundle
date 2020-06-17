@@ -27,6 +27,7 @@
             :wrapper-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ wrapperColumn }} }}"
             label="{{ item.label|trans({}, 'twig') }}"
             extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
+            class="bsw-form-{{ form.itemName }}"
           >
             {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
             {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}

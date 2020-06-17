@@ -2374,6 +2374,56 @@ class Helper
     }
 
     /**
+     * Boundary datetime
+     *
+     * @param string ...$datetime
+     *
+     * @return array
+     */
+    public static function boundaryDateTime(string ...$datetime): array
+    {
+        $datetime = array_map('strtotime', $datetime);
+        asort($datetime);
+
+        $min = date(Abs::FMT_FULL, current($datetime));
+        $max = date(Abs::FMT_FULL, end($datetime));
+
+        return [$min, $max];
+    }
+
+    /**
+     * Compare datetime
+     *
+     * @param string $left
+     * @param string $right
+     *
+     * @return int
+     */
+    public static function compareDateTime(string $left, string $right): int
+    {
+        $left = strtotime($left);
+        $right = strtotime($right);
+
+        return $left <=> $right;
+    }
+
+    /**
+     * Gap second datetime
+     *
+     * @param string $left
+     * @param string $right
+     *
+     * @return int
+     */
+    public static function gapDateTime(string $left, string $right): int
+    {
+        $left = strtotime($left);
+        $right = strtotime($right);
+
+        return abs($left - $right);
+    }
+
+    /**
      * Check type for callable
      *
      * @param mixed  $data
@@ -4393,40 +4443,6 @@ class Helper
         }
 
         return $number;
-    }
-
-    /**
-     * Boundary datetime
-     *
-     * @param string ...$datetime
-     *
-     * @return array
-     */
-    public static function boundaryDateTime(string ...$datetime): array
-    {
-        $datetime = array_map('strtotime', $datetime);
-        asort($datetime);
-
-        $min = date(Abs::FMT_FULL, current($datetime));
-        $max = date(Abs::FMT_FULL, end($datetime));
-
-        return [$min, $max];
-    }
-
-    /**
-     * Compare datetime
-     *
-     * @param string $left
-     * @param string $right
-     *
-     * @return int
-     */
-    public static function compareDateTime(string $left, string $right): int
-    {
-        $left = strtotime($left);
-        $right = strtotime($right);
-
-        return $left <=> $right;
     }
 
     /**

@@ -1,6 +1,6 @@
 <a-row :gutter="{{ form.gutter }}">
   {% for key, item in form.member %}
-    <a-col :span="{{ attribute(form.column, key) }}">
+    <a-col :sm="{{ totalColumn }}" :md="{{ attribute(form.column, key) }}">
       <a-form-item>
         {% set _field = field ~ '_' ~ (item.field ?? key) %}
         {% include "form/" ~ item.itemName ~ ".html.twig" with {field: _field, form: item} %}
