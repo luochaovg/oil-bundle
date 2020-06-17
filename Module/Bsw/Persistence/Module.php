@@ -131,10 +131,12 @@ class Module extends Bsw
     /**
      * Annotation handler
      *
+     * @param array $record
+     *
      * @return array
      * @throws
      */
-    protected function handleAnnotation(): array
+    protected function handleAnnotation(array $record): array
     {
         /**
          * preview annotation
@@ -158,12 +160,12 @@ class Module extends Bsw
 
         $fn = self::ANNOTATION_ONLY;
 
-        $arguments = $this->arguments(['id' => $this->input->id]);
+        $arguments = $this->arguments(['id' => $this->input->id], compact('record'));
         $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, $arguments);
 
         $arguments = $this->arguments(
             ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
-            compact('persistAnnotation')
+            compact('persistAnnotation', 'record')
         );
         $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
@@ -184,12 +186,12 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $arguments = $this->arguments(['id' => $this->input->id]);
+            $arguments = $this->arguments(['id' => $this->input->id], compact('record'));
             $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
 
             $arguments = $this->arguments(
                 ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
-                compact('persistAnnotation')
+                compact('persistAnnotation', 'record')
             );
             $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
@@ -491,21 +493,50 @@ class Module extends Bsw
     {
         /**
          * before hook (row record)
+         *
+         * @param array $original
+         * @param array $extraArgs
+         *
+         * @return mixed
          */
+        $before = function (array $original, array $extraArgs) {
 
-        $before = null;
-        if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
-            $before = [$this->web, $fn];
-        }
+            if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
+                $arguments = $this->arguments(compact('original', 'extraArgs'));
+                $original = $this->web->{$fn}($arguments);
+            }
+
+            $arguments = $this->arguments(
+                ['target' => $original],
+                compact('extraArgs')
+            );
+
+            return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $arguments);
+        };
 
         /**
          * after hook (row record)
+         *
+         * @param array $hooked
+         * @param array $original
+         * @param array $extraArgs
+         *
+         * @return mixed
          */
+        $after = function (array $hooked, array $original, array $extraArgs) {
 
-        $after = null;
-        if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
-            $after = [$this->web, $fn];
-        }
+            if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
+                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs'));
+                $hooked = $this->web->{$fn}($arguments);
+            }
+
+            $arguments = $this->arguments(
+                ['target' => $hooked],
+                compact('original', 'extraArgs')
+            );
+
+            return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $arguments);
+        };
 
         $persistence = !!$this->input->submit;
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'persistence_' . ($this->input->id ? 'modify' : 'newly')]];
@@ -1014,14 +1045,15 @@ class Module extends Bsw
          * handle annotation
          */
 
-        [$persistAnnotation, $_persistAnnotation, $hooks] = $this->handleAnnotation();
-
         $result = $this->getPersistenceData();
         if ($result instanceof ArgsOutput) {
             return $result;
         } else {
             [$submit, $record, $extraSubmit, $recordBefore, $recordDiff] = $result;
         }
+
+        // get annotation
+        [$persistAnnotation, $_persistAnnotation, $hooks] = $this->handleAnnotation($record);
 
         $result = $this->handlePersistenceData($persistAnnotation, $record, $hooks, $output);
         if ($result instanceof ArgsOutput) {

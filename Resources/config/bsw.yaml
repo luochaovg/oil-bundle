@@ -124,6 +124,7 @@ parameters:
         host_official: http://www.bsw-antd.com
         host_file: http://file.bsw-antd.com
         third_message_key: bsw_third_message
+        work_lifecycle_max_day: 14
 
         cache_enabled: true
         cache_default_expires: 86400
@@ -199,12 +200,6 @@ parameters:
         icon_sure: a:coffee
         icon_newly: a:plus
         icon_delete: b:icon-delete1
-
-        work_morning_start: 10:00
-        work_noon_break_start: 12:30
-        work_noon_break_end: 13:00
-        work_night_end: 18:30
-        work_lifecycle_max_day: 14
 
     currency_code: CNY
     currency_char: ￥

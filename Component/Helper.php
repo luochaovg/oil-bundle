@@ -2424,6 +2424,25 @@ class Helper
     }
 
     /**
+     * Datetime with only hour/minute/second
+     *
+     * @param string $time
+     *
+     * @return false|int
+     */
+    public static function datetime(string $time)
+    {
+        if (!self::isDateString($time)) {
+            return false;
+        }
+
+        $time = strtotime($time);
+        $time = $time - current(self::timestampDay());
+
+        return $time;
+    }
+
+    /**
      * Check type for callable
      *
      * @param mixed  $data

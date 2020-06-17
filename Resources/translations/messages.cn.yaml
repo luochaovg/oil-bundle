@@ -77,6 +77,7 @@ Select end date please:                   '请选择结束日期'
 Select start time please:                 '请选择开始时间'
 Select end time please:                   '请选择结束时间'
 Start datetime should lte end:            '开始时间应小于结束时间'
+Time span less than {{ day }} days:       '时间跨度应少于{{ day }}天'
 
 # bsw error
 
