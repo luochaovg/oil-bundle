@@ -117,8 +117,8 @@ trait Persistence
         }
 
         $args->submit['userId'] = $this->usr->{$this->cnf->usr_uid};
-        $args->submit['startTime'] = $startTime;
-        $args->submit['endTime'] = $endTime;
+        $args->submit['startTime'] = date(Abs::FMT_FULL, $startTime);
+        $args->submit['endTime'] = date(Abs::FMT_FULL, $endTime);
 
         return [$args->submit, $args->extraSubmit];
     }
