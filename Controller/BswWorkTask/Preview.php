@@ -2,7 +2,9 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Carbon\Carbon;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -70,7 +72,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 234,
+                        'height' => 328,
                         'title'  => false,
                     ]
                 ),
@@ -122,6 +124,30 @@ trait Preview
     public function previewCharmEndTime(Arguments $args)
     {
         return $this->previewCharmStartTime($args, 'Surplus', 'Expired');
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return Charm
+     */
+    public function previewCharmTrail(Arguments $args)
+    {
+        $value = $args->value;
+        if (empty($value)) {
+            $value = 'Without any trail.';
+        } else {
+
+            dd(Carbon::createFromFormat(Abs::FMT_FULL, '2020-02-18 20:07:20')->locale('zh-CN')->diffForHumans());
+            $value = explode(PHP_EOL, $value);
+            $value = implode(PHP_EOL, array_reverse($value));
+
+            $html = str_replace('{value}', '$1', Abs::HTML_CODE);
+            $value = preg_replace('/\[([0-9\-: ]+)\]/', $html, $value);
+            $value = str_replace(PHP_EOL, Abs::LINE_DASHED, $value);
+        }
+
+        return $this->charmShowContent('Trail', $value, ['width' => 800]);
     }
 
     /**

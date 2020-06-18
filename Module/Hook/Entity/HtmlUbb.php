@@ -16,7 +16,7 @@ class HtmlUbb extends Hook
      */
     public function preview($value, array $args, array $extraArgs = [])
     {
-        return (new Ubb)->ubbToHtml($value);
+        return (new Ubb)->ubbToHtml($value ?? '');
     }
 
     /**
@@ -28,6 +28,6 @@ class HtmlUbb extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
-        return (new Ubb)->htmlToUbb($value);
+        return (new Ubb)->htmlToUbb($value ?? '');
     }
 }

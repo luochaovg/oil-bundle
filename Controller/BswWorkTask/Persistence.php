@@ -9,7 +9,7 @@ use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
-use Leon\BswBundle\Module\Form\Entity\Text;
+use Leon\BswBundle\Module\Form\Entity\Input;
 use Leon\BswBundle\Module\Form\Entity\Time;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -122,6 +122,10 @@ trait Persistence
 
         $args->submit['startTime'] = date(Abs::FMT_FULL, $startTime);
         $args->submit['endTime'] = date(Abs::FMT_FULL, $endTime);
+        $args->submit['trail'] = $this->messageLang(
+            '[{{ date }}] Create the task',
+            ['{{ date }}' => date(Abs::FMT_FULL)]
+        );
 
         return [$args->submit, $args->extraSubmit];
     }
@@ -168,6 +172,7 @@ trait Persistence
                 'donePercent' => false,
                 'weight'      => false,
                 'remark'      => false,
+                'trail'       => false,
                 'state'       => false,
             ]
         );
@@ -231,6 +236,7 @@ trait Persistence
                 'label'    => Helper::cnSpace(),
                 'typeArgs' => $this->weightTypeArgs(),
             ],
+            'trail'  => ['show' => false],
         ];
     }
 
@@ -250,6 +256,28 @@ trait Persistence
             ->setLabel('Update task weight');
 
         return compact('submit');
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function weightAfterSubmit(Arguments $args)
+    {
+        $args->submit['trail'] = $args->recordBefore['trail'];
+        $args->submit['trail'] .= PHP_EOL;
+        $args->submit['trail'] .= $this->messageLang(
+            '[{{ date }}] Change weight from {{ from }} to {{ to }}',
+            [
+                '{{ date }}' => date(Abs::FMT_FULL),
+                '{{ from }}' => $args->recordBefore['weight'],
+                '{{ to }}'   => $args->submit['weight'],
+            ]
+        );
+        $args->submit['trail'] = trim($args->submit['trail']);
+
+        return [$args->submit, $args->extraSubmit];
     }
 
     /**
@@ -287,8 +315,28 @@ trait Persistence
         return [
             'id'          => true,
             'donePercent' => ['label' => Helper::cnSpace()],
+            'whatToDo'    => ['type' => Input::class, 'rules' => [$this->formRuleRequired()]],
+            'trail'       => ['show' => false],
             'state'       => ['show' => false],
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function progressFormOperates(Arguments $args): array
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit
+            ->setBlock(true)
+            ->setLabel('Update task progress');
+
+        return compact('submit');
     }
 
     /**
@@ -310,25 +358,20 @@ trait Persistence
             }
         }
 
+        $args->submit['trail'] = $args->recordBefore['trail'];
+        $args->submit['trail'] .= PHP_EOL;
+        $args->submit['trail'] .= $this->messageLang(
+            '[{{ date }}] Change progress from {{ from }} to {{ to }}{{ remark }}',
+            [
+                '{{ date }}'   => date(Abs::FMT_FULL),
+                '{{ from }}'   => $args->recordBefore['donePercent'],
+                '{{ to }}'     => $args->submit['donePercent'],
+                '{{ remark }}' => rtrim(", {$args->extraSubmit['whatToDo']}", ', '),
+            ]
+        );
+        $args->submit['trail'] = trim($args->submit['trail']);
+
         return [$args->submit, $args->extraSubmit];
-    }
-
-    /**
-     * @param Arguments $args
-     *
-     * @return array
-     */
-    public function progressFormOperates(Arguments $args): array
-    {
-        /**
-         * @var Button $submit
-         */
-        $submit = $args->submit;
-        $submit
-            ->setBlock(true)
-            ->setLabel('Update task progress');
-
-        return compact('submit');
     }
 
     /**

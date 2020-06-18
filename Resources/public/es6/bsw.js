@@ -399,12 +399,13 @@ $(function () {
                 width: data.width || size.width,
                 title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
                 centered: true,
-                wrapClassName: 'bsw-iframe-container',
                 content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-iframe").height(data.height || size.height);
+                let iframe = $("#bsw-iframe");
+                iframe.height(data.height || size.height);
+                iframe.parents("div.ant-modal-body").css({margin: 0, padding: 0});
             });
         },
 

@@ -251,6 +251,8 @@ class Module extends Bsw
                 } elseif (class_exists($k) && is_array($v)) {
                     $hook = $k;
                     $hookArgs = $v;
+                } else {
+                    continue;
                 }
                 if (isset($hook) && isset($hookArgs)) {
                     $hooks[$hook]['fields'][] = $field;
