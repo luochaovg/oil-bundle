@@ -137,14 +137,19 @@ trait Preview
         if (empty($value)) {
             $value = 'Without any trail.';
         } else {
+            $value = array_reverse(explode(PHP_EOL, $value));
+            foreach ($value as &$item) {
+                preg_match_all('/\[([0-9\-: ]+)\]/', $item, $result);
 
-            dd(Carbon::createFromFormat(Abs::FMT_FULL, '2020-02-18 20:07:20')->locale('zh-CN')->diffForHumans());
-            $value = explode(PHP_EOL, $value);
-            $value = implode(PHP_EOL, array_reverse($value));
+                $date = Carbon::createFromFormat(Abs::FMT_FULL, current($result[1]));
+                $human = $date->locale('zh-CN')->diffForHumans();
+                $html = str_replace('{value}', current($result[1]), Abs::HTML_CODE);
 
-            $html = str_replace('{value}', '$1', Abs::HTML_CODE);
-            $value = preg_replace('/\[([0-9\-: ]+)\]/', $html, $value);
-            $value = str_replace(PHP_EOL, Abs::LINE_DASHED, $value);
+                $item .= ' ';
+                $item .= Html::tag('span', "({$human})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
+                $item = str_replace(current($result[0]), $html, $item);
+            }
+            $value = implode(Abs::LINE_DASHED, $value);
         }
 
         return $this->charmShowContent('Trail', $value, ['width' => 800]);
