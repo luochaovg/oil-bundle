@@ -5,9 +5,11 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 use Carbon\Carbon;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Filter\Entity\Accurate;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -22,6 +24,36 @@ trait Preview
     public function previewEntity(): string
     {
         return BswWorkTask::class;
+    }
+
+    /**
+     * @return array
+     */
+    public function previewQuery(): array
+    {
+        return [
+            'select' => ['bwt'],
+            'join'   => [
+                'bau' => [
+                    'entity' => BswAdminUser::class,
+                    'left'   => ['bwt.userId'],
+                    'right'  => ['bau.id'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function previewFilterCorrect(Arguments $args): array
+    {
+        $team = $this->usr->{$this->cnf->usr_team} ?: -1;
+        $args->condition['bau.teamId'] = $this->createFilter(Accurate::class, $team);
+
+        return [$args->filter, $args->condition];
     }
 
     /**

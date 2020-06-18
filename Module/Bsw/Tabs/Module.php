@@ -1,15 +1,14 @@
 <?php
 
-namespace Leon\BswBundle\Module\Bsw\Chart;
+namespace Leon\BswBundle\Module\Bsw\Tabs;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
-use Leon\BswBundle\Module\Bsw\Message;
+use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Error;
 
 /**
  * @property Input                $input
@@ -20,7 +19,7 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const CHART_ITEMS = 'ChartItems';   // 图表数据
+    const TABS_LINKS = 'TabsLinks';    // TABS菜单
 
     /**
      * @return bool
@@ -35,7 +34,7 @@ class Module extends Bsw
      */
     public function name(): string
     {
-        return 'chart';
+        return 'tabs';
     }
 
     /**
@@ -43,7 +42,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return null;
+        return 'limbs/tabs.html';
     }
 
     /**
@@ -78,29 +77,29 @@ class Module extends Bsw
     {
         $output = new Output();
 
-        // items
-        $arguments = $this->arguments(['condition' => $this->input->condition, 'data' => $this->input->data]);
-        $result = $this->caller(
-            $this->method,
-            self::CHART_ITEMS,
-            [Message::class, Error::class, Abs::T_ARRAY],
-            [],
-            $arguments
-        );
+        // links
+        $links = $this->caller($this->method, self::TABS_LINKS, Abs::T_ARRAY, []);
+        foreach ($links as $item) {
+            $fn = $this->method . self::TABS_LINKS;
+            Helper::objectInstanceOf(
+                $item,
+                Links::class,
+                "{$this->class}::{$fn}(): array returned array'items"
+            );
 
-        if ($result instanceof Error) {
-            return $this->showError($result->tiny());
-        } elseif ($result instanceof Message) {
-            return $this->showMessage($result);
-        } else {
-            $output->items = $result;
+            /**
+             * @var Links $item
+             */
+            if ($item->isScript()) {
+                $item->setUrl($item->getRoute());
+            } else {
+                $item->setUrl($this->web->urlSafe($item->getRoute(), [], 'Tabs links'));
+            }
+            array_push($output->links, $item);
         }
 
-        // resource
-        $this->web->appendSrcJsWithKey('e-charts', Abs::JS_CHART);
-        foreach ($output->items as $item) {
-            $this->web->appendSrcJs($item->getTheme());
-        }
+        $output->fit = $this->input->fit;
+        $output->size = $this->input->size;
 
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),

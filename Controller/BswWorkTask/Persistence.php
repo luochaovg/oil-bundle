@@ -7,6 +7,8 @@ use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
+use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Leon\BswBundle\Module\Form\Entity\Input;
@@ -342,10 +344,14 @@ trait Persistence
     /**
      * @param Arguments $args
      *
-     * @return array
+     * @return Error|array
      */
     public function progressAfterSubmit(Arguments $args)
     {
+        if ($args->recordBefore['userId'] !== $this->usr->{$this->cnf->usr_uid}) {
+            return new ErrorAccess();
+        }
+
         if ($args->submit['donePercent'] <= 0) {
             $args->submit['state'] = 1;
         } elseif ($args->submit['donePercent'] < 100) {

@@ -59,6 +59,13 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output();
+
+        $output->title = $this->input->title;
+        $output->okText = $this->input->okText;
+        $output->width = $this->input->width;
+        $output->footer = $this->input->footer;
+        $output->wrapClassName = $this->input->wrapClassName;
+
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,

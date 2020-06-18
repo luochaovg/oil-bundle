@@ -44,6 +44,11 @@
           {% endif %}
           {% block operateTopAfter %}{% endblock %}
         {% endif %}
+        {% block tabsBefore %}{% endblock %}
+        {% if 'tabs' not in logic.display ?? [] %}
+          {{ (tabsHtml ?? null)|raw }}
+        {% endif %}
+        {% block tabsAfter %}{% endblock %}
         <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
           {% block pageBefore %}{% endblock %}
           {% block page %}{% endblock %}

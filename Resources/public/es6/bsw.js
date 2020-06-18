@@ -70,6 +70,10 @@ $(function () {
             this.redirect(this.getBswData($(event.item.$el).find('span')));
         },
 
+        tabsLinksSwitch(key) {
+            this.redirect(this.getBswData($(`#tabs_link_${key}`)));
+        },
+
         dispatcher(data, element) {
             let that = this;
             let action = function () {

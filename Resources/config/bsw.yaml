@@ -152,6 +152,7 @@ parameters:
         usr_account: name
         usr_uid: user_id
         usr_role: role_id
+        usr_team: team_id
         usr_update: update_time
         usr_login: login_time
         usr_avatar: avatar

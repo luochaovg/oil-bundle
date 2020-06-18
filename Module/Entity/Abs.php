@@ -429,16 +429,17 @@ class Abs
     const MODULE_MENU_SORT        = 10;
     const MODULE_HEADER_SORT      = 20;
     const MODULE_CRUMBS_SORT      = 30;
-    const MODULE_FILTER_SORT      = 40;
-    const MODULE_WELCOME_SORT     = 50;
-    const MODULE_OPERATE_SORT     = 60;
-    const MODULE_DATA_SORT        = 70;
-    const MODULE_PREVIEW_SORT     = 80;
-    const MODULE_PERSISTENCE_SORT = 80;
-    const MODULE_CHART_SORT       = 80;
-    const MODULE_AWAY_SORT        = 80;
-    const MODULE_FOOTER_SORT      = 90;
-    const MODULE_MODAL_SORT       = 100;
+    const MODULE_TABS_SORT        = 40;
+    const MODULE_FILTER_SORT      = 50;
+    const MODULE_WELCOME_SORT     = 60;
+    const MODULE_OPERATE_SORT     = 70;
+    const MODULE_DATA_SORT        = 80;
+    const MODULE_PREVIEW_SORT     = 90;
+    const MODULE_PERSISTENCE_SORT = 90;
+    const MODULE_CHART_SORT       = 90;
+    const MODULE_AWAY_SORT        = 90;
+    const MODULE_FOOTER_SORT      = 100;
+    const MODULE_MODAL_SORT       = 110;
 
     const VG_NEWLY  = 'newly';
     const VG_MODIFY = 'modify';

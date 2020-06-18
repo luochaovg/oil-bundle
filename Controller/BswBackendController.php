@@ -471,6 +471,7 @@ class BswBackendController extends BswWebController
             BswModule\Menu\Module::class    => ['sort' => Abs::MODULE_MENU_SORT],
             BswModule\Header\Module::class  => ['sort' => Abs::MODULE_HEADER_SORT],
             BswModule\Crumbs\Module::class  => ['sort' => Abs::MODULE_CRUMBS_SORT, 'crumbs' => $this->crumbs],
+            BswModule\Tabs\Module::class    => ['sort' => Abs::MODULE_TABS_SORT],
             BswModule\Welcome\Module::class => ['sort' => Abs::MODULE_WELCOME_SORT],
             BswModule\Operate\Module::class => ['sort' => Abs::MODULE_OPERATE_SORT],
             BswModule\Footer\Module::class  => ['sort' => Abs::MODULE_FOOTER_SORT],
@@ -491,7 +492,7 @@ class BswBackendController extends BswWebController
     protected function showBlank(string $view, array $args = [], array $moduleList = []): Response
     {
         $args['scene'] = 'blank';
-        $moduleList = array_merge(
+        $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
             [
@@ -515,7 +516,7 @@ class BswBackendController extends BswWebController
     protected function showPreview(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
         $args['scene'] = 'preview';
-        $moduleList = array_merge(
+        $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
             [
@@ -544,7 +545,7 @@ class BswBackendController extends BswWebController
         }
 
         $args['scene'] = 'persistence';
-        $moduleList = array_merge(
+        $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
             [BswModule\Persistence\Module::class => ['sort' => Abs::MODULE_PERSISTENCE_SORT]]
@@ -566,7 +567,7 @@ class BswBackendController extends BswWebController
     protected function showChart(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
         $args['scene'] = 'chart';
-        $moduleList = array_merge(
+        $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
             [

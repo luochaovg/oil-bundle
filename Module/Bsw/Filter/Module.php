@@ -698,6 +698,12 @@ class Module extends Bsw
         $this->handleShowList($filterAnnotation, $output);
         $this->handleFilter($output);
 
+        $output->columnPx = $this->input->columnPx;
+        $output->maxShow = $this->input->maxShow;
+        $output->maxShowInIframe = $this->input->maxShowInIframe;
+        $output->textShow = $this->input->textShow;
+        $output->textHide = $this->input->textHide;
+
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),
             self::ARGS_BEFORE_RENDER,

@@ -959,9 +959,10 @@ class Module extends Bsw
         $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
 
-        $arguments = $this->arguments(['x' => $output->scrollX]);
-        $output->scroll = $this->caller($this->method, self::SCROLL, Abs::T_ARRAY, $output->scroll, $arguments);
-
+        $output->border = $this->input->border;
+        $output->scroll = $this->input->scroll;
+        $output->size = $this->input->size;
+        $output->pageSizeOptions = $this->input->pageSizeOptions;
         $output->dynamic = $this->input->dynamic;
         $output->clsName = $this->input->clsName;
 
