@@ -17,15 +17,21 @@ table.docutils {
 .show-tips {
     display: inline-block;
     margin: 2px;
-    font-size: 90%;
     line-height: normal;
-    background: #fdefdf;
-    color: #0a0909b5;
-    border-top: solid 3px #fdac86;
-    padding: 4px 6px;
+    background: rgba(251, 241, 229, .5);
+    border-left: solid 1px #fdd1a7;
+    border-right: solid 1px #fdd1a7;
+    border-radius: 2px;
+    padding: 4px 8px;
     position: relative;
     cursor: pointer;
     outline: none;
+}
+
+.show-tips p {
+    font-size: 12px;
+    color: rgba(10, 9, 9, 0.55);
+    font-weight: lighter;
 }
 
 .show-tips-hidden {
@@ -34,9 +40,10 @@ table.docutils {
 
 div.rst-content img {
     display: block;
-    width: 36%;
-    margin: 50px auto !important;
-    opacity: .6;
+    width: 50%;
+    height: 10px;
+    margin: 60px auto !important;
+    opacity: .3;
 }
 
 p {
@@ -56,4 +63,28 @@ p {
 
 .tippy-popper p {
     margin-bottom: unset;
+}
+
+table.bsw-doc-table-header td,
+table.bsw-doc-table-error td,
+table.bsw-doc-table-basic td {
+    height: 36px;
+}
+
+table.bsw-doc-table-request td,
+table.bsw-doc-table-response td {
+    height: 40px;
+}
+
+.wy-table td,
+.rst-content table.docutils td,
+.rst-content table.field-list td,
+.wy-table th,
+.rst-content table.docutils th,
+.rst-content table.field-list th {
+    padding: 6px 16px;
+}
+
+div.note > ul {
+    margin-bottom: 0 !important;
 }

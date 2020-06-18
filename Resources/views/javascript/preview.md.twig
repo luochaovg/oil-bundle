@@ -59,7 +59,7 @@ bsw.configure({
     },
     logic: {
         previewResize(v) {
-            let upper = {{ preview.scrollX }};
+            let upper = {{ preview.scroll.x ?? preview.scrollX }};
             let columns = v.previewColumns;
             let fixed = [];
             for (let index in columns) {
@@ -80,8 +80,10 @@ bsw.configure({
                     columns[index].fixed = free ? false : fixed[index];
                 }
             };
-            resize();
-            $(window).resize(() => resize());
+            v.$nextTick(function () {
+                resize();
+                $(window).resize(() => resize());
+            });
         },
         previewImageChange(v) {
             v.previewImageChange();

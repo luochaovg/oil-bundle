@@ -101,7 +101,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=2048, groups={"modify"})
-     * @BswAnnotation\Preview(sort=11.1, render=BswAbs::HTML_PRE, width=360)
+     * @BswAnnotation\Preview(sort=11.1, render=BswAbs::HTML_PRE, width=360, show=false)
      * @BswAnnotation\Persistence(sort=8, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=8, show=false)
      */

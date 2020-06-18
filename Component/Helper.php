@@ -2424,6 +2424,56 @@ class Helper
     }
 
     /**
+     * Get date gap detail
+     *
+     * @param string $date
+     * @param array  $digit
+     * @param string $standardDate
+     *
+     * @return array
+     */
+    public static function gapDateDetail(string $date, ?array $digit = null, string $standardDate = null): array
+    {
+        $standardDate = $standardDate ?? date(Abs::FMT_FULL);
+        $standardTime = strtotime($standardDate);
+        $time = strtotime($date);
+
+        $compare = $time <=> $standardTime;
+        $gap = abs($time - $standardTime);
+
+        [$year, $gap] = self::getIntDivAndMod($gap, Abs::TIME_YEAR);
+        [$month, $gap] = self::getIntDivAndMod($gap, Abs::TIME_MONTH);
+        [$day, $gap] = self::getIntDivAndMod($gap, Abs::TIME_DAY);
+        [$hour, $gap] = self::getIntDivAndMod($gap, Abs::TIME_HOUR);
+        [$minute, $second] = self::getIntDivAndMod($gap, Abs::TIME_MINUTE);
+
+        if (is_null($digit)) {
+            return [$compare, $year, $month, $day, $hour, $minute, $second];
+        }
+
+        $digit = array_merge(
+            [
+                'year'   => 'years/',
+                'month'  => 'months/',
+                'day'    => 'days ',
+                'hour'   => 'h',
+                'minute' => 'm',
+                'second' => 's',
+            ],
+            $digit
+        );
+
+        $info = null;
+        foreach ($digit as $key => $value) {
+            if (!empty($$key) || $key == 'second') {
+                $info .= "{$$key}{$value}";
+            }
+        }
+
+        return [$compare, $info];
+    }
+
+    /**
      * Datetime with only hour/minute/second
      *
      * @param string $time
@@ -2440,6 +2490,27 @@ class Helper
         $time = $time - current(self::timestampDay());
 
         return $time;
+    }
+
+    /**
+     * Get int div and mod
+     *
+     * @param int  $dividend
+     * @param int  $divisor
+     * @param bool $leftPadZero
+     *
+     * @return array
+     */
+    public static function getIntDivAndMod(int $dividend, int $divisor, bool $leftPadZero = false): array
+    {
+        $div = intdiv($dividend, $divisor);
+        $mod = $dividend % $divisor;
+
+        if ($leftPadZero) {
+            $mod = self::strPadLeftLength($mod, 2);
+        }
+
+        return [$div, $mod];
     }
 
     /**

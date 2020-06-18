@@ -465,7 +465,7 @@ class Module extends Bsw
                 'fixed'     => $item['fixed'],
             ];
 
-            if ($field === Abs::PK && is_null($column['fixed'])) {
+            if ($field === $this->input->pk && is_null($column['fixed'])) {
                 $column['fixed'] = 'left';
             }
 

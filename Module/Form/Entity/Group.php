@@ -66,10 +66,6 @@ class Group extends Form
             return $default;
         }
 
-        if (array_sum($this->column) !== 24) {
-            return $default;
-        }
-
         if (count($this->column) != count($this->member)) {
             return $default;
         }

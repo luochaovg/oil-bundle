@@ -431,14 +431,10 @@ class BswInitCommand extends Command implements CommandInterface
         $documentFileList = Helper::multipleToOne($documentFileList);
 
         foreach ($documentFileList as $file) {
-
             $targetFile = str_replace(__DIR__, $project, $file);
             @mkdir(pathinfo($targetFile, PATHINFO_DIRNAME), 0755, true);
-
-            if (!file_exists($targetFile)) {
-                copy($file, $targetFile);
-                $output->writeln("<info>   [Copy] {$targetFile} </info>");
-            }
+            copy($file, $targetFile);
+            $output->writeln("<info>   [Copy] {$targetFile} </info>");
         }
 
         /**

@@ -7,6 +7,7 @@ HEADER参数
 
 .. list-table::
     :widths: 20 15 65
+    :class: bsw-doc-table-header
 
     * - **Name**
       - **Required**
@@ -61,7 +62,7 @@ HEADER参数
 
 1. 根据文档参数列表得到参数数组 **$args**，第二步开始为计算签名的顺序。
 
-    .. code:: php
+    .. code-block:: php
 
         // 假如是登录接口，参数结果如下
         // 这也是最终发送请求时携带的数据
@@ -72,13 +73,13 @@ HEADER参数
 
 #. 获得当前时间戳并添加到 ``$args`` 中 (**key** 为 ``time``)，并且时间参数也要参照上段落文档传入 **HEADER** 中。
 
-    .. code:: php
+    .. code-block:: php
 
         $args['time'] = time();
 
 #. 将得到的参数数组按 **key** 进行倒序排列。
 
-    .. code:: php
+    .. code-block:: php
 
         krsort($args);
 
@@ -93,7 +94,7 @@ HEADER参数
 
 #. 遍历参数数组按 **k1 is v1 and k2 is v2...** 拼接成字符串(注意空格)。
 
-    .. code:: php
+    .. code-block:: php
 
         $sign = [];
         foreach($args as $key => $value) {
@@ -106,7 +107,7 @@ HEADER参数
 
 #. 在拼接好的字符串尾部追加拼接签名秘钥 **{$sign} & {$salt}**。
 
-    .. code:: php
+    .. code-block:: php
 
         $sign .= " & {$salt}";
 
@@ -115,7 +116,7 @@ HEADER参数
 
 #. 对上述得到的字符串使用 **md5** 进行哈希并转小写得到最终的32位签名字符串。
 
-    .. code:: php
+    .. code-block:: php
 
         $sign = strtolower(md5($sign));
         // sign = "1acdb7b5f817e95ef82bd303b398b7cc";

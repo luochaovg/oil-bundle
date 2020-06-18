@@ -166,7 +166,8 @@ class BswDocumentCommand extends Command implements CommandInterface
 
         $errorBill = null;
         $errorBill .= ".. list-table::{$n}";
-        $errorBill .= "{$this->indent}:widths: 15 35 50{$n2}";
+        $errorBill .= "{$this->indent}:widths: 15 35 50{$n}";
+        $errorBill .= "{$this->indent}:class: bsw-doc-table-error{$n2}";
         $errorBill .= "{$this->indent}* - Code{$n}";
         $errorBill .= "{$this->indent}  - Tiny{$n}";
         $errorBill .= "{$this->indent}  - Description for logger{$n2}";
@@ -243,16 +244,18 @@ class BswDocumentCommand extends Command implements CommandInterface
         };
 
         /**
-         * @param array $table
-         * @param array $list
-         * @param int   $indent
+         * @param array  $table
+         * @param array  $list
+         * @param string $className
+         * @param int    $indent
          */
-        $appendTable = function (array $table, array $list, int $indent = 0) use ($append) {
+        $appendTable = function (array $table, array $list, string $className, int $indent = 0) use ($append) {
 
             $append(".. list-table::", 1, $indent);
 
             $widths = implode(' ', array_values($table));
-            $append(":widths: {$widths}", 2, $indent + 1);
+            $append(":widths: {$widths}", 1, $indent + 1);
+            $append(":class: {$className}", 2, $indent + 1);
 
             // table header
             $max = count($table) - 1;
@@ -333,7 +336,8 @@ class BswDocumentCommand extends Command implements CommandInterface
                     ['Route Name', $api['route']],
                     ['Route URL', "{$host}{$api['uri']}"],
                     ['Namespace', $file],
-                ]
+                ],
+                'bsw-doc-table-basic'
             );
 
             // license
@@ -366,8 +370,9 @@ class BswDocumentCommand extends Command implements CommandInterface
                         $ajaxRequest = true;
                     }
                     $prefix = $n ? '- ' : null;
-                    $append($prefix . Helper::docVarReplace($lc, $docFlag), 2, 1);
+                    $append($prefix . Helper::docVarReplace($lc, $docFlag), 1, 1);
                 }
+                $append();
             }
 
             // request params (warning or table)
@@ -546,6 +551,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                         'Description' => 25,
                     ],
                     $paramList,
+                    'bsw-doc-table-request',
                     $argsIndent
                 );
             }
@@ -618,7 +624,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                 $label = Helper::docVarReplace($label, $docFlag);
                 $enumDocument = $this->enumDocument($item['enum']);
                 $indent = $this->indent($propertyIndent + 3);
-                $type = $item['type'];
+                $type = ucfirst($item['type']);
                 $propertyList[] = [
                     "{$item['indent']}{$item['field']}",
                     strpos($type, self::TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
@@ -627,7 +633,12 @@ class BswDocumentCommand extends Command implements CommandInterface
             }
 
             if ($property) {
-                $appendTable(['Name' => 30, 'Type' => 20, 'Description' => 50], $propertyList, $propertyIndent);
+                $appendTable(
+                    ['Name' => 30, 'Type' => 20, 'Description' => 50],
+                    $propertyList,
+                    'bsw-doc-table-response',
+                    $propertyIndent
+                );
             } else {
                 $append(".. note::");
                 $append($this->lang('Without response params in sets'), 2, 1);

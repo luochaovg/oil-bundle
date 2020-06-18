@@ -2,11 +2,11 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Leon\BswBundle\Module\Form\Entity\Text;
@@ -51,36 +51,42 @@ trait Persistence
         }
 
         return [
-            'title'     => ['label' => 'Mission title'],
-            'weight'    => ['typeArgs' => $this->weightTypeArgs()],
-            'lifecycle' => [
+            'title'           => ['label' => 'Mission title'],
+            'weight'          => ['typeArgs' => $this->weightTypeArgs()],
+            'lifecycle_start' => [
                 'type'     => Group::class,
-                'sort'     => 3,
+                'sort'     => 3.1,
                 'typeArgs' => [
-                    'column' => [6, 5, 2, 6, 5],
+                    'column' => [14, 10],
                     'member' => [
                         (new Date())
-                            ->setField('start_day')
-                            ->setPlaceholder('Start day')
+                            ->setField('day')
+                            ->setPlaceholder('Start date')
                             ->setValue($dateStart ?? null)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select start date please'))]),
                         (new Time())
-                            ->setField('start_time')
+                            ->setField('time')
                             ->setPlaceholder('Start time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
                             ->setValue($timeStart ?? null)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select start time please'))]),
-                        (new Text())
-                            ->setStyle(['width' => '100%', 'text-align' => 'center'])
-                            ->setValue('~'),
+                    ],
+                ],
+            ],
+            'lifecycle_end'   => [
+                'type'     => Group::class,
+                'sort'     => 3.2,
+                'typeArgs' => [
+                    'column' => [14, 10],
+                    'member' => [
                         (new Date())
-                            ->setField('end_day')
-                            ->setPlaceholder('End time')
+                            ->setField('day')
+                            ->setPlaceholder('End date')
                             ->setValue($dateEnd ?? null)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select end date please'))]),
                         (new Time())
-                            ->setField('end_time')
+                            ->setField('time')
                             ->setPlaceholder('End time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
@@ -95,7 +101,7 @@ trait Persistence
     /**
      * @param Arguments $args
      *
-     * @return Message|Error|array
+     * @return Message|array
      */
     public function persistenceAfterSubmit(Arguments $args)
     {
@@ -142,7 +148,7 @@ trait Persistence
     /**
      * @return string
      */
-    public function weightEntity(): string
+    public function simpleEntity(): string
     {
         return $this->persistenceEntity();
     }
@@ -152,15 +158,66 @@ trait Persistence
      *
      * @return array
      */
-    public function weightFormOperates(Arguments $args)
+    public function simpleAnnotation(Arguments $args): array
     {
-        /**
-         * @var Button $submit
-         */
-        $submit = $args->submit;
-        $submit->setBlock();
+        $annotation = $this->persistenceAnnotation($args);
+        $annotation = array_merge(
+            $annotation,
+            [
+                'userId'      => false,
+                'donePercent' => false,
+                'weight'      => false,
+                'remark'      => false,
+                'state'       => false,
+            ]
+        );
 
-        return ['submit' => $submit];
+        return $annotation;
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return Message|array
+     */
+    public function simpleAfterSubmit(Arguments $args)
+    {
+        $result = $this->persistenceAfterSubmit($args);
+        if (!is_array($result)) {
+            return $result;
+        }
+
+        [$submit, $extra] = $result;
+        $submit['userId'] = $this->usr->{$this->cnf->usr_uid};
+
+        return [$submit, $extra];
+    }
+
+    /**
+     * Simple persistence record
+     *
+     * @Route("/bsw-work-task/simple/{id}", name="app_bsw_work_task_simple", requirements={"id": "\d+"})
+     * @Access()
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function simple(int $id = null): Response
+    {
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPersistence(['id' => $id, 'nextRoute' => 'app_bsw_work_task_preview']);
+    }
+
+    /**
+     * @return string
+     */
+    public function weightEntity(): string
+    {
+        return $this->persistenceEntity();
     }
 
     /**
@@ -171,10 +228,28 @@ trait Persistence
         return [
             'id'     => true,
             'weight' => [
-                'label'    => false,
+                'label'    => Helper::cnSpace(),
                 'typeArgs' => $this->weightTypeArgs(),
             ],
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function weightFormOperates(Arguments $args): array
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit
+            ->setBlock(true)
+            ->setLabel('Update task weight');
+
+        return compact('submit');
     }
 
     /**
@@ -189,7 +264,11 @@ trait Persistence
      */
     public function weight(int $id = null): Response
     {
-        return $this->persistence($id);
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPersistence(['id' => $id]);
     }
 
     /**
@@ -201,30 +280,55 @@ trait Persistence
     }
 
     /**
-     * @param Arguments $args
-     *
-     * @return array
-     */
-    public function progressFormOperates(Arguments $args)
-    {
-        /**
-         * @var Button $submit
-         */
-        $submit = $args->submit;
-        $submit->setBlock();
-
-        return ['submit' => $submit];
-    }
-
-    /**
      * @return array
      */
     public function progressAnnotationOnly(): array
     {
         return [
             'id'          => true,
-            'donePercent' => ['label' => false],
+            'donePercent' => ['label' => Helper::cnSpace()],
+            'state'       => ['show' => false],
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function progressAfterSubmit(Arguments $args)
+    {
+        if ($args->submit['donePercent'] <= 0) {
+            $args->submit['state'] = 1;
+        } elseif ($args->submit['donePercent'] < 100) {
+            $args->submit['state'] = 2;
+        } else {
+            if (time() <= $args->recordBefore['endTime']) {
+                $args->submit['state'] = 3;
+            } else {
+                $args->submit['state'] = 4;
+            }
+        }
+
+        return [$args->submit, $args->extraSubmit];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function progressFormOperates(Arguments $args): array
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit
+            ->setBlock(true)
+            ->setLabel('Update task progress');
+
+        return compact('submit');
     }
 
     /**
@@ -238,6 +342,10 @@ trait Persistence
      */
     public function progress(int $id = null): Response
     {
-        return $this->persistence($id);
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPersistence(['id' => $id]);
     }
 }

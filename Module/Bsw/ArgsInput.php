@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw;
 
 use Doctrine\ORM\Query\Expr;
+use Leon\BswBundle\Module\Entity\Abs;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -132,4 +133,9 @@ abstract class ArgsInput
      * @var array
      */
     public $data = [];
+
+    /**
+     * @var string
+     */
+    public $pk = Abs::PK;
 }

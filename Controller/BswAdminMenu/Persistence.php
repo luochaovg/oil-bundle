@@ -97,7 +97,11 @@ trait Persistence
      */
     public function sort(int $id = null): Response
     {
-        return $this->persistence($id);
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPersistence(['id' => $id]);
     }
 
     /**

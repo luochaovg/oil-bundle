@@ -224,6 +224,8 @@ parameters:
     bsw_crumbs_map:
         app_bsw_admin_role_access_control_grant: app_bsw_admin_role_preview
         app_bsw_admin_access_control_grant: app_bsw_admin_user_preview
+        app_bsw_work_task_weight: app_bsw_work_task_preview
+        app_bsw_work_task_progress: app_bsw_work_task_preview
 
     bsw_crumbs_keyword_to_icon_map:
         home: b:icon-rest

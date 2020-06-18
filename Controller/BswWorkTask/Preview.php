@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -28,6 +28,16 @@ trait Preview
     public function previewOperates()
     {
         return [
+            (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
+                ->setType(Button::THEME_BSW_WARNING)
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'width'  => Abs::MEDIA_SM,
+                        'height' => 410,
+                        'title'  => $this->twigLang('New task'),
+                    ]
+                ),
             new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly),
         ];
     }
@@ -48,8 +58,8 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 204,
-                        'title'  => $this->twigLang('Weight'),
+                        'height' => 234,
+                        'title'  => false,
                     ]
                 ),
             (new Button('Progress'))
@@ -60,12 +70,58 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 204,
-                        'title'  => $this->twigLang('Progress'),
+                        'height' => 234,
+                        'title'  => false,
                     ]
                 ),
             (new Button('Edit record', 'app_bsw_work_task_persistence'))->setArgs(['id' => $args->item['id']]),
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     * @param string    $left
+     * @param string    $right
+     *
+     * @return Charm
+     */
+    public function previewCharmStartTime(Arguments $args, string $left = 'Ready', string $right = 'Consumed')
+    {
+        if ($args->item['state'] >= 3) {
+            return new Charm(Abs::HTML_CODE, $args->value);
+        }
+
+        $left = $this->fieldLang($left);
+        $right = $this->fieldLang($right);
+        $html = Abs::HTML_CODE . Abs::LINE_DASHED;
+
+        [$gap, $tip] = Helper::gapDateDetail(
+            $args->value,
+            [
+                'day'    => $this->fieldLang('Day'),
+                'hour'   => $this->fieldLang('Hour'),
+                'minute' => $this->fieldLang('Minute'),
+                'second' => $this->fieldLang('Second'),
+            ]
+        );
+
+        if ($gap >= 0) {
+            $html .= str_replace('{value}', "{$left}: {$tip}", Abs::HTML_GREEN_TEXT);
+        } else {
+            $html .= str_replace('{value}', "{$right}: {$tip}", Abs::HTML_ORANGE_TEXT);
+        }
+
+        return new Charm($html, $args->value);
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return Charm
+     */
+    public function previewCharmEndTime(Arguments $args)
+    {
+        return $this->previewCharmStartTime($args, 'Surplus', 'Expired');
     }
 
     /**
@@ -82,6 +138,11 @@ trait Preview
             return $args;
         }
 
-        return $this->showPreview();
+        return $this->showPreview(
+            [
+                'display' => ['menu', 'header', 'footer'],
+                'dynamic' => 10,
+            ]
+        );
     }
 }

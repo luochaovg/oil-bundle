@@ -217,8 +217,8 @@ html_theme_options = {
 # -- Add custom source -------------------------------------------------------
 
 def setup(app):
-    app.add_stylesheet('css/custom.css')
-    app.add_stylesheet('css/tippy.theme.light-border.css')
-    app.add_javascript('js/popper.min.js')
-    app.add_javascript('js/tippy.all.min.js')
-    app.add_javascript('js/foundation.js')
+    app.add_css_file('css/custom.css')
+    app.add_css_file('css/tippy.theme.light-border.css')
+    app.add_js_file('js/popper.min.js')
+    app.add_js_file('js/tippy.all.min.js')
+    app.add_js_file('js/foundation.js')
