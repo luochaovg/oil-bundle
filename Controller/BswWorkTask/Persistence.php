@@ -248,7 +248,7 @@ trait Persistence
     }
 
     /**
-     * Simple persistence record
+     * Add task
      *
      * @Route("/bsw-work-task/simple/{id}", name="app_bsw_work_task_simple", requirements={"id": "\d+"})
      * @Access()
@@ -326,10 +326,10 @@ trait Persistence
     }
 
     /**
-     * Adjustment weight
+     * Adjustment task weight
      *
      * @Route("/bsw-work-task/weight/{id}", name="app_bsw_work_task_weight", requirements={"id": "\d+"})
-     * @Access(same="app_bsw_work_task_persistence")
+     * @Access()
      *
      * @param int $id
      *
@@ -436,9 +436,10 @@ trait Persistence
     }
 
     /**
-     * Adjustment progress
+     * Adjustment task progress
      *
      * @Route("/bsw-work-task/progress/{id}", name="app_bsw_work_task_progress", requirements={"id": "\d+"})
+     * @Access()
      *
      * @param int $id
      *
@@ -483,9 +484,10 @@ trait Persistence
     }
 
     /**
-     * Close record
+     * Close task
      *
      * @Route("/bsw-work-task/close/{id}", name="app_bsw_work_task_close", requirements={"id": "\d+"})
+     * @Access()
      *
      * @param int $id
      *

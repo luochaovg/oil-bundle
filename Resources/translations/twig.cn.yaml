@@ -114,6 +114,10 @@ Export record:                              '导出数据'
 Click it:                                   '点击我'
 Popup for select:                           '弹出选择列表'
 Click to select for upload:                 '选择上传文件'
+Adjustment task weight:                     '调整任务权重'
+Adjustment task progress:                   '调整任务进度'
+Add task:                                   '快速添加任务'
+Close task:                                 '关闭任务'
 
 # bsw tools
 
