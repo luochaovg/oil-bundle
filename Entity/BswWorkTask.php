@@ -135,7 +135,8 @@ class BswWorkTask extends FoundationEntity
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=3.1, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
      * @BswAnnotation\Persistence(sort=11, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=11, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Filter(sort=11.01, type=BswForm\Select::class, placeholder="Mode", group="state", style={"width": "50%"}, enum=BswFilter\Senior::MODE_SELECT_NUMBER, column=3)
+     * @BswAnnotation\Filter(sort=11.02, type=BswForm\Select::class, enum=true, placeholder="Value", group="state", style={"width": "50%"})
      * @BswAnnotation\Mixed(sort=true)
      */
     protected $state = 1;

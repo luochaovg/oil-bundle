@@ -43,7 +43,7 @@ class Senior extends Filter
     const BETWEEN      = 19;
 
     /**
-     * @cosnt array
+     * @const array
      */
     const MODE_RANGE = [
         self::GT      => 'Expr greater than',
@@ -54,7 +54,7 @@ class Senior extends Filter
     ];
 
     /**
-     * @cosnt array
+     * @const array
      */
     const MODE_LIKE = [
         self::LIKE       => 'Expr contain',
@@ -64,7 +64,7 @@ class Senior extends Filter
     ];
 
     /**
-     * @cosnt array
+     * @const array
      */
     const MODE_ROUTINE = [
         self::EQ           => 'Expr equal',
@@ -80,7 +80,19 @@ class Senior extends Filter
     ];
 
     /**
-     * @cosnt array
+     * @const array
+     */
+    const MODE_SELECT_NUMBER = [
+        self::EQ  => 'Expr equal',
+        self::NEQ => 'Expr not equal',
+        self::GT  => 'Expr greater than',
+        self::GTE => 'Expr greater than or equal to',
+        self::LT  => 'Expr less than',
+        self::LTE => 'Expr less than or equal to',
+    ];
+
+    /**
+     * @const array
      */
     const MODE_FULL = self::MODE_ROUTINE + self::MODE_RANGE + self::MODE_LIKE;
 
