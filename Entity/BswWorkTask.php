@@ -37,7 +37,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=2, align="left", width=200, enumExtra=true)
      * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true)
-     * @BswAnnotation\Filter(sort=2, type=BswForm\Select::class, enumExtra=true)
+     * @BswAnnotation\Filter(sort=2, column=3, type=BswForm\Select::class, enumExtra=true)
      */
     protected $userId;
 

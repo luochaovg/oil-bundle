@@ -128,7 +128,7 @@ trait WebCrumbs
         ?string $title = null,
         ?string $icon = null,
         ?string $route = null,
-        int $index = null
+        ?int $index = null
     ): int {
         return array_push(
             $this->correctCrumbs,
@@ -165,6 +165,24 @@ trait WebCrumbs
     }
 
     /**
+     * Remove crumbs
+     *
+     * @param int $index
+     *
+     * @return int
+     */
+    public function removeCrumbs(?int $index = null): int
+    {
+        return array_push(
+            $this->correctCrumbs,
+            [
+                'mode'  => 'remove',
+                'index' => $index,
+            ]
+        );
+    }
+
+    /**
      * Correct crumbs
      */
     public function correctCrumbs()
@@ -174,7 +192,7 @@ trait WebCrumbs
         }
 
         $total = count($this->crumbs);
-        foreach ($this->correctCrumbs as $item) {
+        foreach ($this->correctCrumbs as $key => $item) {
 
             /**
              * @var string $mode
@@ -194,6 +212,11 @@ trait WebCrumbs
             $index = $index < 0 ? $total + $index : $index;
             if (!isset($this->crumbs[$index])) {
                 return;
+            }
+
+            if ($mode == 'remove') {
+                unset($this->crumbs[$key]);
+                continue;
             }
 
             /**

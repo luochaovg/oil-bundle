@@ -73,7 +73,7 @@ trait Preview
      */
     public function previewFilterCorrect(Arguments $args): array
     {
-        [$team] = $this->teamInfo();
+        [$team] = $this->workTaskTeam();
 
         if ($team) {
             $args->condition['bau.teamId'] = $this->createFilter(Accurate::class, $team);
@@ -87,7 +87,7 @@ trait Preview
      */
     public function previewOperates()
     {
-        [$team, $leader] = $this->teamInfo();
+        [$team, $leader] = $this->workTaskTeam();
 
         $operates[] = (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
             ->setType(Button::THEME_BSW_WARNING)
@@ -104,6 +104,11 @@ trait Preview
             $operates[] = new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly);
         }
 
+        $operates[] = (new Button('Logout'))
+            ->setRoute($this->cnf->route_logout)
+            ->setIcon($this->cnf->icon_logout)
+            ->setConfirm($this->messageLang('Are you sure'));
+
         return $operates;
     }
 
@@ -114,7 +119,7 @@ trait Preview
      */
     public function previewRecordOperates(Arguments $args): array
     {
-        [$team, $leader] = $this->teamInfo();
+        [$team, $leader] = $this->workTaskTeam();
 
         $operates[] = (new Button('Progress'))
             ->setType(Button::THEME_BSW_WARNING)
@@ -290,16 +295,9 @@ trait Preview
             return $args;
         }
 
-        [$team, $leader] = $this->teamInfo();
-        if ($team) {
-            $leader = $leader ? ' 🚩' : null;
-            $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
-        }
-
         return $this->showPreview(
             [
-                'display'     => $team ? ['menu', 'header'] : [],
-                'dynamic'     => 3,
+                'dynamic'     => 10,
                 'afterModule' => [
                     'drawer' => function ($logic, $args) {
                         $trailVisible = array_column($args['preview']['list'], 'id');

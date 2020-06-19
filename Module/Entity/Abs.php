@@ -229,6 +229,7 @@ class Abs
     const FN_HOOKER_ARGS             = 'hookerExtraArgs';
     const FN_VALIDATOR_ARGS          = 'validatorExtraArgs';
     const FN_UPLOAD_OPTIONS          = 'uploadOptionsHandler';
+    const FN_BEFORE_LOGIC            = 'beforeLogic';
 
     const FMT_YEAR_ONLY       = 'Y';
     const FMT_MONTH_ONLY      = 'm';

@@ -1,47 +1,53 @@
 <a-layout-header>
-  <span class="icon" @click="menuTrigger">
-    <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
-  </span>
+  {% if 'menu' not in logic.display ?? [] %}
+    <span class="icon" @click="menuTrigger">
+      <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
+    </span>
+  {% endif %}
   <div class="user-wrapper">
-    <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
+    {% if header.setting is not empty %}
+      <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
         {{ scaffold.cnf.iconSetting|icon|raw }}
       </span>
-      <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
-        {% for item in header.setting %}
-          <a-menu-item @click="{{ item.click }}">
-            <div>
-              {{ item.icon|icon|raw }}
-              <span>{{ item.label|trans({}, 'twig') }}</span>
-            </div>
-          </a-menu-item>
-        {% endfor %}
-      </a-menu>
-    </a-dropdown>
-    <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
+        <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
+          {% for item in header.setting %}
+            <a-menu-item @click="{{ item.click }}">
+              <div>
+                {{ item.icon|icon|raw }}
+                <span>{{ item.label|trans({}, 'twig') }}</span>
+              </div>
+            </a-menu-item>
+          {% endfor %}
+        </a-menu>
+      </a-dropdown>
+    {% endif %}
+    {% if header.links is not empty %}
+      <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
       <span class="item action ant-dropdown-link user-dropdown-menu">
         {% set avatar = attribute(scaffold.usr, scaffold.cnf.usrAvatar) %}
         <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
         {% set account = scaffold.cnf.usrAccount %}
         <span class="username">{{ attribute(scaffold.usr, account) ?? ('`' ~ account ~ '`') }}</span>
       </span>
-      <a-menu
-        slot="overlay"
-        class="user-dropdown-menu-wrapper"
-        :default-selected-keys="['{{ scaffold.route }}']"
-        @click="redirectByVue"
-      >
-        {% for item in header.links %}
-          <a-menu-item key="{{ item.route }}">
-            <div>
-              {{ item.icon|icon|raw }}
-              <span bsw-data='{"location": "{{ item.url }}"}'>
+        <a-menu
+          slot="overlay"
+          class="user-dropdown-menu-wrapper"
+          :default-selected-keys="['{{ scaffold.route }}']"
+          @click="redirectByVue"
+        >
+          {% for item in header.links %}
+            <a-menu-item key="{{ item.route }}">
+              <div>
+                {{ item.icon|icon|raw }}
+                <span bsw-data='{"location": "{{ item.url }}"}'>
                 {{ item.label|trans({}, 'twig') }}
               </span>
-            </div>
-          </a-menu-item>
-        {% endfor %}
-      </a-menu>
-    </a-dropdown>
+              </div>
+            </a-menu-item>
+          {% endfor %}
+        </a-menu>
+      </a-dropdown>
+    {% endif %}
   </div>
 </a-layout-header>

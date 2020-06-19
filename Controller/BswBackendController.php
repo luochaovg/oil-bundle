@@ -328,8 +328,9 @@ class BswBackendController extends BswWebController
         }
 
         $ajaxShowArgs = [];
-        $showArgs = ['logic' => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
+        $globalLogic = Helper::dig($inputArgs, 'logic');
+        $showArgs = ['logic' => array_merge((array)$globalLogic, $logicArgs)];
 
         $extraBswArgs = [
             'expr'       => $this->expr,
@@ -380,7 +381,7 @@ class BswBackendController extends BswWebController
             /**
              * twig html
              */
-            $html = $this->renderPart($twig, [$name => $output]);
+            $html = $this->renderPart($twig, array_merge($showArgs, [$name => $output]));
 
             $showArgs["{$name}Html"] = $html;
             $ajaxShowArgs["{$name}Html"] = $html;
@@ -419,7 +420,7 @@ class BswBackendController extends BswWebController
      */
     public function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
     {
-        $showArgs = [Abs::TAG_LOGIC => $logicArgs];
+        $showArgs = ['logic' => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
 
         $extraBswArgs = [
@@ -780,5 +781,49 @@ class BswBackendController extends BswWebController
         }
 
         return $this->access[$route] ?? false;
+    }
+
+    /**
+     * Get work task team info
+     *
+     * @return array
+     */
+    public function workTaskTeam(): array
+    {
+        return [$this->usr('usr_team'), $this->usr('usr_team_leader')];
+    }
+
+    /**
+     * Get work task team by user id
+     *
+     * @param int $userId
+     *
+     * @return mixed
+     * @throws
+     */
+    public function workTaskTeamByUserId(int $userId)
+    {
+        /**
+         * @var BswAdminUserRepository $adminRepo
+         */
+        $adminRepo = $this->repo(BswAdminUser::class);
+        $admin = $adminRepo->find($userId);
+
+        return $admin->teamId;
+    }
+
+    /**
+     * Before action logic
+     */
+    public function beforeLogic()
+    {
+        [$team, $leader] = $this->workTaskTeam();
+        if (!$team) {
+            return null;
+        }
+
+        $leader = $leader ? ' 🚩' : null;
+        $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
+        $this->logic->display = ['menu', 'header', 'crumbs'];
     }
 }

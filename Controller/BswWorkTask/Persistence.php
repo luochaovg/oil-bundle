@@ -186,18 +186,7 @@ trait Persistence
             return $args;
         }
 
-        [$team, $leader] = $this->teamInfo();
-        if ($team) {
-            $leader = $leader ? ' 🚩' : null;
-            $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
-        }
-
-        return $this->showPersistence(
-            [
-                'display' => $team ? ['menu', 'header'] : [],
-                'id'      => $id,
-            ]
-        );
+        return $this->showPersistence(['id' => $id]);
     }
 
     /**
@@ -401,8 +390,8 @@ trait Persistence
      */
     public function progressAfterSubmit(Arguments $args)
     {
-        [$myTeam, $leader] = $this->teamInfo();
-        $userTeam = $this->userTeam($args->recordBefore['userId']);
+        [$myTeam, $leader] = $this->workTaskTeam();
+        $userTeam = $this->workTaskTeamByUserId($args->recordBefore['userId']);
 
         if (
             ($args->recordBefore['userId'] !== $this->usr('usr_uid')) &&

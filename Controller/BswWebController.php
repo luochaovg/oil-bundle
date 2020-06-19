@@ -556,6 +556,7 @@ abstract class BswWebController extends AbstractController
         }
 
         $this->iNeedCost(Abs::END_VALID);
+        $this->dispatchMethod(Abs::FN_BEFORE_LOGIC);
 
         return (object)$args;
     }
@@ -701,6 +702,7 @@ abstract class BswWebController extends AbstractController
 
         $scaffold = [
             'cnf'    => $this->cnf,
+            'logic'  => $this->logic,
             'usr'    => $this->usr,
             'env'    => $this->env,
             'debug'  => $this->debug,

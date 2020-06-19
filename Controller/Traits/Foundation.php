@@ -141,6 +141,11 @@ trait Foundation
     protected $cnf;
 
     /**
+     * @var object
+     */
+    protected $logic;
+
+    /**
      * @var string
      */
     protected $route;
@@ -242,6 +247,7 @@ trait Foundation
         $config = $this->parameters('cnf', false);
         $config = $this->dispatchMethod(Abs::FN_EXTRA_CONFIG, $config, [$config]);
         $this->cnf = (object)$config;
+        $this->logic = (object)[];
 
         $this->iNeedCost(Abs::BEGIN_CONSTRUCT);
 
