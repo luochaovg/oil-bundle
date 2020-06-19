@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Leon\BswBundle\Controller\BswBackendController;
+use Leon\BswBundle\Controller\Traits\WorkTask;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTeam;
 use Leon\BswBundle\Module\Bsw\Arguments;
@@ -18,6 +19,7 @@ class Acme extends BswBackendController
 {
     use Preview;
     use Persistence;
+    use WorkTask;
 
     /**
      * @param Arguments $args

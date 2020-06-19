@@ -96,8 +96,17 @@ abstract class BswWebController extends AbstractController
         }
 
         // prevent route to self
-        if ($this->route == $url) {
-            $url = $this->cnf->route_login;
+        if ($url == $this->route) {
+            $access = array_filter($this->access);
+            foreach ($access as $route => $assert) {
+                if (strpos($route, Abs::TAG_PREVIEW) !== false) {
+                    $url = $route;
+                    break;
+                }
+            }
+            if (empty($url)) {
+                $url = $this->cnf->route_login;
+            }
         }
 
         // args
@@ -177,9 +186,15 @@ abstract class BswWebController extends AbstractController
      */
     protected function responseUrlMap(int $code): ?string
     {
-        $reference = ($this->route == $this->cnf->route_default) ? null : $this->reference();
-        if (strpos($reference, 'login') !== false) {
-            $reference = null;
+        $reference = $this->reference();
+
+        if ($code == ErrorAccess::CODE) {
+            if ($this->route == $this->cnf->route_default) {
+                return null;
+            }
+            if (strpos($reference, 'login') !== false) {
+                return null;
+            }
         }
 
         $map = [
@@ -231,7 +246,10 @@ abstract class BswWebController extends AbstractController
         }
 
         // fallback url
-        $this->session->set(Abs::TAG_FALLBACK, $this->currentUrl());
+        if ($code4logic == ErrorAuthorization::CODE) {
+            $this->addFlash(Abs::TAG_FALLBACK, $this->currentUrl());
+        }
+
         // redirect url
         $url = $url ?? $this->responseUrlMap($code4logic);
 

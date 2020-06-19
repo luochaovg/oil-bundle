@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Entity\BswAdminUser;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 
@@ -41,6 +42,18 @@ trait Profile
             'telegramId' => false,
             'state'      => false,
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function profileAfterSubmit(Arguments $args)
+    {
+        $args->submit['id'] = $this->usr('usr_uid');
+
+        return [$args->submit, $args->extraSubmit];
     }
 
     /**

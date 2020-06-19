@@ -252,7 +252,8 @@ trait Login
          * fallback
          */
 
-        $fallback = $this->session->get(Abs::TAG_FALLBACK);
+        $fallback = $this->session->getFlashBag()->get(Abs::TAG_FALLBACK);
+        $fallback = end($fallback);
         $fallback = $fallback ?? $this->urlSafe($this->cnf->route_default);
 
         return $this->okayAjax(['href' => $fallback], 'Login success');
