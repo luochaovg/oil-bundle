@@ -808,6 +808,7 @@ abstract class BswWebController extends AbstractController
             if ($exception instanceof Throwable) {
                 throw $exception;
             }
+            $this->logger->error('Exception trace -->', $exception->getTrace());
             throw new Exception($exception->getMessage());
         }
 
