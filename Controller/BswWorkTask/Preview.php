@@ -232,9 +232,8 @@ trait Preview
 
         $trail = null;
         $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
-        $last = count($list) - 1;
 
-        foreach ($list as $index => $item) {
+        foreach ($list as $item) {
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
             $cb = $cb->locale($lang)->diffForHumans();
             $cb = Html::tag('span', "({$cb})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
@@ -243,9 +242,7 @@ trait Preview
             $trail .= str_replace('{value}', $item['name'], Abs::TEXT_BLUE) . ' ';
             $trail .= $item['trail'] . ' ';
             $trail .= $cb;
-            if ($index !== $last) {
-                $trail .= Abs::LINE_DASHED;
-            }
+            $trail .= str_replace(10, 15, Abs::LINE_DASHED);
         }
 
         $modeMap = [

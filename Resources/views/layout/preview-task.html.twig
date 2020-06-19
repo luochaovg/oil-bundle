@@ -11,24 +11,39 @@
       @close="trailDrawerClose"
     >
       {{ drawer.trailHtml|raw }}
+      <div
+        :style="{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e8e8e8',
+          padding: '20px 30px',
+          textAlign: 'right',
+          left: 0,
+          background: '#fff',
+          borderRadius: '0 0 4px 4px',
+        }"
+      >
+        <a-button type="primary" @click="trailDrawerClose">{{ 'I got it'|trans({}, 'twig') }}</a-button>
+      </div>
     </a-drawer>
   {% endfor %}
 {% endblock %}
 
 {% block javascriptBefore %}
-bsw.configure({
+  bsw.configure({
   data: {
-      trailCurrent: 0,
-      trailDrawer: {{ logic.drawer.trailVisible|raw }},
+  trailCurrent: 0,
+  trailDrawer: {{ logic.drawer.trailVisible|raw }},
   },
   method: {
-      showTrailDrawer(options) {
-          this.current = options.id;
-          this.trailDrawer[this.current] = true;
-      },
-      trailDrawerClose(e) {
-          this.trailDrawer[this.current] = false;
-      }
+  showTrailDrawer(options) {
+  this.current = options.id;
+  this.trailDrawer[this.current] = true;
   },
-});
+  trailDrawerClose(e) {
+  this.trailDrawer[this.current] = false;
+  }
+  },
+  });
 {% endblock %}
