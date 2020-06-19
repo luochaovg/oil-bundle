@@ -45,12 +45,25 @@ class Senior extends Filter
     /**
      * @const array
      */
-    const MODE_RANGE = [
-        self::GT      => 'Expr greater than',
-        self::GTE     => 'Expr greater than or equal to',
-        self::LT      => 'Expr less than',
-        self::LTE     => 'Expr less than or equal to',
-        self::BETWEEN => 'Expr between',
+    const MODE_EQ = [
+        self::EQ  => 'Expr equal',
+        self::NEQ => 'Expr not equal',
+    ];
+
+    /**
+     * @const array
+     */
+    const MODE_GT = [
+        self::GT  => 'Expr greater than',
+        self::GTE => 'Expr greater than or equal to',
+    ];
+
+    /**
+     * @const array
+     */
+    const MODE_LT = [
+        self::LT  => 'Expr less than',
+        self::LTE => 'Expr less than or equal to',
     ];
 
     /**
@@ -66,11 +79,16 @@ class Senior extends Filter
     /**
      * @const array
      */
-    const MODE_ROUTINE = [
-        self::EQ           => 'Expr equal',
-        self::NEQ          => 'Expr not equal',
-        self::IN           => 'Expr in',
-        self::NOT_IN       => 'Expr not in',
+    const MODE_IN = [
+        self::IN      => 'Expr in',
+        self::NOT_IN  => 'Expr not in',
+        self::BETWEEN => 'Expr between',
+    ];
+
+    /**
+     * @const array
+     */
+    const MODE_EMPTY = [
         self::IS_NULL      => 'Expr is null',
         self::IS_NOT_NULL  => 'Expr is not null',
         self::IS_BLANK     => 'Expr is blank',
@@ -82,19 +100,17 @@ class Senior extends Filter
     /**
      * @const array
      */
-    const MODE_SELECT_NUMBER = [
-        self::EQ  => 'Expr equal',
-        self::NEQ => 'Expr not equal',
-        self::GT  => 'Expr greater than',
-        self::GTE => 'Expr greater than or equal to',
-        self::LT  => 'Expr less than',
-        self::LTE => 'Expr less than or equal to',
-    ];
+    const MODE_SELECT_NUMBER = self::MODE_EQ + self::MODE_GT + self::MODE_LT;
 
     /**
      * @const array
      */
-    const MODE_FULL = self::MODE_ROUTINE + self::MODE_RANGE + self::MODE_LIKE;
+    const MODE_RANGE = self::MODE_GT + self::MODE_LT + self::IN;
+
+    /**
+     * @const array
+     */
+    const MODE_FULL = self::MODE_EQ + self::MODE_GT + self::MODE_LT + self::MODE_LIKE + self::MODE_IN + self::MODE_EMPTY;
 
     /**
      * @param mixed $value
