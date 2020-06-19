@@ -381,7 +381,7 @@ class BswBackendController extends BswWebController
             /**
              * twig html
              */
-            $html = $this->renderPart($twig, [$name => $output]);
+            $html = $this->renderPart($twig, array_merge($showArgs, [$name => $output]));
 
             $showArgs["{$name}Html"] = $html;
             $ajaxShowArgs["{$name}Html"] = $html;
