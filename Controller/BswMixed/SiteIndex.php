@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
 /**
  * @property TranslatorInterface $translator
@@ -52,6 +53,7 @@ trait SiteIndex
      * Welcome page
      *
      * @Route("/", name="app_site_index")
+     * @Access()
      *
      * @return Response
      * @throws
