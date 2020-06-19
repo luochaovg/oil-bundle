@@ -35,13 +35,13 @@ trait Persistence
             ->setType(Button::THEME_DEFAULT)
             ->setSize(Button::SIZE_SMALL)
             ->setArgs(['location' => $this->cnf->ant_icon_url, 'window' => true]);
-        $iconA = $this->renderPart('form/button.html', ['form' => $iconA]);
+        $iconA = $this->getButtonHtml($iconA, true);
 
         $iconB = (new Button('b:symbol'))
             ->setType(Button::THEME_DEFAULT)
             ->setSize(Button::SIZE_SMALL)
             ->setArgs(['location' => $this->cnf->font_symbol_url, 'window' => true]);
-        $iconB = $this->renderPart('form/button.html', ['form' => $iconB]);
+        $iconB = $this->getButtonHtml($iconB, true);
 
         return [
             'icon' => [

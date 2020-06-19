@@ -265,6 +265,18 @@ trait Foundation
     }
 
     /**
+     * Get user field
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function usr(string $key)
+    {
+        return $this->usr->{$this->cnf->{$key}} ?? null;
+    }
+
+    /**
      * Logger process
      *
      * @param string $scene
@@ -292,7 +304,7 @@ trait Foundation
          * production environment and debug uuid
          */
 
-        $userId = (($this->usr->{$this->cnf->usr_uid} ?? null) === $uuid);
+        $userId = ($this->usr('usr_uid') === $uuid);
         $deviceId = (($this->header->device ?? null) === $uuid);
 
         if ($userId || $deviceId) {

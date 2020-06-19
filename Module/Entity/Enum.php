@@ -872,6 +872,7 @@ class Enum
      * @const array 工作任务状态
      */
     const BSW_WORK_TASK_STATE = [
+        0 => 'Task closed',
         1 => 'Task unopened',
         2 => 'Task in progress',
         3 => 'Task done in contract',

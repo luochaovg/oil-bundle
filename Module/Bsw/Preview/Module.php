@@ -467,7 +467,8 @@ class Module extends Bsw
                 'fixed'     => $item['fixed'],
             ];
 
-            if ($field === $this->input->pk && is_null($column['fixed'])) {
+            $pk = $this->entity ? $this->repository->pk() : Abs::PK;
+            if ($field === $pk && is_null($column['fixed'])) {
                 $column['fixed'] = 'left';
             }
 
@@ -807,7 +808,7 @@ class Module extends Bsw
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
 
                 $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
-                $item[$operate] .= $this->web->renderPart('form/button.native.html', ['form' => $button]);
+                $item[$operate] .= $this->web->getButtonHtml($button);
             }
 
             $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";

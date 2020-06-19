@@ -386,43 +386,34 @@ abstract class Bsw
     /**
      * Enum handler
      *
-     * @param array $item
-     * @param array $args
+     * @param array  $item
+     * @param array  $args
      *
      * @return array
      */
     protected function handleForEnum(array $item, array $args = []): array
     {
-        return $this->web->caching(
-            function () use ($item, $args) {
+        if (is_string($item['enumExtra'])) {
+            $method = self::ENUM_EXTRA . ucfirst($item['enumExtra']);
+            $enum = (array)$item['enum'];
 
-                /**
-                 * extra enum
-                 */
-                if (is_string($item['enumExtra'])) {
+            $arguments = $this->arguments(compact('enum'), $args);
+            $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], $arguments);
 
-                    $method = self::ENUM_EXTRA . ucfirst($item['enumExtra']);
-                    $enum = (array)$item['enum'];
+            $arguments = $this->arguments(compact('enumExtra', 'enum'), $args);
+            $enumExtra = $this->caller($this->method, $method, Abs::T_ARRAY, $enumExtra, $arguments);
 
-                    $arguments = $this->arguments(compact('enum'), $args);
-                    $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], $arguments);
-
-                    $arguments = $this->arguments(compact('enumExtra', 'enum'), $args);
-                    $enumExtra = $this->caller($this->method, $method, Abs::T_ARRAY, $enumExtra, $arguments);
-
-                    if (isset($enumExtra)) {
-                        $item['enum'] = $enumExtra + $enum;
-                    }
-                }
-
-                if ($item['enum'] && $item['enumHandler']) {
-                    $item['enum'] = call_user_func_array($item['enumHandler'], [$item['enum']]);
-                    Helper::callReturnType($item['enum'], Abs::T_ARRAY);
-                }
-
-                return $item;
+            if (isset($enumExtra)) {
+                $item['enum'] = $enumExtra + $enum;
             }
-        );
+        }
+
+        if ($item['enum'] && $item['enumHandler']) {
+            $item['enum'] = call_user_func_array($item['enumHandler'], [$item['enum']]);
+            Helper::callReturnType($item['enum'], Abs::T_ARRAY);
+        }
+
+        return $item;
     }
 
     /**

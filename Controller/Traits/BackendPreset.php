@@ -129,6 +129,21 @@ trait BackendPreset
     }
 
     /**
+     * Get button html
+     *
+     * @param Button $button
+     * @param bool   $vue
+     *
+     * @return string
+     */
+    public function getButtonHtml(Button $button, bool $vue = false): string
+    {
+        $twig = $vue ? 'form/button.html' : 'form/button.native.html';
+
+        return $this->renderPart($twig, ['form' => $button]);
+    }
+
+    /**
      * @param string $field
      * @param string $content
      * @param array  $options
@@ -150,9 +165,7 @@ trait BackendPreset
             ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 
-        $button = $this->renderPart('form/button.native.html', ['form' => $button]);
-
-        return new Charm($button, $label);
+        return new Charm($this->getButtonHtml($button), $label);
     }
 
     /**
@@ -184,7 +197,7 @@ trait BackendPreset
         $result = $loggerRepo->newly(
             [
                 'table'  => Helper::tableNameFromCls($entity),
-                'userId' => $this->usr->{$this->cnf->usr_uid} ?? 0,
+                'userId' => $this->usr('usr_uid') ?? 0,
                 'type'   => $type,
                 'before' => Helper::jsonStringify($before),
                 'later'  => Helper::jsonStringify($later),

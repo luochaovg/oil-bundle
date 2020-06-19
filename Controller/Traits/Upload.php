@@ -205,7 +205,7 @@ trait Upload
             }
         }
 
-        $userId = $this->usr->{$this->cnf->usr_uid} ?? 0;
+        $userId = $this->usr('usr_uid') ?? 0;
 
         /**
          * @var BswAttachmentRepository $bswAttachment

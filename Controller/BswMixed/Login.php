@@ -239,6 +239,7 @@ trait Login
                 'name'        => $user->name,
                 'role_id'     => $user->roleId,
                 'team_id'     => $user->teamId,
+                'team_leader' => $user->teamLeader,
                 'sex'         => $user->sex,
                 'update_time' => $user->updateTime,
                 'login_time'  => $now,

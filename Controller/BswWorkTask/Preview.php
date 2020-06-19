@@ -3,19 +3,25 @@
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Carbon\Carbon;
+use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
+use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Filter\Entity\Accurate;
+use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
+/**
+ * @property Expr $expr
+ */
 trait Preview
 {
     /**
@@ -32,6 +38,7 @@ trait Preview
     public function previewQuery(): array
     {
         return [
+            'limit'  => 100,
             'select' => ['bwt'],
             'join'   => [
                 'bau' => [
@@ -39,6 +46,22 @@ trait Preview
                     'left'   => ['bwt.userId'],
                     'right'  => ['bau.id'],
                 ],
+            ],
+            'sort'   => ['bwt.state' => Abs::SORT_ASC],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function previewAnnotation(): array
+    {
+        return [
+            'trail' => [
+                'width' => 120,
+                'align' => 'center',
+                'sort'  => 5.1,
+                'html'  => true,
             ],
         ];
     }
@@ -50,8 +73,11 @@ trait Preview
      */
     public function previewFilterCorrect(Arguments $args): array
     {
-        $team = $this->usr->{$this->cnf->usr_team} ?: -1;
-        $args->condition['bau.teamId'] = $this->createFilter(Accurate::class, $team);
+        [$team] = $this->teamInfo();
+
+        if ($team) {
+            $args->condition['bau.teamId'] = $this->createFilter(Accurate::class, $team);
+        }
 
         return [$args->filter, $args->condition];
     }
@@ -61,19 +87,24 @@ trait Preview
      */
     public function previewOperates()
     {
-        return [
-            (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
-                ->setType(Button::THEME_BSW_WARNING)
-                ->setClick('showIFrame')
-                ->setArgs(
-                    [
-                        'width'  => Abs::MEDIA_SM,
-                        'height' => 410,
-                        'title'  => $this->twigLang('New task'),
-                    ]
-                ),
-            new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly),
-        ];
+        [$team, $leader] = $this->teamInfo();
+
+        $operates[] = (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
+            ->setType(Button::THEME_BSW_WARNING)
+            ->setClick('showIFrame')
+            ->setArgs(
+                [
+                    'width'  => Abs::MEDIA_SM,
+                    'height' => 410,
+                    'title'  => $this->twigLang('New task'),
+                ]
+            );
+
+        if ($leader) {
+            $operates[] = new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly);
+        }
+
+        return $operates;
     }
 
     /**
@@ -83,8 +114,23 @@ trait Preview
      */
     public function previewRecordOperates(Arguments $args): array
     {
-        return [
-            (new Button('Weight'))
+        [$team, $leader] = $this->teamInfo();
+
+        $operates[] = (new Button('Progress'))
+            ->setType(Button::THEME_BSW_WARNING)
+            ->setRoute('app_bsw_work_task_progress')
+            ->setClick('showIFrame')
+            ->setArgs(
+                [
+                    'id'     => $args->item['id'],
+                    'width'  => 500,
+                    'height' => 328,
+                    'title'  => false,
+                ]
+            );
+
+        if ($leader) {
+            $operates[] = (new Button('Weight'))
                 ->setType(Button::THEME_DEFAULT)
                 ->setRoute('app_bsw_work_task_weight')
                 ->setClick('showIFrame')
@@ -95,21 +141,18 @@ trait Preview
                         'height' => 234,
                         'title'  => false,
                     ]
-                ),
-            (new Button('Progress'))
-                ->setType(Button::THEME_BSW_WARNING)
-                ->setRoute('app_bsw_work_task_progress')
-                ->setClick('showIFrame')
-                ->setArgs(
-                    [
-                        'id'     => $args->item['id'],
-                        'width'  => 500,
-                        'height' => 328,
-                        'title'  => false,
-                    ]
-                ),
-            (new Button('Edit record', 'app_bsw_work_task_persistence'))->setArgs(['id' => $args->item['id']]),
-        ];
+                );
+
+            $operates[] = (new Button('Edit record', 'app_bsw_work_task_persistence'))
+                ->setArgs(['id' => $args->item['id']]);
+
+            $operates[] = (new Button('Close', 'app_bsw_work_task_close'))
+                ->setType(Button::THEME_DANGER)
+                ->setConfirm($this->messageLang('Are you sure'))
+                ->setArgs(['id' => $args->item['id']]);
+        }
+
+        return $operates;
     }
 
     /**
@@ -161,30 +204,79 @@ trait Preview
     /**
      * @param Arguments $args
      *
-     * @return Charm
+     * @return array
      */
-    public function previewCharmTrail(Arguments $args)
+    public function previewAfterHook(Arguments $args): array
     {
-        $value = $args->value;
-        if (empty($value)) {
-            $value = 'Without any trail.';
-        } else {
-            $value = array_reverse(explode(PHP_EOL, $value));
-            foreach ($value as &$item) {
-                preg_match_all('/\[([0-9\-: ]+)\]/', $item, $result);
+        /**
+         * @var BswWorkTaskTrailRepository $trailRepo
+         */
+        $trailRepo = $this->repo(BswWorkTaskTrail::class);
+        $list = $trailRepo->lister(
+            [
+                'limit'  => 0,
+                'alias'  => 't',
+                'select' => ['u.name', 't.trail', 't.addTime AS time'],
+                'join'   => [
+                    'u' => [
+                        'entity' => BswAdminUser::class,
+                        'left'   => ['t.userId'],
+                        'right'  => ['u.id'],
+                    ],
+                ],
+                'where'  => [$this->expr->eq('t.taskId', ':task')],
+                'args'   => ['task' => [$args->original['id']]],
+                'order'  => ['t.id' => Abs::SORT_DESC],
+            ]
+        );
 
-                $date = Carbon::createFromFormat(Abs::FMT_FULL, current($result[1]));
-                $human = $date->locale('zh-CN')->diffForHumans();
-                $html = str_replace('{value}', current($result[1]), Abs::HTML_CODE);
+        $trail = null;
+        $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
+        $last = count($list) - 1;
 
-                $item .= ' ';
-                $item .= Html::tag('span', "({$human})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
-                $item = str_replace(current($result[0]), $html, $item);
+        foreach ($list as $index => $item) {
+            $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
+            $cb = $cb->locale($lang)->diffForHumans();
+            $cb = Html::tag('span', "({$cb})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
+
+            $trail .= str_replace('{value}', $item['time'], Abs::HTML_CODE) . ' ';
+            $trail .= str_replace('{value}', $item['name'], Abs::TEXT_BLUE) . ' ';
+            $trail .= $item['trail'] . ' ';
+            $trail .= $cb;
+            if ($index !== $last) {
+                $trail .= Abs::LINE_DASHED;
             }
-            $value = implode(Abs::LINE_DASHED, $value);
         }
 
-        return $this->charmShowContent('Trail', $value, ['width' => 800]);
+        $modeMap = [
+            'modal'  => [
+                'click' => 'showModal',
+                'args'  => [
+                    'width'    => 800,
+                    'title'    => $this->twigLang('Trail'),
+                    'content'  => Html::tag('pre', $trail, ['class' => 'bsw-pre bsw-long-text']),
+                    'centered' => true,
+                ],
+            ],
+            'drawer' => [
+                'click' => 'showTrailDrawer',
+                'args'  => [
+                    'id' => $args->original['id'],
+                ],
+            ],
+        ];
+        $mode = $modeMap['drawer'];
+
+        $button = (new Button('lifecycle'))
+            ->setType(Button::THEME_DEFAULT)
+            ->setSize(Button::SIZE_SMALL)
+            ->setClick($mode['click'])
+            ->setArgs($mode['args']);
+
+        $args->hooked['trail'] = $this->getButtonHtml($button);
+        $args->hooked['trailHtml'] = $trail;
+
+        return $args->hooked;
     }
 
     /**
@@ -201,11 +293,28 @@ trait Preview
             return $args;
         }
 
+        [$team, $leader] = $this->teamInfo();
+        if ($team) {
+            $leader = $leader ? ' 🚩' : null;
+            $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
+        }
+
         return $this->showPreview(
             [
-                'display' => ['menu', 'header', 'footer'],
-                'dynamic' => 10,
-            ]
+                'display'     => $team ? ['menu', 'header'] : [],
+                'dynamic'     => 10,
+                'afterModule' => [
+                    'drawer' => function ($logic, $args) {
+                        $trailVisible = array_column($args['preview']['list'], 'id');
+                        $trailVisible = Helper::arrayValuesSetTo($trailVisible, false, true);
+                        $trailVisible = Helper::jsonStringify($trailVisible);
+
+                        return compact('trailVisible');
+                    },
+                ],
+            ],
+            [],
+            'layout/preview-task.html'
         );
     }
 }

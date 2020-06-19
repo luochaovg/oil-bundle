@@ -685,7 +685,7 @@ class Module extends Bsw
                     ->setSize(Button::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
                     ->setArgs(['field' => $field, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
-                $titleAuto = $this->web->renderPart('form/button.html', ['form' => $button]);
+                $titleAuto = $this->web->getButtonHtml($button, true);
             }
 
             $_record[$field] = [

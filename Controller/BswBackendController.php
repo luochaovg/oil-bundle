@@ -199,14 +199,14 @@ class BswBackendController extends BswWebController
                     ],
                 ],
                 'where'  => [$this->expr->eq('u.id', ':uid')],
-                'args'   => ['uid' => [$this->usr->{$this->cnf->usr_uid}]],
+                'args'   => ['uid' => [$this->usr('usr_uid')]],
                 'order'  => ['log.id' => Abs::SORT_DESC],
             ]
         );
 
         $strict = [
-            'updateTime'    => $this->usr->{$this->cnf->usr_update},
-            'lastLoginTime' => $this->usr->{$this->cnf->usr_login} ?? null,
+            'updateTime'    => $this->usr('usr_update'),
+            'lastLoginTime' => $this->usr('usr_login'),
         ];
 
         if (!$this->parameter('backend_with_login_log')) {
@@ -652,7 +652,7 @@ class BswBackendController extends BswWebController
      */
     protected function getAccessOfRole(int $roleId = null): array
     {
-        $roleId = $roleId ?? $this->usr->{$this->cnf->usr_role};
+        $roleId = $roleId ?? $this->usr('usr_role');
         if (empty($roleId)) {
             return [];
         }
@@ -694,7 +694,7 @@ class BswBackendController extends BswWebController
      */
     protected function getAccessOfUser(int $userId = null): array
     {
-        $userId = $userId ?? $this->usr->{$this->cnf->usr_uid};
+        $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
             return [];
         }
@@ -731,7 +731,7 @@ class BswBackendController extends BswWebController
      */
     protected function getAccessOfRoleByUserId(int $userId = null): array
     {
-        $userId = $userId ?? $this->usr->{$this->cnf->usr_uid};
+        $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
             return [];
         }
@@ -754,7 +754,7 @@ class BswBackendController extends BswWebController
      */
     protected function getAccessOfUserWithRole(int $userId = null): array
     {
-        $userId = $userId ?? $this->usr->{$this->cnf->usr_uid};
+        $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
             return [];
         }

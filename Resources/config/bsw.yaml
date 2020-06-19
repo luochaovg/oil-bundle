@@ -126,7 +126,6 @@ parameters:
         third_message_key: bsw_third_message
         work_lifecycle_max_day: 14
         work_lifecycle_day_hours: 8
-        work_role_id: 0
 
         cache_enabled: true
         cache_default_expires: 86400
@@ -153,6 +152,7 @@ parameters:
         usr_uid: user_id
         usr_role: role_id
         usr_team: team_id
+        usr_team_leader: team_id
         usr_update: update_time
         usr_login: login_time
         usr_avatar: avatar
@@ -218,6 +218,7 @@ parameters:
     bsw_crumbs_preview_pre:
         - persistence
         - away
+        - close
         - sort
         - export
         - import

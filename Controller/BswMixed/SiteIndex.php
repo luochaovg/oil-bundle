@@ -42,7 +42,7 @@ trait SiteIndex
         return $this->messageLang(
             "Welcome {{ user }}, today is {{ today }}",
             [
-                '{{ user }}'  => $this->usr->{$this->cnf->usr_account},
+                '{{ user }}'  => $this->usr('usr_account'),
                 '{{ today }}' => date(Abs::FMT_DAY),
             ]
         );

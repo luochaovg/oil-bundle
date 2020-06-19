@@ -83,7 +83,7 @@ trait Grant
         $accessDanger = array_filter(Helper::arrayColumn($accessRender, ['class', 'title']));
 
         // Access from current administrator user id
-        $accessCurrentAdmin = $this->getAccessOfUserWithRole($this->usr->{$this->cnf->usr_uid});
+        $accessCurrentAdmin = $this->getAccessOfUserWithRole($this->usr('usr_uid'));
         $unAccessCurrentAdmin = array_diff(array_keys($accessRender), array_keys($accessCurrentAdmin));
         $unAccessCurrentAdmin = Helper::arrayValuesSetTo($unAccessCurrentAdmin, true, true);
 

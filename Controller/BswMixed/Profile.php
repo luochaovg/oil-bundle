@@ -34,9 +34,12 @@ trait Profile
     public function profileAnnotation(): array
     {
         return [
-            'phone'  => ['disabled' => true],
-            'roleId' => false,
-            'state'  => false,
+            'phone'      => ['disabled' => true],
+            'roleId'     => false,
+            'teamId'     => false,
+            'teamLeader' => false,
+            'telegramId' => false,
+            'state'      => false,
         ];
     }
 
@@ -53,6 +56,6 @@ trait Profile
             return $args;
         }
 
-        return $this->showPersistence(['id' => $this->usr->{$this->cnf->usr_uid}]);
+        return $this->showPersistence(['id' => $this->usr('usr_uid')]);
     }
 }

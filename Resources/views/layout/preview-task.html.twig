@@ -1,0 +1,34 @@
+{% extends 'layout/preview.html.twig' %}
+
+{% block pageAfter %}
+  {% for drawer in preview.list %}
+    <a-drawer
+      title="{{ 'Trail'|trans({}, 'twig') }}"
+      :width="720"
+      placement="left"
+      :closable="false"
+      :visible="trailDrawer[{{ drawer.id }}]"
+      @close="trailDrawerClose"
+    >
+      {{ drawer.trailHtml|raw }}
+    </a-drawer>
+  {% endfor %}
+{% endblock %}
+
+{% block javascriptBefore %}
+bsw.configure({
+  data: {
+      trailCurrent: 0,
+      trailDrawer: {{ logic.drawer.trailVisible|raw }},
+  },
+  method: {
+      showTrailDrawer(options) {
+          this.current = options.id;
+          this.trailDrawer[this.current] = true;
+      },
+      trailDrawerClose(e) {
+          this.trailDrawer[this.current] = false;
+      }
+  },
+});
+{% endblock %}

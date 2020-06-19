@@ -133,9 +133,4 @@ abstract class ArgsInput
      * @var array
      */
     public $data = [];
-
-    /**
-     * @var string
-     */
-    public $pk = Abs::PK;
 }

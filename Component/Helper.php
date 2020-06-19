@@ -1891,11 +1891,12 @@ class Helper
      */
     public static function tableFieldAddAlias(string $field, string $alias, string $dbTableSplit = '.'): string
     {
+        $field = trim($field, $dbTableSplit);
         if (strpos($field, $dbTableSplit) === false) {
             return "{$alias}{$dbTableSplit}{$field}";
         }
 
-        return trim($field, $dbTableSplit);
+        return $field;
     }
 
     /**

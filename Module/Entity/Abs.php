@@ -20,6 +20,7 @@ class Abs
     const TAG_SQL_ERROR     = 'An exception occurred while executing';
     const RULES_REQUIRED    = ['required' => true, 'message' => '{{ field }} Required'];
     const LINE_DASHED       = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
+    const BK_RENDER_ARGS    = 1;
 
     const NORMAL = 1;
     const CLOSE  = 0;
@@ -39,9 +40,6 @@ class Abs
     const POS_LEFT   = 'left';
     const POS_CENTER = 'center';
     const POS_MIDDLE = 'middle';
-
-    const BK_RENDER_ARGS = 1;
-    const BK_TWIG_ARGS   = 2;
 
     const PERSISTENCE_TOTAL_COLUMN = 24;
     const PERSISTENCE_LABEL_COLUMN = 4;
@@ -666,26 +664,26 @@ class Abs
     const HTML_GRAY_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #d6d6d6;'>{value}</div>";
 
     // html 粉色模板
-    const TEXT_PINK = "<div style='color: #eb2f96;'>{value}</div>";
+    const TEXT_PINK = "<span style='color: #eb2f96;'>{value}</span>";
 
     // html 红色模板
-    const TEXT_RED = "<div style='color: #f5222d;'>{value}</div>";
+    const TEXT_RED = "<span style='color: #f5222d;'>{value}</span>";
 
     // html 橙色模板
-    const TEXT_ORANGE = "<div style='color: #fa8c16;'>{value}</div>";
+    const TEXT_ORANGE = "<span style='color: #fa8c16;'>{value}</span>";
 
     // html 绿色模板
-    const TEXT_GREEN = "<div style='color: #52c41a;'>{value}</div>";
+    const TEXT_GREEN = "<span style='color: #52c41a;'>{value}</span>";
 
     // html 青色模板
-    const TEXT_CYAN = "<div style='color: #13c2c2;'>{value}</div>";
+    const TEXT_CYAN = "<span style='color: #13c2c2;'>{value}</span>";
 
     // html 蓝色模板
-    const TEXT_BLUE = "<div style='color: #1890ff;'>{value}</div>";
+    const TEXT_BLUE = "<span style='color: #1890ff;'>{value}</span>";
 
     // html 紫色模板
-    const TEXT_PURPLE = "<div style='color: #722ed1;'>{value}</div>";
+    const TEXT_PURPLE = "<span style='color: #722ed1;'>{value}</span>";
 
     // html 灰色模板
-    const TEXT_GRAY = "<div style='color: #d6d6d6;'>{value}</div>";
+    const TEXT_GRAY = "<span style='color: #d6d6d6;'>{value}</span>";
 }

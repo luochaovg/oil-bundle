@@ -5,6 +5,7 @@ CREATE TABLE `{TABLE_NAME}` (
   `password` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role_id` int(10) unsigned NOT NULL DEFAULT '0',
   `team_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `team_leader` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `sex` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `telegram_id` bigint(20) NOT NULL DEFAULT '0',
   `google_auth_secret` char(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',

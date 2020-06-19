@@ -965,8 +965,13 @@ abstract class FoundationRepository extends SFRepository
      */
     public function kvp(array $valueFields, string $key = Abs::PK, $handler = null, array ...$filter): array
     {
-        $valueFields = Helper::arrayMap($valueFields, 'kvp.%s');
-        array_push($valueFields, "kvp.{$key}");
+        array_unshift($valueFields, $key);
+        $valueFields = Helper::arrayMap(
+            $valueFields,
+            function ($v) {
+                return Helper::tableFieldAddAlias($v, 'kvp');
+            }
+        );
 
         if ($filter) {
             $this->filters(...$filter);

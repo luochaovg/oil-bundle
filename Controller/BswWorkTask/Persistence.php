@@ -4,15 +4,18 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
+use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
+use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Leon\BswBundle\Module\Form\Entity\Input;
 use Leon\BswBundle\Module\Form\Entity\Time;
+use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
@@ -124,12 +127,47 @@ trait Persistence
 
         $args->submit['startTime'] = date(Abs::FMT_FULL, $startTime);
         $args->submit['endTime'] = date(Abs::FMT_FULL, $endTime);
-        $args->submit['trail'] = $this->messageLang(
-            '[{{ date }}] Create the task',
-            ['{{ date }}' => date(Abs::FMT_FULL)]
-        );
 
         return [$args->submit, $args->extraSubmit];
+    }
+
+    /**
+     * Trail logger
+     *
+     * @param Arguments $args
+     * @param string    $trail
+     *
+     * @return bool|Error
+     */
+    protected function trailLogger(Arguments $args, string $trail)
+    {
+        /**
+         * @var BswWorkTaskTrailRepository $trailRepo
+         */
+        $trailRepo = $this->repo(BswWorkTaskTrail::class);
+        $result = $trailRepo->newly(
+            [
+                'userId' => $this->usr('usr_uid'),
+                'taskId' => intval($args->newly ? $args->result : $args->original['id']),
+                'trail'  => $trail,
+            ]
+        );
+
+        if ($result === false) {
+            return new ErrorDbPersistence();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return bool|Error
+     */
+    public function persistenceAfterPersistence(Arguments $args)
+    {
+        return $this->trailLogger($args, $this->messageLang('Create the task'));
     }
 
     /**
@@ -174,7 +212,6 @@ trait Persistence
                 'donePercent' => false,
                 'weight'      => false,
                 'remark'      => false,
-                'trail'       => false,
                 'state'       => false,
             ]
         );
@@ -195,9 +232,19 @@ trait Persistence
         }
 
         [$submit, $extra] = $result;
-        $submit['userId'] = $this->usr->{$this->cnf->usr_uid};
+        $submit['userId'] = $this->usr('usr_uid');
 
         return [$submit, $extra];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return bool|Error
+     */
+    public function simpleAfterPersistence(Arguments $args)
+    {
+        return $this->trailLogger($args, $this->messageLang('Create the task'));
     }
 
     /**
@@ -238,7 +285,6 @@ trait Persistence
                 'label'    => Helper::cnSpace(),
                 'typeArgs' => $this->weightTypeArgs(),
             ],
-            'trail'  => ['show' => false],
         ];
     }
 
@@ -263,23 +309,20 @@ trait Persistence
     /**
      * @param Arguments $args
      *
-     * @return array
+     * @return bool|Error
      */
-    public function weightAfterSubmit(Arguments $args)
+    public function weightAfterPersistence(Arguments $args)
     {
-        $args->submit['trail'] = $args->recordBefore['trail'];
-        $args->submit['trail'] .= PHP_EOL;
-        $args->submit['trail'] .= $this->messageLang(
-            '[{{ date }}] Change weight from {{ from }} to {{ to }}',
-            [
-                '{{ date }}' => date(Abs::FMT_FULL),
-                '{{ from }}' => $args->recordBefore['weight'],
-                '{{ to }}'   => $args->submit['weight'],
-            ]
+        return $this->trailLogger(
+            $args,
+            $this->messageLang(
+                'Change weight from {{ from }} to {{ to }}',
+                [
+                    '{{ from }}' => $args->recordBefore['weight'],
+                    '{{ to }}'   => $args->record['weight'],
+                ]
+            )
         );
-        $args->submit['trail'] = trim($args->submit['trail']);
-
-        return [$args->submit, $args->extraSubmit];
     }
 
     /**
@@ -318,7 +361,6 @@ trait Persistence
             'id'          => true,
             'donePercent' => ['label' => Helper::cnSpace()],
             'whatToDo'    => ['type' => Input::class, 'rules' => [$this->formRuleRequired()]],
-            'trail'       => ['show' => false],
             'state'       => ['show' => false],
         ];
     }
@@ -348,7 +390,13 @@ trait Persistence
      */
     public function progressAfterSubmit(Arguments $args)
     {
-        if ($args->recordBefore['userId'] !== $this->usr->{$this->cnf->usr_uid}) {
+        [$myTeam, $leader] = $this->teamInfo();
+        $userTeam = $this->userTeam($args->recordBefore['userId']);
+
+        if (
+            ($args->recordBefore['userId'] !== $this->usr('usr_uid')) &&
+            !($leader && ($myTeam === $userTeam))
+        ) {
             return new ErrorAccess();
         }
 
@@ -364,20 +412,27 @@ trait Persistence
             }
         }
 
-        $args->submit['trail'] = $args->recordBefore['trail'];
-        $args->submit['trail'] .= PHP_EOL;
-        $args->submit['trail'] .= $this->messageLang(
-            '[{{ date }}] Change progress from {{ from }} to {{ to }}{{ remark }}',
-            [
-                '{{ date }}'   => date(Abs::FMT_FULL),
-                '{{ from }}'   => $args->recordBefore['donePercent'],
-                '{{ to }}'     => $args->submit['donePercent'],
-                '{{ remark }}' => rtrim(", {$args->extraSubmit['whatToDo']}", ', '),
-            ]
-        );
-        $args->submit['trail'] = trim($args->submit['trail']);
-
         return [$args->submit, $args->extraSubmit];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return bool|Error
+     */
+    public function progressAfterPersistence(Arguments $args)
+    {
+        return $this->trailLogger(
+            $args,
+            $this->messageLang(
+                'Change progress from {{ from }} to {{ to }}{{ remark }}',
+                [
+                    '{{ from }}'   => $args->recordBefore['donePercent'],
+                    '{{ to }}'     => $args->record['donePercent'],
+                    '{{ remark }}' => $args->extraSubmit['whatToDo'],
+                ]
+            )
+        );
     }
 
     /**
@@ -396,5 +451,57 @@ trait Persistence
         }
 
         return $this->showPersistence(['id' => $id]);
+    }
+
+    /**
+     * @return string
+     */
+    public function closeEntity(): string
+    {
+        return $this->persistenceEntity();
+    }
+
+    /**
+     * @return array
+     */
+    public function closeAnnotationOnly(): array
+    {
+        return [
+            'id'    => true,
+            'state' => true,
+        ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return bool|Error
+     */
+    public function closeAfterPersistence(Arguments $args)
+    {
+        return $this->trailLogger($args, $this->messageLang('Close the task'));
+    }
+
+    /**
+     * Close record
+     *
+     * @Route("/bsw-work-task/close/{id}", name="app_bsw_work_task_close", requirements={"id": "\d+"})
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function close(int $id = null): Response
+    {
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPersistence(
+            [
+                'id'     => $id,
+                'submit' => ['id' => $id, 'state' => 0],
+            ]
+        );
     }
 }
