@@ -186,7 +186,18 @@ trait Persistence
             return $args;
         }
 
-        return $this->showPersistence(['id' => $id]);
+        [$team, $leader] = $this->teamInfo();
+        if ($team) {
+            $leader = $leader ? ' 🚩' : null;
+            $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
+        }
+
+        return $this->showPersistence(
+            [
+                'display' => $team ? ['menu', 'header'] : [],
+                'id'      => $id,
+            ]
+        );
     }
 
     /**

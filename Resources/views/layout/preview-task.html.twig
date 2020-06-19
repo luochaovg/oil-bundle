@@ -31,19 +31,19 @@
 {% endblock %}
 
 {% block javascriptBefore %}
-  bsw.configure({
-  data: {
-  trailCurrent: 0,
-  trailDrawer: {{ logic.drawer.trailVisible|raw }},
-  },
-  method: {
-  showTrailDrawer(options) {
-  this.current = options.id;
-  this.trailDrawer[this.current] = true;
-  },
-  trailDrawerClose(e) {
-  this.trailDrawer[this.current] = false;
-  }
-  },
-  });
+bsw.configure({
+    data: {
+        trailCurrent: 0,
+        trailDrawer: {{ logic.drawer.trailVisible|raw }},
+    },
+    method: {
+        showTrailDrawer(options) {
+            this.current = options.id;
+            this.trailDrawer[this.current] = true;
+        },
+        trailDrawerClose(e) {
+            this.trailDrawer[this.current] = false;
+        }
+    },
+});
 {% endblock %}

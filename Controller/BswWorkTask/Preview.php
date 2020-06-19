@@ -100,7 +100,7 @@ trait Preview
                 ]
             );
 
-        if ($leader) {
+        if (!$team || $leader) {
             $operates[] = new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly);
         }
 
@@ -129,7 +129,7 @@ trait Preview
                 ]
             );
 
-        if ($leader) {
+        if (!$team || $leader) {
             $operates[] = (new Button('Weight'))
                 ->setType(Button::THEME_DEFAULT)
                 ->setRoute('app_bsw_work_task_weight')
@@ -299,7 +299,7 @@ trait Preview
         return $this->showPreview(
             [
                 'display'     => $team ? ['menu', 'header'] : [],
-                'dynamic'     => 10,
+                'dynamic'     => 3,
                 'afterModule' => [
                     'drawer' => function ($logic, $args) {
                         $trailVisible = array_column($args['preview']['list'], 'id');

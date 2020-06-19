@@ -89,7 +89,7 @@ bsw.configure({
             v.previewImageChange();
         },
         previewDynamicRefresh(v) {
-            if (v.previewDynamicRefresh < 3) {
+            if (v.previewDynamicRefresh < 3 || v.previewList.length === 0) {
                 return;
             }
             setInterval(function() {
