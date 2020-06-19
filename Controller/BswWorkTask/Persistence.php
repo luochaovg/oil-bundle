@@ -167,6 +167,10 @@ trait Persistence
      */
     public function persistenceAfterPersistence(Arguments $args)
     {
+        if (!$args->newly) {
+            return true;
+        }
+
         return $this->trailLogger($args, $this->messageLang('Create the task'));
     }
 

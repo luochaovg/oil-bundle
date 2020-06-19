@@ -120,11 +120,16 @@ trait Preview
     public function previewRecordOperates(Arguments $args): array
     {
         [$team, $leader] = $this->workTaskTeam();
+        $userTeam = $this->workTaskTeamByUserId($args->item['userId']);
 
         $operates[] = (new Button('Progress'))
             ->setType(Button::THEME_BSW_WARNING)
             ->setRoute('app_bsw_work_task_progress')
             ->setClick('showIFrame')
+            ->setDisabled(
+                ($args->item['userId'] !== $this->usr('usr_uid')) &&
+                !($leader && ($team === $userTeam))
+            )
             ->setArgs(
                 [
                     'id'     => $args->item['id'],
