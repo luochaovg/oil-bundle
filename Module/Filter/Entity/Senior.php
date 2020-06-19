@@ -100,17 +100,52 @@ class Senior extends Filter
     /**
      * @const array
      */
-    const MODE_SELECT_NUMBER = self::MODE_EQ + self::MODE_GT + self::MODE_LT;
+    const MODE_SELECT_NUMBER = [
+        self::EQ  => 'Expr equal',
+        self::NEQ => 'Expr not equal',
+        self::GT  => 'Expr greater than',
+        self::GTE => 'Expr greater than or equal to',
+        self::LT  => 'Expr less than',
+        self::LTE => 'Expr less than or equal to',
+    ];
 
     /**
      * @const array
      */
-    const MODE_RANGE = self::MODE_GT + self::MODE_LT + self::IN;
+    const MODE_RANGE = [
+        self::GT      => 'Expr greater than',
+        self::GTE     => 'Expr greater than or equal to',
+        self::LT      => 'Expr less than',
+        self::LTE     => 'Expr less than or equal to',
+        self::IN      => 'Expr in',
+        self::NOT_IN  => 'Expr not in',
+        self::BETWEEN => 'Expr between',
+    ];
 
     /**
      * @const array
      */
-    const MODE_FULL = self::MODE_EQ + self::MODE_GT + self::MODE_LT + self::MODE_LIKE + self::MODE_IN + self::MODE_EMPTY;
+    const MODE_FULL = [
+        self::EQ           => 'Expr equal',
+        self::NEQ          => 'Expr not equal',
+        self::GT           => 'Expr greater than',
+        self::GTE          => 'Expr greater than or equal to',
+        self::LT           => 'Expr less than',
+        self::LTE          => 'Expr less than or equal to',
+        self::LIKE         => 'Expr contain',
+        self::BEGIN_LIKE   => 'Expr begin contain',
+        self::END_LIKE     => 'Expr end contain',
+        self::NOT_LIKE     => 'Expr not contain',
+        self::IN           => 'Expr in',
+        self::NOT_IN       => 'Expr not in',
+        self::BETWEEN      => 'Expr between',
+        self::IS_NULL      => 'Expr is null',
+        self::IS_NOT_NULL  => 'Expr is not null',
+        self::IS_BLANK     => 'Expr is blank',
+        self::IS_NOT_BLANK => 'Expr is not blank',
+        self::IS_EMPTY     => 'Expr is empty',
+        self::IS_NOT_EMPTY => 'Expr is not empty',
+    ];
 
     /**
      * @param mixed $value
