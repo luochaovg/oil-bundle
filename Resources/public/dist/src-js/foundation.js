@@ -293,6 +293,9 @@ var FoundationPrototype = function () {
             }
 
             for (var k in o) {
+                if (!o.hasOwnProperty(k)) {
+                    continue;
+                }
                 if (new RegExp('(' + k + ')').test(fmt)) {
                     fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
                 }
@@ -617,6 +620,9 @@ var FoundationTools = function (_FoundationPrototype) {
         value: function jsonLength(json) {
             var length = 0;
             for (var i in json) {
+                if (!json.hasOwnProperty(i)) {
+                    continue;
+                }
                 length++;
             }
             return length;
@@ -749,16 +755,16 @@ var FoundationTools = function (_FoundationPrototype) {
                 subValue = void 0,
                 innerObject = void 0,
                 i = void 0;
-            for (name in source) {
-                if (!source.hasOwnProperty(name)) {
+            for (var _name in source) {
+                if (!source.hasOwnProperty(_name)) {
                     continue;
                 }
-                value = source[name];
+                value = source[_name];
 
                 if (this.isArray(value)) {
                     for (i = 0; i < value.length; ++i) {
                         subValue = value[i];
-                        fullSubName = name + '[' + i + ']';
+                        fullSubName = _name + '[' + i + ']';
                         innerObject = {};
                         innerObject[fullSubName] = subValue;
                         query += this.jsonBuildQuery(innerObject, returnObject, needEncode) + '&';
@@ -770,7 +776,7 @@ var FoundationTools = function (_FoundationPrototype) {
                             continue;
                         }
                         subValue = value[subName];
-                        fullSubName = name + '[' + subName + ']';
+                        fullSubName = _name + '[' + subName + ']';
                         innerObject = {};
                         innerObject[fullSubName] = subValue;
                         query += this.jsonBuildQuery(innerObject, returnObject, needEncode) + '&';
@@ -778,11 +784,11 @@ var FoundationTools = function (_FoundationPrototype) {
                     }
                 } else if (value !== undefined && value !== null) {
                     if (needEncode) {
-                        name = encodeURIComponent(name);
+                        _name = encodeURIComponent(_name);
                         value = encodeURIComponent(value);
                     }
-                    query += name + '=' + value + '&';
-                    _query[name] = value;
+                    query += _name + '=' + value + '&';
+                    _query[_name] = value;
                 }
             }
 
@@ -1787,78 +1793,27 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'chart',
         value: function chart(option) {
-            var chart = echarts.init(document.getElementById('chart-' + option.id), option.theme);
+            var that = this;
             var o = option.option;
+            var chart = echarts.init(document.getElementById('chart-' + option.id), option.theme);
 
-            if (this.checkJsonDeep(o, 'tooltip.formatter')) {
-                if (o.tooltip.formatter === ':stackBar') {
-                    o.tooltip.formatter = function (params) {
-                        var total = 0;
-                        var _iteratorNormalCompletion5 = true;
-                        var _didIteratorError5 = false;
-                        var _iteratorError5 = undefined;
-
-                        try {
-                            for (var _iterator5 = params[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                                var item = _step5.value;
-
-                                total += Math.floor(Number.parseFloat(item.data) * 100);
-                            }
-                        } catch (err) {
-                            _didIteratorError5 = true;
-                            _iteratorError5 = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                                    _iterator5.return();
-                                }
-                            } finally {
-                                if (_didIteratorError5) {
-                                    throw _iteratorError5;
-                                }
-                            }
-                        }
-
-                        total /= 100;
-
-                        var tpl = params[0].name + ' (' + total + ')<br>';
-                        var _iteratorNormalCompletion6 = true;
-                        var _didIteratorError6 = false;
-                        var _iteratorError6 = undefined;
-
-                        try {
-                            for (var _iterator6 = params[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                                var _item = _step6.value;
-
-                                var percent = (Number.parseFloat(_item.data) / total || 0) * 100;
-                                percent = percent.toFixed(2);
-                                tpl += _item.marker + ' ' + _item.seriesName + ': ' + _item.data + ' (' + percent + '%)<br>';
-                            }
-                        } catch (err) {
-                            _didIteratorError6 = true;
-                            _iteratorError6 = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                                    _iterator6.return();
-                                }
-                            } finally {
-                                if (_didIteratorError6) {
-                                    throw _iteratorError6;
-                                }
-                            }
-                        }
-
-                        return tpl;
-                    };
-                } else if (o.tooltip.formatter === ':pictorialBar') {
-                    o.tooltip.formatter = function (params) {
-                        return params[0].name + ': ' + params[0].value;
-                    };
+            var replaceHandler = function replaceHandler(target) {
+                for (var key in target) {
+                    if (!target.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    var item = target[key];
+                    if (that.isJson(item)) {
+                        target[key] = replaceHandler(item);
+                    } else if (that.isString(item) && item.startsWith('fn:')) {
+                        var fn = that.ucFirst(item.split(':')[1]);
+                        target[key] = that['chartHandler' + fn];
+                    }
                 }
-            }
+                return target;
+            };
 
-            chart.setOption(o);
+            chart.setOption(replaceHandler(o));
             this.cnf.v.$nextTick(function () {
                 chart.resize();
             });
@@ -1866,6 +1821,101 @@ var FoundationAntD = function (_FoundationTools) {
             $(window).resize(function () {
                 return chart.resize();
             });
+        }
+
+        /**
+         * @param params
+         * @returns {string}
+         */
+
+    }, {
+        key: 'chartHandlerTooltipStack',
+        value: function chartHandlerTooltipStack(params) {
+            var total = 0;
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = params[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var item = _step5.value;
+
+                    total += Math.floor(Number.parseFloat(item.data) * 100);
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+
+            total /= 100;
+
+            var tpl = params[0].name + ' (' + total + ')<br>';
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = params[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var _item = _step6.value;
+
+                    var percent = (Number.parseFloat(_item.data) / total || 0) * 100;
+                    percent = percent.toFixed(2);
+                    tpl += _item.marker + ' ' + _item.seriesName + ': ' + _item.data + ' (' + percent + '%)<br>';
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
+                }
+            }
+
+            return tpl;
+        }
+
+        /**
+         * @param params
+         * @returns {string}
+         */
+
+    }, {
+        key: 'chartHandlerTooltipNormal',
+        value: function chartHandlerTooltipNormal(params) {
+            return params[0].name + ': ' + params[0].value;
+        }
+
+        /**
+         * @param pos
+         * @param params
+         * @param dom
+         * @param rect
+         * @param size
+         * @returns {{top: number}}
+         */
+
+    }, {
+        key: 'chartHandlerTooltipPositionFixed',
+        value: function chartHandlerTooltipPositionFixed(pos, params, dom, rect, size) {
+            var obj = { top: 20 };
+            obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 10;
+            return obj;
         }
 
         /**

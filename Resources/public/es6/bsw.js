@@ -39,6 +39,7 @@ $(function () {
         tips: {}, // from v-init
         modal: {
             visible: false,
+            centered: true,
         },
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
@@ -195,7 +196,7 @@ $(function () {
                     let data = {
                         title: bsw.lang.export_mission,
                         width: 768,
-                        height: 800,
+                        height: 700,
                     };
                     data.location = bsw.setParams(res.sets, this.exportApiUrl, true);
                     this.showIFrame(data, $('body')[0]);
@@ -325,6 +326,7 @@ $(function () {
         },
 
         showModal(options) {
+            this.modal.visible = false;
             options.visible = true;
             if (typeof options.width === 'undefined') {
                 options.width = bsw.popupCosySize().width;
@@ -338,8 +340,7 @@ $(function () {
                     let sets = res.sets;
                     let logic = sets.logic || sets;
                     this.showModal({
-                        centered: true,
-                        width: logic.width || data.width || bsw.popupCosySize().width,
+                        width: logic.width || data.width || undefined,
                         title: logic.title || data.title || bsw.lang.modal_title,
                         content: sets.content,
                     });
@@ -399,10 +400,8 @@ $(function () {
             data.location = bsw.setParams({iframe: true, repair}, data.location);
 
             let options = {
-                visible: true,
                 width: data.width || size.width,
                 title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
-                centered: true,
                 content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
             };
             this.showModal(options);
@@ -498,7 +497,6 @@ $(function () {
         },
 
         showIFrameInParent(data, element) {
-            this.modal.visible = false;
             this.showIFrame(data.response.sets, element);
         },
 

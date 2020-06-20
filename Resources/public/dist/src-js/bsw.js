@@ -73,6 +73,9 @@ $(function () {
         redirectByVue: function redirectByVue(event) {
             this.redirect(this.getBswData($(event.item.$el).find('span')));
         },
+        tabsLinksSwitch: function tabsLinksSwitch(key) {
+            this.redirect(this.getBswData($('#tabs_link_' + key)));
+        },
         dispatcher: function dispatcher(data, element) {
             var that = this;
             var action = function action() {
@@ -404,12 +407,13 @@ $(function () {
                 width: data.width || size.width,
                 title: data.title === false ? data.title : data.title || bsw.lang.please_select,
                 centered: true,
-                wrapClassName: 'bsw-iframe-container',
                 content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
             };
             this.showModal(options);
             this.$nextTick(function () {
-                $("#bsw-iframe").height(data.height || size.height);
+                var iframe = $("#bsw-iframe");
+                iframe.height(data.height || size.height);
+                iframe.parents("div.ant-modal-body").css({ margin: 0, padding: 0 });
             });
         },
         showIFrameWithChecked: function showIFrameWithChecked(data, element) {

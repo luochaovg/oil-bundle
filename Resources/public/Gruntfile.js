@@ -1,36 +1,6 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        copy: {
-            main: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'less/',
-                        src: ['**/*.keep.css'],
-                        dest: 'dist/src-css/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'less/',
-                        src: ['**/*.keep.css'],
-                        dest: 'dist/css/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'es6/',
-                        src: ['**/*.keep.js'],
-                        dest: 'dist/src-js/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'es6/',
-                        src: ['**/*.keep.js'],
-                        dest: 'dist/js/'
-                    },
-                ],
-            },
-        },
         less: {
             common: {
                 options: {
@@ -59,7 +29,7 @@ module.exports = function (grunt) {
                 ]
             },
             common: {
-                src: ['dist/src-css/**/*.css', '!dist/src-css/**/*.keep.css']
+                src: ['!dist/src-css/**/*.keep.css', 'dist/src-css/**/*.css']
             }
         },
         cssmin: {
@@ -93,6 +63,24 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'es6/',
+                        src: ['**/*.keep.js'],
+                        dest: 'dist/src-js/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'es6/',
+                        src: ['**/*.keep.js'],
+                        dest: 'dist/js/'
+                    },
+                ],
+            },
         },
         uglify: {
             options: {
@@ -145,7 +133,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('listen', ['watch']);
-    grunt.registerTask('handle-css', ['copy', 'less', 'postcss', 'cssmin']);
+    grunt.registerTask('handle-css', ['less', 'postcss', 'cssmin']);
     grunt.registerTask('handle-js', ['copy', 'babel', 'uglify']);
-    grunt.registerTask('handle-all', ['copy', 'less', 'postcss', 'cssmin', 'babel', 'uglify']);
+    grunt.registerTask('handle-all', ['less', 'postcss', 'cssmin', 'copy', 'babel', 'uglify']);
 };

@@ -390,10 +390,14 @@ div.ant-modal-mask {
 span.ant-form-item-children button {
   margin: 0 6px 6px 0;
 }
-.ant-form-item:last-child {
+form.ant-form > .ant-form-item:last-child {
   margin-bottom: 0;
 }
-div.ant-input-number {
+form.ant-form > .bsw-form-group {
+  margin-bottom: 0;
+}
+div.ant-input-number,
+span.ant-time-picker {
   width: 100%;
 }
 .header-menu ul li {
@@ -413,8 +417,6 @@ div.ant-input-number {
 .ant-form-item-label,
 .ant-breadcrumb,
 .ant-table-column-title,
-.ant-input,
-.ant-input-number-input,
 .ant-pagination-item-ellipsis,
 .ant-pagination-options-quick-jumper,
 .ant-modal-title,
@@ -444,9 +446,10 @@ span.ant-calendar-picker {
   margin-bottom: 16px !important;
 }
 .bsw-preview-image {
-  display: inline-block;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   border: 1px #1890ff dashed;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 4px;
   margin: 0 auto;
   cursor: pointer;
@@ -455,7 +458,7 @@ span.ant-calendar-picker {
   max-width: 128px;
   max-height: 128px;
 }
-.bsw-chart-tabs {
+.bsw-tabs-links {
   margin: 30px 30px 0 30px;
   text-align: center;
 }
@@ -514,11 +517,7 @@ div.modal-container-center div.ant-modal-body > div {
 a.bsw-preview-link {
   padding-right: 5px;
 }
-.bsw-iframe-container .ant-modal-body {
-  padding: 0;
-  margin: 0;
-}
-.bsw-iframe-container .ant-modal-body #bsw-iframe {
+#bsw-iframe {
   width: 100%;
   border: none;
   vertical-align: bottom;
@@ -541,15 +540,6 @@ a.bsw-preview-link {
   overflow-x: hidden;
   padding: 0;
   border-radius: 4px;
-}
-.ant-drawer-content-wrapper {
-  background: none;
-}
-.ant-drawer-content-wrapper .ant-drawer-content {
-  background: inherit;
-}
-.ant-drawer-content-wrapper .ant-drawer-content .ant-drawer-wrapper-body {
-  background: inherit;
 }
 ul.ant-pagination li {
   margin-bottom: 5px;
@@ -667,5 +657,9 @@ blockquote p {
 .ant-btn.ant-btn-bsw-dark:active {
   background-color: #343a40 !important;
   border-color: #343a40 !important;
+}
+.bsw-tabs-fit .ant-tabs-bar {
+  margin: 0;
+  border-bottom: none;
 }
 /*# sourceMappingURL=bsw.css.map */
