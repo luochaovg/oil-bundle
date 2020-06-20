@@ -258,7 +258,7 @@ trait Preview
                 ],
             ],
         ];
-        $mode = $modeMap['modal'];
+        $mode = $modeMap['drawer'];
 
         $button = (new Button('lifecycle'))
             ->setType(Button::THEME_DEFAULT)

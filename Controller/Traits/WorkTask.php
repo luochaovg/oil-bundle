@@ -49,6 +49,6 @@ trait WorkTask
 
         $leader = $leader ? ' 🚩' : null;
         $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
-        $this->logic->display = ['menu', 'header', 'crumbs'];
+        $this->logic->display = ['menu', 'header'];
     }
 }

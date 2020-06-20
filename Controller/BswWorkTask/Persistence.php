@@ -191,6 +191,8 @@ trait Persistence
             return $args;
         }
 
+        $this->removeCrumbs(0);
+
         return $this->showPersistence(['id' => $id]);
     }
 
