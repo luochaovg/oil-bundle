@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Carbon\Carbon;
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
@@ -16,8 +15,8 @@ use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @property Expr $expr
@@ -158,6 +157,7 @@ trait Preview
 
             $operates[] = (new Button('Close', 'app_bsw_work_task_close'))
                 ->setType(Button::THEME_DANGER)
+                ->setDisabled(!in_array($args->item['state'], [3, 4]))
                 ->setConfirm($this->messageLang('Are you sure'))
                 ->setArgs(['id' => $args->item['id']]);
         }
@@ -270,6 +270,14 @@ trait Preview
         $args->hooked['trailHtml'] = $trail;
 
         return $args->hooked;
+    }
+
+    /**
+     * @return array
+     */
+    public function previewTabsLinks(): array
+    {
+        return $this->tabsLinks();
     }
 
     /**

@@ -160,6 +160,7 @@ Pay action failed:                          '支付操作失败'
 Refund amount so much:                      '退款金额超实付金额'
 Refunded in full:                           '已全额退款'
 No record:                                  '结果集为空'
+Without change:                             '没有任何变动'
 
 # bsw validator
 

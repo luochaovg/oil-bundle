@@ -16,7 +16,7 @@
   :show-checked-strategy="{{ form.showCheckedStrategy }}"
   :dropdown-match-select-width="false"
   :dropdown-style="{{ form.dropdownStyle }}"
-  :tree-data='{{ form.treeData|raw }}'
+  :tree-data="{{ form.treeData }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { {{ initial }} rules: {{ form.rules }} }]"

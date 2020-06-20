@@ -76,11 +76,11 @@ class Module extends Bsw
                     'select' => [
                         'bam.id',
                         'bam.menuId',
-                        'bam.routeName',
+                        'bam.routeName AS route',
                         'bam.icon',
-                        'bam.value',
-                        'bam.javascript',
-                        'bam.jsonParams',
+                        'bam.value AS label',
+                        'bam.javascript AS click',
+                        'bam.jsonParams AS args',
                     ],
                     'where'  => [$this->input->expr->eq('bam.state', ':state')],
                     'args'   => ['state' => [Abs::NORMAL]],
@@ -91,9 +91,8 @@ class Module extends Bsw
                 $menuList = [];
 
                 foreach ($list as $item) {
-                    $menu = new Menu();
-                    $menu->attributes($item);
-                    array_push($menuList, $menu);
+                    $item['args'] = Helper::parseJsonString($item['args'], []);
+                    array_push($menuList, (new Menu())->attributes($item));
                 }
 
                 return $menuList;
@@ -132,14 +131,14 @@ class Module extends Bsw
             /**
              * @var Menu $item
              */
-            $route = trim($item->getRouteName());
+            $route = trim($item->getRoute());
 
             // access control
             if ($route && !$forceFull && empty($this->input->access[$route])) {
                 continue;
             }
 
-            $args = Helper::parseJsonString($item->getJsonParams() ?? '', []);
+            $args = $item->getArgs();
 
             // route path
             if ($route) {
@@ -147,18 +146,18 @@ class Module extends Bsw
             }
 
             // javascript
-            if ($javascript = $item->getJavascript()) {
+            if ($click = $item->getClick()) {
                 foreach ($args as &$value) {
                     $value = str_replace('{ROUTE}', $item->getUrl(), $value);
                 }
                 $args = Helper::numericValues($args);
-                $item->setArgs(array_merge(['function' => $javascript], $args));
+                $item->setArgs(array_merge(['function' => $click], $args));
             }
 
             $menu[$item->getMenuId()][$item->getId()] = $item;
             if ($item->getMenuId() !== $masterIndex) {
-                $slaveMenuDetail[$item->getRouteName()] = [
-                    'info'          => $item->getValue(),
+                $slaveMenuDetail[$item->getRoute()] = [
+                    'info'          => $item->getLabel(),
                     'parentMenuId'  => $item->getMenuId(),
                     'currentMenuId' => $item->getId(),
                 ];
@@ -187,11 +186,11 @@ class Module extends Bsw
 
         $masterMenu = $masterMenuDetail = [];
         foreach ($masterMenuRough as $index => $item) {
-            if (!empty($slaveMenu[$index]) || !empty($item->getRouteName())) {
+            if (!empty($slaveMenu[$index]) || !empty($item->getRoute())) {
                 $masterMenu[$index] = $item;
-                if (!empty($item->getRouteName())) {
-                    $masterMenuDetail[$item->getRouteName()] = [
-                        'info'          => $item->getValue(),
+                if (!empty($item->getRoute())) {
+                    $masterMenuDetail[$item->getRoute()] = [
+                        'info'          => $item->getLabel(),
                         'parentMenuId'  => $item->getMenuId(),
                         'currentMenuId' => $item->getId(),
                     ];

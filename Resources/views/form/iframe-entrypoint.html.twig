@@ -2,7 +2,7 @@
   <a-button
     class="bsw-popup-select"
     :disabled="{{ form.disabled ? 'true' : 'false' }}"
-    bsw-data='{{ form.previewIframeArgs|merge({location: path(form.previewRoute, form.previewArgs)})|stringify }}'
-    @click.navite="showIFrameByVue"
+    bsw-data="{{ form.previewIframeArgs|merge({location: path(form.previewRoute, form.previewArgs)})|stringify }}"
+    @click="showIFrameByVue"
   >{{ scaffold.cnf.iconTag|icon|raw }} {{ form.buttonLabel|trans({}, 'twig') }}</a-button>
 {% endif %}

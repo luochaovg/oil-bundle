@@ -3,7 +3,6 @@
 namespace Leon\BswBundle\Module\Bsw;
 
 use Doctrine\ORM\Query\Expr;
-use Leon\BswBundle\Module\Entity\Abs;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

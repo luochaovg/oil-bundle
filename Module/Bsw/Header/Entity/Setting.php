@@ -2,22 +2,11 @@
 
 namespace Leon\BswBundle\Module\Bsw\Header\Entity;
 
+use Leon\BswBundle\Module\Traits\Link;
+
 class Setting
 {
-    /**
-     * @var string
-     */
-    protected $label;
-
-    /**
-     * @var string
-     */
-    protected $icon;
-
-    /**
-     * @var string
-     */
-    protected $click;
+    use Link;
 
     /**
      * Setting constructor.
@@ -31,65 +20,5 @@ class Setting
         isset($label) && $this->label = $label;
         isset($icon) && $this->icon = $icon;
         isset($click) && $this->click = $click;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param string $label
-     *
-     * @return $this
-     */
-    public function setLabel(string $label)
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIcon(): string
-    {
-        return $this->icon;
-    }
-
-    /**
-     * @param string $icon
-     *
-     * @return $this
-     */
-    public function setIcon(string $icon)
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClick(): string
-    {
-        return $this->click;
-    }
-
-    /**
-     * @param string $click
-     *
-     * @return $this
-     */
-    public function setClick(string $click)
-    {
-        $this->click = $click;
-
-        return $this;
     }
 }

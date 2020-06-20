@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Header;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -75,6 +76,11 @@ class Module extends Bsw
 
         foreach ($setting as $item) {
             Helper::objectInstanceOf($item, Setting::class, "Method {$method}():array items");
+            /**
+             * @var Setting $item
+             */
+            $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
+            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header setting'));
             array_push($output->setting, $item);
         }
 
@@ -83,17 +89,12 @@ class Module extends Bsw
         $method = $this->method() . self::SETTING;
 
         foreach ($links as $item) {
-
             Helper::objectInstanceOf($item, Links::class, "Method {$method}():array items");
-
             /**
              * @var Links $item
              */
-            if ($item->isScript()) {
-                $item->setUrl($item->getRoute());
-            } else {
-                $item->setUrl($this->web->urlSafe($item->getRoute(), [], 'Header links'));
-            }
+            $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
+            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header links'));
             array_push($output->links, $item);
         }
 

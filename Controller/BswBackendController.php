@@ -287,23 +287,14 @@ class BswBackendController extends BswWebController
         }
 
         $links = [
-            new Links('Clean backend cache', $this->cnf->icon_db, $this->cnf->route_clean_backend),
-            new Links('Profile', $this->cnf->icon_profile, $this->cnf->route_profile),
-            new Links('Logout', $this->cnf->icon_logout, $this->cnf->route_logout),
+            new Links('Clean backend cache', $this->cnf->route_clean_backend, $this->cnf->icon_db),
+            new Links('Profile', $this->cnf->route_profile, $this->cnf->icon_profile),
+            new Links('Logout', $this->cnf->route_logout, $this->cnf->icon_logout),
         ];
 
         if ($this->cnf->route_clean_frontend) {
-            $links = Helper::arrayInsert(
-                $links,
-                1,
-                [
-                    new Links(
-                        'Clean frontend cache',
-                        $this->cnf->icon_redis,
-                        $this->cnf->route_clean_frontend
-                    ),
-                ]
-            );
+            $link = new Links('Clean frontend cache', $this->cnf->route_clean_frontend, $this->cnf->icon_redis);
+            $links = Helper::arrayInsert($links, 1, [$link]);
         }
 
         return $links;
