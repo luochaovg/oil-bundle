@@ -26,7 +26,6 @@
     :force-sub-menu-render="true"
   >
     {% for menuItem in menu.masterMenu %}
-
       {% set subMenu = attribute(menu.slaveMenu, menuItem.id) ?? [] %}
       {% if subMenu is not empty %}
         <a-sub-menu key="{{ menuItem.id }}">

@@ -78,7 +78,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => Abs::MEDIA_MIN,
-                        'height' => 220,
+                        'height' => 210,
                         'title'  => false,
                     ]
                 ),

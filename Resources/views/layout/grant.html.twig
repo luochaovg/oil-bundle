@@ -14,7 +14,6 @@
       {% set labelColumn = 4 %}
       {% set dress = logic.dress %}
       {% set realColumn = (totalColumn - labelColumn) %}
-
       <a-form-item
         :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
         :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
@@ -23,11 +22,9 @@
         <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
         <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
       </a-form-item>
-
       <a-form-item v-show="false">
         <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
       </a-form-item>
-
       {% for field, item in logic.form %}
         <a-form-item
           :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
@@ -73,7 +70,6 @@
           </a-checkbox-group>
         </a-form-item>
       {% endfor %}
-
       <a-form-item
         :wrapper-col="{lg: { span: {{ totalColumn }}, offset: 0 }, xl: { span: {{ realColumn }}, offset: {{ labelColumn }} }}"
       >

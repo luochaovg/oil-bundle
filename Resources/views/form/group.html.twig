@@ -1,11 +1,14 @@
 <a-row :gutter="{{ form.gutter }}">
-
   <!-- xs < sm < md < lg < xl < xxl -->
   {% set small = scaffold.iframe ? 'xs' : 'sm' %}
   {% set large = scaffold.iframe ? 'sm' : 'md' %}
-
   {% for key, item in form.member %}
-    <a-col :{{ small }}="{{ totalColumn }}" :{{ large }}="{{ attribute(form.column, key) }}">
+    {% if form.responsive %}
+      {% set attrString = ':' ~ small ~ '="' ~ totalColumn ~ '" :' ~ large ~ '="' ~ attribute(form.column, key) ~ '"' %}
+    {% else %}
+      {% set attrString = ':span="' ~ attribute(form.column, key) ~ '"' %}
+    {% endif %}
+    <a-col {{ attrString|raw }}>
       <a-form-item>
         {% set _field = field ~ '_' ~ (item.field ?? key) %}
         {% include "form/" ~ item.itemName ~ ".html.twig" with {field: _field, form: item} %}

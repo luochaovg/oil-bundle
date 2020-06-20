@@ -1570,7 +1570,7 @@ class Helper
      */
     public static function generateUnique(string $custom = null): string
     {
-        return uniqid(getmypid() . $custom . mt_rand(), true);
+        return str_replace('.', null, uniqid(getmypid() . $custom . mt_rand(), true));
     }
 
     /**

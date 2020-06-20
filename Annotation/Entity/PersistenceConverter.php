@@ -146,8 +146,12 @@ class PersistenceConverter extends AnnotationConverter
      */
     protected function style($value)
     {
-        if (!empty($value)) {
+        if (!is_array($value)) {
             return [];
+        }
+
+        if (!empty($value)) {
+            return $value;
         }
 
         if (in_array(get_class($this->item->type), $this->fullWidthForm)) {

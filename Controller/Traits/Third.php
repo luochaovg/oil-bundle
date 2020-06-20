@@ -41,7 +41,7 @@ trait Third
      */
     public function createQrCode(
         string $content,
-        int $qrWidth = 250,
+        int $qrWidth = 256,
         int $qrMargin = 10,
         ?string $level = null,
         ?array $fColor = null,

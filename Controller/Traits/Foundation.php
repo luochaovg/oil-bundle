@@ -253,7 +253,7 @@ trait Foundation
 
         $this->route = $this->request()->get('_route');
         $this->controller = $this->request()->get('_controller');
-        $this->uuid = $this->getArgs('uuid') ?? ('_' . Helper::generateToken(8, 36));
+        $this->uuid = $this->getArgs('uuid') ?? ('_' . Helper::generateToken(16, 36));
 
         $args = $this->headArgs();
         $args = Helper::arrayPull($args, $this->headerMap, false, '');

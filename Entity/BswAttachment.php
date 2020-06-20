@@ -57,7 +57,7 @@ class BswAttachment extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=40, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=4, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=4, width=400, render=BswAbs::HTML_TEXT, align="center")
      * @BswAnnotation\Persistence(sort=4, disabled=true)
      * @BswAnnotation\Filter(sort=4)
      */
@@ -78,7 +78,7 @@ class BswAttachment extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=32, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=6, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=6, width=260, render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=6)
      * @BswAnnotation\Filter(sort=6)
      */
@@ -89,7 +89,7 @@ class BswAttachment extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=128, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=7, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=7, width=260, render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=7, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=7)
      */

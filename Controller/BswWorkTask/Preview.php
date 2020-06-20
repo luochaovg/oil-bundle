@@ -95,7 +95,7 @@ trait Preview
             ->setArgs(
                 [
                     'width'  => Abs::MEDIA_SM,
-                    'height' => 410,
+                    'height' => 399,
                     'title'  => $this->twigLang('New task'),
                 ]
             );
@@ -134,7 +134,7 @@ trait Preview
                 [
                     'id'     => $args->item['id'],
                     'width'  => 500,
-                    'height' => 328,
+                    'height' => 374,
                     'title'  => false,
                 ]
             );
@@ -148,7 +148,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 234,
+                        'height' => 243,
                         'title'  => false,
                     ]
                 );
@@ -240,29 +240,15 @@ trait Preview
             ]
         );
 
-        $trail = null;
-        $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
-
-        foreach ($list as $item) {
-            $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
-            $cb = $cb->locale($lang)->diffForHumans();
-            $cb = Html::tag('span', "({$cb})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
-
-            $trail .= str_replace('{value}', $item['time'], Abs::HTML_CODE) . ' ';
-            $trail .= str_replace('{value}', $item['name'], Abs::TEXT_BLUE) . ' ';
-            $trail .= $item['trail'] . ' ';
-            $trail .= $cb;
-            $trail .= str_replace(10, 15, Abs::LINE_DASHED);
-        }
+        $trail = $this->trailListStringify($list);
 
         $modeMap = [
             'modal'  => [
                 'click' => 'showModal',
                 'args'  => [
-                    'width'    => 800,
-                    'title'    => $this->twigLang('Trail'),
-                    'content'  => Html::tag('pre', $trail, ['class' => 'bsw-pre bsw-long-text']),
-                    'centered' => true,
+                    'width'   => 800,
+                    'title'   => $this->twigLang('Trail'),
+                    'content' => Html::tag('pre', $trail, ['class' => 'bsw-pre bsw-long-text']),
                 ],
             ],
             'drawer' => [
@@ -272,7 +258,7 @@ trait Preview
                 ],
             ],
         ];
-        $mode = $modeMap['drawer'];
+        $mode = $modeMap['modal'];
 
         $button = (new Button('lifecycle'))
             ->setType(Button::THEME_DEFAULT)

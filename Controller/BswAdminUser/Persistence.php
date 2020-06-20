@@ -94,14 +94,15 @@ trait Persistence
 
         return $this->okayAjax(
             [
-                'width'   => 300,
-                'title'   => 'Scan the qr-code please',
+                'width'   => 280,
+                'title'   => $this->twigLang('Scan the qr-code please'),
                 'content' => Html::tag(
                     'img',
                     null,
                     [
                         'src'   => $qrCode->writeDataUri(),
                         'class' => 'modal-block-only',
+                        'style' => ['margin' => '10px auto'],
                     ]
                 ),
             ]

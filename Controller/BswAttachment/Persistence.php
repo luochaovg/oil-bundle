@@ -55,8 +55,8 @@ trait Persistence
                     'buttonStyle' => [
                         'display'   => 'block',
                         'font-size' => '16px',
-                        'height'    => '72px',
-                        'margin'    => '24px auto 0',
+                        'height'    => '64px',
+                        'margin'    => '30px auto 0',
                     ],
                 ],
             ],

@@ -18,6 +18,11 @@ class Group extends Form
     protected $column = [];
 
     /**
+     * @var bool
+     */
+    protected $responsive = true;
+
+    /**
      * @var int|array
      */
     protected $gutter = 8;
@@ -81,6 +86,26 @@ class Group extends Form
     public function setColumn(array $column)
     {
         $this->column = $column;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isResponsive(): bool
+    {
+        return $this->responsive;
+    }
+
+    /**
+     * @param bool $responsive
+     *
+     * @return $this
+     */
+    public function setResponsive(bool $responsive = false)
+    {
+        $this->responsive = $responsive;
 
         return $this;
     }

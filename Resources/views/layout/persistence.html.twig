@@ -12,11 +12,9 @@
     >
       {% set totalColumn = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
       {% set labelColumn = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
-
       <!-- xs < sm < md < lg < xl < xxl -->
       {% set small = scaffold.iframe ? 'sm' : 'md' %}
       {% set large = scaffold.iframe ? 'md' : 'lg' %}
-
       {% for field, item in persistence.record %}
         {% set form = item.type %}
         {% set wrapperColumn = item.column ?: (totalColumn - labelColumn) %}
@@ -39,7 +37,6 @@
           </a-form-item>
         </transition>
       {% endfor %}
-
       <a-form-item
         :wrapper-col="{
           {{ small }}: { span: {{ totalColumn }}, offset: 0 },

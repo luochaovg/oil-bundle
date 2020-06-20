@@ -154,9 +154,8 @@ trait BackendPreset
     {
         $label = Helper::stringToLabel($field);
         $args = [
-            'title'    => $this->twigLang($label),
-            'content'  => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
-            'centered' => true,
+            'title'   => $this->twigLang($label),
+            'content' => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
         ];
 
         $button = (new Button('{value}'))

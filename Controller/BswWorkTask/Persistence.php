@@ -14,6 +14,7 @@ use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Leon\BswBundle\Module\Form\Entity\Input;
+use Leon\BswBundle\Module\Form\Entity\TextArea;
 use Leon\BswBundle\Module\Form\Entity\Time;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -288,6 +289,7 @@ trait Persistence
             'weight' => [
                 'label'    => Helper::cnSpace(),
                 'typeArgs' => $this->weightTypeArgs(),
+                'style'    => ['margin-bottom' => '48px'],
             ],
         ];
     }
@@ -364,7 +366,11 @@ trait Persistence
         return [
             'id'          => true,
             'donePercent' => ['label' => Helper::cnSpace()],
-            'whatToDo'    => ['type' => Input::class, 'rules' => [$this->formRuleRequired()]],
+            'whatToDo'    => [
+                'type'     => TextArea::class,
+                'typeArgs' => ['maxRows' => 4],
+                'rules'    => [$this->formRuleRequired()],
+            ],
             'state'       => ['show' => false],
         ];
     }

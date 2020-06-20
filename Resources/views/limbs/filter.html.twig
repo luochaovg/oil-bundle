@@ -38,7 +38,6 @@
         {% endif %}
       </a-form-item>
     {% endfor %}
-
     {% if filter.filter|length > filter.maxShow %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
         <a-button @click="filterToggle" type="dashed">
@@ -51,7 +50,6 @@
         </a-button>
       </a-form-item>
     {% endif %}
-
     {% for item in filter.operates %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
         {% include 'form/button.html.twig' with {form: item} %}
