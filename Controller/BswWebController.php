@@ -667,7 +667,7 @@ abstract class BswWebController extends AbstractController
 
                 $menuId = $slaveMenuDetail[$route]['parentMenuId'] ?? -1;
                 if (isset($masterMenu[$menuId])) {
-                    $_accessList[$classInfo]['label'] = $masterMenu[$menuId]->getValue();
+                    $_accessList[$classInfo]['label'] = $masterMenu[$menuId]->getLabel();
                 }
             }
         }

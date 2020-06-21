@@ -1623,6 +1623,37 @@ class Helper
     }
 
     /**
+     * Generate token multiple
+     *
+     * @param int    $digit
+     * @param int    $total
+     * @param string $custom
+     *
+     * @return array
+     */
+    public static function generateTokenMultiple(int $digit, int $total, string $custom = null): array
+    {
+        $count = 0;
+        $box = [];
+
+        if ($digit > 26) {
+            return $box;
+        }
+
+        while ($count < $total) {
+            $code = self::generateToken(18, 36, $custom);
+            $code = strtoupper(substr($code, 0, $digit));
+
+            if (strlen($code) == $digit && !isset($box[$code])) {
+                $box[$code] = true;
+                $count++;
+            }
+        }
+
+        return array_keys($box);
+    }
+
+    /**
      * Generates an unique access token.
      *
      * @param int $length
@@ -1657,37 +1688,6 @@ class Helper
             . mt_rand();
 
         return substr(hash('sha512', $randomData), 0, $length);
-    }
-
-    /**
-     * Generate token multiple
-     *
-     * @param int    $digit
-     * @param int    $total
-     * @param string $custom
-     *
-     * @return array
-     */
-    public static function generateTokenMultiple(int $digit, int $total, string $custom = null): array
-    {
-        $count = 0;
-        $box = [];
-
-        if ($digit > 26) {
-            return $box;
-        }
-
-        while ($count < $total) {
-            $code = self::generateToken(18, 36, $custom);
-            $code = strtoupper(substr($code, 0, $digit));
-
-            if (strlen($code) == $digit && !isset($box[$code])) {
-                $box[$code] = true;
-                $count++;
-            }
-        }
-
-        return array_keys($box);
     }
 
     /**

@@ -70,7 +70,7 @@ trait Progress
         }
 
         [$myTeam, $leader] = $this->workTaskTeam();
-        $userTeam = $this->workTaskTeamByUserId($args->recordBefore['userId']);
+        $userTeam = $this->getUserById($args->recordBefore['userId'])->teamId;
 
         if (
             ($args->recordBefore['userId'] !== $this->usr('usr_uid')) &&

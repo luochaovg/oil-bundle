@@ -72,7 +72,7 @@ trait Third
     }
 
     /**
-     * Time-Based One-Time Password Algorithm (T.O.T.P)
+     * Time based One-Time Password Algorithm (T.O.T.P)
      *
      * @param string $uid
      * @param int    $digits
@@ -118,7 +118,7 @@ trait Third
     }
 
     /**
-     * Get wechat official account
+     * Get WeChat official account
      *
      * @param string $flag
      *
@@ -130,7 +130,7 @@ trait Third
     }
 
     /**
-     * Get wechat payment
+     * Get WeChat payment
      *
      * @param string $flag
      * @param bool   $sandbox

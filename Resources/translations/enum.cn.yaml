@@ -503,3 +503,5 @@ Task unopened:                  '未开始'
 Task in progress:               '进行中'
 Task done in contract:          '如约完成'
 Task done out contract:         '逾期完成'
+
+Work task login:                '工作任务管理'

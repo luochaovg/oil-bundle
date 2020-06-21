@@ -256,3 +256,4 @@ Create the task:                                                            '創
 Close the task:                                                             '關閉了該任務'
 'Change weight from {{ from }} to {{ to }}':                                '將權重從 {{ from }} 修改為 {{ to }}'
 'Change progress from {{ from }} to {{ to }}{{ remark }}':                  '將進度從 {{ from }}% 更新為 {{ to }}%, {{ remark }}'
+'{{ leader }} add task for you {{ task }}':                                 '{{ leader }}給妳添加了新任務: {{ task }}'

@@ -878,4 +878,12 @@ class Enum
         3 => 'Task done in contract',
         4 => 'Task done out contract',
     ];
+
+    /**
+     * @const array TOKEN场景
+     */
+    const BSW_TOKEN_SCENE = [
+        0 => Abs::COMMON,
+        1 => 'Work task login',
+    ];
 }

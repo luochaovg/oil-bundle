@@ -4,13 +4,10 @@ namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\GoogleAuthenticator;
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Entity\BswAdminLogin;
 use Leon\BswBundle\Entity\BswAdminUser;
-use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAccountFrozen;
 use Leon\BswBundle\Module\Error\Entity\ErrorCaptcha;
-use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Module\Error\Entity\ErrorGoogleCaptcha;
 use Leon\BswBundle\Module\Error\Entity\ErrorMetaData;
 use Leon\BswBundle\Module\Error\Entity\ErrorPassword;
@@ -21,13 +18,10 @@ use Leon\BswBundle\Module\Form\Entity\Input;
 use Leon\BswBundle\Module\Form\Entity\Password;
 use Leon\BswBundle\Module\Validator\Entity\Rsa;
 use Leon\BswBundle\Component\Rsa as ComponentRsa;
-use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
-use Leon\BswBundle\Repository\BswAttachmentRepository;
-use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Exception;
+use Monolog\Logger;
 
 /**
  * @property Session $session
@@ -169,7 +163,6 @@ trait Login
         }
 
         $ip = $this->getClientIp();
-        $now = date(Abs::FMT_FULL);
 
         /**
          * ip limit
@@ -182,71 +175,7 @@ trait Login
             }
         }
 
-        /**
-         * login log
-         */
-
-        if ($this->parameter('backend_with_login_log')) {
-
-            try {
-                $location = $this->ip2regionIPDB($ip);
-                $location = $location['location'] ?? 'Unknown';
-            } catch (Exception $e) {
-                $location = 'Unknown';
-            }
-
-            /**
-             * @var BswAdminLoginRepository $loginLogger
-             */
-            $loginLogger = $this->repo(BswAdminLogin::class);
-            $log = $loginLogger->newly(
-                [
-                    'userId'   => $user->id,
-                    'location' => $location,
-                    'ip'       => $ip,
-                    'addTime'  => $now,
-                ]
-            );
-
-            if ($log === false) {
-                return $this->failedAjax(new ErrorDbPersistence());
-            }
-        }
-
-        /**
-         * avatar
-         */
-
-        $avatar = null;
-        if ($user->avatarAttachmentId) {
-
-            /**
-             * @var BswAttachmentRepository $avatarRepo
-             */
-            $avatarRepo = $this->repo(BswAttachment::class);
-            $avatar = $avatarRepo->find($user->avatarAttachmentId);
-            $avatar = $this->attachmentPreviewHandler($avatar, 'avatar')->avatar ?? null;
-        }
-
-        /**
-         * login
-         */
-        $this->session->set(
-            $this->skUser,
-            [
-                'user_id'     => $user->id,
-                'phone'       => $user->phone,
-                'name'        => $user->name,
-                'role_id'     => $user->roleId,
-                'team_id'     => $user->teamId,
-                'team_leader' => $user->teamLeader,
-                'sex'         => $user->sex,
-                'update_time' => $user->updateTime,
-                'login_time'  => $now,
-                'ip'          => $ip,
-                'avatar'      => $avatar,
-            ]
-        );
+        $this->loginAdminUser($user, $ip);
 
         /**
          * fallback

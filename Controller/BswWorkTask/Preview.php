@@ -119,7 +119,7 @@ trait Preview
     public function previewRecordOperates(Arguments $args): array
     {
         [$team, $leader] = $this->workTaskTeam();
-        $userTeam = $this->workTaskTeamByUserId($args->item['userId']);
+        $userTeam = $this->getUserById($args->item['userId'])->teamId;
 
         $operates[] = (new Button('Progress'))
             ->setType(Button::THEME_BSW_WARNING)

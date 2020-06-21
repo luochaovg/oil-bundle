@@ -9,6 +9,7 @@ use Leon\BswBundle\Entity\BswAdminLogin;
 use Leon\BswBundle\Entity\BswAdminRole;
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
+use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw as BswModule;
 use Leon\BswBundle\Module\Bsw\Message;
@@ -20,10 +21,13 @@ use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Hook\Entity\Aes;
 use Leon\BswBundle\Module\Hook\Entity\Enums;
 use Leon\BswBundle\Module\Hook\Entity\Timestamp;
+use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
+use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
+use Exception;
 
 class BswBackendController extends BswWebController
 {
@@ -160,10 +164,10 @@ class BswBackendController extends BswWebController
             return new ErrorAuthorization();
         }
 
-        $strict = $this->parameter('backend_with_ip_strict');
-        $userIp = $user['ip'] ?? false;
+        $strictIp = $this->parameter('backend_with_ip_strict');
+        $userIp = $user[$this->cnf->usr_ip] ?? false;
 
-        if ($strict && ($this->getClientIp() !== $userIp)) {
+        if ($strictIp && ($this->getClientIp() !== $userIp)) {
             $this->logger->error("Account logged in from another place", $user);
 
             return new ErrorAuthorization();
@@ -753,6 +757,80 @@ class BswBackendController extends BswWebController
         $user = $this->getAccessOfUser($userId);
 
         return array_merge($role, $user);
+    }
+
+    /**
+     * Login admin user
+     *
+     * @param object $user
+     * @param string $ip
+     *
+     * @throws
+     */
+    protected function loginAdminUser($user, string $ip)
+    {
+        /**
+         * login log
+         */
+
+        $now = date(Abs::FMT_FULL);
+        if ($this->parameter('backend_with_login_log')) {
+
+            try {
+                $location = $this->ip2regionIPDB($ip);
+                $location = $location['location'] ?? 'Unknown';
+            } catch (Exception $e) {
+                $location = 'Unknown';
+            }
+
+            /**
+             * @var BswAdminLoginRepository $loginLogger
+             */
+            $loginLogger = $this->repo(BswAdminLogin::class);
+            $loginLogger->newly(
+                [
+                    'userId'   => $user->id,
+                    'location' => $location,
+                    'ip'       => $ip,
+                    'addTime'  => $now,
+                ]
+            );
+        }
+
+        /**
+         * avatar
+         */
+
+        $avatar = null;
+        if ($user->avatarAttachmentId) {
+
+            /**
+             * @var BswAttachmentRepository $avatarRepo
+             */
+            $avatarRepo = $this->repo(BswAttachment::class);
+            $avatar = $avatarRepo->find($user->avatarAttachmentId);
+            $avatar = $this->attachmentPreviewHandler($avatar, 'avatar')->avatar ?? null;
+        }
+
+        /**
+         * login
+         */
+        $this->session->set(
+            $this->skUser,
+            [
+                'user_id'     => $user->id,
+                'phone'       => $user->phone,
+                'name'        => $user->name,
+                'role_id'     => $user->roleId,
+                'team_id'     => $user->teamId,
+                'team_leader' => $user->teamLeader,
+                'sex'         => $user->sex,
+                'update_time' => $user->updateTime,
+                'login_time'  => $now,
+                'ip'          => $ip,
+                'avatar'      => $avatar,
+            ]
+        );
     }
 
     /**

@@ -10,12 +10,18 @@ use Leon\BswBundle\Component\Reflection;
 use Leon\BswBundle\Component\Aes;
 use Leon\BswBundle\Component\Service;
 use Leon\BswBundle\Entity\BswConfig;
+use Leon\BswBundle\Entity\BswToken;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Entity\Enum;
 use Leon\BswBundle\Module\Error\Entity\ErrorDevice;
 use Leon\BswBundle\Module\Error\Entity\ErrorException;
+use Leon\BswBundle\Module\Error\Entity\ErrorOAuthExpiredToken;
+use Leon\BswBundle\Module\Error\Entity\ErrorOAuthInvalidToken;
+use Leon\BswBundle\Module\Error\Entity\ErrorOAuthMalformedToken;
+use Leon\BswBundle\Module\Error\Entity\ErrorOAuthNotFoundToken;
 use Leon\BswBundle\Module\Error\Entity\ErrorOS;
 use Leon\BswBundle\Module\Error\Entity\ErrorUA;
+use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\FileNotExistsException;
 use Leon\BswBundle\Module\Filter\Filter;
 use Leon\BswBundle\Module\Traits as MT;
@@ -25,6 +31,7 @@ use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
 use Leon\BswBundle\Module\Exception\ServiceException;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Controller\Traits as CT;
+use Leon\BswBundle\Repository\BswTokenRepository;
 use Leon\BswBundle\Repository\FoundationRepository;
 use Symfony\Bundle\FrameworkBundle\Console\Application as CmdApplication;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -1615,6 +1622,99 @@ trait Foundation
         $application->find($command)->run(new ArrayInput($condition), $output);
 
         return $output->fetch();
+    }
+
+    /**
+     * Create scene token
+     *
+     * @param int   $scene
+     * @param int   $userId
+     * @param array $params
+     * @param int   $effectiveTimes
+     * @param int   $time
+     *
+     * @return false|int
+     * @throws
+     */
+    public function createSceneToken(
+        int $scene = 1,
+        int $userId = 0,
+        array $params = [],
+        int $effectiveTimes = 1,
+        int $time = Abs::TIME_MINUTE * 3
+    ) {
+        /**
+         * @var BswTokenRepository $tokenRepo
+         */
+        $tokenRepo = $this->repo(BswToken::class);
+
+        $token = Helper::generateToken();
+        $result = $tokenRepo->newly(
+            [
+                'userId'         => $userId,
+                'scene'          => $scene,
+                'token'          => $token,
+                'effectiveTimes' => $effectiveTimes,
+                'expiresTime'    => time() + $time,
+                'params'         => Helper::jsonStringify($params),
+            ]
+        );
+
+        return $result ? $token : false;
+    }
+
+    /**
+     * Check scene token
+     *
+     * @param string $token
+     * @param int    $scene
+     * @param int    $userId
+     *
+     * @return Error|object
+     * @throws
+     */
+    public function checkSceneToken(string $token, int $scene = 0, ?int $userId = null)
+    {
+        /**
+         * @var BswTokenRepository $tokenRepo
+         */
+        $tokenRepo = $this->repo(BswToken::class);
+        $record = $tokenRepo->findOneBy(['token' => $token]);
+
+        if (empty($record)) {
+            return new ErrorOAuthNotFoundToken();
+        }
+
+        if (!$record->state) {
+            return new ErrorOAuthMalformedToken();
+        }
+
+        if ($record->scene !== $scene) {
+            return new ErrorOAuthMalformedToken();
+        }
+
+        if (isset($userId) && $record->userId !== $userId) {
+            return new ErrorOAuthMalformedToken();
+        }
+
+        if ($record->effectiveTimes < 1) {
+            return new ErrorOAuthInvalidToken();
+        }
+
+        if ($record->expiresTime < time()) {
+            return new ErrorOAuthExpiredToken();
+        }
+
+        $times = $record->effectiveTimes > 1 ? ($record->effectiveTimes - 1) : 0;
+        $tokenRepo->modify(
+            ['id' => $record->id],
+            [
+                'effectiveTimes' => $times,
+                'state'          => $times ? Abs::NORMAL : Abs::CLOSE,
+            ]
+        );
+
+        return $record;
     }
 
     /**

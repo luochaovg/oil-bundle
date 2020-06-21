@@ -151,13 +151,16 @@ parameters:
         route_tg_hooks: app_tg_hooks
         route_tg_cmd: app_tg_cmd
 
-        usr_account: name
         usr_uid: user_id
+        usr_phone: phone
+        usr_account: name
         usr_role: role_id
         usr_team: team_id
         usr_team_leader: team_leader
+        usr_sex: sex
         usr_update: update_time
         usr_login: login_time
+        usr_ip: ip
         usr_avatar: avatar
 
         app_online_date: '2019-07-01' # use string

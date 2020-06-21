@@ -197,6 +197,7 @@ class Abs
     const SECRET      = '(Secret)';
     const UNKNOWN     = '(Unknown)';
     const UNALLOCATED = '(Unallocated)';
+    const COMMON      = '(Common)';
 
     const SRC_CSS = 'css';
     const SRC_JS  = 'js';

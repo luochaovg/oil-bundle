@@ -78,8 +78,13 @@ $(function () {
         dispatcher(data, element) {
             let that = this;
             let action = function () {
-                let fn = data.function || 'console.log';
-                that[fn](data, element);
+                if (data.function.length === 0) {
+                    return console.error(`Attribute function should be configure in options.`, data);
+                }
+                if (typeof that[data.function] === 'undefined') {
+                    return console.error(`Method ${data.function} is undefined.`, data);
+                }
+                that[data.function](data, element);
             };
             if (typeof data.confirm === 'undefined') {
                 action();
