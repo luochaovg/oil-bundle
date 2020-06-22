@@ -106,12 +106,12 @@ $(function () {
             this.submitFormMethod = $(element).attr('bsw-method');
         },
 
-        pagination(url, page) {
+        pagination(url, page, jump = false) {
             let that = this;
             if (page) {
                 url = bsw.setParams({page}, url);
             }
-            if (typeof that.previewList === 'undefined' || that.previewList.length === 0) {
+            if (jump || typeof that.previewList === 'undefined' || that.previewList.length === 0) {
                 return location.href = url;
             }
             bsw.request(url).then((res) => {
@@ -185,10 +185,7 @@ $(function () {
             if (typeof effect.page && effect.page > 1) {
                 jump = true;
             }
-            if (jump) {
-                return location.href = url;
-            }
-            this.pagination(url);
+            this.pagination(url, 0, jump);
         },
 
         exportFilterForm(values) {

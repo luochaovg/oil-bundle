@@ -66,7 +66,7 @@ trait Preview
     public function previewQuery(): array
     {
         return [
-            'limit'  => 100,
+            'limit'  => 50,
             'select' => ['bwt'],
             'join'   => [
                 'bau' => [
@@ -283,7 +283,8 @@ trait Preview
 
         return $this->showPreview(
             [
-                'dynamic'     => 10,
+                'filterJump'  => true,
+                'pageJump'    => true,
                 'afterModule' => [
                     'drawer' => function ($logic, $args) {
                         $trailVisible = array_column($args['preview']['list'], 'id');

@@ -16,6 +16,11 @@ bsw.configure({
         }
     },
     method: {
+        {% if logic.pageJump is defined %}
+            {% set jump = logic.pageJump ? 'true' : 'false' %}
+        {% else %}
+            {% set jump = 'false' %}
+        {% endif %}
         previewSelectedChange(selectedRow) {
             this.previewSelectedRow = selectedRow;
         },
@@ -24,10 +29,10 @@ bsw.configure({
             return bsw.setParams(Object.assign({page: this.previewPageNumber}, params), url);
         },
         previewPagination(page, pageSize) {
-            this.pagination(this.previewGetUrl(), page);
+            this.pagination(this.previewGetUrl(), page, {{ jump }});
         },
         previewPaginationRefresh() {
-            this.pagination(this.previewGetUrl());
+            this.pagination(this.previewGetUrl(), 0, {{ jump }});
         },
         previewSortData(pagination, filters, sorter) {
             let url = this.previewGetUrl();
@@ -37,7 +42,7 @@ bsw.configure({
                 key = `sequence[${key}]`;
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
-            this.pagination(url);
+            this.pagination(url, 0, {{ jump }});
         },
         previewImageChange() {
             let that = this;

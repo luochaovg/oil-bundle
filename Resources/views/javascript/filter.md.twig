@@ -7,10 +7,11 @@ bsw.configure({
     method: {
         filterSubmit(e) {
             {% if logic.filterJump is defined %}
-            this.filterFormAction(e, {{ logic.filterJump ? 'true' : 'false' }}, 'filterForm', 'filterFormat');
+                {% set jump = logic.filterJump ? 'true' : 'false' %}
             {% else %}
-            this.filterFormAction(e, {{ logic.scene == 'preview' ? 'false' : 'true' }}, 'filterForm', 'filterFormat');
+                {% set jump = logic.scene == 'preview' ? 'false' : 'true' %}
             {% endif %}
+            this.filterFormAction(e, {{ jump }}, 'filterForm', 'filterFormat');
         },
         filterToggle() {
           this.filterExpand = !this.filterExpand;

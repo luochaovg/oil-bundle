@@ -14,10 +14,7 @@
             <a-tag color="blue">{{ 'Task'|trans({}, 'twig') }}</a-tag>
             <span :style={color:"#999"}>{{ item.title }}</span>
           </div>
-          <div>
-            <a-tag color="green">{{ 'Progress'|trans({}, 'twig') }}</a-tag>
-            <span :style={fontSize:"16px"}>{{ item.trail }}</span>
-          </div>
+          <pre :style={fontSize:"16px"}>{{ item.trail }}</pre>
         </a-timeline-item>
         {% else %}
           <a-empty :image="bsw.d.Empty.PRESENTED_IMAGE_SIMPLE"></a-empty>

@@ -15,9 +15,8 @@
         {% for item in drawer.trailList %}
           <a-timeline-item>
             <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
-            <div class="bsw-code">{{ item.time }}</div>
-            {{ item.trail }}
-            <span :style={color:"{{ item.reliable ? 'rgba(0,128,0,.7)' : '#999' }}"}>({{ item.human }})</span>
+            <div>{{ item.time }} <span :style={color:"{{ item.reliable ? 'rgba(0,128,0,.7)' : '#999' }}"}>({{ item.human }})</span></div>
+            <pre>{{ item.trail }}</pre>
           </a-timeline-item>
         {% endfor %}
         {% if drawer.state in [1,2] %}
