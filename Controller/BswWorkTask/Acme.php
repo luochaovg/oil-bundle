@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Carbon\Carbon;
+use Doctrine\ORM\AbstractQuery;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
@@ -221,12 +222,29 @@ class Acme extends BswBackendController
     public function webShouldAuth(array $args)
     {
         $token = $this->getArgs('token');
-        if ($token && $record = $this->checkSceneToken($token)) {
+        if ($token && $record = $this->checkSceneToken($token, 1)) {
+
             $this->session->clear();
             if ($record instanceof Error) {
                 return $record;
             }
-            if ($user = $this->repo(BswAdminUser::class)->find($record->userId)) {
+
+            $user = $this->repo(BswAdminUser::class)->lister(
+                [
+                    'limit' => 1,
+                    'where' => [
+                        $this->expr->eq('bau.telegramId', ':telegram'),
+                        $this->expr->gt('bau.teamId', ':team'),
+                    ],
+                    'args'  => [
+                        'telegram' => [$record->userId],
+                        'team'     => [0],
+                    ],
+                ],
+                AbstractQuery::HYDRATE_OBJECT
+            );
+
+            if ($user) {
                 $this->loginAdminUser($user, $this->getClientIp());
 
                 return $this->redirectToRoute($this->route);
