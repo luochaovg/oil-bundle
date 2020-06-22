@@ -29,13 +29,17 @@ class WorkTaskCommand extends Acme
         $telegram = $this->getTelegram();
         $message = $telegram->getWebhookUpdate()->getMessage();
 
+        if ($message->chat->id < 0) {
+            return $this->textMessage('*Error*: group messages are not supported.');
+        }
+
         $pdo = $this->pdo();
         $exists = $pdo->from('bsw_admin_user')
             ->where('team_id > ?', 0)
             ->where('telegram_id = ?', $message->from->id)
             ->fetch();
         if (empty($exists)) {
-            return $this->textMessage('`Sorry, permission denied.`');
+            return $this->textMessage('*Error*: sorry, `permission denied`.');
         }
 
         $result = $pdo->insertInto(
@@ -48,11 +52,11 @@ class WorkTaskCommand extends Acme
             ]
         )->execute();
         if (empty($result)) {
-            return $this->textMessage('Create token failed.');
+            return $this->textMessage('*Error*: create token failed.');
         }
 
         if (empty($host = $_ENV['WORK_TASK_URL'] ?? null)) {
-            return $this->textMessage('Configure the `WORK_TASK_URL` in env file first.');
+            return $this->textMessage('*Error*: configure the `WORK_TASK_URL` in env file first.');
         }
 
         $tips = 'Do not publish the link, valid once and in 3 minutes.';
