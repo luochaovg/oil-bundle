@@ -203,7 +203,7 @@ trait Preview
      */
     public function previewCharmStartTime(Arguments $args, string $left = 'Ready', string $right = 'Consumed')
     {
-        if ($args->item['state'] >= 3) {
+        if (!in_array($args->item['state'], [1, 2])) {
             return new Charm(Abs::HTML_CODE, $args->value);
         }
 
