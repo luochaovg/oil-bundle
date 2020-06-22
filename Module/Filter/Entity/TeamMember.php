@@ -56,14 +56,10 @@ class TeamMember extends Filter
     {
         $value = array_combine(['team', 'member'], $value);
         if (!empty($value['member'])) {
-            [$table, $field] = $this->getAlias('member');
-
-            return ["{$table}.{$field}", $value['member']];
+            return [implode('.', $this->getAlias('member')), $value['member']];
         }
 
-        [$table, $field] = $this->getAlias('team');
-
-        return ["{$table}.{$field}", $value['team']];
+        return [implode('.', $this->getAlias('team')), $value['team']];
     }
 
     /**

@@ -8,8 +8,12 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Filter\Entity\Accurate;
+use Leon\BswBundle\Module\Filter\Entity\Senior;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
+use Leon\BswBundle\Module\Filter\Entity\WeekIntersect;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
+use Leon\BswBundle\Module\Form\Entity\Week;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -55,6 +59,17 @@ trait Preview
                 'filterArgs' => ['alias' => $this->previewAlias],
                 'column'     => 3,
                 'sort'       => 1,
+            ],
+            'week'   => [
+                'label'      => 'Week n',
+                'field'      => 'bwt.addTime',
+                'type'       => Week::class,
+                'filter'     => WeekIntersect::class,
+                'filterArgs' => [
+                    'timestamp' => true,
+                    'alias'     => ['from' => 'bwt.startTime', 'to' => 'bwt.endTime'],
+                ],
+                'sort'       => 3,
             ],
         ];
     }
@@ -108,6 +123,10 @@ trait Preview
      */
     public function previewFilterCorrect(Arguments $args): array
     {
+        if (empty($args->condition['bwt.state'])) {
+            $args->condition['bwt.state'] = $this->createFilter(Senior::class, [Senior::GT, [0]]);
+        }
+
         $args->condition = $this->correctTeamMemberFilter(
             'bwt.userId',
             $this->previewAlias,

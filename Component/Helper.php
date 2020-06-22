@@ -7,6 +7,7 @@ use BadFunctionCallException;
 use InvalidArgumentException;
 use ZipArchive;
 use Exception;
+use DateTime;
 use finfo;
 
 class Helper
@@ -2491,6 +2492,26 @@ class Helper
         $time = $time - current(self::timestampDay());
 
         return $time;
+    }
+
+    /**
+     * Year and week to date
+     *
+     * @param int    $year
+     * @param int    $week
+     * @param string $format
+     *
+     * @return array
+     * @throws
+     */
+    public static function yearWeekToDate(int $year, int $week, string $format = Abs::FMT_DAY): array
+    {
+        $dto = new DateTime();
+        $dto->setISODate($year, $week);
+        $date[] = $dto->format($format);
+        $date[] = $dto->modify('+6 days')->format($format);
+
+        return $date;
     }
 
     /**

@@ -1,0 +1,15 @@
+{% set initial = (form.value is same as(null)) ? "null" : "moment(`" ~ form.value ~ "`, `" ~ form.format ~ "`)" %}
+<a-week-picker
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  name="{{ form.name }}"
+  :style="{{ form.style }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  size="{{ form.size }}"
+  placeholder="{{ form.placeholder }}"
+  format="{{ form.format }}"
+  {{ form.attributes|raw }}
+  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+></a-week-picker>
