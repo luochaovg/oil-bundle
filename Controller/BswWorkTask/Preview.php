@@ -84,7 +84,9 @@ trait Preview
      */
     public function previewAnnotation(): array
     {
-        return [
+        [$team, $leader] = $this->workTaskTeam();
+
+        $annotation = [
             'trail' => [
                 'width' => 120,
                 'align' => 'center',
@@ -92,6 +94,11 @@ trait Preview
                 'html'  => true,
             ],
         ];
+        if ($leader) {
+            $annotation[Abs::TR_ACT] = ['width' => 126];
+        }
+
+        return $annotation;
     }
 
     /**
