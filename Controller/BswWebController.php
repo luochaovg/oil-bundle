@@ -90,13 +90,16 @@ abstract class BswWebController extends AbstractController
             $url = $crumb->getRoute();
         }
 
+        $needArgs = true;
+        $access = array_filter($this->access);
+
         // from default route
-        if (!$url) {
+        if (!$url && isset($access[$this->cnf->route_default])) {
             $url = $this->cnf->route_default;
         }
 
         // prevent route to self
-        if ($url == $this->route) {
+        if (!$url) {
             $access = array_filter($this->access);
             foreach ($access as $route => $assert) {
                 if (strpos($route, Abs::TAG_PREVIEW) !== false) {
@@ -109,8 +112,12 @@ abstract class BswWebController extends AbstractController
             }
         }
 
+        if ($this->route == $url) {
+            $needArgs = false;
+        }
+
         // args
-        if (!empty($url)) {
+        if (!empty($url) && $needArgs) {
             $args = (array)$this->sessionArrayGet(Abs::TAG_HISTORY, $url, true);
         }
 

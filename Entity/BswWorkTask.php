@@ -58,7 +58,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=4, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
      * @BswAnnotation\Persistence(sort=4, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
-     * @BswAnnotation\Filter(sort=4, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
+     * @BswAnnotation\Filter(sort=4, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true}, show=false)
      * @BswAnnotation\Mixed(sort=true)
      */
     protected $startTime;
@@ -69,7 +69,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\NotNull(groups={"modify", "newly"})
      * @BswAnnotation\Preview(sort=5, align="center", render=BswAbs::RENDER_CODE, hook={0:BswHook\Timestamp::class}, width=190)
      * @BswAnnotation\Persistence(sort=5, type=BswForm\Datetime::class, hook={0:BswHook\Timestamp::class}, show=false)
-     * @BswAnnotation\Filter(sort=5, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true})
+     * @BswAnnotation\Filter(sort=5, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class, filterArgs={"timestamp":true}, show=false)
      * @BswAnnotation\Mixed(sort=true)
      */
     protected $endTime;
@@ -135,8 +135,8 @@ class BswWorkTask extends FoundationEntity
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=3.1, width=130, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
      * @BswAnnotation\Persistence(sort=11, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=11.01, type=BswForm\Select::class, placeholder="Mode", group="state", style={"width": "50%"}, enum=BswFilter\Senior::MODE_SELECT_NUMBER, column=3)
-     * @BswAnnotation\Filter(sort=11.02, type=BswForm\Select::class, enum=true, placeholder="Value", group="state", style={"width": "50%"})
+     * @BswAnnotation\Filter(sort=11.01, type=BswForm\Select::class, placeholder="Mode", group="state", style={"width": "35%"}, enum=BswFilter\Senior::MODE_SELECT_NUMBER, column=4)
+     * @BswAnnotation\Filter(sort=11.02, type=BswForm\Select::class, enum=true, placeholder="Value", group="state", style={"width": "65%"}, typeArgs={"mode":BswForm\Select::MODE_MULTIPLE})
      * @BswAnnotation\Mixed(sort=true)
      */
     protected $state = 1;

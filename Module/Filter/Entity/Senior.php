@@ -101,12 +101,12 @@ class Senior extends Filter
      * @const array
      */
     const MODE_SELECT_NUMBER = [
-        self::EQ  => 'Expr equal',
-        self::NEQ => 'Expr not equal',
-        self::GT  => 'Expr greater than',
-        self::GTE => 'Expr greater than or equal to',
-        self::LT  => 'Expr less than',
-        self::LTE => 'Expr less than or equal to',
+        self::EQ     => 'Expr equal',
+        self::NEQ    => 'Expr not equal',
+        self::GTE    => 'Expr greater than or equal to',
+        self::LTE    => 'Expr less than or equal to',
+        self::IN     => 'Expr in',
+        self::NOT_IN => 'Expr not in',
     ];
 
     /**
