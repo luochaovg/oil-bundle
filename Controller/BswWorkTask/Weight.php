@@ -57,7 +57,7 @@ trait Weight
     /**
      * @param Arguments $args
      *
-     * @return bool|Error
+     * @return array|Error
      */
     public function weightAfterSubmit(Arguments $args)
     {
@@ -65,7 +65,7 @@ trait Weight
             return new ErrorWithoutChange();
         }
 
-        return true;
+        return [$args->submit, $args->extraSubmit];
     }
 
     /**

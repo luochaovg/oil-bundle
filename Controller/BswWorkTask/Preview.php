@@ -4,14 +4,12 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
-use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Filter\Entity\Accurate;
-use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
+use Leon\BswBundle\Module\Filter\Entity\TeamMember;
+use Leon\BswBundle\Module\Form\Entity\SelectTree;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -24,12 +22,43 @@ use Symfony\Component\Routing\Annotation\Route;
 trait Preview
 {
     /**
+     * @var array
+     */
+    protected $previewAlias = [
+        'team'   => ['bau', 'teamId'],
+        'member' => ['bwt', 'userId'],
+    ];
+
+    /**
      * @return string
      */
     public function previewEntity(): string
     {
         return BswWorkTask::class;
     }
+
+    /**
+     * @return array
+     */
+    public function previewFilterAnnotation(): array
+    {
+        [$team] = $this->workTaskTeam();
+
+        return [
+            'userId' => false,
+            'team'   => [
+                'label'      => 'User id',
+                'field'      => 'bwt.userId',
+                'type'       => SelectTree::class,
+                'typeArgs'   => ['treeData' => $this->getTeamMemberTree($team), 'expandAll' => true],
+                'filter'     => TeamMember::class,
+                'filterArgs' => ['alias' => $this->previewAlias],
+                'column'     => 3,
+                'sort'       => 1,
+            ],
+        ];
+    }
+
 
     /**
      * @return array
@@ -72,11 +101,11 @@ trait Preview
      */
     public function previewFilterCorrect(Arguments $args): array
     {
-        [$team] = $this->workTaskTeam();
-
-        if ($team) {
-            $args->condition['bau.teamId'] = $this->createFilter(Accurate::class, $team);
-        }
+        $args->condition = $this->correctTeamMemberFilter(
+            'bwt.userId',
+            $this->previewAlias,
+            $args->condition ?? null
+        );
 
         return [$args->filter, $args->condition];
     }
@@ -218,56 +247,14 @@ trait Preview
      */
     public function previewAfterHook(Arguments $args): array
     {
-        /**
-         * @var BswWorkTaskTrailRepository $trailRepo
-         */
-        $trailRepo = $this->repo(BswWorkTaskTrail::class);
-        $list = $trailRepo->lister(
-            [
-                'limit'  => 0,
-                'alias'  => 't',
-                'select' => ['u.name', 't.trail', 't.addTime AS time'],
-                'join'   => [
-                    'u' => [
-                        'entity' => BswAdminUser::class,
-                        'left'   => ['t.userId'],
-                        'right'  => ['u.id'],
-                    ],
-                ],
-                'where'  => [$this->expr->eq('t.taskId', ':task')],
-                'args'   => ['task' => [$args->original['id']]],
-                'order'  => ['t.id' => Abs::SORT_DESC],
-            ]
-        );
-
-        $trail = $this->trailListStringify($list);
-
-        $modeMap = [
-            'modal'  => [
-                'click' => 'showModal',
-                'args'  => [
-                    'width'   => 800,
-                    'title'   => $this->twigLang('Trail'),
-                    'content' => Html::tag('pre', $trail, ['class' => 'bsw-pre bsw-long-text']),
-                ],
-            ],
-            'drawer' => [
-                'click' => 'showTrailDrawer',
-                'args'  => [
-                    'id' => $args->original['id'],
-                ],
-            ],
-        ];
-        $mode = $modeMap['drawer'];
-
         $button = (new Button('lifecycle'))
             ->setType(Button::THEME_DEFAULT)
             ->setSize(Button::SIZE_SMALL)
-            ->setClick($mode['click'])
-            ->setArgs($mode['args']);
+            ->setClick('showTrailDrawer')
+            ->setArgs(['id' => $args->original['id']]);
 
         $args->hooked['trail'] = $this->getButtonHtml($button);
-        $args->hooked['trailHtml'] = $trail;
+        $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
 
         return $args->hooked;
     }
@@ -308,7 +295,7 @@ trait Preview
                 ],
             ],
             [],
-            'layout/preview-task.html'
+            'task/preview.html'
         );
     }
 }

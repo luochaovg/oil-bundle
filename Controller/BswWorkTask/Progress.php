@@ -110,7 +110,8 @@ trait Progress
                     '{{ to }}'     => $args->record['donePercent'],
                     '{{ remark }}' => $args->extraSubmit['whatToDo'],
                 ]
-            )
+            ),
+            true
         );
     }
 

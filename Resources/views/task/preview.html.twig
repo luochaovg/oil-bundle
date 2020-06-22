@@ -1,0 +1,39 @@
+{% extends 'layout/preview.html.twig' %}
+
+{% block pageAfter %}
+  {% for drawer in preview.list %}
+    <a-drawer
+      title="{{ 'Trail'|trans({}, 'twig') }}"
+      :width="720"
+      placement="left"
+      :closable="false"
+      :visible="trailDrawer[{{ drawer.id }}]"
+      @close="trailDrawerClose"
+      wrap-class-name="bsw-work-task-drawer"
+    >
+      <a-timeline>
+        {% for item in drawer.trailList %}
+          <a-timeline-item>
+            <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
+            <div class="bsw-code">{{ item.time }}</div>
+            {{ item.trail }}
+            <span :style={color:"{{ item.reliable ? 'rgba(0,128,0,.7)' : '#999' }}"}>({{ item.human }})</span>
+          </a-timeline-item>
+        {% endfor %}
+        {% if drawer.state in [1,2] %}
+          <a-timeline-item>
+            <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>
+            Progressing..
+          </a-timeline-item>
+        {% endif %}
+      </a-timeline>
+      <div class="footer-bar">
+        <a-button type="primary" @click="trailDrawerClose">{{ 'I got it'|trans({}, 'twig') }}</a-button>
+      </div>
+    </a-drawer>
+  {% endfor %}
+{% endblock %}
+
+{% block javascriptAfter %}
+  {% include 'javascript/task.md.twig' %}
+{% endblock %}

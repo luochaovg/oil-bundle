@@ -4,7 +4,7 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Carbon\Carbon;
 use Doctrine\ORM\AbstractQuery;
-use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
@@ -14,6 +14,7 @@ use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Module\Error\Error;
+use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,7 @@ class Acme extends BswBackendController
     use Weight;
     use Progress;
     use Close;
+    use WeekReport;
 
     /**
      * @return array
@@ -47,11 +49,12 @@ class Acme extends BswBackendController
      *
      * @param Arguments $args
      * @param string    $trail
+     * @param bool      $reliable
      *
      * @return bool|Error
      * @throws
      */
-    protected function trailLogger(Arguments $args, string $trail)
+    protected function trailLogger(Arguments $args, string $trail, bool $reliable = false)
     {
         /**
          * @var BswWorkTaskTrailRepository $trailRepo
@@ -59,9 +62,10 @@ class Acme extends BswBackendController
         $trailRepo = $this->repo(BswWorkTaskTrail::class);
         $result = $trailRepo->newly(
             [
-                'userId' => $this->usr('usr_uid'),
-                'taskId' => intval($args->newly ? $args->result : $args->original['id']),
-                'trail'  => $trail,
+                'userId'   => $this->usr('usr_uid'),
+                'taskId'   => intval($args->newly ? $args->result : $args->original['id']),
+                'reliable' => $reliable ? 1 : 0,
+                'trail'    => $trail,
             ]
         );
 
@@ -107,16 +111,8 @@ class Acme extends BswBackendController
     {
         return [
             (new Links($this->fieldLang('Task list'), 'app_bsw_work_task_preview', 'b:icon-mark')),
+            (new Links($this->fieldLang('Weekly publication'), 'app_bsw_work_week_report', 'b:icon-calendar')),
             (new Links($this->fieldLang('Progress chart'), 'app_bsw_work_week_survey', 'a:line-chart'))
-                ->setClick('showModal')
-                ->setArgs(
-                    [
-                        'title'   => 'Oops',
-                        'width'   => Abs::MEDIA_MIN,
-                        'content' => $this->fieldLang('Look forward'),
-                    ]
-                ),
-            (new Links($this->fieldLang('Weekly publication'), 'app_bsw_work_week_report', 'b:icon-calendar'))
                 ->setClick('showModal')
                 ->setArgs(
                     [
@@ -129,30 +125,59 @@ class Acme extends BswBackendController
     }
 
     /**
-     * Trail list to string
+     * List task trail
+     *
+     * @param int $taskId
+     *
+     * @return array
+     * @throws
+     */
+    protected function listTaskTrail(int $taskId): array
+    {
+        /**
+         * @var BswWorkTaskTrailRepository $trailRepo
+         */
+        $trailRepo = $this->repo(BswWorkTaskTrail::class);
+        $list = $trailRepo->lister(
+            [
+                'limit'  => 0,
+                'alias'  => 't',
+                'select' => ['u.name', 't.reliable', 't.trail', 't.addTime AS time'],
+                'join'   => [
+                    'u' => [
+                        'entity' => BswAdminUser::class,
+                        'left'   => ['t.userId'],
+                        'right'  => ['u.id'],
+                    ],
+                ],
+                'where'  => [$this->expr->eq('t.taskId', ':task')],
+                'args'   => ['task' => [$taskId]],
+                'order'  => ['t.id' => Abs::SORT_ASC],
+            ]
+        );
+
+        return $this->taskTrailHandler($list);
+    }
+
+    /**
+     * Task trail handler
      *
      * @param array $list
      *
-     * @return string
+     * @return array
      */
-    protected function trailListStringify(array $list): ?string
+    protected function taskTrailHandler(array $list): array
     {
-        $trail = null;
         $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
-
-        foreach ($list as $item) {
+        foreach ($list as &$item) {
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
-            $cb = $cb->locale($lang)->diffForHumans();
-            $cb = Html::tag('span', "({$cb})", ['style' => ['color' => '#ccc', 'font-size' => '12px']]);
-
-            $trail .= str_replace('{value}', $item['time'], Abs::HTML_CODE) . ' ';
-            $trail .= str_replace('{value}', $item['name'], Abs::TEXT_BLUE) . ' ';
-            $trail .= $item['trail'] . ' ';
-            $trail .= $cb;
-            $trail .= str_replace(10, 15, Abs::LINE_DASHED);
+            $item['human'] = $cb->locale($lang)->diffForHumans();
+            $item['color'] = Helper::colorValue($item['name'], true);
+            $item['name'] = current(explode(' ', $item['name']));
+            $item['time'] = date('m/d H:i', strtotime($item['time']));
         }
 
-        return $trail;
+        return $list;
     }
 
     /**
@@ -196,6 +221,135 @@ class Acme extends BswBackendController
             $filter,
             $teamFilter
         );
+    }
+
+    /**
+     * Get team member
+     *
+     * @param int $teamId
+     *
+     * @return array
+     * @throws
+     */
+    protected function getTeamMemberMap(?int $teamId = null): array
+    {
+        $teamFilter = [];
+        if ($teamId) {
+            $teamFilter = [
+                'where' => [$this->expr->eq('u.teamId', ':teamId')],
+                'args'  => ['teamId' => [$teamId]],
+            ];
+        }
+
+        /**
+         * @var BswAdminUserRepository $userRepo
+         */
+        $userRepo = $this->repo(BswAdminUser::class);
+
+        return $userRepo->filters($teamFilter)->lister(
+            [
+                'limit'  => 0,
+                'alias'  => 'u',
+                'select' => [
+                    'u.teamId',
+                    't.name AS teamName',
+                    'u.id AS memberId',
+                    'u.name AS memberName',
+                ],
+                'join'   => [
+                    't' => [
+                        'entity' => BswWorkTeam::class,
+                        'left'   => ['u.teamId'],
+                        'right'  => ['t.id'],
+                    ],
+                ],
+                'where'  => [
+                    $this->expr->gt('u.teamId', ':team'),
+                    $this->expr->eq('u.state', ':state'),
+                ],
+                'args'   => [
+                    'team'  => [0],
+                    'state' => [Abs::NORMAL],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Get team member
+     *
+     * @param int $teamId
+     *
+     * @return array
+     */
+    protected function getTeamMemberTree(?int $teamId = null): array
+    {
+        static $tree;
+
+        if (isset($tree)) {
+            return $tree;
+        }
+
+        $tree = [];
+        $teamMember = $this->getTeamMemberMap($teamId);
+
+        foreach ($teamMember as $item) {
+            $tt = $item['teamId'];
+            $mm = $item['memberId'];
+            if (!isset($tree[$tt])) {
+                $tree[$tt] = [
+                    'title'    => $item['teamName'],
+                    'value'    => $tt,
+                    'children' => [],
+                ];
+            }
+            if (!empty($mm) && !isset($tree[$tt]['children'][$mm])) {
+                $tree[$tt]['children'][$mm] = [
+                    'title'    => $item['memberName'],
+                    'value'    => "{$tt}-{$mm}",
+                    'children' => [],
+                ];
+            }
+        }
+
+        $tree = Helper::arrayValues(
+            $tree,
+            function ($value) {
+                return is_numeric(key($value));
+            }
+        );
+
+        return $tree;
+    }
+
+    /**
+     * Correct team member filter
+     *
+     * @param string $field
+     * @param array  $alias
+     * @param array  $condition
+     *
+     * @return array
+     */
+    protected function correctTeamMemberFilter(string $field, array $alias, ?array $condition = null): array
+    {
+        $condition = $condition ?? [];
+        [$team] = $this->workTaskTeam();
+        if (!$team) {
+            return $condition;
+        }
+
+        $filter = $condition[$field]['filter'] ?? null;
+        $value = $condition[$field]['value'] ?? null;
+
+        if (!$filter) {
+            $filter = (new TeamMember())->setAlias($alias);
+        }
+
+        $value = $filter->correctTeamMemberByAgency($team, $value);
+        $condition[$field] = $this->createFilter($filter, $value);
+
+        return $condition;
     }
 
     /**

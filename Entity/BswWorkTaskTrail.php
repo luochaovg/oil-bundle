@@ -51,13 +51,23 @@ class BswWorkTaskTrail extends FoundationEntity
     protected $taskId;
 
     /**
+     * @ORM\Column(type="smallint", name="`reliable`")
+     * @Assert\Type(type="integer", groups={"modify"})
+     * @Assert\NotNull(groups={"modify"})
+     * @BswAnnotation\Preview(sort=4, align="center", enum=BswEnum::OPPOSE, dress={1:"blue"})
+     * @BswAnnotation\Persistence(sort=4, type=BswForm\Select::class, enum=BswEnum::OPPOSE)
+     * @BswAnnotation\Filter(sort=4, type=BswForm\Select::class, enum=BswEnum::OPPOSE)
+     */
+    protected $reliable = 0;
+
+    /**
      * @ORM\Column(type="string", name="`trail`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=1024, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=4, render=BswAbs::HTML_TEXT)
-     * @BswAnnotation\Persistence(sort=4, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=4)
+     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Persistence(sort=5, type=BswForm\TextArea::class)
+     * @BswAnnotation\Filter(sort=5)
      */
     protected $trail;
 
@@ -65,9 +75,9 @@ class BswWorkTaskTrail extends FoundationEntity
      * @ORM\Column(type="string", name="`add_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=5, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=5, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=5, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=6, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=6, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=6, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $addTime;
 
@@ -75,9 +85,9 @@ class BswWorkTaskTrail extends FoundationEntity
      * @ORM\Column(type="string", name="`update_time`")
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=6, align="center", render=BswAbs::RENDER_CODE, width=190)
-     * @BswAnnotation\Persistence(sort=6, show=false, type=BswForm\Datetime::class)
-     * @BswAnnotation\Filter(sort=6, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
+     * @BswAnnotation\Preview(sort=7, align="center", render=BswAbs::RENDER_CODE, width=190)
+     * @BswAnnotation\Persistence(sort=7, show=false, type=BswForm\Datetime::class)
+     * @BswAnnotation\Filter(sort=7, type=BswForm\DatetimeRange::class, column=4, filter=BswFilter\Between::class)
      */
     protected $updateTime;
 
@@ -85,9 +95,9 @@ class BswWorkTaskTrail extends FoundationEntity
      * @ORM\Column(type="smallint", name="`state`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=7, align="center", enum=true, dress={0:"default", 1:"processing"}, status=true)
-     * @BswAnnotation\Persistence(sort=7, type=BswForm\Select::class, enum=true)
-     * @BswAnnotation\Filter(sort=7, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Preview(sort=8, align="center", enum=true, dress={0:"default", 1:"processing"}, status=true)
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Filter(sort=8, type=BswForm\Select::class, enum=true)
      */
     protected $state = 1;
 }

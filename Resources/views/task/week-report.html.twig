@@ -1,0 +1,33 @@
+{% extends 'layout/preview.html.twig' %}
+
+{% block page %}
+  {% if 'filter' not in logic.display ?? [] %}
+    {% include 'limbs/filter.html.twig' %}
+  {% endif %}
+  <div class="bsw-work-task-week-report">
+    <a-timeline>
+      {% for item in preview.list %}
+        <a-timeline-item>
+          <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
+          <div>{{ item.time }} <span :style={color:"#999"}>({{ item.human }})</span></div>
+          <div>
+            <a-tag color="blue">{{ 'Task'|trans({}, 'twig') }}</a-tag>
+            <span :style={color:"#999"}>{{ item.title }}</span>
+          </div>
+          <div>
+            <a-tag color="green">{{ 'Progress'|trans({}, 'twig') }}</a-tag>
+            <span :style={fontSize:"16px"}>{{ item.trail }}</span>
+          </div>
+        </a-timeline-item>
+        {% else %}
+          <a-empty :image="bsw.d.Empty.PRESENTED_IMAGE_SIMPLE"></a-empty>
+      {% endfor %}
+    </a-timeline>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% if 'filter' not in logic.display ?? [] %}
+  {% include 'javascript/filter.md.twig' %}
+{% endif %}
+{% endblock %}

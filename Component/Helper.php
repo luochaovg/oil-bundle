@@ -2781,18 +2781,29 @@ class Helper
     /**
      * Get color value
      *
-     * @param bool $well
+     * @param string $label
+     * @param bool   $well
      *
      * @return string
      */
-    public static function colorValue(bool $well = false): string
+    public static function colorValue(?string $label = null, bool $well = false): string
     {
         $colors = [];
-        for ($i = 0; $i < 6; $i++) {
-            $colors[] = dechex(rand(0, 15));
+        if ($label) {
+            $colors = self::split(substr(md5($label), 6, 6));
+        } else {
+            for ($i = 0; $i < 6; $i++) {
+                $colors[] = dechex(rand(0, 15));
+            }
         }
 
-        return ($well ? '#' : null) . implode('', $colors);
+        $well = $well ? '#' : null;
+        $color = implode('', $colors);
+        if ($color == 'ffffff') {
+            $color = '666666';
+        }
+
+        return "{$well}{$color}";
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
@@ -36,6 +37,13 @@ trait Persistence
             [$dateEnd, $timeEnd] = explode(' ', date(Abs::FMT_FULL, $args->record['endTime']));
         }
 
+        if (!isset($timeStart) || !isset($timeEnd)) {
+            [$hour, $minute] = explode(' ', date('H i', strtotime('+20 minutes')));
+            $minute = floor($minute / 10) * 10;
+            $timeStart = "{$hour}:{$minute}:00";
+            $timeEnd = '18:00:00';
+        }
+
         return [
             'title'           => ['label' => 'Mission title'],
             'weight'          => ['typeArgs' => $this->weightTypeArgs()],
@@ -55,7 +63,7 @@ trait Persistence
                             ->setPlaceholder('Start time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
-                            ->setValue($timeStart ?? null)
+                            ->setValue($timeStart)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select start time please'))]),
                     ],
                 ],
@@ -76,7 +84,7 @@ trait Persistence
                             ->setPlaceholder('End time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
-                            ->setValue($timeEnd ?? null)
+                            ->setValue($timeEnd)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select end time please'))]),
                     ],
                 ],
