@@ -33,10 +33,10 @@ class WorkTaskCommand extends Acme
         $result = $pdo->insertInto(
             'bsw_token',
             [
-                'userId'      => $message->from->id,
-                'scene'       => 1,
-                'token'       => $token = Helper::generateToken(),
-                'expiresTime' => time() + Abs::TIME_MINUTE,
+                'user_id'      => $message->from->id,
+                'scene'        => 1,
+                'token'        => $token = Helper::generateToken(),
+                'expires_time' => time() + Abs::TIME_MINUTE * 3,
             ]
         )->execute();
 
