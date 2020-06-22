@@ -49,9 +49,10 @@ class WorkTaskCommand extends Acme
             );
         }
 
+        $tips = 'Do not publish the link, valid once and in 3 minutes.';
         return $this->replyWithMessage(
             [
-                'text'       => "[Doorway -> <my task>]({$_ENV['WORK_TASK_URL']}?token={$token})",
+                'text'       => "[Doorway -> <my task>]({$_ENV['WORK_TASK_URL']}?token={$token}) ({$tips})",
                 'parse_mode' => 'Markdown',
             ]
         );
