@@ -111,7 +111,7 @@ $(function () {
             if (page) {
                 url = bsw.setParams({page}, url);
             }
-            if (that.previewList.length === 0) {
+            if (typeof that.previewList === 'undefined' || that.previewList.length === 0) {
                 return location.href = url;
             }
             bsw.request(url).then((res) => {

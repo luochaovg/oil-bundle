@@ -105,26 +105,6 @@ class Acme extends BswBackendController
     }
 
     /**
-     * @return array
-     */
-    protected function tabsLinks(): array
-    {
-        return [
-            (new Links($this->fieldLang('Task list'), 'app_bsw_work_task_preview', 'b:icon-mark')),
-            (new Links($this->fieldLang('Weekly publication'), 'app_bsw_work_week_report', 'b:icon-calendar')),
-            (new Links($this->fieldLang('Progress chart'), 'app_bsw_work_week_survey', 'a:line-chart'))
-                ->setClick('showModal')
-                ->setArgs(
-                    [
-                        'title'   => 'Oops',
-                        'width'   => Abs::MEDIA_MIN,
-                        'content' => $this->fieldLang('Look forward'),
-                    ]
-                ),
-        ];
-    }
-
-    /**
      * List task trail
      *
      * @param int $taskId
@@ -150,8 +130,14 @@ class Acme extends BswBackendController
                         'right'  => ['u.id'],
                     ],
                 ],
-                'where'  => [$this->expr->eq('t.taskId', ':task')],
-                'args'   => ['task' => [$taskId]],
+                'where'  => [
+                    $this->expr->eq('t.taskId', ':task'),
+                    $this->expr->eq('t.state', ':state'),
+                ],
+                'args'   => [
+                    'task'  => [$taskId],
+                    'state' => [Abs::NORMAL],
+                ],
                 'order'  => ['t.id' => Abs::SORT_ASC],
             ]
         );
@@ -353,6 +339,40 @@ class Acme extends BswBackendController
     }
 
     /**
+     * @return array
+     */
+    protected function tabsLinks(): array
+    {
+        [$team, $leader] = $this->workTaskTeam();
+
+        $links[] = new Links(
+            $this->fieldLang('Task list'),
+            'app_bsw_work_task_preview',
+            'b:icon-mark'
+        );
+
+        $links[] = new Links(
+            $this->fieldLang('Weekly publication'),
+            'app_bsw_work_week_report',
+            'b:icon-calendar'
+        );
+
+        $links[] = (new Links($this->fieldLang('Progress chart')))
+            ->setRoute('app_bsw_work_week_survey')
+            ->setIcon('a:line-chart')
+            ->setClick('showModal')
+            ->setArgs(
+                [
+                    'title'   => 'Oops',
+                    'width'   => Abs::MEDIA_MIN,
+                    'content' => $this->fieldLang('Look forward'),
+                ]
+            );
+
+        return $links;
+    }
+
+    /**
      * Before action logic
      */
     public function beforeLogic()
@@ -362,8 +382,11 @@ class Acme extends BswBackendController
             return null;
         }
 
+        $title = $this->fieldLang('Work task manager');
+        $this->seoTitle = $title;
+
         $leader = $leader ? ' 🚩' : null;
-        $this->cnf->copyright = "working task manager © {$this->usr('usr_account')}{$leader}";
+        $this->cnf->copyright = "{$title} © {$this->usr('usr_account')}{$leader}";
         $this->logic->display = ['menu', 'header'];
     }
 

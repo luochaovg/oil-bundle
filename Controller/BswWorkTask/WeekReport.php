@@ -76,8 +76,14 @@ trait WeekReport
                     'right'  => ['u.id'],
                 ],
             ],
-            'where'  => [$this->expr->eq('tt.reliable', ':reliable')],
-            'args'   => ['reliable' => [1]],
+            'where'  => [
+                $this->expr->eq('tt.reliable', ':reliable'),
+                $this->expr->eq('tt.state', ':state'),
+            ],
+            'args'   => [
+                'reliable' => [1],
+                'state'    => [Abs::NORMAL],
+            ],
             'sort'   => ['tt.id' => Abs::SORT_ASC],
         ];
     }

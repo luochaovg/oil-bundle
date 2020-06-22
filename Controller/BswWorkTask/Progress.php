@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
+use Leon\BswBundle\Module\Error\Entity\ErrorProgress;
 use Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\TextArea;
@@ -65,8 +66,8 @@ trait Progress
      */
     public function progressAfterSubmit(Arguments $args)
     {
-        if ($args->recordBefore['donePercent'] == $args->submit['donePercent']) {
-            return new ErrorWithoutChange();
+        if ($args->recordBefore['donePercent'] >= $args->submit['donePercent']) {
+            return new ErrorProgress();
         }
 
         [$myTeam, $leader] = $this->workTaskTeam();
