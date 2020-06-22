@@ -90,7 +90,7 @@ trait Preview
             'trail' => [
                 'width' => 120,
                 'align' => 'center',
-                'sort'  => 5.1,
+                'sort'  => 3.9,
                 'html'  => true,
             ],
         ];

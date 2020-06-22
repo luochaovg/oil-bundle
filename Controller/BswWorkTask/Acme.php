@@ -202,7 +202,8 @@ class Acme extends BswBackendController
             ['kvp.name', 'bwt.name AS team'],
             Abs::PK,
             function ($v) {
-                return "[{$v['team']}] {$v['name']}";
+                return $v['name'];
+                // return "[{$v['team']}] {$v['name']}";
             },
             $filter,
             $teamFilter

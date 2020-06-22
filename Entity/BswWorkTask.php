@@ -35,7 +35,7 @@ class BswWorkTask extends FoundationEntity
      * @ORM\Column(type="integer", name="`user_id`")
      * @Assert\Type(type="integer", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=2, align="left", width=200, enumExtra=true)
+     * @BswAnnotation\Preview(sort=2, align="left", width=130, align="center", enumExtra=true)
      * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true)
      * @BswAnnotation\Filter(sort=2, column=3, type=BswForm\Select::class, enumExtra=true)
      */
@@ -133,7 +133,7 @@ class BswWorkTask extends FoundationEntity
      * @ORM\Column(type="smallint", name="`state`")
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
-     * @BswAnnotation\Preview(sort=3.1, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
+     * @BswAnnotation\Preview(sort=3.1, width=130, align="center", enum=true, dress={1:"blue",2:"orange",3:"green",4:"cyan"})
      * @BswAnnotation\Persistence(sort=11, type=BswForm\Select::class, enum=true)
      * @BswAnnotation\Filter(sort=11.01, type=BswForm\Select::class, placeholder="Mode", group="state", style={"width": "50%"}, enum=BswFilter\Senior::MODE_SELECT_NUMBER, column=3)
      * @BswAnnotation\Filter(sort=11.02, type=BswForm\Select::class, enum=true, placeholder="Value", group="state", style={"width": "50%"})
