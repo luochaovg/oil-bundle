@@ -28,12 +28,12 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const QUERY                  = 'Query';                 // [全局配置] 列表查询
-    const FILTER_FORM_SIZE       = 'FilterFormSize';        // [全局配置] 表单尺寸
-    const FILTER_ANNOTATION      = 'FilterAnnotation';      // [全局配置] 注释补充或覆盖
-    const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';  // [全局配置] 注释限制
-    const FILTER_OPERATE         = 'FilterOperates';        // [全局配置] 操作按钮
-    const FILTER_CORRECT         = 'FilterCorrect';         // [全局配置] 矫正条件
+    const QUERY                  = 'Query';
+    const FILTER_FORM_SIZE       = 'FilterFormSize';
+    const FILTER_ANNOTATION      = 'FilterAnnotation';
+    const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';
+    const FILTER_OPERATE         = 'FilterOperates';
+    const FILTER_CORRECT         = 'FilterCorrect';
 
     /**
      * @var array

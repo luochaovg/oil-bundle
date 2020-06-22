@@ -40,14 +40,14 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const FORM_SIZE          = 'FormSize';          // 表单尺寸
-    const BEFORE_HOOK        = 'BeforeHook';        // 钩子前处理
-    const AFTER_HOOK         = 'AfterHook';         // 钩子后处理
-    const BEFORE_RENDER      = 'BeforeRender';      // 渲染前处理
-    const FORM_OPERATE       = 'FormOperates';      // 操作按钮
-    const AFTER_SUBMIT       = 'AfterSubmit';       // 提交数据后处理
-    const BEFORE_PERSISTENCE = 'BeforePersistence'; // 持久化前置处理 (同级事务)
-    const AFTER_PERSISTENCE  = 'AfterPersistence';  // 持久化前置处理 (同级事务)
+    const FORM_SIZE          = 'FormSize';
+    const BEFORE_HOOK        = 'BeforeHook';
+    const AFTER_HOOK         = 'AfterHook';
+    const BEFORE_RENDER      = 'BeforeRender';
+    const FORM_OPERATE       = 'FormOperates';
+    const AFTER_SUBMIT       = 'AfterSubmit';
+    const BEFORE_PERSISTENCE = 'BeforePersistence';
+    const AFTER_PERSISTENCE  = 'AfterPersistence';
 
     /**
      * @var string

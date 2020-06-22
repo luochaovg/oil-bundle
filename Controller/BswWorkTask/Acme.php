@@ -105,23 +105,23 @@ class Acme extends BswBackendController
     protected function tabsLinks(): array
     {
         return [
-            (new Links('任务列表', 'app_bsw_work_task_preview', 'b:icon-mark')),
-            (new Links('进展图', 'app_bsw_work_week_survey', 'a:line-chart'))
+            (new Links($this->fieldLang('Task list'), 'app_bsw_work_task_preview', 'b:icon-mark')),
+            (new Links($this->fieldLang('Progress chart'), 'app_bsw_work_week_survey', 'a:line-chart'))
                 ->setClick('showModal')
                 ->setArgs(
                     [
                         'title'   => 'Oops',
                         'width'   => Abs::MEDIA_MIN,
-                        'content' => '敬请期待',
+                        'content' => $this->fieldLang('Look forward'),
                     ]
                 ),
-            (new Links('周报', 'app_bsw_work_week_report', 'b:icon-calendar'))
+            (new Links($this->fieldLang('Weekly publication'), 'app_bsw_work_week_report', 'b:icon-calendar'))
                 ->setClick('showModal')
                 ->setArgs(
                     [
                         'title'   => 'Oops',
                         'width'   => Abs::MEDIA_MIN,
-                        'content' => '敬请期待',
+                        'content' => $this->fieldLang('Look forward'),
                     ]
                 ),
         ];
@@ -227,6 +227,7 @@ class Acme extends BswBackendController
             }
             if ($user = $this->repo(BswAdminUser::class)->find($record->userId)) {
                 $this->loginAdminUser($user, $this->getClientIp());
+
                 return $this->redirectToRoute($this->route);
             }
         }

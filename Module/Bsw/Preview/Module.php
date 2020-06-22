@@ -29,15 +29,15 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK   = 'BeforeHook';         // [单行数据] 钩子前处理
-    const AFTER_HOOK    = 'AfterHook';          // [单行数据] 钩子后处理
-    const QUERY         = 'Query';              // [全局配置] 列表查询
-    const CHOICE        = 'Choice';             // [全局配置] 列表选择
-    const BEFORE_RENDER = 'BeforeRender';       // [全量数据] 渲染前处理
-    const CHARM         = 'Charm';              // [字段的值] 个性化装饰
-    const SCROLL        = 'Scroll';             // [全局设置] 滚动参数
-    const OPERATES      = 'RecordOperates';     // [单行数据] 操作按钮组
-    const OPERATES_SIZE = 'RecordOperatesSize'; // [单行数据] 操作按钮大小
+    const BEFORE_HOOK   = 'BeforeHook';
+    const AFTER_HOOK    = 'AfterHook';
+    const QUERY         = 'Query';
+    const CHOICE        = 'Choice';
+    const BEFORE_RENDER = 'BeforeRender';
+    const CHARM         = 'Charm';
+    const SCROLL        = 'Scroll';
+    const OPERATES      = 'RecordOperates';
+    const OPERATES_SIZE = 'RecordOperatesSize';
 
     /**
      * @var array

@@ -18,7 +18,7 @@ use Exception;
 trait Telegram
 {
     /**
-     * TG机器人.调试
+     * Telegram bot - debug
      *
      * @Route("/tg/debug", name="app_tg_debug")
      *
@@ -62,7 +62,7 @@ trait Telegram
     }
 
     /**
-     * TG机器人.设置钩子
+     * Telegram bot - web hooks
      *
      * @Route("/tg/hooks", name="app_tg_hooks")
      *
@@ -125,7 +125,7 @@ trait Telegram
     }
 
     /**
-     * TG机器人.设置指令
+     * Telegram bot - commands
      *
      * @Route("/tg/cmd", name="app_tg_cmd", methods={"GET", "POST"})
      *

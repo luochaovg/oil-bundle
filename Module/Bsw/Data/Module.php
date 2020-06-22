@@ -20,7 +20,7 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const DATA_GENERATOR = 'DataGenerator';     // 数据生成
+    const DATA_GENERATOR = 'DataGenerator';
 
     /**
      * @return bool

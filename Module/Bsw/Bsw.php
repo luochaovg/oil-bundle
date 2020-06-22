@@ -15,12 +15,12 @@ abstract class Bsw
     /**
      * @const string
      */
-    const ENTITY             = 'Entity';            // [全局配置] 表实体类
-    const ANNOTATION         = 'Annotation';        // [全局配置] 注释补充或覆盖
-    const ANNOTATION_ONLY    = 'AnnotationOnly';    // [全局配置] 注释限制
-    const TAILOR             = 'Tailor';            // [全局配置] 定制逻辑
-    const ENUM_EXTRA         = 'EnumExtra';         // 额外枚举
-    const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';  // 渲染前参数处理
+    const ENTITY             = 'Entity';
+    const ANNOTATION         = 'Annotation';
+    const ANNOTATION_ONLY    = 'AnnotationOnly';
+    const TAILOR             = 'Tailor';
+    const ENUM_EXTRA         = 'EnumExtra';
+    const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';
 
     /**
      * @var BswBackendController

@@ -25,8 +25,8 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_AWAY = 'BeforeAway';   // 删除前处理 (事务级)
-    const AFTER_AWAY  = 'AfterAway';    // 删除后处理 (事务级)
+    const BEFORE_AWAY = 'BeforeAway';
+    const AFTER_AWAY  = 'AfterAway';
 
     /**
      * @return bool

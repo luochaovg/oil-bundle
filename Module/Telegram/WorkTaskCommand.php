@@ -40,9 +40,18 @@ class WorkTaskCommand extends Acme
             ]
         );
 
-        $this->replyWithMessage(
+        if (empty($_ENV['WORK_TASK_URL'])) {
+            return $this->replyWithMessage(
+                [
+                    'text'       => 'Configure the `WORK_TASK_URL` in env file first.',
+                    'parse_mode' => 'Markdown',
+                ]
+            );
+        }
+
+        return $this->replyWithMessage(
             [
-                'text'       => "{$_ENV['DATABASE_URL']}?token={$token}",
+                'text'       => "[Doorway -> <my task>]({$_ENV['WORK_TASK_URL']}?token={$token})",
                 'parse_mode' => 'Markdown',
             ]
         );

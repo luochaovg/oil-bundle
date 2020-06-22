@@ -240,5 +240,7 @@ trait WebCrumbs
                 $crumb->setRoute($route);
             }
         }
+
+        $this->crumbs = array_values($this->crumbs);
     }
 }

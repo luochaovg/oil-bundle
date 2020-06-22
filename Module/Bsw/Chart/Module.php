@@ -20,7 +20,7 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const CHART_ITEMS = 'ChartItems';   // 图表数据
+    const CHART_ITEMS = 'ChartItems';
 
     /**
      * @return bool

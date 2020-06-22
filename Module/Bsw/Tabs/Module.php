@@ -20,7 +20,7 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const TABS_LINKS = 'TabsLinks';    // TABS菜单
+    const TABS_LINKS = 'TabsLinks';
 
     /**
      * @return bool

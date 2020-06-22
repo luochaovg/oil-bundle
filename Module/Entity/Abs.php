@@ -502,190 +502,77 @@ class Abs
      * TPL_ / RENDER_ 开头的渲染模板支持ANT-D语法
      */
 
-    // slot 变量模板
     const SLOT_VARIABLES = "value, record, index";
-
-    // slot 不为空白表达式
     const SLOT_NOT_BLANK = '(({:value} !== "") && ({:value} !== null) && ({:value} !== false))';
-
-    // slot 包裹容器模板
     const SLOT_CONTAINER = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
-
-    // slot 包裹容器模板 (支持html)
     const SLOT_HTML_CONTAINER = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
-    // 空数据展示模板
     const TPL_NIL = "<div class='bsw-disable'>{Abs::NIL}</div>";
-
-    // [配合]空数据展示模板
     const TPL_ELSE_NIL = "<div v-else>{Abs::TPL_NIL}</div>";
-
-    // 脏数据展示模板
     const TPL_DIRTY = "<div class='bsw-disable'>{Abs::DIRTY}</div>";
-
-    // [配合]脏数据展示模板
     const TPL_ELSE_DIRTY = "<div v-else>{Abs::TPL_DIRTY}</div>";
-
-    // 未设置展示模板
     const TPL_NOT_SET = "<div class='bsw-disable'>{Abs::NOT_SET}</div>";
-
-    // 非文件展示模板
     const TPL_NOT_FILE = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
 
-    // 普通 dress 模板
     const TPL_DRESS = "<a-tag color='{dress}'>{value}</a-tag>";
-
-    // 粉色 dress 模板
     const TPL_DRESS_PINK = "<a-tag color='pink'>{value}</a-tag>";
-
-    // 红色 dress 模板
     const TPL_DRESS_RED = "<a-tag color='red'>{value}</a-tag>";
-
-    // 橙色 dress 模板
     const TPL_DRESS_ORANGE = "<a-tag color='orange'>{value}</a-tag>";
-
-    // 绿色 dress 模板
     const TPL_DRESS_GREEN = "<a-tag color='green'>{value}</a-tag>";
-
-    // 青色 dress 模板
     const TPL_DRESS_CYAN = "<a-tag color='cyan'>{value}</a-tag>";
-
-    // 蓝色 dress 模板
     const TPL_DRESS_BLUE = "<a-tag color='blue'>{value}</a-tag>";
-
-    // 紫色 dress 模板
     const TPL_DRESS_PURPLE = "<a-tag color='purple'>{value}</a-tag>";
 
-    // 无 dress 枚举模板
     const TPL_ENUM_0_DRESS = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_DIRTY}";
-
-    // 单 dress 枚举模板
     const TPL_ENUM_1_DRESS = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' :color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
-
-    // 多 dress 枚举模板
     const TPL_ENUM_2_DRESS = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
-
-    // 对立面枚举
     const TPL_ENUM_STATE = "<a-badge v-if='{Abs::SLOT_NOT_BLANK}' :status='{dress}' :text='{enum}'></a-badge>{Abs::TPL_ELSE_DIRTY}";
 
-    // 代码模板
     const RENDER_CODE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 代码模板 full
     const RENDER_CODE_FULL = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code full bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 图标模板
     const RENDER_ICON = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}[0] == \"a\"' :type='{:value}.split(\":\")[1]'></a-icon><b-icon v-else :type='{:value}.split(\":\")[1]'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 禁用状态模板
     const RENDER_DISABLE = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 文本模板 (标识空)
     const RENDER_TEXT = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 图片
     const RENDER_IMAGE = "<a v-if='{Abs::SLOT_NOT_BLANK}' :href='{:value}' class='bsw-preview-image' data-fancybox='preview' :data-caption='{:value}'><img :src='{:value}'></a>{Abs::TPL_ELSE_NIL}";
-
-    // 链接
     const RENDER_LINK = "<div v-if='{Abs::SLOT_NOT_BLANK}'><span class='bsw-code bsw-long-text'><a class='bsw-preview-link' :href='{:value}' target='_blank'>✪</a>{value}</span></div>{Abs::TPL_ELSE_NIL}";
-
-    // 密文 (统一)
     const RENDER_SECRET_1 = "<div class='bsw-disable'>{Abs::SECRET}</div>";
-
-    // 密文 (标识空)
     const RENDER_SECRET_2 = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
-
-    // 圆状百分比
     const RENDER_ROUND_PERCENT = "<a-progress type='circle' :percent='{:value}' :width='50' :stroke-width='6'></a-progress>";
-
-    // 条状百分比
     const RENDER_BAR_PERCENT = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='6' status='active' ></a-progress>";
 
     /**
      * HTML_ / TEXT_ 开头的渲染模板仅支持普通渲染
      */
 
-    // html 文本模板
     const HTML_TEXT = "<div class='bsw-long-text'>{value}</div>";
-
-    // html pre 标签
     const HTML_PRE = "<pre class='bsw-pre bsw-long-text'>{value}</pre>";
-
-    // html 代码模板
     const HTML_CODE = "<div class='bsw-code bsw-long-text'>{value}</div>";
-
-    // html 代码模板 full
     const HTML_CODE_FULL = "<div class='bsw-code full bsw-long-text'>{value}</div>";
 
-    // html 粉色模板
     const HTML_PINK = "<div class='ant-tag ant-tag-has-color' style='background-color: #eb2f96;'>{value}</div>";
-
-    // html 红色模板
     const HTML_RED = "<div class='ant-tag ant-tag-has-color' style='background-color: #f5222d;'>{value}</div>";
-
-    // html 橙色模板
     const HTML_ORANGE = "<div class='ant-tag ant-tag-has-color' style='background-color: #fa8c16;'>{value}</div>";
-
-    // html 绿色模板
     const HTML_GREEN = "<div class='ant-tag ant-tag-has-color' style='background-color: #52c41a;'>{value}</div>";
-
-    // html 青色模板
     const HTML_CYAN = "<div class='ant-tag ant-tag-has-color' style='background-color: #13c2c2;'>{value}</div>";
-
-    // html 蓝色模板
     const HTML_BLUE = "<div class='ant-tag ant-tag-has-color' style='background-color: #1890ff;'>{value}</div>";
-
-    // html 紫色模板
     const HTML_PURPLE = "<div class='ant-tag ant-tag-has-color' style='background-color: #722ed1;'>{value}</div>";
-
-    // html 灰色模板
     const HTML_GRAY = "<div class='ant-tag ant-tag-has-color' style='background-color: #d6d6d6;'>{value}</div>";
 
-    // html 粉色模板
     const HTML_PINK_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #eb2f96;'>{value}</div>";
-
-    // html 红色模板
     const HTML_RED_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #f5222d;'>{value}</div>";
-
-    // html 橙色模板
     const HTML_ORANGE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #fa8c16;'>{value}</div>";
-
-    // html 绿色模板
     const HTML_GREEN_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #52c41a;'>{value}</div>";
-
-    // html 青色模板
     const HTML_CYAN_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #13c2c2;'>{value}</div>";
-
-    // html 蓝色模板
     const HTML_BLUE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #1890ff;'>{value}</div>";
-
-    // html 紫色模板
     const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #722ed1;'>{value}</div>";
-
-    // html 灰色模板
     const HTML_GRAY_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #d6d6d6;'>{value}</div>";
 
-    // html 粉色模板
     const TEXT_PINK = "<span style='color: #eb2f96;'>{value}</span>";
-
-    // html 红色模板
     const TEXT_RED = "<span style='color: #f5222d;'>{value}</span>";
-
-    // html 橙色模板
     const TEXT_ORANGE = "<span style='color: #fa8c16;'>{value}</span>";
-
-    // html 绿色模板
     const TEXT_GREEN = "<span style='color: #52c41a;'>{value}</span>";
-
-    // html 青色模板
     const TEXT_CYAN = "<span style='color: #13c2c2;'>{value}</span>";
-
-    // html 蓝色模板
     const TEXT_BLUE = "<span style='color: #1890ff;'>{value}</span>";
-
-    // html 紫色模板
     const TEXT_PURPLE = "<span style='color: #722ed1;'>{value}</span>";
-
-    // html 灰色模板
     const TEXT_GRAY = "<span style='color: #d6d6d6;'>{value}</span>";
 }
