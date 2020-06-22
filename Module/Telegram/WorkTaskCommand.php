@@ -30,7 +30,7 @@ class WorkTaskCommand extends Acme
         $message = $telegram->getWebhookUpdate()->getMessage();
 
         $pdo = $this->pdo();
-        $pdo->insertInto(
+        $result = $pdo->insertInto(
             'bsw_token',
             [
                 'userId'      => $message->from->id,
@@ -38,7 +38,16 @@ class WorkTaskCommand extends Acme
                 'token'       => $token = Helper::generateToken(),
                 'expiresTime' => time() + Abs::TIME_MINUTE,
             ]
-        );
+        )->execute();
+
+        if (empty($result)) {
+            return $this->replyWithMessage(
+                [
+                    'text'       => 'Create token failed.',
+                    'parse_mode' => 'Markdown',
+                ]
+            );
+        }
 
         if (empty($_ENV['WORK_TASK_URL'])) {
             return $this->replyWithMessage(
@@ -50,9 +59,10 @@ class WorkTaskCommand extends Acme
         }
 
         $tips = 'Do not publish the link, valid once and in 3 minutes.';
+
         return $this->replyWithMessage(
             [
-                'text'       => "[Doorway]({$_ENV['WORK_TASK_URL']}?token={$token}) -> <my task> ({$tips})",
+                'text'       => "[Doorway]({$_ENV['WORK_TASK_URL']}?token={$token}) -> <my task> `({$tips})`",
                 'parse_mode' => 'Markdown',
             ]
         );
