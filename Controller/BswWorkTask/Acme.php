@@ -222,6 +222,7 @@ class Acme extends BswBackendController
     {
         $token = $this->getArgs('token');
         if ($token && $record = $this->checkSceneToken($token)) {
+            $this->session->clear();
             if ($record instanceof Error) {
                 return $record;
             }
