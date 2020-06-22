@@ -54,15 +54,11 @@ class BeastCommand extends Acme
         $message = $telegram->getWebhookUpdate()->getMessage();
 
         if (md5($secret) != '69e0f71f25ece4351e4d73af430bec43') {
-            return $this->replyWithMessage(
-                ['text' => '*Error*: password error.', 'parse_mode' => 'Markdown']
-            );
+            return $this->textMessage('*Error*: password error.');
         }
 
         if ($message->chat->id < 0) {
-            return $this->replyWithMessage(
-                ['text' => '*Error*: group messages are not supported.', 'parse_mode' => 'Markdown']
-            );
+            return $this->textMessage('*Error*: group messages are not supported.');
         }
 
         try {
@@ -155,7 +151,7 @@ class BeastCommand extends Acme
             return $this->replyWithPhoto(['photo' => InputFile::create($photoList[0])]);
 
         } catch (Exception $e) {
-            return $this->replyWithMessage(['text' => '*Error*: ' . $e->getMessage(), 'parse_mode' => 'Markdown']);
+            return $this->textMessage("*Error*: {$e->getMessage()}");
         }
     }
 }

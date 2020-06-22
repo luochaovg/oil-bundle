@@ -30,6 +30,14 @@ class WorkTaskCommand extends Acme
         $message = $telegram->getWebhookUpdate()->getMessage();
 
         $pdo = $this->pdo();
+        $exists = $pdo->from('bsw_admin_user')
+            ->where('team_id > ?', 0)
+            ->where('telegram_id = ?', $message->from->id)
+            ->fetch();
+        if (empty($exists)) {
+            return $this->textMessage('`Sorry, permission denied.`');
+        }
+
         $result = $pdo->insertInto(
             'bsw_token',
             [
@@ -39,32 +47,16 @@ class WorkTaskCommand extends Acme
                 'expires_time' => time() + Abs::TIME_MINUTE * 3,
             ]
         )->execute();
-
         if (empty($result)) {
-            return $this->replyWithMessage(
-                [
-                    'text'       => 'Create token failed.',
-                    'parse_mode' => 'Markdown',
-                ]
-            );
+            return $this->textMessage('Create token failed.');
         }
 
-        if (empty($_ENV['WORK_TASK_URL'])) {
-            return $this->replyWithMessage(
-                [
-                    'text'       => 'Configure the `WORK_TASK_URL` in env file first.',
-                    'parse_mode' => 'Markdown',
-                ]
-            );
+        if (empty($host = $_ENV['WORK_TASK_URL'] ?? null)) {
+            return $this->textMessage('Configure the `WORK_TASK_URL` in env file first.');
         }
 
         $tips = 'Do not publish the link, valid once and in 3 minutes.';
 
-        return $this->replyWithMessage(
-            [
-                'text'       => "[Doorway]({$_ENV['WORK_TASK_URL']}?token={$token}) -> <my task> `({$tips})`",
-                'parse_mode' => 'Markdown',
-            ]
-        );
+        return $this->textMessage("[Doorway]({$host}?token={$token}) -> <my task> `({$tips})`");
     }
 }

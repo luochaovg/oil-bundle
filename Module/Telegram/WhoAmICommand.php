@@ -38,6 +38,6 @@ class WhoAmICommand extends Acme
             $message->from->username
         );
 
-        $this->replyWithMessage(['text' => $caption, 'parse_mode' => 'Markdown']);
+        $this->textMessage($caption);
     }
 }

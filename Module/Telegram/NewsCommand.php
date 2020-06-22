@@ -82,6 +82,6 @@ class NewsCommand extends Acme
             $content .= "*({$index})* - [{$item['title']}]({$item['href']}) {$hot}\n";
         }
 
-        $this->replyWithMessage(['text' => $content, 'parse_mode' => 'Markdown']);
+        $this->textMessage($content);
     }
 }

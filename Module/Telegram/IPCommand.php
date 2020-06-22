@@ -32,9 +32,7 @@ class IPCommand extends Acme
         $ip = $this->getArguments()['ip'];
 
         if (empty($ip)) {
-            return $this->replyWithMessage(
-                ['text' => '*Error*: Please given a ip address', 'parse_mode' => 'Markdown']
-            );
+            return $this->textMessage('*Error*: Please given a ip address');
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
@@ -49,9 +47,9 @@ class IPCommand extends Acme
             $data = current($data['data'])['location'] ?? 'pull failed';
 
         } catch (Exception $e) {
-            return $this->replyWithMessage(['text' => '*Error*: ' . $e->getMessage(), 'parse_mode' => 'Markdown']);
+            return $this->textMessage("*Error*: {$e->getMessage()}");
         }
 
-        return $this->replyWithMessage(['text' => "*Location*：{$data}", 'parse_mode' => 'Markdown']);
+        return $this->textMessage("*Location*：{$data}");
     }
 }

@@ -9,9 +9,28 @@ use PDO;
 abstract class Acme extends Command
 {
     /**
+     * Reply text message
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    protected function textMessage(string $message)
+    {
+        return $this->replyWithMessage(
+            [
+                'text'       => $message,
+                'parse_mode' => 'Markdown',
+            ]
+        );
+    }
+
+    /**
+     * Get pdo instance
+     *
      * @return MysqlClient
      */
-    public function pdo(): MysqlClient
+    protected function pdo(): MysqlClient
     {
         $config = parse_url($_ENV['DATABASE_URL']);
         $dbname = trim($config['path'], '/');
