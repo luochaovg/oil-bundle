@@ -10,14 +10,11 @@
         <a-timeline-item>
           <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
           <div>{{ item.time }} <span :style={color:"#999"}>({{ item.human }})</span></div>
-          <div>
-            <a-tag color="blue">{{ 'Task'|trans({}, 'twig') }}</a-tag>
-            <span :style={color:"#999"}>{{ item.title }}</span>
-          </div>
-          <pre :style={fontSize:"16px"}>{{ item.trail }}</pre>
+          <div :style={color:"#999"}>{{ item.title }}</div>
+          <pre class='bsw-pre bsw-long-text'>{{ item.trail }}</pre>
         </a-timeline-item>
-        {% else %}
-          <a-empty :image="bsw.d.Empty.PRESENTED_IMAGE_SIMPLE"></a-empty>
+      {% else %}
+        <a-empty :image="bsw.d.Empty.PRESENTED_IMAGE_SIMPLE"></a-empty>
       {% endfor %}
     </a-timeline>
   </div>

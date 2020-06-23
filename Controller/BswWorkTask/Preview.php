@@ -8,7 +8,6 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Filter\Entity\Accurate;
 use Leon\BswBundle\Module\Filter\Entity\Senior;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Module\Filter\Entity\WeekIntersect;
@@ -75,7 +74,6 @@ trait Preview
         ];
     }
 
-
     /**
      * @return array
      */
@@ -102,19 +100,15 @@ trait Preview
     {
         [$team, $leader] = $this->workTaskTeam();
 
-        $annotation = [
-            'trail' => [
+        return [
+            'trail'     => [
                 'width' => 120,
                 'align' => 'center',
                 'sort'  => 3.9,
                 'html'  => true,
             ],
+            Abs::TR_ACT => ['width' => ($team && !$leader) ? 80 : 126],
         ];
-        if ($leader) {
-            $annotation[Abs::TR_ACT] = ['width' => 126];
-        }
-
-        return $annotation;
     }
 
     /**
