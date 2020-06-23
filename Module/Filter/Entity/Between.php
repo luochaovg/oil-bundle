@@ -16,6 +16,16 @@ class Between extends Filter
     protected $timestamp = false;
 
     /**
+     * @var bool
+     */
+    protected $carryTime = true;
+
+    /**
+     * @var bool
+     */
+    protected $weekValue = false;
+
+    /**
      * @return bool
      */
     public function isTimestamp(): bool
@@ -36,6 +46,46 @@ class Between extends Filter
     }
 
     /**
+     * @return bool
+     */
+    public function isCarryTime(): bool
+    {
+        return $this->carryTime;
+    }
+
+    /**
+     * @param bool $carryTime
+     *
+     * @return $this
+     */
+    public function setCarryTime(bool $carryTime)
+    {
+        $this->carryTime = $carryTime;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWeekValue(): bool
+    {
+        return $this->weekValue;
+    }
+
+    /**
+     * @param bool $weekValue
+     *
+     * @return $this
+     */
+    public function setWeekValue(bool $weekValue)
+    {
+        $this->weekValue = $weekValue;
+
+        return $this;
+    }
+
+    /**
      * @param mixed $value
      *
      * @return array
@@ -43,6 +93,10 @@ class Between extends Filter
      */
     public function parse($value)
     {
+        if ($this->isWeekValue()) {
+            $value = Helper::yearWeekToDate(...explode('-', $value));
+        }
+
         if (is_string($value)) {
             $value = Helper::stringToArray($value, false, false, 'trim', Abs::FORM_DATA_SPLIT);
         }
@@ -54,7 +108,12 @@ class Between extends Filter
         $from = trim($value[0]);
         $to = trim($value[1]);
 
-        if (!$this->timestamp) {
+        if (!$this->isCarryTime()) {
+            $from .= Abs::_DAY_BEGIN;
+            $to .= Abs::_DAY_END;
+        }
+
+        if (!$this->isTimestamp()) {
             return [$from, $to];
         }
 

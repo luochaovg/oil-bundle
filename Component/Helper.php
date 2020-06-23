@@ -2218,8 +2218,8 @@ class Helper
         [$head, $tail] = self::dateWeek($date);
 
         return [
-            strtotime("{$head} " . Abs::DAY_BEGIN),
-            strtotime("{$tail} " . Abs::DAY_END),
+            strtotime($head . Abs::_DAY_BEGIN),
+            strtotime($tail . Abs::_DAY_END),
         ];
     }
 
@@ -2255,8 +2255,8 @@ class Helper
         [$head, $tail] = self::dateMonth($date);
 
         return [
-            strtotime("{$head} " . Abs::DAY_BEGIN),
-            strtotime("{$tail} " . Abs::DAY_END),
+            strtotime($head . Abs::_DAY_BEGIN),
+            strtotime($tail . Abs::_DAY_END),
         ];
     }
 
@@ -2298,8 +2298,8 @@ class Helper
         [$head, $tail] = self::dateQuarter($date);
 
         return [
-            strtotime("{$head} " . Abs::DAY_BEGIN),
-            strtotime("{$tail} " . Abs::DAY_END),
+            strtotime($head . Abs::_DAY_BEGIN),
+            strtotime($tail . Abs::_DAY_END),
         ];
     }
 
@@ -2333,8 +2333,8 @@ class Helper
         [$head, $tail] = self::dateYear($date);
 
         return [
-            strtotime("{$head} " . Abs::DAY_BEGIN),
-            strtotime("{$tail} " . Abs::DAY_END),
+            strtotime($head . Abs::_DAY_BEGIN),
+            strtotime($tail . Abs::_DAY_END),
         ];
     }
 

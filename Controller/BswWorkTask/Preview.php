@@ -67,6 +67,7 @@ trait Preview
                 'filter'     => WeekIntersect::class,
                 'filterArgs' => [
                     'timestamp' => true,
+                    'carryTime' => false,
                     'alias'     => ['from' => 'bwt.startTime', 'to' => 'bwt.endTime'],
                 ],
                 'sort'       => 3,

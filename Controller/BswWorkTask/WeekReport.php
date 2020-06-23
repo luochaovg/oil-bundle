@@ -7,8 +7,8 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Filter\Entity\Between;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
-use Leon\BswBundle\Module\Filter\Entity\WeekBetween;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
 use Leon\BswBundle\Module\Form\Entity\Week;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,10 +55,11 @@ trait WeekReport
                 'column'     => 3,
             ],
             'week' => [
-                'label'  => 'Week n',
-                'field'  => 'tt.addTime',
-                'type'   => Week::class,
-                'filter' => WeekBetween::class,
+                'label'      => 'Week n',
+                'field'      => 'tt.addTime',
+                'type'       => Week::class,
+                'filter'     => Between::class,
+                'filterArgs' => ['weekValue' => true, 'carryTime' => false],
             ],
         ];
     }
