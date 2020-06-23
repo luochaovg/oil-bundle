@@ -67,7 +67,8 @@
     "kriswallsmith/buzz": "^1.0",
     "mailgun/mailgun-php": "^3.0",
     "nyholm/psr7": "^1.2",
-    "yansongda/pay": "^2.9"
+    "yansongda/pay": "^2.9",
+    "mexitek/phpcolors": "^0.4.0"
   },
   "config": {
     "preferred-install": {

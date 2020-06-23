@@ -44,7 +44,8 @@ $(function () {
         message: {}, // from v-init
         tips: {}, // from v-init
         modal: {
-            visible: false
+            visible: false,
+            centered: true
         }
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
@@ -79,8 +80,13 @@ $(function () {
         dispatcher: function dispatcher(data, element) {
             var that = this;
             var action = function action() {
-                var fn = data.function || 'console.log';
-                that[fn](data, element);
+                if (data.function.length === 0) {
+                    return console.error('Attribute function should be configure in options.', data);
+                }
+                if (typeof that[data.function] === 'undefined') {
+                    return console.error('Method ' + data.function + ' is undefined.', data);
+                }
+                that[data.function](data, element);
             };
             if (typeof data.confirm === 'undefined') {
                 action();
@@ -101,11 +107,13 @@ $(function () {
             this.submitFormMethod = $(element).attr('bsw-method');
         },
         pagination: function pagination(url, page) {
+            var jump = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
             var that = this;
             if (page) {
                 url = bsw.setParams({ page: page }, url);
             }
-            if (that.previewList.length === 0) {
+            if (jump || typeof that.previewList === 'undefined' || that.previewList.length === 0) {
                 return location.href = url;
             }
             bsw.request(url).then(function (res) {
@@ -186,10 +194,7 @@ $(function () {
             if (_typeof(effect.page) && effect.page > 1) {
                 jump = true;
             }
-            if (jump) {
-                return location.href = url;
-            }
-            this.pagination(url);
+            this.pagination(url, 0, jump);
         },
         exportFilterForm: function exportFilterForm(values) {
             var _this2 = this;
@@ -203,7 +208,7 @@ $(function () {
                     var data = {
                         title: bsw.lang.export_mission,
                         width: 768,
-                        height: 800
+                        height: 700
                     };
                     data.location = bsw.setParams(res.sets, _this2.exportApiUrl, true);
                     _this2.showIFrame(data, $('body')[0]);
@@ -332,6 +337,7 @@ $(function () {
             }
         },
         showModal: function showModal(options) {
+            this.modal.visible = false;
             options.visible = true;
             if (typeof options.width === 'undefined') {
                 options.width = bsw.popupCosySize().width;
@@ -346,8 +352,7 @@ $(function () {
                     var sets = res.sets;
                     var logic = sets.logic || sets;
                     _this4.showModal({
-                        centered: true,
-                        width: logic.width || data.width || bsw.popupCosySize().width,
+                        width: logic.width || data.width || undefined,
                         title: logic.title || data.title || bsw.lang.modal_title,
                         content: sets.content
                     });
@@ -403,10 +408,8 @@ $(function () {
             data.location = bsw.setParams({ iframe: true, repair: repair }, data.location);
 
             var options = {
-                visible: true,
                 width: data.width || size.width,
                 title: data.title === false ? data.title : data.title || bsw.lang.please_select,
-                centered: true,
                 content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
             };
             this.showModal(options);
@@ -500,7 +503,6 @@ $(function () {
             });
         },
         showIFrameInParent: function showIFrameInParent(data, element) {
-            this.modal.visible = false;
             this.showIFrame(data.response.sets, element);
         }
     }, bsw.config.method || {})).directive(Object.assign({

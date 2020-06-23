@@ -1455,13 +1455,13 @@ class FoundationAntD extends FoundationTools {
      */
     wxJsApiPay(config) {
         if (!window.WeixinJSBridge) {
-            console.log("Js api just work in WeiXin browser");
+            console.log("The api just work in WeChat browser.");
             return;
         }
         WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
                 console.log(result);
                 if (result.err_msg === "get_brand_wcpay_request:ok") {
-                    console.log('success');
+                    console.log('Success');
                 }
             }
         );

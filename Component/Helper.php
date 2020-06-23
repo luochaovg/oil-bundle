@@ -2811,7 +2811,7 @@ class Helper
     {
         $colors = [];
         if ($label) {
-            $colors = self::split(substr(md5($label), 6, 6));
+            $colors = self::split(substr(md5($label), 4, 6));
         } else {
             for ($i = 0; $i < 6; $i++) {
                 $colors[] = dechex(rand(0, 15));

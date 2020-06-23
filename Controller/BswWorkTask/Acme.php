@@ -17,6 +17,7 @@ use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
+use Mexitek\PHPColors\Color;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -151,6 +152,7 @@ class Acme extends BswBackendController
      * @param array $list
      *
      * @return array
+     * @throws
      */
     protected function taskTrailHandler(array $list): array
     {
@@ -158,7 +160,9 @@ class Acme extends BswBackendController
         foreach ($list as &$item) {
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
             $item['human'] = $cb->locale($lang)->diffForHumans();
-            $item['color'] = Helper::colorValue($item['name'], true);
+            $colorHex = Helper::colorValue($item['name'], true);
+            $color = new Color($colorHex);
+            $item['color'] = $color->isDark() ? $colorHex : "#{$color->darken()}";
             $item['name'] = current(explode(' ', $item['name']));
             $item['time'] = date('m/d H:i', strtotime($item['time']));
         }

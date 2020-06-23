@@ -253,7 +253,7 @@ div.ant-modal-mask {
   transition: margin 0.6s ease-out;
 }
 .ant-layout .ant-layout-content.iframe {
-  margin: 10px;
+  margin: 5px;
 }
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
   padding: 60px 40px;
@@ -506,7 +506,7 @@ div.modal-container-center div.ant-modal-body > div {
 }
 .modal-block-only {
   display: block;
-  margin: 10px auto;
+  margin: 0 auto;
 }
 .ant-spin-container:after {
   z-index: 998;
@@ -661,5 +661,47 @@ blockquote p {
 .bsw-tabs-fit .ant-tabs-bar {
   margin: 0;
   border-bottom: none;
+}
+.bsw-work-task-drawer .ant-drawer-body {
+  padding: 50px;
+}
+.bsw-work-task-drawer .ant-timeline-item {
+  padding: 0 0 40px;
+}
+.bsw-work-task-drawer .ant-timeline-item-content {
+  margin: 0 0 0 40px;
+}
+.bsw-work-task-drawer .ant-timeline-item-content > div {
+  margin-bottom: 5px;
+}
+.bsw-work-task-drawer .ant-timeline-item-tail {
+  border-left: 1px dotted #8ab9ff;
+}
+.bsw-work-task-drawer .footer-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #e8e8e8;
+  padding: 20px 30px;
+  text-align: right;
+  left: 0;
+  background: #fff;
+  border-radius: 0 0 4px 4px;
+}
+.bsw-work-task-week-report {
+  background: #fff;
+  padding: 80px 120px;
+}
+.bsw-work-task-week-report .ant-timeline-item {
+  padding: 0 0 50px;
+}
+.bsw-work-task-week-report .ant-timeline-item-content {
+  margin: 0 0 0 40px;
+}
+.bsw-work-task-week-report .ant-timeline-item-content > div {
+  margin-bottom: 5px;
+}
+.bsw-work-task-week-report .ant-timeline-item-tail {
+  border-left: 1px dotted #8ab9ff;
 }
 /*# sourceMappingURL=bsw.css.map */
