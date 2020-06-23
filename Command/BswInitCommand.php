@@ -19,14 +19,14 @@ class BswInitCommand extends Command implements CommandInterface
     use BswFoundation;
 
     /**
-     * @var
+     * @var string
      */
     protected $project;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $api = false;
+    protected $app;
 
     /**
      * @return array
@@ -133,7 +133,7 @@ class BswInitCommand extends Command implements CommandInterface
      */
     protected function fosRestCnf(): array
     {
-        if (!$this->api) {
+        if ($this->app !== Abs::APP_TYPE_API) {
             return ['fos_rest' => null];
         }
 
@@ -274,6 +274,10 @@ class BswInitCommand extends Command implements CommandInterface
      */
     protected function routesCnf(): array
     {
+        if ($this->app !== Abs::APP_TYPE_BACKEND) {
+            return [];
+        }
+
         return [
             'leon_bsw_bundle' => [
                 'resource' => '@LeonBswBundle/Controller',
@@ -387,7 +391,7 @@ class BswInitCommand extends Command implements CommandInterface
         $dumper = new Dumper();
 
         $this->project = $params['project'];
-        $this->api = $params['app'] === 'api';
+        $this->app = $params['app'];
 
         $doneFile = "{$project}/.done-init";
         if ($params['force'] !== 'yes' && file_exists($doneFile)) {
@@ -516,7 +520,7 @@ class BswInitCommand extends Command implements CommandInterface
                     new ArrayInput(
                         [
                             '--table'     => $table,
-                            '--app'       => $params['app'],
+                            '--app'       => $this->app,
                             '--cover'     => $params['scaffold-cover'] ?: 'no',
                             '--path'      => $params['scaffold-path'] ?: null,
                             '--namespace' => $params['scaffold-namespace'] ?: null,
