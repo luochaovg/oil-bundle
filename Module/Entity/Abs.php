@@ -61,6 +61,7 @@ class Abs
     const TAG_TIPS           = 'tips';
     const TAG_HISTORY        = 'history';
     const TAG_FALLBACK       = 'fallback';
+    const TAG_SESSION_LANG   = 'lang';
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
     const TAG_FILTER         = 'filter';

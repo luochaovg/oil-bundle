@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\EventListener;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Entity\Enum;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -13,11 +14,6 @@ class LocaleSubscriber implements EventSubscriberInterface
      * @var string
      */
     protected $defaultLocale;
-
-    /**
-     * @var string
-     */
-    protected $flag = 'lang';
 
     /**
      * LocaleSubscriber constructor.
@@ -37,8 +33,8 @@ class LocaleSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
-        $lang = $request->headers->get($this->flag);
-        $lang = $lang ?: $request->getSession()->get($this->flag);
+        $lang = $request->headers->get(Abs::TAG_SESSION_LANG);
+        $lang = $lang ?: $request->getSession()->get(Abs::TAG_SESSION_LANG);
 
         $locale = $lang ? str_replace('-', '_', strtolower($lang)) : false;
         $locale = Enum::LANG_TO_LOCALE[$locale] ?? false;

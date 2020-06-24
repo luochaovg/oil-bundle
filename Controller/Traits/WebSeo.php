@@ -13,6 +13,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 trait WebSeo
 {
     /**
+     * @var bool
+     */
+    protected $seoWithAppName = true;
+
+    /**
      * @var string
      */
     protected $seoTitle;
@@ -40,43 +45,53 @@ trait WebSeo
         $request = $this->request();
         $i18n = $request->getLocale();
 
+        $appName = null;
+        if ($this->seoWithAppName) {
+            $appName = $this->cnf->app_name ?: 'UnsetAppName';
+        }
+
         /**
          * Trans key
          *
+         * @param string $route
          * @param string $type
          *
          * @return string|null
          */
-        $get = function (string $type) use ($i18n) {
+        $get = function (string $route, string $type) use ($appName, $i18n, &$get) {
 
-            $key = "{$this->route}_{$type}";
+            $key = "{$route}_{$type}";
             $cnfKey = "{$key}_{$i18n}";
 
             $message = $this->cnf->{$cnfKey} ?? $this->seoLang($key);
             $message = ($message == $key) ? null : $message;
-            $appName = $this->cnf->app_name ?? 'UnsetAppName';
+            $message = $message ?: $get('acme', $type);
+
+            if ($route === 'acme') {
+                $appName = null;
+            }
 
             if ($message) {
                 switch ($type) {
                     case 't':
-                        $message = " - {$message}";
+                        $message = trim("{$appName} - {$message}", '- ');
                         break;
                     case 'd':
                     case 'k':
-                        $message = ", {$message}";
+                        $message = trim("{$appName}, {$message}", ', ');
                         break;
                 }
             }
 
-            return "{$appName}{$message}";
+            return $message;
         };
 
-        list($this->seoTitle, $this->seoDescription, $this->seoKeywords) = $this->caching(
+        [$this->seoTitle, $this->seoDescription, $this->seoKeywords] = $this->caching(
             function () use (&$get) {
                 return [
-                    $this->seoTitle ?: $get('t'),
-                    $this->seoDescription ?: $get('d'),
-                    $this->seoKeywords ?: $get('k'),
+                    $this->seoTitle ?: $get($this->route, 't'),
+                    $this->seoDescription ?: $get($this->route, 'd'),
+                    $this->seoKeywords ?: $get($this->route, 'k'),
                 ];
             },
             "seo.{$this->route}"
