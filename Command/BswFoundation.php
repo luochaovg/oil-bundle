@@ -145,14 +145,13 @@ trait BswFoundation
         $config = $this->web->caching(
             function () {
                 $config = $this->web->parameters('cnf');
-                $vgConfig = $this->web->parameters('vg_cnf');
                 try {
                     $dbConfig = $this->repo(BswConfig::class)->kvp(['value'], 'key');
                 } catch (Exception $e) {
                     $dbConfig = [];
                 }
 
-                return (object)array_merge($config, $vgConfig, $dbConfig);
+                return (object)array_merge($config, $dbConfig);
             }
         );
 

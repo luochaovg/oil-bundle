@@ -126,7 +126,7 @@ trait Third
      */
     public function wxOfficial(string $flag = 'default'): WxOfficial
     {
-        return WxFactory::officialAccount($this->parameters("wx_official_{$flag}"));
+        return WxFactory::officialAccount($this->parameter("wx_official_{$flag}"));
     }
 
     /**
@@ -139,7 +139,7 @@ trait Third
      */
     public function wxPayment(string $flag = 'default', bool $sandbox = false): WxPayment
     {
-        $config = $this->parameters("wx_payment_{$flag}");
+        $config = $this->parameter("wx_payment_{$flag}");
         $sandbox = $sandbox ? ['sandbox' => true] : [];
 
         return WxFactory::payment(array_merge($config, $sandbox));
@@ -155,7 +155,7 @@ trait Third
      */
     public function aliPayment(string $flag = 'default', bool $sandbox = false): Alipay
     {
-        $config = $this->parameters("ali_payment_{$flag}");
+        $config = $this->parameter("ali_payment_{$flag}");
         $sandbox = $sandbox ? ['mode' => 'dev'] : [];
 
         return WxAliPayment::alipay(array_merge($config, $sandbox));

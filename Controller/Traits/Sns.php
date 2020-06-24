@@ -207,15 +207,15 @@ trait Sns
         try {
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
-            $mail->Host = $this->parameters('smtp_host');
+            $mail->Host = $this->parameter('smtp_host');
             $mail->SMTPAuth = true;
-            $mail->Username = $this->parameters('smtp_sender');
-            $mail->Password = $this->parameters('smtp_secret');
+            $mail->Username = $this->parameter('smtp_sender');
+            $mail->Password = $this->parameter('smtp_secret');
             $mail->SMTPSecure = 'tls';
-            $mail->Port = $this->parameters('smtp_port');
+            $mail->Port = $this->parameter('smtp_port');
 
             // recipients
-            $mail->setFrom($this->parameters('smtp_sender'));
+            $mail->setFrom($this->parameter('smtp_sender'));
             $mail->addAddress($email);
 
             // content
