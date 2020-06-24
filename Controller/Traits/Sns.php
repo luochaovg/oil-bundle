@@ -205,23 +205,17 @@ trait Sns
         $mail = new PHPMailer(true);
 
         try {
-
-            $index = $this->parameter('smtp_index');
-            $host = $this->parameters('smtp_host');
-            $total = count($host);
-            $index = ($index < 0 || $index >= $total) ? rand(0, $total - 1) : $index;
-
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
-            $mail->Host = $this->parameters('smtp_host')[$index];
+            $mail->Host = $this->parameters('smtp_host');
             $mail->SMTPAuth = true;
-            $mail->Username = $this->parameters('smtp_sender')[$index];
-            $mail->Password = $this->parameters('smtp_secret')[$index];
+            $mail->Username = $this->parameters('smtp_sender');
+            $mail->Password = $this->parameters('smtp_secret');
             $mail->SMTPSecure = 'tls';
-            $mail->Port = $this->parameters('smtp_port')[$index];
+            $mail->Port = $this->parameters('smtp_port');
 
             // recipients
-            $mail->setFrom($this->parameters('smtp_sender')[$index]);
+            $mail->setFrom($this->parameters('smtp_sender'));
             $mail->addAddress($email);
 
             // content
