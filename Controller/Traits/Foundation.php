@@ -510,9 +510,13 @@ trait Foundation
             return $params;
         }
 
-        $bundleParams = (array)$this->parameter("{$bundle}_{$name}", null, $inController);
+        // null or array
+        $bundleParams = $this->parameter("{$bundle}_{$name}", null, $inController);
+        if (is_null($params) || !is_array($bundleParams)) {
+            return $bundleParams;
+        }
 
-        return Helper::merge($bundleParams, (array)$params);
+        return Helper::merge($bundleParams, $params);
     }
 
     /**

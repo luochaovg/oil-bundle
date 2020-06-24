@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\Traits;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request as SfRequest;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,9 +66,10 @@ trait WebSeo
 
             $message = $this->cnf->{$cnfKey} ?? $this->seoLang($key);
             $message = ($message == $key) ? null : $message;
-            $message = $message ?: $get('acme', $type);
 
-            if ($route === 'acme') {
+            if ($route !== Abs::TAG_SEO_ACME_KEY) {
+                $message = $message ?: $get(Abs::TAG_SEO_ACME_KEY, $type);
+            } else {
                 $appName = null;
             }
 

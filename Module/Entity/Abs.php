@@ -62,6 +62,7 @@ class Abs
     const TAG_HISTORY        = 'history';
     const TAG_FALLBACK       = 'fallback';
     const TAG_SESSION_LANG   = 'lang';
+    const TAG_SEO_ACME_KEY   = 'seo_acme';
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
     const TAG_FILTER         = 'filter';
