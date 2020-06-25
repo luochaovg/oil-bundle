@@ -365,8 +365,12 @@ class Module extends Bsw
          * text use render (that slot)
          */
 
-        if ($item['render']) {
-            return $this->parseSlot($item['render'], $field, [], Abs::SLOT_CONTAINER);
+        if ($render = $item['render']) {
+            if (Helper::strEndWith($render, Abs::TPL_SUFFIX)) {
+                $render = $this->web->renderPart($render);
+            }
+
+            return $this->parseSlot($render, $field, [], Abs::SLOT_CONTAINER);
         }
 
         return false;

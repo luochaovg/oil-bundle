@@ -14,6 +14,7 @@ class Abs
     const SORT              = 'sort';
     const ORDER             = 'order';
     const MIN_ADMIN_ROLE    = -10;
+    const HTML_SUFFIX       = '.html';
     const TPL_SUFFIX        = '.twig';
     const AUTO              = 'auto';
     const HEX_SIZE          = 1024;

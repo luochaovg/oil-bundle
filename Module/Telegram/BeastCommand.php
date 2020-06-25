@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Telegram;
 
 use Leon\BswBundle\Component\Rsa;
+use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\DomCrawler\Crawler;
 use Telegram\Bot\Actions;
 use Exception;
@@ -99,7 +100,7 @@ class BeastCommand extends Acme
 
             $actorListUrl = $classifyUrl;
             if ($actorList > 1) {
-                $actorListUrl = "{$actorListUrl}{$actorList}.html";
+                $actorListUrl = $actorListUrl . $actorList . Abs::HTML_SUFFIX;
             }
             $actorListHtml = file_get_contents($actorListUrl);
             $actorUrl = [];

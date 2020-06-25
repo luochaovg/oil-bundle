@@ -694,7 +694,7 @@ abstract class BswWebController extends AbstractController
         $suffix = Abs::TPL_SUFFIX;
 
         if (!$view) {
-            $suffix = ".html{$suffix}";
+            $suffix = Abs::HTML_SUFFIX . $suffix;
             // view handler
             if (method_exists($this, $fn = Abs::FN_BLANK_VIEW)) {
                 $view = $this->{$fn}($suffix);
@@ -765,7 +765,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return string
      */
-    public function renderPart(string $view, array $parameters): string
+    public function renderPart(string $view, array $parameters = []): string
     {
         $parameters['scaffold'] = $this->displayArgsScaffold([], true);
         $view = $this->viewHandler($parameters['scaffold'], $view);
