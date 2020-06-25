@@ -174,12 +174,12 @@ trait Grant
                 ->setRoute('app_bsw_admin_user_preview');
         };
 
-        [$disabled, $dress] = $this->disabled($args->id);
+        [$disabled, $danger] = $this->disabled($args->id);
 
         return $this->showPersistence(
             [
                 'id'           => $args->id,
-                'dress'        => $dress,
+                'danger'       => $danger,
                 'disabled'     => $disabled,
                 'disabledJson' => Helper::jsonStringify(array_keys($disabled)),
                 'handler'      => $grantRole,

@@ -28,8 +28,6 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const QUERY                  = 'Query';
-    const FILTER_FORM_SIZE       = 'FilterFormSize';
     const FILTER_ANNOTATION      = 'FilterAnnotation';
     const FILTER_ANNOTATION_ONLY = 'FilterAnnotationOnly';
     const FILTER_OPERATE         = 'FilterOperates';
@@ -433,7 +431,6 @@ class Module extends Bsw
     {
         $record = [];
         $format = [];
-        $size = $this->caller($this->method, self::FILTER_FORM_SIZE, Abs::T_STRING, Form::SIZE_MIDDLE);
 
         foreach ($filter as $key => $item) {
 
@@ -452,7 +449,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($size);
+                $form->setSize($this->input->filterFormSize);
             }
 
             /**
@@ -535,7 +532,7 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
             $operate->setHtmlType(Button::TYPE_SUBMIT);
-            $operate->setSize($size);
+            $operate->setSize($this->input->filterFormSize);
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 

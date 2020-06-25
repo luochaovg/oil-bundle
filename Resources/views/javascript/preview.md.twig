@@ -24,15 +24,8 @@ bsw.configure({
         previewSelectedChange(selectedRow) {
             this.previewSelectedRow = selectedRow;
         },
-        previewGetUrl(url, params={}) {
-            url = url || this.previewUrl;
-            return bsw.setParams(Object.assign({page: this.previewPageNumber}, params), url);
-        },
         previewPagination(page, pageSize) {
             this.pagination(this.previewGetUrl(), page, {{ jump }});
-        },
-        previewPaginationRefresh() {
-            this.pagination(this.previewGetUrl(), null, {{ jump }});
         },
         previewSortData(pagination, filters, sorter) {
             let url = this.previewGetUrl();
@@ -43,24 +36,7 @@ bsw.configure({
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
             this.pagination(url, null, {{ jump }});
-        },
-        previewImageChange() {
-            let that = this;
-            let doChecker = setInterval(() => checker(), 50);
-            let checker = function() {
-                let total = $('img').length;
-                let done = 0;
-                $('img').each(function() {
-                    done += (this.complete ? 1 : 0);
-                });
-                let tmp = that.previewColumns[0].fixed;
-                that.previewColumns[0].fixed = !tmp;
-                that.previewColumns[0].fixed = tmp;
-                if ((done >= total) || total === 0) {
-                    clearInterval(doChecker);
-                }
-            }
-        },
+        }
     },
     logic: {
         previewResize(v) {
@@ -98,8 +74,7 @@ bsw.configure({
                 return;
             }
             setInterval(function() {
-                v.noLoadingOnce = true;
-                v.previewPaginationRefresh();
+                v.previewPaginationRefresh(false);
             }, v.previewDynamicRefresh * 1000);
         }
     }

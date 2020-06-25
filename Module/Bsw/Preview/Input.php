@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Module\Bsw\Preview;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Form;
 
 class Input extends ArgsInput
 {
@@ -47,4 +48,9 @@ class Input extends ArgsInput
      * @var string
      */
     public $clsName;
+
+    /**
+     * @var string
+     */
+    public $recordOperatesSize = Form::SIZE_SMALL;
 }

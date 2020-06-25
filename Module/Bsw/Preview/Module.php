@@ -32,13 +32,15 @@ class Module extends Bsw
      */
     const BEFORE_HOOK   = 'BeforeHook';
     const AFTER_HOOK    = 'AfterHook';
-    const QUERY         = 'Query';
     const CHOICE        = 'Choice';
     const BEFORE_RENDER = 'BeforeRender';
     const CHARM         = 'Charm';
-    const SCROLL        = 'Scroll';
     const OPERATES      = 'RecordOperates';
-    const OPERATES_SIZE = 'RecordOperatesSize';
+
+    /**
+     * @const string
+     */
+    const DRESS_DEFAULT = 'default';
 
     /**
      * @var array
@@ -276,10 +278,28 @@ class Module extends Bsw
         }
 
         /**
+         * dress handler
+         */
+
+        if (isset($item['dress']) && !$item['status']) {
+            if (is_string($item['dress']) && $item['dress'] === self::DRESS_DEFAULT) {
+                $item['dress'] = '';
+            }
+            if (is_array($item['dress'])) {
+                $item['dress'] = array_filter(
+                    $item['dress'],
+                    function ($v) {
+                        return !(empty($v) || ($v === self::DRESS_DEFAULT));
+                    }
+                );
+            }
+        }
+
+        /**
          * text use dress (dress type be string)
          */
 
-        if ($item['dress'] && !$item['enum']) {
+        if (isset($item['dress']) && !$item['enum']) {
 
             if (!is_string($item['dress'])) {
                 $exception = $this->getAnnotationException($field);
@@ -288,20 +308,24 @@ class Module extends Bsw
                 );
             }
 
-            return $this->parseSlot($item['dress'], $field, [], Abs::SLOT_CONTAINER);
+            $var = [
+                'dress' => $item['dress'],
+            ];
+
+            return $this->parseSlot(Abs::TPL_SCALAR_DRESS, $field, $var, Abs::SLOT_CONTAINER);
         }
 
         /**
          * choice list (enum) use dress (dress type be sting or array)
          */
 
-        if ($item['dress'] && $item['enum']) {
+        if (isset($item['dress']) && $item['enum']) {
 
             $dressArray = false;
             if (is_array($item['dress'])) {
+                $dressArray = true;
                 $dressStringify = Helper::jsonStringify($item['dress']);
                 $item['dress'] = "{$dressStringify}[value]";
-                $dressArray = true;
             }
 
             $enumStringify = $this->web->enumLang($item['enum'], true);
@@ -313,9 +337,9 @@ class Module extends Bsw
             ];
 
             if ($item['status']) {
-                $tpl = Abs::TPL_ENUM_STATE;
+                $tpl = Abs::TPL_ENUM_STATUS_DRESS;
             } else {
-                $tpl = $dressArray ? Abs::TPL_ENUM_1_DRESS : Abs::TPL_ENUM_2_DRESS;
+                $tpl = $dressArray ? Abs::TPL_ENUM_MANY_DRESS : Abs::TPL_ENUM_ONE_DRESS;
                 $var['value'] = "{{ {$enumStringify}[value] }}";
             }
 
@@ -326,7 +350,7 @@ class Module extends Bsw
          * choice list (enum) without dress
          */
 
-        if (!$item['dress'] && $item['enum']) {
+        if (!isset($item['dress']) && $item['enum']) {
 
             $enumStringify = $this->web->enumLang($item['enum'], true);
             $var = [
@@ -334,11 +358,11 @@ class Module extends Bsw
                 'value'               => "{{ {$enumStringify}[value] }}",
             ];
 
-            return $this->parseSlot(Abs::TPL_ENUM_0_DRESS, $field, $var, Abs::SLOT_CONTAINER);
+            return $this->parseSlot(Abs::TPL_ENUM_WITHOUT_DRESS, $field, $var, Abs::SLOT_CONTAINER);
         }
 
         /**
-         * test use render
+         * text use render (that slot)
          */
 
         if ($item['render']) {
@@ -438,7 +462,7 @@ class Module extends Bsw
          */
 
         $scrollX = 0;
-        $hooks = $columns = $dress = [];
+        $hooks = $columns = $slots = [];
 
         foreach ($previewAnnotation as $field => $item) {
 
@@ -492,14 +516,14 @@ class Module extends Bsw
             }
 
             /**
-             * dress handler
+             * slot handler
              */
 
             $slot = $this->createSlot($field, $item);
 
             if ($slot !== false) {
                 $column['scopedSlots'] = ['customRender' => "__{$field}"];
-                $dress[$field] = $slot;
+                $slots[$field] = $slot;
             }
 
             /**
@@ -507,7 +531,7 @@ class Module extends Bsw
              */
 
             if ($mixed = $mixedAnnotation[$field] ?? null) {
-                foreach (['order', 'sort'] as $keyword) {
+                foreach ([Abs::ORDER, Abs::SORT] as $keyword) {
 
                     if (!$mixed[$keyword]) {
                         continue;
@@ -522,7 +546,7 @@ class Module extends Bsw
         }
 
         $output->scrollX = $scrollX;
-        $output->dress = $dress;
+        $output->slots = $slots;
         $output->columns = $columns;
 
         return [$hooks, $previewAnnotation, $mixedAnnotation];
@@ -789,7 +813,6 @@ class Module extends Bsw
 
             $item[$operate] = null;
             $maxButtons = max($maxButtons, count($buttons));
-            $size = $this->caller($this->method, self::OPERATES_SIZE, Abs::T_STRING, Form::SIZE_SMALL);
 
             foreach ($buttons as $index => $button) {
 
@@ -803,7 +826,7 @@ class Module extends Bsw
                  * @var Button $button
                  */
 
-                $button->setSize($size);
+                $button->setSize($this->input->recordOperatesSize);
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
@@ -815,7 +838,7 @@ class Module extends Bsw
             $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";
 
             /**
-             * field dress
+             * field slot
              */
 
             foreach ($item as $field => &$value) {
@@ -847,12 +870,12 @@ class Module extends Bsw
                     throw new ModuleException("{$this->method}{$charm}() should return scalar or " . Charm::class);
                 }
 
-                $output->dress[$field] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $field);
+                $output->slots[$field] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $field);
             }
         }
 
         /**
-         * dress & column for operate
+         * slots & column for operate
          */
 
         if ($maxButtons > 0) {
@@ -876,7 +899,7 @@ class Module extends Bsw
                 $output->columns[$operate] ?? []
             );
 
-            $output->dress[$operate] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $operate);
+            $output->slots[$operate] = $this->parseSlot(Abs::SLOT_HTML_CONTAINER, $operate);
 
         } else {
             unset($output->columns[$operate]);
@@ -951,7 +974,7 @@ class Module extends Bsw
 
         $output->list = $list;
         $output->listJson = Helper::jsonStringify($output->list, '{}');
-        $output->dressJson = Helper::jsonStringify($output->dress, '{}');
+        $output->slotsJson = Helper::jsonStringify($output->slots, '{}');
         $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
         $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);

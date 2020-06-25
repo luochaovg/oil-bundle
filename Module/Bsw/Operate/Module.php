@@ -23,9 +23,7 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const OPERATES          = 'Operates';
-    const OPERATES_SIZE     = 'OperatesSize';
-    const OPERATES_POSITION = 'OperatesPosition';
+    const OPERATES = 'Operates';
 
     /**
      * @return bool
@@ -100,7 +98,6 @@ class Module extends Bsw
 
         $nowScene = $this->input->iframe ? Button::SCENE_IFRAME : Button::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
-        $size = $this->caller($this->method, self::OPERATES_SIZE, Abs::T_STRING, Form::SIZE_MIDDLE);
 
         // buttons handler
         foreach ($buttons as $button) {
@@ -114,7 +111,7 @@ class Module extends Bsw
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be {$buttonCls}[]");
             }
 
-            $button->setSize($size);
+            $button->setSize($this->input->operatesSize);
             $scene = $button->getScene();
             if ($scene === Button::SCENE_COMMON) {
                 $scene = $nowScene;
@@ -140,12 +137,9 @@ class Module extends Bsw
             $output->position = Abs::POS_BOTTOM;
         }
 
-        $output->position = $this->caller(
-            $this->method,
-            self::OPERATES_POSITION,
-            Abs::T_STRING,
-            $output->position
-        );
+        if ($this->input->position) {
+            $output->position = $this->input->position;
+        }
 
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),

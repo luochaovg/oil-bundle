@@ -103,6 +103,11 @@ trait Weight
             return $args;
         }
 
-        return $this->showPersistence(['id' => $id]);
+        return $this->showPersistence(
+            [
+                'id'   => $id,
+                'sets' => ['function' => 'refreshPreview'],
+            ]
+        );
     }
 }

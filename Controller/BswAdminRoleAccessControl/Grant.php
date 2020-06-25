@@ -141,16 +141,16 @@ trait Grant
                 ->setRoute('app_bsw_admin_role_preview');
         };
 
-        $dress = $this->getAccessOfAll();
-        $dress = Helper::arrayColumn($dress, ['class', 'title']);
-        $dress = array_filter($dress);
+        $danger = $this->getAccessOfAll();
+        $danger = Helper::arrayColumn($danger, ['class', 'title']);
+        $danger = array_filter($danger);
 
         $disabled = [];
 
         return $this->showPersistence(
             [
                 'id'           => $args->id,
-                'dress'        => $dress,
+                'danger'       => $danger,
                 'disabled'     => $disabled,
                 'disabledJson' => Helper::jsonStringify(array_keys($disabled)),
                 'handler'      => $grantRole,

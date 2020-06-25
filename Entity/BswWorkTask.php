@@ -46,7 +46,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=64, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=3, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=3)
      * @BswAnnotation\Persistence(sort=3)
      * @BswAnnotation\Filter(sort=3, showPriority=10)
      */

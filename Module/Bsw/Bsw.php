@@ -16,6 +16,7 @@ abstract class Bsw
      * @const string
      */
     const ENTITY             = 'Entity';
+    const QUERY              = 'Query';
     const ANNOTATION         = 'Annotation';
     const ANNOTATION_ONLY    = 'AnnotationOnly';
     const TAILOR             = 'Tailor';
@@ -325,6 +326,9 @@ abstract class Bsw
                 'NOT_SET',
                 'NOT_FILE',
                 'SECRET',
+                'UNKNOWN',
+                'UNALLOCATED',
+                'COMMON',
                 'TPL_',
                 'SLOT_',
             ];
@@ -430,9 +434,9 @@ abstract class Bsw
     {
         $output = new ArgsOutput();
         $output->message = (new Message($message))
-            ->setCode($code)
             ->setClassify(Abs::TAG_CLASSIFY_ERROR)
             ->setRoute($route)
+            ->setCode($code)
             ->setArgs($args);
 
         return $output;
@@ -442,17 +446,19 @@ abstract class Bsw
      * Show success
      *
      * @param string $message
+     * @param array  $sets
      * @param array  $args
      * @param string $route
      *
      * @return ArgsOutput
      */
-    public function showSuccess(string $message, array $args = [], ?string $route = ''): ArgsOutput
+    public function showSuccess(string $message, array $sets = [], array $args = [], ?string $route = ''): ArgsOutput
     {
         $output = new ArgsOutput();
         $output->message = (new Message($message))
             ->setClassify(Abs::TAG_CLASSIFY_SUCCESS)
             ->setRoute($route)
+            ->setSets($sets)
             ->setArgs($args);
 
         return $output;

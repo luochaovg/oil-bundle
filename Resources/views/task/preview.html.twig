@@ -1,36 +1,35 @@
 {% extends 'layout/preview.html.twig' %}
 
 {% block pageAfter %}
-  {% for drawer in preview.list %}
-    <a-drawer
-      title="{{ 'Trail'|trans({}, 'twig') }}"
-      :width="720"
-      placement="left"
-      :closable="false"
-      :visible="trailDrawer[{{ drawer.id }}]"
-      @close="trailDrawerClose"
-      wrap-class-name="bsw-work-task-drawer"
-    >
-      <a-timeline>
-        {% for item in drawer.trailList %}
-          <a-timeline-item>
-            <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
-            <div>{{ item.time }} <span :style={color:"{{ item.reliable ? 'rgba(0,128,0,.7)' : '#999' }}"}>({{ item.human }})</span></div>
-            <pre class='bsw-pre bsw-long-text'>{{ item.trail }}</pre>
-          </a-timeline-item>
-        {% endfor %}
-        {% if drawer.state in [1,2] %}
-          <a-timeline-item>
-            <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>
-            Progressing..
-          </a-timeline-item>
-        {% endif %}
-      </a-timeline>
-      <div class="footer-bar">
-        <a-button type="primary" @click="trailDrawerClose">{{ 'I got it'|trans({}, 'twig') }}</a-button>
-      </div>
-    </a-drawer>
-  {% endfor %}
+  <a-drawer
+    v-for="drawer in previewList"
+    :key="drawer.id"
+    title="{{ 'Trail'|trans({}, 'twig') }}"
+    :width="720"
+    placement="left"
+    :closable="false"
+    :visible="trailDrawer[drawer.id]"
+    @close="trailDrawerClose"
+    wrap-class-name="bsw-work-task-drawer"
+  >
+    <a-timeline>
+      <a-timeline-item v-for="item in drawer.trailList" :key="item.id">
+        <a-avatar slot="dot" size="large" :style={backgroundColor:item.color}>{{ '{{ item.name }}' }}</a-avatar>
+        <div>
+          {{ '{{ item.time }}' }}
+          <span :style={color:item.reliable?'rgba(0,128,0,.7)':'#999'}>({{ '{{ item.human }}' }})</span>
+        </div>
+        <pre class='bsw-pre bsw-long-text'>{{ '{{ item.trail }}' }}</pre>
+      </a-timeline-item>
+      <a-timeline-item v-if="drawer.state in [1,2]">
+        <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>
+        Progressing..
+      </a-timeline-item>
+    </a-timeline>
+    <div class="footer-bar">
+      <a-button type="primary" @click="trailDrawerClose">{{ 'I got it'|trans({}, 'twig') }}</a-button>
+    </div>
+  </a-drawer>
 {% endblock %}
 
 {% block javascriptAfter %}

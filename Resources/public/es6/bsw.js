@@ -106,6 +106,34 @@ $(function () {
             this.submitFormMethod = $(element).attr('bsw-method');
         },
 
+        previewGetUrl(url, params = {}) {
+            url = url || this.previewUrl;
+            return bsw.setParams(Object.assign({page: this.previewPageNumber}, params), url);
+        },
+
+        previewPaginationRefresh(jump) {
+            this.noLoadingOnce = true;
+            this.pagination(this.previewGetUrl(), null, jump);
+        },
+
+        previewImageChange() {
+            let that = this;
+            let doChecker = setInterval(() => checker(), 50);
+            let checker = function() {
+                let img = $('img');
+                let done = 0;
+                img.each(function() {
+                    done += (this.complete ? 1 : 0);
+                });
+                let tmp = that.previewColumns[0].fixed;
+                that.previewColumns[0].fixed = !tmp;
+                that.previewColumns[0].fixed = tmp;
+                if ((done >= img.length) || img.length === 0) {
+                    clearInterval(doChecker);
+                }
+            }
+        },
+
         pagination(url, page, jump = false) {
             let that = this;
             if (page) {
@@ -185,7 +213,7 @@ $(function () {
             if (typeof effect.page && effect.page > 1) {
                 jump = true;
             }
-            this.pagination(url, 0, jump);
+            this.pagination(url, null, jump);
         },
 
         exportFilterForm(values) {
@@ -359,7 +387,7 @@ $(function () {
             bsw.request(data.location).then((res) => {
                 bsw.response(res).then(() => {
                     if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.previewPaginationRefresh();
+                        that.previewPaginationRefresh(false);
                     }
                 }).catch((reason => {
                     console.warn(reason);
@@ -500,6 +528,11 @@ $(function () {
 
         showIFrameInParent(data, element) {
             this.showIFrame(data.response.sets, element);
+        },
+
+        refreshPreviewInParent(data, element) {
+            this.handleResponseInParent(data, element);
+            this.previewPaginationRefresh(false);
         },
 
     }, bsw.config.method || {})).directive(Object.assign({

@@ -511,26 +511,28 @@ class Abs
     const SLOT_CONTAINER      = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'>{tpl}</div>";
     const SLOT_HTML_CONTAINER = "<div class='bsw-td-{field}' slot='{uuid}' slot-scope='{Abs::SLOT_VARIABLES}'><div v-html='{:value}'></div></div>";
 
-    const TPL_NIL        = "<div class='bsw-disable'>{Abs::NIL}</div>";
-    const TPL_ELSE_NIL   = "<div v-else>{Abs::TPL_NIL}</div>";
-    const TPL_DIRTY      = "<div class='bsw-disable'>{Abs::DIRTY}</div>";
-    const TPL_ELSE_DIRTY = "<div v-else>{Abs::TPL_DIRTY}</div>";
-    const TPL_NOT_SET    = "<div class='bsw-disable'>{Abs::NOT_SET}</div>";
-    const TPL_NOT_FILE   = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
+    const TPL_NIL              = "<div class='bsw-disable'>{Abs::NIL}</div>";
+    const TPL_ELSE_NIL         = "<div v-else>{Abs::TPL_NIL}</div>";
+    const TPL_DIRTY            = "<div class='bsw-disable'>{Abs::DIRTY}</div>";
+    const TPL_ELSE_DIRTY       = "<div v-else>{Abs::TPL_DIRTY}</div>";
+    const TPL_NOT_SET          = "<div class='bsw-disable'>{Abs::NOT_SET}</div>";
+    const TPL_ELSE_NOT_SET     = "<div v-else>{Abs::TPL_NOT_SET}</div>";
+    const TPL_NOT_FILE         = "<div class='bsw-disable'>{Abs::NOT_FILE}</div>";
+    const TPL_ELSE_NOT_FILE    = "<div v-else>{Abs::TPL_NOT_FILE}</div>";
+    const TPL_SECRET           = "<div class='bsw-disable'>{Abs::SECRET}</div>";
+    const TPL_ELSE_SECRET      = "<div v-else>{Abs::TPL_SECRET}</div>";
+    const TPL_UNKNOWN          = "<div class='bsw-disable'>{Abs::UNKNOWN}</div>";
+    const TPL_ELSE_UNKNOWN     = "<div v-else>{Abs::TPL_UNKNOWN}</div>";
+    const TPL_UNALLOCATED      = "<div class='bsw-disable'>{Abs::UNALLOCATED}</div>";
+    const TPL_ELSE_UNALLOCATED = "<div v-else>{Abs::TPL_UNALLOCATED}</div>";
+    const TPL_COMMON           = "<div class='bsw-disable'>{Abs::COMMON}</div>";
+    const TPL_ELSE_COMMON      = "<div v-else>{Abs::TPL_COMMON}</div>";
 
-    const TPL_DRESS        = "<a-tag color='{dress}'>{value}</a-tag>";
-    const TPL_DRESS_PINK   = "<a-tag color='pink'>{value}</a-tag>";
-    const TPL_DRESS_RED    = "<a-tag color='red'>{value}</a-tag>";
-    const TPL_DRESS_ORANGE = "<a-tag color='orange'>{value}</a-tag>";
-    const TPL_DRESS_GREEN  = "<a-tag color='green'>{value}</a-tag>";
-    const TPL_DRESS_CYAN   = "<a-tag color='cyan'>{value}</a-tag>";
-    const TPL_DRESS_BLUE   = "<a-tag color='blue'>{value}</a-tag>";
-    const TPL_DRESS_PURPLE = "<a-tag color='purple'>{value}</a-tag>";
-
-    const TPL_ENUM_0_DRESS = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_DIRTY}";
-    const TPL_ENUM_1_DRESS = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' :color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
-    const TPL_ENUM_2_DRESS = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
-    const TPL_ENUM_STATE   = "<a-badge v-if='{Abs::SLOT_NOT_BLANK}' :status='{dress}' :text='{enum}'></a-badge>{Abs::TPL_ELSE_DIRTY}";
+    const TPL_SCALAR_DRESS       = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_NIL}";
+    const TPL_ENUM_WITHOUT_DRESS = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_DIRTY}";
+    const TPL_ENUM_ONE_DRESS     = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
+    const TPL_ENUM_MANY_DRESS    = "<a-tag v-if='{Abs::SLOT_NOT_BLANK}' :color='{dress}'>{value}</a-tag>{Abs::TPL_ELSE_DIRTY}";
+    const TPL_ENUM_STATUS_DRESS  = "<a-badge v-if='{Abs::SLOT_NOT_BLANK}' :status='{dress}' :text='{enum}'></a-badge>{Abs::TPL_ELSE_DIRTY}";
 
     const RENDER_CODE          = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_CODE_FULL     = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code full bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";

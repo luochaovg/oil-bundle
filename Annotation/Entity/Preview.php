@@ -50,13 +50,18 @@ class Preview extends Annotation
     public $width;
 
     /**
-     * @var array|string (Priority over render)
+     * @var bool (Priority first)
+     */
+    public $html = false;
+
+    /**
+     * @var array|string (Priority second)
      * @license Enum{"pink", "red", "orange", "green", "cyan", "blue", "purple", "#color"}
      */
     public $dress;
 
     /**
-     * @var string For vue-slot (Lowest priority)
+     * @var string For vue-slot (Priority latest)
      */
     public $render;
 
@@ -79,9 +84,4 @@ class Preview extends Annotation
      * @var string|array|callable
      */
     public $enumHandler;
-
-    /**
-     * @var bool
-     */
-    public $html = false;
 }

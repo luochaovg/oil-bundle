@@ -40,7 +40,6 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const FORM_SIZE          = 'FormSize';
     const BEFORE_HOOK        = 'BeforeHook';
     const AFTER_HOOK         = 'AfterHook';
     const BEFORE_RENDER      = 'BeforeRender';
@@ -597,7 +596,6 @@ class Module extends Bsw
 
         $_record = [];
         $format = [];
-        $size = $this->caller($this->method, self::FORM_SIZE, Abs::T_STRING, Form::SIZE_LARGE);
 
         foreach ($persistAnnotation as $field => $item) {
 
@@ -630,7 +628,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($size);
+                $form->setSize($this->input->formSize);
             }
 
             /**
@@ -1032,12 +1030,13 @@ class Module extends Bsw
 
         return $this->showSuccess(
             $newly ? $this->input->i18nNewly : $this->input->i18nModify,
+            $this->input->sets,
             [
                 '{{ result }}' => $result,
                 '{{ before }}' => $before,
                 '{{ after }}'  => $after,
             ],
-            $this->input->nextRoute
+            isset($this->input->sets['function']) ? null : $this->input->nextRoute
         );
     }
 

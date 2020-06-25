@@ -31,12 +31,12 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
-    public $dress = [];
+    public $slots = [];
 
     /**
      * @var string
      */
-    public $dressJson;
+    public $slotsJson;
 
     /**
      * @var bool

@@ -12,7 +12,7 @@
     >
       {% set totalColumn = 24 %}
       {% set labelColumn = 4 %}
-      {% set dress = logic.dress %}
+      {% set danger = logic.danger %}
       {% set realColumn = (totalColumn - labelColumn) %}
       <a-form-item
         :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
@@ -45,14 +45,14 @@
             <a-row>
               {% for value, label in item.type.enum %}
                 {% set disabled = attribute(logic.disabled, value) ?? false %}
-                {% set realDress = attribute(dress, value) ?? null %}
+                {% set _danger = attribute(danger, value) ?? null %}
                 <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
-                  {% if realDress is not null %}
+                  {% if _danger is not null %}
                     <a-popover overlay-class-name="bsw-popover">
-                      <template slot="content">{{ realDress.title|trans({}, 'twig') }}</template>
+                      <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
-                        class="{{ realDress.class }}"
+                        class="{{ _danger.class }}"
                         value="{{ value }}">
                         {{ label }}
                       </a-checkbox>

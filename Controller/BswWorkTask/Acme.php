@@ -123,7 +123,7 @@ class Acme extends BswBackendController
             [
                 'limit'  => 0,
                 'alias'  => 't',
-                'select' => ['u.name', 't.reliable', 't.trail', 't.addTime AS time'],
+                'select' => ['t.id', 'u.name', 't.reliable', 't.trail', 't.addTime AS time'],
                 'join'   => [
                     'u' => [
                         'entity' => BswAdminUser::class,

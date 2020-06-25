@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Persistence;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
+use Leon\BswBundle\Module\Form\Form;
 
 class Input extends ArgsInput
 {
@@ -45,4 +46,14 @@ class Input extends ArgsInput
      * @var string
      */
     public $nextRoute = '';
+
+    /**
+     * @var string
+     */
+    public $formSize = Form::SIZE_LARGE;
+
+    /**
+     * @var array
+     */
+    public $sets = [];
 }

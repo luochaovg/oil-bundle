@@ -80,7 +80,6 @@ trait Preview
     public function previewQuery(): array
     {
         return [
-            'limit'  => 50,
             'select' => ['bwt'],
             'join'   => [
                 'bau' => [
@@ -89,7 +88,7 @@ trait Preview
                     'right'  => ['bau.id'],
                 ],
             ],
-            'sort'   => ['bwt.state' => Abs::SORT_ASC],
+            'sort'   => ['bwt.id' => Abs::SORT_DESC],
         ];
     }
 
@@ -304,6 +303,7 @@ trait Preview
 
         return $this->showPreview(
             [
+                'dynamic'     => 10,
                 'filterJump'  => true,
                 'pageJump'    => true,
                 'afterModule' => [
