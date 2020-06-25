@@ -386,8 +386,8 @@ abstract class Bsw
     /**
      * Enum handler
      *
-     * @param array  $item
-     * @param array  $args
+     * @param array $item
+     * @param array $args
      *
      * @return array
      */
@@ -420,15 +420,17 @@ abstract class Bsw
      * Show error
      *
      * @param string $message
+     * @param int    $code
      * @param array  $args
      * @param string $route
      *
      * @return ArgsOutput
      */
-    public function showError(string $message, array $args = [], string $route = null): ArgsOutput
+    public function showError(string $message, int $code = 0, array $args = [], string $route = null): ArgsOutput
     {
         $output = new ArgsOutput();
         $output->message = (new Message($message))
+            ->setCode($code)
             ->setClassify(Abs::TAG_CLASSIFY_ERROR)
             ->setRoute($route)
             ->setArgs($args);

@@ -90,7 +90,6 @@ abstract class BswWebController extends AbstractController
             $url = $crumb->getRoute();
         }
 
-        $needArgs = true;
         $access = array_filter($this->access);
 
         // from default route
@@ -112,12 +111,8 @@ abstract class BswWebController extends AbstractController
             }
         }
 
-        if ($this->route == $url) {
-            $needArgs = false;
-        }
-
         // args
-        if (!empty($url) && $needArgs) {
+        if (!empty($url)) {
             $args = (array)$this->sessionArrayGet(Abs::TAG_HISTORY, $url, true);
         }
 
@@ -257,11 +252,9 @@ abstract class BswWebController extends AbstractController
             $this->addFlash(Abs::TAG_FALLBACK, $this->currentUrl());
         }
 
-        // redirect url
-        $url = $url ?? $this->responseUrlMap($code4logic);
-
         $message = (new Message())
             ->setMessage("[{$code4logic}] {$tiny}")
+            ->setCode($code4logic)
             ->setRoute($url)
             ->setArgs($params)
             ->setClassify(Abs::TAG_CLASSIFY_ERROR);
@@ -283,7 +276,13 @@ abstract class BswWebController extends AbstractController
 
         $content = $this->messageLang($message->getMessage(), $trans);
         $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
-        $url = $this->redirectUrl($message->getRoute(), $params);
+
+        // redirect url
+        $url = $message->getRoute();
+        if ($code = $message->getCode()) {
+            $url = $this->responseUrlMap($code);
+        }
+        $url = $this->redirectUrl($url, $params);
 
         return $this->redirect($url);
     }

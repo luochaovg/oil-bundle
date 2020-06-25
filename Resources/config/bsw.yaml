@@ -236,7 +236,7 @@ parameters:
         app_bsw_work_task_progress: app_bsw_work_task_preview
 
     bsw_crumbs_keyword_to_icon_map:
-        home: b:icon-rest
+        home: a:home
         preview: b:icon-form
         persistence: b:icon-edit
         away: b:icon-delete

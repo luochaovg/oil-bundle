@@ -1089,16 +1089,16 @@ class Module extends Bsw
                 );
             }
 
-            $message = call_user_func_array(
+            $result = call_user_func_array(
                 $this->input->handler,
                 [$this->input->submit, $_persistAnnotation]
             );
 
-            if ($message instanceof Error) {
-                return $this->showError($message->tiny());
+            if ($result instanceof Error) {
+                return $this->showError($result->tiny());
             }
 
-            return $this->showMessage($message);
+            return $this->showMessage($result);
         }
 
         /**

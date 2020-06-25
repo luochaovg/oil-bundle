@@ -10,6 +10,7 @@ use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Message;
+use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\FilterException;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -925,7 +926,7 @@ class Module extends Bsw
         try {
             $this->getQueryOptions();
         } catch (FilterException $e) {
-            return $this->showError($e->getMessage());
+            return $this->showError($e->getMessage(), ErrorParameter::CODE);
         }
 
         [$hooks, $previewAnnotation, $mixedAnnotation] = $this->handleAnnotation($output);
@@ -937,10 +938,6 @@ class Module extends Bsw
 
         $list = $this->handlePreviewData($list, $hooks, $previewAnnotation, $output);
         $this->correctPreviewColumn($list, $output);
-
-        /**
-         * @var Choice $choice
-         */
 
         $choice = $this->input->choice ?? new Choice();
         $arguments = $this->arguments(compact('choice'));

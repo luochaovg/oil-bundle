@@ -32,7 +32,7 @@ bsw.configure({
             this.pagination(this.previewGetUrl(), page, {{ jump }});
         },
         previewPaginationRefresh() {
-            this.pagination(this.previewGetUrl(), 0, {{ jump }});
+            this.pagination(this.previewGetUrl(), null, {{ jump }});
         },
         previewSortData(pagination, filters, sorter) {
             let url = this.previewGetUrl();
@@ -42,7 +42,7 @@ bsw.configure({
                 key = `sequence[${key}]`;
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
-            this.pagination(url, 0, {{ jump }});
+            this.pagination(url, null, {{ jump }});
         },
         previewImageChange() {
             let that = this;
