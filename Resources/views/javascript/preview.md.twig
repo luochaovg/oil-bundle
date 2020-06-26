@@ -36,7 +36,10 @@ bsw.configure({
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
             this.pagination(url, null, {{ jump }});
-        }
+        },
+        previewRowClsName(record, index) {
+            return record.rowClsName;
+        },
     },
     logic: {
         previewResize(v) {

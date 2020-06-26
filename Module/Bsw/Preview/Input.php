@@ -47,7 +47,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $clsName;
+    public $clsName = 'previewRowClsName';
 
     /**
      * @var string
