@@ -43,6 +43,7 @@ trait WeekReport
     public function weekReportFilterAnnotationOnly(): array
     {
         [$team] = $this->workTaskTeam();
+        $teamValue = $team ? "{$team}-{$this->usr('usr_uid')}" : null;
 
         return [
             'team' => [
@@ -52,6 +53,7 @@ trait WeekReport
                 'typeArgs'   => ['treeData' => $this->getTeamMemberTree($team), 'expandAll' => true],
                 'filter'     => TeamMember::class,
                 'filterArgs' => ['alias' => $this->weekReportAlias],
+                'value'      => $teamValue,
                 'column'     => 3,
             ],
             'week' => [
@@ -60,6 +62,7 @@ trait WeekReport
                 'type'       => Week::class,
                 'filter'     => Between::class,
                 'filterArgs' => ['weekValue' => true, 'carryTime' => false],
+                'value'      => date('Y-W'),
             ],
         ];
     }

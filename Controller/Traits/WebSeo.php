@@ -73,7 +73,7 @@ trait WebSeo
                 $appName = null;
             }
 
-            if ($message) {
+            if ($appName || $message) {
                 switch ($type) {
                     case 't':
                         $message = trim("{$appName} - {$message}", '- ');

@@ -14,7 +14,9 @@ use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Filter\Entity\Senior;
 use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
+use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Form\Entity\Input as FormInput;
@@ -458,8 +460,13 @@ class Module extends Bsw
 
             $item = $this->handleForEnum($item, ['scene' => $this->input->scene]);
 
-            $enumClass = Select::class;
-            if (get_class($form) === $enumClass) {
+            $enumClass = [
+                Select::class,
+                Radio::class,
+                Checkbox::class,
+            ];
+
+            if (in_array(get_class($form), $enumClass)) {
                 if (!is_array($item['enum'])) {
                     $exception = $this->getAnnotationException($key);
                     throw new AnnotationException(
