@@ -46,7 +46,6 @@ trait Preview
     public function previewFilterAnnotation(): array
     {
         [$team] = $this->workTaskTeam();
-        $teamValue = $team ? "{$team}-{$this->usr('usr_uid')}" : null;
 
         return [
             'userId' => false,
@@ -57,7 +56,7 @@ trait Preview
                 'typeArgs'   => ['treeData' => $this->getTeamMemberTree($team), 'expandAll' => true],
                 'filter'     => TeamMember::class,
                 'filterArgs' => ['alias' => $this->previewAlias],
-                'value'      => $teamValue,
+                'value'      => $this->teamDefaultValue(),
                 'column'     => 3,
                 'sort'       => 1,
             ],

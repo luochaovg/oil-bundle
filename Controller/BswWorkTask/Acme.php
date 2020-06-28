@@ -88,6 +88,25 @@ class Acme extends BswBackendController
     }
 
     /**
+     * Get team default value
+     *
+     * @return string
+     */
+    public function teamDefaultValue(): ?string
+    {
+        [$team, $leader] = $this->workTaskTeam();
+        if (!$team) {
+            return null;
+        }
+
+        if ($leader) {
+            return "{$team}";
+        }
+
+        return "{$team}-{$this->usr('usr_uid')}";
+    }
+
+    /**
      * Get admin by id
      *
      * @param int $userId
