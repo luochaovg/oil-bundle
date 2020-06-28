@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Form;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Form\Entity\Traits\Attributes;
+use Leon\BswBundle\Module\Form\Entity\Traits\Change;
 use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
@@ -26,6 +27,7 @@ abstract class Form
     use Key;
     use Field;
     use Name;
+    use Change;
 
     /**
      * @const string

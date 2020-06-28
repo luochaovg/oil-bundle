@@ -8,6 +8,9 @@
   size="{{ form.size }}"
   checked-children="{{ form.checkedChildren }}"
   un-checked-children="{{ form.unCheckedChildren }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: {{ form.value ? 'true' : 'false' }}, valuePropName: 'checked' }]"
 ></a-switch>

@@ -78,6 +78,18 @@ class Select extends Form
     }
 
     /**
+     * @return string
+     */
+    public function getChange(): ?string
+    {
+        if ($this->getSwitchFieldShape()) {
+            return 'switchFieldShapeWithSelect';
+        }
+
+        return parent::getChange();
+    }
+
+    /**
      * @return bool
      */
     public function isAllowClear(): bool

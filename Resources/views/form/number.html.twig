@@ -9,6 +9,9 @@
   :min="{{ form.min }}"
   :max="{{ form.max }}"
   step="{{ form.step }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

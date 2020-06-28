@@ -17,6 +17,9 @@
   :dropdown-match-select-width="false"
   :dropdown-style="{{ form.dropdownStyle }}"
   :tree-data="{{ form.treeData }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { {{ initial }} rules: {{ form.rules }} }]"

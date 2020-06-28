@@ -6,6 +6,9 @@
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ form.rules }} }]"

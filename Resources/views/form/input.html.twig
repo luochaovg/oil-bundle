@@ -11,6 +11,9 @@
   {% if form.maxLength %}
     :max-length="{{ form.maxLength }}"
   {% endif %}
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"

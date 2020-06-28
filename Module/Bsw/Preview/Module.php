@@ -366,8 +366,12 @@ class Module extends Bsw
          */
 
         if ($render = $item['render']) {
-            if (Helper::strEndWith($render, Abs::TPL_SUFFIX)) {
-                $render = $this->web->renderPart($render);
+            if (Helper::strEndWith($render, Abs::HTML_SUFFIX)) {
+                $render = $this->web->caching(
+                    function () use ($render) {
+                        return $this->web->renderPart($render);
+                    }
+                );
             }
 
             return $this->parseSlot($render, $field, [], Abs::SLOT_CONTAINER);

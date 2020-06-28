@@ -30,7 +30,10 @@
       </a-form-item>
       {% if googleCaptcha is defined %}
         <a-form-item>
-          {% include "form/" ~ googleCaptcha.itemName ~ ".html.twig" with {field: 'googleCaptcha', form: googleCaptcha} %}
+          {% include "form/" ~ googleCaptcha.itemName ~ ".html.twig" with {
+            field: 'google_captcha',
+            form: googleCaptcha
+          } %}
         </a-form-item>
       {% endif %}
       <a-form-item>

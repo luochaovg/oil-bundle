@@ -537,15 +537,15 @@ class Abs
 
     const RENDER_CODE          = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_CODE_FULL     = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code full bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-    const RENDER_ICON          = "<div v-if='{Abs::SLOT_NOT_BLANK}'><a-icon v-if='{:value}[0] == \"a\"' :type='{:value}.split(\":\")[1]'></a-icon><b-icon v-else :type='{:value}.split(\":\")[1]'></b-icon> {value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_DISABLE       = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_TEXT          = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-    const RENDER_IMAGE         = "<a v-if='{Abs::SLOT_NOT_BLANK}' :href='{:value}' class='bsw-preview-image' data-fancybox='preview' :data-caption='{:value}'><img :src='{:value}'></a>{Abs::TPL_ELSE_NIL}";
-    const RENDER_LINK          = "<div v-if='{Abs::SLOT_NOT_BLANK}'><span class='bsw-code bsw-long-text'><a class='bsw-preview-link' :href='{:value}' target='_blank'>✪</a>{value}</span></div>{Abs::TPL_ELSE_NIL}";
     const RENDER_SECRET_1      = "<div class='bsw-disable'>{Abs::SECRET}</div>";
     const RENDER_SECRET_2      = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_ROUND_PERCENT = "<a-progress type='circle' :percent='{:value}' :width='50' :stroke-width='6'></a-progress>";
     const RENDER_BAR_PERCENT   = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='6' status='active' ></a-progress>";
+    const RENDER_ICON          = "part/render-icon.html";
+    const RENDER_IMAGE         = "part/render-image.html";
+    const RENDER_LINK          = "part/render-link.html";
 
     /**
      * HTML_ / TEXT_ 开头的渲染模板仅支持普通渲染

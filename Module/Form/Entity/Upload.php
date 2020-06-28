@@ -7,7 +7,6 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonType;
-use Leon\BswBundle\Module\Form\Entity\Traits\Change;
 use Leon\BswBundle\Module\Form\Entity\Traits\FileItems;
 use Leon\BswBundle\Module\Form\Entity\Traits\Flag;
 use Leon\BswBundle\Module\Form\Entity\Traits\ListType;
@@ -24,7 +23,6 @@ class Upload extends Number
     use Accept;
     use ListType;
     use Flag;
-    use Change;
     use FileItems;
     use Url;
     use NeedId;

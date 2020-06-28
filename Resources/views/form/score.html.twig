@@ -11,6 +11,9 @@
   {% if form.character %}
     character="{{ form.character }}"
   {% endif %}
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   :count="{{ form.count }}"
   {{ form.attributes|raw }}
 ></a-rate>

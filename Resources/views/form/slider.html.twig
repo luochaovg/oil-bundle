@@ -13,6 +13,9 @@
   :range="{{ form.range ? 'true' : 'false' }}"
   :step="{{ form.step }}"
   :vertical="{{ form.vertical ? 'true' : 'false' }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
   {% if form.tooltipVisible is not same as(null) %}
     :tooltip-visible="{{ form.tooltipVisible ? 'true' : 'false' }}"
   {% endif %}
