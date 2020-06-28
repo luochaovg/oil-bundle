@@ -704,4 +704,16 @@ blockquote p {
 .bsw-work-task-week-report .ant-timeline-item-tail {
   border-left: 1px dotted #8ab9ff;
 }
+.task-status-done {
+  background-color: rgba(0, 130, 41, 0.1);
+}
+.task-status-overdue {
+  background-color: rgba(250, 150, 0, 0.1);
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
 /*# sourceMappingURL=bsw.css.map */

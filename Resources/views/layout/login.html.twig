@@ -5,35 +5,37 @@
 {% endblock %}
 
 {% block content %}
-  <div class="header">
-    <a href="{{ void }}">
-      <img src="{{ scaffold.cnf.appLogo }}">
-      {% set appName = scaffold.cnf.appName ?? 'Application' %}
-      <span>{{ appName }}</span>
-    </a>
-  </div>
-  <a-form
-    :form="loginForm"
-    class="login-form"
-    @submit="userLogin"
-  >
-    <a-form-item>
-      {% include "form/" ~ account.itemName ~ ".html.twig" with {field: 'account', form: account} %}
-    </a-form-item>
-    <a-form-item>
-      {% include "form/" ~ password.itemName ~ ".html.twig" with {field: 'password', form: password} %}
-    </a-form-item>
-    <a-form-item class="bsw-captcha-item">
-      {% include "form/" ~ captcha.itemName ~ ".html.twig" with {field: 'captcha', form: captcha} %}
-      <img class="bsw-captcha" src="{{ path(scaffold.cnf.routeCaptcha) }}">
-    </a-form-item>
-    {% if googleCaptcha is defined %}
+  <div class="{{ scaffold.cnf.loginContainerClass }}">
+    <div class="header">
+      <a href="{{ void }}">
+        <img src="{{ scaffold.cnf.appLogo }}">
+        {% set appName = scaffold.cnf.appName ?? 'Application' %}
+        <span>{{ appName }}</span>
+      </a>
+    </div>
+    <a-form
+      :form="loginForm"
+      class="login-form"
+      @submit="userLogin"
+    >
       <a-form-item>
-        {% include "form/" ~ googleCaptcha.itemName ~ ".html.twig" with {field: 'googleCaptcha', form: googleCaptcha} %}
+        {% include "form/" ~ account.itemName ~ ".html.twig" with {field: 'account', form: account} %}
       </a-form-item>
-    {% endif %}
-    <a-form-item>
-      {% include "form/" ~ submit.itemName ~ ".html.twig" with {field: 'submit', form: submit} %}
-    </a-form-item>
-  </a-form>
+      <a-form-item>
+        {% include "form/" ~ password.itemName ~ ".html.twig" with {field: 'password', form: password} %}
+      </a-form-item>
+      <a-form-item class="bsw-captcha-item">
+        {% include "form/" ~ captcha.itemName ~ ".html.twig" with {field: 'captcha', form: captcha} %}
+        <img class="bsw-captcha" src="{{ path(scaffold.cnf.routeCaptcha) }}">
+      </a-form-item>
+      {% if googleCaptcha is defined %}
+        <a-form-item>
+          {% include "form/" ~ googleCaptcha.itemName ~ ".html.twig" with {field: 'googleCaptcha', form: googleCaptcha} %}
+        </a-form-item>
+      {% endif %}
+      <a-form-item>
+        {% include "form/" ~ submit.itemName ~ ".html.twig" with {field: 'submit', form: submit} %}
+      </a-form-item>
+    </a-form>
+  </div>
 {% endblock %}

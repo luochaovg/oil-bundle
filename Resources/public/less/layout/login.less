@@ -3,7 +3,14 @@
 div.ant-spin-container {
   width: 100%;
   min-height: 100%;
-  padding: 110px 0 144px;
+  padding: 120px 0;
+  transition: padding .5s ease-in-out;
+  @media screen and (max-width: @mobile-sm) {
+    padding: 50px 0;
+  }
+  @media screen and (min-height: 1000px) {
+    padding: 200px 0
+  }
 }
 
 div.header {
@@ -29,8 +36,28 @@ div.header {
   }
 }
 
+.login-container {
+  width: 460px;
+  margin: 0 auto;
+  padding: 40px 0;
+  background: rgba(255, 255, 255, .3);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 4px;
+
+  &.dark {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(6, 6, 6, 0.2);
+  }
+
+  @media screen and (max-width: @mobile-sm) {
+    width: unset;
+    background: none;
+    border: none;
+  }
+}
+
 .login-form {
-  margin: 80px auto 0;
+  margin: 64px auto 0;
   max-width: 360px;
 
   .login-form-forgot {
@@ -49,7 +76,8 @@ div.header {
     padding-left: 36px;
   }
 
-  @media screen and (max-width: @mobile) {
+  transition: max-width .5s ease-in-out;
+  @media screen and (max-width: @mobile-sm) {
     margin: 70px auto 0;
     max-width: 320px;
   }

@@ -106,6 +106,35 @@ $(function () {
             this.submitFormUrl = data.location;
             this.submitFormMethod = $(element).attr('bsw-method');
         },
+        previewGetUrl: function previewGetUrl(url) {
+            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+            url = url || this.previewUrl;
+            return bsw.setParams(Object.assign({ page: this.previewPageNumber }, params), url);
+        },
+        previewPaginationRefresh: function previewPaginationRefresh(jump) {
+            this.noLoadingOnce = true;
+            this.pagination(this.previewGetUrl(), null, jump);
+        },
+        previewImageChange: function previewImageChange() {
+            var that = this;
+            var doChecker = setInterval(function () {
+                return checker();
+            }, 50);
+            var checker = function checker() {
+                var img = $('img');
+                var done = 0;
+                img.each(function () {
+                    done += this.complete ? 1 : 0;
+                });
+                var tmp = that.previewColumns[0].fixed;
+                that.previewColumns[0].fixed = !tmp;
+                that.previewColumns[0].fixed = tmp;
+                if (done >= img.length || img.length === 0) {
+                    clearInterval(doChecker);
+                }
+            };
+        },
         pagination: function pagination(url, page) {
             var jump = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
@@ -194,7 +223,7 @@ $(function () {
             if (_typeof(effect.page) && effect.page > 1) {
                 jump = true;
             }
-            this.pagination(url, 0, jump);
+            this.pagination(url, null, jump);
         },
         exportFilterForm: function exportFilterForm(values) {
             var _this2 = this;
@@ -368,7 +397,7 @@ $(function () {
             bsw.request(data.location).then(function (res) {
                 bsw.response(res).then(function () {
                     if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.previewPaginationRefresh();
+                        that.previewPaginationRefresh(false);
                     }
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -504,6 +533,10 @@ $(function () {
         },
         showIFrameInParent: function showIFrameInParent(data, element) {
             this.showIFrame(data.response.sets, element);
+        },
+        refreshPreviewInParent: function refreshPreviewInParent(data, element) {
+            this.handleResponseInParent(data, element);
+            this.previewPaginationRefresh(false);
         }
     }, bsw.config.method || {})).directive(Object.assign({
 

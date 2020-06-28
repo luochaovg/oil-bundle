@@ -43,7 +43,6 @@ bsw.configure({
             }
 
             login.password = bsw.rsaEncrypt(login.password);
-            console.log(login);
             bsw.request(this.loginApiUrl, login).then(function (res) {
                 _this.btnLoading = true;
                 bsw.response(res, null, null, 2).catch(function () {
