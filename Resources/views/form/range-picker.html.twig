@@ -17,6 +17,7 @@
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
+  :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   :placeholder="['{{ form.placeholder }}', '{{ form.placeholder }}']"
   format="{{ form.format }}"
   separator="{{ form.separator }}"

@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;

@@ -8,6 +8,7 @@
   {% if form.change %}
       @change="{{ form.change }}"
   {% endif %}
+  :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
 >

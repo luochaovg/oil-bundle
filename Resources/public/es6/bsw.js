@@ -119,10 +119,10 @@ $(function () {
         previewImageChange() {
             let that = this;
             let doChecker = setInterval(() => checker(), 50);
-            let checker = function() {
+            let checker = function () {
                 let img = $('img');
                 let done = 0;
-                img.each(function() {
+                img.each(function () {
                     done += (this.complete ? 1 : 0);
                 });
                 let tmp = that.previewColumns[0].fixed;
@@ -353,6 +353,10 @@ $(function () {
                 }
                 now[f] = (collect[f].includes(value));
             }
+        },
+
+        formItemFilterOption(input, option) {
+            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
         },
 
         showModal(options) {

@@ -1,15 +1,13 @@
-<a-input-password
+<a-mentions
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
-  type="{{ form.type }}"
-  size="{{ form.size }}"
-  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
-  {% if form.maxLength %}
-    :max-length="{{ form.maxLength }}"
+  :rows="{{ form.rows }}"
+  {% if form.filterOption %}
+    :filter-option="{{ form.filterOption }}"
   {% endif %}
   {% if form.change %}
     @change="{{ form.change }}"
@@ -19,7 +17,8 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
 >
-  {% if form.icon %}
-    {{ form.icon|icon(true, form.iconClass, form.iconAttribute)|raw }}
-  {% endif %}
-</a-input-password>
+  {% for key, value in form.enum %}
+    <a-mentions-option value="{{ value ~ '!' ~ key }}">{{ value }}</a-mentions-option>
+  {% endfor %}
+</a-mentions>
+

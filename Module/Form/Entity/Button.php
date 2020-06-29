@@ -32,11 +32,15 @@ class Button extends Form
     /**
      * @const string
      */
-    const THEME_PRIMARY       = 'primary';
-    const THEME_DASHED        = 'dashed';
-    const THEME_DANGER        = 'danger';
-    const THEME_LINK          = 'link';
-    const THEME_DEFAULT       = 'default';
+    const THEME_PRIMARY = 'primary';
+    const THEME_DASHED  = 'dashed';
+    const THEME_DANGER  = 'danger';
+    const THEME_LINK    = 'link';
+    const THEME_DEFAULT = 'default';
+
+    /**
+     * @const string
+     */
     const THEME_BSW_PRIMARY   = 'bsw-primary bsw-btn';
     const THEME_BSW_SECONDARY = 'bsw-secondary bsw-btn';
     const THEME_BSW_SUCCESS   = 'bsw-success bsw-btn';

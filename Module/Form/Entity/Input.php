@@ -5,8 +5,10 @@ namespace Leon\BswBundle\Module\Form\Entity;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\Icon;
 use Leon\BswBundle\Module\Form\Entity\Traits\MaxLength;
+use Leon\BswBundle\Module\Form\Entity\Traits\Prefix;
 use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
+use Leon\BswBundle\Module\Form\Entity\Traits\Suffix;
 use Leon\BswBundle\Module\Form\Entity\Traits\Type;
 use Leon\BswBundle\Module\Form\Form;
 
@@ -18,6 +20,8 @@ class Input extends Form
     use Type;
     use MaxLength;
     use Icon;
+    use Prefix;
+    use Suffix;
 
     /**
      * @const string

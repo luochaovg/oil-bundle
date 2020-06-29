@@ -27,9 +27,15 @@ class SelectTree extends Form
     use TreeData;
     use ExpandAll;
 
+    /**
+     * @const string
+     */
     const SEARCH_VALUE = 'value';
     const SEARCH_TITLE = 'title';
 
+    /**
+     * @const string
+     */
     const CHECKED_STRATEGY_ALL      = 'bsw.d.TreeSelect.SHOW_ALL';
     const CHECKED_STRATEGY_PARENT   = 'bsw.d.TreeSelect.SHOW_PARENT';
     const CHECKED_STRATEGY_CHILDREN = 'bsw.d.TreeSelect.SHOW_CHILD';

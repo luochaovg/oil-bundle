@@ -11,6 +11,7 @@
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
+  :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   format="{{ form.format }}"
   :hour-step="{{ form.hourStep }}"

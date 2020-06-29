@@ -16,6 +16,7 @@
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
+  :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   {% if form.tooltipVisible is not same as(null) %}
     :tooltip-visible="{{ form.tooltipVisible ? 'true' : 'false' }}"
   {% endif %}

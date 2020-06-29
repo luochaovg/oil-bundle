@@ -1,19 +1,19 @@
-{% set initial = (form.value is same as(null)) ? "null" : "moment(`" ~ form.value ~ "`, `" ~ form.format ~ "`)" %}
-<a-month-picker
+<a-auto-complete
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
-  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   size="{{ form.size }}"
+  :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
+  :data-source="{{ form.dataSource }}"
+  :filter-option="{{ form.filterOption }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
-  format="{{ form.format }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
-></a-month-picker>
+  v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+></a-auto-complete>

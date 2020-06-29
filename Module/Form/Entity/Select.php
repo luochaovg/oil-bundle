@@ -44,6 +44,9 @@ class Select extends Form
     const MODE_TAGS     = 'tags';
     const MODE_BOX      = 'combobox';
 
+    /**
+     * @const string
+     */
     const SEARCH_VALUE = 'value';
     const SEARCH_LABEL = 'children';
 
