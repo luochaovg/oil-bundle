@@ -4,7 +4,17 @@
   min-height: 100vh;
 }
 
-.ant-layout-sider {
+.ant-layout-header {
+  .logo {
+    float: left;
+  }
+
+  .ant-menu-horizontal {
+    line-height: 64px;
+  }
+}
+
+.ant-layout-sider, .ant-layout-header {
   .ant-menu {
     border-right: none;
 
@@ -51,7 +61,7 @@
   }
 }
 
-.ant-layout-sider-light {
+.ant-layout-sider-light, .ant-layout-header-light {
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, .05);
 
   .logo {
@@ -70,7 +80,7 @@
   }
 }
 
-.ant-layout-sider-dark {
+.ant-layout-sider-dark, .ant-layout-header-dark {
   .logo {
     background: #002140;
 
