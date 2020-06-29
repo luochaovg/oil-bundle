@@ -38,6 +38,7 @@ class BswWorkTask extends FoundationEntity
      * @BswAnnotation\Preview(sort=2, align="left", width=130, align="center", enumExtra=true)
      * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true)
      * @BswAnnotation\Filter(sort=2, column=3, type=BswForm\Select::class, enumExtra=true)
+     * @BswAnnotation\Mixed(sort=true)
      */
     protected $userId;
 
