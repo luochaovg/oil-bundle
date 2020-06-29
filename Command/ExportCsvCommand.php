@@ -111,7 +111,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
             }
         }
 
-        if ($this->page == 1) {
+        if ($this->params->page == 1) {
             $_header = [];
             foreach ($keys as $key) {
                 if (!isset($header[$key])) {
@@ -125,7 +125,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
         $this->csvWriter($record);
         $total = count($record);
 
-        return $this->page == 1 ? $total - 1 : $total;
+        return $this->params->page == 1 ? $total - 1 : $total;
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
             $instance->setCsvFile($this->params->csv);
         }
 
-        $args = Helper::pageArgs(['page' => $this->page, 'limit' => intval($this->params->limit)]);
+        $args = Helper::pageArgs(['page' => $this->params->page, 'limit' => intval($this->params->limit)]);
         $instance->writer($list, $args['offset']);
     }
 }

@@ -58,7 +58,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @var int
      */
-    protected $page = 0;
+    protected $page = 1;
 
     /**
      * @var bool
@@ -92,6 +92,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     {
         return [
             'limit'    => [null, InputOption::VALUE_OPTIONAL, 'Limit of list handler', $this->limit],
+            'page'     => [null, InputOption::VALUE_OPTIONAL, 'Page of list handler', $this->page],
             'force'    => [null, InputOption::VALUE_OPTIONAL, 'Force command', 'no'],
             'args'     => [null, InputOption::VALUE_OPTIONAL, 'Extra arguments'],
             'receiver' => [null, InputOption::VALUE_OPTIONAL, 'Receiver telegram id, split by comma'],
@@ -268,7 +269,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             "<info>\n {$this->getName()} => " . static::class . " -> " . Helper::date() . " \n</info>"
         );
 
-        $page = $this->logic($this->params->limit);
+        $page = $this->logic($this->params->limit, $this->params->page);
         $this->done($page);
     }
 
@@ -280,7 +281,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      * @return int
      * @throws
      */
-    protected function logic(int $limit, int $pageNow = 1, int $recordSuccess = 0): int
+    protected function logic(int $limit, int $pageNow, int $recordSuccess = 0): int
     {
         if ($limit < 1) {
             throw new InvalidArgumentException('Arguments `limit` should be integer and gte 1');
@@ -326,7 +327,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $result = [];
         }
 
-        $this->page = $pageNow;
+        $this->params->page = $pageNow;
         if (empty($result['items'])) {
             return $pageNow === 1 ? 0 : $pageNow;
         }
