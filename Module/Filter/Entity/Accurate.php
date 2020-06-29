@@ -10,7 +10,7 @@ class Accurate extends Filter
     /**
      * @param mixed $value
      *
-     * @return string
+     * @return string|array
      */
     public function parse($value)
     {

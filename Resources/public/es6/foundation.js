@@ -209,7 +209,7 @@ class FoundationPrototype {
     /**
      * Date format
      *
-     * @param target string
+     * @param target Date
      * @param fmt string
      * @return {*}
      */
