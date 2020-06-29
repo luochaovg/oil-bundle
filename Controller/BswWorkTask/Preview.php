@@ -70,7 +70,6 @@ trait Preview
                     'carryTime' => false,
                     'alias'     => ['from' => 'bwt.startTime', 'to' => 'bwt.endTime'],
                 ],
-                'value'      => date('Y-W'),
                 'sort'       => 3,
             ],
         ];
