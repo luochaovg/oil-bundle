@@ -145,13 +145,22 @@ div.ant-modal-mask {
 .bsw-scaffold {
   min-height: 100vh;
 }
-.ant-layout-sider .ant-menu {
+.ant-layout-header .logo {
+  float: left;
+}
+.ant-layout-header .ant-menu-horizontal {
+  line-height: 64px;
+}
+.ant-layout-sider .ant-menu,
+.ant-layout-header .ant-menu {
   border-right: none;
 }
-.ant-layout-sider .ant-menu .ant-menu-item a {
+.ant-layout-sider .ant-menu .ant-menu-item a,
+.ant-layout-header .ant-menu .ant-menu-item a {
   display: inline-block;
 }
-.ant-layout-sider .logo {
+.ant-layout-sider .logo,
+.ant-layout-header .logo {
   position: relative;
   height: 64px;
   padding-left: 22px;
@@ -159,13 +168,15 @@ div.ant-modal-mask {
   line-height: 64px;
   transition: all .3s;
 }
-.ant-layout-sider .logo img {
+.ant-layout-sider .logo img,
+.ant-layout-header .logo img {
   display: inline-block;
   height: 32px;
   margin: 0 4px 0 0;
   vertical-align: middle;
 }
-.ant-layout-sider .logo h1 {
+.ant-layout-sider .logo h1,
+.ant-layout-header .logo h1 {
   display: inline-block;
   margin: 0 4px;
   font-weight: 100;
@@ -176,33 +187,42 @@ div.ant-modal-mask {
   color: #fff;
   overflow: hidden;
 }
-.ant-layout-sider .logo h1 sup {
+.ant-layout-sider .logo h1 sup,
+.ant-layout-header .logo h1 sup {
   font-size: 10px;
   color: #fa8c16;
 }
-.ant-layout-sider .ant-layout-sider-trigger {
+.ant-layout-sider .ant-layout-sider-trigger,
+.ant-layout-header .ant-layout-sider-trigger {
   background: transparent;
 }
-.ant-layout-sider-light {
+.ant-layout-sider-light,
+.ant-layout-header-light {
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
-.ant-layout-sider-light .logo {
+.ant-layout-sider-light .logo,
+.ant-layout-header-light .logo {
   background: #fff;
   box-shadow: 1px 1px 0 0 #e8e8e8;
 }
-.ant-layout-sider-light .logo h1 {
+.ant-layout-sider-light .logo h1,
+.ant-layout-header-light .logo h1 {
   color: #1890ff;
 }
-.ant-layout-sider-light .ant-layout-sider-trigger:hover {
+.ant-layout-sider-light .ant-layout-sider-trigger:hover,
+.ant-layout-header-light .ant-layout-sider-trigger:hover {
   background: rgba(0, 0, 0, 0.025);
 }
-.ant-layout-sider-dark .logo {
+.ant-layout-sider-dark .logo,
+.ant-layout-header-dark .logo {
   background: #002140;
 }
-.ant-layout-sider-dark .logo h1 {
+.ant-layout-sider-dark .logo h1,
+.ant-layout-header-dark .logo h1 {
   color: #fff;
 }
-.ant-layout-sider-dark .ant-layout-sider-trigger:hover {
+.ant-layout-sider-dark .ant-layout-sider-trigger:hover,
+.ant-layout-header-dark .ant-layout-sider-trigger:hover {
   background: rgba(255, 255, 255, 0.06);
 }
 .ant-pagination {
@@ -715,5 +735,8 @@ kbd,
 pre,
 samp {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+textarea[size="large"] {
+  font-size: 16px;
 }
 /*# sourceMappingURL=bsw.css.map */

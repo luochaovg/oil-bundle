@@ -11,7 +11,7 @@
           <a-avatar slot="dot" size="large" :style={backgroundColor:"{{ item.color }}"}>{{ item.name }}</a-avatar>
           <div>{{ item.time }} <span :style={color:"#999"}>({{ item.human }})</span></div>
           <div :style={color:"#999"}>{{ item.title }}</div>
-          <pre class='bsw-pre bsw-long-text'>{{ item.trail }}</pre>
+          <pre class='bsw-pre bsw-long-text'>{{ item.trail|raw }}</pre>
         </a-timeline-item>
       {% else %}
         <a-empty :image="bsw.d.Empty.PRESENTED_IMAGE_SIMPLE"></a-empty>

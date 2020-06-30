@@ -131,18 +131,13 @@ trait Persistence
         }
 
         $userId = $args->record['userId'];
-        $telegramId = $this->getUserById($userId)->telegramId;
-        $url = $this->url('app_bsw_work_task_preview', ['token' => $this->createSceneToken(0, $userId)]);
-
-        if ($telegramId && ($this->usr('usr_uid') != $userId)) {
-            $message = $this->messageLang(
-                '{{ leader }} add task for you {{ task }}',
-                [
-                    '{{ leader }}' => '*' . $this->usr('usr_account') . '* ',
-                    '{{ task }}'   => "[{$args->record['title']}]({$url})",
-                ]
+        if ($this->usr('usr_uid') != $userId) {
+            $this->sendTelegramTips(
+                false,
+                $userId,
+                '{{ leader }} create task for you {{ task }}',
+                ['{{ task }}' => $args->record['title']]
             );
-            $this->telegramSendMessage($telegramId, $message);
         }
 
         return $this->trailLogger($args, $this->messageLang('Create the task'));

@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 use Carbon\Carbon;
 use Doctrine\ORM\AbstractQuery;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
@@ -17,8 +18,8 @@ use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
-use Mexitek\PHPColors\Color;
 use Symfony\Component\HttpFoundation\Response;
+use Mexitek\PHPColors\Color;
 
 /**
  * Bsw work task
@@ -66,7 +67,7 @@ class Acme extends BswBackendController
                 'userId'   => $this->usr('usr_uid'),
                 'taskId'   => intval($args->newly ? $args->result : $args->original['id']),
                 'reliable' => $reliable ? 1 : 0,
-                'trail'    => $trail,
+                'trail'    => Html::cleanHtml($trail),
             ]
         );
 
@@ -184,6 +185,11 @@ class Acme extends BswBackendController
             $item['color'] = $color->isDark() ? $colorHex : "#{$color->darken()}";
             $item['name'] = current(explode(' ', $item['name']));
             $item['time'] = date('m/d H:i', strtotime($item['time']));
+            $member = $this->matchMentions(Html::cleanHtml($item['trail']));
+            foreach ($member as $v) {
+                $name = Html::tag('a', "@{$v['name']}", ['href' => 'javascript:;']);
+                $item['trail'] = str_replace($v['block'], $name, $item['trail']);
+            }
         }
 
         return $list;
@@ -363,12 +369,74 @@ class Acme extends BswBackendController
     }
 
     /**
+     * Send telegram tips
+     *
+     * @param bool   $isTelegramId
+     * @param int    $id // User id or Telegram id
+     * @param string $messageLabel
+     * @param array  $messageArgs
+     * @param string $route
+     */
+    public function sendTelegramTips(
+        bool $isTelegramId,
+        int $id,
+        string $messageLabel,
+        array $messageArgs = [],
+        string $route = 'app_bsw_work_task_preview'
+    ) {
+        if (!$this->cnf->work_task_send_telegram) {
+            return;
+        }
+
+        if ($isTelegramId) {
+            $telegramId = $id;
+        } else {
+            $telegramId = $this->getUserById($id)->telegramId;
+        }
+
+        if (!$telegramId) {
+            return;
+        }
+
+        $url = $this->url($route, ['token' => $this->createSceneToken(1, $telegramId)]);
+        $url = "[Doorway]({$url})";
+
+        $member = $this->usr('usr_account');
+        $message = $this->messageLang(
+            $messageLabel,
+            array_merge(['{{ member }}' => $member], $messageArgs)
+        );
+
+        $this->telegramSendMessage($telegramId, "\[{$url}] {$message}");
+    }
+
+    /**
+     * Match mentions
+     *
+     * @param string $content
+     *
+     * @return array
+     */
+    protected function matchMentions(string $content): array
+    {
+        $member = [];
+        preg_match_all('/@(.*?)\!(\d+)/', $content, $result);
+        foreach ($result[0] ?? [] as $key => $block) {
+            $member[] = [
+                'block'      => $block,
+                'telegramId' => $result[2][$key],
+                'name'       => $result[1][$key],
+            ];
+        }
+
+        return $member;
+    }
+
+    /**
      * @return array
      */
     protected function tabsLinks(): array
     {
-        [$team, $leader] = $this->workTaskTeam();
-
         $links[] = new Links(
             $this->fieldLang('Task list'),
             'app_bsw_work_task_preview',

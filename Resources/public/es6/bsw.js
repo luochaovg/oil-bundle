@@ -583,6 +583,8 @@ $(function () {
 
         let timeout = change ? 1000 : 400;
         setTimeout(function () {
+            // resize
+            $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm

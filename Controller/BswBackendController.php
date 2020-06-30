@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Entity\BswAdminLogin;
@@ -790,7 +791,7 @@ class BswBackendController extends BswWebController
             $loginLogger->newly(
                 [
                     'userId'   => $user->id,
-                    'location' => $location,
+                    'location' => Html::cleanHtml($location),
                     'ip'       => $ip,
                     'addTime'  => $now,
                 ]

@@ -2,8 +2,10 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Error;
+use Leon\BswBundle\Repository\BswWorkTaskRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +38,22 @@ trait Close
      */
     public function closeAfterPersistence(Arguments $args)
     {
+        /**
+         * @var BswWorkTaskRepository $taskRepo
+         */
+        $taskRepo = $this->repo(BswWorkTask::class);
+        $taskId = $args->newly ? $args->result : $args->original['id'];
+        $task = $taskRepo->find($taskId);
+
+        if ($this->usr('usr_uid') != $task->userId) {
+            $this->sendTelegramTips(
+                false,
+                $task->userId,
+                '{{ leader }} close task {{ task }}',
+                ['{{ task }}' => $task->title]
+            );
+        }
+
         return $this->trailLogger($args, $this->messageLang('Close the task'));
     }
 

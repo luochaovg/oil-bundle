@@ -257,4 +257,7 @@ Create the task:                                                            '创
 Close the task:                                                             '关闭了该任务'
 'Change weight from {{ from }} to {{ to }}':                                '将权重从 {{ from }} 修改为 {{ to }}'
 'Change progress from {{ from }} to {{ to }}{{ remark }}':                  '将进度从 {{ from }}% 更新为 {{ to }}%, {{ remark }}'
-'{{ leader }} add task for you {{ task }}':                                 '{{ leader }}给你添加了新任务: {{ task }}'
+'{{ member }} create task for you {{ task }}':                              '*{{ member }}* 给你添加了新任务 -> *{{ task }}*'
+'{{ member }} change task weight to {{ to }} for {{ task }}':               '*{{ member }}* 将任务 -> *{{ task }}* 权重修改为 *{{ to }}*'
+'{{ member }} close task {{ task }}':                                       '*{{ member }}* 关闭了任务 -> *{{ task }}*'
+'{{ member }} mentions you in task {{ task }} {{ mention }}':               '*{{ member }}* 在任务工作中 -> *{{ task }}* 提到了你 {{ mention }}'

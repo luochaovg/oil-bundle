@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Component\Upload as Uploader;
 use Leon\BswBundle\Component\UploadItem;
 use Leon\BswBundle\Entity\BswAttachment;
@@ -240,7 +241,7 @@ trait Upload
                     'sha1'     => $file->sha1,
                     'size'     => $file->size,
                     'deep'     => $file->savePath,
-                    'filename' => $file->saveName,
+                    'filename' => Html::cleanHtml($file->saveName),
                     'state'    => Abs::NORMAL,
                 ]
             );

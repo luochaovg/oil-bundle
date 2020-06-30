@@ -19,7 +19,7 @@
           {{ '{{ item.time }}' }}
           <span :style={color:item.reliable?'rgba(0,128,0,.7)':'#999'}>({{ '{{ item.human }}' }})</span>
         </div>
-        <pre class='bsw-pre bsw-long-text'>{{ '{{ item.trail }}' }}</pre>
+        <pre class='bsw-pre bsw-long-text' v-html="item.trail"></pre>
       </a-timeline-item>
       <a-timeline-item v-if="drawer.state in [1,2]">
         <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>

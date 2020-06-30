@@ -75,6 +75,19 @@ trait Weight
      */
     public function weightAfterPersistence(Arguments $args)
     {
+        $userId = $args->recordBefore['userId'];
+        if ($this->usr('usr_uid') != $userId) {
+            $this->sendTelegramTips(
+                false,
+                $userId,
+                '{{ leader }} change task weight to {{ to }} for {{ task }}',
+                [
+                    '{{ to }}'   => $args->record['weight'],
+                    '{{ task }}' => $args->recordBefore['title'],
+                ]
+            );
+        }
+
         return $this->trailLogger(
             $args,
             $this->messageLang(

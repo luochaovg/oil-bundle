@@ -365,6 +365,9 @@ $(function () {
                 now[f] = collect[f].includes(value);
             }
         },
+        formItemFilterOption: function formItemFilterOption(input, option) {
+            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+        },
         showModal: function showModal(options) {
             this.modal.visible = false;
             options.visible = true;
@@ -582,6 +585,8 @@ $(function () {
 
         var timeout = change ? 1000 : 400;
         setTimeout(function () {
+            // resize
+            $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
                 if (typeof v.message.content !== 'undefined') {
                     // notification message confirm

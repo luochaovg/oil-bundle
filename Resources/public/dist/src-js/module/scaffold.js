@@ -16,6 +16,9 @@ bsw.configure({
             var _collapsed = this.menuCollapsed ? 'yes' : 'no';
             var collapsed = bsw.cookieMapNext('bsw_menu_collapsed', this.opposeMap, _collapsed, true);
             this.menuCollapsed = collapsed === 'yes';
+            setTimeout(function () {
+                $(window).resize();
+            }, 300);
         },
         scaffoldInit: function scaffoldInit() {
             // theme

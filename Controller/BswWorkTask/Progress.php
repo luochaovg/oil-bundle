@@ -2,18 +2,23 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
 use Leon\BswBundle\Module\Error\Entity\ErrorProgress;
-use Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange;
 use Leon\BswBundle\Module\Error\Error;
-use Leon\BswBundle\Module\Form\Entity\TextArea;
+use Leon\BswBundle\Module\Form\Entity\Mentions;
+use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @property Expr $expr
+ */
 trait Progress
 {
     /**
@@ -29,12 +34,26 @@ trait Progress
      */
     public function progressAnnotationOnly(): array
     {
+        /**
+         * @var BswAdminUserRepository $adminRepo
+         */
+        $adminRepo = $this->repo(BswAdminUser::class);
+        $member = $adminRepo->kvp(
+            ['name'],
+            'telegramId',
+            null,
+            [
+                'where' => [$this->expr->gt('kvp.telegramId', ':telegram')],
+                'args'  => ['telegram' => [0]],
+            ]
+        );
+
         return [
             'id'          => true,
             'donePercent' => ['label' => Helper::cnSpace()],
             'whatToDo'    => [
-                'type'     => TextArea::class,
-                'typeArgs' => ['maxRows' => 4],
+                'type'     => Mentions::class,
+                'typeArgs' => ['rows' => 4, 'enum' => $member],
                 'rules'    => [$this->formRuleRequired()],
             ],
             'state'       => ['show' => false],
@@ -102,6 +121,19 @@ trait Progress
      */
     public function progressAfterPersistence(Arguments $args)
     {
+        $member = $this->matchMentions($args->extraSubmit['whatToDo']);
+        foreach ($member as $item) {
+            $this->sendTelegramTips(
+                true,
+                $item['telegramId'],
+                '{{ member }} mentions you in task {{ task }} {{ mention }}',
+                [
+                    '{{ task }}'    => $args->recordBefore['title'],
+                    '{{ mention }}' => "[{$item['name']}](tg://user?id={$item['telegramId']})",
+                ]
+            );
+        }
+
         return $this->trailLogger(
             $args,
             $this->messageLang(
