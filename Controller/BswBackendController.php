@@ -267,59 +267,6 @@ class BswBackendController extends BswWebController
     }
 
     /**
-     * Module header setting
-     *
-     * @return Setting[]
-     */
-    public function moduleHeaderSetting(): array
-    {
-        return [
-            new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
-            new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
-            new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch'),
-        ];
-    }
-
-    /**
-     * Module header links
-     *
-     * @return Links[]
-     */
-    public function moduleHeaderLinks(): array
-    {
-        if (!$this->urlSafe($this->cnf->route_clean_frontend)) {
-            $this->cnf->route_clean_frontend = false;
-        }
-
-        $links = [
-            new Links('Clean backend cache', $this->cnf->route_clean_backend, $this->cnf->icon_db),
-            new Links('Profile', $this->cnf->route_profile, $this->cnf->icon_profile),
-            new Links('Logout', $this->cnf->route_logout, $this->cnf->icon_logout),
-        ];
-
-        if ($this->cnf->route_clean_frontend) {
-            $link = new Links('Clean frontend cache', $this->cnf->route_clean_frontend, $this->cnf->icon_redis);
-            $links = Helper::arrayInsert($links, 1, [$link]);
-        }
-
-        return $links;
-    }
-
-    /**
-     * Module header language
-     *
-     * @return array
-     */
-    public function moduleHeaderLanguage(): array
-    {
-        return [
-            'cn' => '简体中文',
-            'hk' => '繁體中文',
-            'en' => 'English',
-        ];
-    }
-
-    /**
      * Render module
      *
      * @param array  $moduleList
@@ -426,7 +373,7 @@ class BswBackendController extends BswWebController
      * @return Response|Message|array
      * @throws
      */
-    public function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
+    protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
     {
         $showArgs = ['logic' => $logicArgs];
         $inputArgs = $this->displayArgsScaffold();
@@ -618,7 +565,7 @@ class BswBackendController extends BswWebController
      *
      * @return array
      */
-    protected function getAccessOfRender(): array
+    public function getAccessOfRender(): array
     {
         $access = $this->getAccessOfAll(true, $this->bsw['menu']);
         $annotation = [];
@@ -659,7 +606,7 @@ class BswBackendController extends BswWebController
      * @return array
      * @throws
      */
-    protected function getAccessOfRole(int $roleId = null): array
+    public function getAccessOfRole(int $roleId = null): array
     {
         $roleId = $roleId ?? $this->usr('usr_role');
         if (empty($roleId)) {
@@ -701,7 +648,7 @@ class BswBackendController extends BswWebController
      * @return array
      * @throws
      */
-    protected function getAccessOfUser(int $userId = null): array
+    public function getAccessOfUser(int $userId = null): array
     {
         $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
@@ -738,7 +685,7 @@ class BswBackendController extends BswWebController
      * @return array
      * @throws
      */
-    protected function getAccessOfRoleByUserId(int $userId = null): array
+    public function getAccessOfRoleByUserId(int $userId = null): array
     {
         $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
@@ -761,7 +708,7 @@ class BswBackendController extends BswWebController
      *
      * @return array
      */
-    protected function getAccessOfUserWithRole(int $userId = null): array
+    public function getAccessOfUserWithRole(int $userId = null): array
     {
         $userId = $userId ?? $this->usr('usr_uid');
         if (empty($userId)) {
@@ -863,5 +810,58 @@ class BswBackendController extends BswWebController
         }
 
         return $this->access[$route] ?? false;
+    }
+
+    /**
+     * Module header setting
+     *
+     * @return Setting[]
+     */
+    public function moduleHeaderSetting(): array
+    {
+        return [
+            new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
+            new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
+            new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch'),
+        ];
+    }
+
+    /**
+     * Module header links
+     *
+     * @return Links[]
+     */
+    public function moduleHeaderLinks(): array
+    {
+        if (!$this->urlSafe($this->cnf->route_clean_frontend)) {
+            $this->cnf->route_clean_frontend = false;
+        }
+
+        $links = [
+            new Links('Clean backend cache', $this->cnf->route_clean_backend, $this->cnf->icon_db),
+            new Links('Profile', $this->cnf->route_profile, $this->cnf->icon_profile),
+            new Links('Logout', $this->cnf->route_logout, $this->cnf->icon_logout),
+        ];
+
+        if ($this->cnf->route_clean_frontend) {
+            $link = new Links('Clean frontend cache', $this->cnf->route_clean_frontend, $this->cnf->icon_redis);
+            $links = Helper::arrayInsert($links, 1, [$link]);
+        }
+
+        return $links;
+    }
+
+    /**
+     * Module header language
+     *
+     * @return array
+     */
+    public function moduleHeaderLanguage(): array
+    {
+        return [
+            'cn' => '简体中文',
+            'hk' => '繁體中文',
+            'en' => 'English',
+        ];
     }
 }

@@ -48,6 +48,81 @@ trait ApiDocument
     }
 
     /**
+     * List class bill
+     *
+     * @param array  $extraPath
+     * @param string $module
+     *
+     * @return array
+     * @throws
+     */
+    public function classBill(array $extraPath, string $module): array
+    {
+        $paths = array_merge(
+            [
+                'LeonBswBundle' => [
+                    'bundle'    => true,
+                    'namespace' => 'Leon\BswBundle\Module\{module}\Entity',
+                    'path'      => '{path}/Module/{module}/Entity',
+                ],
+                'CurrentApp'    => [
+                    'bundle'    => false,
+                    'namespace' => 'App\Module\{module}',
+                    'path'      => '{path}/src/Module/{module}',
+                ],
+            ],
+            $extraPath,
+            $this->parameter('module_extra_path', [])
+        );
+
+        $_paths = [];
+
+        foreach ($paths as $key => $item) {
+            if (!isset($item['bundle']) || !isset($item['namespace']) || !isset($item['path'])) {
+                throw new Exception("Keys bundle/namespace/path must in config `module_extra_path` items");
+            }
+
+            if ($item['bundle']) {
+                $_path = $this->kernel->getBundle($key)->getPath();
+            } else {
+                $_path = $this->kernel->getProjectDir();
+            }
+
+            $namespace = str_replace(['{path}', '{module}'], [$_path, $module], $item['namespace']);
+            $path = str_replace(['{path}', '{module}'], [$_path, $module], $item['path']);
+
+            if (file_exists($path)) {
+                $namespace = '\\' . trim($namespace, '\\') . '\\';
+                $_paths[$namespace] = rtrim($path, '/') . '/';
+            }
+        }
+
+        $classBill = [];
+        foreach ($_paths as $ns => $path) {
+            Helper::directoryIterator(
+                $path,
+                $classBill,
+                function ($file) use ($ns) {
+                    if (strpos($file, '.php') === false) {
+                        return false;
+                    }
+
+                    $class = pathinfo($file, PATHINFO_FILENAME);
+                    $class = "{$ns}{$class}";
+
+                    if (!class_exists($class)) {
+                        return false;
+                    }
+
+                    return $class;
+                }
+            );
+        }
+
+        return $classBill;
+    }
+
+    /**
      * Api error bill
      *
      * @param array $paths
@@ -118,80 +193,5 @@ trait ApiDocument
                 return $bill;
             }
         );
-    }
-
-    /**
-     * List class bill
-     *
-     * @param array  $extraPath
-     * @param string $module
-     *
-     * @return array
-     * @throws
-     */
-    protected function classBill(array $extraPath, string $module): array
-    {
-        $paths = array_merge(
-            [
-                'LeonBswBundle' => [
-                    'bundle'    => true,
-                    'namespace' => 'Leon\BswBundle\Module\{module}\Entity',
-                    'path'      => '{path}/Module/{module}/Entity',
-                ],
-                'CurrentApp'    => [
-                    'bundle'    => false,
-                    'namespace' => 'App\Module\{module}',
-                    'path'      => '{path}/src/Module/{module}',
-                ],
-            ],
-            $extraPath,
-            $this->parameter('module_extra_path', [])
-        );
-
-        $_paths = [];
-
-        foreach ($paths as $key => $item) {
-            if (!isset($item['bundle']) || !isset($item['namespace']) || !isset($item['path'])) {
-                throw new Exception("Keys bundle/namespace/path must in config `module_extra_path` items");
-            }
-
-            if ($item['bundle']) {
-                $_path = $this->kernel->getBundle($key)->getPath();
-            } else {
-                $_path = $this->kernel->getProjectDir();
-            }
-
-            $namespace = str_replace(['{path}', '{module}'], [$_path, $module], $item['namespace']);
-            $path = str_replace(['{path}', '{module}'], [$_path, $module], $item['path']);
-
-            if (file_exists($path)) {
-                $namespace = '\\' . trim($namespace, '\\') . '\\';
-                $_paths[$namespace] = rtrim($path, '/') . '/';
-            }
-        }
-
-        $classBill = [];
-        foreach ($_paths as $ns => $path) {
-            Helper::directoryIterator(
-                $path,
-                $classBill,
-                function ($file) use ($ns) {
-                    if (strpos($file, '.php') === false) {
-                        return false;
-                    }
-
-                    $class = pathinfo($file, PATHINFO_FILENAME);
-                    $class = "{$ns}{$class}";
-
-                    if (!class_exists($class)) {
-                        return false;
-                    }
-
-                    return $class;
-                }
-            );
-        }
-
-        return $classBill;
     }
 }

@@ -170,7 +170,7 @@ trait WebSource
      *
      * @return string
      */
-    protected function perfectSourceUrl(
+    public function perfectSourceUrl(
         string $src,
         ?string $suffix = null,
         ?string $cdnKey = null,

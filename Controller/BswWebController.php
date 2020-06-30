@@ -46,7 +46,7 @@ abstract class BswWebController extends AbstractController
     /**
      * @var array
      */
-    public $langMap = ['cn' => 'cn', 'hk' => 'hk', 'en' => 'en'];
+    protected $langMap = ['cn' => 'cn', 'hk' => 'hk', 'en' => 'en'];
 
     /**
      * Bootstrap
@@ -74,7 +74,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return string
      */
-    protected function redirectUrl(string $url = null, array $args = [])
+    public function redirectUrl(string $url = null, array $args = [])
     {
         if ($url && Helper::isUrlAlready($url)) {
             return $url;
@@ -126,7 +126,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return string|null
      */
-    protected function getHistoryRoute(int $index = -1): ?string
+    public function getHistoryRoute(int $index = -1): ?string
     {
         $history = array_keys($this->session->get(Abs::TAG_HISTORY));
         $route = array_slice($history, $index, 1);
@@ -147,36 +147,10 @@ abstract class BswWebController extends AbstractController
      *
      * @return void
      */
-    protected function setCookie(string $key, $value, int $expire = Abs::TIME_HOUR)
+    public function setCookie(string $key, $value, int $expire = Abs::TIME_HOUR)
     {
         $cookie = new Cookie($key, $value, time() + $expire);
         $this->response->headers->setCookie($cookie);
-    }
-
-    /**
-     * Response success (auto ajax)
-     *
-     * @param string $message
-     * @param array  $args
-     * @param string $url
-     *
-     * @return Response
-     */
-    protected function responseSuccess(string $message, array $args = [], string $url = null): Response
-    {
-        if ($this->ajax) {
-            return $this->successAjax($message, $args);
-        }
-
-        [$params, $trans] = $this->resolveArgs($args);
-
-        $message = (new Message())
-            ->setMessage($this->messageLang($message, $trans))
-            ->setRoute($this->redirectUrl($url))
-            ->setArgs($params)
-            ->setClassify(Abs::TAG_CLASSIFY_SUCCESS);
-
-        return $this->responseMessage($message);
     }
 
     /**
@@ -186,7 +160,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return string
      */
-    protected function responseUrlMap(int $code): ?string
+    public function responseUrlMap(int $code): ?string
     {
         $reference = $this->reference();
 
@@ -211,6 +185,32 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
+     * Response success (auto ajax)
+     *
+     * @param string $message
+     * @param array  $args
+     * @param string $url
+     *
+     * @return Response
+     */
+    public function responseSuccess(string $message, array $args = [], string $url = null): Response
+    {
+        if ($this->ajax) {
+            return $this->successAjax($message, $args);
+        }
+
+        [$params, $trans] = $this->resolveArgs($args);
+
+        $message = (new Message())
+            ->setMessage($this->messageLang($message, $trans))
+            ->setRoute($this->redirectUrl($url))
+            ->setArgs($params)
+            ->setClassify(Abs::TAG_CLASSIFY_SUCCESS);
+
+        return $this->responseMessage($message);
+    }
+
+    /**
      * Response error (auto ajax)
      *
      * @param int|Error $code
@@ -220,7 +220,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return Response
      */
-    protected function responseError($code, string $message = '', array $args = [], string $url = null): Response
+    public function responseError($code, string $message = '', array $args = [], string $url = null): Response
     {
         [$code4logic, $tiny, $detail] = [$code, null, null];
 
@@ -270,7 +270,7 @@ abstract class BswWebController extends AbstractController
      * @return Response
      * @throws
      */
-    protected function responseMessage(Message $message): Response
+    public function responseMessage(Message $message): Response
     {
         [$params, $trans] = $this->resolveArgs($message->getArgs());
 
@@ -295,7 +295,7 @@ abstract class BswWebController extends AbstractController
      * @return Response
      * @throws
      */
-    protected function responseMessageWithAjax(Message $message): Response
+    public function responseMessageWithAjax(Message $message): Response
     {
         [$params, $trans] = $this->resolveArgs($message->getArgs());
         $content = $this->messageLang($message->getMessage(), $trans);
@@ -349,7 +349,7 @@ abstract class BswWebController extends AbstractController
      *
      * @throws
      */
-    protected function appendMessage(
+    public function appendMessage(
         string $content,
         int $duration = null,
         string $classify = Abs::TAG_CLASSIFY_WARNING,
@@ -379,7 +379,7 @@ abstract class BswWebController extends AbstractController
      *
      * @param array $modalOptions
      */
-    protected function appendTips(array $modalOptions)
+    public function appendTips(array $modalOptions)
     {
         $modalOptions = array_merge(
             [
@@ -410,7 +410,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return mixed
      */
-    protected function latestMessage(string $key, bool $jsonDecode = false)
+    public function latestMessage(string $key, bool $jsonDecode = false)
     {
         $list = $this->session->getFlashBag()->get($key);
         $latest = end($list);
@@ -432,7 +432,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return string
      */
-    protected function labelWithMenu(
+    public function labelWithMenu(
         array $allMenuDetail,
         string $route,
         string $methodInfo,
@@ -601,7 +601,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return array
      */
-    protected function getRouteOfAll(bool $value = true): array
+    public function getRouteOfAll(bool $value = true): array
     {
         $routes = array_column($this->getRouteCollection(), 'route');
         $routes = Helper::arrayValuesSetTo($routes, $value, true);
@@ -617,7 +617,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return array
      */
-    protected function getAccessOfAll(bool $keyByClass = false, ?array $menuAssist = null): array
+    public function getAccessOfAll(bool $keyByClass = false, ?array $menuAssist = null): array
     {
         $accessList = [];
         $route = $this->getRouteCollection(true);
@@ -682,35 +682,6 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * View string handler
-     *
-     * @param array       $scaffold
-     * @param string|null $view
-     *
-     * @return string
-     */
-    public function viewHandler(array $scaffold, ?string $view = null): string
-    {
-        $suffix = Abs::TPL_SUFFIX;
-
-        if (!$view) {
-            $suffix = Abs::HTML_SUFFIX . $suffix;
-            // view handler
-            if (method_exists($this, $fn = Abs::FN_BLANK_VIEW)) {
-                $view = $this->{$fn}($suffix);
-            } else {
-                $view = "{$scaffold['cls']}/{$scaffold['fn']}{$suffix}";
-            }
-
-        } elseif (strpos($view, $suffix) === false) {
-            // just it
-            $view .= $suffix;
-        }
-
-        return $view;
-    }
-
-    /**
      * Get args for scaffold view
      *
      * @param array $extra
@@ -718,7 +689,7 @@ abstract class BswWebController extends AbstractController
      *
      * @return array
      */
-    protected function displayArgsScaffold(array $extra = [], bool $forView = false): array
+    public function displayArgsScaffold(array $extra = [], bool $forView = false): array
     {
         $json = $this->parameters('json');
         [$cls, $fn] = $this->getMCM('-');
@@ -758,19 +729,32 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * Get render template
+     * View string handler
      *
-     * @param string $view
-     * @param array  $parameters
+     * @param array       $scaffold
+     * @param string|null $view
      *
      * @return string
      */
-    public function renderPart(string $view, array $parameters = []): string
+    public function viewHandler(array $scaffold, ?string $view = null): string
     {
-        $parameters['scaffold'] = $this->displayArgsScaffold([], true);
-        $view = $this->viewHandler($parameters['scaffold'], $view);
+        $suffix = Abs::TPL_SUFFIX;
 
-        return $this->renderView($view, $parameters);
+        if (!$view) {
+            $suffix = Abs::HTML_SUFFIX . $suffix;
+            // view handler
+            if (method_exists($this, $fn = Abs::FN_BLANK_VIEW)) {
+                $view = $this->{$fn}($suffix);
+            } else {
+                $view = "{$scaffold['cls']}/{$scaffold['fn']}{$suffix}";
+            }
+
+        } elseif (strpos($view, $suffix) === false) {
+            // just it
+            $view .= $suffix;
+        }
+
+        return $view;
     }
 
     /**
@@ -815,6 +799,22 @@ abstract class BswWebController extends AbstractController
         }
 
         return $this->render($view, $params, $this->response);
+    }
+
+    /**
+     * Get render template
+     *
+     * @param string $view
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    public function renderPart(string $view, array $parameters = []): string
+    {
+        $parameters['scaffold'] = $this->displayArgsScaffold([], true);
+        $view = $this->viewHandler($parameters['scaffold'], $view);
+
+        return $this->renderView($view, $parameters);
     }
 
     /**

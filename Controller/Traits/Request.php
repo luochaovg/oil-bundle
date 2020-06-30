@@ -189,7 +189,7 @@ trait Request
      * @param string $message
      * @param array  $args
      */
-    protected function logClassify(string $classify, string $message, array $args = [])
+    public function logClassify(string $classify, string $message, array $args = [])
     {
         $requestArgs = $this->requestRecord();
         $this->logger->{$classify}($message, $args);

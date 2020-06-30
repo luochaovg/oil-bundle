@@ -3,6 +3,8 @@
 namespace Leon\BswBundle\Controller\Traits;
 
 use EasyWeChat\Factory as WxFactory;
+use Leon\BswBundle\Component\Helper;
+use Mexitek\PHPColors\Color;
 use Yansongda\Pay\Gateways\Alipay;
 use Yansongda\Pay\Pay as WxAliPayment;
 use EasyWeChat\OfficialAccount\Application as WxOfficial;
@@ -115,6 +117,25 @@ trait Third
         $this->logger->debug("Number captcha in server {$captcha} and user input {$input}");
 
         return (new CaptchaBuilder($captcha))->testPhrase($input);
+    }
+
+    /**
+     * Name to color
+     *
+     * @param string $target
+     *
+     * @return array
+     * @throws
+     */
+    public function nameToColor(string $target): array
+    {
+        $colorHex = Helper::colorValue($target, true);
+        $color = new Color($colorHex);
+        $color = $color->isDark() ? $colorHex : "#{$color->darken()}";
+
+        $target = current(explode(' ', $target));
+
+        return [$target, $color];
     }
 
     /**

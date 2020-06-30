@@ -196,6 +196,34 @@ abstract class BswApiController extends AbstractFOSRestController
     }
 
     /**
+     * Get old sign
+     *
+     * @param array $args
+     *
+     * @return string
+     */
+    abstract protected function apiOldSign(array $args): string;
+
+    /**
+     * Get new sign
+     *
+     * @param array $args
+     * @param bool  $debug
+     *
+     * @return string
+     */
+    abstract protected function apiNewSign(array $args, bool $debug = false): string;
+
+    /**
+     * Should authorization
+     *
+     * @param array $args
+     *
+     * @return array|object|Error
+     */
+    abstract protected function apiShouldAuth(array $args);
+
+    /**
      * Converts an Exception to a Response
      *
      * @param Request             $request
@@ -228,32 +256,4 @@ abstract class BswApiController extends AbstractFOSRestController
 
         return $this->response(ErrorException::CODE, $code4http, $message);
     }
-
-    /**
-     * Get old sign
-     *
-     * @param array $args
-     *
-     * @return string
-     */
-    abstract protected function apiOldSign(array $args): string;
-
-    /**
-     * Get new sign
-     *
-     * @param array $args
-     * @param bool  $debug
-     *
-     * @return string
-     */
-    abstract protected function apiNewSign(array $args, bool $debug = false): string;
-
-    /**
-     * Should authorization
-     *
-     * @param array $args
-     *
-     * @return array|object|Error
-     */
-    abstract protected function apiShouldAuth(array $args);
 }

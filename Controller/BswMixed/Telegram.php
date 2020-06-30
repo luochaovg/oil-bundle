@@ -102,7 +102,7 @@ trait Telegram
      *
      * @return array
      */
-    private function fetchCommands(string $path, string $namespace): array
+    protected function fetchCommands(string $path, string $namespace): array
     {
         $commands = [];
         Helper::directoryIterator(

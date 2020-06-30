@@ -19,7 +19,6 @@ use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Mexitek\PHPColors\Color;
 
 /**
  * Bsw work task
@@ -180,10 +179,7 @@ class Acme extends BswBackendController
         foreach ($list as &$item) {
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
             $item['human'] = $cb->locale($lang)->diffForHumans();
-            $colorHex = Helper::colorValue($item['name'], true);
-            $color = new Color($colorHex);
-            $item['color'] = $color->isDark() ? $colorHex : "#{$color->darken()}";
-            $item['name'] = current(explode(' ', $item['name']));
+            [$item['name'], $item['color']] = $this->nameToColor($item['name']);
             $item['time'] = date('m/d H:i', strtotime($item['time']));
             $member = $this->matchMentions(Html::cleanHtml($item['trail']));
             foreach ($member as $v) {

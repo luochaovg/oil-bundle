@@ -43,7 +43,7 @@ class Upload extends Number
     public function __construct()
     {
         parent::__construct();
-        $this->setListType(self::LIST_TYPE_TEXT);
+        $this->setListType(self::LIST_TYPE_IMG);
         $this->setChange('uploaderChange');
         $this->setButtonType(Button::THEME_DEFAULT);
         $this->setButtonLabel('Click to select for upload');

@@ -446,7 +446,7 @@ trait Foundation
      *
      * @return mixed
      */
-    protected function parameterInOrder(array $names, bool $inController, string $assert)
+    public function parameterInOrder(array $names, bool $inController, string $assert)
     {
         foreach ($names as $name) {
             $value = $this->parameter($name, null, $inController);
@@ -1096,38 +1096,6 @@ trait Foundation
     }
 
     /**
-     * Handle error with diff env
-     *
-     * @param Exception|string $error
-     * @param array            $trace
-     *
-     * @return string
-     */
-    public function errorHandler($error, array $trace = []): ?string
-    {
-        if ($error instanceof Exception) {
-            $error = "{$error->getMessage()} in {$error->getFile()} line {$error->getLine()}";
-        }
-
-        if (!is_string($error)) {
-            return null;
-        }
-
-        if ($this->debug) {
-            $this->logger->error("Unforeseen error, {$error}", $trace);
-
-            return $error;
-        }
-
-        $code = Helper::strPadLeftLength(rand(1, 9999), 4);
-        $code = date('md') . $code;
-
-        $this->logger->error("Unforeseen error, [{$code}] {$error}", $trace);
-
-        return $this->messageLang('[{{ code }}] Unforeseen error', ['{{ code }}' => $code]);
-    }
-
-    /**
      * Call service api
      *
      * @param string $path
@@ -1477,7 +1445,7 @@ trait Foundation
      * @return true|Response
      * @throws
      */
-    protected function validDevice(int $type = Abs::VD_ALL)
+    public function validDevice(int $type = Abs::VD_ALL)
     {
         if (Helper::bitFlagAssert($type, Abs::VD_OS) && empty($this->header->os)) {
             return $this->failed(new ErrorOS());
@@ -1743,6 +1711,38 @@ trait Foundation
         $message->setCode($codeMap[$classify] ?? $this->codeOkForLogic);
 
         return $this->responseMessageWithAjax($message);
+    }
+
+    /**
+     * Handle error with diff env
+     *
+     * @param Exception|string $error
+     * @param array            $trace
+     *
+     * @return string
+     */
+    public function errorHandler($error, array $trace = []): ?string
+    {
+        if ($error instanceof Exception) {
+            $error = "{$error->getMessage()} in {$error->getFile()} line {$error->getLine()}";
+        }
+
+        if (!is_string($error)) {
+            return null;
+        }
+
+        if ($this->debug) {
+            $this->logger->error("Unforeseen error, {$error}", $trace);
+
+            return $error;
+        }
+
+        $code = Helper::strPadLeftLength(rand(1, 9999), 4);
+        $code = date('md') . $code;
+
+        $this->logger->error("Unforeseen error, [{$code}] {$error}", $trace);
+
+        return $this->messageLang('[{{ code }}] Unforeseen error', ['{{ code }}' => $code]);
     }
 
     /**

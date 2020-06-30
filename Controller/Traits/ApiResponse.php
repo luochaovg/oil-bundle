@@ -88,7 +88,7 @@ trait ApiResponse
      *
      * @return Response
      */
-    protected function original(array $data, int $code4http = Response::HTTP_OK): Response
+    public function original(array $data, int $code4http = Response::HTTP_OK): Response
     {
         $this->logger->debug('Response data as follow', $data);
 
@@ -122,7 +122,7 @@ trait ApiResponse
      *
      * @return mixed
      */
-    protected function strongSetTypeByReflect($value)
+    public function strongSetTypeByReflect($value)
     {
         if (!empty($value) || !$this->strongSetType) {
             return $value;
@@ -175,7 +175,7 @@ trait ApiResponse
      * @return Response
      * @throws
      */
-    protected function response(int $code4logic, int $code4http, string $message = null, array $data = []): Response
+    public function response(int $code4logic, int $code4http, string $message = null, array $data = []): Response
     {
         $response = [];
         if (strpos($message, Abs::TAG_SQL_ERROR) !== false) {
@@ -215,7 +215,7 @@ trait ApiResponse
      * @return Response
      * @throws
      */
-    protected function okay($data, string $message = '', array $args = []): Response
+    public function okay($data, string $message = '', array $args = []): Response
     {
         if (is_object($data)) {
             $data = Helper::entityToArray($data);
@@ -237,7 +237,7 @@ trait ApiResponse
      * @return Response
      * @throws
      */
-    protected function success(string $message, array $args = []): Response
+    public function success(string $message, array $args = []): Response
     {
         if ($message) {
             $message = $this->messageLang($message, $args);
@@ -256,7 +256,7 @@ trait ApiResponse
      * @return Response
      * @throws
      */
-    protected function failed($code, string $message = '', array $args = []): Response
+    public function failed($code, string $message = '', array $args = []): Response
     {
         [$code4http, $code4logic, $tiny, $detail] = [Response::HTTP_OK, $code, null, null];
 

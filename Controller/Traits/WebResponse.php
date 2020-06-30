@@ -82,6 +82,27 @@ trait WebResponse
     }
 
     /**
+     * Resolve args for query params and trans args
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    public function resolveArgs(array $args): array
+    {
+        $params = $trans = [];
+        foreach ($args as $key => $val) {
+            if (strpos($key, '{{') === 0) {
+                $trans[$key] = $val;
+            } else {
+                $params[$key] = $val;
+            }
+        }
+
+        return [$params, $trans];
+    }
+
+    /**
      * Format response - ajax
      *
      * @param int    $code4logic
@@ -95,7 +116,7 @@ trait WebResponse
      * @return JsonResponse
      * @throws
      */
-    protected function responseAjax(
+    public function responseAjax(
         int $code4logic,
         int $code4http,
         string $message = null,
@@ -131,27 +152,6 @@ trait WebResponse
     }
 
     /**
-     * Resolve args for query params and trans args
-     *
-     * @param array $args
-     *
-     * @return array
-     */
-    protected function resolveArgs(array $args): array
-    {
-        $params = $trans = [];
-        foreach ($args as $key => $val) {
-            if (strpos($key, '{{') === 0) {
-                $trans[$key] = $val;
-            } else {
-                $params[$key] = $val;
-            }
-        }
-
-        return [$params, $trans];
-    }
-
-    /**
      * Okay with params (auto lang) - ajax
      *
      * @param array|object $data
@@ -162,7 +162,7 @@ trait WebResponse
      * @return JsonResponse
      * @throws
      */
-    protected function okayAjax($data, string $message = '', array $args = [], ?int $duration = null): JsonResponse
+    public function okayAjax($data, string $message = '', array $args = [], ?int $duration = null): JsonResponse
     {
         if (is_object($data)) {
             $data = Helper::entityToArray($data);
@@ -193,7 +193,7 @@ trait WebResponse
      * @return JsonResponse
      * @throws
      */
-    protected function successAjax(string $message, array $args = [], ?int $duration = null): JsonResponse
+    public function successAjax(string $message, array $args = [], ?int $duration = null): JsonResponse
     {
         [$data, $trans] = $this->resolveArgs($args);
 
@@ -223,7 +223,7 @@ trait WebResponse
      * @return JsonResponse
      * @throws
      */
-    protected function failedAjax($code, string $message = '', array $args = [], ?int $duration = null): JsonResponse
+    public function failedAjax($code, string $message = '', array $args = [], ?int $duration = null): JsonResponse
     {
         [$data, $trans] = $this->resolveArgs($args);
         [$code4http, $code4logic, $tiny, $detail] = [HttpResponse::HTTP_OK, $code, null, null];

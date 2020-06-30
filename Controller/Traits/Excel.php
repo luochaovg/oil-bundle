@@ -26,7 +26,7 @@ trait Excel
      * @return array
      * @throws
      */
-    protected function excelSheet(string $file, string $sheet = null, bool $write = false)
+    public function excelSheet(string $file, string $sheet = null, bool $write = false)
     {
         // create reader
         $type = IOFactory::identify($file);
@@ -234,7 +234,7 @@ trait Excel
      * @return Cell
      * @throws
      */
-    protected function excelCellRender(Cell $cell, $item): Cell
+    public function excelCellRender(Cell $cell, $item): Cell
     {
         if (is_scalar($item)) {
             return $cell->setValue($item);
