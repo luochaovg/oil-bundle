@@ -3,19 +3,14 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\UploadItem;
-use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Entity\ErrorUpload;
-use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Component\Upload as Uploader;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Annotation\Entity\Input as I;
 use Leon\BswBundle\Annotation\Entity\Output as O;
-use Exception;
 
 /**
  * @property LoggerInterface $logger

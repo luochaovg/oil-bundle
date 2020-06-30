@@ -20,6 +20,16 @@ bsw.configure({
                 $(window).resize();
             }, 300);
         },
+        changeLanguageByVue: function changeLanguageByVue(event) {
+            var key = $(event.item.$el).find('span').attr('lang');
+            bsw.request(this.languageApiUrl, { key: key }).then(function (res) {
+                bsw.response(res).catch(function (reason) {
+                    console.warn(reason);
+                });
+            }).catch(function (reason) {
+                console.warn(reason);
+            });
+        },
         scaffoldInit: function scaffoldInit() {
             // theme
             this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, this.configure.theme || this.theme);

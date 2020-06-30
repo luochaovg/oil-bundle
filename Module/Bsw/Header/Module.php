@@ -19,8 +19,9 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const SETTING = 'Setting';
-    const LINKS   = 'Links';
+    const SETTING  = 'Setting';
+    const LINKS    = 'Links';
+    const LANGUAGE = 'Language';
 
     /**
      * @return string
@@ -97,6 +98,9 @@ class Module extends Bsw
             $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header links'));
             array_push($output->links, $item);
         }
+
+        // Links
+        $output->language = $this->caller($this->method(), self::LANGUAGE, Abs::T_ARRAY, []);
 
         $output = $this->caller(
             $this->method . Helper::underToCamel($this->name(), false),

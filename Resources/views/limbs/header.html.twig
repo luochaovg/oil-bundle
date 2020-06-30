@@ -5,11 +5,35 @@
     </span>
   {% endif %}
   <div class="user-wrapper">
+    {% if header.language is not empty %}
+      <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
+        <span class="item action ant-dropdown-link user-dropdown-menu">
+          {{ scaffold.cnf.iconLanguage|icon|raw }}
+          <span class="language">{{ 'Language'|trans({}, 'twig') }}</span>
+        </span>
+        <a-menu
+          slot="overlay"
+          class="user-dropdown-menu-wrapper"
+          @click="changeLanguageByVue"
+        >
+          {% for key, label in header.language %}
+            <a-menu-item>
+              <div>
+                <span lang="{{ key }}">
+                  {{ label }}
+                </span>
+              </div>
+            </a-menu-item>
+          {% endfor %}
+        </a-menu>
+      </a-dropdown>
+    {% endif %}
     {% if header.setting is not empty %}
       <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
-      <span class="item action ant-dropdown-link user-dropdown-menu">
-        {{ scaffold.cnf.iconSetting|icon|raw }}
-      </span>
+        <span class="item action ant-dropdown-link user-dropdown-menu">
+          {{ scaffold.cnf.iconSetting|icon|raw }}
+          <span class="setting">{{ 'Setting'|trans({}, 'twig') }}</span>
+        </span>
         <a-menu
           slot="overlay"
           class="user-dropdown-menu-wrapper"
@@ -30,12 +54,12 @@
     {% endif %}
     {% if header.links is not empty %}
       <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
-      <span class="item action ant-dropdown-link user-dropdown-menu">
-        {% set avatar = attribute(scaffold.usr, scaffold.cnf.usrAvatar) %}
-        <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
-        {% set account = scaffold.cnf.usrAccount %}
-        <span class="username">{{ attribute(scaffold.usr, account) ?? ('`' ~ account ~ '`') }}</span>
-      </span>
+        <span class="item action ant-dropdown-link user-dropdown-menu">
+          {% set avatar = attribute(scaffold.usr, scaffold.cnf.usrAvatar) %}
+          <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
+          {% set account = scaffold.cnf.usrAccount %}
+          <span class="username">{{ attribute(scaffold.usr, account) ?? ('`' ~ account ~ '`') }}</span>
+        </span>
         <a-menu
           slot="overlay"
           class="user-dropdown-menu-wrapper"

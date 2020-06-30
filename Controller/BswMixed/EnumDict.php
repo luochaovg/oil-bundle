@@ -8,7 +8,6 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Leon\BswBundle\Component\Reflection;
-use ReflectionClassConstant;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
 /**

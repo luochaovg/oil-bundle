@@ -10,6 +10,7 @@ bsw.configure({
         thirdMessageSwitch() {
             this.thirdMessage = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.thirdMessage, true, bsw.lang.third_message);
         },
+
         menuTrigger() {
             let _collapsed = this.menuCollapsed ? 'yes' : 'no';
             let collapsed = bsw.cookieMapNext('bsw_menu_collapsed', this.opposeMap, _collapsed, true);
@@ -18,6 +19,18 @@ bsw.configure({
                 $(window).resize();
             }, 300);
         },
+
+        changeLanguageByVue(event) {
+            let key = $(event.item.$el).find('span').attr('lang');
+            bsw.request(this.languageApiUrl, {key}).then((res) => {
+                bsw.response(res).catch((reason => {
+                    console.warn(reason);
+                }));
+            }).catch((reason => {
+                console.warn(reason);
+            }));
+        },
+
         scaffoldInit() {
             // theme
             this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, this.configure.theme || this.theme);

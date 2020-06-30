@@ -17,4 +17,9 @@ class Output extends ArgsOutput
      * @var Links[]
      */
     public $links = [];
+
+    /**
+     * @var array
+     */
+    public $language = [];
 }

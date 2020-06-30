@@ -79,6 +79,7 @@ Select end time please:                     '請選擇結束時間'
 Start datetime should lte end:              '開始時間應小於結束時間'
 Time span less than {{ day }} days:         '時間跨度應少於{{ day }}天'
 Progress must enlarge:                      '進度必須向上更新'
+Switch lang success, current {{ lang }}:    '語言切換成功: {{ lang }}'
 
 # bsw error
 

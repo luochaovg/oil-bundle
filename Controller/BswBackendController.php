@@ -306,6 +306,20 @@ class BswBackendController extends BswWebController
     }
 
     /**
+     * Module header language
+     *
+     * @return array
+     */
+    public function moduleHeaderLanguage(): array
+    {
+        return [
+            'cn' => '简体中文',
+            'hk' => '繁體中文',
+            'en' => 'English',
+        ];
+    }
+
+    /**
      * Render module
      *
      * @param array  $moduleList

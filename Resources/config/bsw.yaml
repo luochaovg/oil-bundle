@@ -140,6 +140,7 @@ parameters:
         route_login: app_user_login
         route_login_handler: app_user_login_handler
         route_logout: app_user_logout
+        route_language: app_language
         route_profile: app_user_profile
         route_clean_backend: app_clean_backend
         route_clean_frontend: app_clean_frontend
@@ -211,6 +212,7 @@ parameters:
         icon_sure: a:coffee
         icon_newly: a:plus
         icon_delete: b:icon-delete1
+        icon_language: b:icon-icon-60
 
     currency_code: CNY
     currency_char: ￥
