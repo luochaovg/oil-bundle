@@ -388,8 +388,8 @@ class BswDocumentCommand extends Command implements CommandInterface
 
             // input
             $input = $this->web->getInputAnnotation($api['class'], $api['method']);
-            if (empty($input) && empty($api['param'])) {
 
+            if (empty($input) && empty($api['param'])) {
                 // no input (warning)
                 $append(".. note::");
                 if (!empty($lr = $api['license-request'])) {
@@ -407,8 +407,11 @@ class BswDocumentCommand extends Command implements CommandInterface
                 // input params (table)
                 $paramList = [];
                 foreach ($api['param'] as $name => $item) {
+
                     $label = Helper::stringToLabel($item['info'] ?: $name);
-                    $label = Helper::docVarReplace($this->lang($label, 'fields'), $docFlag);
+                    $label = $this->lang($label, 'fields');
+                    $label = Helper::docVarReplace($label, $docFlag);
+
                     $args[] = [$name, $item['type'], $label, Abs::REQ_GET];
                     if ('GET' == $api['http']) {
                         $http = self::TAG_RIGHT . ' GET';
@@ -427,12 +430,16 @@ class BswDocumentCommand extends Command implements CommandInterface
 
                 $argsIndent = 0;
                 foreach ($input as $item) {
+
                     $label = $item->trans ? $this->lang($item->label, 'fields') : $item->label;
                     $label = Helper::docVarReplace($label, $docFlag);
-                    $args[] = [$item->field, $item->type, $label, $item->method ?: current($api['http'])];
+                    if ($item->remark) {
+                        $label .= " ({$item->remark})";
+                    }
 
                     $rules = [];
                     $enumDocument = null;
+                    $args[] = [$item->field, $item->type, $label, $item->method ?: current($api['http'])];
 
                     foreach ($item->rules as $fn => $params) {
 
@@ -623,12 +630,10 @@ class BswDocumentCommand extends Command implements CommandInterface
                     $item['trans'] = false;
                 }
 
-                $label = $item['label'];
-                if ($item['trans']) {
-                    $label = Helper::stringToLabel($label);
-                    $label = $this->lang($label, 'fields');
-                }
+                $label = Helper::stringToLabel($item['label']);
+                $label = $item['trans'] ? $this->lang($label, 'fields') : $label;
                 $label = Helper::docVarReplace($label, $docFlag);
+
                 $enumDocument = $this->enumDocument($item['enum']);
                 $indent = $this->indent($propertyIndent + 3);
                 $type = ucfirst($item['type']);

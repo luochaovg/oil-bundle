@@ -563,6 +563,30 @@ abstract class FoundationRepository extends SFRepository
         }
 
         /*
+         * Having
+         */
+
+        $having = $having ?? [];
+        if (!is_array($having)) {
+            throw new RepositoryException('Variable `having` should be array if configured');
+        }
+
+        $having = array_filter($having);
+
+        foreach ($having as $expr) {
+
+            if (!is_string($expr) && !is_object($expr)) {
+                throw new RepositoryException("Items of variable `having` must string or object");
+            }
+
+            if (is_object($expr) && Helper::nsName(get_class($expr)) !== $exprNamespace) {
+                throw new RepositoryException("Items of variable `having` must namespaces `{$exprNamespace}`");
+            }
+
+            $model->having($expr);
+        }
+
+        /*
          * Join
          */
 

@@ -473,11 +473,19 @@ abstract class BswWebController extends AbstractController
     {
         $this->iNeedCost(Abs::BEGIN_VALID);
 
+        /**
+         * ajax
+         */
+
         if (Helper::bitFlagAssert($type, Abs::V_AJAX) && !$this->ajax) {
             $this->iNeedCost(Abs::END_VALID);
 
             return $this->responseError(new ErrorAjaxRequest());
         }
+
+        /**
+         * validator
+         */
 
         $caller = Helper::backtrace(1, ['class', 'function']);
         $annotation = $this->getInputAnnotation($caller['class'], $caller['function']);

@@ -39,7 +39,7 @@ class Dispatcher
      * @param mixed  $value
      * @param array  $extraArgs
      * @param bool   $sign
-     * @param bool   $useLabel
+     * @param string $label
      *
      * @return ValidatorResult
      * @throws
@@ -50,7 +50,7 @@ class Dispatcher
         $value,
         array $extraArgs,
         bool $sign,
-        bool $useLabel = true
+        string $label
     ): ValidatorResult {
 
         $result = new ValidatorResult($value, $sign ? $value : false);
@@ -59,13 +59,6 @@ class Dispatcher
         }
 
         $index = 0;
-        if ($useLabel) {
-            $title = Helper::stringToLabel($field);
-            $title = $this->translator->trans($title, [], 'fields', $this->locale);
-        } else {
-            $title = $field;
-        }
-
         foreach ($rules as $fn => $args) {
 
             $index += 1;
@@ -113,7 +106,7 @@ class Dispatcher
             $error = $this->translator->trans(
                 $error,
                 [
-                    '{{ field }}' => $title,
+                    '{{ field }}' => $label,
                     '{{ value }}' => $value,
                     '{{ rule }}'  => $fn,
                     '{{ arg1 }}'  => $args[0] ?? null,

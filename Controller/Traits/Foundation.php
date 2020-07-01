@@ -577,15 +577,15 @@ trait Foundation
                 $item->sign = is_null($value) ? false : true;
             }
 
+            if ($this->validatorUseLabel) {
+                $label = Helper::stringToLabel($item->label ?? $item->field);
+                $label = $item->trans ? $this->fieldLang($label) : $label;
+            } else {
+                $label = $item->field;
+            }
+
             $extraArgs['_args_handler'] = $item->rulesArgsHandler;
-            $result = $dispatcher->execute(
-                $item->field,
-                $item->rules,
-                $value,
-                $extraArgs,
-                $item->sign,
-                $this->validatorUseLabel
-            );
+            $result = $dispatcher->execute($item->field, $item->rules, $value, $extraArgs, $item->sign, $label);
 
             if (!empty($result->error)) {
                 $_class = $item->error;

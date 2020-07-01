@@ -46,6 +46,11 @@ class Input extends Annotation
     public $label;
 
     /**
+     * @var string
+     */
+    public $remark;
+
+    /**
      * @var bool Need trans for label?
      */
     public $trans;

@@ -437,6 +437,10 @@ class BswInitCommand extends Command implements CommandInterface
         foreach ($documentFileList as $file) {
             $targetFile = str_replace(__DIR__, $project, $file);
             @mkdir(pathinfo($targetFile, PATHINFO_DIRNAME), 0755, true);
+
+            if (strpos($targetFile, '.rst') !== false && file_exists($targetFile)) {
+                continue;
+            }
             copy($file, $targetFile);
             $output->writeln("<info>   [Copy] {$targetFile} </info>");
         }
