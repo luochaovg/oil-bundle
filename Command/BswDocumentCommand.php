@@ -290,9 +290,10 @@ class BswDocumentCommand extends Command implements CommandInterface
         $validatorBill[Abs::VALIDATION_IF_SET] = $this->lang('Validation when not blank');
 
         $tagsMap = [
-            '[AUTH]' => '{AUTH}',
-            '[USER]' => '{USER}',
-            '[AJAX]' => '{AJAX}',
+            '[AUTH]'    => '{AUTH}',
+            '[USER]'    => '{USER}',
+            '[AJAX]'    => '{AJAX}',
+            '[WEB_API]' => '{WEB_API}',
         ];
 
         foreach ($apiList as $order => $api) {
@@ -360,19 +361,25 @@ class BswDocumentCommand extends Command implements CommandInterface
             // extra document
             $ajaxRequest = false;
             if (!empty($license)) {
-                $append($this->lang('Supplementary notes'));
-                $append($lineTitle, 2);
-                $append(".. note::");
-
+                $licenseList = [];
                 $n = count($license) > 1;
                 foreach ($license as $lc) {
-                    if (strpos($lc, '{AJAX}') !== false) {
+                    if (strpos($lc, '{AJAX}') !== false || strpos($lc, '{WEB_API}') !== false) {
                         $ajaxRequest = true;
                     }
                     $prefix = $n ? '- ' : null;
-                    $append($prefix . Helper::docVarReplace($lc, $docFlag), 1, 1);
+                    $licenseList[] = $prefix . Helper::docVarReplace($lc, $docFlag);
                 }
-                $append();
+
+                if ($licenseList = array_filter($licenseList)) {
+                    $append($this->lang('Supplementary notes'));
+                    $append($lineTitle, 2);
+                    $append(".. note::");
+                    foreach ($licenseList as $l) {
+                        $append($l, 1, 1);
+                    }
+                    $append();
+                }
             }
 
             // request params (warning or table)
@@ -689,7 +696,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             if ($this->jsonStrict) {
 
                 $json = [];
-                $dataKey = null;
+                $dataKey = Abs::UNKNOWN;
 
                 foreach ($docKeys as $k => $item) {
                     if ($k == 'data') {
@@ -710,14 +717,14 @@ class BswDocumentCommand extends Command implements CommandInterface
                 $correctList = [];
                 $correctMap = array_combine(array_keys($setsTypeMap), array_fill(0, count($setsTypeMap), []));
 
-                foreach ($json[$dataKey] as $key => $value) {
+                foreach ($json[$dataKey] ?? [] as $key => $value) {
                     if (isset($correctMap[$value])) {
                         $correctList[] = $key;
                     }
                 }
 
                 $correctSets = [];
-                foreach ($json[$dataKey] as $key => $value) {
+                foreach ($json[$dataKey] ?? [] as $key => $value) {
                     $keys = explode('.', $key);
                     $first = current($keys);
                     if ((count($keys) > 1) && in_array($first, $correctList)) {
