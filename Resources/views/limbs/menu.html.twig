@@ -22,10 +22,10 @@
     :theme="theme"
     :default-open-keys="['{{ menu.parent }}']"
     :default-selected-keys="['{{ menu.current }}']"
-    @click="redirectByVue"
-    mode="inline"
     :inline-collapsed="menuCollapsed"
     :force-sub-menu-render="true"
+    mode="inline"
+    @click="redirectByVue"
   >
     {% for menuItem in menu.masterMenu %}
       {% set subMenu = attribute(menu.slaveMenu, menuItem.id) ?? [] %}
@@ -56,4 +56,5 @@
       {% endif %}
     {% endfor %}
   </a-menu>
+  {% block menuContainer %}{% endblock %}
 </a-layout-sider>

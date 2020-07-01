@@ -26,6 +26,7 @@ use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Symfony\Component\HttpFoundation\Response;
+use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu as MenuItem;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Exception;
@@ -810,6 +811,16 @@ class BswBackendController extends BswWebController
         }
 
         return $this->access[$route] ?? false;
+    }
+
+    /**
+     * Module header menu
+     *
+     * @return MenuItem[]
+     */
+    public function moduleHeaderMenu(): array
+    {
+        return [];
     }
 
     /**

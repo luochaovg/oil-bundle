@@ -46,7 +46,7 @@ abstract class BswWebController extends AbstractController
     /**
      * @var array
      */
-    protected $langMap = ['cn' => 'cn', 'hk' => 'hk', 'en' => 'en'];
+    public $langMap = ['cn' => 'cn', 'hk' => 'hk', 'en' => 'en'];
 
     /**
      * Bootstrap

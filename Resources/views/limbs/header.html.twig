@@ -4,7 +4,28 @@
       <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
     </span>
   {% endif %}
-  <div class="user-wrapper">
+  <div class="user-wrapper left">
+    {% if header.menu is not empty %}
+      <a-menu
+        :default-selected-keys="['{{ scaffold.route }}']"
+        mode="horizontal"
+        @click="redirectByVue"
+      >
+        {% for item in header.menu %}
+          <a-menu-item key="{{ item.route }}">
+            <div>
+              {% if item.icon is not empty %}
+                {{ item.icon|icon|raw }}
+              {% endif %}
+              <span bsw-data="{{ item.data }}">{{ item.label|trans({}, 'twig') }}</span>
+            </div>
+          </a-menu-item>
+        {% endfor %}
+      </a-menu>
+    {% endif %}
+  </div>
+  {% block headerContainer %}{% endblock %}
+  <div class="user-wrapper right">
     {% if header.language is not empty %}
       <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
         <span class="item action ant-dropdown-link user-dropdown-menu">
@@ -71,8 +92,8 @@
               <div>
                 {{ item.icon|icon|raw }}
                 <span bsw-data="{{ item.data }}">
-                {{ item.label|trans({}, 'twig') }}
-              </span>
+                  {{ item.label|trans({}, 'twig') }}
+                </span>
               </div>
             </a-menu-item>
           {% endfor %}

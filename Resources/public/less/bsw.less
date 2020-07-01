@@ -120,8 +120,9 @@
     }
 
     span.icon {
-      padding: 22px 24px;
       font-size: 20px;
+      float: left;
+      padding: 0 24px;
     }
 
     span.item {
@@ -131,8 +132,15 @@
 
     .user-wrapper {
       display: inline-block;
-      float: right;
-      margin-right: 24px;
+
+      &.left {
+        float: left;
+      }
+
+      &.right {
+        float: right;
+        margin-right: 24px;
+      }
 
       .avatar {
         color: #1890ff;
@@ -697,4 +705,14 @@ code, kbd, pre, samp {
 
 textarea[size="large"] {
   font-size: 16px;
+}
+
+.bsw-preview {
+  .ant-statistic-content {
+    font-size: unset;
+  }
+
+  .ant-statistic-content-value-decimal, .ant-statistic-content-suffix {
+    font-size: 12px;
+  }
 }

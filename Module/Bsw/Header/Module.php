@@ -9,6 +9,7 @@ use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
+use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu;
 use Leon\BswBundle\Module\Entity\Abs;
 
 /**
@@ -19,6 +20,7 @@ class Module extends Bsw
     /**
      * @const string
      */
+    const MENU     = 'Menu';
     const SETTING  = 'Setting';
     const LINKS    = 'Links';
     const LANGUAGE = 'Language';
@@ -71,15 +73,51 @@ class Module extends Bsw
     {
         $output = new Output();
 
+        // Menu
+        $menu = $this->caller($this->method(), self::MENU, Abs::T_ARRAY, []);
+        $method = $this->method() . self::MENU;
+
+        foreach ($menu as $item) {
+            /**
+             * @var Menu $item
+             */
+            Helper::objectInstanceOf($item, Menu::class, "Method {$method}():array items");
+
+            // access control
+            $route = trim($item->getRoute());
+            if ($route && empty($this->input->access[$route])) {
+                continue;
+            }
+
+            $args = $item->getArgs();
+
+            // route path
+            if ($route) {
+                $item->setUrl($this->web->urlSafe($route, $args, 'Header menu route'));
+            }
+
+            // javascript
+            if ($click = $item->getClick()) {
+                foreach ($args as &$value) {
+                    $value = str_replace('{ROUTE}', $item->getUrl(), $value);
+                }
+                $args = Helper::numericValues($args);
+                $item->setArgs(array_merge(['function' => $click], $args));
+            }
+
+            array_push($output->menu, $item);
+        }
+
         // Setting
         $setting = $this->caller($this->method(), self::SETTING, Abs::T_ARRAY, []);
         $method = $this->method() . self::SETTING;
 
         foreach ($setting as $item) {
-            Helper::objectInstanceOf($item, Setting::class, "Method {$method}():array items");
             /**
              * @var Setting $item
              */
+            Helper::objectInstanceOf($item, Setting::class, "Method {$method}():array items");
+
             $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
             $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header setting'));
             array_push($output->setting, $item);
@@ -90,10 +128,11 @@ class Module extends Bsw
         $method = $this->method() . self::SETTING;
 
         foreach ($links as $item) {
-            Helper::objectInstanceOf($item, Links::class, "Method {$method}():array items");
             /**
              * @var Links $item
              */
+            Helper::objectInstanceOf($item, Links::class, "Method {$method}():array items");
+
             $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
             $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header links'));
             array_push($output->links, $item);
