@@ -170,7 +170,8 @@ class BswBackendController extends BswWebController
         $userIp = $user[$this->cnf->usr_ip] ?? false;
 
         if ($strictIp && ($this->getClientIp() !== $userIp)) {
-            $this->logger->error("Account logged in from another place", $user);
+            $this->session->clear();
+            $this->logger->error("Account login in another place: {$user[$this->cnf->usr_uid]} at {$userIp}");
 
             return new ErrorAuthorization();
         }
@@ -224,6 +225,7 @@ class BswBackendController extends BswWebController
         foreach ($strict as $from => $to) {
             if ($session[$from] != $to) {
                 $this->session->clear();
+                $this->logger->error("Account login by another: {$this->usr('usr_uid')} at {$this->usr('usr_login')}");
 
                 return false;
             }
