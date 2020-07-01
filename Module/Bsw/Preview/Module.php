@@ -36,6 +36,7 @@ class Module extends Bsw
     const BEFORE_RENDER = 'BeforeRender';
     const CHARM         = 'Charm';
     const OPERATES      = 'RecordOperates';
+    const MIXED_HANDLER = 'MixedHandler';
 
     /**
      * @const string
@@ -464,6 +465,18 @@ class Module extends Bsw
         }
 
         $previewAnnotation = Helper::sortArray($previewAnnotation, 'sort');
+
+        /**
+         * mixed annotation handler
+         */
+        $arguments = $this->arguments(['mixed' => $mixedAnnotation]);
+        $mixedAnnotation = $this->caller(
+            $this->method,
+            self::MIXED_HANDLER,
+            Abs::T_ARRAY,
+            $mixedAnnotation,
+            $arguments
+        );
 
         /**
          * hooks & columns
