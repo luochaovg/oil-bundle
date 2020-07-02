@@ -45,7 +45,7 @@ class BswAdminLogin extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=256, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=3, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=3, width=200, align="center", render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=3, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=3)
      */

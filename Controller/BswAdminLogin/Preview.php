@@ -42,6 +42,16 @@ trait Preview
     }
 
     /**
+     * @param Arguments $args
+     *
+     * @return string
+     */
+    public function previewCharmLocation(Arguments $args)
+    {
+        return str_replace('|', ' > ', trim($args->value, '|'));
+    }
+
+    /**
      * Preview record
      *
      * @Route("/bsw-admin-login/preview", name="app_bsw_admin_login_preview")

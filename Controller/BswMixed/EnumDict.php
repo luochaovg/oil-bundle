@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\BswMixed;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Select;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Leon\BswBundle\Component\Reflection;
@@ -15,6 +16,29 @@ use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
  */
 trait EnumDict
 {
+    /**
+     * @return array
+     */
+    public function enumDictFilterAnnotation()
+    {
+        return [
+            'limit' => [
+                'label'  => 'Limit',
+                'type'   => Select::class,
+                'column' => 3,
+                'enum'   => [
+                    5   => 'count ≤ 5',
+                    10  => 'count ≤ 10',
+                    20  => 'count ≤ 20',
+                    30  => 'count ≤ 30',
+                    50  => 'count ≤ 50',
+                    100 => 'count ≤ 100',
+                ],
+                'value'  => 20,
+            ],
+        ];
+    }
+
     /**
      * @return array
      */

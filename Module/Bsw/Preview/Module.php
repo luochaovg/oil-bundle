@@ -643,18 +643,24 @@ class Module extends Bsw
          * list by query
          */
 
-        $page = intval($this->web->getArgs(Abs::PG_PAGE) ?? 1);
-        $limit = intval($this->web->getArgs(Abs::PG_PAGE_SIZE));
-        $limit = in_array($limit, Abs::PG_PAGE_SIZE_OPTIONS) ? $limit : FoundationRepository::PAGE_SIZE;
-
         $query = array_merge(
             [
                 'paging' => true,
-                'page'   => $page,
-                'limit'  => $limit,
+                'page'   => 1,
+                'limit'  => FoundationRepository::PAGE_SIZE,
             ],
             $this->query
         );
+
+        if (($page = intval($this->web->getArgs(Abs::PG_PAGE))) > 0) {
+            $query['page'] = intval($page) ?: 1;
+        }
+
+        if (($limit = intval($this->web->getArgs(Abs::PG_PAGE_SIZE))) > 0) {
+            if (in_array($limit, Abs::PG_PAGE_SIZE_OPTIONS)) {
+                $query['limit'] = $limit;
+            }
+        }
 
         /**
          * Fetch data

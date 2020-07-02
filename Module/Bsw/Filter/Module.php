@@ -311,7 +311,7 @@ class Module extends Bsw
         $_annotation = [];
         foreach ($filterAnnotation as $key => $item) {
             $key = Helper::camelToUnderWithNumeric($key);
-            if (!$this->query) {
+            if (!$this->entity) {
                 $_annotation[$key] = $item;
                 continue;
             }
@@ -511,7 +511,7 @@ class Module extends Bsw
         $search->setAttributes(['bsw-method' => 'search']);
 
         $export = null;
-        if ($this->input->scene === 'preview') {
+        if ($this->input->scene === 'preview' && $this->entity) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Button::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => 'export']);
             $export->setRouteForAccess($this->input->cnf->route_export);
