@@ -412,6 +412,9 @@ abstract class FoundationRepository extends SFRepository
     public function away(array $criteria, bool $throw = true)
     {
         $batch = $this->findBy($criteria);
+        if (empty($batch)) {
+            return 0;
+        }
 
         return $this->transactional(
             function () use ($batch) {
@@ -441,10 +444,15 @@ abstract class FoundationRepository extends SFRepository
      *
      * @return false|int
      * @throws
+     *
+     * @license Cannot call it in for with transactional
      */
     public function modify(array $criteria, array $attributes, int $per = null, bool $throw = true)
     {
         $batch = $this->findBy($criteria);
+        if (empty($batch)) {
+            return 0;
+        }
 
         return $this->transactional(
             function () use ($batch, $attributes, $per) {
