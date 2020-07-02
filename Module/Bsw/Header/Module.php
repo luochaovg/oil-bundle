@@ -142,8 +142,8 @@ class Module extends Bsw
         $output->language = $this->caller($this->method(), self::LANGUAGE, Abs::T_ARRAY, []);
 
         $output = $this->caller(
-            $this->method . Helper::underToCamel($this->name(), false),
-            self::ARGS_BEFORE_RENDER,
+            $this->method,
+            self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
             $this->arguments(compact('output'))

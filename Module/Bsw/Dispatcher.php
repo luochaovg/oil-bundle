@@ -3,8 +3,10 @@
 namespace Leon\BswBundle\Module\Bsw;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Reflection;
 use Leon\BswBundle\Controller\BswWebController;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use stdClass;
 
 class Dispatcher
 {
@@ -55,8 +57,16 @@ class Dispatcher
          * create input args
          */
         $input = $bsw->input();
+        $inputReal = [];
+
+        $cls = get_class($input);
+        $ref = new Reflection();
+
         foreach ($input as $attribute => $value) {
             $input->{$attribute} = $inputArgs[$attribute] ?? $value;
+            if ($ref->propertyExistsSelf($cls, $attribute)) {
+                $inputReal[$attribute] = $input->{$attribute};
+            }
         }
 
         /**
@@ -64,7 +74,6 @@ class Dispatcher
          */
         $bsw->initialization($input);
         $output = Helper::entityToArray($bsw->logic());
-        $inputArgs = array_merge($output, $inputArgs);
 
         /**
          * source
@@ -78,6 +87,6 @@ class Dispatcher
         $name = $bsw->name();
         $twig = $bsw->twig();
 
-        return [$name, $twig, $output, $inputArgs];
+        return [$name, $twig, $inputReal, $output];
     }
 }

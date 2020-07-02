@@ -37,6 +37,7 @@ class Module extends Bsw
     const CHARM         = 'Charm';
     const OPERATES      = 'RecordOperates';
     const MIXED_HANDLER = 'MixedHandler';
+    const PREVIEW_DATA  = 'PreviewData';
 
     /**
      * @const string
@@ -583,11 +584,14 @@ class Module extends Bsw
      */
     protected function manualLister(array $query): array
     {
-        if (!is_array($this->input->preview)) {
-            throw new ModuleException('Given preview data if lister from controller');
+        $previewData = $this->caller($this->method, self::PREVIEW_DATA, Abs::T_ARRAY);
+
+        if (!is_array($previewData)) {
+            $fn = self::PREVIEW_DATA;
+            throw new ModuleException("{$this->class}::{$this->method}{$fn}() must configure and return be array");
         }
 
-        return $this->web->manualListForPagination($this->input->preview, $query);
+        return $this->web->manualListForPagination($previewData, $query);
     }
 
     /**
@@ -1015,8 +1019,8 @@ class Module extends Bsw
         $output->clsName = $this->input->clsName;
 
         $output = $this->caller(
-            $this->method . Helper::underToCamel($this->name(), false),
-            self::ARGS_BEFORE_RENDER,
+            $this->method,
+            self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
             $this->arguments(compact('output'))

@@ -132,4 +132,9 @@ abstract class ArgsInput
      * @var array
      */
     public $data = [];
+
+    /**
+     * @var array
+     */
+    public $moduleArgs = [];
 }

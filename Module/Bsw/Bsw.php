@@ -15,13 +15,14 @@ abstract class Bsw
     /**
      * @const string
      */
-    const ENTITY             = 'Entity';
-    const QUERY              = 'Query';
-    const ANNOTATION         = 'Annotation';
-    const ANNOTATION_ONLY    = 'AnnotationOnly';
-    const TAILOR             = 'Tailor';
-    const ENUM_EXTRA         = 'EnumExtra';
-    const ARGS_BEFORE_RENDER = 'ArgsBeforeRender';
+    const ENTITY              = 'Entity';
+    const QUERY               = 'Query';
+    const ANNOTATION          = 'Annotation';
+    const ANNOTATION_ONLY     = 'AnnotationOnly';
+    const TAILOR              = 'Tailor';
+    const ENUM_EXTRA          = 'EnumExtra';
+    const INPUT_ARGS_HANDLER  = 'InputArgsHandler';
+    const OUTPUT_ARGS_HANDLER = 'OutputArgsHandler';
 
     /**
      * @var BswBackendController
@@ -137,6 +138,14 @@ abstract class Bsw
         // class/method name
         $this->class = Helper::underToCamel($this->input->cls, false, '-');
         $this->method = Helper::underToCamel($this->input->fn, true, '-');
+
+        $this->input = $this->caller(
+            $this->method,
+            self::INPUT_ARGS_HANDLER,
+            $this->input(),
+            $this->input,
+            $this->arguments(['input' => $this->input])
+        );
 
         // tailor
         $this->tailor = $this->caller($this->method, self::TAILOR, Abs::T_ARRAY, []);

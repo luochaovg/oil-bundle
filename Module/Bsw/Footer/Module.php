@@ -60,8 +60,8 @@ class Module extends Bsw
     {
         $output = new Output();
         $output = $this->caller(
-            $this->method . Helper::underToCamel($this->name(), false),
-            self::ARGS_BEFORE_RENDER,
+            $this->method,
+            self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
             $this->arguments(compact('output'))

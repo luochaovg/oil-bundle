@@ -10,11 +10,6 @@ use Leon\BswBundle\Module\Form\Form;
 class Input extends ArgsInput
 {
     /**
-     * @var array
-     */
-    public $preview = [];
-
-    /**
      * @var Choice
      */
     public $choice;

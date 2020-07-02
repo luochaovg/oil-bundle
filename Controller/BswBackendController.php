@@ -311,7 +311,11 @@ class BswBackendController extends BswWebController
              * @var Bsw $bsw
              */
             $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
+            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
+
+            $inputArgs['moduleArgs'][$name]['input'] = $input;
+            $inputArgs['moduleArgs'][$name]['output'] = $output;
+            $inputArgs = array_merge($inputArgs, $output);
 
             /**
              * @var BswModule\Message $message
@@ -402,7 +406,11 @@ class BswBackendController extends BswWebController
             }
 
             $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $output, $inputArgs] = $bswDispatcher->execute($module, $inputArgs);
+            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
+
+            $inputArgs['moduleArgs'][$name]['input'] = $input;
+            $inputArgs['moduleArgs'][$name]['output'] = $output;
+            $inputArgs = array_merge($inputArgs, $output);
 
             /**
              * @var BswModule\Message $message

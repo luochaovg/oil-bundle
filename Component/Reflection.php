@@ -541,4 +541,23 @@ class Reflection
 
         return array_merge($docArray, compact('name', 'modifier', 'modifiers'), $own);
     }
+
+    // ---
+
+    /**
+     * Property exists self only
+     *
+     * @param string $cls
+     * @param string $property
+     *
+     * @return bool
+     * @throws
+     */
+    public function propertyExistsSelf(string $cls, string $property)
+    {
+        $instance = new ReflectionProperty($cls, $property);
+        $class = $instance->getDeclaringClass()->getName();
+
+        return $cls === $class;
+    }
 }
