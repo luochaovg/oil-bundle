@@ -177,14 +177,24 @@ class Acme extends BswBackendController
     {
         $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
         foreach ($list as &$item) {
+
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
             $item['human'] = $cb->locale($lang)->diffForHumans();
             [$item['name'], $item['color']] = $this->nameToColor($item['name']);
             $item['time'] = date('m/d H:i', strtotime($item['time']));
+
+            // mentions
             $member = $this->matchMentions(Html::cleanHtml($item['trail']));
             foreach ($member as $v) {
                 $name = Html::tag('a', "@{$v['name']}", ['href' => 'javascript:;']);
                 $item['trail'] = str_replace($v['block'], $name, $item['trail']);
+            }
+
+            // links
+            preg_match_all('/https?\:\/\/[\S]+/i', $item['trail'], $result);
+            foreach ($result[0] ?? [] as $link) {
+                $linkHtml = Html::tag('a', $link, ['href' => $link, 'target' => '_blank']);
+                $item['trail'] = str_replace($link, $linkHtml, $item['trail']);
             }
         }
 

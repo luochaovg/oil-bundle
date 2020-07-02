@@ -4428,7 +4428,8 @@ class Helper
         foreach ($groupByDateAndX as $item) {
 
             $title = $item[$titleField];
-            $data[$xMap[$item[$xField]]][$title] = $item[$valueField];
+            $key = $xMap[$item[$xField]] ?? $item[$xField];
+            $data[$key][$title] = $item[$valueField];
 
             if (!isset($totalField)) {
                 continue;
