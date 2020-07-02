@@ -658,7 +658,11 @@ class BswDocumentCommand extends Command implements CommandInterface
             // response params demo
             $append($this->lang('Response params demo'));
             $append($lineTitle, 2);
-            $append(".. code-block:: json", 2);
+            if ($this->jsonStrict) {
+                $append(".. code-block:: json", 2);
+            } else {
+                $append(".. code-block::", 2);
+            }
 
             $setsTypeMap = [
                 'array'    => ['begin' => '[', 'end' => ']'],
