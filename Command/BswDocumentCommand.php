@@ -290,10 +290,9 @@ class BswDocumentCommand extends Command implements CommandInterface
         $validatorBill[Abs::VALIDATION_IF_SET] = $this->lang('Validation when not blank');
 
         $tagsMap = [
-            '[AUTH]'    => '{AUTH}',
-            '[USER]'    => '{USER}',
-            '[AJAX]'    => '{AJAX}',
-            '[WEB_API]' => '{WEB_API}',
+            '[AUTH]' => '{AUTH}',
+            '[USER]' => '{USER}',
+            '[AJAX]' => '{AJAX}',
         ];
 
         foreach ($apiList as $order => $api) {
@@ -364,7 +363,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                 $licenseList = [];
                 $n = count($license) > 1;
                 foreach ($license as $lc) {
-                    if (strpos($lc, '{AJAX}') !== false || strpos($lc, '{WEB_API}') !== false) {
+                    if (strpos($lc, '{AJAX}') !== false) {
                         $ajaxRequest = true;
                     }
                     $prefix = $n ? '- ' : null;
