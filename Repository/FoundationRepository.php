@@ -149,7 +149,7 @@ abstract class FoundationRepository extends SFRepository
      * @return QueryBuilder
      * @throws
      */
-    protected function query(): QueryBuilder
+    public function query(): QueryBuilder
     {
         return $this->createQueryBuilder(Helper::tableNameToAlias($this->entity));
     }
@@ -160,7 +160,7 @@ abstract class FoundationRepository extends SFRepository
      * @return EntityManager
      * @throws
      */
-    protected function em(): EntityManager
+    public function em(): EntityManager
     {
         if (!$this->em->isOpen()) {
             $this->em = $this->em->create(
@@ -175,7 +175,7 @@ abstract class FoundationRepository extends SFRepository
     /**
      * @return Connection
      */
-    protected function pdo(): Connection
+    public function pdo(): Connection
     {
         return $this->em()->getConnection();
     }
@@ -435,6 +435,34 @@ abstract class FoundationRepository extends SFRepository
     }
 
     /**
+     * Away (strict match one)
+     *
+     * @param array $criteria
+     *
+     * @return int
+     * @throws
+     */
+    public function awayOnlyOne(array $criteria)
+    {
+        $total = $this->count($criteria);
+        if ($total !== 1) {
+            return 0;
+        }
+
+        /**
+         * @var FoundationEntity $entity
+         */
+        $entity = $this->findOneBy($criteria);
+
+        $em = $this->em();
+        $em->remove($entity);
+        $em->flush();
+        $em->clear();
+
+        return 1;
+    }
+
+    /**
      * Modify
      *
      * @param array $criteria
@@ -444,8 +472,6 @@ abstract class FoundationRepository extends SFRepository
      *
      * @return false|int
      * @throws
-     *
-     * @license Cannot call it in for with transactional
      */
     public function modify(array $criteria, array $attributes, int $per = null, bool $throw = true)
     {
@@ -491,6 +517,44 @@ abstract class FoundationRepository extends SFRepository
             },
             $throw
         );
+    }
+
+    /**
+     * Modify (strict match one)
+     *
+     * @param array $criteria
+     * @param array $attributes
+     *
+     * @return false|int
+     * @throws
+     */
+    public function modifyOnlyOne(array $criteria, array $attributes)
+    {
+        $total = $this->count($criteria);
+        if ($total !== 1) {
+            return 0;
+        }
+
+        /**
+         * @var FoundationEntity $entity
+         */
+        $entity = $this->findOneBy($criteria);
+        $entity->attributes($attributes);
+
+        // validator
+        $error = $this->validator->validate($entity, null, [Abs::VG_MODIFY]);
+        if (count($error)) {
+            $error = $this->error($error);
+
+            return $this->push(current($error));
+        }
+
+        $em = $this->em();
+        $em->persist($entity);
+        $em->flush();
+        $em->clear();
+
+        return 1;
     }
 
     /**
