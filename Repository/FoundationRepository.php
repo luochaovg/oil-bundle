@@ -262,6 +262,8 @@ abstract class FoundationRepository extends SFRepository
      *
      * @return false|mixed|null
      * @throws
+     *
+     * @license Transaction block cannot in foreach, just foreach block in transaction
      */
     public function transactional(callable $logic, bool $throw = true)
     {
