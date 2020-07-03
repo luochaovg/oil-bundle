@@ -3,6 +3,7 @@
 {% block pageAfter %}
   <a-drawer
     v-for="drawer in previewList"
+    wrap-class-name="bsw-drawer bsw-work-task-drawer"
     :key="drawer.id"
     title="{{ 'Trail'|trans({}, 'twig') }}"
     :width="720"
@@ -10,7 +11,6 @@
     :closable="false"
     :visible="trailDrawer[drawer.id]"
     @close="trailDrawerClose"
-    wrap-class-name="bsw-work-task-drawer"
   >
     <a-timeline>
       <a-timeline-item v-for="item in drawer.trailList" :key="item.id">

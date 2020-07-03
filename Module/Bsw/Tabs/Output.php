@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw\Tabs;
 
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
-use Leon\BswBundle\Module\Form\Entity\Button;
 
 class Output extends ArgsOutput
 {
@@ -16,10 +15,10 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
-    public $fit = true;
+    public $fit;
 
     /**
      * @var string
      */
-    public $size = Button::SIZE_DEFAULT;
+    public $size;
 }

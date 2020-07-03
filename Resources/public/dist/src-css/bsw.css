@@ -248,8 +248,9 @@ div.ant-modal-mask {
   background: rgba(0, 0, 0, 0.025);
 }
 .ant-layout .ant-layout-header span.icon {
-  padding: 22px 24px;
   font-size: 20px;
+  float: left;
+  padding: 0 24px;
 }
 .ant-layout .ant-layout-header span.item {
   padding: 24px 12px;
@@ -257,6 +258,11 @@ div.ant-modal-mask {
 }
 .ant-layout .ant-layout-header .user-wrapper {
   display: inline-block;
+}
+.ant-layout .ant-layout-header .user-wrapper.left {
+  float: left;
+}
+.ant-layout .ant-layout-header .user-wrapper.right {
   float: right;
   margin-right: 24px;
 }
@@ -697,20 +703,14 @@ blockquote p {
 .bsw-work-task-drawer .ant-timeline-item-tail {
   border-left: 1px dotted #8ab9ff;
 }
-.bsw-work-task-drawer .footer-bar {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid #e8e8e8;
-  padding: 20px 30px;
-  text-align: right;
-  left: 0;
-  background: #fff;
-  border-radius: 0 0 4px 4px;
-}
 .bsw-work-task-week-report {
   background: #fff;
   padding: 80px 120px;
+}
+@media screen and (max-width: 992px) {
+  .bsw-work-task-week-report {
+    padding: 50px 40px;
+  }
 }
 .bsw-work-task-week-report .ant-timeline-item {
   padding: 0 0 50px;
@@ -728,7 +728,7 @@ blockquote p {
   background-color: rgba(0, 130, 41, 0.1);
 }
 .task-status-overdue {
-  background-color: rgba(250, 150, 0, 0.1);
+  background-color: rgba(250, 150, 0, 0.06);
 }
 code,
 kbd,
@@ -738,5 +738,31 @@ samp {
 }
 textarea[size="large"] {
   font-size: 16px;
+}
+.bsw-preview .ant-statistic-content {
+  font-size: unset;
+}
+.bsw-preview .ant-statistic-content-value-decimal,
+.bsw-preview .ant-statistic-content-suffix {
+  font-size: 12px;
+}
+@media screen and (max-width: 992px) {
+  .bsw-drawer .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+}
+.bsw-menu-mobile .ant-drawer-content {
+  background-color: transparent;
+}
+.ant-drawer .footer-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #e8e8e8;
+  padding: 20px;
+  text-align: right;
+  left: 0;
+  background: #fff;
+  border-radius: 0 0 4px 4px;
 }
 /*# sourceMappingURL=bsw.css.map */

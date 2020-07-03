@@ -1,6 +1,6 @@
 <?php
 
-namespace Leon\BswBundle\Module\Bsw\Modal;
+namespace Leon\BswBundle\Module\Bsw\Drawer;
 
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 
@@ -17,9 +17,14 @@ class Output extends ArgsOutput
     public $width;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $footer;
+    public $height;
+
+    /**
+     * @var string
+     */
+    public $placement;
 
     /**
      * @var string
@@ -69,15 +74,25 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $bodyStyleJson;
-
-    /**
-     * @var string
-     */
     public $maskStyleJson;
 
     /**
      * @var string
      */
-    public $dialogStyleJson;
+    public $wrapStyleJson;
+
+    /**
+     * @var string
+     */
+    public $drawerStyleJson;
+
+    /**
+     * @var string
+     */
+    public $headerStyleJson;
+
+    /**
+     * @var string
+     */
+    public $bodyStyleJson;
 }

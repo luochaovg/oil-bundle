@@ -96,6 +96,14 @@ abstract class Bsw
     }
 
     /**
+     * @return bool
+     */
+    public function inheritArgs(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     abstract public function name(): string;

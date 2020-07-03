@@ -45,7 +45,13 @@ $(function () {
         tips: {}, // from v-init
         modal: {
             visible: false,
-            centered: true
+            centered: true,
+            ok: bsw.blank,
+            cancel: bsw.blank,
+            afterClose: bsw.blank
+        },
+        drawer: {
+            visible: false
         }
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
@@ -79,6 +85,11 @@ $(function () {
         },
         dispatcher: function dispatcher(data, element) {
             var that = this;
+            if (data.iframe) {
+                delete data.iframe;
+                parent.postMessage({ data: data, function: 'dispatcher' }, '*');
+                return;
+            }
             var action = function action() {
                 if (data.function.length === 0) {
                     return console.error('Attribute function should be configure in options.', data);
@@ -376,6 +387,17 @@ $(function () {
             }
             this.modal = Object.assign(this.modal, options);
         },
+        showDrawer: function showDrawer(options) {
+            this.drawer.visible = false;
+            options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = bsw.popupCosySize().width;
+            }
+            this.drawer = Object.assign(this.drawer, options);
+        },
+        closeDrawer: function closeDrawer() {
+            this.drawer.visible = false;
+        },
         showModalAfterRequest: function showModalAfterRequest(data, element) {
             var _this4 = this;
 
@@ -444,12 +466,24 @@ $(function () {
                 title: data.title === false ? data.title : data.title || bsw.lang.please_select,
                 content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
             };
-            this.showModal(options);
-            this.$nextTick(function () {
-                var iframe = $("#bsw-iframe");
-                iframe.height(data.height || size.height);
-                iframe.parents("div.ant-modal-body").css({ margin: 0, padding: 0 });
-            });
+
+            var mode = data.shape || 'modal';
+            if (mode === 'drawer') {
+                this.showDrawer(options);
+                this.$nextTick(function () {
+                    var iframe = $("#bsw-iframe");
+                    var footerHeight = options.footer ? 73 : 0;
+                    iframe.height(bsw.popupCosySize(true).height - footerHeight - 55);
+                    iframe.parents("div.ant-drawer-body").css({ margin: 0, padding: 0 });
+                });
+            } else {
+                this.showModal(options);
+                this.$nextTick(function () {
+                    var iframe = $("#bsw-iframe");
+                    iframe.height(data.height || size.height);
+                    iframe.parents("div.ant-modal-body").css({ margin: 0, padding: 0 });
+                });
+            }
         },
         showIFrameWithChecked: function showIFrameWithChecked(data, element) {
             var ids = this.selectedRowHandler(data.selector).join(',');
@@ -515,13 +549,26 @@ $(function () {
         // for iframe exec in parent
         //
 
+        dispatcherInParent: function dispatcherInParent(data, element) {
+            this.modal.visible = false;
+            this.closeDrawer();
+            this.$nextTick(function () {
+                if (typeof data.data.location !== 'undefined') {
+                    data.data.location = bsw.unsetParams(['iframe'], data.data.location);
+                }
+                this.dispatcher(data.data, element);
+            });
+        },
         fillParentFormInParent: function fillParentFormInParent(data, element) {
             var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
 
             this.modal.visible = false;
-            if (this[form] && data.repair) {
-                this[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
-            }
+            this.closeDrawer();
+            this.$nextTick(function () {
+                if (this[form] && data.repair) {
+                    this[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
+                }
+            });
         },
         fillParentFormAfterAjaxInParent: function fillParentFormAfterAjaxInParent(res, element) {
             var data = res.response.sets;
@@ -530,8 +577,11 @@ $(function () {
         },
         handleResponseInParent: function handleResponseInParent(data, element) {
             this.modal.visible = false;
-            bsw.response(data.response).catch(function (reason) {
-                console.warn(reason);
+            this.closeDrawer();
+            this.$nextTick(function () {
+                bsw.response(data.response).catch(function (reason) {
+                    console.warn(reason);
+                });
             });
         },
         showIFrameInParent: function showIFrameInParent(data, element) {

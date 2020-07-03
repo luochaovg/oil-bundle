@@ -1757,10 +1757,15 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'popupCosySize',
         value: function popupCosySize() {
+            var honest = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
             var width = document.body.clientWidth;
             var height = document.body.clientHeight;
-            width *= width < 1285 ? 1 : .7;
-            height *= height < 666 ? .9 : .75;
+
+            if (!honest) {
+                width *= width < 1285 ? 1 : .7;
+                height *= height < 666 ? .9 : .75;
+            }
 
             return { width: width, height: height };
         }

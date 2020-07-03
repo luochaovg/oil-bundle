@@ -1,0 +1,30 @@
+<a-drawer
+  :visible="drawer.visible"
+  wrap-class-name="{{ ['bsw-drawer', drawer.wrapClassName ?? null]|filter(v => v)|join(' ') }}"
+  :closable="{{ drawer.closable ? 'true' : 'false' }}"
+  :destroy-on-close="true"
+  :keyboard="{{ drawer.keyboard ? 'true' : 'false' }}"
+  :mask="{{ drawer.mask ? 'true' : 'false' }}"
+  :mask-closable="{{ drawer.maskClosable ? 'true' : 'false' }}"
+  :title="drawer.title === false ? '' : (drawer.title || '{{ drawer.title|trans({}, 'twig') }}')"
+  :width="drawer.width || '{{ drawer.width }}'"
+  :height="drawer.height || '{{ drawer.height }}'"
+  :z-index="drawer.zIndex || {{ drawer.zIndex }}"
+  :placement="drawer.placement || '{{ drawer.placement }}'"
+  :mask-style="{{ drawer.maskStyleJson }}"
+  :wrap-style="{{ drawer.wrapStyleJson }}"
+  :drawer-style="{{ drawer.drawerStyleJson }}"
+  :header-style="{{ drawer.headerStyleJson }}"
+  :body-style="{{ drawer.bodyStyleJson }}"
+  @close="closeDrawer"
+>
+  <div v-html="drawer.content"></div>
+  <div v-show="drawer.footer" class="footer-bar">
+    <a-button type="default" @click="closeDrawer">
+      {{ drawer.cancelText|trans({}, 'twig') }}
+    </a-button>
+    <a-button type="{{ drawer.okType }}" @click="closeDrawer">
+      {{ drawer.okText|trans({}, 'twig') }}
+    </a-button>
+  </div>
+</a-drawer>

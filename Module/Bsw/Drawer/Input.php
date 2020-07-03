@@ -1,8 +1,9 @@
 <?php
 
-namespace Leon\BswBundle\Module\Bsw\Modal;
+namespace Leon\BswBundle\Module\Bsw\Drawer;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
 
 class Input extends ArgsInput
@@ -10,17 +11,22 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $title = 'Modal';
+    public $title = 'Drawer';
 
     /**
      * @var string|int
      */
-    public $width = '50%';
+    public $width = Abs::MEDIA_SM;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $footer = false;
+    public $height = 512;
+
+    /**
+     * @var string
+     */
+    public $placement = Abs::POS_LEFT;
 
     /**
      * @var string
@@ -40,7 +46,7 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
-    public $maskClosable = false;
+    public $maskClosable = true;
 
     /**
      * @var string
@@ -70,15 +76,25 @@ class Input extends ArgsInput
     /**
      * @var array
      */
-    public $bodyStyle = [];
-
-    /**
-     * @var array
-     */
     public $maskStyle = [];
 
     /**
      * @var array
      */
-    public $dialogStyle = [];
+    public $wrapStyle = [];
+
+    /**
+     * @var array
+     */
+    public $drawerStyle = [];
+
+    /**
+     * @var array
+     */
+    public $headerStyle = [];
+
+    /**
+     * @var array
+     */
+    public $bodyStyle = [];
 }

@@ -40,6 +40,12 @@ $(function () {
         modal: {
             visible: false,
             centered: true,
+            ok: bsw.blank,
+            cancel: bsw.blank,
+            afterClose: bsw.blank,
+        },
+        drawer: {
+            visible: false,
         },
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
@@ -373,6 +379,19 @@ $(function () {
             this.modal = Object.assign(this.modal, options);
         },
 
+        showDrawer(options) {
+            this.drawer.visible = false;
+            options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = bsw.popupCosySize().width;
+            }
+            this.drawer = Object.assign(this.drawer, options);
+        },
+
+        closeDrawer() {
+            this.drawer.visible = false;
+        },
+
         showModalAfterRequest(data, element) {
             bsw.request(data.location).then((res) => {
                 bsw.response(res).then(() => {
@@ -443,12 +462,24 @@ $(function () {
                 title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
                 content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
             };
-            this.showModal(options);
-            this.$nextTick(function () {
-                let iframe = $("#bsw-iframe");
-                iframe.height(data.height || size.height);
-                iframe.parents("div.ant-modal-body").css({margin: 0, padding: 0});
-            });
+
+            let mode = data.shape || 'modal';
+            if (mode === 'drawer') {
+                this.showDrawer(options);
+                this.$nextTick(function () {
+                    let iframe = $("#bsw-iframe");
+                    let footerHeight = options.footer ? 73 : 0;
+                    iframe.height(bsw.popupCosySize(true).height - footerHeight - 55);
+                    iframe.parents("div.ant-drawer-body").css({margin: 0, padding: 0});
+                });
+            } else {
+                this.showModal(options);
+                this.$nextTick(function () {
+                    let iframe = $("#bsw-iframe");
+                    iframe.height(data.height || size.height);
+                    iframe.parents("div.ant-modal-body").css({margin: 0, padding: 0});
+                });
+            }
         },
 
         showIFrameWithChecked(data, element) {
@@ -517,17 +548,23 @@ $(function () {
 
         dispatcherInParent(data, element) {
             this.modal.visible = false;
-            if (typeof data.data.location !== 'undefined') {
-                data.data.location = bsw.unsetParams(['iframe'], data.data.location);
-            }
-            this.dispatcher(data.data, element);
+            this.closeDrawer();
+            this.$nextTick(function () {
+                if (typeof data.data.location !== 'undefined') {
+                    data.data.location = bsw.unsetParams(['iframe'], data.data.location);
+                }
+                this.dispatcher(data.data, element);
+            });
         },
 
         fillParentFormInParent(data, element, form = 'persistenceForm') {
             this.modal.visible = false;
-            if (this[form] && data.repair) {
-                this[form].setFieldsValue({[data.repair]: data.ids});
-            }
+            this.closeDrawer();
+            this.$nextTick(function () {
+                if (this[form] && data.repair) {
+                    this[form].setFieldsValue({[data.repair]: data.ids});
+                }
+            });
         },
 
         fillParentFormAfterAjaxInParent(res, element) {
@@ -538,9 +575,12 @@ $(function () {
 
         handleResponseInParent(data, element) {
             this.modal.visible = false;
-            bsw.response(data.response).catch((reason => {
-                console.warn(reason);
-            }));
+            this.closeDrawer();
+            this.$nextTick(function () {
+                bsw.response(data.response).catch((reason => {
+                    console.warn(reason);
+                }));
+            });
         },
 
         showIFrameInParent(data, element) {

@@ -12,6 +12,9 @@
       {% if 'modal' not in logic.display ?? [] %}
         {{ (modalHtml ?? null)|raw }}
       {% endif %}
+      {% if 'drawer' not in logic.display ?? [] %}
+        {{ (drawerHtml ?? null)|raw }}
+      {% endif %}
       <a-config-provider :locale="locale">
         {% block bodyBefore %}{% endblock %}
         {% block body %}{% endblock %}

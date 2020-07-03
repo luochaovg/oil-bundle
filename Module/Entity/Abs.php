@@ -22,6 +22,8 @@ class Abs
     const RULES_REQUIRED    = ['required' => true, 'message' => '{{ field }} Required'];
     const LINE_DASHED       = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
     const BK_RENDER_ARGS    = 1;
+    const SHAPE_MODAL       = 'modal';
+    const SHAPE_DRAWER      = 'drawer';
 
     const NORMAL = 1;
     const CLOSE  = 0;
@@ -445,6 +447,7 @@ class Abs
     const MODULE_AWAY_SORT        = 90;
     const MODULE_FOOTER_SORT      = 100;
     const MODULE_MODAL_SORT       = 110;
+    const MODULE_DRAWER_SORT      = 120;
 
     const VG_NEWLY  = 'newly';
     const VG_MODIFY = 'modify';

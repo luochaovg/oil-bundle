@@ -40,17 +40,17 @@ class Output extends ArgsOutput
     /**
      * @var int
      */
-    public $columnPx = 74;
+    public $columnPx;
 
     /**
      * @var int
      */
-    public $maxShow = 5;
+    public $maxShow;
 
     /**
      * @var int
      */
-    public $maxShowInIframe = 4;
+    public $maxShowInIframe;
 
     /**
      * @var array
@@ -75,10 +75,10 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $textShow = 'Show filter';
+    public $textShow;
 
     /**
      * @var string
      */
-    public $textHide = 'Hide filter';
+    public $textHide;
 }

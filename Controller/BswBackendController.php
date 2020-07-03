@@ -311,11 +311,7 @@ class BswBackendController extends BswWebController
              * @var Bsw $bsw
              */
             $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
-
-            $inputArgs['moduleArgs'][$name]['input'] = $input;
-            $inputArgs['moduleArgs'][$name]['output'] = $output;
-            $inputArgs = array_merge($inputArgs, $output);
+            [$name, $twig, $inputArgs, $output] = $bswDispatcher->execute($module, $inputArgs);
 
             /**
              * @var BswModule\Message $message
@@ -443,6 +439,7 @@ class BswBackendController extends BswWebController
             BswModule\Operate\Module::class => ['sort' => Abs::MODULE_OPERATE_SORT],
             BswModule\Footer\Module::class  => ['sort' => Abs::MODULE_FOOTER_SORT],
             BswModule\Modal\Module::class   => ['sort' => Abs::MODULE_MODAL_SORT],
+            BswModule\Drawer\Module::class  => ['sort' => Abs::MODULE_DRAWER_SORT],
         ];
     }
 

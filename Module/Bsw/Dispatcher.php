@@ -46,11 +46,11 @@ class Dispatcher
         $bsw = new $moduleClass($this->web);
 
         if (($inputArgs['ajax'] ?? false) && !$bsw->allowAjax()) {
-            return [null, null, [], $inputArgs];
+            return [null, null, $inputArgs, []];
         }
 
         if (($inputArgs['iframe'] ?? false) && !$bsw->allowIframe()) {
-            return [null, null, [], $inputArgs];
+            return [null, null, $inputArgs, []];
         }
 
         /**
@@ -81,12 +81,14 @@ class Dispatcher
         $this->web->appendSrcCss($bsw->css());
         $this->web->appendSrcJs($bsw->javascript());
 
-        /**
-         * scalar
-         */
         $name = $bsw->name();
-        $twig = $bsw->twig();
+        $inputArgs['moduleArgs'][$name]['input'] = $input;
+        $inputArgs['moduleArgs'][$name]['output'] = $output;
 
-        return [$name, $twig, $inputReal, $output];
+        if ($bsw->inheritArgs()) {
+            $inputArgs = array_merge($inputArgs, $output);
+        }
+
+        return [$name, $bsw->twig(), $inputArgs, $output];
     }
 }

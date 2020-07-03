@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw\Preview;
 
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
-use Leon\BswBundle\Module\Entity\Abs;
 
 class Output extends ArgsOutput
 {
@@ -41,7 +40,7 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
-    public $border = true;
+    public $border;
 
     /**
      * @var int
@@ -56,7 +55,7 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
-    public $size = 'default'; // default、small
+    public $size;
 
     /**
      * @var Choice
@@ -76,7 +75,7 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
-    public $pageSizeOptions = Abs::PG_PAGE_SIZE_OPTIONS;
+    public $pageSizeOptions;
 
     /**
      * @var string
@@ -86,7 +85,7 @@ class Output extends ArgsOutput
     /**
      * @var int
      */
-    public $dynamic = 0;
+    public $dynamic;
 
     /**
      * @var array
@@ -101,10 +100,10 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
-    public $header = false;
+    public $header;
 
     /**
      * @var bool
      */
-    public $footer = false;
+    public $footer;
 }

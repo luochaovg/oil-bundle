@@ -1343,11 +1343,14 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {{width: number, height: number}}
      */
-    popupCosySize() {
+    popupCosySize(honest = false) {
         let width = document.body.clientWidth;
         let height = document.body.clientHeight;
-        width *= (width < 1285 ? 1 : .7);
-        height *= (height < 666 ? .9 : .75);
+
+        if (!honest) {
+            width *= (width < 1285 ? 1 : .7);
+            height *= (height < 666 ? .9 : .75);
+        }
 
         return {width, height};
     }

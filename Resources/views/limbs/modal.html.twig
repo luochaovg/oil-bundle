@@ -1,29 +1,24 @@
 <a-modal
   v-model="modal.visible"
-  :title="modal.title === false ? '' : (modal.title || '{{ modal.title|trans({}, 'twig') }}')"
-  :keyboard="{{ modal.keyboard ? 'true' : 'false' }}"
+  wrap-class-name="{{ ['bsw-modal', modal.wrapClassName ?? null]|filter(v => v)|join(' ') }}"
+  :closable="{{ modal.closable ? 'true' : 'false' }}"
+  :destroy-on-close="true"
   :mask="{{ modal.mask ? 'true' : 'false' }}"
   :mask-closable="{{ modal.maskClosable ? 'true' : 'false' }}"
-  :destroy-on-close="true"
+  :keyboard="{{ modal.keyboard ? 'true' : 'false' }}"
+  :title="modal.title === false ? '' : (modal.title || '{{ modal.title|trans({}, 'twig') }}')"
   :ok-text="modal.okText || '{{ modal.okText|trans({}, 'twig') }}'"
   :ok-type="modal.okType || '{{ modal.okType }}'"
-  :z-index="modal.zIndex || {{ modal.zIndex }}"
   :cancel-text="modal.cancelText || '{{ modal.cancelText|trans({}, 'twig') }}'"
-  :width="modal.width || '{{ modal.width }}'"
-  :wrap-class-name="modal.wrapClassName || '{{ modal.wrapClassName }}'"
-  :body-style="{{ modal.bodyStyle }}"
-  :mask-style="{{ modal.maskStyle }}"
-  :dialog-style="{{ modal.dialogStyle }}"
+  :z-index="modal.zIndex || {{ modal.zIndex }}"
   :centered="modal.centered"
-  {% if modal.okCallback %}
-    :ok="{{ modal.okCallback }}"
-  {% endif %}
-  {% if modal.cancelCallback %}
-    :cancel="{{ modal.cancelCallback }}"
-  {% endif %}
-  {% if modal.afterCloseCallback %}
-    :after-close="{{ modal.afterCloseCallback }}"
-  {% endif %}
+  :width="modal.width || '{{ modal.width }}'"
+  :body-style="{{ modal.bodyStyleJson }}"
+  :mask-style="{{ modal.maskStyleJson }}"
+  :dialog-style="{{ modal.dialogStyleJson }}"
+  @ok="modal.ok"
+  @cancel="modal.cancel"
+  @after-close="modal.afterClose"
   {% if not modal.footer %}
     :footer="null"
   {% endif %}

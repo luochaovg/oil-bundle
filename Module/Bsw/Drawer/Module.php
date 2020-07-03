@@ -1,6 +1,6 @@
 <?php
 
-namespace Leon\BswBundle\Module\Bsw\Modal;
+namespace Leon\BswBundle\Module\Bsw\Drawer;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
@@ -25,7 +25,7 @@ class Module extends Bsw
      */
     public function name(): string
     {
-        return 'modal';
+        return 'drawer';
     }
 
     /**
@@ -34,7 +34,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return 'limbs/modal.html';
+        return 'limbs/drawer.html';
     }
 
     /**
@@ -70,7 +70,8 @@ class Module extends Bsw
 
         $output->title = $this->input->title;
         $output->width = $this->input->width;
-        $output->footer = $this->input->footer;
+        $output->height = $this->input->height;
+        $output->placement = $this->input->placement;
         $output->wrapClassName = $this->input->wrapClassName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
@@ -81,9 +82,11 @@ class Module extends Bsw
         $output->zIndex = $this->input->zIndex;
         $output->closable = $this->input->closable;
 
-        $output->bodyStyleJson = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
         $output->maskStyleJson = Helper::jsonStringify($this->input->maskStyle, '{}', JSON_FORCE_OBJECT);
-        $output->dialogStyleJson = Helper::jsonStringify($this->input->dialogStyle, '{}', JSON_FORCE_OBJECT);
+        $output->wrapStyleJson = Helper::jsonStringify($this->input->wrapStyle, '{}', JSON_FORCE_OBJECT);
+        $output->drawerStyleJson = Helper::jsonStringify($this->input->drawerStyle, '{}', JSON_FORCE_OBJECT);
+        $output->headerStyleJson = Helper::jsonStringify($this->input->headerStyle, '{}', JSON_FORCE_OBJECT);
+        $output->bodyStyleJson = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
 
         $output = $this->caller(
             $this->method,

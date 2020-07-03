@@ -1009,13 +1009,11 @@ class Module extends Bsw
         $output->slotsJson = Helper::jsonStringify($output->slots, '{}');
         $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
-        $output->pageSizeOptions = array_map('strval', $output->pageSizeOptions);
-        $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
-
         $output->border = $this->input->border;
         $output->scroll = $this->input->scroll;
         $output->size = $this->input->size;
-        $output->pageSizeOptions = $this->input->pageSizeOptions;
+        $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
+        $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
         $output->dynamic = $this->input->dynamic;
         $output->clsName = $this->input->clsName;
         $output->header = $this->input->header;
