@@ -21,7 +21,7 @@
         </div>
         <pre class='bsw-pre bsw-long-text' v-html="item.trail"></pre>
       </a-timeline-item>
-      <a-timeline-item v-if="drawer.state in [1,2]">
+      <a-timeline-item v-if="[1,2].indexOf(drawer.state) >= 0">
         <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>
         Progressing..
       </a-timeline-item>

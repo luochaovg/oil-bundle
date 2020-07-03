@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswMixed;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -22,12 +23,15 @@ trait EnumDict
     public function enumDictFilterAnnotation()
     {
         return [
-            'limit' => [
-                'label'  => 'Limit',
-                'field'  => 'limit',
-                'type'   => Select::class,
-                'column' => 3,
-                'enum'   => [
+            'keyword' => [
+                'label' => 'Keyword',
+                'field' => 'keyword',
+            ],
+            'limit'   => [
+                'label' => 'Limit',
+                'field' => 'limit',
+                'type'  => Select::class,
+                'enum'  => [
                     0  => Abs::SELECT_ALL_VALUE,
                     5  => 'count ≤ 5',
                     10 => 'count ≤ 10',
@@ -35,7 +39,7 @@ trait EnumDict
                     30 => 'count ≤ 30',
                     50 => 'count ≤ 50',
                 ],
-                'value'  => 20,
+                'value' => 20,
             ],
         ];
     }
@@ -99,14 +103,6 @@ trait EnumDict
     }
 
     /**
-     * @return array
-     */
-    public function enumDictQuery(): array
-    {
-        return ['limit' => 0];
-    }
-
-    /**
      * @param Arguments $args
      *
      * @return array
@@ -138,6 +134,11 @@ trait EnumDict
                     'enum' => $enum,
                 ]
             );
+        }
+
+        $keyword = $args->condition['keyword']['value'] ?? null;
+        if ($keyword) {
+            $list = Helper::arraySearchFilter($list, $keyword);
         }
 
         return $list;

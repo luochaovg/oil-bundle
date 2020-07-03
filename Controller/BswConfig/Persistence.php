@@ -36,4 +36,31 @@ trait Persistence
 
         return $this->showPersistence(['id' => $id]);
     }
+
+    /**
+     * @return string
+     */
+    public function awayEntity(): string
+    {
+        return $this->persistenceEntity();
+    }
+
+    /**
+     * Away record
+     *
+     * @Route("/bsw-config/away/{id}", name="app_bsw_config_away", requirements={"id": "\d+"})
+     * @Access()
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function away(int $id): Response
+    {
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->doAway(['id' => $id]);
+    }
 }

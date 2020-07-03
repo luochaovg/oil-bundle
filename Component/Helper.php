@@ -3245,17 +3245,67 @@ class Helper
     /**
      * Unique for more-dimensional
      *
-     * @param array $data
+     * @param array $target
      *
      * @return array
      */
-    public static function moreDimensionArrayUnique(array $data): array
+    public static function moreDimensionArrayUnique(array $target): array
     {
-        $data = array_map('serialize', $data);
-        $data = array_unique($data);
-        $data = array_map('unserialize', $data);
+        $target = array_map('serialize', $target);
+        $target = array_unique($target);
+        $target = array_map('unserialize', $target);
 
-        return $data;
+        return $target;
+    }
+
+    /**
+     * Array search filter
+     *
+     * @param array  $target
+     * @param string $keyword
+     * @param bool   $searchKey
+     * @param bool   $searchValue
+     *
+     * @return array
+     */
+    public static function arraySearchFilter(
+        array $target,
+        string $keyword,
+        bool $searchKey = false,
+        $searchValue = true
+    ): array {
+
+        if (!$searchKey && !$searchValue) {
+            return $target;
+        }
+
+        $field = '__value';
+        foreach ($target as $item) {
+            $item[$field] = serialize($item);
+        }
+
+        if ($searchValue === true) {
+            $searchValue = $field;
+        }
+
+        foreach ($target as $key => $item) {
+            $tag = 0;
+            if ($searchKey && strpos($key, $keyword) === false) {
+                $tag += 1;
+            }
+            if ($searchValue && strpos($item[$searchValue] ?? null, $keyword) === false) {
+                $tag += 1;
+            }
+            if ($tag > 0) {
+                unset($target[$key]);
+            }
+        }
+
+        foreach ($target as &$item) {
+            unset($item[$field]);
+        }
+
+        return $target;
     }
 
     /**
