@@ -6,6 +6,7 @@ use Leon\BswBundle\Annotation\Entity\Input;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Component\MysqlDoc;
+use Leon\BswBundle\Component\Pinyin;
 use Leon\BswBundle\Component\Reflection;
 use Leon\BswBundle\Component\Aes;
 use Leon\BswBundle\Component\Service;
@@ -789,7 +790,7 @@ trait Foundation
     }
 
     /**
-     * Get app name tag
+     * Get app name tag (just en)
      *
      * @param string $split
      * @param bool   $lower
@@ -799,6 +800,9 @@ trait Foundation
     public function app(?string $split = '_', bool $lower = true): string
     {
         $app = $this->cnf->app_name;
+        if (Helper::utf8Chinese($app)) {
+            $app = ucwords(Pinyin::getPinyin($app), ' ');
+        }
         if ($lower) {
             $app = strtolower($app);
         }
@@ -1385,8 +1389,8 @@ trait Foundation
                 return $repo->kvp(['value'], 'key');
             },
             $key,
-            $args('db_cache_default_expires'),
-            $args('db_cache_enabled')
+            $args('config_cache_default_expires'),
+            $args('config_cache_enabled')
         );
     }
 
@@ -1711,6 +1715,34 @@ trait Foundation
         $message->setCode($codeMap[$classify] ?? $this->codeOkForLogic);
 
         return $this->responseMessageWithAjax($message);
+    }
+
+    /**
+     * Get config with locate
+     *
+     * @param string $name
+     * @param mixed  $default
+     * @param bool   $strict
+     *
+     * @return mixed
+     */
+    public function cnfWithLocate(string $name, $default = null, bool $strict = false)
+    {
+        if (!empty($this->header->lang)) {
+            $newName = "{$this->header->lang}_{$name}";
+        } elseif ($lang = $this->request()->getSession()->get(Abs::TAG_SESSION_LANG)) {
+            $newName = "{$lang}_{$name}";
+        } elseif ($lang = $this->request()->getLocale()) {
+            $newName = "{$lang}_{$name}";
+        } else {
+            $newName = $name;
+        }
+
+        if ($strict) {
+            return $this->cnf->{$newName} ?? $default;
+        }
+
+        return $this->cnf->{$newName} ?? $this->cnf->{$name} ?? $default;
     }
 
     /**

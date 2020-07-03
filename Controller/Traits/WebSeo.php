@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Controller\Traits;
 
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request as SfRequest;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -40,15 +39,9 @@ trait WebSeo
      */
     public function seo(): array
     {
-        /**
-         * @var $request SfRequest
-         */
-        $request = $this->request();
-        $i18n = $request->getLocale();
-
         $appName = null;
         if ($this->seoWithAppName) {
-            $appName = $this->cnf->app_name ?: 'UnsetAppName';
+            $appName = $this->cnfWithLocate('app_name') ?: 'UnsetAppName';
         }
 
         /**
@@ -59,12 +52,10 @@ trait WebSeo
          *
          * @return string|null
          */
-        $get = function (string $route, string $type) use ($appName, $i18n, &$get) {
+        $get = function (string $route, string $type) use ($appName, &$get) {
 
             $key = "{$route}_{$type}";
-            $cnfKey = "{$key}_{$i18n}";
-
-            $message = $this->cnf->{$cnfKey} ?? $this->seoLang($key);
+            $message = $this->cnfWithLocate($key) ?? $this->seoLang($key);
             $message = ($message == $key) ? null : $message;
 
             if ($route !== Abs::TAG_SEO_ACME_KEY) {
