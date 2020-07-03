@@ -61,10 +61,23 @@ class Module extends Bsw
         $output = new Output();
 
         $output->title = $this->input->title;
-        $output->okText = $this->input->okText;
         $output->width = $this->input->width;
         $output->footer = $this->input->footer;
         $output->wrapClassName = $this->input->wrapClassName;
+        $output->keyboard = $this->input->keyboard;
+        $output->mask = $this->input->mask;
+        $output->maskClosable = $this->input->maskClosable;
+        $output->okText = $this->input->okText;
+        $output->cancelText = $this->input->cancelText;
+        $output->okType = $this->input->okType;
+        $output->zIndex = $this->input->zIndex;
+        $output->closable = $this->input->closable;
+        $output->bodyStyle = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
+        $output->maskStyle = Helper::jsonStringify($this->input->maskStyle, '{}', JSON_FORCE_OBJECT);
+        $output->dialogStyle = Helper::jsonStringify($this->input->dialogStyle, '{}', JSON_FORCE_OBJECT);
+        $output->okCallback = $this->input->okCallback;
+        $output->cancelCallback = $this->input->cancelCallback;
+        $output->afterCloseCallback = $this->input->afterCloseCallback;
 
         $output = $this->caller(
             $this->method,

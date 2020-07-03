@@ -10,7 +10,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $operatesSize = Form::SIZE_MIDDLE;
+    public $operatesSize = Form::SIZE_DEFAULT;
 
     /**
      * @var string

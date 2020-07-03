@@ -40,5 +40,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $filterFormSize = Form::SIZE_MIDDLE;
+    public $filterFormSize = Form::SIZE_DEFAULT;
 }

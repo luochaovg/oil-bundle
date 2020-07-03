@@ -1018,6 +1018,8 @@ class Module extends Bsw
         $output->pageSizeOptions = $this->input->pageSizeOptions;
         $output->dynamic = $this->input->dynamic;
         $output->clsName = $this->input->clsName;
+        $output->header = $this->input->header;
+        $output->footer = $this->input->footer;
 
         $output = $this->caller(
             $this->method,

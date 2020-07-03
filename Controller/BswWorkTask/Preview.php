@@ -312,6 +312,7 @@ trait Preview
 
         return $this->showPreview(
             [
+                'border'      => false,
                 'dynamic'     => 10,
                 'filterJump'  => true,
                 'pageJump'    => true,

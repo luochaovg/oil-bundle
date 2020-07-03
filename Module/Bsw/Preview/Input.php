@@ -53,4 +53,14 @@ class Input extends ArgsInput
      * @var string
      */
     public $recordOperatesSize = Form::SIZE_SMALL;
+
+    /**
+     * @var bool
+     */
+    public $header = false;
+
+    /**
+     * @var bool
+     */
+    public $footer = false;
 }

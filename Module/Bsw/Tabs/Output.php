@@ -21,5 +21,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $size = Button::SIZE_MIDDLE;
+    public $size = Button::SIZE_DEFAULT;
 }

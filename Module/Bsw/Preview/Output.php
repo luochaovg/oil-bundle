@@ -97,4 +97,14 @@ class Output extends ArgsOutput
      * @var string
      */
     public $clsName;
+
+    /**
+     * @var bool
+     */
+    public $header = false;
+
+    /**
+     * @var bool
+     */
+    public $footer = false;
 }

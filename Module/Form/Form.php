@@ -34,9 +34,10 @@ abstract class Form
     /**
      * @const string
      */
-    const SIZE_SMALL  = 'small';
-    const SIZE_MIDDLE = 'default';
-    const SIZE_LARGE  = 'large';
+    const SIZE_SMALL   = 'small';
+    const SIZE_DEFAULT = 'default';
+    const SIZE_MIDDLE  = 'middle';
+    const SIZE_LARGE   = 'large';
 
     /**
      * @var string

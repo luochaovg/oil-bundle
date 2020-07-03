@@ -23,6 +23,7 @@
             type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
             selectedRowKeys: previewSelectedRow,
             onChange: previewSelectedChange,
+            selections: true
           }"
       {% endif %}
       :scroll="{{ {x: preview.scrollX}|merge(preview.scroll)|stringify }}"
@@ -32,6 +33,16 @@
       {% for item in preview.slots %}
         {{ item|raw }}
       {% endfor %}
+      {% if preview.header %}
+        <template slot="title" slot-scope="currentPageData">
+          {% block previewTableHeader %}{% endblock %}
+        </template>
+      {% endif %}
+      {% if preview.header %}
+        <template slot="footer" slot-scope="currentPageData">
+          {% block previewTableFooter %}{% endblock %}
+        </template>
+      {% endif %}
     </a-table>
     <a-pagination
       :show-quick-jumper="true"

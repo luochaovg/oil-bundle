@@ -15,5 +15,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $size = Button::SIZE_MIDDLE;
+    public $size = Button::SIZE_DEFAULT;
 }
