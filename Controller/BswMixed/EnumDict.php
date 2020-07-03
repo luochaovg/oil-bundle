@@ -50,11 +50,6 @@ trait EnumDict
     public function enumDictAnnotation()
     {
         return [
-            'id'   => [
-                'width'  => 80,
-                'align'  => 'center',
-                'render' => Abs::RENDER_CODE,
-            ],
             'key'  => [
                 'width' => 200,
                 'align' => 'right',
