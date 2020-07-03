@@ -77,6 +77,11 @@ $(function () {
 
         dispatcher(data, element) {
             let that = this;
+            if (data.iframe) {
+                delete data.iframe;
+                parent.postMessage({data, function: 'dispatcher'}, '*');
+                return;
+            }
             let action = function () {
                 if (data.function.length === 0) {
                     return console.error(`Attribute function should be configure in options.`, data);
@@ -509,6 +514,14 @@ $(function () {
         //
         // for iframe exec in parent
         //
+
+        dispatcherInParent(data, element) {
+            this.modal.visible = false;
+            if (typeof data.data.location !== 'undefined') {
+                data.data.location = bsw.unsetParams(['iframe'], data.data.location);
+            }
+            this.dispatcher(data.data, element);
+        },
 
         fillParentFormInParent(data, element, form = 'persistenceForm') {
             this.modal.visible = false;
