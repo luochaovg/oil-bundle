@@ -165,7 +165,7 @@ trait Preview
     {
         return [
             (new Button('Persistence', 'app_bsw_config_persistence'))
-                ->setArgs(['iframe' => true])
+                ->setArgs(['iframe' => !!$this->getArgs('iframe')])
                 ->appendArgs($this->clonePreviewToForm($args->hooked)),
         ];
     }

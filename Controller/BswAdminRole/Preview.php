@@ -2,14 +2,20 @@
 
 namespace Leon\BswBundle\Controller\BswAdminRole;
 
+use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminRole;
+use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Repository\BswAdminRoleAccessControlRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
+/**
+ * @property Expr $expr
+ */
 trait Preview
 {
     /**
@@ -18,7 +24,13 @@ trait Preview
     public function previewAnnotation(): array
     {
         return [
-            Abs::TR_ACT => ['width' => 150],
+            'roleAccessTotal' => [
+                'width'  => 150,
+                'align'  => 'center',
+                'sort'   => 2.1,
+                'render' => Abs::HTML_CODE,
+            ],
+            Abs::TR_ACT       => ['width' => 150],
         ];
     }
 
@@ -57,6 +69,38 @@ trait Preview
                 ->setType(Button::THEME_DANGER)
                 ->setArgs(['id' => $args->item['id'], 'target' => $args->item['name']]),
         ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function previewAfterHook(Arguments $args): array
+    {
+        static $roleAccessTotal;
+
+        /**
+         * @var BswAdminRoleAccessControlRepository $roleAccess
+         */
+        $roleAccess = $this->repo(BswAdminRoleAccessControl::class);
+
+        if (!isset($roleAccessTotal)) {
+            $roleAccessTotal = $roleAccess->lister(
+                [
+                    'alias'  => 'ac',
+                    'select' => ['ac.roleId', 'COUNT(ac) AS total'],
+                    'where'  => [$this->expr->eq('ac.state', ':state')],
+                    'args'   => ['state' => [Abs::NORMAL]],
+                    'group'  => ['ac.roleId'],
+                ]
+            );
+            $roleAccessTotal = array_column($roleAccessTotal, 'total', 'roleId');
+        }
+
+        $args->hooked['roleAccessTotal'] = $roleAccessTotal[$args->hooked['id']] ?? 0;
+
+        return $args->hooked;
     }
 
     /**
