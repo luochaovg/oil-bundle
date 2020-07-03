@@ -224,7 +224,7 @@ trait Upload
 
             // The file already exists
             if ($exists->state !== Abs::NORMAL) {
-                $bswAttachment->modify(['id' => $exists->id], ['state' => Abs::NORMAL]);
+                $bswAttachment->modify([Abs::PK => $exists->id], ['state' => Abs::NORMAL]);
             }
 
             $file->savePath = $exists->deep;

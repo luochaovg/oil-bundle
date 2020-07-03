@@ -9,7 +9,7 @@ bsw.configure({
             {% if logic.filterJump is defined %}
                 {% set jump = logic.filterJump ? 'true' : 'false' %}
             {% else %}
-                {% set jump = logic.scene == 'preview' ? 'false' : 'true' %}
+                {% set jump = logic.scene == constant(scaffold.abs ~ "::TAG_PREVIEW") ? 'false' : 'true' %}
             {% endif %}
             this.filterFormAction(e, {{ jump }}, 'filterForm', 'filterFormat');
         },

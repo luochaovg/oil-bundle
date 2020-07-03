@@ -584,7 +584,8 @@ class Module extends Bsw
      */
     protected function manualLister(array $query): array
     {
-        $previewData = $this->caller($this->method, self::PREVIEW_DATA, Abs::T_ARRAY);
+        $arguments = $this->arguments(['condition' => $this->input->condition]);
+        $previewData = $this->caller($this->method, self::PREVIEW_DATA, Abs::T_ARRAY, null, $arguments);
 
         if (!is_array($previewData)) {
             $fn = self::PREVIEW_DATA;

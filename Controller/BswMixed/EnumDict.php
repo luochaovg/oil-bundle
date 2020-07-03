@@ -24,15 +24,16 @@ trait EnumDict
         return [
             'limit' => [
                 'label'  => 'Limit',
+                'field'  => 'limit',
                 'type'   => Select::class,
                 'column' => 3,
                 'enum'   => [
-                    5   => 'count ≤ 5',
-                    10  => 'count ≤ 10',
-                    20  => 'count ≤ 20',
-                    30  => 'count ≤ 30',
-                    50  => 'count ≤ 50',
-                    100 => 'count ≤ 100',
+                    0  => Abs::SELECT_ALL_VALUE,
+                    5  => 'count ≤ 5',
+                    10 => 'count ≤ 10',
+                    20 => 'count ≤ 20',
+                    30 => 'count ≤ 30',
+                    50 => 'count ≤ 50',
                 ],
                 'value'  => 20,
             ],
@@ -106,6 +107,43 @@ trait EnumDict
     }
 
     /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function enumDictPreviewData(Arguments $args): array
+    {
+        $reflection = new Reflection();
+        $constant = $reflection->getClsConstDoc(static::$enum, true);
+
+        $list = [];
+        $limit = $args->condition['limit']['value'] ?? 0;
+
+        foreach ($constant as $key => $item) {
+            if (empty($item['proto'])) {
+                continue;
+            }
+
+            $enum = $item['proto']->getValue();
+            if ($limit && count($enum) > $limit) {
+                continue;
+            }
+
+            $enum = $this->enumLang($enum);
+            array_push(
+                $list,
+                [
+                    'key'  => $key,
+                    'info' => $item['const'],
+                    'enum' => $enum,
+                ]
+            );
+        }
+
+        return $list;
+    }
+
+    /**
      * Enum dict
      *
      * @Route("/enum-dict", name="app_enum_dict")
@@ -120,26 +158,6 @@ trait EnumDict
             return $args;
         }
 
-        $reflection = new Reflection();
-        $constant = $reflection->getClsConstDoc(static::$enum, true);
-
-        $list = [];
-        foreach ($constant as $key => $item) {
-            if (empty($item['proto'])) {
-                continue;
-            }
-            $enum = $item['proto']->getValue();
-            $enum = $this->enumLang($enum);
-            array_push(
-                $list,
-                [
-                    'key'  => $key,
-                    'info' => $item['const'],
-                    'enum' => $enum,
-                ]
-            );
-        }
-
-        return $this->showPreview(['preview' => $list]);
+        return $this->showPreview();
     }
 }

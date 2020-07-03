@@ -72,7 +72,7 @@ abstract class Hook
         }
 
         $value = $this->item->{$this->field};
-        $fn = $persistence ? 'persistence' : 'preview';
+        $fn = $persistence ? Abs::TAG_PERSISTENCE : Abs::TAG_PREVIEW;
 
         // keep origin value
         if ($suffix = Helper::dig($extraArgs, Abs::HOOKER_FLAG_ENUMS_SUFFIX)) {

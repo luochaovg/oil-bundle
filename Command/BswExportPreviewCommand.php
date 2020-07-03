@@ -6,6 +6,7 @@ use App\Module\Entity\Enum;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Pinyin;
 use Leon\BswBundle\Entity\BswCommandQueue;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Repository\BswCommandQueueRepository;
 use Symfony\Component\Console\Input\InputOption;
 use Exception;
@@ -152,7 +153,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
      */
     public function percent(float $percent): bool
     {
-        return !!$this->missionRepo->modify(['id' => $this->params->args->id], ['donePercent' => $percent]);
+        return !!$this->missionRepo->modify([Abs::PK => $this->params->args->id], ['donePercent' => $percent]);
     }
 
     /**
@@ -177,6 +178,6 @@ class BswExportPreviewCommand extends ExportCsvCommand
             $this->output->writeln("<error> Manual upload file error: {$e->getMessage()} </error>");
         }
 
-        $this->missionRepo->modify(['id' => $this->params->args->id], ['fileAttachmentId' => $file->id]);
+        $this->missionRepo->modify([Abs::PK => $this->params->args->id], ['fileAttachmentId' => $file->id]);
     }
 }

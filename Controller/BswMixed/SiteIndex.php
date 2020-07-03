@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Doctrine\DBAL\Connection;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -50,29 +51,13 @@ trait SiteIndex
     }
 
     /**
-     * Welcome page
+     * @param Arguments $args
      *
-     * @Route("/", name="app_site_index")
-     * @Access()
-     *
-     * @return Response
+     * @return array
      * @throws
      */
-    public function siteIndex(): Response
+    public function siteIndexPreviewData(Arguments $args): array
     {
-        if (($args = $this->valid()) instanceof Response) {
-            return $args;
-        }
-
-        /**
-         * @param string $label
-         *
-         * @return string
-         */
-        $lang = function (string $label): string {
-            return $this->twigLang($label);
-        };
-
         /**
          * @var Connection $pdo
          */
@@ -81,58 +66,58 @@ trait SiteIndex
 
         $list = [
             [
-                'name'  => $lang('Server protocol'),
+                'name'  => $this->twigLang('Server protocol'),
                 'value' => $_SERVER['SERVER_PROTOCOL'],
             ],
             [
-                'name'  => $lang('Gateway interface'),
+                'name'  => $this->twigLang('Gateway interface'),
                 'value' => $_SERVER['GATEWAY_INTERFACE'],
             ],
             [
-                'name'  => $lang('Server software'),
+                'name'  => $this->twigLang('Server software'),
                 'value' => $_SERVER['SERVER_SOFTWARE'],
             ],
             [
-                'name'  => $lang('Service address'),
+                'name'  => $this->twigLang('Service address'),
                 'value' => $_SERVER['SERVER_ADDR'],
             ],
             [
                 'id'    => 5,
-                'name'  => $lang('Service port'),
+                'name'  => $this->twigLang('Service port'),
                 'value' => $_SERVER['SERVER_PORT'],
             ],
             [
-                'name'  => $lang('Remote address'),
+                'name'  => $this->twigLang('Remote address'),
                 'value' => $_SERVER['REMOTE_ADDR'],
             ],
 
             [
-                'name'  => $lang('PHP version'),
+                'name'  => $this->twigLang('PHP version'),
                 'value' => PHP_VERSION,
             ],
             [
-                'name'  => $lang('Zend version'),
+                'name'  => $this->twigLang('Zend version'),
                 'value' => Zend_Version(),
             ],
             [
                 'id'    => 8,
-                'name'  => $lang('MySQL version'),
+                'name'  => $this->twigLang('MySQL version'),
                 'value' => current($version),
             ],
             [
-                'name'  => $lang('PHP uname'),
+                'name'  => $this->twigLang('PHP uname'),
                 'value' => php_uname(),
             ],
             [
-                'name'  => $lang('Http user agent'),
+                'name'  => $this->twigLang('Http user agent'),
                 'value' => $_SERVER['HTTP_USER_AGENT'],
             ],
             [
-                'name'  => $lang('Backend framework'),
+                'name'  => $this->twigLang('Backend framework'),
                 'value' => 'Symfony ' . $this->kernel::VERSION,
             ],
             [
-                'name'  => $lang('Frontend framework'),
+                'name'  => $this->twigLang('Frontend framework'),
                 'value' => 'Ant Design for Vue',
             ],
         ];
@@ -142,6 +127,23 @@ trait SiteIndex
             $item['id'] = ++$index;
         }
 
-        return $this->showPreview(['preview' => $list]);
+        return $list;
+    }
+
+    /**
+     * Welcome page
+     *
+     * @Route("/", name="app_site_index")
+     * @Access()
+     *
+     * @return Response
+     */
+    public function siteIndex(): Response
+    {
+        if (($args = $this->valid()) instanceof Response) {
+            return $args;
+        }
+
+        return $this->showPreview();
     }
 }

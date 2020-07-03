@@ -1431,7 +1431,7 @@ trait Foundation
         return [
             Abs::PG_CURRENT_PAGE => $query['page'],
             Abs::PG_PAGE_SIZE    => $query['limit'],
-            Abs::PG_TOTAL_PAGE   => ceil($total / $query['limit']),
+            Abs::PG_TOTAL_PAGE   => $query['limit'] ? ceil($total / $query['limit']) : 1,
             Abs::PG_TOTAL_ITEM   => $total,
             Abs::PG_ITEMS        => array_slice($list, $query['offset'], $query['limit']),
         ];
