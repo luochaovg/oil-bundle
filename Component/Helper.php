@@ -3279,8 +3279,8 @@ class Helper
             return $target;
         }
 
-        $field = '__value';
-        foreach ($target as $item) {
+        $field = '_search_with_all_value';
+        foreach ($target as &$item) {
             $item[$field] = serialize($item);
         }
 

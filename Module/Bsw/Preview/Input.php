@@ -27,6 +27,11 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
+    public $removeOperateInIframe = true;
+
+    /**
+     * @var bool
+     */
     public $size = 'default'; // default、small
 
     /**

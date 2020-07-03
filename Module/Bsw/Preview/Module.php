@@ -937,7 +937,7 @@ class Module extends Bsw
             unset($output->columns[$operate]);
         }
 
-        if ($this->input->iframe) {
+        if ($this->input->iframe && $this->input->removeOperateInIframe) {
             $output->scrollX -= ($output->columns[$operate]['width'] ?? 0);
             unset($output->columns[$operate]);
         }

@@ -26,12 +26,12 @@ trait SiteIndex
                 'render' => Abs::RENDER_CODE,
             ],
             'name'  => [
-                'width'  => 250,
+                'width'  => 200,
                 'align'  => 'right',
                 'render' => Abs::RENDER_CODE,
             ],
             'value' => [
-                'width' => 750,
+                'width' => 500,
             ],
         ];
     }

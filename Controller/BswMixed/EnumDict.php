@@ -50,13 +50,18 @@ trait EnumDict
     public function enumDictAnnotation()
     {
         return [
+            'id'   => [
+                'width'  => 80,
+                'align'  => 'center',
+                'render' => Abs::RENDER_CODE,
+            ],
             'key'  => [
-                'width' => 300,
+                'width' => 200,
                 'align' => 'right',
                 'html'  => true,
             ],
             'enum' => [
-                'width' => 700,
+                'width' => 500,
                 'html'  => true,
             ],
         ];
@@ -115,6 +120,7 @@ trait EnumDict
         $list = [];
         $limit = $args->condition['limit']['value'] ?? 0;
 
+        $id = 1;
         foreach ($constant as $key => $item) {
             if (empty($item['proto'])) {
                 continue;
@@ -129,6 +135,7 @@ trait EnumDict
             array_push(
                 $list,
                 [
+                    'id'   => $id++,
                     'key'  => $key,
                     'info' => $item['const'],
                     'enum' => $enum,

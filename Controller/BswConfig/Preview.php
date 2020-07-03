@@ -41,6 +41,16 @@ trait Preview
     public function previewOperates()
     {
         return [
+            (new Button('Project config'))
+                ->setType(Button::THEME_DASHED)
+                ->setRoute('app_bsw_configured_preview')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'width' => Abs::MEDIA_LG,
+                        'title' => false,
+                    ]
+                ),
             new Button('New record', 'app_bsw_config_persistence', $this->cnf->icon_newly),
         ];
     }
@@ -102,13 +112,18 @@ trait Preview
     public function configuredAnnotation()
     {
         return [
+            'id'    => [
+                'width'  => 80,
+                'align'  => 'center',
+                'render' => Abs::RENDER_CODE,
+            ],
             'key'   => [
-                'width' => 300,
+                'width' => 200,
                 'align' => 'right',
                 'html'  => true,
             ],
             'value' => [
-                'width' => 700,
+                'width' => 500,
                 'html'  => true,
             ],
         ];
@@ -122,8 +137,10 @@ trait Preview
     public function configuredPreviewData(Arguments $args): array
     {
         $list = [];
+        $id = 1;
         foreach ($this->cnf as $key => $value) {
-            $list[] = compact('key', 'value');
+            $list[] = compact('id', 'key', 'value');
+            $id += 1;
         }
 
         $key = $args->condition['key']['value'] ?? null;
@@ -148,7 +165,8 @@ trait Preview
     {
         return [
             (new Button('Persistence', 'app_bsw_config_persistence'))
-                ->setArgs($this->clonePreviewToForm($args->hooked)),
+                ->setArgs(['iframe' => true])
+                ->appendArgs($this->clonePreviewToForm($args->hooked)),
         ];
     }
 
@@ -166,6 +184,6 @@ trait Preview
             return $args;
         }
 
-        return $this->showPreview();
+        return $this->showPreview(['removeOperateInIframe' => false]);
     }
 }
