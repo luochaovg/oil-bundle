@@ -48,11 +48,6 @@ class Output extends ArgsOutput
     public $maxShow;
 
     /**
-     * @var int
-     */
-    public $maxShowInIframe;
-
-    /**
      * @var array
      */
     public $showList = [];

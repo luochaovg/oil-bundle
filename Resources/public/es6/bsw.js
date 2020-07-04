@@ -40,10 +40,8 @@ $(function () {
         modal: {
             visible: false,
             centered: true,
-            ok: bsw.blank,
-            cancel: bsw.blank,
-            afterClose: bsw.blank,
         },
+        footer: 'footer',
         drawer: {
             visible: false,
         },
@@ -70,7 +68,7 @@ $(function () {
         },
 
         getBswData(object) {
-            return bsw.evalExpr(object.attr('bsw-data'));
+            return object[0].dataBsw || object.data('bsw') || {};
         },
 
         redirectByVue(event) {
@@ -89,7 +87,7 @@ $(function () {
                 return;
             }
             let action = function () {
-                if (data.function.length === 0) {
+                if (!data.function || data.function.length === 0) {
                     return console.error(`Attribute function should be configure in options.`, data);
                 }
                 if (typeof that[data.function] === 'undefined') {
@@ -376,7 +374,13 @@ $(function () {
             if (typeof options.width === 'undefined') {
                 options.width = bsw.popupCosySize().width;
             }
-            this.modal = Object.assign(this.modal, options);
+            options = Object.assign(this.modal, options);
+            if (options.footer) {
+                this.footer = '_footer';
+            } else {
+                this.footer = 'footer';
+            }
+            this.modal = options;
         },
 
         showDrawer(options) {
@@ -385,23 +389,68 @@ $(function () {
             if (typeof options.width === 'undefined') {
                 options.width = bsw.popupCosySize().width;
             }
-            this.drawer = Object.assign(this.drawer, options);
+            options = Object.assign(this.drawer, options);
+            this.drawer = options;
         },
 
-        closeDrawer() {
+        executeMethod(element, fn) {
+            if (!element.length) {
+                return;
+            }
+            let data = element[0].dataBsw;
+            if (data[fn]) {
+                if (typeof this[data[fn]] === 'undefined') {
+                    return console.error(`Method ${data[fn]} is undefined.`, data);
+                }
+                this[data[fn]](data, event);
+            }
+        },
+
+        modalOnOk(event) {
+            this.modal.visible = false;
+            if (!event) {
+                return;
+            }
+            let element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
+            this.executeMethod(element, 'ok');
+        },
+
+        modalOnCancel(event) {
+            this.modal.visible = false;
+            if (!event) {
+                return;
+            }
+            let element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
+            this.executeMethod(element, 'cancel');
+        },
+
+        drawerOnOk(event) {
             this.drawer.visible = false;
+            if (!event) {
+                return;
+            }
+            let element = $(event.target).parents('.bsw-footer-bar');
+            this.executeMethod(element, 'ok');
+        },
+
+        drawerOnCancel(event) {
+            this.drawer.visible = false;
+            if (!event) {
+                return;
+            }
+            let element = $(event.target).parents('.bsw-footer-bar');
+            this.executeMethod(element, 'cancel');
         },
 
         showModalAfterRequest(data, element) {
             bsw.request(data.location).then((res) => {
                 bsw.response(res).then(() => {
-                    let sets = res.sets;
-                    let logic = sets.logic || sets;
-                    this.showModal({
-                        width: logic.width || data.width || undefined,
-                        title: logic.title || data.title || bsw.lang.modal_title,
-                        content: sets.content,
-                    });
+                    let options = bsw.jsonFilter(Object.assign(data, {
+                        width: res.sets.width || data.width || undefined,
+                        title: res.sets.title || data.title || bsw.lang.modal_title,
+                        content: res.sets.content,
+                    }));
+                    this.showModal(options);
                 }).catch((reason => {
                     console.warn(reason);
                 }));
@@ -457,11 +506,11 @@ $(function () {
             let repair = $(element).prev().attr('id');
             data.location = bsw.setParams({iframe: true, repair}, data.location);
 
-            let options = {
+            let options = bsw.jsonFilter(Object.assign(data, {
                 width: data.width || size.width,
                 title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
                 content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
-            };
+            }));
 
             let mode = data.shape || 'modal';
             if (mode === 'drawer') {
@@ -547,8 +596,8 @@ $(function () {
         //
 
         dispatcherInParent(data, element) {
-            this.modal.visible = false;
-            this.closeDrawer();
+            this.modalOnCancel();
+            this.drawerOnCancel();
             this.$nextTick(function () {
                 if (typeof data.data.location !== 'undefined') {
                     data.data.location = bsw.unsetParams(['iframe'], data.data.location);
@@ -558,8 +607,8 @@ $(function () {
         },
 
         fillParentFormInParent(data, element, form = 'persistenceForm') {
-            this.modal.visible = false;
-            this.closeDrawer();
+            this.modalOnCancel();
+            this.drawerOnCancel();
             this.$nextTick(function () {
                 if (this[form] && data.repair) {
                     this[form].setFieldsValue({[data.repair]: data.ids});
@@ -574,8 +623,8 @@ $(function () {
         },
 
         handleResponseInParent(data, element) {
-            this.modal.visible = false;
-            this.closeDrawer();
+            this.modalOnCancel();
+            this.drawerOnCancel();
             this.$nextTick(function () {
                 bsw.response(data.response).catch((reason => {
                     console.warn(reason);
@@ -607,7 +656,7 @@ $(function () {
         // component
         'b-icon': bsw.d.Icon.createFromIconfontCN({
             // /bundles/leonbsw/dist/js/iconfont.js
-            scriptUrl: $('#var-font-symbol').attr('bsw-value')
+            scriptUrl: $('#var-font-symbol').data('bsw-value')
         }),
 
     }, bsw.config.component || {})).init(function (v) {
@@ -643,7 +692,7 @@ $(function () {
                     // notification message confirm
                     let duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                     try {
-                        bsw[v.message.classify](v.message.content, duration, null, v.message.type);
+                        bsw[v.message.classify](Base64.decode(v.message.content), duration, null, v.message.type);
                     } catch (e) {
                         console.warn(bsw.lang.message_data_error);
                         console.warn(v.message);
@@ -651,6 +700,12 @@ $(function () {
                 }
                 // tips
                 if (typeof v.tips.content !== 'undefined') {
+                    let map = ['title', 'content'];
+                    for (let i = 0; i < map.length; i++) {
+                        if (typeof v.tips[map[i]] !== 'undefined') {
+                            v.tips[map[i]] = Base64.decode(v.tips[map[i]]);
+                        }
+                    }
                     v.showModal(v.tips);
                 }
             });

@@ -13,7 +13,7 @@
   {% if form.circle %}
     shape="circle"
   {% endif %}
-  bsw-data="{{ form.data }}"
+  :data-bsw.prop="{{ form.data }}"
   @click="dispatcherByVue"
   {{ form.attributes|raw }}
   {% if form.bindLoading %}

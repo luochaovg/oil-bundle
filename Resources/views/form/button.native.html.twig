@@ -16,7 +16,7 @@
     disabled="disabled"
   {% endif %}
   type="{{ form.htmlType }}"
-  bsw-data="{{ form.data }}"
+  data-bsw="{{ form.data }}"
   onclick="bsw.cnf.v.dispatcherByNative(this)"
   {% if form.selector %}
     {% set var = 'previewSelectedRow.length' %}

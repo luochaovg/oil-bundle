@@ -42,7 +42,7 @@
               {% if subMenuItem.icon is not empty %}
                 {{ subMenuItem.icon|icon|raw }}
               {% endif %}
-              <span bsw-data="{{ subMenuItem.data }}">{{ subMenuItem.label|trans({}, 'twig') }}</span>
+              <span :data-bsw.prop="{{ subMenuItem.data }}">{{ subMenuItem.label|trans({}, 'twig') }}</span>
             </a-menu-item>
           {% endfor %}
         </a-sub-menu>
@@ -51,7 +51,7 @@
           {% if menuItem.icon is not empty %}
             {{ menuItem.icon|icon|raw }}
           {% endif %}
-          <span bsw-data="{{ menuItem.data }}">{{ menuItem.label|trans({}, 'twig') }}</span>
+          <span :data-bsw.prop="{{ menuItem.data }}">{{ menuItem.label|trans({}, 'twig') }}</span>
         </a-menu-item>
       {% endif %}
     {% endfor %}

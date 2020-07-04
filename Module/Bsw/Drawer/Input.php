@@ -54,9 +54,19 @@ class Input extends ArgsInput
     public $okText = 'Sure';
 
     /**
+     * @var bool
+     */
+    public $okShow = true;
+
+    /**
      * @var string
      */
     public $cancelText = 'Cancel';
+
+    /**
+     * @var bool
+     */
+    public $cancelShow = false;
 
     /**
      * @var string

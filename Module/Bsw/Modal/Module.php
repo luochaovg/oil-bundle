@@ -70,7 +70,6 @@ class Module extends Bsw
 
         $output->title = $this->input->title;
         $output->width = $this->input->width;
-        $output->footer = $this->input->footer;
         $output->wrapClassName = $this->input->wrapClassName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;

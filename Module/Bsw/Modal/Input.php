@@ -18,11 +18,6 @@ class Input extends ArgsInput
     public $width = '50%';
 
     /**
-     * @var bool
-     */
-    public $footer = false;
-
-    /**
      * @var string
      */
     public $wrapClassName = null;

@@ -26,10 +26,6 @@ $(function () {
 
     }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({
 
-        getBswData(object) {
-            return web.evalExpr(object.attr('bsw-data'));
-        },
-
         redirect(data) {
             if (data.function && data.function !== 'redirect') {
                 return this.dispatcher(data, $('body'));
@@ -44,6 +40,10 @@ $(function () {
             }
         },
 
+        getBswData(object) {
+            return object[0].dataBsw || object.data('bsw') || {};
+        },
+
         redirectByVue(event) {
             this.redirect(this.getBswData($(event.item.$el).find('span')));
         },
@@ -51,13 +51,18 @@ $(function () {
         dispatcher(data, element) {
             let that = this;
             let action = function () {
-                let fn = data.function || 'console.log';
-                that[fn](data, element);
+                if (!data.function || data.function.length === 0) {
+                    return console.error(`Attribute function should be configure in options.`, data);
+                }
+                if (typeof that[data.function] === 'undefined') {
+                    return console.error(`Method ${data.function} is undefined.`, data);
+                }
+                that[data.function](data, element);
             };
             if (typeof data.confirm === 'undefined') {
                 action();
             } else {
-                web.showConfirm(data.confirm, web.lang.confirm_title, {onOk: () => action()});
+                bsw.showConfirm(data.confirm, bsw.lang.confirm_title, {onOk: () => action()});
             }
         },
 
@@ -84,7 +89,7 @@ $(function () {
         // component
         'b-icon': web.d.Icon.createFromIconfontCN({
             // /bundles/leonbsw/dist/js/iconfont.js
-            scriptUrl: $('#var-font-symbol').attr('bsw-value')
+            scriptUrl: $('#var-font-symbol').data('bsw-value')
         }),
 
     }, web.config.component || {})).init(function (v) {
@@ -109,16 +114,22 @@ $(function () {
         setTimeout(function () {
             if (typeof v.message.content !== 'undefined') {
                 // notification message confirm
-                let duration = web.isNull(v.message.duration) ? undefined : v.message.duration;
+                let duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                 try {
-                    web[v.message.classify](v.message.content, duration, null, v.message.type);
+                    bsw[v.message.classify](Base64.decode(v.message.content), duration, null, v.message.type);
                 } catch (e) {
-                    console.warn(web.lang.message_data_error);
+                    console.warn(bsw.lang.message_data_error);
                     console.warn(v.message);
                 }
             }
             // tips
             if (typeof v.tips.content !== 'undefined') {
+                let map = ['title', 'content'];
+                for (let i = 0; i < map.length; i++) {
+                    if (typeof v.tips[map[i]] !== 'undefined') {
+                        v.tips[map[i]] = Base64.decode(v.tips[map[i]]);
+                    }
+                }
                 v.showModal(v.tips);
             }
         }, 100);

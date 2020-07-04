@@ -372,117 +372,117 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is array
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isArray(val) {
-        if (null === val) {
+    isArray(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'object' && val.constructor === Array;
+        return typeof value === 'object' && value.constructor === Array;
     }
 
     /**
      * Is object
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isObject(val) {
-        if (null === val) {
+    isObject(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'object' && val.constructor === Object;
+        return typeof value === 'object' && value.constructor === Object;
     }
 
     /**
      * Is null
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isNull(val) {
-        if (val) {
+    isNull(value) {
+        if (value) {
             return false;
         }
-        return typeof val !== 'undefined' && val !== 0;
+        return typeof value !== 'undefined' && value !== 0;
     }
 
     /**
      * Is json
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isJson(val) {
-        if (null === val) {
+    isJson(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'object' && Object.prototype.toString.call(val).toLowerCase() === '[object object]';
+        return typeof value === 'object' && Object.prototype.toString.call(value).toLowerCase() === '[object object]';
     }
 
     /**
      * Is string
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isString(val) {
-        if (null === val) {
+    isString(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'string' && val.constructor === String;
+        return typeof value === 'string' && value.constructor === String;
     }
 
     /**
      * Is numeric
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isNumeric(val) {
-        if (null === val || '' === val) {
+    isNumeric(value) {
+        if (null === value || '' === value) {
             return false;
         }
-        return !isNaN(val);
+        return !isNaN(value);
     }
 
     /**
      * Is boolean
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isBoolean(val) {
-        if (null === val) {
+    isBoolean(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'boolean' && val.constructor === Boolean;
+        return typeof value === 'boolean' && value.constructor === Boolean;
     }
 
     /**
      * Is function
      *
-     * @param val mixed
+     * @param value mixed
      * @return {boolean}
      */
-    isFunction(val) {
-        if (null === val) {
+    isFunction(value) {
+        if (null === value) {
             return false;
         }
-        return typeof val === 'function' && Object.prototype.toString.call(val).toLowerCase() === '[object function]';
+        return typeof value === 'function' && Object.prototype.toString.call(value).toLowerCase() === '[object function]';
     }
 
     /**
      * Get json length
      *
-     * @param json object
+     * @param target json
      * @return {number}
      */
-    jsonLength(json) {
+    jsonLength(target) {
         let length = 0;
-        for (let i in json) {
-            if (!json.hasOwnProperty(i)) {
+        for (let i in target) {
+            if (!target.hasOwnProperty(i)) {
                 continue;
             }
             length++;
@@ -493,17 +493,17 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Get element offset
      *
-     * @param obj join
+     * @param element object
      * @return {{left: *, top: *, width: number, height: number}}
      */
-    offset(obj) {
-        obj = obj.jquery ? obj : $(obj);
-        let pos = obj.offset();
+    offset(element) {
+        element = element.jquery ? element : $(element);
+        let pos = element.offset();
         return {
             left: pos.left,
             top: pos.top,
-            width: obj[0].offsetWidth,
-            height: obj[0].offsetHeight
+            width: element[0].offsetWidth,
+            height: element[0].offsetHeight
         };
     }
 
@@ -697,13 +697,13 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Count px of padding and margin
      *
-     * @param obj json
+     * @param element object
      * @param length int
-     * @param type string
-     * @param pos string
+     * @param type string|array
+     * @param pos string|array
      * @return {number}
      */
-    pam(obj, length, type, pos) {
+    pam(element, length, type, pos) {
         length = length || 1;
         type = type || ['margin', 'padding'];
         pos = pos || ['left', 'right'];
@@ -711,7 +711,7 @@ class FoundationTools extends FoundationPrototype {
         let px = 0;
         type.each(function (m) {
             pos.each(function (n) {
-                px += parseInt(obj.css(m + '-' + n)) * length;
+                px += parseInt(element.css(m + '-' + n)) * length;
             });
         });
 
@@ -769,12 +769,12 @@ class FoundationTools extends FoundationPrototype {
      *
      * @param num int
      * @param callback callable
-     * @param obj object
+     * @param element object
      * @param ctrl bool
      */
-    keyBind(num, callback, obj, ctrl) {
-        obj = obj || $(document);
-        obj.unbind('keydown').bind('keydown', function (event) {
+    keyBind(num, callback, element, ctrl = false) {
+        element = element || $(document);
+        element.unbind('keydown').bind('keydown', function (event) {
             if (ctrl) {
                 if (event.keyCode === num && event.ctrlKey && callback) {
                     callback();
@@ -919,10 +919,10 @@ class FoundationTools extends FoundationPrototype {
      *
      * @param cls string
      * @param add bool
-     * @param element string
+     * @param selector string
      */
-    switchClass(cls, add, element = 'html') {
-        let container = $(element);
+    switchClass(cls, add, selector = 'html') {
+        let container = $(selector);
         container.removeClass(cls);
         add === 'yes' && container.addClass(cls);
     }
@@ -930,13 +930,13 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Check json keys exists
      *
-     * @param data object
-     * @param keys string
+     * @param target object
+     * @param keys array
      *
      * @returns boolean
      */
-    checkJsonDeep(data, keys) {
-        let origin = data;
+    checkJsonDeep(target, keys) {
+        let origin = target;
         keys = keys.split('.');
         for (let key of keys) {
             if (typeof origin[key] === 'undefined' || !origin[key]) {
@@ -946,6 +946,24 @@ class FoundationTools extends FoundationPrototype {
         }
 
         return true;
+    }
+
+    /**
+     * Json filter
+     *
+     * @param target json
+     * @param filter array
+     */
+    jsonFilter(target, filter = ['', null]) {
+        for (let i in target) {
+            if (!target.hasOwnProperty(i)) {
+                continue;
+            }
+            if (filter.indexOf(target[i]) !== -1) {
+                delete target[i];
+            }
+        }
+        return target;
     }
 }
 

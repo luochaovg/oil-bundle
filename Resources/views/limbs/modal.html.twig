@@ -16,12 +16,10 @@
   :body-style="{{ modal.bodyStyleJson }}"
   :mask-style="{{ modal.maskStyleJson }}"
   :dialog-style="{{ modal.dialogStyleJson }}"
-  @ok="modal.ok"
-  @cancel="modal.cancel"
-  @after-close="modal.afterClose"
-  {% if not modal.footer %}
-    :footer="null"
-  {% endif %}
+  :[footer]="null"
+  @ok="modalOnOk"
+  @cancel="modalOnCancel"
 >
+  <div class="bsw-modal-data" :data-bsw.prop="{ok: modal.ok, cancel: modal.cancel}"></div>
   <div v-html="modal.content"></div>
 </a-modal>

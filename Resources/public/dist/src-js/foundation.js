@@ -483,144 +483,144 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is array
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isArray',
-        value: function isArray(val) {
-            if (null === val) {
+        value: function isArray(value) {
+            if (null === value) {
                 return false;
             }
-            return (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && val.constructor === Array;
+            return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Array;
         }
 
         /**
          * Is object
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isObject',
-        value: function isObject(val) {
-            if (null === val) {
+        value: function isObject(value) {
+            if (null === value) {
                 return false;
             }
-            return (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && val.constructor === Object;
+            return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
         }
 
         /**
          * Is null
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isNull',
-        value: function isNull(val) {
-            if (val) {
+        value: function isNull(value) {
+            if (value) {
                 return false;
             }
-            return typeof val !== 'undefined' && val !== 0;
+            return typeof value !== 'undefined' && value !== 0;
         }
 
         /**
          * Is json
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isJson',
-        value: function isJson(val) {
-            if (null === val) {
+        value: function isJson(value) {
+            if (null === value) {
                 return false;
             }
-            return (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && Object.prototype.toString.call(val).toLowerCase() === '[object object]';
+            return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && Object.prototype.toString.call(value).toLowerCase() === '[object object]';
         }
 
         /**
          * Is string
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isString',
-        value: function isString(val) {
-            if (null === val) {
+        value: function isString(value) {
+            if (null === value) {
                 return false;
             }
-            return typeof val === 'string' && val.constructor === String;
+            return typeof value === 'string' && value.constructor === String;
         }
 
         /**
          * Is numeric
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isNumeric',
-        value: function isNumeric(val) {
-            if (null === val || '' === val) {
+        value: function isNumeric(value) {
+            if (null === value || '' === value) {
                 return false;
             }
-            return !isNaN(val);
+            return !isNaN(value);
         }
 
         /**
          * Is boolean
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isBoolean',
-        value: function isBoolean(val) {
-            if (null === val) {
+        value: function isBoolean(value) {
+            if (null === value) {
                 return false;
             }
-            return typeof val === 'boolean' && val.constructor === Boolean;
+            return typeof value === 'boolean' && value.constructor === Boolean;
         }
 
         /**
          * Is function
          *
-         * @param val mixed
+         * @param value mixed
          * @return {boolean}
          */
 
     }, {
         key: 'isFunction',
-        value: function isFunction(val) {
-            if (null === val) {
+        value: function isFunction(value) {
+            if (null === value) {
                 return false;
             }
-            return typeof val === 'function' && Object.prototype.toString.call(val).toLowerCase() === '[object function]';
+            return typeof value === 'function' && Object.prototype.toString.call(value).toLowerCase() === '[object function]';
         }
 
         /**
          * Get json length
          *
-         * @param json object
+         * @param target json
          * @return {number}
          */
 
     }, {
         key: 'jsonLength',
-        value: function jsonLength(json) {
+        value: function jsonLength(target) {
             var length = 0;
-            for (var i in json) {
-                if (!json.hasOwnProperty(i)) {
+            for (var i in target) {
+                if (!target.hasOwnProperty(i)) {
                     continue;
                 }
                 length++;
@@ -631,20 +631,20 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Get element offset
          *
-         * @param obj join
+         * @param element object
          * @return {{left: *, top: *, width: number, height: number}}
          */
 
     }, {
         key: 'offset',
-        value: function offset(obj) {
-            obj = obj.jquery ? obj : $(obj);
-            var pos = obj.offset();
+        value: function offset(element) {
+            element = element.jquery ? element : $(element);
+            var pos = element.offset();
             return {
                 left: pos.left,
                 top: pos.top,
-                width: obj[0].offsetWidth,
-                height: obj[0].offsetHeight
+                width: element[0].offsetWidth,
+                height: element[0].offsetHeight
             };
         }
 
@@ -944,16 +944,16 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Count px of padding and margin
          *
-         * @param obj json
+         * @param element object
          * @param length int
-         * @param type string
-         * @param pos string
+         * @param type string|array
+         * @param pos string|array
          * @return {number}
          */
 
     }, {
         key: 'pam',
-        value: function pam(obj, length, type, pos) {
+        value: function pam(element, length, type, pos) {
             length = length || 1;
             type = type || ['margin', 'padding'];
             pos = pos || ['left', 'right'];
@@ -961,7 +961,7 @@ var FoundationTools = function (_FoundationPrototype) {
             var px = 0;
             type.each(function (m) {
                 pos.each(function (n) {
-                    px += parseInt(obj.css(m + '-' + n)) * length;
+                    px += parseInt(element.css(m + '-' + n)) * length;
                 });
             });
 
@@ -1029,15 +1029,17 @@ var FoundationTools = function (_FoundationPrototype) {
          *
          * @param num int
          * @param callback callable
-         * @param obj object
+         * @param element object
          * @param ctrl bool
          */
 
     }, {
         key: 'keyBind',
-        value: function keyBind(num, callback, obj, ctrl) {
-            obj = obj || $(document);
-            obj.unbind('keydown').bind('keydown', function (event) {
+        value: function keyBind(num, callback, element) {
+            var ctrl = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+            element = element || $(document);
+            element.unbind('keydown').bind('keydown', function (event) {
                 if (ctrl) {
                     if (event.keyCode === num && event.ctrlKey && callback) {
                         callback();
@@ -1222,15 +1224,15 @@ var FoundationTools = function (_FoundationPrototype) {
          *
          * @param cls string
          * @param add bool
-         * @param element string
+         * @param selector string
          */
 
     }, {
         key: 'switchClass',
         value: function switchClass(cls, add) {
-            var element = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'html';
+            var selector = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'html';
 
-            var container = $(element);
+            var container = $(selector);
             container.removeClass(cls);
             add === 'yes' && container.addClass(cls);
         }
@@ -1238,16 +1240,16 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Check json keys exists
          *
-         * @param data object
-         * @param keys string
+         * @param target object
+         * @param keys array
          *
          * @returns boolean
          */
 
     }, {
         key: 'checkJsonDeep',
-        value: function checkJsonDeep(data, keys) {
-            var origin = data;
+        value: function checkJsonDeep(target, keys) {
+            var origin = target;
             keys = keys.split('.');
             var _iteratorNormalCompletion4 = true;
             var _didIteratorError4 = false;
@@ -1278,6 +1280,29 @@ var FoundationTools = function (_FoundationPrototype) {
             }
 
             return true;
+        }
+
+        /**
+         * Json filter
+         *
+         * @param target json
+         * @param filter array
+         */
+
+    }, {
+        key: 'jsonFilter',
+        value: function jsonFilter(target) {
+            var filter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['', null];
+
+            for (var i in target) {
+                if (!target.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (filter.indexOf(target[i]) !== -1) {
+                    delete target[i];
+                }
+            }
+            return target;
         }
     }]);
 

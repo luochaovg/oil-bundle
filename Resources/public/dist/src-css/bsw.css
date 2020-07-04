@@ -286,7 +286,7 @@ div.ant-modal-mask {
 }
 @media screen and (max-width: 992px) {
   .ant-layout .ant-layout-content.iframe .bsw-persistence {
-    padding: 30px 20px;
+    padding: 30px;
   }
 }
 .ant-layout .ant-layout-content .ant-breadcrumb {
@@ -754,7 +754,7 @@ textarea[size="large"] {
 .bsw-menu-mobile .ant-drawer-content {
   background-color: transparent;
 }
-.ant-drawer .footer-bar {
+.bsw-footer-bar {
   position: absolute;
   bottom: 0;
   width: 100%;

@@ -100,6 +100,7 @@ trait WebSource
         'vue'    => Abs::JS_VUE_MIN,
         'ant-d'  => Abs::JS_ANT_D_LANG_MIN,
         'app'    => Abs::JS_FOUNDATION,
+        'base64' => Abs::JS_BASE64,
     ];
 
     /**
@@ -116,6 +117,7 @@ trait WebSource
         'vue'    => Abs::POS_TOP,
         'ant-d'  => Abs::POS_TOP,
         'app'    => Abs::POS_TOP,
+        'base64' => Abs::POS_TOP,
     ];
 
     /**

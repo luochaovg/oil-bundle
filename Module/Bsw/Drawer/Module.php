@@ -77,7 +77,9 @@ class Module extends Bsw
         $output->mask = $this->input->mask;
         $output->maskClosable = $this->input->maskClosable;
         $output->okText = $this->input->okText;
+        $output->okShow = $this->input->okShow;
         $output->cancelText = $this->input->cancelText;
+        $output->cancelShow = $this->input->cancelShow;
         $output->okType = $this->input->okType;
         $output->zIndex = $this->input->zIndex;
         $output->closable = $this->input->closable;

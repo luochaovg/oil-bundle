@@ -3,8 +3,6 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\UploadItem;
-use Leon\BswBundle\Module\Bsw\Message;
-use Leon\BswBundle\Module\Entity\Abs;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
@@ -60,17 +58,16 @@ trait Upload
         ];
 
         if ($href = $file->href ?? null) {
-            $message = (new Message())
-                ->setCode(Response::HTTP_OK)
-                ->setMessage('File upload done, download {{ url }}')
-                ->setRoute($href)
-                ->setArgs(['{{ url }}' => $file->url])
-                ->setClassify(Abs::TAG_CLASSIFY_SUCCESS)
-                ->setType(Abs::TAG_TYPE_CONFIRM)
-                ->setSets($sets)
-                ->setDuration(Abs::TIME_MINUTE);
+            $sets['href'] = $this->redirectUrl($href);
+            $this->appendTips(
+                [
+                    'contentHtml' => true,
+                    'title'       => $this->messageLang('File upload done'),
+                    'content'     => "<a target='_blank' href='{$file->url}'>{$file->url}</a>",
+                ]
+            );
 
-            return $this->responseMessageWithAjax($message);
+            return $this->okayAjax($sets);
         }
 
         return $this->okayAjax($sets, 'File upload done');

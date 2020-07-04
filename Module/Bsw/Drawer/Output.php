@@ -52,9 +52,19 @@ class Output extends ArgsOutput
     public $okText;
 
     /**
+     * @var bool
+     */
+    public $okShow;
+
+    /**
      * @var string
      */
     public $cancelText;
+
+    /**
+     * @var bool
+     */
+    public $cancelShow;
 
     /**
      * @var string

@@ -98,8 +98,13 @@ trait Preview
             (new Button('Google qr code'))
                 ->setType(Button::THEME_DEFAULT)
                 ->setRoute('app_bsw_admin_user_google_qr_code')
-                ->setArgs(['id' => $args->item['id']])
-                ->setClick('showModalAfterRequest'),
+                ->setClick('showModalAfterRequest')
+                ->setArgs(
+                    [
+                        'width' => 300,
+                        'id'    => $args->item['id'],
+                    ]
+                ),
 
             (new Button('Grant authorization for user'))
                 ->setRoute('app_bsw_admin_access_control_grant')

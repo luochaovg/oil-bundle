@@ -17,11 +17,6 @@ class Output extends ArgsOutput
     public $width;
 
     /**
-     * @var bool
-     */
-    public $footer;
-
-    /**
      * @var string
      */
     public $wrapClassName;

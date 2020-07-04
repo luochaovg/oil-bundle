@@ -27,9 +27,6 @@ $(function () {
         tips: {} // from v-init
 
     }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({
-        getBswData: function getBswData(object) {
-            return web.evalExpr(object.attr('bsw-data'));
-        },
         redirect: function redirect(data) {
             if (data.function && data.function !== 'redirect') {
                 return this.dispatcher(data, $('body'));
@@ -43,19 +40,27 @@ $(function () {
                 }
             }
         },
+        getBswData: function getBswData(object) {
+            return object[0].dataBsw || object.data('bsw') || {};
+        },
         redirectByVue: function redirectByVue(event) {
             this.redirect(this.getBswData($(event.item.$el).find('span')));
         },
         dispatcher: function dispatcher(data, element) {
             var that = this;
             var action = function action() {
-                var fn = data.function || 'console.log';
-                that[fn](data, element);
+                if (!data.function || data.function.length === 0) {
+                    return console.error('Attribute function should be configure in options.', data);
+                }
+                if (typeof that[data.function] === 'undefined') {
+                    return console.error('Method ' + data.function + ' is undefined.', data);
+                }
+                that[data.function](data, element);
             };
             if (typeof data.confirm === 'undefined') {
                 action();
             } else {
-                web.showConfirm(data.confirm, web.lang.confirm_title, { onOk: function onOk() {
+                bsw.showConfirm(data.confirm, bsw.lang.confirm_title, { onOk: function onOk() {
                         return action();
                     } });
             }
@@ -81,7 +86,7 @@ $(function () {
         // component
         'b-icon': web.d.Icon.createFromIconfontCN({
             // /bundles/leonbsw/dist/js/iconfont.js
-            scriptUrl: $('#var-font-symbol').attr('bsw-value')
+            scriptUrl: $('#var-font-symbol').data('bsw-value')
         })
 
     }, web.config.component || {})).init(function (v) {
@@ -106,16 +111,22 @@ $(function () {
         setTimeout(function () {
             if (typeof v.message.content !== 'undefined') {
                 // notification message confirm
-                var duration = web.isNull(v.message.duration) ? undefined : v.message.duration;
+                var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                 try {
-                    web[v.message.classify](v.message.content, duration, null, v.message.type);
+                    bsw[v.message.classify](Base64.decode(v.message.content), duration, null, v.message.type);
                 } catch (e) {
-                    console.warn(web.lang.message_data_error);
+                    console.warn(bsw.lang.message_data_error);
                     console.warn(v.message);
                 }
             }
             // tips
             if (typeof v.tips.content !== 'undefined') {
+                var map = ['title', 'content'];
+                for (var i = 0; i < map.length; i++) {
+                    if (typeof v.tips[map[i]] !== 'undefined') {
+                        v.tips[map[i]] = Base64.decode(v.tips[map[i]]);
+                    }
+                }
                 v.showModal(v.tips);
             }
         }, 100);

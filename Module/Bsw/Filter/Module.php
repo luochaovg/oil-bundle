@@ -631,8 +631,9 @@ class Module extends Bsw
      */
     protected function handleShowList(array $filterAnnotation, Output $output)
     {
+        $output->maxShow = $this->input->maxShow;
         if ($this->input->iframe) {
-            $output->maxShow = $output->maxShowInIframe;
+            $output->maxShow = $this->input->maxShowInIframe;
         }
 
         [$output->group, $output->diffuse] = $this->getFilterGroup($filterAnnotation);
@@ -703,8 +704,6 @@ class Module extends Bsw
         $this->handleFilter($output);
 
         $output->columnPx = $this->input->columnPx;
-        $output->maxShow = $this->input->maxShow;
-        $output->maxShowInIframe = $this->input->maxShowInIframe;
         $output->textShow = $this->input->textShow;
         $output->textHide = $this->input->textHide;
 

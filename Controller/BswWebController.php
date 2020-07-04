@@ -361,13 +361,14 @@ abstract class BswWebController extends AbstractController
         }
 
         $content = $this->messageLang($content);
-        $content = str_replace(['"', "'"], null, $content);
+        $content = Html::cleanHtml($content);
+        $content = base64_encode($content);
 
         $message = [
             'type'     => $type,
             'duration' => $duration,
             'classify' => $classify,
-            'content'  => Html::cleanHtml($content),
+            'content'  => $content,
         ];
 
         // message to flash
@@ -375,7 +376,7 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * Append tips
+     * Append tips (modal options)
      *
      * @param array $modalOptions
      */
@@ -384,7 +385,7 @@ abstract class BswWebController extends AbstractController
         $modalOptions = array_merge(
             [
                 'title' => 'Tips',
-                'width' => '420px',
+                'width' => Abs::MEDIA_MIN,
             ],
             $modalOptions
         );
@@ -393,9 +394,10 @@ abstract class BswWebController extends AbstractController
             if (!isset($modalOptions[$key])) {
                 continue;
             }
-
-            $content = str_replace(['"', "'"], null, $modalOptions[$key]);
-            $modalOptions[$key] = Html::cleanHtml($content);
+            if (!($modalOptions["{$key}Html"] ?? false)) {
+                $modalOptions[$key] = Html::cleanHtml($modalOptions[$key]);
+            }
+            $modalOptions[$key] = base64_encode($modalOptions[$key]);
         }
 
         // message to flash
