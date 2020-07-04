@@ -687,10 +687,11 @@ $(function () {
                     // notification message confirm
                     var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
                     try {
-                        bsw[v.message.classify](Base64.decode(v.message.content), duration, null, v.message.type);
+                        var a = v.message.content;
+                        bsw[v.message.classify](bsw.base64Decode(v.message.content), duration, null, v.message.type);
                     } catch (e) {
-                        console.warn(bsw.lang.message_data_error);
-                        console.warn(v.message);
+                        console.warn(bsw.lang.message_data_error, v.message);
+                        console.warn(e);
                     }
                 }
                 // tips
@@ -698,7 +699,7 @@ $(function () {
                     var map = ['title', 'content'];
                     for (var i = 0; i < map.length; i++) {
                         if (typeof v.tips[map[i]] !== 'undefined') {
-                            v.tips[map[i]] = Base64.decode(v.tips[map[i]]);
+                            v.tips[map[i]] = bsw.base64Decode(v.tips[map[i]]);
                         }
                     }
                     v.showModal(v.tips);

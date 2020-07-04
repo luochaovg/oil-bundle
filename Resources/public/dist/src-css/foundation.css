@@ -88,6 +88,17 @@ div.ant-modal-mask {
     opacity: .2;
   }
 }
+@keyframes bsw-breathing-top {
+  0% {
+    opacity: .3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .3;
+  }
+}
 @keyframes bsw-rotate {
   0% {
     transform: rotate(0deg);

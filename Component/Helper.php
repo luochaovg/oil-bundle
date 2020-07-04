@@ -1339,6 +1339,18 @@ class Helper
     }
 
     /**
+     * Base64 encode for js
+     *
+     * @param string $content
+     *
+     * @return string
+     */
+    public static function base64EncodeForJs(string $content): string
+    {
+        return base64_encode(rawurlencode($content)); // js: decodeURIComponent(atob('xxx'))
+    }
+
+    /**
      * Cal the size of the thumb
      *
      * @param int $thumbW

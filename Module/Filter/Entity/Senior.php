@@ -155,10 +155,7 @@ class Senior extends Filter
      */
     public function parse($value): array
     {
-        $this->expression = $value[0] ?? null;
-        $value = $value[1] ?? null;
-
-        if (empty($this->expression)) {
+        if (empty($this->expression = $value[0] ?? null)) {
             throw new FilterException("Give filter expression first");
         }
 
@@ -166,7 +163,7 @@ class Senior extends Filter
             throw new FilterException("Filter expression is not support");
         }
 
-        if (is_null($value)) {
+        if (is_null($value = $value[1] ?? null)) {
             if (!in_array(
                 $this->expression,
                 [

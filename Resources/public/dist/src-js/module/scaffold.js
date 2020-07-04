@@ -51,6 +51,9 @@ bsw.configure({
     },
     logic: {
         thirdMessage: function thirdMessage(v) {
+            if (typeof v.configure === 'undefined' || typeof v.configure.third_message_second === 'undefined') {
+                return;
+            }
             if (v.configure.third_message_second < 3) {
                 return;
             }

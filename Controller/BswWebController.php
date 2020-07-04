@@ -355,14 +355,13 @@ abstract class BswWebController extends AbstractController
         string $classify = Abs::TAG_CLASSIFY_WARNING,
         string $type = Abs::TAG_TYPE_MESSAGE
     ) {
-
         if (strpos($content, Abs::TAG_SQL_ERROR) !== false) {
             throw new Exception($content);
         }
 
         $content = $this->messageLang($content);
         $content = Html::cleanHtml($content);
-        $content = base64_encode($content);
+        $content = Helper::base64EncodeForJs($content);
 
         $message = [
             'type'     => $type,
@@ -397,7 +396,7 @@ abstract class BswWebController extends AbstractController
             if (!($modalOptions["{$key}Html"] ?? false)) {
                 $modalOptions[$key] = Html::cleanHtml($modalOptions[$key]);
             }
-            $modalOptions[$key] = base64_encode($modalOptions[$key]);
+            $modalOptions[$key] = Helper::base64EncodeForJs($modalOptions[$key]);
         }
 
         // message to flash

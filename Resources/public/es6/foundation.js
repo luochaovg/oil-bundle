@@ -1388,6 +1388,16 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Base64 decode
+     *
+     * @param text
+     * @returns {string}
+     */
+    base64Decode(text) {
+        return decodeURIComponent(atob(text));
+    }
+
+    /**
      * Create chart
      *
      * @param option object

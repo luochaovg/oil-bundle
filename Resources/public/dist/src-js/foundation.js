@@ -1813,6 +1813,19 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Base64 decode
+         *
+         * @param text
+         * @returns {string}
+         */
+
+    }, {
+        key: 'base64Decode',
+        value: function base64Decode(text) {
+            return decodeURIComponent(atob(text));
+        }
+
+        /**
          * Create chart
          *
          * @param option object

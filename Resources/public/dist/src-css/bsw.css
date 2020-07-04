@@ -88,6 +88,17 @@ div.ant-modal-mask {
     opacity: .2;
   }
 }
+@keyframes bsw-breathing-top {
+  0% {
+    opacity: .3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .3;
+  }
+}
 @keyframes bsw-rotate {
   0% {
     transform: rotate(0deg);
@@ -539,6 +550,7 @@ div.modal-container-center div.ant-modal-body > div {
 }
 .ant-checkbox-wrapper.danger {
   color: #f54f4f;
+  animation: bsw-breathing-top 1s infinite;
 }
 a.bsw-preview-link {
   padding-right: 5px;

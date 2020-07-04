@@ -377,6 +377,8 @@ class Module extends Bsw
         $filter = $this->web->hooker($_hooks, $filter, true, null, null, $extraArgs);
 
         $condition = [];
+        [$group, $diffuse] = $this->getFilterGroup($filterAnnotation);
+
         foreach ($filterAnnotation as $key => $item) {
             if (!isset($filter[$key]) && !isset($item['value'])) {
                 continue;
@@ -396,7 +398,8 @@ class Module extends Bsw
                 $condition[$field] = $this->web->createFilter(Senior::class, []);
             }
 
-            $index = $filterAnnotation[$key]['index'];
+            $groupName = $diffuse[$key];
+            $index = array_search($key, $group[$groupName]);
             $condition[$field]['value'][$index] = $filterAnnotation[$key]['value'];
         }
 
@@ -655,16 +658,24 @@ class Module extends Bsw
             foreach ($members as $field) {
                 if (!isset($output->filter[$name])) {
                     $output->filter[$name] = [
+                        'group'  => $name,
+                        'type'   => [],
                         'label'  => $output->filter[$field]['label'],
                         'column' => $output->filter[$field]['column'],
-                        'type'   => [],
                         'sort'   => $output->filter[$field]['sort'],
-                        'group'  => $name,
-                        'title'  => null,
+                        'title'  => $output->filter[$field]['title'],
                     ];
                 }
-                $output->filter[$name]['type'][] = $output->filter[$field]['type'];
-                $output->filter[$name]['title'] = $output->filter[$field]['title'];
+                /**
+                 * @var Form $type
+                 */
+                $type = $output->filter[$field]['type'];
+                $output->filter[$name]['type'][] = $type;
+                foreach (['label', 'column', 'sort', 'title'] as $key) {
+                    if (empty($output->filter[$name][$key])) {
+                        $output->filter[$name][$key] = $output->filter[$field][$key];
+                    }
+                }
                 unset($output->filter[$field]);
             }
         }
