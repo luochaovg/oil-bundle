@@ -1,8 +1,7 @@
 <?php
 
-namespace Leon\BswBundle\Module\Bsw\Modal;
+namespace Leon\BswBundle\Module\Bsw\Result;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -25,7 +24,7 @@ class Module extends Bsw
      */
     public function name(): string
     {
-        return 'modal';
+        return 'result';
     }
 
     /**
@@ -34,7 +33,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
-        return 'limbs/modal.html';
+        return 'limbs/result.html';
     }
 
     /**
@@ -71,19 +70,11 @@ class Module extends Bsw
         $output->title = $this->input->title;
         $output->centered = $this->input->centered;
         $output->width = $this->input->width;
-        $output->wrapClassName = $this->input->wrapClassName;
-        $output->keyboard = $this->input->keyboard;
-        $output->mask = $this->input->mask;
-        $output->maskClosable = $this->input->maskClosable;
-        $output->okText = $this->input->okText;
-        $output->cancelText = $this->input->cancelText;
-        $output->okType = $this->input->okType;
-        $output->zIndex = $this->input->zIndex;
-        $output->closable = $this->input->closable;
-
-        $output->bodyStyleJson = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
-        $output->maskStyleJson = Helper::jsonStringify($this->input->maskStyle, '{}', JSON_FORCE_OBJECT);
-        $output->dialogStyleJson = Helper::jsonStringify($this->input->dialogStyle, '{}', JSON_FORCE_OBJECT);
+        $output->subTitle = $this->input->subTitle;
+        $output->status = $this->input->status;
+        $output->operatorType = $this->input->operatorType;
+        $output->operatorClick = $this->input->operatorClick;
+        $output->operator = $this->input->operator;
 
         $output = $this->caller(
             $this->method,

@@ -101,7 +101,7 @@ div.ant-modal-mask {
     opacity: .2;
   }
   50% {
-    opacity: .6;
+    opacity: .8;
   }
   100% {
     opacity: .2;
@@ -120,12 +120,30 @@ div.ant-modal-mask {
   }
 }
 
-@keyframes bsw-rotate {
+@keyframes bsw-rotate-360 {
   0% {
     transform: rotate(0deg)
   }
   100% {
     transform: rotate(360deg)
+  }
+}
+
+@keyframes bsw-rotate-180 {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(180deg)
+  }
+}
+
+@keyframes bsw-rotate-90 {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(90deg)
   }
 }
 

@@ -127,6 +127,9 @@ Adjustment task progress:                   '调整任务进度'
 Add task:                                   '快速添加任务'
 Close task:                                 '关闭任务'
 Week report:                                '任务周报'
+Operation success:                          '操作成功'
+Operation failed:                           '操作失败'
+Operation done:                             '操作完成'
 
 # bsw tools
 

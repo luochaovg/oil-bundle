@@ -61,7 +61,8 @@ class Abs
     const END_API         = 'End third api';
 
     const TAG_MESSAGE        = 'message';
-    const TAG_TIPS           = 'tips';
+    const TAG_MODAL          = 'modal';
+    const TAG_RESULT         = 'result';
     const TAG_HISTORY        = 'history';
     const TAG_FALLBACK       = 'fallback';
     const TAG_SESSION_LANG   = 'lang';
@@ -88,6 +89,14 @@ class Abs
     const TAG_CLASSIFY_INFO    = 'info';
     const TAG_CLASSIFY_WARNING = 'warning';
     const TAG_CLASSIFY_ERROR   = 'error';
+
+    const RESULT_SUCCESS = 'success';
+    const RESULT_ERROR   = 'error';
+    const RESULT_INFO    = 'info';
+    const RESULT_WARNING = 'warning';
+    const RESULT_403     = '403';
+    const RESULT_404     = '404';
+    const RESULT_500     = '500';
 
     const HOOKER_FLAG_FIELDS       = '_fields';
     const HOOKER_FLAG_ACME         = '_acme';
@@ -448,6 +457,7 @@ class Abs
     const MODULE_FOOTER_SORT      = 100;
     const MODULE_MODAL_SORT       = 110;
     const MODULE_DRAWER_SORT      = 120;
+    const MODULE_RESULT_SORT      = 130;
 
     const VG_NEWLY  = 'newly';
     const VG_MODIFY = 'modify';

@@ -1,0 +1,27 @@
+<a-modal
+  v-model="result.visible"
+  wrap-class-name="bsw-modal"
+  :closable="false"
+  :destroy-on-close="true"
+  :mask="true"
+  :mask-closable="false"
+  :keyboard="false"
+  :footer="null"
+  :centered="{{ result.centered ? 'true' : 'false' }}"
+  :width="result.width || {{ result.width }}"
+>
+  <a-result :status="typeof result.status !== 'undefined' ? result.status : '{{ result.status }}'">
+    {% set title = result.title|trans({}, 'twig') %}
+    <div slot="title" v-html="typeof result.title !== 'undefined' ? result.title : '{{ title }}'"></div>
+    {% set subTitle = result.subTitle|trans({}, 'twig') %}
+    <div slot="subTitle" v-html="typeof result.subTitle !== 'undefined' ? result.subTitle : '{{ subTitle }}'"></div>
+    {% block resultOperator %}
+      <template v-slot:extra>
+        <a-button
+          type="{{ result.operatorType }}"
+          @click="{{ result.operatorClick }}"
+        >{{ result.operator|trans({}, 'twig') }}</a-button>
+      </template>
+    {% endblock %}
+  </a-result>
+</a-modal>

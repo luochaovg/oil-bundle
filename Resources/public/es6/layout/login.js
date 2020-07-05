@@ -36,7 +36,7 @@ NydhxUEs0y8aMzWbGwIDAQAB
             }
 
             login.password = bsw.rsaEncrypt(login.password);
-            bsw.request(this.loginApiUrl, login).then((res) => {
+            bsw.request(this.init.loginApiUrl, login).then((res) => {
                 this.btnLoading = true;
                 bsw.response(res, null, null, 2).catch(() => {
                     this.btnLoading = false;

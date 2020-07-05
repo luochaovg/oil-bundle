@@ -1351,6 +1351,26 @@ class Helper
     }
 
     /**
+     * Base64 encode for js （array）
+     *
+     * @param array $target
+     *
+     * @return array
+     */
+    public static function arrayBase64EncodeForJs(array $target): array
+    {
+        foreach ($target as &$item) {
+            if (is_array($item)) {
+                $item = self::arrayBase64EncodeForJs($item);
+            } elseif (is_string($item)) {
+                $item = self::base64EncodeForJs($item);
+            }
+        }
+
+        return $target;
+    }
+
+    /**
      * Cal the size of the thumb
      *
      * @param int $thumbW

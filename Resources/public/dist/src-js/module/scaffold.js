@@ -22,7 +22,7 @@ bsw.configure({
         },
         changeLanguageByVue: function changeLanguageByVue(event) {
             var key = $(event.item.$el).find('span').attr('lang');
-            bsw.request(this.languageApiUrl, { key: key }).then(function (res) {
+            bsw.request(this.init.languageApiUrl, { key: key }).then(function (res) {
                 bsw.response(res).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -31,16 +31,17 @@ bsw.configure({
             });
         },
         scaffoldInit: function scaffoldInit() {
+            var cnf = this.init.configure;
             // theme
-            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, this.configure.theme || this.theme);
+            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, cnf.theme || this.theme);
             // color weak
-            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, this.configure.weak || this.weak);
+            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, cnf.weak || this.weak);
             bsw.switchClass('bsw-weak', this.weak);
             // third message
-            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, this.configure.third_message || this.third_message);
+            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, cnf.third_message || this.third_message);
             // menu
-            this.menuWidth = this.configure.menu_width || this.menuWidth;
-            var collapsed = bsw.cookieMapCurrent('bsw_menu_collapsed', this.opposeMap, typeof this.configure.menu_collapsed === 'undefined' ? this.menuWidth : this.configure.menu_collapsed);
+            this.menuWidth = cnf.menu_width || this.menuWidth;
+            var collapsed = bsw.cookieMapCurrent('bsw_menu_collapsed', this.opposeMap, typeof cnf.menu_collapsed === 'undefined' ? this.menuWidth : cnf.menu_collapsed);
 
             var menuCollapsed = collapsed === 'yes';
             this.$nextTick(function () {
@@ -51,10 +52,11 @@ bsw.configure({
     },
     logic: {
         thirdMessage: function thirdMessage(v) {
-            if (typeof v.configure === 'undefined' || typeof v.configure.third_message_second === 'undefined') {
+            var cnf = v.init.configure;
+            if (typeof cnf === 'undefined' || typeof cnf.third_message_second === 'undefined') {
                 return;
             }
-            if (v.configure.third_message_second < 3) {
+            if (cnf.third_message_second < 3) {
                 return;
             }
             v.$nextTick(function () {
@@ -64,7 +66,7 @@ bsw.configure({
                         return;
                     }
                     v.noLoadingOnce = true;
-                    bsw.request(v.thirdMessageApiUrl).then(function (res) {
+                    bsw.request(v.init.thirdMessageApiUrl).then(function (res) {
                         if (res.error === 4967) {
                             return;
                         }
@@ -74,7 +76,7 @@ bsw.configure({
                     }).catch(function (reason) {
                         console.warn(reason);
                     });
-                }, v.configure.third_message_second * 1000);
+                }, cnf.third_message_second * 1000);
             });
         }
     }

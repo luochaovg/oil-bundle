@@ -13,6 +13,11 @@ class Input extends ArgsInput
     public $title = 'Modal';
 
     /**
+     * @var bool
+     */
+    public $centered = true;
+
+    /**
      * @var string|int
      */
     public $width = '50%';

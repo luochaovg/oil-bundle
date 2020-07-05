@@ -12,6 +12,11 @@ class Output extends ArgsOutput
     public $title;
 
     /**
+     * @var bool
+     */
+    public $centered;
+
+    /**
      * @var string|int
      */
     public $width;

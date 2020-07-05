@@ -1398,6 +1398,24 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Base64 decode (array)
+     *
+     * @param target
+     * @returns {*}
+     */
+    arrayBase64Decode(target) {
+        for (let key in target) {
+            if (!target.hasOwnProperty(key)) {
+                continue;
+            }
+            if (this.isString(target[key])) {
+                target[key] = this.base64Decode(target[key]);
+            }
+        }
+        return target;
+    }
+
+    /**
      * Create chart
      *
      * @param option object

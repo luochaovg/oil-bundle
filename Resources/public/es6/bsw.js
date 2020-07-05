@@ -34,15 +34,21 @@ $(function () {
 
         noLoadingOnce: false,
         spinning: false,
-        configure: {},  // from v-init
-        message: {},  // from v-init
-        tips: {}, // from v-init
+        init: { // from v-init
+            configure: {},
+            message: {},
+            modal: {},
+            result: {}
+        },
+        footer: 'footer',
         modal: {
             visible: false,
             centered: true,
         },
-        footer: 'footer',
         drawer: {
+            visible: false,
+        },
+        result: {
             visible: false,
         },
 
@@ -237,7 +243,7 @@ $(function () {
                         width: 768,
                         height: 700,
                     };
-                    data.location = bsw.setParams(res.sets, this.exportApiUrl, true);
+                    data.location = bsw.setParams(res.sets, this.init.exportApiUrl, true);
                     this.showIFrame(data, $('body')[0]);
                 }).catch((reason => {
                     console.warn(reason);
@@ -381,6 +387,13 @@ $(function () {
                 this.footer = 'footer';
             }
             this.modal = options;
+        },
+
+        showResult(options) {
+            this.result.visible = false;
+            options.visible = true;
+            options = Object.assign(this.result, options);
+            this.result = options;
         },
 
         showDrawer(options) {
@@ -577,7 +590,7 @@ $(function () {
                     that.ckEditor[id] = editor;
                     editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                        return new FileUploadAdapter(editor, loader, that.uploadApiUrl);
+                        return new FileUploadAdapter(editor, loader, that.init.uploadApiUrl);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
                         if (that[form]) {
@@ -647,7 +660,7 @@ $(function () {
         init: {
             bind: function (el, binding, vnode) {
                 let key = bsw.smallHump(binding.arg);
-                vnode.context[key] = (binding.value || binding.expression);
+                vnode.context.init[key] = (binding.value || binding.expression);
             }
         },
 
@@ -688,26 +701,26 @@ $(function () {
             // resize
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
-                if (typeof v.message.content !== 'undefined') {
+                // message
+                let message = v.init.message;
+                if (typeof message.content !== 'undefined') {
                     // notification message confirm
-                    let duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
+                    message = bsw.arrayBase64Decode(message);
+                    let duration = bsw.isNull(message.duration) ? undefined : message.duration;
                     try {
-                        let a = v.message.content;
-                        bsw[v.message.classify](bsw.base64Decode(v.message.content), duration, null, v.message.type);
+                        bsw[message.classify](message.content, duration, null, message.type);
                     } catch (e) {
-                        console.warn(bsw.lang.message_data_error, v.message);
+                        console.warn(bsw.lang.message_data_error, message);
                         console.warn(e);
                     }
                 }
-                // tips
-                if (typeof v.tips.content !== 'undefined') {
-                    let map = ['title', 'content'];
-                    for (let i = 0; i < map.length; i++) {
-                        if (typeof v.tips[map[i]] !== 'undefined') {
-                            v.tips[map[i]] = bsw.base64Decode(v.tips[map[i]]);
-                        }
-                    }
-                    v.showModal(v.tips);
+                // modal
+                if (typeof v.init.modal.content !== 'undefined') {
+                    v.showModal(bsw.arrayBase64Decode(v.init.modal));
+                }
+                // result
+                if (typeof v.init.result.title !== 'undefined') {
+                    v.showResult(bsw.arrayBase64Decode(v.init.result));
                 }
             });
         }, timeout);

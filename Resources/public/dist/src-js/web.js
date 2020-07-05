@@ -22,9 +22,12 @@ $(function () {
         locale: web.d.locales[web.lang.i18n_ant],
         noLoadingOnce: false,
         spinning: false,
-        configure: {}, // from v-init
-        message: {}, // from v-init
-        tips: {} // from v-init
+        init: { // from v-init
+            configure: {},
+            message: {},
+            modal: {},
+            result: {}
+        }
 
     }, web.config.data)).computed(Object.assign({}, web.config.computed || {})).method(Object.assign({
         redirect: function redirect(data) {
@@ -77,7 +80,7 @@ $(function () {
         init: {
             bind: function bind(el, binding, vnode) {
                 var key = web.smallHump(binding.arg);
-                vnode.context[key] = binding.value || binding.expression;
+                vnode.context.init[key] = binding.value || binding.expression;
             }
         }
 
@@ -109,25 +112,26 @@ $(function () {
         });
 
         setTimeout(function () {
-            if (typeof v.message.content !== 'undefined') {
+            // message
+            var message = v.init.message;
+            if (typeof message.content !== 'undefined') {
                 // notification message confirm
-                var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
+                message = bsw.arrayBase64Decode(message);
+                var duration = bsw.isNull(message.duration) ? undefined : message.duration;
                 try {
-                    bsw[v.message.classify](Base64.decode(v.message.content), duration, null, v.message.type);
+                    bsw[message.classify](message.content, duration, null, message.type);
                 } catch (e) {
-                    console.warn(bsw.lang.message_data_error);
-                    console.warn(v.message);
+                    console.warn(bsw.lang.message_data_error, message);
+                    console.warn(e);
                 }
             }
-            // tips
-            if (typeof v.tips.content !== 'undefined') {
-                var map = ['title', 'content'];
-                for (var i = 0; i < map.length; i++) {
-                    if (typeof v.tips[map[i]] !== 'undefined') {
-                        v.tips[map[i]] = Base64.decode(v.tips[map[i]]);
-                    }
-                }
-                v.showModal(v.tips);
+            // modal
+            if (typeof v.init.modal.content !== 'undefined') {
+                v.showModal(bsw.arrayBase64Decode(v.init.modal));
+            }
+            // result
+            if (typeof v.init.result.title !== 'undefined') {
+                v.showResult(bsw.arrayBase64Decode(v.init.result));
             }
         }, 100);
     });

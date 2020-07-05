@@ -40,15 +40,21 @@ $(function () {
 
         noLoadingOnce: false,
         spinning: false,
-        configure: {}, // from v-init
-        message: {}, // from v-init
-        tips: {}, // from v-init
+        init: { // from v-init
+            configure: {},
+            message: {},
+            modal: {},
+            result: {}
+        },
+        footer: 'footer',
         modal: {
             visible: false,
             centered: true
         },
-        footer: 'footer',
         drawer: {
+            visible: false
+        },
+        result: {
             visible: false
         }
 
@@ -248,7 +254,7 @@ $(function () {
                         width: 768,
                         height: 700
                     };
-                    data.location = bsw.setParams(res.sets, _this2.exportApiUrl, true);
+                    data.location = bsw.setParams(res.sets, _this2.init.exportApiUrl, true);
                     _this2.showIFrame(data, $('body')[0]);
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -390,6 +396,12 @@ $(function () {
                 this.footer = 'footer';
             }
             this.modal = options;
+        },
+        showResult: function showResult(options) {
+            this.result.visible = false;
+            options.visible = true;
+            options = Object.assign(this.result, options);
+            this.result = options;
         },
         showDrawer: function showDrawer(options) {
             this.drawer.visible = false;
@@ -575,7 +587,7 @@ $(function () {
                     that.ckEditor[id] = editor;
                     editor.isReadOnly = $(em).attr('disabled') === 'disabled';
                     editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
-                        return new FileUploadAdapter(editor, loader, that.uploadApiUrl);
+                        return new FileUploadAdapter(editor, loader, that.init.uploadApiUrl);
                     };
                     that.ckEditor[id].model.document.on('change:data', function () {
                         if (that[form]) {
@@ -642,7 +654,7 @@ $(function () {
         init: {
             bind: function bind(el, binding, vnode) {
                 var key = bsw.smallHump(binding.arg);
-                vnode.context[key] = binding.value || binding.expression;
+                vnode.context.init[key] = binding.value || binding.expression;
             }
         }
 
@@ -683,26 +695,26 @@ $(function () {
             // resize
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
-                if (typeof v.message.content !== 'undefined') {
+                // message
+                var message = v.init.message;
+                if (typeof message.content !== 'undefined') {
                     // notification message confirm
-                    var duration = bsw.isNull(v.message.duration) ? undefined : v.message.duration;
+                    message = bsw.arrayBase64Decode(message);
+                    var duration = bsw.isNull(message.duration) ? undefined : message.duration;
                     try {
-                        var a = v.message.content;
-                        bsw[v.message.classify](bsw.base64Decode(v.message.content), duration, null, v.message.type);
+                        bsw[message.classify](message.content, duration, null, message.type);
                     } catch (e) {
-                        console.warn(bsw.lang.message_data_error, v.message);
+                        console.warn(bsw.lang.message_data_error, message);
                         console.warn(e);
                     }
                 }
-                // tips
-                if (typeof v.tips.content !== 'undefined') {
-                    var map = ['title', 'content'];
-                    for (var i = 0; i < map.length; i++) {
-                        if (typeof v.tips[map[i]] !== 'undefined') {
-                            v.tips[map[i]] = bsw.base64Decode(v.tips[map[i]]);
-                        }
-                    }
-                    v.showModal(v.tips);
+                // modal
+                if (typeof v.init.modal.content !== 'undefined') {
+                    v.showModal(bsw.arrayBase64Decode(v.init.modal));
+                }
+                // result
+                if (typeof v.init.result.title !== 'undefined') {
+                    v.showResult(bsw.arrayBase64Decode(v.init.result));
                 }
             });
         }, timeout);

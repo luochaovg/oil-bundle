@@ -359,48 +359,75 @@ abstract class BswWebController extends AbstractController
             throw new Exception($content);
         }
 
-        $content = $this->messageLang($content);
-        $content = Html::cleanHtml($content);
-        $content = Helper::base64EncodeForJs($content);
-
         $message = [
             'type'     => $type,
             'duration' => $duration,
             'classify' => $classify,
-            'content'  => $content,
+            'content'  => Html::cleanHtml($this->messageLang($content)),
         ];
+        $message = Helper::arrayBase64EncodeForJs($message);
 
         // message to flash
         $this->addFlash(Abs::TAG_MESSAGE, Helper::jsonStringify($message));
     }
 
     /**
-     * Append tips (modal options)
+     * Append modal
      *
-     * @param array $modalOptions
+     * @param array $options
      */
-    public function appendTips(array $modalOptions)
+    public function appendModal(array $options)
     {
-        $modalOptions = array_merge(
+        $options = array_merge(
             [
                 'title' => 'Tips',
                 'width' => Abs::MEDIA_MIN,
             ],
-            $modalOptions
+            $options
         );
 
         foreach (['title', 'content'] as $key) {
-            if (!isset($modalOptions[$key])) {
+            if (!isset($options[$key])) {
                 continue;
             }
-            if (!($modalOptions["{$key}Html"] ?? false)) {
-                $modalOptions[$key] = Html::cleanHtml($modalOptions[$key]);
+            if (!($options["{$key}Html"] ?? false)) {
+                $options[$key] = Html::cleanHtml($options[$key]);
             }
-            $modalOptions[$key] = Helper::base64EncodeForJs($modalOptions[$key]);
         }
+        $options = Helper::arrayBase64EncodeForJs($options);
 
         // message to flash
-        $this->addFlash(Abs::TAG_TIPS, Helper::jsonStringify($modalOptions));
+        $this->addFlash(Abs::TAG_MODAL, Helper::jsonStringify($options));
+    }
+
+    /**
+     * Append result
+     *
+     * @param array $options
+     */
+    public function appendResult(array $options)
+    {
+        $options = array_merge(
+            [
+                'status' => Abs::RESULT_SUCCESS,
+                'title'  => 'Operation success',
+                'width'  => Abs::MEDIA_MIN,
+            ],
+            $options
+        );
+
+        foreach (['title', 'subTitle'] as $key) {
+            if (!isset($options[$key])) {
+                continue;
+            }
+            if (!($options["{$key}Html"] ?? false)) {
+                $options[$key] = Html::cleanHtml($options[$key]);
+            }
+        }
+        $options = Helper::arrayBase64EncodeForJs($options);
+
+        // message to flash
+        $this->addFlash(Abs::TAG_RESULT, Helper::jsonStringify($options));
     }
 
     /**
@@ -700,29 +727,29 @@ abstract class BswWebController extends AbstractController
      */
     public function displayArgsScaffold(array $extra = [], bool $forView = false): array
     {
-        $json = $this->parameters('json');
+        $configure = $this->parameters('configure');
         [$cls, $fn] = $this->getMCM('-');
         $getArgs = $this->getArgs();
 
         $scaffold = [
-            'cnf'    => $this->cnf,
-            'logic'  => $this->logic,
-            'usr'    => $this->usr,
-            'env'    => $this->env,
-            'debug'  => $this->debug,
-            'route'  => $this->route,
-            'get'    => $getArgs,
-            'url'    => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
-            'ctrl'   => $this->controller,
-            'cls'    => $cls,
-            'fn'     => $fn,
-            'access' => $this->access,
-            'ajax'   => $this->ajax,
-            'iframe' => empty($getArgs['iframe']) ? false : true,
-            'json'   => $json ? Helper::jsonStringify($json) : null,
-            'abs'    => static::$abs,
-            'enum'   => static::$enum,
-            'uuid'   => $this->uuid,
+            'cnf'       => $this->cnf,
+            'logic'     => $this->logic,
+            'usr'       => $this->usr,
+            'env'       => $this->env,
+            'debug'     => $this->debug,
+            'route'     => $this->route,
+            'get'       => $getArgs,
+            'url'       => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
+            'ctrl'      => $this->controller,
+            'cls'       => $cls,
+            'fn'        => $fn,
+            'access'    => $this->access,
+            'ajax'      => $this->ajax,
+            'iframe'    => empty($getArgs['iframe']) ? false : true,
+            'abs'       => static::$abs,
+            'enum'      => static::$enum,
+            'uuid'      => $this->uuid,
+            'configure' => $configure ? Helper::jsonStringify($configure) : null,
         ];
 
         if ($forView) {
@@ -778,10 +805,11 @@ abstract class BswWebController extends AbstractController
     {
         $scaffold = $this->displayArgsScaffold(
             [
-                'seo'  => $this->seo(),
-                'src'  => $this->source(),
-                'msg'  => $this->latestMessage(Abs::TAG_MESSAGE),
-                'tips' => $this->latestMessage(Abs::TAG_TIPS),
+                'seo'     => $this->seo(),
+                'src'     => $this->source(),
+                'message' => $this->latestMessage(Abs::TAG_MESSAGE),
+                'modal'   => $this->latestMessage(Abs::TAG_MODAL),
+                'result'  => $this->latestMessage(Abs::TAG_RESULT),
             ],
             true
         );

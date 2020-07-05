@@ -22,7 +22,7 @@ bsw.configure({
 
         changeLanguageByVue(event) {
             let key = $(event.item.$el).find('span').attr('lang');
-            bsw.request(this.languageApiUrl, {key}).then((res) => {
+            bsw.request(this.init.languageApiUrl, {key}).then((res) => {
                 bsw.response(res).catch((reason => {
                     console.warn(reason);
                 }));
@@ -32,19 +32,20 @@ bsw.configure({
         },
 
         scaffoldInit() {
+            let cnf = this.init.configure;
             // theme
-            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, this.configure.theme || this.theme);
+            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, cnf.theme || this.theme);
             // color weak
-            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, this.configure.weak || this.weak);
+            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, cnf.weak || this.weak);
             bsw.switchClass('bsw-weak', this.weak);
             // third message
-            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, this.configure.third_message || this.third_message);
+            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, cnf.third_message || this.third_message);
             // menu
-            this.menuWidth = this.configure.menu_width || this.menuWidth;
+            this.menuWidth = cnf.menu_width || this.menuWidth;
             let collapsed = bsw.cookieMapCurrent(
                 'bsw_menu_collapsed',
                 this.opposeMap,
-                (typeof this.configure.menu_collapsed === 'undefined') ? this.menuWidth : this.configure.menu_collapsed
+                (typeof cnf.menu_collapsed === 'undefined') ? this.menuWidth : cnf.menu_collapsed
             );
 
             let menuCollapsed = (collapsed === 'yes');
@@ -56,10 +57,11 @@ bsw.configure({
     },
     logic: {
         thirdMessage(v) {
-            if (typeof v.configure === 'undefined' || typeof v.configure.third_message_second === 'undefined') {
+            let cnf = v.init.configure;
+            if (typeof cnf === 'undefined' || typeof cnf.third_message_second === 'undefined') {
                 return;
             }
-            if (v.configure.third_message_second < 3) {
+            if (cnf.third_message_second < 3) {
                 return;
             }
             v.$nextTick(function () {
@@ -69,7 +71,7 @@ bsw.configure({
                         return;
                     }
                     v.noLoadingOnce = true;
-                    bsw.request(v.thirdMessageApiUrl).then((res) => {
+                    bsw.request(v.init.thirdMessageApiUrl).then((res) => {
                         if (res.error === 4967) {
                             return;
                         }
@@ -79,7 +81,7 @@ bsw.configure({
                     }).catch((reason => {
                         console.warn(reason);
                     }));
-                }, v.configure.third_message_second * 1000);
+                }, cnf.third_message_second * 1000);
             });
         }
     }

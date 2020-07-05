@@ -440,6 +440,7 @@ class BswBackendController extends BswWebController
             BswModule\Footer\Module::class  => ['sort' => Abs::MODULE_FOOTER_SORT],
             BswModule\Modal\Module::class   => ['sort' => Abs::MODULE_MODAL_SORT],
             BswModule\Drawer\Module::class  => ['sort' => Abs::MODULE_DRAWER_SORT],
+            BswModule\Result\Module::class  => ['sort' => Abs::MODULE_RESULT_SORT],
         ];
     }
 

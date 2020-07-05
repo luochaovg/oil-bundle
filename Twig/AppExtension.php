@@ -21,6 +21,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('arrayMap', [Helper::class, 'arrayMap']),
             new TwigFilter('arrayMapDouble', [Helper::class, 'arrayMapDouble']),
             new TwigFilter('icon', [$this, 'icon']),
+            new TwigFilter('nativeIcon', [$this, 'nativeIcon']),
             new TwigFilter('implode', [$this, 'implode']),
             new TwigFilter('imageStyle', [$this, 'imageStyle']),
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
@@ -66,6 +67,37 @@ class AppExtension extends AbstractExtension
                     'class' => $class,
                 ]
             )
+        );
+    }
+
+    /**
+     * Get native icon html
+     *
+     * @param string $icon
+     * @param array  $class
+     *
+     * @return string|null
+     */
+    public static function nativeIcon(string $icon, array $class = [])
+    {
+        $flag = 'a';
+        if (strpos($icon, ':') !== false) {
+            [$flag, $icon] = explode(':', $icon) + [2 => null];
+        }
+
+        if ($flag !== 'b') {
+            return '';
+        }
+
+        array_unshift($class, 'bsw-icon');
+
+        return Html::tag(
+            'svg',
+            Html::tag('use', null, ['xlink:href' => "#{$icon}"]),
+            [
+                'class'       => $class,
+                'aria-hidden' => true,
+            ]
         );
     }
 

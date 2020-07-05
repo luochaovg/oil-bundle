@@ -59,11 +59,11 @@ trait Upload
 
         if ($href = $file->href ?? null) {
             $sets['href'] = $this->redirectUrl($href);
-            $this->appendTips(
+            $this->appendResult(
                 [
-                    'contentHtml' => true,
-                    'title'       => $this->messageLang('File upload done'),
-                    'content'     => "<a target='_blank' href='{$file->url}'>{$file->url}</a>",
+                    'subTitleHtml' => true,
+                    'title'        => $this->messageLang('File upload done'),
+                    'subTitle'     => "<a target='_blank' href='{$file->url}'>{$file->url}</a>",
                 ]
             );
 

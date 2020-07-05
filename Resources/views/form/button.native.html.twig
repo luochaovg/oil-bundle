@@ -24,5 +24,8 @@
   {% endif %}
   {{ form.attributes|raw }}
 >
+  {% if form.icon %}
+    {{ form.icon|nativeIcon(form.iconClass)|raw }}
+  {% endif %}
   <span>{{ form.label|trans({}, 'twig') }}</span>
 </button>

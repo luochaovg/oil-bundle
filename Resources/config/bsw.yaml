@@ -260,7 +260,7 @@ parameters:
         - export
         - queue
 
-    bsw_json:
+    bsw_configure:
         theme: dark
         menu_width: 256
         menu_collapsed: no

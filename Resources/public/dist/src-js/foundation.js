@@ -1826,6 +1826,27 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Base64 decode (array)
+         *
+         * @param target
+         * @returns {*}
+         */
+
+    }, {
+        key: 'arrayBase64Decode',
+        value: function arrayBase64Decode(target) {
+            for (var key in target) {
+                if (!target.hasOwnProperty(key)) {
+                    continue;
+                }
+                if (this.isString(target[key])) {
+                    target[key] = this.base64Decode(target[key]);
+                }
+            }
+            return target;
+        }
+
+        /**
          * Create chart
          *
          * @param option object

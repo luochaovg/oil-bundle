@@ -82,7 +82,7 @@ div.ant-modal-mask {
     opacity: .2;
   }
   50% {
-    opacity: .6;
+    opacity: .8;
   }
   100% {
     opacity: .2;
@@ -99,12 +99,28 @@ div.ant-modal-mask {
     opacity: .3;
   }
 }
-@keyframes bsw-rotate {
+@keyframes bsw-rotate-360 {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+@keyframes bsw-rotate-180 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@keyframes bsw-rotate-90 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(90deg);
   }
 }
 /* Theme for tips */
@@ -776,5 +792,35 @@ textarea[size="large"] {
   left: 0;
   background: #fff;
   border-radius: 0 0 4px 4px;
+}
+.bsw-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  overflow: hidden;
+  display: inline-block;
+  color: inherit;
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+}
+.ant-btn .bsw-icon {
+  transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  line-height: 1;
+}
+.ant-btn > svg {
+  pointer-events: none;
+}
+.ant-result {
+  padding: 16px 0;
+}
+.ant-result-title {
+  font-size: 20px;
+}
+.ant-result-icon > .anticon {
+  font-size: 56px;
 }
 /*# sourceMappingURL=bsw.css.map */
