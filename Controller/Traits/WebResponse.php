@@ -147,7 +147,7 @@ trait WebResponse
 
         $this->iNeedCost(Abs::END_REQUEST);
         $this->iNeedLogger(Abs::END_REQUEST);
-        
+
         return new JsonResponse($response, $code4http);
     }
 

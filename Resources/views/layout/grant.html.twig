@@ -49,7 +49,7 @@
                 <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
                   {% if _danger is not null %}
                     <a-popover overlay-class-name="bsw-popover">
-                      <template v-slot:content>{{ _danger.title|trans({}, 'twig') }}</template>
+                      <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
                         class="{{ _danger.class }}"

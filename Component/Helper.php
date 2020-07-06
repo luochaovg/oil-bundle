@@ -3312,8 +3312,8 @@ class Helper
         }
 
         $field = '_search_with_all_value';
-        foreach ($target as &$item) {
-            $item[$field] = serialize($item);
+        foreach ($target as $key => $item) {
+            $target[$key][$field] = serialize($item);
         }
 
         if ($searchValue === true) {
@@ -3333,7 +3333,7 @@ class Helper
             }
         }
 
-        foreach ($target as &$item) {
+        foreach ($target as $item) {
             unset($item[$field]);
         }
 
@@ -3920,7 +3920,7 @@ class Helper
     ): array {
 
         $offset = array_search($position, array_keys($source));
-        if ($offset === false || !$offset) {
+        if ($offset === false) {
             return $before ? array_merge($insertArray, $source) : array_merge($source, $insertArray);
         }
 

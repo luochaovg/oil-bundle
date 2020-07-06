@@ -16,10 +16,15 @@
   :body-style="{{ modal.bodyStyleJson }}"
   :mask-style="{{ modal.maskStyleJson }}"
   :dialog-style="{{ modal.dialogStyleJson }}"
+  :ok-button-props="{props:typeof modal.okProps !== 'undefined' ? modal.okProps : {}}"
+  :cancel-button-props="{props:typeof modal.cancelProps !== 'undefined' ? modal.cancelProps : {}}"
   :[footer]="null"
-  @ok="modalOnOk"
-  @cancel="modalOnCancel"
+  @ok="bsw.modalOnOk"
+  @cancel="bsw.modalOnCancel"
 >
-  <div class="bsw-modal-data" :data-bsw.prop="{ok: modal.ok, cancel: modal.cancel}"></div>
+  <div
+    class="bsw-modal-data"
+    :data-bsw.prop="{ok: modal.ok, cancel: modal.cancel, extra: result.extra}"
+  ></div>
   <div v-html="modal.content"></div>
 </a-modal>

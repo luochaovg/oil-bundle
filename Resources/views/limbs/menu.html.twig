@@ -1,7 +1,7 @@
 <a-layout-sider
   class="bsw-menu"
   :theme="theme"
-  v-show="!bsw.isMobile()"
+  v-if="!bsw.isMobile()"
   collapsible
   v-model="menuCollapsed"
   :width="menuWidth"

@@ -54,12 +54,7 @@ class BswBackendController extends BswWebController
     /**
      * @var string
      */
-    protected $skUser = 'frontend-user-sk';
-
-    /**
-     * @var bool
-     */
-    protected $langErrorTiny = true;
+    protected $skUser = 'backend-user-sk';
 
     /**
      * @var bool
@@ -69,12 +64,17 @@ class BswBackendController extends BswWebController
     /**
      * @var array
      */
-    protected $mapCdnSrcCss = [];
+    protected $currentSrcCss = [
+        'bsw' => Abs::CSS_BSW,
+    ];
 
     /**
      * @var array
      */
-    protected $mapCdnSrcJs = [];
+    protected $currentSrcJs = [
+        'copy' => Abs::JS_COPY,
+        'bsw'  => Abs::JS_BSW,
+    ];
 
     /**
      * Bootstrap
@@ -86,15 +86,9 @@ class BswBackendController extends BswWebController
         if ($this->bswSrc) {
             $lang = $this->langLatest($this->langMap, 'en');
             $this->appendSrcJs(
-                [Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang], Abs::JS_BSW],
+                [Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang]],
                 Abs::POS_TOP,
-                '',
-                true
-            );
-            $this->appendSrcCss(
-                [Abs::CSS_BSW],
-                Abs::POS_TOP,
-                '',
+                'bsw',
                 true
             );
         }

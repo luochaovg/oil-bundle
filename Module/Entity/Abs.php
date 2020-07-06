@@ -556,7 +556,7 @@ class Abs
     const RENDER_SECRET_2      = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_ROUND_PERCENT = "<a-progress type='circle' :percent='{:value}' :width='50' :stroke-width='6'></a-progress>";
     const RENDER_BAR_PERCENT   = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='6' status='active' ></a-progress>";
-    const RENDER_NUM_PERCENT   = '<a-statistic :value="{:value}"><template v-slot:suffix><span> / 100</span></template></a-statistic>';
+    const RENDER_NUM_PERCENT   = '<a-statistic :value="{:value}"><template slot="suffix"><span> / 100</span></template></a-statistic>';
     const RENDER_STAR          = '<a-rate :default-value="{:value}" allow-half disabled></a-rate>';
     const RENDER_AVATAR        = '<a-avatar size="large" :src="{:value}"></a-avatar>';
     const RENDER_COUNT         = '<a-statistic :value="{:value}"></a-statistic>';

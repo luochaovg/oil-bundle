@@ -24,4 +24,6 @@ window.lang = {
     third_message: '第三方消息提示',
     total: '總計',
     export_mission: '導出任務',
+    copy_success: '內容復制成功',
+    copy_failed: '內容復制出錯',
 };

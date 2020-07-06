@@ -25,5 +25,7 @@ window.lang = {
     color_weak: 'Color weak mode',
     third_message: 'Third message',
     total: 'Total',
-    export_mission: 'Export mission'
+    export_mission: 'Export mission',
+    copy_success: 'Content copied success',
+    copy_failed: 'Content copied failed'
 };

@@ -34,15 +34,25 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $operatorType;
+    public $okText;
+
+    /**
+     * @var bool
+     */
+    public $okShow;
 
     /**
      * @var string
      */
-    public $operatorClick;
+    public $cancelText;
+
+    /**
+     * @var bool
+     */
+    public $cancelShow;
 
     /**
      * @var string
      */
-    public $operator;
+    public $okType;
 }

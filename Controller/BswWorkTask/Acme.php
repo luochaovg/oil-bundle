@@ -458,12 +458,12 @@ class Acme extends BswBackendController
         $links[] = (new Links($this->fieldLang('Progress chart')))
             ->setRoute('app_bsw_work_week_survey')
             ->setIcon('a:line-chart')
-            ->setClick('showModal')
+            ->setClick('showResult')
             ->setArgs(
                 [
-                    'title'   => 'Oops',
-                    'width'   => Abs::MEDIA_MIN,
-                    'content' => $this->fieldLang('Look forward'),
+                    'status'   => Abs::RESULT_WARNING,
+                    'title'    => $this->fieldLang('Look forward'),
+                    'subTitle' => 'Look forward',
                 ]
             );
 

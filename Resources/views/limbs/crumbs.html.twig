@@ -1,4 +1,4 @@
-<a-breadcrumb v-show="{{ crumbs.list is empty ? 'false' : 'true' }}" separator="|">
+<a-breadcrumb v-if="{{ crumbs.list is empty ? 'false' : 'true' }}" separator="|">
   {% for item in crumbs.list %}
     {% if item.route is empty or loop.last %}
       <a-breadcrumb-item>

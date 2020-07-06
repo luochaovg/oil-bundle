@@ -29,7 +29,7 @@
             class="bsw-form-{{ form.itemName }}"
           >
             {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
-            {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template v-slot:content>' ~ title ~ '</template>' : null %}
+            {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
             {% set end = title ? '</a-popover>' : null %}
             {{ begin|raw }}
             {% include "form/" ~ form.itemName ~ ".html.twig" %}

@@ -24,6 +24,20 @@ class BswFrontendController extends BswWebController
     protected $skUser = 'frontend-user-sk';
 
     /**
+     * @var array
+     */
+    protected $currentSrcCss = [
+        'web' => Abs::CSS_WEB,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $currentSrcJs = [
+        'web' => Abs::JS_WEB,
+    ];
+
+    /**
      * Bootstrap
      */
     protected function bootstrap()
@@ -34,15 +48,9 @@ class BswFrontendController extends BswWebController
             $lang = $this->langLatest($this->langMap, 'en');
 
             $this->appendSrcJs(
-                [Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang], Abs::JS_WEB],
+                [Abs::JS_MOMENT_LANG[$lang], Abs::JS_LANG[$lang]],
                 Abs::POS_TOP,
-                '',
-                true
-            );
-            $this->appendSrcCss(
-                [Abs::CSS_WEB],
-                Abs::POS_TOP,
-                '',
+                'web',
                 true
             );
         }

@@ -16,20 +16,24 @@
   :drawer-style="{{ drawer.drawerStyleJson }}"
   :header-style="{{ drawer.headerStyleJson }}"
   :body-style="{{ drawer.bodyStyleJson }}"
-  @close="drawerOnCancel"
+  @close="bsw.drawerOnCancel"
 >
   <div v-html="drawer.content"></div>
-  <div v-show="drawer.footer" :data-bsw.prop="{ok: drawer.ok, cancel: drawer.cancel}" class="bsw-footer-bar">
+  <div
+    v-if="drawer.footer"
+    :data-bsw.prop="{ok: drawer.ok, cancel: drawer.cancel, extra: result.extra}"
+    class="bsw-footer-bar"
+  >
     <a-button
       v-if="typeof drawer.cancelShow !== 'undefined' ? drawer.cancelShow : {{ drawer.cancelShow ? 'true' : 'false' }}"
       type="default"
-      @click="drawerOnCancel"
+      @click="bsw.drawerOnCancel"
       v-text="drawer.cancelText || '{{ drawer.cancelText|trans({}, 'twig') }}'">
     </a-button>
     <a-button
       v-if="typeof drawer.okShow !== 'undefined' ? drawer.okShow : {{ drawer.okShow ? 'true' : 'false' }}"
       :type="drawer.okType || '{{ drawer.okType }}'"
-      @click="drawerOnOk"
+      @click="bsw.drawerOnOk"
       v-text="drawer.okText || '{{ drawer.okText|trans({}, 'twig') }}'">
     </a-button>
   </div>

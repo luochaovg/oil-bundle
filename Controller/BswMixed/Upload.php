@@ -61,9 +61,13 @@ trait Upload
             $sets['href'] = $this->redirectUrl($href);
             $this->appendResult(
                 [
-                    'subTitleHtml' => true,
                     'title'        => $this->messageLang('File upload done'),
                     'subTitle'     => "<a target='_blank' href='{$file->url}'>{$file->url}</a>",
+                    'subTitleHtml' => true,
+                    'icon'         => 'b:icon-download',
+                    'ok'           => 'copyFileLink',
+                    'okText'       => $this->twigLang('Copied it and close'),
+                    'extra'        => ['link' => $file->url],
                 ]
             );
 

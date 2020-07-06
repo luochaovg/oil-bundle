@@ -36,15 +36,25 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $operatorType = Button::THEME_PRIMARY;
+    public $okText = 'I got it';
+
+    /**
+     * @var bool
+     */
+    public $okShow = true;
 
     /**
      * @var string
      */
-    public $operatorClick = 'result.visible = false';
+    public $cancelText = 'Cancel';
+
+    /**
+     * @var bool
+     */
+    public $cancelShow = false;
 
     /**
      * @var string
      */
-    public $operator = 'I got it';
+    public $okType = Button::THEME_PRIMARY;
 }

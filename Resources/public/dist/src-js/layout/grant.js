@@ -3,16 +3,12 @@
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 bsw.configure({
-    data: {
-        selectedList: {},
-        disabledList: []
-    },
     method: {
         selectAll: function selectAll() {
             var that = this;
             var form = 'persistenceForm';
-            $.each(this.selectedList, function (key, meta) {
-                var disabled = bsw.arrayIntersect(meta, that.disabledList);
+            $.each(this.init.selectedList, function (key, meta) {
+                var disabled = bsw.arrayIntersect(meta, that.init.disabledList);
                 var selected = that[form].getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion = true;
@@ -52,8 +48,8 @@ bsw.configure({
         unSelectAll: function unSelectAll() {
             var that = this;
             var form = 'persistenceForm';
-            $.each(this.selectedList, function (key, meta) {
-                var disabled = bsw.arrayIntersect(meta, that.disabledList);
+            $.each(this.init.selectedList, function (key, meta) {
+                var disabled = bsw.arrayIntersect(meta, that.init.disabledList);
                 var selected = that[form].getFieldValue(key);
                 var values = [];
                 var _iteratorNormalCompletion2 = true;

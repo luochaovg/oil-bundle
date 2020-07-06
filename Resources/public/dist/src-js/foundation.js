@@ -4,6 +4,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -1434,9 +1436,18 @@ var FoundationAntD = function (_FoundationTools) {
                 init: function init() {
                     var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.blank;
 
-                    //that.cnf.v = (new (that.v.extend(conf))()).$mount(selector);
                     conf.el = selector;
                     that.cnf.v = new that.v(conf);
+                    that.cnf.v.$nextTick(function () {
+                        // logic
+                        for (var fn in that.config.logic || []) {
+                            if (!that.config.logic.hasOwnProperty(fn)) {
+                                continue;
+                            }
+                            that.config.logic[fn](that.cnf.v);
+                        }
+                    });
+                    that.changeImageCaptcha();
                     logic(that.cnf.v);
                 }
             };
@@ -1839,7 +1850,9 @@ var FoundationAntD = function (_FoundationTools) {
                 if (!target.hasOwnProperty(key)) {
                     continue;
                 }
-                if (this.isString(target[key])) {
+                if (this.isJson(target[key])) {
+                    target[key] = this.arrayBase64Decode(target[key]);
+                } else if (this.isString(target[key])) {
                     target[key] = this.base64Decode(target[key]);
                 }
             }
@@ -1888,6 +1901,8 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Chart handler -> tooltip stack
+         *
          * @param params
          * @returns {string}
          */
@@ -1955,6 +1970,8 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Chart handler -> tooltip normal
+         *
          * @param params
          * @returns {string}
          */
@@ -1966,6 +1983,8 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Chart handler -> tooltip position fixed
+         *
          * @param pos
          * @param params
          * @param dom
@@ -1980,6 +1999,594 @@ var FoundationAntD = function (_FoundationTools) {
             var obj = { top: 20 };
             obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 10;
             return obj;
+        }
+
+        /**
+         * Show message
+         *
+         * @param options
+         */
+
+    }, {
+        key: 'showMessage',
+        value: function showMessage(options) {
+            var classify = options.classify || 'info';
+            var duration = this.isNull(options.duration) ? undefined : options.duration;
+            try {
+                this[classify](options.content, duration, null, options.type);
+            } catch (e) {
+                console.warn(this.lang.message_data_error, options);
+                console.warn(e);
+            }
+        }
+
+        /**
+         * Show modal popup
+         *
+         * @param options
+         */
+
+    }, {
+        key: 'showModal',
+        value: function showModal(options) {
+            var v = this.cnf.v;
+            v.modal.visible = false;
+            options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = this.popupCosySize().width;
+            }
+            options = Object.assign(v.modal, options);
+            if (options.footer) {
+                v.footer = '_footer';
+            } else {
+                v.footer = 'footer';
+            }
+            v.modal = options;
+        }
+
+        /**
+         * Show drawer popup
+         *
+         * @param options
+         */
+
+    }, {
+        key: 'showDrawer',
+        value: function showDrawer(options) {
+            var v = this.cnf.v;
+            v.drawer.visible = false;
+            options.visible = true;
+            if (typeof options.width === 'undefined') {
+                options.width = this.popupCosySize().width;
+            }
+            options = Object.assign(v.drawer, options);
+            v.drawer = options;
+        }
+
+        /**
+         * Show result popup
+         *
+         * @param options
+         */
+
+    }, {
+        key: 'showResult',
+        value: function showResult(options) {
+            var v = this.cnf.v;
+            v.result.visible = false;
+            options.visible = true;
+            options = Object.assign(v.result, options);
+            v.result = options;
+        }
+
+        /**
+         * Show modal after request
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'showModalAfterRequest',
+        value: function showModalAfterRequest(data, element) {
+            var _this3 = this;
+
+            this.request(data.location).then(function (res) {
+                _this3.response(res).then(function () {
+                    var options = _this3.jsonFilter(Object.assign(data, {
+                        width: res.sets.width || data.width || undefined,
+                        title: res.sets.title || data.title || _this3.lang.modal_title,
+                        content: res.sets.content
+                    }));
+                    _this3.showModal(options);
+                }).catch(function (reason) {
+                    console.warn(reason);
+                });
+            }).catch(function (reason) {
+                console.warn(reason);
+            });
+        }
+
+        /**
+         * Show iframe by popup (modal/drawer)
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'showIFrame',
+        value: function showIFrame(data, element) {
+            var v = this.cnf.v;
+            var that = this;
+            var size = that.popupCosySize();
+            var repair = $(element).prev().attr('id');
+            data.location = that.setParams({ iframe: true, repair: repair }, data.location);
+
+            var options = that.jsonFilter(Object.assign(data, {
+                width: data.width || size.width,
+                title: data.title === false ? data.title : data.title || that.lang.please_select,
+                content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
+            }));
+
+            var mode = data.shape || 'modal';
+            if (mode === 'drawer') {
+                that.showDrawer(options);
+                v.$nextTick(function () {
+                    var iframe = $("#bsw-iframe");
+                    var footerHeight = options.footer ? 73 : 0;
+                    iframe.height(that.popupCosySize(true).height - footerHeight - 55);
+                    iframe.parents("div.ant-drawer-body").css({ margin: 0, padding: 0 });
+                });
+            } else {
+                that.showModal(options);
+                v.$nextTick(function () {
+                    var iframe = $("#bsw-iframe");
+                    iframe.height(data.height || size.height);
+                    iframe.parents("div.ant-modal-body").css({ margin: 0, padding: 0 });
+                });
+            }
+        }
+
+        /**
+         * Modal onclick ok
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'modalOnOk',
+        value: function modalOnOk(event) {
+            if (event) {
+                var element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
+                var result = bsw.dispatcherByBswDataElement(element, 'ok');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.modal.visible = false;
+        }
+
+        /**
+         * Modal onclick cancel
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'modalOnCancel',
+        value: function modalOnCancel(event) {
+            if (event) {
+                var element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
+                var result = bsw.dispatcherByBswDataElement(element, 'cancel');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.modal.visible = false;
+        }
+
+        /**
+         * Drawer onclick ok
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'drawerOnOk',
+        value: function drawerOnOk(event) {
+            if (event) {
+                var element = $(event.target).parents('.bsw-footer-bar');
+                var result = bsw.dispatcherByBswDataElement(element, 'ok');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.drawer.visible = false;
+        }
+
+        /**
+         * Drawer onclick cancel
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'drawerOnCancel',
+        value: function drawerOnCancel(event) {
+            if (event) {
+                var element = $(event.target).parents('.bsw-footer-bar');
+                var result = bsw.dispatcherByBswDataElement(element, 'cancel');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.drawer.visible = false;
+        }
+
+        /**
+         * Result onclick ok
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'resultOnOk',
+        value: function resultOnOk(event) {
+            if (event) {
+                var element = $(event.target).parent().find('.bsw-result-data');
+                var result = bsw.dispatcherByBswDataElement(element, 'ok');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.result.visible = false;
+        }
+
+        /**
+         * Result onclick cancel
+         *
+         * @param event
+         */
+
+    }, {
+        key: 'resultOnCancel',
+        value: function resultOnCancel(event) {
+            if (event) {
+                var element = $(event.target).parent().find('.bsw-result-data');
+                var result = bsw.dispatcherByBswDataElement(element, 'cancel');
+                if (result === true) {
+                    return;
+                }
+            }
+            bsw.cnf.v.result.visible = false;
+        }
+
+        /**
+         * Change image captcha
+         *
+         * @param selector
+         */
+
+    }, {
+        key: 'changeImageCaptcha',
+        value: function changeImageCaptcha() {
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'img.bsw-captcha';
+
+            var that = this;
+            $(selector).off('click').on('click', function () {
+                var src = $(this).attr('src');
+                src = that.setParams({ t: that.timestamp() }, src);
+                $(this).attr('src', src);
+            });
+        }
+
+        /**
+         * Message auto discovery
+         */
+
+    }, {
+        key: 'messageAutoDiscovery',
+        value: function messageAutoDiscovery(discovery) {
+            var that = this;
+            // message
+            if (typeof discovery.message.content !== 'undefined') {
+                that.showMessage(that.arrayBase64Decode(discovery.message));
+            }
+            // modal
+            if (typeof discovery.modal.content !== 'undefined') {
+                that.showModal(that.arrayBase64Decode(discovery.modal));
+            }
+            // result
+            if (typeof discovery.result.title !== 'undefined') {
+                that.showResult(that.arrayBase64Decode(discovery.result));
+            }
+        }
+
+        /**
+         * Get bsw data
+         *
+         * @param object
+         * @returns {*|{}}
+         */
+
+    }, {
+        key: 'getBswData',
+        value: function getBswData(object) {
+            return object[0].dataBsw || object.data('bsw') || {};
+        }
+
+        /**
+         * Dispatcher by bsw data
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'dispatcherByBswData',
+        value: function dispatcherByBswData(data, element) {
+            var that = this;
+            if (data.iframe) {
+                delete data.iframe;
+                parent.postMessage({ data: data, function: 'dispatcherByBswData' }, '*');
+                return;
+            }
+            var action = function action() {
+                if (!data.function || data.function.length === 0) {
+                    return console.error('Attribute function should be configure in options.', data);
+                }
+                if (typeof that.cnf.v[data.function] !== 'undefined') {
+                    return that.cnf.v[data.function](data, element);
+                } else if (typeof that[data.function] !== 'undefined') {
+                    return that[data.function](data, element);
+                }
+                return console.error('Method ' + data.function + ' is undefined.', data);
+            };
+            if (typeof data.confirm === 'undefined') {
+                return action();
+            }
+            that.showConfirm(data.confirm, that.lang.confirm_title, {
+                onOk: function onOk() {
+                    action();
+                    return false;
+                }
+            });
+        }
+
+        /**
+         * Dispatcher by bsw data element
+         *
+         * @param element
+         * @param fn
+         */
+
+    }, {
+        key: 'dispatcherByBswDataElement',
+        value: function dispatcherByBswDataElement(element, fn) {
+            if (!element.length) {
+                return;
+            }
+            var that = this;
+            var data = element[0].dataBsw;
+            if (data[fn]) {
+                if (typeof that.cnf.v[data[fn]] !== 'undefined') {
+                    return that.cnf.v[data[fn]](data, element);
+                } else if (typeof that[data[fn]] !== 'undefined') {
+                    return that[data[fn]](data, element);
+                }
+                return console.error('Method ' + data[fn] + ' is undefined.', data);
+            }
+        }
+
+        /**
+         * Redirect (by bsw data)
+         *
+         * @param data
+         * @returns {*}
+         */
+
+    }, {
+        key: 'redirect',
+        value: function redirect(data) {
+            if (data.function && data.function !== 'redirect') {
+                return this.dispatcherByBswData(data, $('body'));
+            }
+            var url = data.location;
+            if (this.isMobile() && this.cnf.v.mobileDefaultCollapsed) {
+                this.cookie().set('bsw_menu_collapsed', 'yes');
+            }
+            if (url.startsWith('http') || url.startsWith('/')) {
+                if (typeof data.window === 'undefined') {
+                    return location.href = url;
+                } else {
+                    return window.open(url);
+                }
+            }
+        }
+
+        /**
+         * Form item filter option
+         *
+         * @param input
+         * @param option
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'formItemFilterOption',
+        value: function formItemFilterOption(input, option) {
+            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+        }
+
+        /**
+         * Init ck editor
+         *
+         * @param form
+         * @param selector
+         */
+
+    }, {
+        key: 'initCkEditor',
+        value: function initCkEditor() {
+            var form = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'persistenceForm';
+            var selector = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.bsw-persistence .bsw-ck';
+
+            if (!window.DecoupledEditor) {
+                return;
+            }
+            var that = this;
+            var v = this.cnf.v;
+            $(selector).each(function () {
+                var em = this;
+                var id = $(em).prev('textarea').attr('id');
+                var container = $(em).find('.bsw-ck-editor');
+                DecoupledEditor.create(container[0], {
+                    language: that.lang.i18n_editor,
+                    placeholder: $(em).attr('placeholder')
+                }).then(function (editor) {
+                    v.ckEditor[id] = editor;
+                    editor.isReadOnly = $(em).attr('disabled') === 'disabled';
+                    editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
+                        return new FileUploadAdapter(editor, loader, v.init.uploadApiUrl);
+                    };
+                    v.ckEditor[id].model.document.on('change:data', function () {
+                        if (v[form]) {
+                            v[form].setFieldsValue(_defineProperty({}, id, v.ckEditor[id].getData()));
+                        }
+                    });
+                    $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
+                }).catch(function (err) {
+                    console.warn(err.stack);
+                });
+            });
+        }
+
+        /**
+         * Init clipboard
+         *
+         * @param selector
+         */
+
+    }, {
+        key: 'initClipboard',
+        value: function initClipboard() {
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.ant-btn';
+
+            if (!window.Clipboard) {
+                return;
+            }
+            var that = this;
+            var clipboard = new Clipboard(selector, {
+                text: function text(trigger) {
+                    if (typeof that.cnf.v.copy !== 'undefined' && that.cnf.v.copy) {
+                        var text = that.cnf.v.copy;
+                        that.cnf.v.copy = null;
+                        return text;
+                    }
+                    return trigger.getAttribute('data-clipboard-text');
+                }
+            });
+            clipboard.on('success', function (e) {
+                that.success(that.lang.copy_success, 3);
+                e.clearSelection();
+            });
+            clipboard.on('error', function (e) {
+                that.error(that.lang.copy_failed, 3);
+                console.error('Clipboard operation error', e);
+            });
+        }
+
+        /**
+         * [in parent] Dispatcher by bsw data
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'dispatcherByBswDataInParent',
+        value: function dispatcherByBswDataInParent(data, element) {
+            var that = this;
+            this.modalOnCancel();
+            this.drawerOnCancel();
+            this.cnf.v.$nextTick(function () {
+                if (typeof data.data.location !== 'undefined') {
+                    data.data.location = that.unsetParams(['iframe'], data.data.location);
+                }
+                that.dispatcherByBswData(data.data, element);
+            });
+        }
+
+        /**
+         * [in parent] Filter form item
+         *
+         * @param data
+         * @param element
+         * @param form
+         */
+
+    }, {
+        key: 'fillParentFormInParent',
+        value: function fillParentFormInParent(data, element) {
+            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
+
+            var v = this.cnf.v;
+            this.modalOnCancel();
+            this.drawerOnCancel();
+            v.$nextTick(function () {
+                if (v[form] && data.repair) {
+                    v[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
+                }
+            });
+        }
+
+        /**
+         * [in parent] fill form after ajax
+         *
+         * @param res
+         * @param element
+         */
+
+    }, {
+        key: 'fillParentFormAfterAjaxInParent',
+        value: function fillParentFormAfterAjaxInParent(res, element) {
+            var data = res.response.sets;
+            data.repair = data.arguments.repair;
+            this.fillParentFormInParent(data, element);
+        }
+
+        /**
+         * [in parent] Handler response
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'handleResponseInParent',
+        value: function handleResponseInParent(data, element) {
+            var that = this;
+            this.modalOnCancel();
+            this.drawerOnCancel();
+            this.cnf.v.$nextTick(function () {
+                that.response(data.response).catch(function (reason) {
+                    console.warn(reason);
+                });
+            });
+        }
+
+        /**
+         * [in parent] Show iframe
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'showIFrameInParent',
+        value: function showIFrameInParent(data, element) {
+            this.showIFrame(data.response.sets, element);
         }
 
         /**

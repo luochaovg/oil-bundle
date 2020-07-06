@@ -18,7 +18,7 @@ bsw.configure({
         persistenceInit(v) {
             v.persistenceForm = v.$form.createForm(v);
             v.$nextTick(function () {
-                bsw.cnf.v.initCkEditor();
+                bsw.initCkEditor();
             });
             v.$nextTick(function () {
                 for (let field in v.persistenceFieldShapeCollect) {

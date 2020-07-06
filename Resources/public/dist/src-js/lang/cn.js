@@ -25,5 +25,7 @@ window.lang = {
     color_weak: '色弱模式',
     third_message: '第三方消息提示',
     total: '总计',
-    export_mission: '导出任务'
+    export_mission: '导出任务',
+    copy_success: '内容复制成功',
+    copy_failed: '内容复制出错'
 };

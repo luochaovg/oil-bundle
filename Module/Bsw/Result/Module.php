@@ -72,9 +72,11 @@ class Module extends Bsw
         $output->width = $this->input->width;
         $output->subTitle = $this->input->subTitle;
         $output->status = $this->input->status;
-        $output->operatorType = $this->input->operatorType;
-        $output->operatorClick = $this->input->operatorClick;
-        $output->operator = $this->input->operator;
+        $output->okText = $this->input->okText;
+        $output->okShow = $this->input->okShow;
+        $output->cancelText = $this->input->cancelText;
+        $output->cancelShow = $this->input->cancelShow;
+        $output->okType = $this->input->okType;
 
         $output = $this->caller(
             $this->method,

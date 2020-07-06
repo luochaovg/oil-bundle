@@ -16,11 +16,31 @@
     {% set subTitle = result.subTitle|trans({}, 'twig') %}
     <div slot="subTitle" v-html="typeof result.subTitle !== 'undefined' ? result.subTitle : '{{ subTitle }}'"></div>
     {% block resultOperator %}
-      <template v-slot:extra>
+      <a-icon
+        slot="icon"
+        v-if="result.icon && result.icon.split(':')[0] === 'a'"
+        :type="result.icon.split(':')[1]"></a-icon>
+      <b-icon
+        slot="icon"
+        v-else-if="result.icon && result.icon.split(':')[0] === 'b'"
+        :type="result.icon.split(':')[1]"></b-icon>
+      <template slot="extra">
+        <div
+          class="bsw-result-data"
+          :data-bsw.prop="{ok: result.ok, cancel: result.cancel, extra: result.extra}"
+        ></div>
         <a-button
-          type="{{ result.operatorType }}"
-          @click="{{ result.operatorClick }}"
-        >{{ result.operator|trans({}, 'twig') }}</a-button>
+          v-if="typeof result.cancelShow !== 'undefined' ? result.cancelShow : {{ result.cancelShow ? 'true' : 'false' }}"
+          type="default"
+          @click="bsw.resultOnCancel"
+          v-text="result.cancelText || '{{ result.cancelText|trans({}, 'twig') }}'">
+        </a-button>
+        <a-button
+          v-if="typeof result.okShow !== 'undefined' ? result.okShow : {{ result.okShow ? 'true' : 'false' }}"
+          :type="result.okType || '{{ result.okType }}'"
+          @click="bsw.resultOnOk"
+          v-text="result.okText || '{{ result.okText|trans({}, 'twig') }}'">
+        </a-button>
       </template>
     {% endblock %}
   </a-result>

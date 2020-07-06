@@ -58,12 +58,23 @@ abstract class BswWebController extends AbstractController
         // history for last time
         $args = $this->getArgs();
 
-        $iframe = $args['iframe'] ?? null;
-        $scene = $args['scene'] ?? null;
-
-        if (isset($this->route) && is_null($iframe) && ($scene !== 'export')) {
-            $this->sessionArraySet(Abs::TAG_HISTORY, $this->route, $args);
+        // don't history when iframe
+        if (($args['iframe'] ?? null) !== null) {
+            return;
         }
+
+        // don't history when export
+        if (($args['scene'] ?? null) === 'export') {
+            return;
+        }
+
+        // don't history when configure exclude route
+        $exclude = $this->parameters('route_exclude_history', false);
+        if (is_null($this->route) || in_array($this->route, $exclude)) {
+            return;
+        }
+
+        $this->sessionArraySet(Abs::TAG_HISTORY, $this->route, $args);
     }
 
     /**

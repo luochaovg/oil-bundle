@@ -815,12 +815,18 @@ textarea[size="large"] {
   pointer-events: none;
 }
 .ant-result {
-  padding: 16px 0;
+  padding: 10px;
 }
-.ant-result-title {
+.ant-result .ant-result-icon {
+  margin-bottom: 16px;
+}
+.ant-result .ant-result-icon > .anticon {
+  font-size: 56px;
+}
+.ant-result .ant-result-title {
   font-size: 20px;
 }
-.ant-result-icon > .anticon {
-  font-size: 56px;
+.ant-result .ant-result-subtitle {
+  margin-top: 10px;
 }
 /*# sourceMappingURL=bsw.css.map */

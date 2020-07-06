@@ -56,64 +56,80 @@ $(function () {
 
         moment,
 
-        redirect(data) {
-            if (data.function && data.function !== 'redirect') {
-                return this.dispatcher(data, $('body'));
-            }
-            let url = data.location;
-            if (bsw.isMobile() && this.mobileDefaultCollapsed) {
-                bsw.cookie().set('bsw_menu_collapsed', 'yes');
-            }
-            if (url.startsWith('http') || url.startsWith('/')) {
-                if (typeof data.window === 'undefined') {
-                    return location.href = url;
-                } else {
-                    return window.open(url);
-                }
-            }
-        },
-
-        getBswData(object) {
-            return object[0].dataBsw || object.data('bsw') || {};
-        },
-
         redirectByVue(event) {
-            this.redirect(this.getBswData($(event.item.$el).find('span')));
+            bsw.redirect(bsw.getBswData($(event.item.$el).find('span')));
         },
 
         tabsLinksSwitch(key) {
-            this.redirect(this.getBswData($(`#tabs_link_${key}`)));
-        },
-
-        dispatcher(data, element) {
-            let that = this;
-            if (data.iframe) {
-                delete data.iframe;
-                parent.postMessage({data, function: 'dispatcher'}, '*');
-                return;
-            }
-            let action = function () {
-                if (!data.function || data.function.length === 0) {
-                    return console.error(`Attribute function should be configure in options.`, data);
-                }
-                if (typeof that[data.function] === 'undefined') {
-                    return console.error(`Method ${data.function} is undefined.`, data);
-                }
-                that[data.function](data, element);
-            };
-            if (typeof data.confirm === 'undefined') {
-                action();
-            } else {
-                bsw.showConfirm(data.confirm, bsw.lang.confirm_title, {onOk: () => action()});
-            }
+            bsw.redirect(bsw.getBswData($(`#tabs_link_${key}`)));
         },
 
         dispatcherByNative(element) {
-            this.dispatcher(this.getBswData($(element)), element);
+            bsw.dispatcherByBswData(bsw.getBswData($(element)), element);
         },
 
         dispatcherByVue(event) {
             this.dispatcherByNative($(event.target)[0])
+        },
+
+        selectedRowHandler(field) {
+            let rows = [];
+            for (let i = 0; i < this.previewSelectedRow.length; i++) {
+                if (bsw.isString(this.previewSelectedRow[i])) {
+                    rows[i] = bsw.evalExpr(this.previewSelectedRow[i]);
+                    if (field) {
+                        rows[i] = rows[i][field] || null;
+                    }
+                }
+            }
+            return rows;
+        },
+
+        multipleAction(data, element) {
+            let ids = this.selectedRowHandler();
+            if (ids.length === 0) {
+                return bsw.warning(bsw.lang.select_item_first);
+            }
+            bsw.request(data.location, {ids: ids}).then((res) => {
+                bsw.response(res).catch((reason => {
+                    console.warn(reason);
+                }));
+            }).catch((reason => {
+                console.warn(reason);
+            }));
+        },
+
+        showIFrameWithChecked(data, element) {
+            let ids = this.selectedRowHandler(data.selector).join(',');
+            let args = {ids};
+            if (typeof data.form !== "undefined") {
+                let key = `fill[${data.form}]`;
+                args = {[key]: ids};
+            }
+            data.location = bsw.setParams(args, data.location);
+            bsw.showIFrame(data, element);
+        },
+
+        showIFrameByNative(element) {
+            bsw.showIFrame(bsw.getBswData($(element)), element);
+        },
+
+        showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0])
+        },
+
+        fillParentForm(data, element) {
+            data.ids = this.selectedRowHandler(data.selector).join(',');
+            if (data.ids.length === 0) {
+                return bsw.warning(bsw.lang.select_item_first);
+            }
+            parent.postMessage(data, '*');
+        },
+
+        verifyJsonFormat(data, element, form = 'persistenceForm') {
+            let json = this[form].getFieldValue(data.field);
+            let url = bsw.setParams({[data.key]: json}, data.url);
+            window.open(url);
         },
 
         setUrlToForm(data, element) {
@@ -244,7 +260,7 @@ $(function () {
                         height: 700,
                     };
                     data.location = bsw.setParams(res.sets, this.init.exportApiUrl, true);
-                    this.showIFrame(data, $('body')[0]);
+                    bsw.showIFrame(data, $('body')[0]);
                 }).catch((reason => {
                     console.warn(reason);
                 }));
@@ -370,108 +386,6 @@ $(function () {
             }
         },
 
-        formItemFilterOption(input, option) {
-            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
-        },
-
-        showModal(options) {
-            this.modal.visible = false;
-            options.visible = true;
-            if (typeof options.width === 'undefined') {
-                options.width = bsw.popupCosySize().width;
-            }
-            options = Object.assign(this.modal, options);
-            if (options.footer) {
-                this.footer = '_footer';
-            } else {
-                this.footer = 'footer';
-            }
-            this.modal = options;
-        },
-
-        showResult(options) {
-            this.result.visible = false;
-            options.visible = true;
-            options = Object.assign(this.result, options);
-            this.result = options;
-        },
-
-        showDrawer(options) {
-            this.drawer.visible = false;
-            options.visible = true;
-            if (typeof options.width === 'undefined') {
-                options.width = bsw.popupCosySize().width;
-            }
-            options = Object.assign(this.drawer, options);
-            this.drawer = options;
-        },
-
-        executeMethod(element, fn) {
-            if (!element.length) {
-                return;
-            }
-            let data = element[0].dataBsw;
-            if (data[fn]) {
-                if (typeof this[data[fn]] === 'undefined') {
-                    return console.error(`Method ${data[fn]} is undefined.`, data);
-                }
-                this[data[fn]](data, event);
-            }
-        },
-
-        modalOnOk(event) {
-            this.modal.visible = false;
-            if (!event) {
-                return;
-            }
-            let element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
-            this.executeMethod(element, 'ok');
-        },
-
-        modalOnCancel(event) {
-            this.modal.visible = false;
-            if (!event) {
-                return;
-            }
-            let element = $(event.target).parents('.ant-modal-footer').prev().find('.bsw-modal-data');
-            this.executeMethod(element, 'cancel');
-        },
-
-        drawerOnOk(event) {
-            this.drawer.visible = false;
-            if (!event) {
-                return;
-            }
-            let element = $(event.target).parents('.bsw-footer-bar');
-            this.executeMethod(element, 'ok');
-        },
-
-        drawerOnCancel(event) {
-            this.drawer.visible = false;
-            if (!event) {
-                return;
-            }
-            let element = $(event.target).parents('.bsw-footer-bar');
-            this.executeMethod(element, 'cancel');
-        },
-
-        showModalAfterRequest(data, element) {
-            bsw.request(data.location).then((res) => {
-                bsw.response(res).then(() => {
-                    let options = bsw.jsonFilter(Object.assign(data, {
-                        width: res.sets.width || data.width || undefined,
-                        title: res.sets.title || data.title || bsw.lang.modal_title,
-                        content: res.sets.content,
-                    }));
-                    this.showModal(options);
-                }).catch((reason => {
-                    console.warn(reason);
-                }));
-            }).catch((reason => {
-                console.warn(reason);
-            }));
-        },
-
         requestByAjax(data, element) {
             let that = this;
             bsw.request(data.location).then((res) => {
@@ -487,167 +401,13 @@ $(function () {
             }));
         },
 
-        selectedRowHandler(field) {
-            let rows = [];
-            for (let i = 0; i < this.previewSelectedRow.length; i++) {
-                if (bsw.isString(this.previewSelectedRow[i])) {
-                    rows[i] = bsw.evalExpr(this.previewSelectedRow[i]);
-                    if (field) {
-                        rows[i] = rows[i][field] || null;
-                    }
-                }
-            }
-            return rows;
-        },
-
-        multipleAction(data, element) {
-            let ids = this.selectedRowHandler();
-            if (ids.length === 0) {
-                return bsw.warning(bsw.lang.select_item_first);
-            }
-            bsw.request(data.location, {ids: ids}).then((res) => {
-                bsw.response(res).catch((reason => {
-                    console.warn(reason);
-                }));
-            }).catch((reason => {
-                console.warn(reason);
-            }));
-        },
-
-        showIFrame(data, element) {
-            let size = bsw.popupCosySize();
-            let repair = $(element).prev().attr('id');
-            data.location = bsw.setParams({iframe: true, repair}, data.location);
-
-            let options = bsw.jsonFilter(Object.assign(data, {
-                width: data.width || size.width,
-                title: data.title === false ? data.title : (data.title || bsw.lang.please_select),
-                content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
-            }));
-
-            let mode = data.shape || 'modal';
-            if (mode === 'drawer') {
-                this.showDrawer(options);
-                this.$nextTick(function () {
-                    let iframe = $("#bsw-iframe");
-                    let footerHeight = options.footer ? 73 : 0;
-                    iframe.height(bsw.popupCosySize(true).height - footerHeight - 55);
-                    iframe.parents("div.ant-drawer-body").css({margin: 0, padding: 0});
-                });
-            } else {
-                this.showModal(options);
-                this.$nextTick(function () {
-                    let iframe = $("#bsw-iframe");
-                    iframe.height(data.height || size.height);
-                    iframe.parents("div.ant-modal-body").css({margin: 0, padding: 0});
-                });
-            }
-        },
-
-        showIFrameWithChecked(data, element) {
-            let ids = this.selectedRowHandler(data.selector).join(',');
-            let args = {ids};
-            if (typeof data.form !== "undefined") {
-                let key = `fill[${data.form}]`;
-                args = {[key]: ids};
-            }
-            data.location = bsw.setParams(args, data.location);
-            this.showIFrame(data, element);
-        },
-
-        showIFrameByNative(element) {
-            this.showIFrame(this.getBswData($(element)), element);
-        },
-
-        showIFrameByVue(event) {
-            this.showIFrameByNative($(event.target)[0])
-        },
-
-        fillParentForm(data, element) {
-            data.ids = this.selectedRowHandler(data.selector).join(',');
-            if (data.ids.length === 0) {
-                return bsw.warning(bsw.lang.select_item_first);
-            }
-            parent.postMessage(data, '*');
-        },
-
-        verifyJsonFormat(data, element, form = 'persistenceForm') {
-            let json = this[form].getFieldValue(data.field);
-            let url = bsw.setParams({[data.key]: json}, data.url);
-            window.open(url);
-        },
-
-        initCkEditor(form = 'persistenceForm') {
-            let that = this;
-            $('.bsw-persistence .bsw-ck').each(function () {
-                let em = this;
-                let id = $(em).prev('textarea').attr('id');
-                let container = $(em).find('.bsw-ck-editor');
-                DecoupledEditor.create(container[0], {
-                    language: bsw.lang.i18n_editor,
-                    placeholder: $(em).attr('placeholder'),
-                }).then(editor => {
-                    that.ckEditor[id] = editor;
-                    editor.isReadOnly = $(em).attr('disabled') === 'disabled';
-                    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                        return new FileUploadAdapter(editor, loader, that.init.uploadApiUrl);
-                    };
-                    that.ckEditor[id].model.document.on('change:data', function () {
-                        if (that[form]) {
-                            that[form].setFieldsValue({[id]: that.ckEditor[id].getData()});
-                        }
-                    });
-                    $(em).find('.bsw-ck-toolbar').append(editor.ui.view.toolbar.element);
-                }).catch(err => {
-                    console.warn(err.stack);
-                });
-            });
+        copyFileLink(data, element) {
+            this.copy = data.extra.link;
         },
 
         //
         // for iframe exec in parent
         //
-
-        dispatcherInParent(data, element) {
-            this.modalOnCancel();
-            this.drawerOnCancel();
-            this.$nextTick(function () {
-                if (typeof data.data.location !== 'undefined') {
-                    data.data.location = bsw.unsetParams(['iframe'], data.data.location);
-                }
-                this.dispatcher(data.data, element);
-            });
-        },
-
-        fillParentFormInParent(data, element, form = 'persistenceForm') {
-            this.modalOnCancel();
-            this.drawerOnCancel();
-            this.$nextTick(function () {
-                if (this[form] && data.repair) {
-                    this[form].setFieldsValue({[data.repair]: data.ids});
-                }
-            });
-        },
-
-        fillParentFormAfterAjaxInParent(res, element) {
-            let data = res.response.sets;
-            data.repair = data.arguments.repair;
-            this.fillParentFormInParent(data, element);
-        },
-
-        handleResponseInParent(data, element) {
-            this.modalOnCancel();
-            this.drawerOnCancel();
-            this.$nextTick(function () {
-                bsw.response(data.response).catch((reason => {
-                    console.warn(reason);
-                }));
-            });
-        },
-
-        showIFrameInParent(data, element) {
-            this.showIFrame(data.response.sets, element);
-        },
 
         refreshPreviewInParent(data, element) {
             this.handleResponseInParent(data, element);
@@ -679,56 +439,20 @@ $(function () {
             change = v.scaffoldInit();
         }
 
-        v.$nextTick(function () {
-            // logic
-            for (let fn in bsw.config.logic || []) {
-                if (!bsw.config.logic.hasOwnProperty(fn)) {
-                    continue;
-                }
-                bsw.config.logic[fn](v);
-            }
-        });
-
-        // change captcha
-        $('img.bsw-captcha').off('click').on('click', function () {
-            let src = $(this).attr('src');
-            src = bsw.setParams({t: bsw.timestamp()}, src);
-            $(this).attr('src', src);
-        });
+        bsw.initClipboard();
 
         let timeout = change ? 1000 : 400;
         setTimeout(function () {
-            // resize
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
-                // message
-                let message = v.init.message;
-                if (typeof message.content !== 'undefined') {
-                    // notification message confirm
-                    message = bsw.arrayBase64Decode(message);
-                    let duration = bsw.isNull(message.duration) ? undefined : message.duration;
-                    try {
-                        bsw[message.classify](message.content, duration, null, message.type);
-                    } catch (e) {
-                        console.warn(bsw.lang.message_data_error, message);
-                        console.warn(e);
-                    }
-                }
-                // modal
-                if (typeof v.init.modal.content !== 'undefined') {
-                    v.showModal(bsw.arrayBase64Decode(v.init.modal));
-                }
-                // result
-                if (typeof v.init.result.title !== 'undefined') {
-                    v.showResult(bsw.arrayBase64Decode(v.init.result));
-                }
+                bsw.messageAutoDiscovery(v.init);
             });
         }, timeout);
     });
 
     window.addEventListener('message', function (event) {
         event.data.function += 'InParent';
-        bsw.cnf.v.dispatcher(event.data, $('body')[0]);
+        bsw.dispatcherByBswData(event.data, $('body')[0]);
     }, false)
 });
 

@@ -217,13 +217,16 @@ parameters:
     currency_code: CNY
     currency_char: ￥
 
+    module_extra_path: []
+
     bsw_route_exclude_login:
         - app_user_login
         - app_user_logout
         - app_captcha
         - app_upload
 
-    module_extra_path: []
+    bsw_route_exclude_history:
+        - app_third_message
 
     bsw_crumbs_preview_pre:
         - persistence

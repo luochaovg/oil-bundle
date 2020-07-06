@@ -34,7 +34,7 @@
 >
   {% if form.needTips %}
     <a-popover>
-      <template v-slot:content>
+      <template slot="content">
         <a-table
           :columns="persistenceUploadTipsCollect.{{ field }}.columns"
           :data-source="persistenceUploadTipsCollect.{{ field }}.list"

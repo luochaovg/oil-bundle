@@ -24,4 +24,6 @@ window.lang = {
     third_message: 'Third message',
     total: 'Total',
     export_mission: 'Export mission',
+    copy_success: 'Content copied success',
+    copy_failed: 'Content copied failed',
 };
