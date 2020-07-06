@@ -61,4 +61,22 @@ trait Style
     {
         return isset($this->style[$name]);
     }
+
+    /**
+     * @param bool|string $value
+     *
+     * @return $this
+     */
+    public function setHide($value)
+    {
+        if ($value === true) {
+            $this->appendStyle(['display' => 'none']);
+        } elseif ($value === false) {
+            $this->appendStyle(['display' => 'inline-block']);
+        } else {
+            $this->appendStyle(['display' => $value]);
+        }
+
+        return $this;
+    }
 }

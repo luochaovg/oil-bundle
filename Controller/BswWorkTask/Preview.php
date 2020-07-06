@@ -98,8 +98,6 @@ trait Preview
      */
     public function previewAnnotation(): array
     {
-        [$team, $leader] = $this->workTaskTeam();
-
         return [
             'trail'     => [
                 'width' => 120,
@@ -107,7 +105,7 @@ trait Preview
                 'sort'  => 3.9,
                 'html'  => true,
             ],
-            Abs::TR_ACT => ['width' => ($team && !$leader) ? 80 : 126],
+            Abs::TR_ACT => ['width' => 126],
         ];
     }
 
@@ -188,6 +186,18 @@ trait Preview
                 ]
             );
 
+        $operates[] = (new Button('Notes'))
+            ->setRoute('app_bsw_work_task_notes')
+            ->setClick('showIFrame')
+            ->setArgs(
+                [
+                    'fill'   => ['taskId' => $args->item['id']],
+                    'width'  => 500,
+                    'height' => 303,
+                    'title'  => false,
+                ]
+            );
+
         if (!$team || $leader) {
             $operates[] = (new Button('Weight'))
                 ->setType(Button::THEME_DEFAULT)
@@ -208,6 +218,7 @@ trait Preview
             $operates[] = (new Button('Close', 'app_bsw_work_task_close'))
                 ->setType(Button::THEME_DANGER)
                 ->setDisabled(!in_array($args->item['state'], [3, 4]))
+                ->setHide(!in_array($args->item['state'], [3, 4]))
                 ->setConfirm($this->messageLang('Are you sure'))
                 ->setArgs(['id' => $args->item['id']]);
         }

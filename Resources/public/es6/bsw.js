@@ -410,7 +410,7 @@ $(function () {
         //
 
         refreshPreviewInParent(data, element) {
-            this.handleResponseInParent(data, element);
+            bsw.handleResponseInParent(data, element);
             this.previewPaginationRefresh(false);
         },
 
