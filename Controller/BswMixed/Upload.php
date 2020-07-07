@@ -44,7 +44,7 @@ trait Upload
         /**
          * @var UploadItem $file
          */
-        $file = $this->uploadCore($upload, $options);
+        $file = $this->uploadOneCore($upload, $options);
         if ($file instanceof Response) {
             return $file;
         }

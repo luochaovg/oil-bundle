@@ -13,62 +13,77 @@ class Upload
     /**
      * @var string
      */
-    protected $rootPath;
+    public $flag;
+
+    /**
+     * @var string
+     */
+    public $rootPath;
 
     /**
      * @var array
      */
-    protected $nameNoChar = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+    public $nameNoChar = ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
 
     /**
      * @var float|int
      */
-    protected $maxSize = 1024 * 8;
+    public $maxSize = 1024 * 8;
 
     /**
      * @var array
      */
-    protected $suffix = [];
+    public $suffix = [];
 
     /**
      * @var array
      */
-    protected $noSuffix = ['php'];
+    public $noSuffix = ['php'];
 
     /**
      * @var array
      */
-    protected $mime = [];
+    public $mime = [];
 
     /**
      * @var array
      */
-    protected $noMime = [];
+    public $noMime = [];
 
     /**
      * @var array
      */
-    protected $picSizes = [[10, 'max'], [10, 'max']];
+    public $picSizes = [[10, 'max'], [10, 'max']];
 
     /**
      * @var array
      */
-    protected $savePathFn = [];
+    public $savePathFn = [];
+
+    /**
+     * @var string Just data format
+     */
+    public $savePathFmt;
 
     /**
      * @var array
      */
-    protected $saveNameFn = ['uniqid'];
+    public $saveNameFn = ['uniqid'];
 
     /**
      * @var bool
      */
-    protected $saveReplace = false;
+    public $saveReplace = false;
 
     /**
      * @var bool
      */
-    protected $manual = false;
+    public $manual = false;
+
+    /**
+     * @var bool
+     */
+    public $removeAfterUpload = false;
 
     /**
      * Upload constructor.
@@ -78,13 +93,10 @@ class Upload
     public function __construct(array $config = [])
     {
         foreach ($config as $item => $value) {
-            $item = Helper::underToCamel($item);
             if (!property_exists($this, $item)) {
                 continue;
             }
-
             $this->{$item} = $value;
-
             $stringToArray = ['suffix', 'noSuffix', 'mime', 'noMime'];
             if (in_array($item, $stringToArray) && is_string($this->{$item})) {
                 $this->{$item} = Helper::stringToArray($this->{$item});
@@ -114,19 +126,12 @@ class Upload
         $fileInfo = new finfo(FILEINFO_MIME_TYPE);
 
         $result = [];
-
         foreach ($files as $key => $item) {
-
             if (!empty($item['error'])) {
-                throw new UploadException('Unknown upload error', $item['error']);
+                throw new UploadException(null, $item['error']);
             }
 
-            $file = new UploadItem(
-                $item['tmp_name'],
-                $item['name'],
-                $item['key'] ?? $key,
-                $item['size']
-            );
+            $file = new UploadItem($item['tmp_name'], $item['name'], $item['key'] ?? $key, $item['size']);
 
             // get suffix by extend for adobe.flash upload
             $file->type = strtolower($fileInfo->file($file->tmpName));
@@ -165,6 +170,10 @@ class Upload
                 $file->md5 = md5_file($file->file);
                 $file->sha1 = sha1_file($file->file);
 
+                if ($this->removeAfterUpload) {
+                    unlink($file->file);
+                }
+
                 $result[$key] = $file;
             }
         }
@@ -185,26 +194,26 @@ class Upload
         $option = (object)$option;
         $tips = new stdClass();
 
-        $tips->maxFileSize = '≤' . Helper::humanSize(($option->max_size ?? 0) * 1024);
+        $tips->maxFileSize = '≤' . Helper::humanSize(($option->maxSize ?? 0) * 1024);
         $tips->allowSuffix = ['*'];
         $tips->allowMime = ['*'];
 
         if (!empty($option->suffix)) {
             $tips->allowSuffix = $option->suffix;
-        } elseif (!empty($option->no_suffix)) {
-            $tips->allowSuffix = Helper::arrayMap($option->no_suffix, '!%s');
+        } elseif (!empty($option->noSuffix)) {
+            $tips->allowSuffix = Helper::arrayMap($option->noSuffix, '!%s');
         }
 
         if (!empty($option->mime)) {
             $tips->allowMime = $option->mime;
-        } elseif (!empty($option->no_mime)) {
-            $tips->allowMime = Helper::arrayMap($option->no_mime, '!%s');
+        } elseif (!empty($option->noMime)) {
+            $tips->allowMime = Helper::arrayMap($option->noMime, '!%s');
         }
 
         $image = array_merge(Abs::IMAGE_SUFFIX, ['*']);
         $intersect = array_intersect($image, $tips->allowSuffix);
         if (count($intersect) > 0) {
-            [[$wMin, $wMax], [$hMin, $hMax]] = $option->pic_sizes;
+            [[$wMin, $wMax], [$hMin, $hMax]] = $option->picSizes;
             $wMax = (strtoupper($wMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$wMax}px";
             $hMax = (strtoupper($hMax) === Abs::IMAGE_SIZE_MAX) ? Abs::IMAGE_SIZE_MAX : "{$hMax}px";
             $tips->pictureSizes = "[{$wMin}px~{$wMax}]*[{$hMin}px~{$hMax}]";
@@ -392,7 +401,7 @@ class Upload
             return $subPath;
         }
 
-        $subPath = $this->createName($this->savePathFn);
+        $subPath = $this->createName($this->savePathFn, $this->savePathFmt);
         $fullPath = Helper::joinString(DIRECTORY_SEPARATOR, $this->rootPath, $subPath);
         if (!empty($subPath) && !is_dir($fullPath) && !@mkdir($fullPath, 0777, true)) {
             throw new UploadException('Create directory fail');
@@ -402,22 +411,45 @@ class Upload
     }
 
     /**
-     * Create name by rule
-     *
-     * @param array|callable $rule
+     * Save path builder
      *
      * @return string
      */
-    private function createName($rule): string
+    public function savePath(): string
     {
-        $rule = (array)$rule + [1 => []];
-        [$fn, $params] = $rule;
+        return $this->flag;
+    }
+
+    /**
+     * Create name by rule
+     *
+     * @param array|callable $rule
+     * @param string         $fmt
+     *
+     * @return string
+     */
+    private function createName($rule, string $fmt = null): string
+    {
+        $rule = (array)$rule + [1 => [], 2 => false];
+        [$fn, $params, $unshiftUploader] = $rule;
 
         if (is_string($fn) && !function_exists($fn)) {
             $fn = [$this, $fn];
         }
 
-        return call_user_func_array($fn, $params);
+        $params = (array)$params;
+        if ($unshiftUploader) {
+            array_unshift($params, $this);
+        }
+
+        $name = call_user_func_array($fn, array_values($params));
+
+        if ($fmt) {
+            $fmt = date($fmt);
+            $name = "{$name}{$fmt}";
+        }
+
+        return $name;
     }
 
     /**
@@ -470,5 +502,25 @@ class Upload
         }
 
         return $fileName;
+    }
+
+    /**
+     * Rebuild file instance
+     *
+     * @param UploadItem $file
+     * @param object     $record
+     *
+     * @return UploadItem
+     */
+    public function rebuild(UploadItem $file, $record): UploadItem
+    {
+        $file->savePath = $record->deep;
+        $file->saveName = $record->filename;
+        $file->file = Helper::joinString(DIRECTORY_SEPARATOR, $this->rootPath, $file->savePath, $file->saveName);
+        $file->fileName = Helper::joinString(DIRECTORY_SEPARATOR, $file->savePath, $file->saveName);;
+        $file->id = $record->id;
+        $file->new = false;
+
+        return $file;
     }
 }

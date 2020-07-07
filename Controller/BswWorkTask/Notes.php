@@ -95,10 +95,10 @@ trait Notes
             $this->sendTelegramTips(
                 false,
                 $task->userId,
-                '{{ leader }} write notes in {{ task }}, {{ notes }}',
+                '{{ member }} write notes in {{ task }}, {{ notes }}',
                 [
                     '{{ task }}'  => $task->title,
-                    '{{ trail }}' => $args->record['trail'],
+                    '{{ notes }}' => $args->record['trail'],
                 ]
             );
         }

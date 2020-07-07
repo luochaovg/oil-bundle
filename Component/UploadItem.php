@@ -100,4 +100,9 @@ class UploadItem
      * @var string
      */
     public $url;
+
+    /**
+     * @var bool
+     */
+    public $new = true;
 }

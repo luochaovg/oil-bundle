@@ -14,11 +14,12 @@ class UploadException extends Exception
      * @param int            $code
      * @param Throwable|null $previous
      */
-    public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct(?string $message = null, int $code = 0, Throwable $previous = null)
     {
         if (!empty($code)) {
             $message = $this->codeToMessage($code);
         }
+        $message = $message ?? 'Unknown upload error';
 
         parent::__construct($message, $code, $previous);
     }
@@ -26,12 +27,13 @@ class UploadException extends Exception
     /**
      * @param $code
      *
-     * @return string
+     * @return string|null
      */
-    private function codeToMessage(int $code): string
+    private function codeToMessage(int $code): ?string
     {
-        switch ($code) {
+        $message = null;
 
+        switch ($code) {
             case UPLOAD_ERR_INI_SIZE:
                 $message = "Uploaded file exceeds the php directive";
                 break;
@@ -58,10 +60,6 @@ class UploadException extends Exception
 
             case UPLOAD_ERR_EXTENSION:
                 $message = "File upload stopped by extension";
-                break;
-
-            default:
-                $message = "Unknown upload error";
                 break;
         }
 

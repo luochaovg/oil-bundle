@@ -462,7 +462,7 @@ class Acme extends BswBackendController
             ->setClick('showResult')
             ->setArgs(
                 [
-                    'status'   => Abs::RESULT_WARNING,
+                    'status'   => Abs::RESULT_404,
                     'title'    => $this->fieldLang('Look forward'),
                     'subTitle' => 'Gradually improving, look forward.',
                 ]

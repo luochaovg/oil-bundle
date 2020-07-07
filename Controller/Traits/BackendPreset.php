@@ -221,7 +221,7 @@ trait BackendPreset
             return array_merge(
                 $option,
                 [
-                    'file_fn' => function ($file) {
+                    'fileFn' => function ($file) {
                         $file->href = 'app_bsw_attachment_preview';
 
                         return $file;

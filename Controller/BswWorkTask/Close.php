@@ -49,7 +49,7 @@ trait Close
             $this->sendTelegramTips(
                 false,
                 $task->userId,
-                '{{ leader }} close task {{ task }}',
+                '{{ member }} close task {{ task }}',
                 ['{{ task }}' => $task->title]
             );
         }

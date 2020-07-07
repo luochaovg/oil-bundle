@@ -123,17 +123,17 @@ trait Upload
     public function uploadOptionByFlag(string $flag, bool $manual = false): array
     {
         $default = [
-            'max_size'     => 128 * Abs::HEX_SIZE,
-            'suffix'       => [],
-            'mime'         => [],
-            'pic_sizes'    => [[10, 'max'], [10, 'max']],
-            'save_replace' => false,
-            'root_path'    => $this->parameter('file'),
-            'manual'       => $manual,
-            'save_name_fn' => ['uniqid'],
-            'save_path_fn' => function () use ($flag) {
-                return $flag;
-            },
+            'flag'        => $flag,
+            'maxSize'     => $this->parameter('upload_max_mb') * Abs::HEX_SIZE,
+            'suffix'      => [],
+            'mime'        => [],
+            'picSizes'    => [[10, 'max'], [10, 'max']],
+            'saveReplace' => $this->parameter('upload_replace_file'),
+            'rootPath'    => $this->parameter('file'),
+            'manual'      => $manual,
+            'saveNameFn'  => $this->parameter('upload_save_name'),
+            'savePathFn'  => $this->parameter('upload_save_path'),
+            'savePathFmt' => $this->parameter('upload_save_fmt'),
         ];
 
         return $this->dispatchMethod(Abs::FN_UPLOAD_OPTIONS, $default, [$flag, $default]);
@@ -184,7 +184,7 @@ trait Upload
     }
 
     /**
-     * Upload core
+     * Upload one core
      *
      * @param array $file
      * @param array $options
@@ -193,11 +193,28 @@ trait Upload
      * @return object
      * @throws
      */
-    public function uploadCore(array $file, array $options, int $platform = 2)
+    public function uploadOneCore(array $file, array $options, int $platform = 2)
     {
+        /**
+         * @var BswAttachmentRepository $bswAttachment
+         */
+        $bswAttachment = $this->repo(BswAttachment::class);
+        $userId = $this->usr('usr_uid') ?? 0;
+
+        // multiplex in same person
+        $exists = $bswAttachment->findOneBy(
+            $unique = [
+                'sha1'     => sha1_file($file['tmp_name']),
+                'platform' => $platform,
+                'userId'   => $userId,
+            ]
+        );
+
         // upload
         try {
-            $file = current((new Uploader($options))->upload([$file]));
+            $options['removeAfterUpload'] = !!$exists;
+            $uploader = new Uploader($options);
+            $file = current($uploader->upload([$file]));
         } catch (Exception $e) {
             if ($options['manual']) {
                 throw new Exception($e->getMessage());
@@ -206,20 +223,6 @@ trait Upload
             }
         }
 
-        $userId = $this->usr('usr_uid') ?? 0;
-
-        /**
-         * @var BswAttachmentRepository $bswAttachment
-         */
-        $bswAttachment = $this->repo(BswAttachment::class);
-        $exists = $bswAttachment->findOneBy(
-            $unique = [
-                'sha1'     => $file->sha1,
-                'platform' => $platform,
-                'userId'   => $userId,
-            ]
-        );
-
         if ($exists) {
 
             // The file already exists
@@ -227,9 +230,7 @@ trait Upload
                 $bswAttachment->modify([Abs::PK => $exists->id], ['state' => Abs::NORMAL]);
             }
 
-            $file->savePath = $exists->deep;
-            $file->saveName = $exists->filename;
-            $file->id = $exists->id;
+            $file = $uploader->rebuild($file, $exists);
 
         } else {
 
@@ -245,13 +246,22 @@ trait Upload
                     'state'    => Abs::NORMAL,
                 ]
             );
+
+            if ($file->id === false) {
+                if ($options['manual']) {
+                    throw new Exception($bswAttachment->pop());
+                } else {
+                    return $this->failedAjax(new ErrorUpload(), $bswAttachment->pop());
+                }
+            }
+
             $file = $this->ossUpload($file);
         }
 
         // file url
         $file = $this->attachmentPreviewHandler($file, 'url', ['savePath', 'saveName'], false);
-        if (is_callable($options['file_fn'] ?? null)) {
-            $file = call_user_func_array($options['file_fn'], [$file]);
+        if (is_callable($options['fileFn'] ?? null)) {
+            $file = call_user_func_array($options['fileFn'], [$file]);
         }
 
         return $file;

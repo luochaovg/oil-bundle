@@ -173,7 +173,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
         $options = $this->web->uploadOptionByFlag('bsw-export', true);
 
         try {
-            $file = $this->web->uploadCore($file, $options);
+            $file = $this->web->uploadOneCore($file, $options);
         } catch (Exception $e) {
             $this->output->writeln("<error> Manual upload file error: {$e->getMessage()} </error>");
         }

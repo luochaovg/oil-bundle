@@ -14,6 +14,11 @@ parameters:
     config_cache_enabled: true
     config_cache_default_expires: 86400
     upload_to_oss: true
+    upload_max_mb: 128
+    upload_replace_file: false
+    upload_save_name: uniqid
+    upload_save_path: savePath
+    upload_save_fmt: null
 
     platform_sms: aws
     platform_email: aws
