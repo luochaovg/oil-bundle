@@ -174,7 +174,7 @@ parameters:
         font_symbol: /bundles/leonbsw/font/iconfont/iconfont.js
         font_symbol_url: /bundles/leonbsw/font/iconfont/demo_index.html
         ant_icon_url: https://www.antdv.com/components/icon-cn
-        verify_json_url: https://www.bejson.com/kim.htm
+        verify_json_url: https://www.bejson.com
         loading_label: null
         work_task_send_telegram: true
 
@@ -217,6 +217,7 @@ parameters:
         icon_sure: a:coffee
         icon_newly: a:plus
         icon_delete: b:icon-delete1
+        icon_edit: b:icon-icon-38
         icon_language: b:icon-icon-60
 
     currency_code: CNY

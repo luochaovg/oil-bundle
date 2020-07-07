@@ -309,13 +309,17 @@ abstract class BswWebController extends AbstractController
     public function responseMessageWithAjax(Message $message): Response
     {
         [$params, $trans] = $this->resolveArgs($message->getArgs());
-        $content = $this->messageLang($message->getMessage(), $trans);
+
+        $content = $message->getMessage();
+        $content = $content ? $this->messageLang($content, $trans) : null;
         $url = $message->getRoute();
         $data = $message->getSets();
 
         if (isset($url)) {
 
-            $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
+            if ($content) {
+                $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
+            }
             $content = null;
             $data = array_merge($data, ['href' => $this->redirectUrl($url ?: null, $params)]);
 
