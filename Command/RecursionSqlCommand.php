@@ -122,6 +122,14 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
     /**
      * @return array
      */
+    public function extraFilter(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
     public function filter(): array
     {
         return [];
@@ -300,14 +308,14 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
             $this->alias = Helper::tableNameToAlias($entity);
             $this->repo = $this->repo($entity);
 
-            $_filter = [];
+            $fixFilter = [];
             if ($this->fixPagination) {
                 $pk = "{$this->alias}.{$this->repo->pk()}";
-                $_filter['order'] = [$pk => Abs::SORT_ASC];
+                $fixFilter['order'] = [$pk => Abs::SORT_ASC];
                 if ($pageNow > 1) {
                     $query = array_merge($query, ['page' => 1, 'offset' => 0]);
-                    $_filter = array_merge(
-                        $_filter,
+                    $fixFilter = array_merge(
+                        $fixFilter,
                         [
                             'where'  => [$this->expr->gt($pk, ':pk')],
                             'args'   => ['pk' => [$this->fpMaxId]],
@@ -318,8 +326,13 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
                 }
             }
 
+            $extraFilter = $this->extrafilter();
+            if ($fixFilter) {
+                array_push($extraFilter, $fixFilter);
+            }
+
             $filter = array_merge($this->filter(), $query);
-            $result = $this->repo->filters($_filter)->lister($filter);
+            $result = $this->repo->filters(...$extraFilter)->lister($filter);
 
         } elseif ($result = $this->lister()) {
             $result = $this->web->manualListForPagination($result, $query);

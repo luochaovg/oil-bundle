@@ -811,7 +811,7 @@ class Helper
         $target = array_shift($items);
 
         if (empty($items)) {
-            return $target;
+            return (array)$target;
         }
 
         foreach ($items as $next) {
