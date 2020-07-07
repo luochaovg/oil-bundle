@@ -219,6 +219,7 @@ parameters:
         icon_delete: b:icon-delete1
         icon_edit: b:icon-icon-38
         icon_language: b:icon-icon-60
+        icon_speech: b:icon-icon-49
 
     currency_code: CNY
     currency_char: ￥

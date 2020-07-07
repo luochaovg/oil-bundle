@@ -482,6 +482,7 @@ class Abs
     const JS_PHOTOS         = 'npm;photoswipe/dist/photoswipe.min.js';
     const JS_FANCY_BOX      = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.js';
     const JS_LAZY_LOAD      = 'npm;layzr.js/dist/layzr.js';
+    const JS_FULL_SCREEN    = 'npm;screenfull/dist/screenfull.js';
     const JS_FOUNDATION     = 'diy;foundation.js';
     const JS_BSW            = 'diy;bsw.js';
     const JS_WEB            = 'diy;web.js';

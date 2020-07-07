@@ -1,6 +1,7 @@
 Switch theme:               '切換主題'
 Switch color weak:          '切換色弱模式'
 Switch third message:       '開關實時提示'
+Switch full screen:         '切換全屏'
 Profile:                    '個人資料'
 Clean backend cache:        '後臺緩存'
 Clean frontend cache:       '項目緩存'

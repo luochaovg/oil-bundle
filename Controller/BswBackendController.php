@@ -72,8 +72,9 @@ class BswBackendController extends BswWebController
      * @var array
      */
     protected $currentSrcJs = [
-        'copy' => Abs::JS_COPY,
-        'bsw'  => Abs::JS_BSW,
+        'fulls' => Abs::JS_FULL_SCREEN,
+        'copy'  => Abs::JS_COPY,
+        'bsw'   => Abs::JS_BSW,
     ];
 
     /**
@@ -836,6 +837,11 @@ class BswBackendController extends BswWebController
             new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
             new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
             new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch'),
+            (new Setting())
+                ->setLabel('Switch full screen')
+                ->setIcon($this->cnf->icon_speech)
+                ->setClick('fullScreenToggle')
+                ->setArgs(['element' => 'html']),
         ];
     }
 
