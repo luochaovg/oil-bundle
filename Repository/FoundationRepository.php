@@ -828,11 +828,15 @@ abstract class FoundationRepository extends SFRepository
          * Page
          */
 
+        $limitDefaultMap = [
+            Abs::SELECT => static::PAGE_SIZE,
+        ];
+
         $pageArgs = Helper::pageArgs(
             [
                 'paging' => $paging ?? false,
                 'page'   => $page ?? 1,
-                'limit'  => $limit ?? static::PAGE_SIZE,
+                'limit'  => $limit ?? ($limitDefaultMap[$method] ?? 0),
             ],
             static::PAGE_SIZE
         );

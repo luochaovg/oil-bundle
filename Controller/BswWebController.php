@@ -291,11 +291,10 @@ abstract class BswWebController extends AbstractController
         // redirect url
         $url = $message->getRoute();
         if ($code = $message->getCode()) {
-            $url = $this->responseUrlMap($code);
+            $url = $this->responseUrlMap($code) ?? $url;
         }
-        $url = $this->redirectUrl($url, $params);
 
-        return $this->redirect($url);
+        return $this->redirect($this->redirectUrl($url, $params));
     }
 
     /**
