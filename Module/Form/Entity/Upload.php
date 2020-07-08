@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\Accept;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
@@ -31,21 +32,14 @@ class Upload extends Number
     use ButtonType;
 
     /**
-     * @const string
-     */
-    const LIST_TYPE_TEXT     = 'text';
-    const LIST_TYPE_IMG      = 'picture';
-    const LIST_TYPE_IMG_CARD = 'picture-card';
-
-    /**
      * Upload constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->setListType(self::LIST_TYPE_TEXT);
+        $this->setListType(Abs::LIST_TYPE_TEXT);
         $this->setChange('uploaderChange');
-        $this->setButtonType(Button::THEME_DEFAULT);
+        $this->setButtonType(Abs::THEME_DEFAULT);
         $this->setButtonLabel('Click to select for upload');
     }
 }

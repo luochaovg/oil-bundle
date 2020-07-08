@@ -26,7 +26,7 @@ trait Preview
         return [
             'roleAccessTotal' => [
                 'width'  => 150,
-                'align'  => 'center',
+                'align'  => Abs::POS_CENTER,
                 'sort'   => 2.1,
                 'render' => Abs::HTML_CODE,
             ],
@@ -66,7 +66,7 @@ trait Preview
 
             (new Button('Grant authorization for role'))
                 ->setRoute('app_bsw_admin_role_access_control_grant')
-                ->setType(Button::THEME_DANGER)
+                ->setType(Abs::THEME_DANGER)
                 ->setArgs(['id' => $args->item['id'], 'target' => $args->item['name']]),
         ];
     }

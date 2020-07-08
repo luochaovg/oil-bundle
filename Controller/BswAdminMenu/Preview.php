@@ -41,7 +41,7 @@ trait Preview
     {
         return [
             (new Button('Encase', null, $this->cnf->icon_two_box))
-                ->setType(Button::THEME_DANGER)
+                ->setType(Abs::THEME_DANGER)
                 ->setSelector(Abs::SELECTOR_CHECKBOX)
                 ->setRoute('app_bsw_admin_menu_multiple_encase')
                 ->setClick('multipleAction')
@@ -50,7 +50,7 @@ trait Preview
             (new Button('Sure', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
-                ->setScene(Button::SCENE_IFRAME)
+                ->setScene(Abs::SCENE_IFRAME)
                 ->setArgs(
                     [
                         'repair'   => $this->getArgs('repair'),
@@ -71,7 +71,7 @@ trait Preview
     {
         return [
             (new Button('Sort'))
-                ->setType(Button::THEME_DEFAULT)
+                ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_admin_menu_sort')
                 ->setClick('showIFrame')
                 ->setArgs(

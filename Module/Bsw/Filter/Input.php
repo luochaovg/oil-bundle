@@ -3,7 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Filter;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
-use Leon\BswBundle\Module\Form\Form;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Input extends ArgsInput
 {
@@ -40,5 +40,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $filterFormSize = Form::SIZE_DEFAULT;
+    public $filterFormSize = Abs::SIZE_DEFAULT;
 }

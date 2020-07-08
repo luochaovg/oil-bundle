@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswWorkTask;
-use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Repository\BswWorkTaskRepository;
@@ -16,31 +15,24 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @property Expr $expr
  */
-trait Notes
+trait Transfer
 {
     /**
      * @return string
      */
-    public function notesEntity(): string
+    public function transferEntity(): string
     {
-        return BswWorkTaskTrail::class;
+        return BswWorkTask::class;
     }
 
     /**
      * @return array
      */
-    public function notesAnnotationOnly(): array
+    public function transferAnnotationOnly(): array
     {
         return [
-            'userId' => ['show' => false],
-            'taskId' => ['hide' => true],
-            'trail'  => [
-                'label'    => 'Notes',
-                'typeArgs' => [
-                    'minRows' => 5,
-                    'maxRows' => 5,
-                ],
-            ],
+            'id'     => true,
+            'userId' => true,
         ];
     }
 
@@ -49,7 +41,7 @@ trait Notes
      *
      * @return array
      */
-    public function notesFormOperates(Arguments $args): array
+    public function transferFormOperates(Arguments $args): array
     {
         /**
          * @var Button $submit
@@ -57,8 +49,8 @@ trait Notes
         $submit = $args->submit;
         $submit
             ->setBlock(true)
-            ->setIcon('b:icon-form')
-            ->setLabel('Write notes');
+            ->setIcon('b:icon-feng')
+            ->setLabel('Transfer task');
 
         return compact('submit');
     }
@@ -66,58 +58,47 @@ trait Notes
     /**
      * @param Arguments $args
      *
-     * @return array|Error
-     */
-    public function notesAfterSubmit(Arguments $args)
-    {
-        $args->submit['userId'] = $this->usr('usr_uid');
-        $args->submit['trail'] = $this->messageLang(
-            'Write task notes, {{ notes }}',
-            ['{{ notes }}' => $args->submit['trail']]
-        );
-
-        return [$args->submit, $args->extraSubmit];
-    }
-
-    /**
-     * @param Arguments $args
-     *
      * @return bool|Error
      */
-    public function notesAfterPersistence(Arguments $args)
+    public function transferAfterPersistence(Arguments $args)
     {
         /**
          * @var BswWorkTaskRepository $taskRepo
          */
         $taskRepo = $this->repo(BswWorkTask::class);
-        $task = $taskRepo->find($args->record['taskId']);
+        $task = $taskRepo->find($args->original['id']);
 
         if ($this->usr('usr_uid') != $task->userId) {
             $this->sendTelegramTips(
                 false,
                 $task->userId,
-                '{{ member }} write notes in {{ task }}, {{ notes }}',
-                [
-                    '{{ task }}'  => $task->title,
-                    '{{ notes }}' => $args->record['trail'],
-                ]
+                '{{ member }} transfer task {{ task }} to you',
+                ['{{ task }}' => $task->title]
             );
         }
 
-        return true;
+        $user = $this->getUserById($args->original['userId']);
+
+        return $this->trailLogger(
+            $args,
+            $this->messageLang(
+                'Transfer task to {{ to }}',
+                ['{{ to }}' => $user->name]
+            )
+        );
     }
 
     /**
-     * Write task notes
+     * Transfer task
      *
-     * @Route("/bsw-work-task/notes/{id}", name="app_bsw_work_task_notes", requirements={"id": "\d+"})
+     * @Route("/bsw-work-task/transfer/{id}", name="app_bsw_work_task_transfer", requirements={"id": "\d+"})
      * @Access()
      *
      * @param int $id
      *
      * @return Response
      */
-    public function notes(int $id = null): Response
+    public function transfer(int $id = null): Response
     {
         if (($args = $this->valid()) instanceof Response) {
             return $args;

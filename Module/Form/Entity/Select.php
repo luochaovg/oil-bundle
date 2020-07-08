@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\DropdownStyle;
@@ -37,27 +38,13 @@ class Select extends Form
     use DropdownStyle;
 
     /**
-     * @const string
-     */
-    const MODE_DEFAULT  = 'default';
-    const MODE_MULTIPLE = 'multiple';
-    const MODE_TAGS     = 'tags';
-    const MODE_BOX      = 'combobox';
-
-    /**
-     * @const string
-     */
-    const SEARCH_VALUE = 'value';
-    const SEARCH_LABEL = 'children';
-
-    /**
      * Select constructor.
      */
     public function __construct()
     {
         $this->setButtonLabel('Popup for select');
-        $this->setMode(self::MODE_DEFAULT);
-        $this->setOptionFilterProp(self::SEARCH_LABEL);
+        $this->setMode(Abs::MODE_DEFAULT);
+        $this->setOptionFilterProp(Abs::SEARCH_LABEL);
     }
 
     /**

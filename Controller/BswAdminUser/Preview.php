@@ -28,13 +28,13 @@ trait Preview
         return [
             'roleAccessTotal' => [
                 'width'  => 130,
-                'align'  => 'center',
+                'align'  => Abs::POS_CENTER,
                 'sort'   => 3.1,
                 'render' => Abs::HTML_CODE,
             ],
             'userAccessTotal' => [
                 'width'  => 130,
-                'align'  => 'center',
+                'align'  => Abs::POS_CENTER,
                 'sort'   => 3.2,
                 'render' => Abs::HTML_CODE,
             ],
@@ -71,7 +71,7 @@ trait Preview
             (new Button('Sure', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
-                ->setScene(Button::SCENE_IFRAME)
+                ->setScene(Abs::SCENE_IFRAME)
                 ->setArgs(
                     [
                         'repair'   => $this->getArgs('repair'),
@@ -96,7 +96,7 @@ trait Preview
                 ->setArgs(['id' => $args->item['id']]),
 
             (new Button('Google qr code'))
-                ->setType(Button::THEME_DEFAULT)
+                ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_admin_user_google_qr_code')
                 ->setClick('showModalAfterRequest')
                 ->setArgs(
@@ -108,7 +108,7 @@ trait Preview
 
             (new Button('Grant authorization for user'))
                 ->setRoute('app_bsw_admin_access_control_grant')
-                ->setType(Button::THEME_DANGER)
+                ->setType(Abs::THEME_DANGER)
                 ->setArgs(['id' => $args->item['id'], 'target' => $args->item['name']]),
         ];
     }

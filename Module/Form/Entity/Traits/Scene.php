@@ -2,12 +2,14 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 trait Scene
 {
     /**
      * @var string
      */
-    protected $scene = self::SCENE_NORMAL;
+    protected $scene = Abs::SCENE_NORMAL;
 
     /**
      * @return string

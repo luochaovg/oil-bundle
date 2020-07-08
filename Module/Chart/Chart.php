@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Chart;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Chart\Traits;
+use Leon\BswBundle\Module\Entity\Abs;
 
 abstract class Chart
 {
@@ -45,12 +46,6 @@ abstract class Chart
         Traits\Width;
 
     /**
-     * @const string
-     */
-    const SELECTED_MODE_MULTIPLE = 'multiple';
-    const SELECTED_MODE_SINGLE   = 'single';
-
-    /**
      * Chart constructor.
      *
      * @param string|null $name
@@ -58,7 +53,7 @@ abstract class Chart
     public function __construct(string $name = null)
     {
         $this->setMobile(Helper::isMobile());
-        $this->setSelectedMode(self::SELECTED_MODE_MULTIPLE);
+        $this->setSelectedMode(Abs::SELECTOR_MODE_MULTIPLE);
 
         if ($name) {
             $this->setName($name);

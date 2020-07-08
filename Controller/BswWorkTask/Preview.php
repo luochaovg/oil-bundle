@@ -101,11 +101,14 @@ trait Preview
         return [
             'trail'     => [
                 'width' => 120,
-                'align' => 'center',
+                'align' => Abs::POS_CENTER,
                 'sort'  => 3.9,
                 'html'  => true,
             ],
-            Abs::TR_ACT => ['width' => 126],
+            Abs::TR_ACT => [
+                'width' => 156,
+                'align' => Abs::POS_LEFT,
+            ],
         ];
     }
 
@@ -137,7 +140,7 @@ trait Preview
         [$team, $leader] = $this->workTaskTeam();
 
         $operates[] = (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
-            ->setType(Button::THEME_BSW_WARNING)
+            ->setType(Abs::THEME_BSW_SUCCESS)
             ->setClick('showIFrame')
             ->setArgs(
                 [
@@ -154,6 +157,7 @@ trait Preview
         $operates[] = (new Button('Logout'))
             ->setRoute($this->cnf->route_logout)
             ->setIcon($this->cnf->icon_logout)
+            ->setType(Abs::THEME_LINK)
             ->setConfirm($this->messageLang('Are you sure'));
 
         return $operates;
@@ -170,7 +174,8 @@ trait Preview
         $userTeam = $this->getUserById($args->item['userId'])->teamId;
 
         $operates[] = (new Button('Progress'))
-            ->setType(Button::THEME_BSW_WARNING)
+            ->setIcon('b:icon-process')
+            ->setType(Abs::THEME_BSW_SUCCESS)
             ->setRoute('app_bsw_work_task_progress')
             ->setClick('showIFrame')
             ->setDisabled(
@@ -187,6 +192,7 @@ trait Preview
             );
 
         $operates[] = (new Button('Notes'))
+            ->setIcon('b:icon-form')
             ->setRoute('app_bsw_work_task_notes')
             ->setClick('showIFrame')
             ->setArgs(
@@ -199,8 +205,25 @@ trait Preview
             );
 
         if (!$team || $leader) {
+            $operates[] = (new Button('Transfer'))
+                ->setIcon('b:icon-feng')
+                ->setRoute('app_bsw_work_task_transfer')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'fill'   => [
+                            'id'     => $args->item['id'],
+                            'userId' => $args->item['userId'],
+                        ],
+                        'width'  => Abs::MEDIA_MIN,
+                        'height' => 210,
+                        'title'  => false,
+                    ]
+                );
+
             $operates[] = (new Button('Weight'))
-                ->setType(Button::THEME_DEFAULT)
+                ->setIcon('b:icon-jewelry')
+                ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_work_task_weight')
                 ->setClick('showIFrame')
                 ->setArgs(
@@ -212,13 +235,16 @@ trait Preview
                     ]
                 );
 
-            $operates[] = (new Button('Edit record', 'app_bsw_work_task_persistence'))
+            $operates[] = (new Button('Edit record'))
+                ->setIcon('b:icon-edit')
+                ->setRoute('app_bsw_work_task_persistence')
                 ->setArgs(['id' => $args->item['id']]);
 
-            $operates[] = (new Button('Close', 'app_bsw_work_task_close'))
-                ->setType(Button::THEME_DANGER)
+            $operates[] = (new Button('Close'))
+                ->setIcon('b:icon-success')
+                ->setRoute('app_bsw_work_task_close')
+                ->setType(Abs::THEME_DANGER)
                 ->setDisabled(!in_array($args->item['state'], [3, 4]))
-                ->setHide(!in_array($args->item['state'], [3, 4]))
                 ->setConfirm($this->messageLang('Are you sure'))
                 ->setArgs(['id' => $args->item['id']]);
         }
@@ -280,8 +306,8 @@ trait Preview
     public function previewAfterHook(Arguments $args): array
     {
         $button = (new Button('lifecycle'))
-            ->setType(Button::THEME_DEFAULT)
-            ->setSize(Button::SIZE_SMALL)
+            ->setType(Abs::THEME_DEFAULT)
+            ->setSize(Abs::SIZE_SMALL)
             ->setClick('showTrailDrawer')
             ->setArgs(['id' => $args->original['id']]);
 

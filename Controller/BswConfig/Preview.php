@@ -42,7 +42,7 @@ trait Preview
     {
         return [
             (new Button('Project config'))
-                ->setType(Button::THEME_DASHED)
+                ->setType(Abs::THEME_DASHED)
                 ->setRoute('app_bsw_configured_preview')
                 ->setClick('showIFrame')
                 ->setArgs(
@@ -65,7 +65,7 @@ trait Preview
         return [
             (new Button('Edit record', 'app_bsw_config_persistence'))->setArgs(['id' => $args->item['id']]),
             (new Button('Remove', 'app_bsw_config_away'))
-                ->setType(Button::THEME_DANGER)
+                ->setType(Abs::THEME_DANGER)
                 ->setConfirm($this->translator->trans('Are you sure'))
                 ->setArgs(['id' => $args->item['id']]),
         ];
@@ -114,12 +114,12 @@ trait Preview
         return [
             'id'    => [
                 'width'  => 80,
-                'align'  => 'center',
+                'align'  => Abs::POS_CENTER,
                 'render' => Abs::RENDER_CODE,
             ],
             'key'   => [
                 'width' => 200,
-                'align' => 'right',
+                'align' => Abs::POS_RIGHT,
                 'html'  => true,
             ],
             'value' => [

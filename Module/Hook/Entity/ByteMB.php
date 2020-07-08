@@ -11,7 +11,7 @@ class ByteMB extends Hook
     /**
      * @const int
      */
-    const REDOUBLE = Abs::HEX_SIZE ** 2;
+    const REDOUBLE = Abs::HEX_SIZE_2;
 
     /**
      * @param mixed $value

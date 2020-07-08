@@ -18,6 +18,16 @@ class Abs
     const TPL_SUFFIX        = '.twig';
     const AUTO              = 'auto';
     const HEX_SIZE          = 1024;
+    const HEX_SIZE_2        = self::HEX_SIZE ** 2;
+    const HEX_SIZE_3        = self::HEX_SIZE ** 3;
+    const HEX_SECOND_MINUTE = 60;
+    const HEX_MINUTE_HOUR   = 60;
+    const HEX_HOUR_DAY      = 24;
+    const HEX_DAY_WEEK      = 7;
+    const HEX_DAY_MONTH     = 30;
+    const HEX_DAY_YEAR      = 360;
+    const HEX_MONTH_YEAR    = 12;
+    const HEX_CENT_YUAN     = 100;
     const TAG_SQL_ERROR     = 'An exception occurred while executing';
     const RULES_REQUIRED    = ['required' => true, 'message' => '{{ field }} Required'];
     const LINE_DASHED       = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
@@ -90,13 +100,13 @@ class Abs
     const TAG_CLASSIFY_WARNING = 'warning';
     const TAG_CLASSIFY_ERROR   = 'error';
 
-    const RESULT_SUCCESS = 'success';
-    const RESULT_ERROR   = 'error';
-    const RESULT_INFO    = 'info';
-    const RESULT_WARNING = 'warning';
-    const RESULT_403     = '403';
-    const RESULT_404     = '404';
-    const RESULT_500     = '500';
+    const RESULT_STATUS_SUCCESS = 'success';
+    const RESULT_STATUS_ERROR   = 'error';
+    const RESULT_STATUS_INFO    = 'info';
+    const RESULT_STATUS_WARNING = 'warning';
+    const RESULT_STATUS_403     = '403';
+    const RESULT_STATUS_404     = '404';
+    const RESULT_STATUS_500     = '500';
 
     const HOOKER_FLAG_FIELDS       = '_fields';
     const HOOKER_FLAG_ACME         = '_acme';
@@ -172,6 +182,11 @@ class Abs
     const T_ARRAY_INDEX = 'index';
     const T_ARRAY_ASSOC = 'assoc';
 
+    const DOC_TAG_RIGHT = '¹';
+    const DOC_TAG_WRONG = 'º';
+    const DOC_TAG_TREE  = '└ ';
+    const DOC_TAG_LINE  = '``›››››``';
+
     const ASSERT_EMPTY = 'empty';
     const ASSERT_ISSET = 'isset';
 
@@ -180,6 +195,73 @@ class Abs
 
     const FORMAT_JSON = 'json';
     const FORMAT_HTML = 'html';
+
+    const SIZE_SMALL   = 'small';
+    const SIZE_DEFAULT = 'default';
+    const SIZE_MIDDLE  = 'middle';
+    const SIZE_LARGE   = 'large';
+
+    const SCENE_COMMON = 'common';
+    const SCENE_NORMAL = 'normal';
+    const SCENE_IFRAME = 'iframe';
+
+    const MODE_DEFAULT  = 'default';
+    const MODE_MULTIPLE = 'multiple';
+    const MODE_TAGS     = 'tags';
+    const MODE_BOX      = 'combobox';
+
+    const SEARCH_VALUE = 'value';
+    const SEARCH_LABEL = 'children';
+    const SEARCH_TITLE = 'title';
+
+    const CHECKED_STRATEGY_ALL      = 'bsw.d.TreeSelect.SHOW_ALL';
+    const CHECKED_STRATEGY_PARENT   = 'bsw.d.TreeSelect.SHOW_PARENT';
+    const CHECKED_STRATEGY_CHILDREN = 'bsw.d.TreeSelect.SHOW_CHILD';
+
+    const TYPE_BUTTON   = 'button';
+    const TYPE_CHECKBOX = 'checkbox';
+    const TYPE_COLOR    = 'color';
+    const TYPE_DATE     = 'date';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_LOCAL    = 'datetime-local';
+    const TYPE_EMAIL    = 'email';
+    const TYPE_FILE     = 'file';
+    const TYPE_HIDDEN   = 'hidden';
+    const TYPE_IMAGE    = 'image';
+    const TYPE_MONTH    = 'month';
+    const TYPE_NUMBER   = 'number';
+    const TYPE_PASSWORD = 'password';
+    const TYPE_RADIO    = 'radio';
+    const TYPE_RANGE    = 'range';
+    const TYPE_RESET    = 'reset';
+    const TYPE_SEARCH   = 'search';
+    const TYPE_SUBMIT   = 'submit';
+    const TYPE_TEL      = 'tel';
+    const TYPE_TEXT     = 'text';
+    const TYPE_TIME     = 'time';
+    const TYPE_URL      = 'url';
+    const TYPE_WEEK     = 'week';
+
+    const LIST_TYPE_TEXT     = 'text';
+    const LIST_TYPE_IMG      = 'picture';
+    const LIST_TYPE_IMG_CARD = 'picture-card';
+
+    const PLACEMENT_TOP    = 'top';
+    const PLACEMENT_BOTTOM = 'bottom';
+
+    const THEME_PRIMARY       = 'primary';
+    const THEME_DASHED        = 'dashed';
+    const THEME_DANGER        = 'danger';
+    const THEME_LINK          = 'link';
+    const THEME_DEFAULT       = 'default';
+    const THEME_BSW_PRIMARY   = 'bsw-primary bsw-btn';
+    const THEME_BSW_SECONDARY = 'bsw-secondary bsw-btn';
+    const THEME_BSW_SUCCESS   = 'bsw-success bsw-btn';
+    const THEME_BSW_DANGER    = 'bsw-danger bsw-btn';
+    const THEME_BSW_WARNING   = 'bsw-warning bsw-btn';
+    const THEME_BSW_INFO      = 'bsw-info bsw-btn';
+    const THEME_BSW_LIGHT     = 'bsw-light bsw-btn';
+    const THEME_BSW_DARK      = 'bsw-dark bsw-btn';
 
     const MEDIA_MIN = 375;
     const MEDIA_XS  = 575;
@@ -277,6 +359,10 @@ class Abs
     const PG_TOTAL_ITEM        = 'total_item';
     const PG_ITEMS             = 'items';
     const PG_PAGE_SIZE_OPTIONS = [10, 20, 30, 50, 100];
+
+    const MULTIPLE_PER       = 50;
+    const PAGE_DEFAULT_SIZE  = 30;
+    const PAGE_DEFAULT_RANGE = 10;
 
     const PAY_PLATFORM_SIN    = 1;
     const PAY_PLATFORM_WALL   = 2;
@@ -384,16 +470,18 @@ class Abs
     const APP_TYPE_FRONTEND = 'frontend';
     const APP_TYPE_BACKEND  = 'backend';
 
-    const SELECTOR_CHECKBOX = 'checkbox';
-    const SELECTOR_RADIO    = 'radio';
+    const SELECTOR_CHECKBOX      = 'checkbox';
+    const SELECTOR_RADIO         = 'radio';
+    const SELECTOR_MODE_MULTIPLE = 'multiple';
+    const SELECTOR_MODE_SINGLE   = 'single';
 
     const TIME_SECOND = 1;
-    const TIME_MINUTE = self::TIME_SECOND * 60;
-    const TIME_HOUR   = self::TIME_MINUTE * 60;
-    const TIME_DAY    = self::TIME_HOUR * 24;
-    const TIME_WEEK   = self::TIME_DAY * 7;
-    const TIME_MONTH  = self::TIME_DAY * 30;
-    const TIME_YEAR   = self::TIME_MONTH * 12;
+    const TIME_MINUTE = self::TIME_SECOND * self::HEX_SECOND_MINUTE;
+    const TIME_HOUR   = self::TIME_MINUTE * self::HEX_MINUTE_HOUR;
+    const TIME_DAY    = self::TIME_HOUR * Abs::HEX_HOUR_DAY;
+    const TIME_WEEK   = self::TIME_DAY * Abs::HEX_DAY_WEEK;
+    const TIME_MONTH  = self::TIME_DAY * Abs::HEX_DAY_MONTH;
+    const TIME_YEAR   = self::TIME_DAY * Abs::HEX_DAY_YEAR;
 
     const V_NOTHING     = 0;   // do nothing
     const V_SIGN        = 1;   // signature

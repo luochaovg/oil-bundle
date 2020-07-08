@@ -423,7 +423,7 @@ abstract class BswWebController extends AbstractController
     {
         $options = array_merge(
             [
-                'status' => Abs::RESULT_SUCCESS,
+                'status' => Abs::RESULT_STATUS_SUCCESS,
                 'title'  => 'Operation success',
                 'width'  => Abs::MEDIA_MIN,
             ],

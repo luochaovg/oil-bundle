@@ -22,12 +22,12 @@ trait SiteIndex
         return [
             'id'    => [
                 'width'  => 80,
-                'align'  => 'center',
+                'align'  => Abs::POS_CENTER,
                 'render' => Abs::RENDER_CODE,
             ],
             'name'  => [
                 'width'  => 200,
-                'align'  => 'right',
+                'align'  => Abs::POS_RIGHT,
                 'render' => Abs::RENDER_CODE,
             ],
             'value' => [

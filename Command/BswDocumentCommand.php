@@ -22,14 +22,6 @@ class BswDocumentCommand extends Command implements CommandInterface
     use BswFoundation;
 
     /**
-     * @const string
-     */
-    const TAG_RIGHT = '¹';
-    const TAG_WRONG = 'º';
-    const TAG_TREE  = '└ ';
-    const TAG_LINE  = '``›››››``';
-
-    /**
      * @var string
      */
     protected $path;
@@ -413,9 +405,9 @@ class BswDocumentCommand extends Command implements CommandInterface
 
                     $args[] = [$name, $item['type'], $label, Abs::REQ_GET];
                     if ('GET' == $api['http']) {
-                        $http = self::TAG_RIGHT . ' GET';
+                        $http = Abs::DOC_TAG_RIGHT . ' GET';
                     } else {
-                        $http = self::TAG_WRONG . ' GET';
+                        $http = Abs::DOC_TAG_WRONG . ' GET';
                     }
                     $paramList[] = [
                         $name,
@@ -539,9 +531,9 @@ class BswDocumentCommand extends Command implements CommandInterface
                     $http = $item->method ?: Abs::REQ_ALL;
 
                     if (in_array($http, $api['http'])) {
-                        $http = self::TAG_RIGHT . " {$http}";
+                        $http = Abs::DOC_TAG_RIGHT . " {$http}";
                     } else {
-                        $http = self::TAG_WRONG . " {$http}";
+                        $http = Abs::DOC_TAG_WRONG . " {$http}";
                     }
 
                     $paramList[] = [
@@ -612,7 +604,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             // output params (table)
             $_property = [];
             foreach ($property as $name => $item) {
-                $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? self::TAG_TREE : null);
+                $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? Abs::DOC_TAG_TREE : null);
                 $item['field'] = current(array_reverse(explode('.', $name)));
                 $item['label'] = $item['label'] ?? $item['field'];
                 $_property[$name] = $item;
@@ -624,7 +616,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             foreach ($property = $_property as $name => $item) {
 
                 if ($item['field'] === '__line__') {
-                    $item['field'] = $item['type'] = self::TAG_LINE;
+                    $item['field'] = $item['type'] = Abs::DOC_TAG_LINE;
                     $item['label'] = "**{$item['label']}**";
                     $item['trans'] = false;
                 }
@@ -638,7 +630,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                 $type = ucfirst($item['type']);
                 $propertyList[] = [
                     "{$item['indent']}{$item['field']}",
-                    strpos($type, self::TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
+                    strpos($type, Abs::DOC_TAG_LINE) === 0 ? $type : ".. div:: show-tips\n\n{$indent}{$type}",
                     "{$item['indent']}{$label} {$enumDocument}",
                 ];
             }

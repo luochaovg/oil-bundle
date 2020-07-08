@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Hook\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Hook\Hook;
 
 class HourDay extends Hook
@@ -9,7 +10,7 @@ class HourDay extends Hook
     /**
      * @const int
      */
-    const REDOUBLE = 24;
+    const REDOUBLE = Abs::HEX_HOUR_DAY;
 
     /**
      * @param mixed $value

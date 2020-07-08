@@ -52,7 +52,7 @@ trait EnumDict
         return [
             'key'  => [
                 'width' => 200,
-                'align' => 'right',
+                'align' => Abs::POS_RIGHT,
                 'html'  => true,
             ],
             'enum' => [

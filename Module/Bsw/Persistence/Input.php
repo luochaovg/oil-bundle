@@ -3,7 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Persistence;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
-use Leon\BswBundle\Module\Form\Form;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Input extends ArgsInput
 {
@@ -50,7 +50,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $formSize = Form::SIZE_LARGE;
+    public $formSize = Abs::SIZE_LARGE;
 
     /**
      * @var array

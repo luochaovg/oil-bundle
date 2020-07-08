@@ -3,7 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Tabs;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
-use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Input extends ArgsInput
 {
@@ -15,5 +15,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $size = Button::SIZE_DEFAULT;
+    public $size = Abs::SIZE_DEFAULT;
 }

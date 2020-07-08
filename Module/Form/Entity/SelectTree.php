@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\DropdownStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\ExpandAll;
@@ -28,24 +29,11 @@ class SelectTree extends Form
     use ExpandAll;
 
     /**
-     * @const string
-     */
-    const SEARCH_VALUE = 'value';
-    const SEARCH_TITLE = 'title';
-
-    /**
-     * @const string
-     */
-    const CHECKED_STRATEGY_ALL      = 'bsw.d.TreeSelect.SHOW_ALL';
-    const CHECKED_STRATEGY_PARENT   = 'bsw.d.TreeSelect.SHOW_PARENT';
-    const CHECKED_STRATEGY_CHILDREN = 'bsw.d.TreeSelect.SHOW_CHILD';
-
-    /**
      * Select constructor.
      */
     public function __construct()
     {
-        $this->setOptionFilterProp(self::SEARCH_TITLE);
-        $this->setShowCheckedStrategy(self::CHECKED_STRATEGY_ALL);
+        $this->setOptionFilterProp(Abs::SEARCH_TITLE);
+        $this->setShowCheckedStrategy(Abs::CHECKED_STRATEGY_ALL);
     }
 }

@@ -46,7 +46,7 @@ trait Preview
     {
         return [
             (new Button('Upload', null, $this->cnf->icon_upload))
-                ->setType(Button::THEME_BSW_DARK)
+                ->setType(Abs::THEME_BSW_DARK)
                 ->setRoute('app_bsw_attachment_upload_file')
                 ->setClick('showIFrame')
                 ->setArgs(

@@ -49,6 +49,7 @@ trait Weight
         $submit = $args->submit;
         $submit
             ->setBlock(true)
+            ->setIcon('b:icon-jewelry')
             ->setLabel('Update task weight');
 
         return compact('submit');

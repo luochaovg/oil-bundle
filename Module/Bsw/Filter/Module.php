@@ -515,7 +515,7 @@ class Module extends Bsw
 
         $export = null;
         if ($this->input->scene === Abs::TAG_PREVIEW && $this->entity) {
-            $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Button::THEME_DEFAULT);
+            $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => 'export']);
             $export->setRouteForAccess($this->input->cnf->route_export);
         }
@@ -541,7 +541,7 @@ class Module extends Bsw
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
-            $operate->setHtmlType(Button::TYPE_SUBMIT);
+            $operate->setHtmlType(Abs::TYPE_SUBMIT);
             $operate->setSize($this->input->filterFormSize);
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
         }

@@ -73,6 +73,7 @@ trait Progress
         $submit = $args->submit;
         $submit
             ->setBlock(true)
+            ->setIcon('b:icon-process')
             ->setLabel('Update task progress');
 
         return compact('submit');

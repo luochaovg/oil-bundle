@@ -29,7 +29,7 @@ class NewPassword extends Tailor
             'sort'     => $sort,
             'column'   => 8,
             'type'     => Input::class,
-            'typeArgs' => ['type' => Input::TYPE_PASSWORD],
+            'typeArgs' => ['type' => Abs::TYPE_PASSWORD],
         ];
 
         if (empty($args->id)) {

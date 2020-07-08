@@ -64,7 +64,7 @@ trait Login
 
             'submit' => (new Button())
                 ->setLabel('SIGN IN')
-                ->setHtmlType(Button::TYPE_SUBMIT)
+                ->setHtmlType(Abs::TYPE_SUBMIT)
                 ->setBlock(true)
                 ->setBindLoading('btnLoading'),
         ];

@@ -33,6 +33,7 @@ class Acme extends BswBackendController
     use Close;
     use WeekReport;
     use Notes;
+    use Transfer;
 
     /**
      * @return array
@@ -462,7 +463,7 @@ class Acme extends BswBackendController
             ->setClick('showResult')
             ->setArgs(
                 [
-                    'status'   => Abs::RESULT_404,
+                    'status'   => Abs::RESULT_STATUS_404,
                     'title'    => $this->fieldLang('Look forward'),
                     'subTitle' => 'Gradually improving, look forward.',
                 ]

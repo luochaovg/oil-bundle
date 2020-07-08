@@ -2,12 +2,14 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 trait Size
 {
     /**
      * @var string
      */
-    protected $size = self::SIZE_LARGE;
+    protected $size = Abs::SIZE_LARGE;
 
     /**
      * @return string

@@ -35,21 +35,6 @@ abstract class FoundationRepository extends SFRepository
         MT\Message;
 
     /**
-     * @const int
-     */
-    const MULTIPLE_PER = 50;
-
-    /**
-     * @const int
-     */
-    const PAGE_SIZE = 30;
-
-    /**
-     * @const int
-     */
-    const PAGE_RANGE = 10;
-
-    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -330,7 +315,7 @@ abstract class FoundationRepository extends SFRepository
             function () use ($batch, $per) {
 
                 $i = 0;
-                $per = ($per ?? self::MULTIPLE_PER);
+                $per = ($per ?? Abs::MULTIPLE_PER);
                 $em = $this->em();
 
                 foreach ($batch as $record) {
@@ -486,7 +471,7 @@ abstract class FoundationRepository extends SFRepository
             function () use ($batch, $attributes, $per) {
 
                 $i = 0;
-                $per = ($per ?? self::MULTIPLE_PER);
+                $per = ($per ?? Abs::MULTIPLE_PER);
                 $em = $this->em();
 
                 foreach ($batch as $entity) {
@@ -829,7 +814,7 @@ abstract class FoundationRepository extends SFRepository
          */
 
         $limitDefaultMap = [
-            Abs::SELECT => static::PAGE_SIZE,
+            Abs::SELECT => Abs::PAGE_DEFAULT_SIZE,
         ];
 
         $pageArgs = Helper::pageArgs(
@@ -838,7 +823,7 @@ abstract class FoundationRepository extends SFRepository
                 'page'   => $page ?? 1,
                 'limit'  => $limit ?? ($limitDefaultMap[$method] ?? 0),
             ],
-            static::PAGE_SIZE
+            Abs::PAGE_DEFAULT_SIZE
         );
 
         extract($pageArgs);
@@ -1037,7 +1022,7 @@ abstract class FoundationRepository extends SFRepository
         );
 
         // page range
-        $pagination->setPageRange(static::PAGE_RANGE);
+        $pagination->setPageRange(Abs::PAGE_DEFAULT_RANGE);
 
         if (is_int($filter['hint'])) {
             $pagination->setTotalItemCount($filter['hint']);

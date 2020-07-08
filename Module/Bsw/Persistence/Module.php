@@ -421,7 +421,7 @@ class Module extends Bsw
                     [
                         'title'     => $this->web->fieldLang('Type'),
                         'dataIndex' => 'type',
-                        'align'     => 'right',
+                        'align'     => Abs::POS_RIGHT,
                         'width'     => 100,
                     ],
                     [
@@ -668,19 +668,19 @@ class Module extends Bsw
             $this->formDefaultConfigure($form, $field, $item, $output);
 
             $tipsAuto = $titleAuto = null;
-            if (get_class($form) == Select::class && $form->getMode() == Select::MODE_MULTIPLE) {
+            if (get_class($form) == Select::class && $form->getMode() == Abs::MODE_MULTIPLE) {
                 if (!$this->input->id || $form->isValueMultiple()) {
                     $tipsAuto = $this->web->twigLang('For multiple newly');
                 } else {
-                    $form->setMode(Select::MODE_DEFAULT);
+                    $form->setMode(Abs::MODE_DEFAULT);
                 }
             }
 
             if (in_array(JsonStringify::class, $item['hook'])) {
                 $button = (new Button('Verify JSON format'))
                     ->setIcon($this->input->cnf->icon_badge)
-                    ->setType(Button::THEME_LINK)
-                    ->setSize(Button::SIZE_SMALL)
+                    ->setType(Abs::THEME_LINK)
+                    ->setSize(Abs::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
                     ->setArgs(['field' => $field, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
                 $titleAuto = $this->web->getButtonHtml($button, true);
@@ -723,7 +723,7 @@ class Module extends Bsw
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
-            $operate->setHtmlType(Button::TYPE_SUBMIT);
+            $operate->setHtmlType(Abs::TYPE_SUBMIT);
             $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
@@ -922,7 +922,15 @@ class Module extends Bsw
                  */
 
                 $arguments = $this->arguments(
-                    compact('newly', 'record', 'original', 'extraSubmit', 'recordBefore', 'recordDiff')
+                    compact(
+                        'newly',
+                        'record',
+                        'original',
+                        'submit',
+                        'extraSubmit',
+                        'recordBefore',
+                        'recordDiff'
+                    )
                 );
 
                 $before = $this->caller(
@@ -996,7 +1004,16 @@ class Module extends Bsw
                  */
 
                 $arguments = $this->arguments(
-                    compact('newly', 'record', 'original', 'extraSubmit', 'recordBefore', 'recordDiff', 'result')
+                    compact(
+                        'newly',
+                        'record',
+                        'original',
+                        'submit',
+                        'extraSubmit',
+                        'recordBefore',
+                        'recordDiff',
+                        'result'
+                    )
                 );
 
                 $after = $this->caller(

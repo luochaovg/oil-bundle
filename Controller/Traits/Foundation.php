@@ -1427,7 +1427,7 @@ trait Foundation
             return $list;
         }
 
-        $query = array_merge($query, Helper::pageArgs($query, FoundationRepository::PAGE_SIZE));
+        $query = array_merge($query, Helper::pageArgs($query, Abs::PAGE_DEFAULT_SIZE));
         $total = count($list);
 
         $query['limit'] = $query['limit'] ?: $total;

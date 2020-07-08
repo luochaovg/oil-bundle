@@ -67,7 +67,7 @@ trait Style
      *
      * @return $this
      */
-    public function setHide($value)
+    public function setDisplay($value)
     {
         if ($value === true) {
             $this->appendStyle(['display' => 'none']);
@@ -78,5 +78,13 @@ trait Style
         }
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDisplay(): ?string
+    {
+        return $this->style['display'] ?? null;
     }
 }

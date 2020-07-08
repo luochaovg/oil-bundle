@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw\Result;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Form\Entity\Button;
 
 class Input extends ArgsInput
 {
@@ -31,7 +30,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $status = Abs::RESULT_SUCCESS;
+    public $status = Abs::RESULT_STATUS_SUCCESS;
 
     /**
      * @var string
@@ -56,5 +55,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $okType = Button::THEME_PRIMARY;
+    public $okType = Abs::THEME_PRIMARY;
 }

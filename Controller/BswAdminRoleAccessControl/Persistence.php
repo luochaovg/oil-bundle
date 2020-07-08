@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Controller\BswAdminRoleAccessControl;
 
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 

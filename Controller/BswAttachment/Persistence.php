@@ -3,9 +3,9 @@
 namespace Leon\BswBundle\Controller\BswAttachment;
 
 use Leon\BswBundle\Entity\BswAttachment;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
@@ -51,7 +51,7 @@ trait Persistence
                     'flag'        => 'mixed',
                     'needId'      => false,
                     'needTips'    => false,
-                    'buttonType'  => Button::THEME_BSW_DARK,
+                    'buttonType'  => Abs::THEME_BSW_DARK,
                     'buttonStyle' => [
                         'display'   => 'block',
                         'font-size' => '16px',

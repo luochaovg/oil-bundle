@@ -12,7 +12,6 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Form\Form;
 
 /**
  * @property Input                $input
@@ -92,11 +91,11 @@ class Module extends Bsw
 
         $buttonScene = [];
         $choiceScene = [
-            Button::SCENE_IFRAME => new Choice(),
-            Button::SCENE_NORMAL => new Choice(),
+            Abs::SCENE_IFRAME => new Choice(),
+            Abs::SCENE_NORMAL => new Choice(),
         ];
 
-        $nowScene = $this->input->iframe ? Button::SCENE_IFRAME : Button::SCENE_NORMAL;
+        $nowScene = $this->input->iframe ? Abs::SCENE_IFRAME : Abs::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
 
         // buttons handler
@@ -113,7 +112,7 @@ class Module extends Bsw
 
             $button->setSize($this->input->operatesSize);
             $scene = $button->getScene();
-            if ($scene === Button::SCENE_COMMON) {
+            if ($scene === Abs::SCENE_COMMON) {
                 $scene = $nowScene;
             }
 

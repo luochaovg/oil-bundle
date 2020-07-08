@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Chart\Entity;
 
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Chart\Traits;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Map extends Chart
 {
@@ -29,7 +30,7 @@ class Map extends Chart
      */
     protected function init()
     {
-        $this->setSelectedMode(self::SELECTED_MODE_SINGLE)
+        $this->setSelectedMode(Abs::SELECTOR_MODE_SINGLE)
             ->moduleDisable('legend', 'grid', 'axisX', 'axisY')
             ->setTooltipField('formatter', $this->getTooltipTpl())
             ->setTooltipField('trigger', 'item')

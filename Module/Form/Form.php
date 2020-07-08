@@ -32,21 +32,6 @@ abstract class Form
     use AutoFocus;
 
     /**
-     * @const string
-     */
-    const SIZE_SMALL   = 'small';
-    const SIZE_DEFAULT = 'default';
-    const SIZE_MIDDLE  = 'middle';
-    const SIZE_LARGE   = 'large';
-
-    /**
-     * @var string
-     */
-    const SCENE_COMMON = 'common';
-    const SCENE_NORMAL = 'normal';
-    const SCENE_IFRAME = 'iframe';
-
-    /**
      * @return string
      */
     public function getItemName(): string

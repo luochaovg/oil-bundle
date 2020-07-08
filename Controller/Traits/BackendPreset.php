@@ -162,8 +162,8 @@ trait BackendPreset
         ];
 
         $button = (new Button('{value}'))
-            ->setSize(Button::SIZE_SMALL)
-            ->setType(Button::THEME_DEFAULT)
+            ->setSize(Abs::SIZE_SMALL)
+            ->setType(Abs::THEME_DEFAULT)
             ->setClick('showModal')
             ->setArgs(array_merge($options, $args));
 

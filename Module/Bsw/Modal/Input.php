@@ -3,7 +3,7 @@
 namespace Leon\BswBundle\Module\Bsw\Modal;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
-use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Input extends ArgsInput
 {
@@ -55,7 +55,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $okType = Button::THEME_PRIMARY;
+    public $okType = Abs::THEME_PRIMARY;
 
     /**
      * @var int

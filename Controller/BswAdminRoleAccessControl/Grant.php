@@ -10,7 +10,6 @@ use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Repository\BswAdminRoleAccessControlRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Leon\BswBundle\Annotation\Entity\Input as I;

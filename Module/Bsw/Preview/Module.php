@@ -18,8 +18,6 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\ModuleException;
-use Leon\BswBundle\Module\Form\Form;
-use Leon\BswBundle\Repository\FoundationRepository;
 
 /**
  * @property Input                $input
@@ -652,7 +650,7 @@ class Module extends Bsw
             [
                 'paging' => true,
                 'page'   => 1,
-                'limit'  => FoundationRepository::PAGE_SIZE,
+                'limit'  => Abs::PAGE_DEFAULT_SIZE,
             ],
             $this->query
         );
@@ -862,8 +860,8 @@ class Module extends Bsw
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
-
                 $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
+
                 $item[$operate] .= $this->web->getButtonHtml($button);
             }
 

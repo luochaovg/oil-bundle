@@ -10,7 +10,6 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 

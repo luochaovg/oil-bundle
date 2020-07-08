@@ -71,7 +71,7 @@ class AttachmentImage extends Tailor
             'render' => Abs::RENDER_IMAGE,
             'sort'   => $sort,
             'width'  => 200,
-            'align'  => 'center',
+            'align'  => Abs::POS_CENTER,
         ];
         $args->target["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
