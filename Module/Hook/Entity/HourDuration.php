@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Hook\Entity;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Hook\Hook;
 
 class HourDuration extends Hook
@@ -20,7 +21,12 @@ class HourDuration extends Hook
             return null;
         }
 
-        return Helper::humanDuration($value);
+        // return Helper::humanDuration($value);
+
+        $date = date(Abs::FMT_FULL, time() + $value * 3600);
+        [$_, $info] = Helper::gapDateDetail($date, $extraArgs['digit'] ?? []);
+
+        return $info;
     }
 
     /**

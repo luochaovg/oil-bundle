@@ -21,6 +21,7 @@ use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Hook\Entity\Aes;
 use Leon\BswBundle\Module\Hook\Entity\Enums;
+use Leon\BswBundle\Module\Hook\Entity\HourDuration;
 use Leon\BswBundle\Module\Hook\Entity\Timestamp;
 use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
@@ -130,17 +131,25 @@ class BswBackendController extends BswWebController
     {
         return Helper::merge(
             [
-                Aes::class       => [
+                Aes::class          => [
                     'aes_iv'     => $this->parameter('aes_iv'),
                     'aes_key'    => $this->parameter('aes_key'),
                     'aes_method' => $this->parameter('aes_method'),
                     'plaintext'  => $this->plaintextSensitive,
                 ],
-                Enums::class     => [
+                Enums::class        => [
                     'trans' => $this->translator,
                 ],
-                Timestamp::class => [
+                Timestamp::class    => [
                     'persistence_newly_empty' => time(),
+                ],
+                HourDuration::class => [
+                    'digit' => [
+                        'year'  => $this->fieldLang('Year'),
+                        'month' => $this->fieldLang('Month'),
+                        'day'   => $this->fieldLang('Day'),
+                        'hour'  => $this->fieldLang('Hour'),
+                    ],
                 ],
             ],
             $args

@@ -2487,21 +2487,25 @@ class Helper
 
         $digit = array_merge(
             [
-                'year'   => 'years/',
-                'month'  => 'months/',
-                'day'    => 'days ',
-                'hour'   => 'h',
-                'minute' => 'm',
-                'second' => 's',
+                'year'   => 'year',
+                'month'  => 'month',
+                'day'    => 'day',
+                'hour'   => 'hour',
+                'minute' => 'minute',
+                'second' => 'second',
             ],
             $digit
         );
 
         $info = null;
         foreach ($digit as $key => $value) {
-            if (!empty($$key) || $key == 'second') {
+            if (!empty($$key)) {
                 $info .= "{$$key}{$value}";
             }
+        }
+
+        if (empty($info)) {
+            $info = "0{$digit['second']}";
         }
 
         return [$compare, $info];
@@ -4221,20 +4225,21 @@ class Helper
      *
      * @param int $duration
      * @param int $decimals
+     * @param int $power
      *
      * @return string
      */
-    public static function humanDuration(int $duration, int $decimals = 1): string
+    public static function humanDuration(int $duration, int $decimals = 1, int $power = 1): string
     {
         $map = [
-            'year'  => [Abs::TIME_YEAR * 3, Abs::TIME_YEAR],
-            'month' => [Abs::TIME_MONTH * 3, Abs::TIME_MONTH],
-            'day'   => [Abs::TIME_DAY * 3, Abs::TIME_DAY],
+            'year'  => Abs::TIME_YEAR,
+            'month' => Abs::TIME_MONTH,
+            'day'   => Abs::TIME_DAY,
         ];
 
         $duration *= Abs::TIME_HOUR;
-        foreach ($map as $unit => $item) {
-            [$size, $redouble] = $item;
+        foreach ($map as $unit => $redouble) {
+            $size = $redouble * $power;
             if ($duration >= $size) {
                 return self::numberFormat($duration / $redouble, $decimals, ',') . $unit;
             }

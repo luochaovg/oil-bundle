@@ -89,6 +89,9 @@ trait BackendPreset
     {
         $hooked = Helper::arrayRemove($hooked, ['id']);
         foreach ($hooked as &$value) {
+            if (!is_scalar($value)) {
+                continue;
+            }
             $value = ltrim($value, '$￥');
         }
 
