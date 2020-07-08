@@ -112,7 +112,7 @@ abstract class Chart
                     'sublink'   => $this->getSubTitleLink(),
                     'x'         => 'center',
                     'itemGap'   => 8,
-                    'bottom'    => $titleNumber == 2 ? 0 : 8,
+                    'bottom'    => 8,
                 ],
                 $this->getTitle()
             );
@@ -133,37 +133,20 @@ abstract class Chart
                     'selected'     => $this->getSelected(),
                     'type'         => 'scroll',
                     'align'        => 'auto',
-                    'top'          => 8,
+                    'top'          => 15,
                     'width'        => '90%',
                 ],
                 $this->getLegend()
             );
         }
 
-        // grid
-        if ($this->moduleState('grid')) {
-            if ($titleNumber == 0) {
-                $this->setGridField('bottom', 0);
-            }
-            $option['grid'] = Helper::merge(
-                [
-                    'top'          => 50,
-                    'right'        => $this->isMobile() ? 0 : 50,
-                    'bottom'       => 45,
-                    'left'         => $this->isMobile() ? 0 : 40,
-                    'containLabel' => true,
-                ],
-                $this->getGrid()
-            );
-        }
-
         // toolbox
-        if ($this->moduleState('toolbox')) {
+        if ($this->moduleState('toolbox') && !$this->isMobile()) {
             $option['toolbox'] = Helper::merge(
                 [
                     'orient'   => 'vertical',
-                    'top'      => ($option['grid']['top'] ?? 50) - 6,
-                    'right'    => $this->isMobile() ? 0 : 10,
+                    'top'      => 60 - 5,
+                    'right'    => 10,
                     'itemSize' => 10,
                     'feature'  => [
                         'saveAsImage' => [
@@ -174,6 +157,25 @@ abstract class Chart
                     ],
                 ],
                 $this->getToolbox()
+            );
+        }
+
+        // grid
+        if ($this->moduleState('grid')) {
+            $titleNumberMapToBottom = [
+                0 => 15,
+                1 => 45,
+                2 => 65,
+            ];
+            $this->setGridField('bottom', $titleNumberMapToBottom[$titleNumber]);
+            $option['grid'] = Helper::merge(
+                [
+                    'top'          => 60,
+                    'right'        => empty($option['toolbox']) ? 15 : 45,
+                    'left'         => $this->isMobile() ? 0 : 15,
+                    'containLabel' => true,
+                ],
+                $this->getGrid()
             );
         }
 

@@ -7,7 +7,7 @@ trait BackgroundColor
     /**
      * @var string
      */
-    protected $backgroundColor = 'transparent';
+    protected $backgroundColor = 'white';
 
     /**
      * @return string

@@ -22,7 +22,7 @@ trait SubTitleText
      *
      * @return $this
      */
-    public function setSubTitle(string $subTitleText)
+    public function setSubTitleText(string $subTitleText)
     {
         $this->subTitleText = $subTitleText;
 

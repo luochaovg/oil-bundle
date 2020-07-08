@@ -27,7 +27,7 @@ class Line extends Chart
         ],
         'boundaryGap' => true,
         'axisLabel'   => [
-            'rotate' => 30,
+            'rotate' => 20,
             'margin' => 15,
         ],
     ];
