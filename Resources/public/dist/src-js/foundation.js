@@ -1711,7 +1711,6 @@ var FoundationAntD = function (_FoundationTools) {
                         if (obj.statusText === 'timeout') {
                             console.warn('Client request timeout: ', obj);
                             console.warn('Retry current request in times ' + times);
-
                             if (times <= 3) {
                                 return that.request(url, data, type, upload, ++times);
                             }
@@ -2334,14 +2333,14 @@ var FoundationAntD = function (_FoundationTools) {
             }
             var action = function action() {
                 if (!data.function || data.function.length === 0) {
-                    return console.error('Attribute function should be configure in options.', data);
+                    return console.warn('Attribute function should be configure in options.', data);
                 }
                 if (typeof that.cnf.v[data.function] !== 'undefined') {
                     return that.cnf.v[data.function](data, element);
                 } else if (typeof that[data.function] !== 'undefined') {
                     return that[data.function](data, element);
                 }
-                return console.error('Method ' + data.function + ' is undefined.', data);
+                return console.warn('Method ' + data.function + ' is undefined.', data);
             };
             if (typeof data.confirm === 'undefined') {
                 return action();
@@ -2375,7 +2374,7 @@ var FoundationAntD = function (_FoundationTools) {
                 } else if (typeof that[data[fn]] !== 'undefined') {
                     return that[data[fn]](data, element);
                 }
-                return console.error('Method ' + data[fn] + ' is undefined.', data);
+                return console.warn('Method ' + data[fn] + ' is undefined.', data);
             }
         }
 
@@ -2493,7 +2492,7 @@ var FoundationAntD = function (_FoundationTools) {
             });
             clipboard.on('error', function (e) {
                 that.error(that.lang.copy_failed, 3);
-                console.error('Clipboard operation error', e);
+                console.warn('Clipboard operation error', e);
             });
         }
 
@@ -2587,6 +2586,27 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'showIFrameInParent',
         value: function showIFrameInParent(data, element) {
             this.showIFrame(data.response.sets, element);
+        }
+
+        /**
+         * Full screen
+         *
+         * @param data
+         * @param element
+         */
+
+    }, {
+        key: 'fullScreenToggle',
+        value: function fullScreenToggle(data, element) {
+            if (!window.screenfull) {
+                return;
+            }
+            var container = $(data.element)[0];
+            if (screenfull.isEnabled) {
+                screenfull.toggle(container);
+            } else {
+                console.warn('Your browser is not supported.');
+            }
         }
 
         /**

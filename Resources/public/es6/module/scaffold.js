@@ -1,13 +1,13 @@
 bsw.configure({
     method: {
-        themeSwitch() {
+        themeSwitch(data, element) {
             this.theme = bsw.cookieMapNext('bsw_theme', this.themeMap, this.theme, true, bsw.lang.theme);
         },
-        colorWeakSwitch() {
+        colorWeakSwitch(data, element) {
             this.weak = bsw.cookieMapNext('bsw_color_weak', this.opposeMap, this.weak, true, bsw.lang.color_weak);
             bsw.switchClass('bsw-weak', this.weak);
         },
-        thirdMessageSwitch() {
+        thirdMessageSwitch(data, element) {
             this.thirdMessage = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.thirdMessage, true, bsw.lang.third_message);
         },
 
