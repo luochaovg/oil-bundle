@@ -2,9 +2,12 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Error\Error;
+use Leon\BswBundle\Module\Form\Entity\Button;
+use Leon\BswBundle\Repository\BswWorkTaskRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,6 +47,25 @@ trait PersistenceSimple
     /**
      * @param Arguments $args
      *
+     * @return array
+     */
+    public function simpleFormOperates(Arguments $args): array
+    {
+        /**
+         * @var Button $submit
+         */
+        $submit = $args->submit;
+        $submit
+            ->setBlock(true)
+            ->setIcon('a:bug')
+            ->setLabel('New task');
+
+        return compact('submit');
+    }
+
+    /**
+     * @param Arguments $args
+     *
      * @return Message|array
      */
     public function simpleAfterSubmit(Arguments $args)
@@ -66,6 +88,17 @@ trait PersistenceSimple
      */
     public function simpleAfterPersistence(Arguments $args)
     {
+        [$team, $leader, $leaderId, $leaderTg] = $this->workTaskTeamAndLeader();
+
+        if ($this->usr('usr_uid') != $leaderId) {
+            $this->sendTelegramTips(
+                true,
+                $leaderTg,
+                '{{ member }} create task {{ task }} for self',
+                ['{{ task }}' => $args->record['title']]
+            );
+        }
+
         return $this->trailLogger($args, $this->messageLang('Create the task'));
     }
 

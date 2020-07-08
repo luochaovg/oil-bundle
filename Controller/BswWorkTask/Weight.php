@@ -81,7 +81,7 @@ trait Weight
             $this->sendTelegramTips(
                 false,
                 $userId,
-                '{{ member }} change task weight to {{ to }} for {{ task }}',
+                '{{ member }} change task {{ task }} weight to {{ to }}',
                 [
                     '{{ to }}'   => $args->record['weight'],
                     '{{ task }}' => $args->recordBefore['title'],

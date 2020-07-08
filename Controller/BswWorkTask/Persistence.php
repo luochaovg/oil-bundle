@@ -135,7 +135,7 @@ trait Persistence
             $this->sendTelegramTips(
                 false,
                 $userId,
-                '{{ member }} create task for you {{ task }}',
+                '{{ member }} create task {{ task }} for you',
                 ['{{ task }}' => $args->record['title']]
             );
         }

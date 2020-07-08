@@ -90,6 +90,35 @@ class Acme extends BswBackendController
     }
 
     /**
+     * Get work task team and leader info
+     *
+     * @return array
+     * @throws
+     */
+    protected function workTaskTeamAndLeader(): array
+    {
+        $leaderId = $leaderTg = 0;
+        [$team, $leader] = $this->workTaskTeam();
+
+        /**
+         * @var BswAdminUserRepository $adminRepo
+         */
+        $adminRepo = $this->repo(BswAdminUser::class);
+        $teamLeader = $adminRepo->findOneBy(
+            [
+                'teamId'     => $team,
+                'teamLeader' => 1,
+            ]
+        );
+        if ($teamLeader) {
+            $leaderId = $teamLeader->id;
+            $leaderTg = $teamLeader->telegramId;
+        }
+
+        return [$team, $leader, $leaderId, $leaderTg];
+    }
+
+    /**
      * Get team default value
      *
      * @return string

@@ -135,10 +135,25 @@ trait Progress
             );
         }
 
+        [$team, $leader, $leaderId, $leaderTg] = $this->workTaskTeamAndLeader();
+        if ($this->usr('usr_uid') != $leaderId) {
+            $this->sendTelegramTips(
+                true,
+                $leaderTg,
+                '{{ member }} change task {{ task }} progress from {{ from }} to {{ to }}, {{ remark }}',
+                [
+                    '{{ task }}'   => $args->recordBefore['title'],
+                    '{{ from }}'   => $args->recordBefore['donePercent'],
+                    '{{ to }}'     => $args->record['donePercent'],
+                    '{{ remark }}' => $args->extraSubmit['whatToDo'],
+                ]
+            );
+        }
+
         return $this->trailLogger(
             $args,
             $this->messageLang(
-                'Change progress from {{ from }} to {{ to }}{{ remark }}',
+                'Change progress from {{ from }} to {{ to }}, {{ remark }}',
                 [
                     '{{ from }}'   => $args->recordBefore['donePercent'],
                     '{{ to }}'     => $args->record['donePercent'],
