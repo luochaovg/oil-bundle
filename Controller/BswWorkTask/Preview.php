@@ -211,10 +211,7 @@ trait Preview
                 ->setClick('showIFrame')
                 ->setArgs(
                     [
-                        'fill'   => [
-                            'id'     => $args->item['id'],
-                            'userId' => $args->item['userId'],
-                        ],
+                        'id'     => $args->item['id'],
                         'width'  => Abs::MEDIA_MIN,
                         'height' => 210,
                         'title'  => false,

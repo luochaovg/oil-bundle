@@ -5,8 +5,8 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
+use Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange;
 use Leon\BswBundle\Module\Error\Error;
-use Leon\BswBundle\Repository\BswWorkTaskRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
@@ -58,26 +58,34 @@ trait Transfer
     /**
      * @param Arguments $args
      *
+     * @return array|Error
+     */
+    public function transferAfterSubmit(Arguments $args)
+    {
+        if ($args->submit['userId'] == $args->recordBefore['userId']) {
+            return new ErrorWithoutChange();
+        }
+
+        return [$args->submit, $args->extraSubmit];
+    }
+
+    /**
+     * @param Arguments $args
+     *
      * @return bool|Error
      */
     public function transferAfterPersistence(Arguments $args)
     {
-        /**
-         * @var BswWorkTaskRepository $taskRepo
-         */
-        $taskRepo = $this->repo(BswWorkTask::class);
-        $task = $taskRepo->find($args->original['id']);
-
-        if ($this->usr('usr_uid') != $task->userId) {
+        if ($this->usr('usr_uid') != $args->record['userId']) {
             $this->sendTelegramTips(
                 false,
-                $task->userId,
+                $args->record['userId'],
                 '{{ member }} transfer task {{ task }} to you',
-                ['{{ task }}' => $task->title]
+                ['{{ task }}' => $args->recordBefore['title']]
             );
         }
 
-        $user = $this->getUserById($args->original['userId']);
+        $user = $this->getUserById($args->record['userId']);
 
         return $this->trailLogger(
             $args,

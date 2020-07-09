@@ -916,7 +916,6 @@ class Module extends Bsw
                 $newly,
                 $pk
             ) {
-
                 /**
                  * Before persistence
                  */
@@ -995,9 +994,11 @@ class Module extends Bsw
                     }
                 }
 
-                $recordDiff['__effect'] = $result;
-                $record['__extra'] = $extraSubmit;
+                $recordDiff[Abs::RECORD_LOGGER_EFFECT] = $result;
+                $record[Abs::RECORD_LOGGER_EXTRA] = $extraSubmit;
                 $this->web->databaseOperationLogger($this->entity, $loggerType, $recordBefore, $record, $recordDiff);
+
+                unset($recordDiff[Abs::RECORD_LOGGER_EFFECT], $record[Abs::RECORD_LOGGER_EXTRA]);
 
                 /**
                  * After persistence

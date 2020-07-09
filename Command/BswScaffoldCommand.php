@@ -544,9 +544,9 @@ class BswScaffoldCommand extends Command implements CommandInterface
              * @return string
              */
             $createGroup = function (bool $comma = true, bool $class = false) use ($item): string {
-                $groups = [Abs::VG_MODIFY];
+                $groups = [Abs::VALIDATOR_GROUP_MODIFY];
                 if ($class || (!isset($item->default) && $item->flag != 'PRI')) {
-                    array_push($groups, Abs::VG_NEWLY);
+                    array_push($groups, Abs::VALIDATOR_GROUP_NEWLY);
                 }
                 $target = "groups={\"" . implode('", "', $groups) . "\"}";
 

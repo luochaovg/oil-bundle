@@ -296,7 +296,7 @@ abstract class FoundationRepository extends SFRepository
      */
     public function newly(array $attributes)
     {
-        return $this->persistence(new $this->entity, $attributes, [Abs::VG_NEWLY]);
+        return $this->persistence(new $this->entity, $attributes, [Abs::VALIDATOR_GROUP_NEWLY]);
     }
 
     /**
@@ -327,7 +327,7 @@ abstract class FoundationRepository extends SFRepository
                     $entity->attributes($record);
 
                     // validator
-                    $error = $this->validator->validate($entity, null, [Abs::VG_NEWLY]);
+                    $error = $this->validator->validate($entity, null, [Abs::VALIDATOR_GROUP_NEWLY]);
                     if (count($error)) {
                         $error = $this->error($error);
                         throw new ValidatorException(current($error));
@@ -364,13 +364,13 @@ abstract class FoundationRepository extends SFRepository
     public function newlyOrModify(array $criteria, array $attributes, callable $exists = null)
     {
         $record = $this->findOneBy($criteria);
-        $group = [Abs::VG_MODIFY];
+        $group = [Abs::VALIDATOR_GROUP_MODIFY];
 
         if (empty($record)) {
 
             // newly
             $record = new $this->entity;
-            $group = [Abs::VG_NEWLY];
+            $group = [Abs::VALIDATOR_GROUP_NEWLY];
             $attributes = array_merge($criteria, $attributes);
 
         } elseif ($exists) {
@@ -482,7 +482,7 @@ abstract class FoundationRepository extends SFRepository
                     $entity->attributes($attributes);
 
                     // validator
-                    $error = $this->validator->validate($entity, null, [Abs::VG_MODIFY]);
+                    $error = $this->validator->validate($entity, null, [Abs::VALIDATOR_GROUP_MODIFY]);
                     if (count($error)) {
                         $error = $this->error($error);
                         throw new ValidatorException(current($error));
@@ -529,7 +529,7 @@ abstract class FoundationRepository extends SFRepository
         $entity->attributes($attributes);
 
         // validator
-        $error = $this->validator->validate($entity, null, [Abs::VG_MODIFY]);
+        $error = $this->validator->validate($entity, null, [Abs::VALIDATOR_GROUP_MODIFY]);
         if (count($error)) {
             $error = $this->error($error);
 
