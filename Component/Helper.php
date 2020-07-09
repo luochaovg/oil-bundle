@@ -4793,7 +4793,7 @@ class Helper
      *
      * @return array
      */
-    public static function divideNumberToNCopies(float $number, int $copies, $precision = 0)
+    public static function divideNumberToNCopies(float $number, int $copies, $precision = 0): array
     {
         $divideNumber = bcdiv($number, $copies, $precision);
         $lastNumber = bcsub($number, $divideNumber * ($copies - 1), $precision);

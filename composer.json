@@ -68,7 +68,9 @@
     "mailgun/mailgun-php": "^3.0",
     "nyholm/psr7": "^1.2",
     "yansongda/pay": "^2.9",
-    "mexitek/phpcolors": "^0.4.0"
+    "mexitek/phpcolors": "^0.4.0",
+    "envms/fluentpdo": "^2.1",
+    "markrogoyski/math-php": "1.*"
   },
   "config": {
     "preferred-install": {

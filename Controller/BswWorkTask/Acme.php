@@ -19,6 +19,7 @@ use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
+use MathPHP\Algebra;
 
 /**
  * Bsw work task
@@ -37,6 +38,7 @@ class Acme extends BswBackendController
 
     /**
      * @return array
+     * @throws
      */
     protected function weightTypeArgs(): array
     {
@@ -44,14 +46,23 @@ class Acme extends BswBackendController
         $workDays = $this->cnf->work_lifecycle_max_day - $weekendDays;
         $maxHours = ceil($workDays * $this->cnf->work_lifecycle_day_hours);
 
-        if ($maxHours > 300) {
-            $maxHours = 300;
-            $marks = [30, 60, 90, 120, 150, 180, 210, 240, 270];
-        } else {
-            $marks = [20, 40, 60, 80];
+        if ($maxHours > $max = 100) {
+            $maxHours = $max;
         }
 
-        return ['min' => 1, 'max' => $maxHours, 'marks' => array_combine($marks, $marks)];
+        $step = 1;
+        $factors = Algebra::factors($maxHours);
+        foreach ($factors as $f) {
+            if ($maxHours / $f <= 5) {
+                $step = $f;
+                break;
+            }
+        }
+
+        $marks = range($step, $maxHours - $step, $step);
+        $marks = array_combine($marks, $marks);
+
+        return ['min' => 1, 'max' => $maxHours, 'marks' => $marks];
     }
 
     /**
