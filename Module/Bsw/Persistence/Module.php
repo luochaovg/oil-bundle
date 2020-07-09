@@ -213,7 +213,7 @@ class Module extends Bsw
             }
 
             if (!is_array($item)) {
-                throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
+                throw new ModuleException("Persistence {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
             if ($_item === false) {
@@ -242,23 +242,7 @@ class Module extends Bsw
         $_persistAnnotation = $persistAnnotation;
 
         foreach ($persistAnnotation as $field => $item) {
-
-            foreach ($item['hook'] as $k => $v) {
-                if (is_numeric($k) && class_exists($v)) {
-                    $hook = $v;
-                    $hookArgs = [];
-                } elseif (class_exists($k) && is_array($v)) {
-                    $hook = $k;
-                    $hookArgs = $v;
-                } else {
-                    continue;
-                }
-                if (isset($hook) && isset($hookArgs)) {
-                    $hooks[$hook]['fields'][] = $field;
-                    $hooks[$hook]['args'] = $hookArgs;
-                }
-            }
-
+            $this->handleForFieldHook($field, $item['hook'], $hooks);
             if (!$item['show']) {
                 unset($persistAnnotation[$field]);
             }

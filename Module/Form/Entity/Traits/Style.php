@@ -70,9 +70,9 @@ trait Style
     public function setDisplay($value)
     {
         if ($value === true) {
-            $this->appendStyle(['display' => 'none']);
-        } elseif ($value === false) {
             $this->appendStyle(['display' => 'inline-block']);
+        } elseif ($value === false) {
+            $this->appendStyle(['display' => 'none']);
         } else {
             $this->appendStyle(['display' => $value]);
         }

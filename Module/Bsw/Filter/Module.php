@@ -142,19 +142,7 @@ class Module extends Bsw
      */
     protected function listEntityFields(): array
     {
-        $entityList = [];
-
-        if ($this->entity) {
-            $entityList[$this->query['alias']] = $this->entity;
-        }
-
-        foreach (($this->query['join'] ?? []) as $alias => $item) {
-            if (is_string($item['entity'])) {
-                $entityList[$alias] = $item['entity'];
-            } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
-                $entityList[$alias] = $item['entity']['from'];
-            }
-        }
+        $entityList = $this->listEntityBasicFields();
 
         $filterAnnotation = [];
         $filterAnnotationFull = [];
@@ -178,48 +166,6 @@ class Module extends Bsw
         }
 
         return [$filterAnnotation, $filterAnnotationFull];
-    }
-
-    /**
-     * Annotation extra item handler
-     *
-     * @param string $field
-     * @param mixed  $item
-     * @param array  $filterAnnotationFull
-     * @param int    $defaultIndex
-     *
-     * @return array
-     */
-    protected function annotationExtraItemHandler(
-        string $field,
-        $item,
-        array $filterAnnotationFull,
-        int $defaultIndex
-    ): array {
-
-        if (is_bool($item)) {
-            return [$field, []];
-        }
-
-        if (!is_array($item)) {
-            return [$field, $item];
-        }
-
-        if (!(isset($item['table']) && isset($item['field']))) {
-            return [$field, $item];
-        }
-
-        $_table = Helper::dig($item, 'table');
-        $_field = Helper::dig($item, 'field');
-        $_index = Helper::dig($item, 'index') ?? $defaultIndex;
-
-        $item['field'] = "{$_table}.{$_field}";
-        $_field = "{$_field}{$_index}";
-
-        $_item = $filterAnnotationFull[$_table][$_field] ?? [];
-        $item = array_merge($_item, $item);
-
-        return ["{$field}{$_index}", $item];
     }
 
     /**
@@ -276,7 +222,7 @@ class Module extends Bsw
 
             $_item = $item;
             $defaultIndex = 0;
-            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $filterAnnotationFull, $defaultIndex);
+            [$field, $item] = $this->handleForAnnotationExtraItem($field, $item, $filterAnnotationFull, $defaultIndex);
 
             $_field = Helper::camelToUnderWithNumeric($field, true);
             if (!is_numeric(Helper::arrayLatestItem($_field))) {
@@ -284,7 +230,7 @@ class Module extends Bsw
             }
 
             if (!is_array($item)) {
-                throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
+                throw new ModuleException("Filter {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
             if ($_item === false) {
@@ -297,7 +243,7 @@ class Module extends Bsw
 
             $original = $this->web->annotation(Filter::class, true);
             $original->class = $this->class;
-            $original->target = $field;
+            $original->target = $_field;
 
             $item = $original->converter([new Filter($item)]);
             $filterAnnotation[$field] = (array)current($item[Filter::class]);
@@ -329,23 +275,7 @@ class Module extends Bsw
          */
         $hooks = [];
         foreach ($filterAnnotation as $field => $item) {
-
-            foreach ($item['hook'] as $k => $v) {
-                if (is_numeric($k) && class_exists($v)) {
-                    $hook = $v;
-                    $hookArgs = [];
-                } elseif (class_exists($k) && is_array($v)) {
-                    $hook = $k;
-                    $hookArgs = $v;
-                } else {
-                    continue;
-                }
-                if (isset($hook) && isset($hookArgs)) {
-                    $hooks[$hook]['fields'][] = $field;
-                    $hooks[$hook]['args'] = $hookArgs;
-                }
-            }
-
+            $this->handleForFieldHook($field, $item['hook'], $hooks);
             if (!$item['show']) {
                 unset($filterAnnotation[$field]);
             }

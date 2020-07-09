@@ -165,19 +165,7 @@ class Module extends Bsw
      */
     protected function listEntityFields(): array
     {
-        $entityList = [];
-
-        if ($this->entity) {
-            $entityList[$this->query['alias']] = $this->entity;
-        }
-
-        foreach (($this->query['join'] ?? []) as $alias => $item) {
-            if (is_string($item['entity'])) {
-                $entityList[$alias] = $item['entity'];
-            } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
-                $entityList[$alias] = $item['entity']['from'];
-            }
-        }
+        $entityList = $this->listEntityBasicFields();
 
         $previewAnnotation = $previewAnnotationFull = [];
         $mixedAnnotation = $mixedAnnotationFull = [];
@@ -206,38 +194,6 @@ class Module extends Bsw
         }
 
         return [$previewAnnotation, $previewAnnotationFull, $mixedAnnotation, $mixedAnnotationFull];
-    }
-
-    /**
-     * Annotation extra item handler
-     *
-     * @param string $field
-     * @param mixed  $item
-     * @param array  $previewAnnotationFull
-     *
-     * @return array
-     */
-    protected function annotationExtraItemHandler(string $field, $item, array $previewAnnotationFull): array
-    {
-        if (is_bool($item)) {
-            return [$field, []];
-        }
-
-        if (!is_array($item)) {
-            return [$field, $item];
-        }
-
-        if (!(isset($item['table']) && isset($item['field']))) {
-            return [$field, $item];
-        }
-
-        $_table = Helper::dig($item, 'table');
-        $_field = Helper::dig($item, 'field');
-
-        $_item = $previewAnnotationFull[$_table][$_field] ?? [];
-        $item = array_merge($_item, $item);
-
-        return [$field, $item];
     }
 
     /**
@@ -441,10 +397,10 @@ class Module extends Bsw
         foreach ($previewAnnotationExtra as $field => $item) {
 
             $_item = $item;
-            [$field, $item] = $this->annotationExtraItemHandler($field, $item, $previewAnnotationFull);
+            [$field, $item] = $this->handleForAnnotationExtraItem($field, $item, $previewAnnotationFull);
 
             if (!is_array($item)) {
-                throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be array[]");
+                throw new ModuleException("Preview {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
             if ($_item === false) {
@@ -485,23 +441,7 @@ class Module extends Bsw
         $hooks = $columns = $slots = [];
 
         foreach ($previewAnnotation as $field => $item) {
-
-            foreach ($item['hook'] as $k => $v) {
-                if (is_numeric($k) && class_exists($v)) {
-                    $hook = $v;
-                    $hookArgs = [];
-                } elseif (class_exists($k) && is_array($v)) {
-                    $hook = $k;
-                    $hookArgs = $v;
-                } else {
-                    continue;
-                }
-                if (isset($hook) && isset($hookArgs)) {
-                    $hooks[$hook]['fields'][] = $field;
-                    $hooks[$hook]['args'] = $hookArgs;
-                }
-            }
-
+            $this->handleForFieldHook($field, $item['hook'], $hooks);
             if (!$item['show']) {
                 continue;
             }

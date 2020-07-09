@@ -438,6 +438,106 @@ abstract class Bsw
     }
 
     /**
+     * Field hook handler
+     *
+     * @param string $field
+     * @param array  $fieldHook
+     * @param array  $hooks
+     */
+    protected function handleForFieldHook(string $field, array $fieldHook, array &$hooks)
+    {
+        foreach ($fieldHook as $k => $v) {
+            if (is_numeric($k) && class_exists($v)) {
+                $hook = $v;
+                $hookArgs = [];
+            } elseif (class_exists($k) && is_array($v)) {
+                $hook = $k;
+                $hookArgs = $v;
+            } else {
+                continue;
+            }
+            if (isset($hook) && isset($hookArgs)) {
+                $hooks[$hook]['fields'][] = $field;
+                $hooks[$hook]['args'] = $hookArgs;
+            }
+        }
+    }
+
+    /**
+     * List entity basic fields
+     *
+     * @return array
+     * @throws
+     */
+    protected function listEntityBasicFields(): array
+    {
+        $entityList = [];
+
+        if ($this->entity) {
+            $entityList[$this->query['alias']] = $this->entity;
+        }
+
+        foreach (($this->query['join'] ?? []) as $alias => $item) {
+            if (is_string($item['entity'])) {
+                $entityList[$alias] = $item['entity'];
+            } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
+                $entityList[$alias] = $item['entity']['from'];
+            }
+        }
+
+        return $entityList;
+    }
+
+    /**
+     * Annotation extra item handler
+     *
+     * @param string $field
+     * @param mixed  $item
+     * @param array  $filterAnnotationFull
+     * @param int    $defaultIndex
+     *
+     * @return array
+     */
+    protected function handleForAnnotationExtraItem(
+        string $field,
+        $item,
+        array $filterAnnotationFull,
+        ?int $defaultIndex = null
+    ): array {
+
+        if (is_bool($item)) {
+            return [$field, []];
+        }
+
+        if (!is_array($item)) {
+            return [$field, $item];
+        }
+
+        if (!(isset($item['table']) && isset($item['field']))) {
+            return [$field, $item];
+        }
+
+        $_table = Helper::dig($item, 'table');
+        $_field = Helper::dig($item, 'field');
+
+        if (is_null($defaultIndex)) {
+            $_item = $previewAnnotationFull[$_table][$_field] ?? [];
+            $item = array_merge($_item, $item);
+
+            return [$field, $item];
+        }
+
+        $_index = Helper::dig($item, 'index') ?? $defaultIndex;
+        $item['field'] = "{$_table}.{$_field}";
+        $_field = "{$_field}{$_index}";
+
+        $_item = $filterAnnotationFull[$_table][$_field] ?? [];
+        $item = array_merge($_item, $item);
+
+        return ["{$field}{$_index}", $item];
+    }
+
+    /**
      * Show error
      *
      * @param string $message
