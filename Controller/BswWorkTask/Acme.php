@@ -11,11 +11,11 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Entity\BswWorkTeam;
 use Leon\BswBundle\Module\Bsw\Arguments;
-use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
+use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -287,7 +287,6 @@ class Acme extends BswBackendController
             Abs::PK,
             function ($v) {
                 return $v['name'];
-                // return "[{$v['team']}] {$v['name']}";
             },
             $filter,
             $teamFilter
@@ -490,33 +489,65 @@ class Acme extends BswBackendController
     /**
      * @return array
      */
-    protected function tabsLinks(): array
+    protected function operatesButton(): array
     {
-        $links[] = new Links(
-            $this->fieldLang('Task list'),
-            'app_bsw_work_task_preview',
-            'b:icon-mark'
-        );
+        $style = [
+            'margin' => '3px 4px 3px 0',
+            'float'  => Abs::POS_LEFT,
+        ];
 
-        $links[] = new Links(
-            $this->fieldLang('Weekly publication'),
-            'app_bsw_work_week_report',
-            'b:icon-calendar'
-        );
+        [$team, $leader] = $this->workTaskTeam();
 
-        $links[] = (new Links($this->fieldLang('Progress chart')))
-            ->setRoute('app_bsw_work_week_survey')
-            ->setIcon('a:line-chart')
-            ->setClick('showResult')
-            ->setArgs(
-                [
-                    'status'   => Abs::RESULT_STATUS_404,
-                    'title'    => $this->fieldLang('Look forward'),
-                    'subTitle' => 'Gradually improving, look forward.',
-                ]
-            );
+        return [
+            (new Button('Task list'))
+                ->setType(Abs::THEME_DEFAULT)
+                ->setRoute('app_bsw_work_task_preview')
+                ->setIcon('b:icon-mark')
+                ->setStyle($style),
 
-        return $links;
+            (new Button('Weekly publication'))
+                ->setType(Abs::THEME_DEFAULT)
+                ->setRoute('app_bsw_work_week_report')
+                ->setIcon('b:icon-calendar')
+                ->setStyle($style),
+
+            (new Button('Progress chart'))
+                ->setType(Abs::THEME_DEFAULT)
+                ->setIcon('a:line-chart')
+                ->setClick('showResult')
+                ->setStyle($style)
+                ->setArgs(
+                    [
+                        'status'   => Abs::RESULT_STATUS_404,
+                        'title'    => $this->fieldLang('Look forward'),
+                        'subTitle' => 'Gradually improving, look forward.',
+                    ]
+                ),
+
+            (new Button('New record'))
+                ->setRoute('app_bsw_work_task_persistence')
+                ->setIcon($this->cnf->icon_newly)
+                ->setDisplay(!$team || $leader),
+
+            (new Button('New task'))
+                ->setType(Abs::THEME_BSW_SUCCESS)
+                ->setRoute('app_bsw_work_task_simple')
+                ->setIcon('a:bug')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'width'  => Abs::MEDIA_SM,
+                        'height' => 409,
+                        'title'  => $this->twigLang('New task'),
+                    ]
+                ),
+
+            (new Button('Logout'))
+                ->setType(Abs::THEME_LINK)
+                ->setRoute($this->cnf->route_logout)
+                ->setIcon($this->cnf->icon_logout)
+                ->setConfirm($this->messageLang('Are you sure')),
+        ];
     }
 
     /**

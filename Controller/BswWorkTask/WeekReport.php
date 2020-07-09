@@ -9,6 +9,7 @@ use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Filter\Entity\Between;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
+use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
 use Leon\BswBundle\Module\Form\Entity\Week;
 use Symfony\Component\HttpFoundation\Response;
@@ -116,6 +117,14 @@ trait WeekReport
     }
 
     /**
+     * @return Button[]
+     */
+    public function weekReportOperates()
+    {
+        return $this->operatesButton();
+    }
+
+    /**
      * @param Arguments $args
      *
      * @return mixed
@@ -125,14 +134,6 @@ trait WeekReport
         $args->hooked = current($this->taskTrailHandler([$args->hooked]));
 
         return $args->hooked;
-    }
-
-    /**
-     * @return array
-     */
-    public function weekReportTabsLinks(): array
-    {
-        return $this->tabsLinks();
     }
 
     /**

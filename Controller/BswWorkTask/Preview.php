@@ -137,30 +137,7 @@ trait Preview
      */
     public function previewOperates()
     {
-        [$team, $leader] = $this->workTaskTeam();
-
-        $operates[] = (new Button('New task', 'app_bsw_work_task_simple', 'a:bug'))
-            ->setType(Abs::THEME_BSW_SUCCESS)
-            ->setClick('showIFrame')
-            ->setArgs(
-                [
-                    'width'  => Abs::MEDIA_SM,
-                    'height' => 409,
-                    'title'  => $this->twigLang('New task'),
-                ]
-            );
-
-        if (!$team || $leader) {
-            $operates[] = new Button('New record', 'app_bsw_work_task_persistence', $this->cnf->icon_newly);
-        }
-
-        $operates[] = (new Button('Logout'))
-            ->setRoute($this->cnf->route_logout)
-            ->setIcon($this->cnf->icon_logout)
-            ->setType(Abs::THEME_LINK)
-            ->setConfirm($this->messageLang('Are you sure'));
-
-        return $operates;
+        return $this->operatesButton();
     }
 
     /**
@@ -173,42 +150,43 @@ trait Preview
         [$team, $leader] = $this->workTaskTeam();
         $userTeam = $this->getUserById($args->item['userId'])->teamId;
 
-        $operates[] = (new Button('Progress'))
-            ->setIcon('b:icon-process')
-            ->setType(Abs::THEME_BSW_SUCCESS)
-            ->setRoute('app_bsw_work_task_progress')
-            ->setClick('showIFrame')
-            ->setDisabled(
-                ($args->item['userId'] !== $this->usr('usr_uid')) &&
-                !($leader && ($team === $userTeam))
-            )
-            ->setArgs(
-                [
-                    'id'     => $args->item['id'],
-                    'width'  => 500,
-                    'height' => 384,
-                    'title'  => false,
-                ]
-            );
-
-        $operates[] = (new Button('Notes'))
-            ->setIcon('b:icon-form')
-            ->setRoute('app_bsw_work_task_notes')
-            ->setClick('showIFrame')
-            ->setArgs(
-                [
-                    'fill'   => ['taskId' => $args->item['id']],
-                    'width'  => 500,
-                    'height' => 313,
-                    'title'  => false,
-                ]
-            );
-
-        if (!$team || $leader) {
-            $operates[] = (new Button('Transfer'))
-                ->setIcon('b:icon-feng')
-                ->setRoute('app_bsw_work_task_transfer')
+        $operates = [
+            (new Button('Progress'))
+                ->setType(Abs::THEME_BSW_SUCCESS)
+                ->setRoute('app_bsw_work_task_progress')
+                ->setIcon('b:icon-process')
                 ->setClick('showIFrame')
+                ->setDisabled(
+                    ($args->item['userId'] !== $this->usr('usr_uid')) &&
+                    !($leader && ($team === $userTeam))
+                )
+                ->setArgs(
+                    [
+                        'id'     => $args->item['id'],
+                        'width'  => 500,
+                        'height' => 384,
+                        'title'  => false,
+                    ]
+                ),
+
+            (new Button('Notes'))
+                ->setRoute('app_bsw_work_task_notes')
+                ->setIcon('b:icon-form')
+                ->setClick('showIFrame')
+                ->setArgs(
+                    [
+                        'fill'   => ['taskId' => $args->item['id']],
+                        'width'  => 500,
+                        'height' => 313,
+                        'title'  => false,
+                    ]
+                ),
+
+            (new Button('Transfer'))
+                ->setRoute('app_bsw_work_task_transfer')
+                ->setIcon('b:icon-feng')
+                ->setClick('showIFrame')
+                ->setDisplay(!$team || $leader)
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
@@ -216,13 +194,14 @@ trait Preview
                         'height' => 220,
                         'title'  => false,
                     ]
-                );
+                ),
 
-            $operates[] = (new Button('Weight'))
-                ->setIcon('b:icon-jewelry')
+            (new Button('Weight'))
                 ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_work_task_weight')
+                ->setIcon('b:icon-jewelry')
                 ->setClick('showIFrame')
+                ->setDisplay(!$team || $leader)
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
@@ -230,21 +209,23 @@ trait Preview
                         'height' => 253,
                         'title'  => false,
                     ]
-                );
+                ),
 
-            $operates[] = (new Button('Edit record'))
-                ->setIcon('b:icon-edit')
+            (new Button('Edit record'))
                 ->setRoute('app_bsw_work_task_persistence')
-                ->setArgs(['id' => $args->item['id']]);
+                ->setIcon('b:icon-edit')
+                ->setDisplay(!$team || $leader)
+                ->setArgs(['id' => $args->item['id']]),
 
-            $operates[] = (new Button('Close'))
-                ->setIcon('b:icon-success')
-                ->setRoute('app_bsw_work_task_close')
+            (new Button('Close'))
                 ->setType(Abs::THEME_DANGER)
+                ->setRoute('app_bsw_work_task_close')
+                ->setIcon('b:icon-success')
+                ->setDisplay(!$team || $leader)
                 ->setDisabled(!in_array($args->item['state'], [3, 4]))
                 ->setConfirm($this->messageLang('Are you sure'))
-                ->setArgs(['id' => $args->item['id']]);
-        }
+                ->setArgs(['id' => $args->item['id']]),
+        ];
 
         return $operates;
     }
@@ -312,22 +293,14 @@ trait Preview
         $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
 
         if (in_array($args->hooked['state'], [3, 4])) {
-            $args->hooked['rowClsName'] = "task-status-done";
+            $args->hooked['rowClsName'] = 'task-status-done';
         } elseif ($args->hooked['state'] === 1 && $args->original['startTime'] <= time()) {
-            $args->hooked['rowClsName'] = "task-status-overdue";
+            $args->hooked['rowClsName'] = 'task-status-overdue';
         } elseif ($args->hooked['state'] === 2 && $args->original['endTime'] <= time()) {
-            $args->hooked['rowClsName'] = "task-status-overdue";
+            $args->hooked['rowClsName'] = 'task-status-overdue';
         }
 
         return $args->hooked;
-    }
-
-    /**
-     * @return array
-     */
-    public function previewTabsLinks(): array
-    {
-        return $this->tabsLinks();
     }
 
     /**
