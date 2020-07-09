@@ -4783,4 +4783,24 @@ class Helper
 
         return $target;
     }
+
+    /**
+     * Divide number to N copies
+     *
+     * @param float $number
+     * @param int   $copies
+     * @param int   $precision
+     *
+     * @return array
+     */
+    public static function divideNumberToNCopies(float $number, int $copies, $precision = 0)
+    {
+        $divideNumber = bcdiv($number, $copies, $precision);
+        $lastNumber = bcsub($number, $divideNumber * ($copies - 1), $precision);
+
+        $set = array_fill(0, $copies - 1, $divideNumber);
+        array_push($set, $lastNumber);
+
+        return $set;
+    }
 }

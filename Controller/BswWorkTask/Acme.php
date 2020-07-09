@@ -44,7 +44,14 @@ class Acme extends BswBackendController
         $workDays = $this->cnf->work_lifecycle_max_day - $weekendDays;
         $maxHours = ceil($workDays * $this->cnf->work_lifecycle_day_hours);
 
-        return ['min' => 1, 'max' => $maxHours];
+        if ($maxHours > 300) {
+            $maxHours = 300;
+            $marks = [30, 60, 90, 120, 150, 180, 210, 240, 270];
+        } else {
+            $marks = [20, 40, 60, 80];
+        }
+
+        return ['min' => 1, 'max' => $maxHours, 'marks' => array_combine($marks, $marks)];
     }
 
     /**
