@@ -52,7 +52,7 @@ trait Preview
                 ->setArgs(
                     [
                         'width'  => Abs::MEDIA_MIN,
-                        'height' => 189,
+                        'height' => 209,
                         'title'  => false,
                     ]
                 ),

@@ -56,7 +56,7 @@ trait Persistence
                         'display'   => 'block',
                         'font-size' => '16px',
                         'height'    => '64px',
-                        'margin'    => '30px auto 0',
+                        'margin'    => '40px auto 0',
                     ],
                 ],
             ],

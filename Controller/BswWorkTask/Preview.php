@@ -145,7 +145,7 @@ trait Preview
             ->setArgs(
                 [
                     'width'  => Abs::MEDIA_SM,
-                    'height' => 399,
+                    'height' => 409,
                     'title'  => $this->twigLang('New task'),
                 ]
             );
@@ -186,7 +186,7 @@ trait Preview
                 [
                     'id'     => $args->item['id'],
                     'width'  => 500,
-                    'height' => 374,
+                    'height' => 384,
                     'title'  => false,
                 ]
             );
@@ -199,7 +199,7 @@ trait Preview
                 [
                     'fill'   => ['taskId' => $args->item['id']],
                     'width'  => 500,
-                    'height' => 303,
+                    'height' => 313,
                     'title'  => false,
                 ]
             );
@@ -213,7 +213,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => Abs::MEDIA_MIN,
-                        'height' => 210,
+                        'height' => 220,
                         'title'  => false,
                     ]
                 );
@@ -227,7 +227,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 243,
+                        'height' => 253,
                         'title'  => false,
                     ]
                 );
