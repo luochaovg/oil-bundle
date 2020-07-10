@@ -10,7 +10,7 @@ class TeamMember extends Filter
     /**
      * @var array
      */
-    protected $alias = ['team' => ['x', 'teamId'], 'member' => ['tt', 'memberId']];
+    protected $alias = ['team' => ['x', 'teamId'], 'member' => ['t', 'memberId']];
 
     /**
      * @param string $index

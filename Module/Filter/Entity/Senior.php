@@ -285,19 +285,35 @@ class Senior extends Filter
         }
 
         if ($this->expression == self::LIKE) {
-            return ["{$field} LIKE '%{$target}%'"];
+            return [
+                "{$field} LIKE '%:{$targetKey}%'",
+                [$targetKey => $target],
+                [$targetKey => Type::STRING],
+            ];
         }
 
         if ($this->expression == self::BEGIN_LIKE) {
-            return ["{$field} LIKE '{$target}%'"];
+            return [
+                "{$field} LIKE ':{$targetKey}%'",
+                [$targetKey => $target],
+                [$targetKey => Type::STRING],
+            ];
         }
 
         if ($this->expression == self::END_LIKE) {
-            return ["{$field} LIKE '%{$target}'"];
+            return [
+                "{$field} LIKE '%:{$targetKey}'",
+                [$targetKey => $target],
+                [$targetKey => Type::STRING],
+            ];
         }
 
         if ($this->expression == self::NOT_LIKE) {
-            return ["{$field} NOT LIKE '%{$target}%'"];
+            return [
+                "{$field} NOT LIKE '%:{$targetKey}%'",
+                [$targetKey => $target],
+                [$targetKey => Type::STRING],
+            ];
         }
 
         if ($this->expression == self::BETWEEN) {
@@ -442,19 +458,27 @@ class Senior extends Filter
         }
 
         if ($this->expression == self::LIKE) {
-            return [$this->expr->like($field, $this->expr->literal("%{$target}%"))];
+            return [
+                $this->expr->like($field, $this->expr->literal("%{$target}%")),
+            ];
         }
 
         if ($this->expression == self::BEGIN_LIKE) {
-            return [$this->expr->like($field, $this->expr->literal("{$target}%"))];
+            return [
+                $this->expr->like($field, $this->expr->literal("{$target}%")),
+            ];
         }
 
         if ($this->expression == self::END_LIKE) {
-            return [$this->expr->like($field, $this->expr->literal("%{$target}"))];
+            return [
+                $this->expr->like($field, $this->expr->literal("%{$target}")),
+            ];
         }
 
         if ($this->expression == self::NOT_LIKE) {
-            return [$this->expr->notLike($field, $this->expr->literal("%{$target}%"))];
+            return [
+                $this->expr->notLike($field, $this->expr->literal("%{$target}%")),
+            ];
         }
 
         if ($this->expression == self::BETWEEN) {
