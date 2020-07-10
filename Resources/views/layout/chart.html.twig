@@ -8,11 +8,13 @@
   {% endif %}
   {% block filterAfter %}{% endblock %}
   {% block chartBefore %}{% endblock %}
-  <div class="bsw-chart-list">
-    {% for item in chart.items %}
-      {% include 'limbs/chart.html.twig' with {chart: item} %}
-    {% endfor %}
-  </div>
+  {% block chart %}
+    <div class="bsw-chart-list">
+      {% for item in chart.items %}
+        {% include 'limbs/chart.html.twig' with {chart: item} %}
+      {% endfor %}
+    </div>
+  {% endblock %}
   {% block chartAfter %}{% endblock %}
 {% endblock %}
 

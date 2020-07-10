@@ -2,71 +2,103 @@
 
 {% block content %}
   <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|filter(v => v)|join(' ') }}">
+    <!-- menu mobile -->
     {% if menuHtml is defined %}
-      <a-drawer
-        wrap-class-name="bsw-menu-mobile"
-        v-if="bsw.isMobile()"
-        placement="left"
-        :closable="false"
-        :visible="!menuCollapsed"
-        :width="menuWidth"
-        @close="menuTrigger"
-      >
-        {% if 'menu' not in logic.display ?? [] %}
-          {{ (menuHtml ?? null)|raw }}
-        {% endif %}
-      </a-drawer>
+      {% block menuMobileBefore %}{% endblock %}
+      {% block menuMobile %}
+        <a-drawer
+          wrap-class-name="bsw-menu-mobile"
+          v-if="bsw.isMobile()"
+          placement="left"
+          :closable="false"
+          :visible="!menuCollapsed"
+          :width="menuWidth"
+          @close="menuTrigger"
+        >
+          {% if 'menu' not in logic.display ?? [] %}
+            {{ (menuHtml ?? null)|raw }}
+          {% endif %}
+        </a-drawer>
+      {% endblock %}
+      {% block menuMobileAfter %}{% endblock %}
     {% endif %}
+    <!-- menu -->
     {% if 'menu' not in logic.display ?? [] %}
-      {{ (menuHtml ?? null)|raw }}
+      {% block menuBefore %}{% endblock %}
+      {% block menu %}
+        {{ (menuHtml ?? null)|raw }}
+      {% endblock %}
+      {% block menuAfter %}{% endblock %}
     {% endif %}
     <a-layout>
-      {% block headerBefore %}{% endblock %}
+      <!-- header -->
       {% if 'header' not in logic.display ?? [] %}
-        {{ (headerHtml ?? null)|raw }}
+        {% block headerBefore %}{% endblock %}
+        {% block header %}
+          {{ (headerHtml ?? null)|raw }}
+        {% endblock %}
+        {% block headerAfter %}{% endblock %}
       {% endif %}
-      {% block headerAfter %}{% endblock %}
       <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
-        {% block crumbsBefore %}{% endblock %}
+        <!-- crumbs -->
         {% if 'crumbs' not in logic.display ?? [] %}
-          {{ (crumbsHtml ?? null)|raw }}
+          {% block crumbsBefore %}{% endblock %}
+          {% block crumbs %}
+            {{ (crumbsHtml ?? null)|raw }}
+          {% endblock %}
+          {% block curmbsAfter %}{% endblock %}
         {% endif %}
-        {% block curmbsAfter %}{% endblock %}
-        {% block welcomeBefore %}{% endblock %}
+        <!-- welcome -->
         {% if 'welcome' not in logic.display ?? [] %}
-          {{ (welcomeHtml ?? null)|raw }}
+          {% block welcomeBefore %}{% endblock %}
+          {% block welcome %}
+            {{ (welcomeHtml ?? null)|raw }}
+          {% endblock %}
+          {% block welcomeAfter %}{% endblock %}
         {% endif %}
-        {% block welcomeAfter %}{% endblock %}
         {% if operate is defined and operate.position is same as(top) %}
-          {% block operateTopBefore %}{% endblock %}
+          <!-- operate top -->
           {% if 'operate' not in logic.display ?? [] %}
-            {{ (operateHtml ?? null)|raw }}
+            {% block operateTopBefore %}{% endblock %}
+            {% block operateTop %}
+              {{ (operateHtml ?? null)|raw }}
+            {% endblock %}
+            {% block operateTopAfter %}{% endblock %}
           {% endif %}
-          {% block operateTopAfter %}{% endblock %}
         {% endif %}
-        {% block tabsBefore %}{% endblock %}
+        <!-- tabs -->
         {% if 'tabs' not in logic.display ?? [] %}
-          {{ (tabsHtml ?? null)|raw }}
+          {% block tabsBefore %}{% endblock %}
+          {% block tabs %}
+            {{ (tabsHtml ?? null)|raw }}
+          {% endblock %}
+          {% block tabsAfter %}{% endblock %}
         {% endif %}
-        {% block tabsAfter %}{% endblock %}
         <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
+          <!-- page -->
           {% block pageBefore %}{% endblock %}
           {% block page %}{% endblock %}
           {% block pageAfter %}{% endblock %}
         </div>
         {% if operate is defined and operate.position is same as(bottom) %}
-          {% block operateBottomBefore %}{% endblock %}
+          <!-- operate bottom -->
           {% if 'operate' not in logic.display ?? [] %}
-            {{ (operateHtml ?? null)|raw }}
+            {% block operateBottomBefore %}{% endblock %}
+            {% block operateBottome %}
+              {{ (operateHtml ?? null)|raw }}
+            {% endblock %}
+            {% block operateBottomAfter %}{% endblock %}
           {% endif %}
-          {% block operateBottomAfter %}{% endblock %}
         {% endif %}
       </a-layout-content>
-      {% block footerBefore %}{% endblock %}
+      <!-- footer -->
       {% if 'footer' not in logic.display ?? [] %}
-        {{ (footerHtml ?? null)|raw }}
+        {% block footerBefore %}{% endblock %}
+        {% block footer %}
+          {{ (footerHtml ?? null)|raw }}
+        {% endblock %}
+        {% block footerAfter %}{% endblock %}
       {% endif %}
-      {% block footerAfter %}{% endblock %}
     </a-layout>
   </a-layout>
 {% endblock %}

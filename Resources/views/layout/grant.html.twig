@@ -4,79 +4,83 @@
 {% block page %}
   <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
   <p class="bsw-hide" v-init:disabled_list='{{ logic.disabledJson|raw }}'></p>
-  <div class="bsw-persistence">
-    <a-form
-      id="persistenceForm"
-      :form="persistenceForm"
-      @submit="persistenceSubmit"
-    >
-      {% set totalColumn = 24 %}
-      {% set labelColumn = 4 %}
-      {% set danger = logic.danger %}
-      {% set realColumn = (totalColumn - labelColumn) %}
-      <a-form-item
-        :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
-        :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
-        label="{{ 'Action'|trans({}, 'twig') }}"
+  {% block grantBefore %}{% endblock %}
+  {% block grant %}
+    <div class="bsw-persistence">
+      <a-form
+        id="persistenceForm"
+        :form="persistenceForm"
+        @submit="persistenceSubmit"
       >
-        <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
-        <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
-      </a-form-item>
-      <a-form-item v-show="false">
-        <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
-      </a-form-item>
-      {% for field, item in logic.form %}
+        {% set totalColumn = 24 %}
+        {% set labelColumn = 4 %}
+        {% set danger = logic.danger %}
+        {% set realColumn = (totalColumn - labelColumn) %}
         <a-form-item
           :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
           :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
-          label="{{ item.label|trans({}, 'twig') }}"
+          label="{{ 'Action'|trans({}, 'twig') }}"
         >
-          {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
-          <a-checkbox-group
-            {% if item.type.class %}
-              class="{{ item.type.class }}"
-            {% endif %}
-            :style="{width: '100%'}"
-            :disabled="{{ item.type.disabled ? 'true' : 'false' }}"
-            placeholder="{{ item.type.placeholder }}"
-            {{ item.type.attributes|raw }}
-            v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
+          <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
+          <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
+        </a-form-item>
+        <a-form-item v-show="false">
+          <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
+        </a-form-item>
+        {% for field, item in logic.form %}
+          <a-form-item
+            :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
+            :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
+            label="{{ item.label|trans({}, 'twig') }}"
           >
-            <a-row>
-              {% for value, label in item.type.enum %}
-                {% set disabled = attribute(logic.disabled, value) ?? false %}
-                {% set _danger = attribute(danger, value) ?? null %}
-                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
-                  {% if _danger is not null %}
-                    <a-popover overlay-class-name="bsw-popover">
-                      <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
+            {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
+            <a-checkbox-group
+              {% if item.type.class %}
+                class="{{ item.type.class }}"
+              {% endif %}
+              :style="{width: '100%'}"
+              :disabled="{{ item.type.disabled ? 'true' : 'false' }}"
+              placeholder="{{ item.type.placeholder }}"
+              {{ item.type.attributes|raw }}
+              v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
+            >
+              <a-row>
+                {% for value, label in item.type.enum %}
+                  {% set disabled = attribute(logic.disabled, value) ?? false %}
+                  {% set _danger = attribute(danger, value) ?? null %}
+                  <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
+                    {% if _danger is not null %}
+                      <a-popover overlay-class-name="bsw-popover">
+                        <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
+                        <a-checkbox
+                          :disabled="{{ disabled ? 'true' : 'false' }}"
+                          class="{{ _danger.class }}"
+                          value="{{ value }}">
+                          {{ label }}
+                        </a-checkbox>
+                      </a-popover>
+                    {% else %}
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
-                        class="{{ _danger.class }}"
                         value="{{ value }}">
                         {{ label }}
                       </a-checkbox>
-                    </a-popover>
-                  {% else %}
-                    <a-checkbox
-                      :disabled="{{ disabled ? 'true' : 'false' }}"
-                      value="{{ value }}">
-                      {{ label }}
-                    </a-checkbox>
-                  {% endif %}
-                </a-col>
-              {% endfor %}
-            </a-row>
-          </a-checkbox-group>
-        </a-form-item>
-      {% endfor %}
-      <a-form-item
-        :wrapper-col="{lg: { span: {{ totalColumn }}, offset: 0 }, xl: { span: {{ realColumn }}, offset: {{ labelColumn }} }}"
-      >
-        {% for form in persistence.operates %}
-          {% include 'form/button.html.twig' %}
+                    {% endif %}
+                  </a-col>
+                {% endfor %}
+              </a-row>
+            </a-checkbox-group>
+          </a-form-item>
         {% endfor %}
-      </a-form-item>
-    </a-form>
-  </div>
+        <a-form-item
+          :wrapper-col="{lg: { span: {{ totalColumn }}, offset: 0 }, xl: { span: {{ realColumn }}, offset: {{ labelColumn }} }}"
+        >
+          {% for form in persistence.operates %}
+            {% include 'form/button.html.twig' %}
+          {% endfor %}
+        </a-form-item>
+      </a-form>
+    </div>
+  {% endblock %}
+  {% block grantAfter %}{% endblock %}
 {% endblock %}

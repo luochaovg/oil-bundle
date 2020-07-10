@@ -6,17 +6,33 @@
   {% endif %}
   <div class="{{ ['bsw-body', tplBodyClass ?? null]|filter(v => v)|join(' ') }}">
     <template>
+      <!-- init -->
       {% if limbsInit ?? true %}
         {% include 'limbs/init.html.twig' %}
       {% endif %}
+      <!-- modal -->
       {% if 'modal' not in logic.display ?? [] %}
-        {{ (modalHtml ?? null)|raw }}
+        {% block modalBefore %}{% endblock %}
+        {% block modal %}
+          {{ (modalHtml ?? null)|raw }}
+        {% endblock %}
+        {% block modalAfter %}{% endblock %}
       {% endif %}
+      <!-- drawer -->
       {% if 'drawer' not in logic.display ?? [] %}
-        {{ (drawerHtml ?? null)|raw }}
+        {% block drawerBefore %}{% endblock %}
+        {% block drawer %}
+          {{ (drawerHtml ?? null)|raw }}
+        {% endblock %}
+        {% block drawerAfter %}{% endblock %}
       {% endif %}
+      <!-- result -->
       {% if 'result' not in logic.display ?? [] %}
-        {{ (resultHtml ?? null)|raw }}
+        {% block resultBefore %}{% endblock %}
+        {% block result %}
+          {{ (resultHtml ?? null)|raw }}
+        {% endblock %}
+        {% block resultAfter %}{% endblock %}
       {% endif %}
       <a-config-provider :locale="locale" :auto-insert-space-in-button="true">
         {% block bodyBefore %}{% endblock %}

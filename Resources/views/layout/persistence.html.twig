@@ -3,52 +3,54 @@
 
 {% block page %}
   {% block persistenceBefore %}{% endblock %}
-  <div class="bsw-persistence">
-    <a-form
-      id="persistenceForm"
-      :form="persistenceForm"
-      :style="{{ persistence.styleJson }}"
-      @submit="persistenceSubmit"
-    >
-      {% set totalColumn = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
-      {% set labelColumn = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
-      <!-- xs < sm < md < lg < xl < xxl -->
-      {% set small = scaffold.iframe ? 'sm' : 'md' %}
-      {% set large = scaffold.iframe ? 'md' : 'lg' %}
-      {% for field, item in persistence.record %}
-        {% set form = item.type %}
-        {% set wrapperColumn = item.column ?: (totalColumn - labelColumn) %}
-        {% set meta = "persistenceFieldShapeNow." ~ field %}
-        <transition name="bsw">
-          <a-form-item
-            v-show="typeof {{ meta }} !== 'undefined' ? !{{ meta }} : {{ item.hide ? 'false' : 'true' }}"
-            :label-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ labelColumn }} }}"
-            :wrapper-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ wrapperColumn }} }}"
-            label="{{ item.label|trans({}, 'twig') }}"
-            extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
-            class="bsw-form-{{ form.itemName }}"
-          >
-            {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
-            {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
-            {% set end = title ? '</a-popover>' : null %}
-            {{ begin|raw }}
-            {% include "form/" ~ form.itemName ~ ".html.twig" %}
-            {{ end|raw }}
-          </a-form-item>
-        </transition>
-      {% endfor %}
-      <a-form-item
-        :wrapper-col="{
+  {% block persistence %}
+    <div class="bsw-persistence">
+      <a-form
+        id="persistenceForm"
+        :form="persistenceForm"
+        :style="{{ persistence.styleJson }}"
+        @submit="persistenceSubmit"
+      >
+        {% set totalColumn = constant(scaffold.abs ~ "::PERSISTENCE_TOTAL_COLUMN") %}
+        {% set labelColumn = constant(scaffold.abs ~ "::PERSISTENCE_LABEL_COLUMN") %}
+        <!-- xs < sm < md < lg < xl < xxl -->
+        {% set small = scaffold.iframe ? 'sm' : 'md' %}
+        {% set large = scaffold.iframe ? 'md' : 'lg' %}
+        {% for field, item in persistence.record %}
+          {% set form = item.type %}
+          {% set wrapperColumn = item.column ?: (totalColumn - labelColumn) %}
+          {% set meta = "persistenceFieldShapeNow." ~ field %}
+          <transition name="bsw">
+            <a-form-item
+              v-show="typeof {{ meta }} !== 'undefined' ? !{{ meta }} : {{ item.hide ? 'false' : 'true' }}"
+              :label-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ labelColumn }} }}"
+              :wrapper-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ wrapperColumn }} }}"
+              label="{{ item.label|trans({}, 'twig') }}"
+              extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
+              class="bsw-form-{{ form.itemName }}"
+            >
+              {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
+              {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
+              {% set end = title ? '</a-popover>' : null %}
+              {{ begin|raw }}
+              {% include "form/" ~ form.itemName ~ ".html.twig" %}
+              {{ end|raw }}
+            </a-form-item>
+          </transition>
+        {% endfor %}
+        <a-form-item
+          :wrapper-col="{
           {{ small }}: { span: {{ totalColumn }}, offset: 0 },
           {{ large }}: { span: {{ totalColumn - labelColumn }}, offset: {{ labelColumn }} }
         }"
-      >
-        {% for form in persistence.operates %}
-          {% include 'form/button.html.twig' %}
-        {% endfor %}
-      </a-form-item>
-    </a-form>
-  </div>
+        >
+          {% for form in persistence.operates %}
+            {% include 'form/button.html.twig' %}
+          {% endfor %}
+        </a-form-item>
+      </a-form>
+    </div>
+  {% endblock %}
   {% block persistenceAfter %}{% endblock %}
 {% endblock %}
 

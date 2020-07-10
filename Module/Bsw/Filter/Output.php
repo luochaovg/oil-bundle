@@ -33,6 +33,11 @@ class Output extends ArgsOutput
     public $operates = [];
 
     /**
+     * @var bool
+     */
+    public $showLabel;
+
+    /**
      * @var string
      */
     public $formatJson;

@@ -8,56 +8,60 @@
   {% block filterAfter %}{% endblock %}
   {% set fields = '{' ~ (preview.choice.fields ?? [])|arrayMapDouble('"%s":"${record.%s}"')|join(',') ~ '}' %}
   {% block previewBefore %}{% endblock %}
-  <div class="bsw-preview">
-    <a-table
-      :columns="previewColumns"
-      :data-source="previewList"
-      :bordered="{{ preview.border ? 'true' : 'false' }}"
-      :pagination="false"
-      {% if  preview.clsName|length %}
-        :row-class-name="{{ preview.clsName }}"
-      {% endif %}
-      :row-key="record => `{{ fields }}`"
-      {% if preview.choice.enable ?? false %}
-        :row-selection="{
+  {% block preview %}
+    <div class="bsw-preview">
+      <a-table
+        :columns="previewColumns"
+        :data-source="previewList"
+        :bordered="{{ preview.border ? 'true' : 'false' }}"
+        :pagination="false"
+        {% if  preview.clsName|length %}
+          :row-class-name="{{ preview.clsName }}"
+        {% endif %}
+        :row-key="record => `{{ fields }}`"
+        {% if preview.choice.enable ?? false %}
+          :row-selection="{
             type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
             selectedRowKeys: previewSelectedRow,
             onChange: previewSelectedChange,
             selections: true
           }"
-      {% endif %}
-      :scroll="{{ {x: preview.scrollX}|merge(preview.scroll)|stringify }}"
-      size="{{ preview.size }}"
-      @change="previewSortData"
-    >
-      {% for item in preview.slots %}
-        {{ item|raw }}
-      {% endfor %}
-      {% if preview.header %}
-        <template slot="title" slot-scope="currentPageData">
-          {% block previewTableHeader %}{% endblock %}
-        </template>
-      {% endif %}
-      {% if preview.header %}
-        <template slot="footer" slot-scope="currentPageData">
-          {% block previewTableFooter %}{% endblock %}
-        </template>
-      {% endif %}
-    </a-table>
-    <a-pagination
-      :show-quick-jumper="true"
-      :hide-on-single-page="true"
-      :show-total="(total, range) => `${bsw.lang.total} ${total}`"
-      :page-size.sync="previewPageSize"
-      :default-current="previewPaginationData.currentPage"
-      :total="previewPaginationData.totalItem"
-      :show-size-changer="true"
-      :page-size-options="previewPaginationSizeOptions"
-      :simple="false"
-      size="{{ preview.size }}"
-      @change="previewPagination"
-    ></a-pagination>
-  </div>
+        {% endif %}
+        :scroll="{{ {x: preview.scrollX}|merge(preview.scroll)|stringify }}"
+        size="{{ preview.size }}"
+        @change="previewSortData"
+      >
+        {% block previewSlots %}
+          {% for item in preview.slots %}
+            {{ item|raw }}
+          {% endfor %}
+        {% endblock %}
+        {% if preview.header %}
+          <template slot="title" slot-scope="currentPageData">
+            {% block previewTableHeader %}{% endblock %}
+          </template>
+        {% endif %}
+        {% if preview.header %}
+          <template slot="footer" slot-scope="currentPageData">
+            {% block previewTableFooter %}{% endblock %}
+          </template>
+        {% endif %}
+      </a-table>
+      <a-pagination
+        :show-quick-jumper="true"
+        :hide-on-single-page="true"
+        :show-total="(total, range) => `${bsw.lang.total} ${total}`"
+        :page-size.sync="previewPageSize"
+        :default-current="previewPaginationData.currentPage"
+        :total="previewPaginationData.totalItem"
+        :show-size-changer="true"
+        :page-size-options="previewPaginationSizeOptions"
+        :simple="false"
+        size="{{ preview.size }}"
+        @change="previewPagination"
+      ></a-pagination>
+    </div>
+  {% endblock %}
   {% block previewAfter %}{% endblock %}
 {% endblock %}
 

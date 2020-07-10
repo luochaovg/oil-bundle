@@ -1,6 +1,6 @@
 {% if filter.filter is not empty %}
   <a-form
-    class="bsw-filter-form"
+    class="{{ ['bsw-filter-form', filter.showLabel ? null : 'bsw-filter-without-label']|filter(v => v)|join(' ') }}"
     :form="filterForm"
     layout="vertical"
     @submit="filterSubmit"
@@ -12,7 +12,7 @@
       {% endif %}
       {% set width = (filter.columnPx * item.column + extra) %}
       <a-form-item
-        label="{{ item.label }}"
+        label="{{ filter.showLabel ? item.label : null }}"
         class="bsw-filter-item"
         :style="{ width: '{{ width }}px', display: filterDisplay('{{ key }}') }"
         {% if item.type is iterable %}
@@ -39,7 +39,7 @@
       </a-form-item>
     {% endfor %}
     {% if filter.filter|length > filter.maxShow %}
-      <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
+      <a-form-item class="bsw-filter-item bsw-filter-action" label="{{ filter.showLabel ? '　' : null }}">
         <a-button @click="filterToggle" type="dashed">
           <span v-if="filterExpand">
             {{ scaffold.cnf.iconLeft|icon|raw }} {{ filter.textHide|trans({}, 'twig') }}
@@ -51,7 +51,7 @@
       </a-form-item>
     {% endif %}
     {% for item in filter.operates %}
-      <a-form-item class="bsw-filter-item bsw-filter-action" label="　">
+      <a-form-item class="bsw-filter-item bsw-filter-action" label="{{ filter.showLabel ? '　' : null }}">
         {% include 'form/button.html.twig' with {form: item} %}
       </a-form-item>
     {% endfor %}

@@ -19,6 +19,14 @@ class Module extends Bsw
     const WELCOME = 'Welcome';
 
     /**
+     * @return bool
+     */
+    public function allowIframe(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

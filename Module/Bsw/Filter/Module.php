@@ -444,7 +444,7 @@ class Module extends Bsw
         $search->setAttributes(['bsw-method' => 'search']);
 
         $export = null;
-        if ($this->input->scene === Abs::TAG_PREVIEW && $this->entity) {
+        if ($this->input->scene === Abs::TAG_PREVIEW && $this->entity && $this->input->showExport) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => 'export']);
             $export->setRouteForAccess($this->input->cnf->route_export);
@@ -638,6 +638,7 @@ class Module extends Bsw
         );
 
         [$output->filter, $output->operates, $format] = $this->handleFilterData($filter);
+        $output->showLabel = $this->input->showLabel;
         $output->condition = $condition;
         $output->formatJson = Helper::jsonStringify($format, '{}');
 

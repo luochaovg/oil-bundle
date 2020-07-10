@@ -38,6 +38,16 @@ class Input extends ArgsInput
     public $textHide = 'Hide filter';
 
     /**
+     * @var bool
+     */
+    public $showExport = true;
+
+    /**
+     * @var bool
+     */
+    public $showLabel = true;
+
+    /**
      * @var string
      */
     public $filterFormSize = Abs::SIZE_DEFAULT;

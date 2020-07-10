@@ -20,6 +20,14 @@ class Module extends Bsw
     }
 
     /**
+     * @return bool
+     */
+    public function allowIframe(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

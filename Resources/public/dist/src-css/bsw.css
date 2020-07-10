@@ -832,4 +832,7 @@ textarea[size="large"] {
 .ant-result .ant-result-subtitle {
   margin-top: 10px;
 }
+.bsw-filter-without-label.ant-form-vertical .ant-form-item {
+  padding-bottom: 0;
+}
 /*# sourceMappingURL=bsw.css.map */

@@ -162,6 +162,7 @@ Refund amount so much:                      '退款金额超实付金额'
 Refunded in full:                           '已全额退款'
 No record:                                  '结果集为空'
 Without change:                             '没有任何变动'
+Please give qualified input:                '请给定符合条件的输入'
 
 # bsw validator
 
