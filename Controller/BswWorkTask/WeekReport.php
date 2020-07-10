@@ -84,7 +84,7 @@ trait WeekReport
                 ],
                 'u' => [
                     'entity' => BswAdminUser::class,
-                    'left'   => ['t.userId'],
+                    'left'   => ['tt.userId'],
                     'right'  => ['u.id'],
                 ],
             ],

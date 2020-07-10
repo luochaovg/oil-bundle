@@ -31,6 +31,7 @@ trait PersistenceSimple
         $annotation = array_merge(
             $annotation,
             [
+                'type'        => ['hide' => true],
                 'userId'      => false,
                 'donePercent' => false,
                 'weight'      => false,

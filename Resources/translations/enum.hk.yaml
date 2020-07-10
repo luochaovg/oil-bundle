@@ -1,4 +1,3 @@
-
 Bank Transfer Finland:                      'Bank Transfer Finland'
 Bank Transfer Korea:                        'Bank Transfer Korea'
 Bank Transfer Malaysia:                     'Bank Transfer Malaysia'
@@ -488,6 +487,9 @@ Execute manual:                 '手動指定'
 
 Away after execute:             '用後即焚'
 Reuse after execute:            '重復執行'
+
+Member task:                    '成員任務'
+Team task:                      '團隊任務'
 
 Third to phone:                 '第三方賬號綁定手機'
 Third to email:                 '第三方賬號綁定郵箱'

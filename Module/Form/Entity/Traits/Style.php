@@ -69,12 +69,12 @@ trait Style
      */
     public function setDisplay($value)
     {
-        if ($value === true) {
-            $this->appendStyle(['display' => 'inline-block']);
-        } elseif ($value === false) {
-            $this->appendStyle(['display' => 'none']);
-        } else {
+        if (is_string($value)) {
             $this->appendStyle(['display' => $value]);
+        } elseif ($value) {
+            $this->appendStyle(['display' => 'inline-block']);
+        } else {
+            $this->appendStyle(['display' => 'none']);
         }
 
         return $this;

@@ -8,6 +8,7 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Filter\Entity\Accurate;
 use Leon\BswBundle\Module\Filter\Entity\Senior;
 use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Module\Filter\Entity\WeekIntersect;
@@ -49,7 +50,7 @@ trait Preview
 
         return [
             'userId' => false,
-            'team'   => [
+            'team'   => $this->isTeamTask ? false : [
                 'label'      => 'User id',
                 'field'      => 'bwt.userId',
                 'type'       => SelectTree::class,
@@ -99,6 +100,8 @@ trait Preview
     public function previewAnnotation(): array
     {
         return [
+            'userId'    => !$this->isTeamTask,
+            'weight'    => !$this->isTeamTask,
             'trail'     => [
                 'width' => 120,
                 'align' => Abs::POS_CENTER,
@@ -129,6 +132,8 @@ trait Preview
             $args->condition ?? null
         );
 
+        $args->condition['bwt.type'] = $this->createFilter(Accurate::class, $this->isTeamTask ? 2 : 1);
+
         return [$args->filter, $args->condition];
     }
 
@@ -148,26 +153,31 @@ trait Preview
     public function previewRecordOperates(Arguments $args): array
     {
         [$team, $leader] = $this->workTaskTeam();
-        $userTeam = $this->getUserById($args->item['userId'])->teamId;
 
-        $operates = [
+        $isMyTask = $args->item['userId'] === $this->usr('usr_uid');
+        $isMyTeam = $team === $this->getUserById($args->item['userId'])->teamId;
+
+        return [
             (new Button('Progress'))
                 ->setType(Abs::THEME_BSW_SUCCESS)
                 ->setRoute('app_bsw_work_task_progress')
                 ->setIcon('b:icon-process')
                 ->setClick('showIFrame')
-                ->setDisabled(
-                    ($args->item['userId'] !== $this->usr('usr_uid')) &&
-                    !($leader && ($team === $userTeam))
-                )
+                ->setDisabled(!($isMyTask || ($isMyTeam && $leader)))
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 384,
+                        'height' => 426,
                         'title'  => false,
                     ]
                 ),
+
+            (new Button('Edit record'))
+                ->setRoute('app_bsw_work_task_persistence')
+                ->setIcon('b:icon-edit')
+                ->setDisplay($leader)
+                ->setArgs(['id' => $args->item['id']]),
 
             (new Button('Notes'))
                 ->setRoute('app_bsw_work_task_notes')
@@ -176,8 +186,9 @@ trait Preview
                 ->setArgs(
                     [
                         'fill'   => ['taskId' => $args->item['id']],
-                        'width'  => 500,
-                        'height' => 313,
+                        'type'   => $this->isTeamTask ? 'team' : 'member',
+                        'width'  => $this->isTeamTask ? Abs::MEDIA_SM : 500,
+                        'height' => $this->isTeamTask ? 433 : 313,
                         'title'  => false,
                     ]
                 ),
@@ -185,8 +196,8 @@ trait Preview
             (new Button('Transfer'))
                 ->setRoute('app_bsw_work_task_transfer')
                 ->setIcon('b:icon-feng')
+                ->setDisplay($leader && !$this->isTeamTask)
                 ->setClick('showIFrame')
-                ->setDisplay(!$team || $leader)
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
@@ -200,8 +211,8 @@ trait Preview
                 ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_work_task_weight')
                 ->setIcon('b:icon-jewelry')
+                ->setDisplay($leader && !$this->isTeamTask)
                 ->setClick('showIFrame')
-                ->setDisplay(!$team || $leader)
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
@@ -211,23 +222,15 @@ trait Preview
                     ]
                 ),
 
-            (new Button('Edit record'))
-                ->setRoute('app_bsw_work_task_persistence')
-                ->setIcon('b:icon-edit')
-                ->setDisplay(!$team || $leader)
-                ->setArgs(['id' => $args->item['id']]),
-
             (new Button('Close'))
                 ->setType(Abs::THEME_DANGER)
                 ->setRoute('app_bsw_work_task_close')
                 ->setIcon('b:icon-success')
-                ->setDisplay(!$team || $leader)
+                ->setDisplay($leader)
                 ->setDisabled(!in_array($args->item['state'], [3, 4]))
                 ->setConfirm($this->messageLang('Are you sure'))
                 ->setArgs(['id' => $args->item['id']]),
         ];
-
-        return $operates;
     }
 
     /**
@@ -250,6 +253,8 @@ trait Preview
         [$gap, $tip] = Helper::gapDateDetail(
             $args->value,
             [
+                'year'   => $this->fieldLang('Year'),
+                'month'  => $this->fieldLang('Month'),
                 'day'    => $this->fieldLang('Day'),
                 'hour'   => $this->fieldLang('Hour'),
                 'minute' => $this->fieldLang('Minute'),

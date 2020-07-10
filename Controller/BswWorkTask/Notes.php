@@ -32,13 +32,14 @@ trait Notes
     public function notesAnnotationOnly(): array
     {
         return [
+            'id'     => false,
             'userId' => ['show' => false],
             'taskId' => ['hide' => true],
             'trail'  => [
                 'label'    => 'Notes',
                 'typeArgs' => [
-                    'minRows' => 5,
-                    'maxRows' => 5,
+                    'minRows' => $this->isTeamTask ? 10 : 5,
+                    'maxRows' => $this->isTeamTask ? 10 : 5,
                 ],
             ],
         ];

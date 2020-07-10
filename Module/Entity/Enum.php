@@ -869,6 +869,14 @@ class Enum
     ];
 
     /**
+     * @const array 任务类型
+     */
+    const BSW_WORK_TASK_TYPE = [
+        1 => 'Member task',
+        2 => 'Team task',
+    ];
+
+    /**
      * @const array 工作任务状态
      */
     const BSW_WORK_TASK_STATE = [

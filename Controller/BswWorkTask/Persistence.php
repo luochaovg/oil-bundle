@@ -6,7 +6,9 @@ use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorAccess;
 use Leon\BswBundle\Module\Error\Error;
+use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Leon\BswBundle\Module\Form\Entity\Time;
@@ -92,6 +94,14 @@ trait Persistence
     }
 
     /**
+     * @return Button[]
+     */
+    public function persistenceOperates()
+    {
+        return $this->operatesButton();
+    }
+
+    /**
      * @param Arguments $args
      *
      * @return Message|array
@@ -106,11 +116,17 @@ trait Persistence
             return new Message('Start datetime should lte end');
         }
 
-        $days = ($endTime - $startTime) / Abs::TIME_DAY;
-        if ($days > $this->cnf->work_lifecycle_max_day) {
-            return (new Message())
-                ->setMessage('Time span less than {{ day }} days')
-                ->setArgs(['{{ day }}' => $this->cnf->work_lifecycle_max_day]);
+        if ($args->submit['type'] == 1) {
+            $days = ($endTime - $startTime) / Abs::TIME_DAY;
+            if ($days > $this->cnf->work_lifecycle_max_day) {
+                return (new Message())
+                    ->setMessage('Time span less than {{ day }} days')
+                    ->setArgs(['{{ day }}' => $this->cnf->work_lifecycle_max_day]);
+            }
+        } else {
+            [$team, $leader, $leaderId] = $this->workTaskTeamAndLeader();
+            $args->submit['userId'] = $leaderId;
+            $args->submit['weight'] = 0;
         }
 
         $args->submit['startTime'] = date(Abs::FMT_FULL, $startTime);
@@ -158,8 +174,6 @@ trait Persistence
         if (($args = $this->valid()) instanceof Response) {
             return $args;
         }
-
-        $this->removeCrumbs(0);
 
         return $this->showPersistence(['id' => $id]);
     }

@@ -677,30 +677,30 @@ class Abs
     const HTML_CODE      = "<div class='bsw-code bsw-long-text'>{value}</div>";
     const HTML_CODE_FULL = "<div class='bsw-code full bsw-long-text'>{value}</div>";
 
-    const HTML_PINK   = "<div class='ant-tag ant-tag-has-color' style='background-color: #eb2f96;'>{value}</div>";
-    const HTML_RED    = "<div class='ant-tag ant-tag-has-color' style='background-color: #f5222d;'>{value}</div>";
-    const HTML_ORANGE = "<div class='ant-tag ant-tag-has-color' style='background-color: #fa8c16;'>{value}</div>";
-    const HTML_GREEN  = "<div class='ant-tag ant-tag-has-color' style='background-color: #52c41a;'>{value}</div>";
-    const HTML_CYAN   = "<div class='ant-tag ant-tag-has-color' style='background-color: #13c2c2;'>{value}</div>";
-    const HTML_BLUE   = "<div class='ant-tag ant-tag-has-color' style='background-color: #1890ff;'>{value}</div>";
-    const HTML_PURPLE = "<div class='ant-tag ant-tag-has-color' style='background-color: #722ed1;'>{value}</div>";
-    const HTML_GRAY   = "<div class='ant-tag ant-tag-has-color' style='background-color: #d6d6d6;'>{value}</div>";
+    const HTML_PINK   = "<div class='ant-tag ant-tag-has-color' style='background-color:#eb2f96;'>{value}</div>";
+    const HTML_RED    = "<div class='ant-tag ant-tag-has-color' style='background-color:#f5222d;'>{value}</div>";
+    const HTML_ORANGE = "<div class='ant-tag ant-tag-has-color' style='background-color:#fa8c16;'>{value}</div>";
+    const HTML_GREEN  = "<div class='ant-tag ant-tag-has-color' style='background-color:#52c41a;'>{value}</div>";
+    const HTML_CYAN   = "<div class='ant-tag ant-tag-has-color' style='background-color:#13c2c2;'>{value}</div>";
+    const HTML_BLUE   = "<div class='ant-tag ant-tag-has-color' style='background-color:#1890ff;'>{value}</div>";
+    const HTML_PURPLE = "<div class='ant-tag ant-tag-has-color' style='background-color:#722ed1;'>{value}</div>";
+    const HTML_GRAY   = "<div class='ant-tag ant-tag-has-color' style='background-color:#d6d6d6;'>{value}</div>";
 
-    const HTML_PINK_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color: #eb2f96;'>{value}</div>";
-    const HTML_RED_TEXT    = "<div class='ant-tag ant-tag-has-color' style='color: #f5222d;'>{value}</div>";
-    const HTML_ORANGE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #fa8c16;'>{value}</div>";
-    const HTML_GREEN_TEXT  = "<div class='ant-tag ant-tag-has-color' style='color: #52c41a;'>{value}</div>";
-    const HTML_CYAN_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color: #13c2c2;'>{value}</div>";
-    const HTML_BLUE_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color: #1890ff;'>{value}</div>";
-    const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color: #722ed1;'>{value}</div>";
-    const HTML_GRAY_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color: #d6d6d6;'>{value}</div>";
+    const HTML_PINK_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#eb2f96;'>{value}</div>";
+    const HTML_RED_TEXT    = "<div class='ant-tag ant-tag-has-color' style='color:#f5222d;'>{value}</div>";
+    const HTML_ORANGE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color:#fa8c16;'>{value}</div>";
+    const HTML_GREEN_TEXT  = "<div class='ant-tag ant-tag-has-color' style='color:#52c41a;'>{value}</div>";
+    const HTML_CYAN_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#13c2c2;'>{value}</div>";
+    const HTML_BLUE_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#1890ff;'>{value}</div>";
+    const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color:#722ed1;'>{value}</div>";
+    const HTML_GRAY_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#d6d6d6;'>{value}</div>";
 
-    const TEXT_PINK   = "<span style='color: #eb2f96;'>{value}</span>";
-    const TEXT_RED    = "<span style='color: #f5222d;'>{value}</span>";
-    const TEXT_ORANGE = "<span style='color: #fa8c16;'>{value}</span>";
-    const TEXT_GREEN  = "<span style='color: #52c41a;'>{value}</span>";
-    const TEXT_CYAN   = "<span style='color: #13c2c2;'>{value}</span>";
-    const TEXT_BLUE   = "<span style='color: #1890ff;'>{value}</span>";
-    const TEXT_PURPLE = "<span style='color: #722ed1;'>{value}</span>";
-    const TEXT_GRAY   = "<span style='color: #d6d6d6;'>{value}</span>";
+    const TEXT_PINK   = "<span style='color:#eb2f96;'>{value}</span>";
+    const TEXT_RED    = "<span style='color:#f5222d;'>{value}</span>";
+    const TEXT_ORANGE = "<span style='color:#fa8c16;'>{value}</span>";
+    const TEXT_GREEN  = "<span style='color:#52c41a;'>{value}</span>";
+    const TEXT_CYAN   = "<span style='color:#13c2c2;'>{value}</span>";
+    const TEXT_BLUE   = "<span style='color:#1890ff;'>{value}</span>";
+    const TEXT_PURPLE = "<span style='color:#722ed1;'>{value}</span>";
+    const TEXT_GRAY   = "<span style='color:#d6d6d6;'>{value}</span>";
 }

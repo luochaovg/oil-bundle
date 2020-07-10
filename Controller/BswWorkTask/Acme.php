@@ -37,6 +37,21 @@ class Acme extends BswBackendController
     use Transfer;
 
     /**
+     * @var bool
+     */
+    protected $isTeamTask = false;
+
+    /**
+     * bootstrap
+     */
+    public function bootstrap()
+    {
+        parent::bootstrap();
+
+        $this->isTeamTask = $this->getArgs('type') === 'team';
+    }
+
+    /**
      * @return array
      * @throws
      */
@@ -491,28 +506,48 @@ class Acme extends BswBackendController
      */
     protected function operatesButton(): array
     {
-        $style = [
-            'margin' => '3px 4px 3px 0',
-            'float'  => Abs::POS_LEFT,
-        ];
-
         [$team, $leader] = $this->workTaskTeam();
+        $style = $team ? ['margin' => '3px 4px 3px 0', 'float' => Abs::POS_LEFT] : [];
+
+        $current = function (string $route, ?bool $isTeamTask = null): string {
+            $currentPage = $this->route === $route;
+            if (isset($this->isTeamTask) && isset($isTeamTask) && $this->isTeamTask !== $isTeamTask) {
+                $currentPage = false;
+            }
+
+            return $currentPage ? Abs::THEME_BSW_DARK : Abs::THEME_BSW_LIGHT;
+        };
 
         return [
-            (new Button('Task list'))
-                ->setType(Abs::THEME_DEFAULT)
+            (new Button('Member task list'))
+                ->setType($current('app_bsw_work_task_preview', false))
                 ->setRoute('app_bsw_work_task_preview')
-                ->setIcon('b:icon-mark')
-                ->setStyle($style),
+                ->setIcon('b:icon-box')
+                ->setStyle($style)
+                ->setArgs(['type' => 'member']),
+
+            (new Button('Team task list'))
+                ->setType($current('app_bsw_work_task_preview', true))
+                ->setRoute('app_bsw_work_task_preview')
+                ->setIcon('b:icon-similarproduct')
+                ->setStyle($style)
+                ->setArgs(['type' => 'team']),
+
+            (new Button('New task'))
+                ->setRoute('app_bsw_work_task_persistence')
+                ->setType($current('app_bsw_work_task_persistence'))
+                ->setIcon($this->cnf->icon_newly)
+                ->setStyle($style)
+                ->setDisplay($leader),
 
             (new Button('Weekly publication'))
-                ->setType(Abs::THEME_DEFAULT)
+                ->setType($current('app_bsw_work_week_report'))
                 ->setRoute('app_bsw_work_week_report')
                 ->setIcon('b:icon-calendar')
                 ->setStyle($style),
 
             (new Button('Progress chart'))
-                ->setType(Abs::THEME_DEFAULT)
+                ->setType($current('app_bsw_work_task_overall'))
                 ->setIcon('a:line-chart')
                 ->setClick('showResult')
                 ->setStyle($style)
@@ -524,15 +559,11 @@ class Acme extends BswBackendController
                     ]
                 ),
 
-            (new Button('New record'))
-                ->setRoute('app_bsw_work_task_persistence')
-                ->setIcon($this->cnf->icon_newly)
-                ->setDisplay(!$team || $leader),
-
             (new Button('New task'))
                 ->setType(Abs::THEME_BSW_SUCCESS)
                 ->setRoute('app_bsw_work_task_simple')
                 ->setIcon('a:bug')
+                ->setDisplay($team)
                 ->setClick('showIFrame')
                 ->setArgs(
                     [
@@ -546,6 +577,7 @@ class Acme extends BswBackendController
                 ->setType(Abs::THEME_LINK)
                 ->setRoute($this->cnf->route_logout)
                 ->setIcon($this->cnf->icon_logout)
+                ->setDisplay($team)
                 ->setConfirm($this->messageLang('Are you sure')),
         ];
     }
@@ -565,7 +597,7 @@ class Acme extends BswBackendController
 
         $leader = $leader ? ' 🚩' : null;
         $this->cnf->copyright = "{$title} © {$this->usr('usr_account')}{$leader}";
-        $this->logic->display = ['menu', 'header'];
+        $this->logic->display = ['menu', 'header', 'crumbs'];
     }
 
     /**

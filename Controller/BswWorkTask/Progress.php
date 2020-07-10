@@ -34,6 +34,8 @@ trait Progress
      */
     public function progressAnnotationOnly(): array
     {
+        [$team, $leader] = $this->workTaskTeam();
+
         /**
          * @var BswAdminUserRepository $adminRepo
          */
@@ -43,8 +45,14 @@ trait Progress
             'telegramId',
             null,
             [
-                'where' => [$this->expr->gt('kvp.telegramId', ':telegram')],
-                'args'  => ['telegram' => [0]],
+                'where' => [
+                    $this->expr->gt('kvp.telegramId', ':telegram'),
+                    $this->expr->eq('kvp.teamId', ':team'),
+                ],
+                'args'  => [
+                    'telegram' => [0],
+                    'team'     => [$team],
+                ],
             ]
         );
 
@@ -53,7 +61,7 @@ trait Progress
             'donePercent' => ['label' => Helper::cnSpace()],
             'whatToDo'    => [
                 'type'     => Mentions::class,
-                'typeArgs' => ['rows' => 4, 'enum' => $member],
+                'typeArgs' => ['rows' => 6, 'enum' => $member],
                 'rules'    => [$this->formRuleRequired()],
             ],
             'state'       => ['show' => false],
