@@ -2894,11 +2894,12 @@ class Helper
      * Filter the special char
      *
      * @param string       $string
+     * @param string       $replace
      * @param string|array $specialChar
      *
      * @return string
      */
-    public static function filterSpecialChar(string $string, $specialChar = null): string
+    public static function filterSpecialChar(string $string, ?string $replace = null, $specialChar = null): string
     {
         $specialChar = $specialChar ?: self::special4char();
 
@@ -2907,7 +2908,7 @@ class Helper
         }
 
         foreach ($specialChar as $char) {
-            $string = str_replace($char, null, $string);
+            $string = str_replace($char, $replace, $string);
         }
 
         return $string;

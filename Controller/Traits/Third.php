@@ -133,7 +133,12 @@ trait Third
         $color = new Color($colorHex);
         $color = $color->isDark() ? $colorHex : "#{$color->darken()}";
 
+        $target = Helper::filterSpecialChar($target, ' ');
         $target = current(explode(' ', $target));
+
+        if (strlen($target) > $max = 6) {
+            $target = substr($target, 0, $max);
+        }
 
         return [$target, $color];
     }

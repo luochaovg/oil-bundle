@@ -74,7 +74,7 @@ trait WeekReport
     {
         return [
             'paging' => false,
-            'select' => ['u.name', 't.title', 'tt.trail', 'tt.addTime AS time'],
+            'select' => ['u.name', 't.title', 't.type', 'tt.trail', 'tt.addTime AS time'],
             'alias'  => 'tt',
             'join'   => [
                 't' => [

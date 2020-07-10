@@ -8,6 +8,7 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
+use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Entity\BswWorkTeam;
 use Leon\BswBundle\Module\Bsw\Arguments;
@@ -205,24 +206,24 @@ class Acme extends BswBackendController
         $list = $trailRepo->lister(
             [
                 'limit'  => 0,
-                'alias'  => 't',
-                'select' => ['t.id', 'u.name', 't.reliable', 't.trail', 't.addTime AS time'],
+                'alias'  => 'tt',
+                'select' => ['u.name', 'tt.id', 'tt.reliable', 'tt.trail', 'tt.addTime AS time'],
                 'join'   => [
                     'u' => [
                         'entity' => BswAdminUser::class,
-                        'left'   => ['t.userId'],
+                        'left'   => ['tt.userId'],
                         'right'  => ['u.id'],
                     ],
                 ],
                 'where'  => [
-                    $this->expr->eq('t.taskId', ':task'),
-                    $this->expr->eq('t.state', ':state'),
+                    $this->expr->eq('tt.taskId', ':task'),
+                    $this->expr->eq('tt.state', ':state'),
                 ],
                 'args'   => [
                     'task'  => [$taskId],
                     'state' => [Abs::NORMAL],
                 ],
-                'order'  => ['t.id' => Abs::SORT_ASC],
+                'order'  => ['tt.id' => Abs::SORT_ASC],
             ]
         );
 
@@ -241,6 +242,10 @@ class Acme extends BswBackendController
     {
         $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
         foreach ($list as &$item) {
+
+            if (isset($item['type']) && $item['type'] === 2) {
+                $item['name'] = '★';
+            }
 
             $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
             $item['human'] = $cb->locale($lang)->diffForHumans();
@@ -554,7 +559,7 @@ class Acme extends BswBackendController
                 ->setArgs(
                     [
                         'status'   => Abs::RESULT_STATUS_404,
-                        'title'    => $this->fieldLang('Look forward'),
+                        'title'    => $this->twigLang('Look forward'),
                         'subTitle' => 'Gradually improving, look forward.',
                     ]
                 ),
@@ -592,7 +597,7 @@ class Acme extends BswBackendController
             return null;
         }
 
-        $title = $this->fieldLang('Work task manager');
+        $title = $this->twigLang('Work task manager');
         $this->seoTitle = $title;
 
         $leader = $leader ? ' 🚩' : null;

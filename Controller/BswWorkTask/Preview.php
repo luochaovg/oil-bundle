@@ -100,15 +100,15 @@ trait Preview
     public function previewAnnotation(): array
     {
         return [
-            'userId'    => !$this->isTeamTask,
-            'weight'    => !$this->isTeamTask,
-            'trail'     => [
+            'userId'      => !$this->isTeamTask,
+            'weight'      => !$this->isTeamTask,
+            'trail'       => [
                 'width' => 120,
                 'align' => Abs::POS_CENTER,
                 'sort'  => 3.9,
                 'html'  => true,
             ],
-            Abs::TR_ACT => [
+            Abs::TR_ACT   => [
                 'width' => 156,
                 'align' => Abs::POS_LEFT,
             ],
