@@ -425,6 +425,9 @@ div.ant-modal-mask {
 .bsw-persistence .ant-upload-drag .ant-upload-drag-icon {
   margin-bottom: 10px !important;
 }
+.bsw-persistence form.ant-form > .ant-form-item:last-child {
+  padding-top: 10px;
+}
 @media screen and (max-width: 992px) {
   .bsw-persistence {
     padding: 40px 30px;

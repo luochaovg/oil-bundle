@@ -1624,8 +1624,13 @@ class FoundationAntD extends FoundationTools {
             that.showDrawer(options);
             v.$nextTick(function () {
                 let iframe = $("#bsw-iframe");
+                let headerHeight = options.title ? 55 : 0;
                 let footerHeight = options.footer ? 73 : 0;
-                iframe.height(that.popupCosySize(true).height - footerHeight - 55);
+                let height = that.popupCosySize(true).height;
+                if (options.placement === 'top' || options.placement === 'bottom') {
+                    height = options.height || 512;
+                }
+                iframe.height(height - headerHeight - footerHeight);
                 iframe.parents("div.ant-drawer-body").css({margin: 0, padding: 0});
             });
         } else {
