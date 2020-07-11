@@ -16,4 +16,19 @@ class Input extends ArgsInput
      * @var string
      */
     public $size = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var string
+     */
+    public $type = Abs::TABS_TYPE_CARD;
+
+    /**
+     * @var int
+     */
+    public $tabBarGutter = 8;
+
+    /**
+     * @var string
+     */
+    public $position = Abs::POS_TOP;
 }

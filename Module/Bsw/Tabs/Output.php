@@ -21,4 +21,19 @@ class Output extends ArgsOutput
      * @var string
      */
     public $size;
+
+    /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var int
+     */
+    public $tabBarGutter;
+
+    /**
+     * @var string
+     */
+    public $position;
 }

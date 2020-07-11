@@ -114,6 +114,10 @@ class Abs
     const LIST_TYPE_IMG      = 'picture';
     const LIST_TYPE_IMG_CARD = 'picture-card';
 
+    const TABS_TYPE_LINE     = 'line';
+    const TABS_TYPE_CARD     = 'card';
+    const TABS_TYPE_EDITABLE = 'editable-card';
+
     const THEME_PRIMARY       = 'primary';
     const THEME_DASHED        = 'dashed';
     const THEME_DANGER        = 'danger';

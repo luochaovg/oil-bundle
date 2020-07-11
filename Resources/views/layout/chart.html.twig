@@ -4,7 +4,9 @@
 {% block page %}
   {% block filterBefore %}{% endblock %}
   {% if 'filter' not in logic.display ?? [] %}
-    {% include 'limbs/filter.html.twig' %}
+    {% block filter %}
+      {% include 'limbs/filter.html.twig' %}
+    {% endblock %}
   {% endif %}
   {% block filterAfter %}{% endblock %}
   {% block chartBefore %}{% endblock %}

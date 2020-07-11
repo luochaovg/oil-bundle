@@ -2,13 +2,17 @@
 
 {% block w3c %}
   {% if limbsInnocence ?? true %}
-    {% include 'limbs/innocence.html.twig' %}
+    {% block innocence %}
+      {% include 'limbs/innocence.html.twig' %}
+    {% endblock %}
   {% endif %}
   <div class="{{ ['bsw-body', tplBodyClass ?? null]|filter(v => v)|join(' ') }}">
     <template>
       <!-- init -->
       {% if limbsInit ?? true %}
-        {% include 'limbs/init.html.twig' %}
+        {% block init %}
+          {% include 'limbs/init.html.twig' %}
+        {% endblock %}
       {% endif %}
       <!-- modal -->
       {% if 'modal' not in logic.display ?? [] %}

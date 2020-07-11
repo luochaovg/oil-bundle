@@ -106,6 +106,9 @@ class Module extends Bsw
 
         $output->fit = $this->input->fit;
         $output->size = $this->input->size;
+        $output->type = $this->input->type;
+        $output->tabBarGutter = $this->input->tabBarGutter;
+        $output->position = $this->input->position;
 
         $output = $this->caller(
             $this->method,
