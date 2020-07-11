@@ -32,7 +32,6 @@ trait WebCrumbs
 
                 $crumbsMap = $this->parameters('crumbs_map');
                 $routes = $this->getRouteCollection();
-                $routeClsMap = Helper::arrayColumn($routes, 'desc_cls', 'route');
                 $routeFnMap = Helper::arrayColumn($routes, 'desc_fn', 'route');
 
                 /**
@@ -45,20 +44,13 @@ trait WebCrumbs
                  */
                 $inStack = function (string $route, array $stack = []) use (
                     $crumbsMap,
-                    $routeClsMap,
                     $routeFnMap,
                     $allMenuDetail,
                     &$inStack
                 ) {
                     // manual
                     if (isset($crumbsMap[$route])) {
-
-                        $info = $this->labelWithMenu(
-                            $allMenuDetail,
-                            $route,
-                            $routeFnMap[$route],
-                            $routeClsMap[$route]
-                        );
+                        $info = $allMenuDetail[$route]['info'] ?? $this->twigLang($routeFnMap[$route]);
                         array_unshift($stack, new Crumb($info, $route));
 
                         return $inStack($crumbsMap[$route], $stack);
@@ -66,13 +58,7 @@ trait WebCrumbs
 
                     // auto
                     if (!empty($routeFnMap[$route])) {
-
-                        $info = $this->labelWithMenu(
-                            $allMenuDetail,
-                            $route,
-                            $routeFnMap[$route],
-                            $routeClsMap[$route]
-                        );
+                        $info = $allMenuDetail[$route]['info'] ?? $this->twigLang($routeFnMap[$route]);
                         array_unshift($stack, new Crumb($info, $route));
 
                         foreach ($this->parameters('crumbs_preview_pre') as $keyword) {

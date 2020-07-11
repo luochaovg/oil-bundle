@@ -81,10 +81,10 @@ trait Style
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
-    public function getDisplay(): ?string
+    public function isDisplay(): bool
     {
-        return $this->style['display'] ?? null;
+        return ($this->style['display'] ?? null) !== 'none';
     }
 }

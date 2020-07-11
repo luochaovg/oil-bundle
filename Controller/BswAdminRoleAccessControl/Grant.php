@@ -86,8 +86,7 @@ trait Grant
 
         $this->appendSrcJs('diy;layout/grant');
         if ($target = $this->getArgs('target')) {
-            $this->changeCrumbs(null, null, '');
-            $this->appendCrumbs($target, $this->cnf->icon_warning);
+            $this->changeCrumbs("%s >> {$target}");
         }
 
         /**

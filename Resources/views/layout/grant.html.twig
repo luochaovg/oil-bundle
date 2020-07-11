@@ -17,9 +17,8 @@
         {% set danger = logic.danger %}
         {% set realColumn = (totalColumn - labelColumn) %}
         <a-form-item
-          :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
-          :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
-          label="{{ 'Action'|trans({}, 'twig') }}"
+          :label-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
+          :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
         >
           <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
           <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
@@ -27,11 +26,11 @@
         <a-form-item v-show="false">
           <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
         </a-form-item>
-        {% for field, item in logic.form %}
+        {% for index, item in logic.form %}
           <a-form-item
-            :label-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ labelColumn }} }}"
-            :wrapper-col="{lg: { span: {{ totalColumn }} }, xl: { span: {{ realColumn }} }}"
-            label="{{ item.label|trans({}, 'twig') }}"
+            :label-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
+            :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
+            label="{{ item.info }}"
           >
             {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
             <a-checkbox-group
@@ -42,13 +41,13 @@
               :disabled="{{ item.type.disabled ? 'true' : 'false' }}"
               placeholder="{{ item.type.placeholder }}"
               {{ item.type.attributes|raw }}
-              v-decorator="['{{ field }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
+              v-decorator="['{{ index }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
             >
               <a-row>
                 {% for value, label in item.type.enum %}
                   {% set disabled = attribute(logic.disabled, value) ?? false %}
                   {% set _danger = attribute(danger, value) ?? null %}
-                  <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8" :xxl="6">
+                  <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
                     {% if _danger is not null %}
                       <a-popover overlay-class-name="bsw-popover">
                         <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
@@ -72,9 +71,7 @@
             </a-checkbox-group>
           </a-form-item>
         {% endfor %}
-        <a-form-item
-          :wrapper-col="{lg: { span: {{ totalColumn }}, offset: 0 }, xl: { span: {{ realColumn }}, offset: {{ labelColumn }} }}"
-        >
+        <a-form-item :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}">
           {% for form in persistence.operates %}
             {% include 'form/button.html.twig' %}
           {% endfor %}

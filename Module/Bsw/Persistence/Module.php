@@ -378,7 +378,7 @@ class Module extends Bsw
              */
             $key = 'persistenceFileListKeyCollect';
             $form->setFileListKey("${key}.${field}.list");
-            $form->setDisabled(!$this->web->routeIsAccess($form->getRouteForAccess()));
+            $form->setDisplay($this->web->routeIsAccess($form->getRouteForAccess()));
             $output->fileListKeyCollect[$field] = [
                 'key'  => $key,
                 'list' => [],
@@ -708,7 +708,7 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
-            $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
+            $operate->setDisplay($this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
         return [$_record, $operates, $format, $original];

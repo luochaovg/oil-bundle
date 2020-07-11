@@ -779,13 +779,11 @@ class Module extends Bsw
                     'condition' => $this->input->condition,
                 ]
             );
-            $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
 
             $item[$operate] = null;
-            $maxButtons = max($maxButtons, count($buttons));
+            $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
 
             foreach ($buttons as $index => $button) {
-
                 $buttonCls = Button::class;
                 if (!Helper::extendClass($button, $buttonCls, true)) {
                     $fn = self::OPERATES;
@@ -800,11 +798,19 @@ class Module extends Bsw
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
-                $button->setDisabled(!$this->web->routeIsAccess($button->getRouteForAccess()));
+                $button->setDisplay($this->web->routeIsAccess($button->getRouteForAccess()));
 
                 $item[$operate] .= $this->web->getButtonHtml($button);
             }
 
+            $buttonsDisplay = 0;
+            foreach ($buttons as $button) {
+                if ($button->isDisplay()) {
+                    $buttonsDisplay += 1;
+                }
+            }
+
+            $maxButtons = max($maxButtons, $buttonsDisplay);
             $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";
 
             /**

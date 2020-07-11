@@ -584,7 +584,6 @@ class BswBackendController extends BswWebController
         $annotation = [];
 
         foreach ($access as $key => $item) {
-
             $enum = [];
             foreach ($item['items'] as $route => $target) {
                 if ($target['join'] === false || $target['same']) {
@@ -593,19 +592,16 @@ class BswBackendController extends BswWebController
                 $enum[$route] = $target['info'];
             }
 
-            $_key = md5($item['label']);
-
-            if (!isset($annotation[$_key])) {
-                $annotation[$_key] = [
-                    'label' => $item['label'] ?: 'UnSetDescription',
+            if (!isset($annotation[$key])) {
+                $annotation[$key] = [
+                    'info'  => $item['info'] ?: 'UnSetDescription',
                     'type'  => new Checkbox(),
                     'enum'  => [],
                     'value' => [],
                 ];
             }
 
-            $action = &$annotation[$_key];
-            $action['enum'] = array_merge($action['enum'], $enum);
+            $annotation[$key]['enum'] = array_merge($annotation[$key]['enum'], $enum);
         }
 
         return $annotation;

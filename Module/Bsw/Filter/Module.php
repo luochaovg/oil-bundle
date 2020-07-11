@@ -473,7 +473,7 @@ class Module extends Bsw
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
             $operate->setSize($this->input->filterFormSize);
-            $operate->setDisabled(!$this->web->routeIsAccess($operate->getRouteForAccess()));
+            $operate->setDisplay($this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
         return [$record, $operates, $format];

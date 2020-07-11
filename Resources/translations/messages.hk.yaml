@@ -1,5 +1,3 @@
-# bsw logic
-
 Uploaded file exceeds the php directive:    '上傳文件大小超過後端限制'
 Uploaded file exceeds the html directive:   '上傳文件大小超過前端限制'
 Uploaded file was only partially:           '上傳文件不完整'
@@ -79,8 +77,6 @@ Start datetime should lte end:              '開始時間應小於結束時間'
 Time span less than {{ day }} days:         '時間跨度應少於{{ day }}天'
 Progress must enlarge:                      '進度必須向上更新'
 Switch lang success, current {{ lang }}:    '語言切換成功: {{ lang }}'
-
-# bsw error
 
 Invalid account:                            '賬號信息有誤'
 Accounts frozen:                            '賬號被凍結'
@@ -163,8 +159,6 @@ Refunded in full:                           '已全額退款'
 No record:                                  '結果集為空'
 Without change:                             '沒有任何變動'
 Please give qualified input:                '請給定符合條件的輸入'
-
-# bsw validator
 
 Is array:                                   '為數組'
 Set default value:                          '設置默認值'

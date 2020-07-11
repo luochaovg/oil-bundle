@@ -164,7 +164,7 @@
       .bsw-persistence {
         padding: 60px 40px;
         @media screen and (max-width: @mobile-lg) {
-          padding: 30px;
+          padding: 30px !important;
         }
       }
     }
@@ -312,15 +312,21 @@ thead.ant-table-thead > tr > th > div {
   }
 
   @media screen and (max-width: @mobile-lg) {
-    padding: 40px 30px;
+    padding: 40px 30px !important;
   }
 }
 
-.bsw-grant form {
-  max-width: unset;
+.bsw-grant {
+  .bsw-persistence {
+    padding: 80px 120px;
+  }
 
-  .ant-checkbox-group {
-    line-height: unset;
+  form {
+    max-width: unset;
+
+    .ant-checkbox-group {
+      line-height: unset;
+    }
   }
 }
 

@@ -465,44 +465,6 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * Label with menu
-     *
-     * @param array  $allMenuDetail
-     * @param string $route
-     * @param string $methodInfo
-     * @param string $classInfo
-     *
-     * @return string
-     */
-    public function labelWithMenu(
-        array $allMenuDetail,
-        string $route,
-        string $methodInfo,
-        string $classInfo
-    ): string {
-
-        $map = [
-            'Preview record'     => 'Preview',
-            'Persistence record' => 'Persistence',
-        ];
-
-        if (!($menuSet = $allMenuDetail[$route]['info'] ?? null)) {
-            $route = str_replace(Abs::TAG_PERSISTENCE, Abs::TAG_PREVIEW, $route);
-            $menuSet = $allMenuDetail[$route]['info'] ?? null;
-        }
-
-        if (isset($map[$methodInfo])) {
-            $split = ['cn' => ''][$this->header->lang] ?? ' ';
-            $twig = $menuSet ?? $this->twigLang($classInfo);
-            $twig = $twig . $split . $this->twigLang($map[$methodInfo]);
-        } else {
-            $twig = $menuSet ?? $this->twigLang($methodInfo);
-        }
-
-        return $twig;
-    }
-
-    /**
      * Valid args
      *
      * @param int  $type
@@ -673,7 +635,6 @@ abstract class BswWebController extends AbstractController
         $route = $this->getRouteCollection(true);
 
         foreach ($route as $class => $item) {
-
             [$classify, $access] = $this->getAccessControlAnnotation($class);
             foreach ($access as $method => &$target) {
 
@@ -701,34 +662,23 @@ abstract class BswWebController extends AbstractController
         $_accessList = [];
         $masterMenuDetail = $menuAssist['masterMenuDetailForRender'] ?? [];
         $slaveMenuDetail = $menuAssist['slaveMenuDetailForRender'] ?? [];
-        $masterMenu = $menuAssist['masterMenuForRender'] ?? [];
+        $allMenuDetail = array_merge($masterMenuDetail, $slaveMenuDetail);
 
         foreach ($accessList as $classInfo => $items) {
+            $id = md5($classInfo);
             foreach ($items as $route => $item) {
-                if (!isset($_accessList[$classInfo])) {
-                    $_accessList[$classInfo] = [
-                        'label' => $classInfo,
+                if (!isset($_accessList[$id])) {
+                    $_accessList[$id] = [
+                        'info'  => $this->twigLang($classInfo),
                         'items' => [],
                     ];
                 }
-
-                $target = &$_accessList[$classInfo]['items'];
-                $target[$route] = $item;
-                $target[$route]['info'] = $this->labelWithMenu(
-                    array_merge($masterMenuDetail, $slaveMenuDetail),
-                    $route,
-                    $target[$route]['info'],
-                    $classInfo
-                );
-
-                $menuId = $slaveMenuDetail[$route]['parentMenuId'] ?? -1;
-                if (isset($masterMenu[$menuId])) {
-                    $_accessList[$classInfo]['label'] = $masterMenu[$menuId]->getLabel();
-                }
+                $item['info'] = $allMenuDetail[$route]['info'] ?? $this->twigLang($item['info']);
+                $_accessList[$id]['items'][$route] = $item;
             }
         }
 
-        return $_accessList;
+        return array_values($_accessList);
     }
 
     /**
