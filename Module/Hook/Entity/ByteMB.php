@@ -38,6 +38,6 @@ class ByteMB extends Hook
      */
     public function persistence($value, array $args, array $extraArgs = [])
     {
-        return $value * static::REDOUBLE;
+        return intval($value) * static::REDOUBLE;
     }
 }

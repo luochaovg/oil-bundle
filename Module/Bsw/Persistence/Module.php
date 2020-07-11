@@ -1060,7 +1060,7 @@ class Module extends Bsw
         } else {
             [$submit, $record, $extraSubmit, $recordBefore, $recordDiff] = $result;
         }
-
+        
         // get annotation
         [$persistAnnotation, $_persistAnnotation, $hooks] = $this->handleAnnotation($record);
 
