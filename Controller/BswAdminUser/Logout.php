@@ -1,6 +1,6 @@
 <?php
 
-namespace Leon\BswBundle\Controller\BswMixed;
+namespace Leon\BswBundle\Controller\BswAdminUser;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -13,7 +13,7 @@ trait Logout
     /**
      * User logout
      *
-     * @Route("/user/logout", name="app_user_logout")
+     * @Route("/bsw-admin-user/logout", name="app_bsw_admin_user_logout")
      *
      * @return Response
      */

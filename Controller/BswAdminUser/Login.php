@@ -1,6 +1,6 @@
 <?php
 
-namespace Leon\BswBundle\Controller\BswMixed;
+namespace Leon\BswBundle\Controller\BswAdminUser;
 
 use Leon\BswBundle\Component\GoogleAuthenticator;
 use Leon\BswBundle\Component\Helper;
@@ -32,7 +32,7 @@ trait Login
     /**
      * User login
      *
-     * @Route("/user/login", name="app_user_login")
+     * @Route("/bsw-admin-user/login", name="app_bsw_admin_user_login")
      *
      * @return Response
      */
@@ -90,7 +90,7 @@ trait Login
     /**
      * User login handler
      *
-     * @Route("/user/sign-in", name="app_user_login_handler", methods="POST")
+     * @Route("/bsw-admin-user/login-handler", name="app_bsw_admin_user_login_handler", methods="POST")
      *
      * @I("account", rules="phone")
      * @I("password", rules="rsa|password")
@@ -185,6 +185,6 @@ trait Login
         $fallback = end($fallback);
         $fallback = $fallback ?: $this->urlSafe($this->cnf->route_default);
 
-        return $this->okayAjax(['href' => $fallback], 'Login success');
+        return $this->okayAjax(['href' => $fallback,], 'Login success', [], 1);
     }
 }

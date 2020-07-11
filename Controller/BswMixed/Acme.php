@@ -16,10 +16,7 @@ class Acme extends BswBackendController
     use CleanBackend;
     use Export;
     use Language;
-    use Login;
-    use Logout;
     use NumberCaptcha;
-    use Profile;
     use SiteIndex;
     use Telegram;
     use ThirdMessage;

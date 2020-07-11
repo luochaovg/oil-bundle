@@ -18,6 +18,9 @@ class Acme extends BswBackendController
 {
     use Preview;
     use Persistence;
+    use Login;
+    use Logout;
+    use Profile;
 
     /**
      * @param Arguments $args

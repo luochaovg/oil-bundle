@@ -1,6 +1,6 @@
 <?php
 
-namespace Leon\BswBundle\Controller\BswMixed;
+namespace Leon\BswBundle\Controller\BswAdminUser;
 
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Arguments;
@@ -59,7 +59,7 @@ trait Profile
     /**
      * User profile
      *
-     * @Route("/user/profile", name="app_user_profile")
+     * @Route("/bsw-admin-user/profile", name="app_bsw_admin_user_profile")
      *
      * @return Response
      */
