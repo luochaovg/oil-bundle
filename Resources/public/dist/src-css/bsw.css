@@ -313,7 +313,7 @@ div.ant-modal-mask {
 }
 @media screen and (max-width: 992px) {
   .ant-layout .ant-layout-content.iframe .bsw-persistence {
-    padding: 30px;
+    padding: 30px !important;
   }
 }
 .ant-layout .ant-layout-content .ant-breadcrumb {
@@ -430,14 +430,38 @@ div.ant-modal-mask {
 }
 @media screen and (max-width: 992px) {
   .bsw-persistence {
-    padding: 40px 30px;
+    padding: 40px 30px !important;
   }
+}
+.bsw-grant .bsw-persistence {
+  padding: 80px 120px;
 }
 .bsw-grant form {
   max-width: unset;
 }
 .bsw-grant form .ant-checkbox-group {
   line-height: unset;
+}
+.bsw-grant .ant-form-item-label > label {
+  font-size: 16px;
+}
+.bsw-checkbox-middle form input[type=checkbox],
+.bsw-checkbox-middle form input[type=radio] {
+  width: 16px;
+  height: 16px;
+}
+.bsw-checkbox-middle .ant-checkbox-inner {
+  width: 18px;
+  height: 18px;
+}
+.bsw-checkbox-middle .ant-checkbox-inner:after {
+  top: 46%;
+  left: 23%;
+  width: 6.5px;
+  height: 11px;
+}
+.bsw-checkbox-middle .ant-checkbox {
+  top: -2px;
 }
 .ant-form-item-label label:after {
   content: ":";
@@ -754,6 +778,9 @@ blockquote p {
 }
 .bsw-work-task-week-report .ant-timeline-item-tail {
   border-left: 1px dotted #8ab9ff;
+}
+.preview-children {
+  background-color: rgba(50, 144, 251, 0.03);
 }
 .task-status-done {
   background-color: rgba(0, 130, 41, 0.1);

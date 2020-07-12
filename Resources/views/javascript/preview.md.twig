@@ -1,6 +1,6 @@
 bsw.configure({
     data: {
-        previewColumns: {{ preview.columnsJson|raw }},
+        previewColumns: [],
         previewList: {{ preview.listJson|raw }},
         previewSelectedRow: [],
         previewDynamicRefresh: {{ preview.dynamic }},
@@ -42,6 +42,9 @@ bsw.configure({
         },
     },
     logic: {
+        previewColumnHandler(v) {
+            v.previewColumns = bsw.jsonFnHandler({{ preview.columnsJson|raw }}, 'customRender');
+        },
         previewResize(v) {
             let upper = {{ preview.scroll.x ?? preview.scrollX }};
             let columns = v.previewColumns;

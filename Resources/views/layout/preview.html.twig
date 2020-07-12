@@ -33,7 +33,8 @@
             type: '{{ (preview.choice.multiple ?? false) ? 'checkbox' : 'radio' }}',
             selectedRowKeys: previewSelectedRow,
             onChange: previewSelectedChange,
-            selections: true
+            selections: true,
+            fixed: {{ preview.choiceFixed ? 'true' : 'false' }}
           }"
         {% endif %}
         :scroll="{{ {x: preview.scrollX}|merge(preview.scroll)|stringify }}"

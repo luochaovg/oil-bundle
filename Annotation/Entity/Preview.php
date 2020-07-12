@@ -40,6 +40,21 @@ class Preview extends Annotation
     public $align;
 
     /**
+     * @var bool
+     */
+    public $ellipsis = false;
+
+    /**
+     * @var bool
+     */
+    public $headerColumn = 1;
+
+    /**
+     * @var string
+     */
+    public $customRender;
+
+    /**
      * @var false|string
      */
     public $fixed;

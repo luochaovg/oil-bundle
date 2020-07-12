@@ -377,7 +377,7 @@ class Module extends Bsw
              * File list key
              */
             $key = 'persistenceFileListKeyCollect';
-            $form->setFileListKey("${key}.${field}.list");
+            $form->setFileListKey("{$key}.{$field}.list");
             $form->setDisplay($this->web->routeIsAccess($form->getRouteForAccess()));
             $output->fileListKeyCollect[$field] = [
                 'key'  => $key,

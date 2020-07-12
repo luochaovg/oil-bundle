@@ -484,6 +484,9 @@ class Module extends Bsw
                 'title'     => $this->web->fieldLang($item['label']),
                 'dataIndex' => $field,
                 'fixed'     => $item['fixed'],
+                'align'     => $item['align'],
+                'ellipsis'  => $item['ellipsis'],
+                'colSpan'   => $item['headerColumn'],
             ];
 
             $pk = $this->entity ? $this->repository->pk() : Abs::PK;
@@ -505,8 +508,8 @@ class Module extends Bsw
                 $scrollX += $width;
             }
 
-            if ($align = $item['align']) {
-                $column['align'] = $align;
+            if ($customRender = $item['customRender']) {
+                $column['customRender'] = "fn:{$customRender}";
             }
 
             /**
@@ -973,6 +976,58 @@ class Module extends Bsw
     }
 
     /**
+     * Get preview data with children
+     *
+     * @param array  $list
+     * @param string $parentKey
+     * @param array  $hooks
+     * @param Output $output
+     * @param array  $previewAnnotation
+     * @param array  $mixedAnnotation
+     *
+     * @return array
+     * @throws
+     */
+    protected function getPreviewDataWithChildren(
+        array $list,
+        string $parentKey,
+        array $hooks,
+        Output $output,
+        array $previewAnnotation,
+        array $mixedAnnotation
+    ): array {
+
+        foreach ($list as &$record) {
+            $parentId = $record[$parentKey] ?? null;
+            if (empty($parentId)) {
+                break;
+            }
+            $query = $this->getQueryOptions($parentId);
+            $childrenList = $this->getPreviewData($query, $output, $mixedAnnotation, $parentId);
+            if ($childrenList) {
+                $childrenList = $this->handlePreviewData(
+                    $childrenList,
+                    $hooks,
+                    $previewAnnotation,
+                    $output,
+                    $parentId
+                );
+                $this->correctPreviewColumn($childrenList, $output);
+                $record[Abs::TAG_CHILDREN] = $this->getPreviewDataWithChildren(
+                    $childrenList,
+                    $parentKey,
+                    $hooks,
+                    $output,
+                    $previewAnnotation,
+                    $mixedAnnotation
+                );
+            }
+        }
+
+        return $list;
+    }
+
+    /**
      * @return ArgsOutput
      * @throws
      */
@@ -1007,25 +1062,14 @@ class Module extends Bsw
 
         if ($this->entity && $this->isChildrenNecessary()) {
             $parentKey = is_string($this->input->parentField) ? $this->input->parentField : $this->repository->pk();
-            foreach ($list as &$record) {
-                $parentId = $record[$parentKey] ?? null;
-                if (empty($parentId)) {
-                    break;
-                }
-                $query = $this->getQueryOptions($parentId);
-                $childrenList = $this->getPreviewData($query, $output, $mixedAnnotation, $parentId);
-                if ($childrenList) {
-                    $childrenList = $this->handlePreviewData(
-                        $childrenList,
-                        $hooks,
-                        $previewAnnotation,
-                        $output,
-                        $parentId
-                    );
-                    $this->correctPreviewColumn($childrenList, $output);
-                    $record[Abs::TAG_CHILDREN] = $childrenList;
-                }
-            }
+            $list = $this->getPreviewDataWithChildren(
+                $list,
+                $parentKey,
+                $hooks,
+                $output,
+                $previewAnnotation,
+                $mixedAnnotation
+            );
         }
 
         $choice = $this->input->choice ?? new Choice();
@@ -1042,6 +1086,7 @@ class Module extends Bsw
         $output->slotsJson = Helper::jsonStringify($output->slots, '{}');
         $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
+        $output->choiceFixed = $this->input->choiceFixed;
         $output->border = $this->input->border;
         $output->childrenName = $this->input->childrenName;
         $output->expandRows = $this->input->expandRows;

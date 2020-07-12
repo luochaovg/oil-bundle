@@ -322,7 +322,7 @@ trait Foundation
         $deviceId = (($this->header->device ?? null) === $uuid);
 
         if ($userId || $deviceId) {
-            $this->logError("{$message} for (UUID: ${uuid})");
+            $this->logError("{$message} for (UUID: {$uuid})");
         } else {
             $this->logWarning($message);
         }

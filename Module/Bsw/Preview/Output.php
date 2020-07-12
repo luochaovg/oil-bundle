@@ -8,6 +8,16 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 class Output extends ArgsOutput
 {
     /**
+     * @var Choice
+     */
+    public $choice;
+
+    /**
+     * @var bool
+     */
+    public $choiceFixed;
+
+    /**
      * @var array
      */
     public $columns = [];
@@ -81,11 +91,6 @@ class Output extends ArgsOutput
      * @var bool
      */
     public $size;
-
-    /**
-     * @var Choice
-     */
-    public $choice;
 
     /**
      * @var array

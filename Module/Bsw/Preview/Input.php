@@ -16,6 +16,11 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
+    public $choiceFixed = true;
+
+    /**
+     * @var bool
+     */
     public $border = true;
 
     /**
