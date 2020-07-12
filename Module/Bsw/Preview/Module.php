@@ -28,14 +28,16 @@ class Module extends Bsw
     /**
      * @const string
      */
-    const BEFORE_HOOK   = 'BeforeHook';
-    const AFTER_HOOK    = 'AfterHook';
-    const CHOICE        = 'Choice';
-    const BEFORE_RENDER = 'BeforeRender';
-    const CHARM         = 'Charm';
-    const OPERATES      = 'RecordOperates';
-    const MIXED_HANDLER = 'MixedHandler';
-    const PREVIEW_DATA  = 'PreviewData';
+    const QUERY_PARENT   = 'QueryParent';
+    const QUERY_CHILDREN = 'QueryChildren';
+    const BEFORE_HOOK    = 'BeforeHook';
+    const AFTER_HOOK     = 'AfterHook';
+    const CHOICE         = 'Choice';
+    const BEFORE_RENDER  = 'BeforeRender';
+    const CHARM          = 'Charm';
+    const OPERATES       = 'RecordOperates';
+    const MIXED_HANDLER  = 'MixedHandler';
+    const PREVIEW_DATA   = 'PreviewData';
 
     /**
      * @const string
@@ -43,14 +45,14 @@ class Module extends Bsw
     const DRESS_DEFAULT = 'default';
 
     /**
-     * @var array
-     */
-    protected $query = [];
-
-    /**
      * @var string
      */
     protected $methodTailor = 'tailorPreview';
+
+    /**
+     * @var bool
+     */
+    protected $isExport = false;
 
     /**
      * @var array
@@ -135,37 +137,68 @@ class Module extends Bsw
     }
 
     /**
+     * @return bool
+     */
+    protected function isChildrenNecessary(): bool
+    {
+        return $this->input->parentField && !$this->isExport && !$this->input->condition;
+    }
+
+    /**
+     * Get query name
+     *
+     * @param int $parentId
+     *
+     * @return string
+     */
+    protected function choiceQueryMethod(?int $parentId = null): string
+    {
+        if ($this->isChildrenNecessary()) {
+            return $parentId ? self::QUERY_CHILDREN : self::QUERY_PARENT;
+        }
+
+        return self::QUERY;
+    }
+
+    /**
      * Get query options
+     *
+     * @param int $parentId
      *
      * @return array
      * @throws
      */
-    protected function getQueryOptions(): array
+    protected function getQueryOptions(?int $parentId = null): array
     {
-        if ($this->query) {
-            return $this->query;
+        $fn = $this->choiceQueryMethod($parentId);
+        $arguments = $parentId ? $this->arguments(['parent' => $parentId]) : null;
+        $query = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
+
+        if ($fn === self::QUERY_CHILDREN && empty($query)) {
+            throw new ModuleException("Query {$this->class}::{$this->method}{$fn}():array returned must be not empty");
         }
 
-        $this->query = $this->caller($this->method, self::QUERY, Abs::T_ARRAY, []);
-        if ($this->entity && !isset($this->query['alias'])) {
-            $this->query['alias'] = Helper::tableNameToAlias($this->entity);
+        if ($this->entity && !isset($query['alias'])) {
+            $query['alias'] = Helper::tableNameToAlias($this->entity);
         }
 
-        $query = $this->web->parseFilter($this->input->condition);
-        $this->query = Helper::merge($this->query, $query);
+        $condition = $this->web->parseFilter($this->input->condition);
+        $query = Helper::merge($query, $condition);
 
-        return $this->query;
+        return $query;
     }
 
     /**
      * List entity fields
      *
+     * @param array $query
+     *
      * @return array
      * @throws
      */
-    protected function listEntityFields(): array
+    protected function listEntityFields(array $query): array
     {
-        $entityList = $this->listEntityBasicFields();
+        $entityList = $this->listEntityBasicFields($query);
 
         $previewAnnotation = $previewAnnotationFull = [];
         $mixedAnnotation = $mixedAnnotationFull = [];
@@ -339,18 +372,19 @@ class Module extends Bsw
     /**
      * Annotation handler
      *
+     * @param array  $query
      * @param Output $output
      *
      * @return array
      * @throws
      */
-    protected function handleAnnotation(Output $output): array
+    protected function handleAnnotation(array $query, Output $output): array
     {
         /**
          * preview annotation
          */
 
-        [$previewAnnotation, $previewAnnotationFull, $mixedAnnotation] = $this->listEntityFields();
+        [$previewAnnotation, $previewAnnotationFull, $mixedAnnotation] = $this->listEntityFields($query);
 
         /**
          * preview annotation only
@@ -536,13 +570,15 @@ class Module extends Bsw
     /**
      * Get preview data
      *
+     * @param array  $query
      * @param Output $output
      * @param array  $mixedAnnotation
+     * @param int    $parentId
      *
      * @return array|ArgsOutput
      * @throws ModuleException
      */
-    protected function getPreviewData(Output $output, array $mixedAnnotation)
+    protected function getPreviewData(array $query, Output $output, array $mixedAnnotation, int $parentId = 0)
     {
         /**
          * sequence for order
@@ -566,14 +602,14 @@ class Module extends Bsw
                 $made = $mixed[Abs::ORDER] ? Abs::ORDER : Abs::SORT;
                 $unmade = $mixed[Abs::ORDER] ? Abs::SORT : Abs::ORDER;
 
-                $this->query[$made] = [$mixed['field'] => $this->long2sort[$direction]];
-                unset($this->query[$unmade]);
+                $query[$made] = [$mixed['field'] => $this->long2sort[$direction]];
+                unset($query[$unmade]);
                 break;
             }
 
             $sequence = array_merge(
-                $this->query[Abs::ORDER] ?? [],
-                $this->query[Abs::SORT] ?? []
+                $query[Abs::ORDER] ?? [],
+                $query[Abs::SORT] ?? []
             );
 
             if ($sequence) {
@@ -592,18 +628,22 @@ class Module extends Bsw
                 'page'   => 1,
                 'limit'  => Abs::PAGE_DEFAULT_SIZE,
             ],
-            $this->query
+            $query
         );
 
-        if (($page = intval($this->web->getArgs(Abs::PG_PAGE))) > 0) {
-            $query['page'] = intval($page) ?: 1;
-        }
+        if (!$parentId) {
+            if (($page = intval($this->web->getArgs(Abs::PG_PAGE))) > 0) {
+                $query['page'] = intval($page) ?: 1;
+            }
 
-        if (($limit = intval($this->web->getArgs(Abs::PG_PAGE_SIZE))) > 0) {
-            if (in_array($limit, Abs::PG_PAGE_SIZE_OPTIONS)) {
-                $query['limit'] = $limit;
+            if (($limit = intval($this->web->getArgs(Abs::PG_PAGE_SIZE))) > 0) {
+                if (in_array($limit, Abs::PG_PAGE_SIZE_OPTIONS)) {
+                    $query['limit'] = $limit;
+                }
             }
         }
+
+        $fn = $this->choiceQueryMethod($parentId);
 
         /**
          * Fetch data
@@ -617,8 +657,9 @@ class Module extends Bsw
             }
 
             $arguments = $this->arguments(['target' => $query]);
-            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
-            if ($this->web->getArgs('scene') === 'export') {
+            $query = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
+
+            if ($this->isExport) {
                 return $this->showMessage(
                     (new Message())->setSets(
                         [
@@ -633,11 +674,13 @@ class Module extends Bsw
 
         } else {
             $arguments = $this->arguments(['target' => $query]);
-            $query = $this->tailor($this->methodTailor, self::QUERY, Abs::T_ARRAY, $arguments);
+            $query = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
             $list = $this->manualLister($query);
         }
 
-        $output->query = $query;
+        if (!$parentId) {
+            $output->query = $query;
+        }
 
         /**
          * pagination
@@ -647,12 +690,14 @@ class Module extends Bsw
 
             $page = $list;
             $list = Helper::dig($page, Abs::PG_ITEMS);
-            $output->page = [
-                'currentPage' => $page[Abs::PG_CURRENT_PAGE],
-                'pageSize'    => $page[Abs::PG_PAGE_SIZE],
-                'totalPage'   => $page[Abs::PG_TOTAL_PAGE],
-                'totalItem'   => $page[Abs::PG_TOTAL_ITEM],
-            ];
+            if (!$parentId) {
+                $output->page = [
+                    'currentPage' => $page[Abs::PG_CURRENT_PAGE],
+                    'pageSize'    => $page[Abs::PG_PAGE_SIZE],
+                    'totalPage'   => $page[Abs::PG_TOTAL_PAGE],
+                    'totalItem'   => $page[Abs::PG_TOTAL_ITEM],
+                ];
+            }
         }
 
         return $list;
@@ -665,12 +710,19 @@ class Module extends Bsw
      * @param array  $hooks
      * @param array  $previewAnnotation
      * @param Output $output
+     * @param int    $parentId
      *
      * @return array
      * @throws
      */
-    protected function handlePreviewData(array $list, array $hooks, array $previewAnnotation, Output $output): array
-    {
+    protected function handlePreviewData(
+        array $list,
+        array $hooks,
+        array $previewAnnotation,
+        Output $output,
+        int $parentId = 0
+    ): array {
+
         $basicNumber = ($output->query['page'] - 1) * $output->query['limit'] + 1;
 
         /**
@@ -780,7 +832,7 @@ class Module extends Bsw
                 ]
             );
 
-            $item[$operate] = null;
+            $recordOperates = [];
             $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
 
             foreach ($buttons as $index => $button) {
@@ -798,9 +850,14 @@ class Module extends Bsw
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
                 $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
-                $button->setDisplay($this->web->routeIsAccess($button->getRouteForAccess()));
 
-                $item[$operate] .= $this->web->getButtonHtml($button);
+                // instead of display with remove
+                if (!$this->web->routeIsAccess($button->getRouteForAccess())) {
+                    unset($buttons[$index]);
+                    continue;
+                }
+
+                array_push($recordOperates, $this->web->getButtonHtml($button));
             }
 
             $buttonsDisplay = 0;
@@ -811,7 +868,12 @@ class Module extends Bsw
             }
 
             $maxButtons = max($maxButtons, $buttonsDisplay);
-            $item[$operate] = "<div class='bsw-record-action'>{$item[$operate]}</div>";
+            $recordOperates = implode(null, $recordOperates);
+            $item[$operate] = Html::tag('div', $recordOperates, ['class' => 'bsw-record-action']);
+
+            if ($parentId) {
+                $item[Abs::TAG_ROW_CLS_NAME] = 'preview-children';
+            }
 
             /**
              * field slot
@@ -917,20 +979,21 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output();
+        $this->isExport = $this->web->getArgs('scene') === Abs::TAG_EXPORT;
 
         /**
          * handle annotation
          */
 
         try {
-            $this->getQueryOptions();
+            $query = $this->getQueryOptions();
         } catch (FilterException $e) {
             return $this->showError($e->getMessage(), ErrorParameter::CODE);
         }
 
-        [$hooks, $previewAnnotation, $mixedAnnotation] = $this->handleAnnotation($output);
+        [$hooks, $previewAnnotation, $mixedAnnotation] = $this->handleAnnotation($query, $output);
 
-        $list = $this->getPreviewData($output, $mixedAnnotation);
+        $list = $this->getPreviewData($query, $output, $mixedAnnotation);
         if ($list instanceof ArgsOutput) {
             return $list;
         }
@@ -938,10 +1001,36 @@ class Module extends Bsw
         $list = $this->handlePreviewData($list, $hooks, $previewAnnotation, $output);
         $this->correctPreviewColumn($list, $output);
 
+        /**
+         * children
+         */
+
+        if ($this->entity && $this->isChildrenNecessary()) {
+            $parentKey = is_string($this->input->parentField) ? $this->input->parentField : $this->repository->pk();
+            foreach ($list as &$record) {
+                $parentId = $record[$parentKey] ?? null;
+                if (empty($parentId)) {
+                    break;
+                }
+                $query = $this->getQueryOptions($parentId);
+                $childrenList = $this->getPreviewData($query, $output, $mixedAnnotation, $parentId);
+                if ($childrenList) {
+                    $childrenList = $this->handlePreviewData(
+                        $childrenList,
+                        $hooks,
+                        $previewAnnotation,
+                        $output,
+                        $parentId
+                    );
+                    $this->correctPreviewColumn($childrenList, $output);
+                    $record[Abs::TAG_CHILDREN] = $childrenList;
+                }
+            }
+        }
+
         $choice = $this->input->choice ?? new Choice();
         $arguments = $this->arguments(compact('choice'));
         $choice = $this->caller($this->method, self::CHOICE, Choice::class, $choice, $arguments);
-
         $arguments = $this->arguments(['target' => $choice]);
         $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $arguments);
 
@@ -954,12 +1043,17 @@ class Module extends Bsw
         $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
         $output->border = $this->input->border;
+        $output->childrenName = $this->input->childrenName;
+        $output->expandRows = $this->input->expandRows;
+        $output->expandRowByClick = $this->input->expandRowByClick;
+        $output->expandIconColumnIndex = $this->input->expandIconColumnIndex;
+        $output->indentSize = $this->input->indentSize;
         $output->scroll = $this->input->scroll;
         $output->size = $this->input->size;
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
         $output->dynamic = $this->input->dynamic;
-        $output->clsName = $this->input->clsName;
+        $output->rowClsNameMethod = $this->input->rowClsNameMethod;
         $output->header = $this->input->header;
         $output->footer = $this->input->footer;
 

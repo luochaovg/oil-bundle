@@ -43,6 +43,31 @@ class Output extends ArgsOutput
     public $border;
 
     /**
+     * @var string
+     */
+    public $childrenName;
+
+    /**
+     * @var bool
+     */
+    public $expandRows;
+
+    /**
+     * @var bool
+     */
+    public $expandRowByClick;
+
+    /**
+     * @var int
+     */
+    public $expandIconColumnIndex;
+
+    /**
+     * @var int
+     */
+    public $indentSize;
+
+    /**
      * @var int
      */
     public $scrollX = 2000;
@@ -95,7 +120,7 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $clsName;
+    public $rowClsNameMethod;
 
     /**
      * @var bool

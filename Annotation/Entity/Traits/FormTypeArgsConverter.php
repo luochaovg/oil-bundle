@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Annotation\Entity\Traits;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Input;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -22,7 +23,7 @@ trait FormTypeArgsConverter
 
         $isInputItem = ($this->item->type instanceof Input);
         $length = $this->items[Length::class]->max ?? null;
-        if (($this->scene != 'filter') && $isInputItem && !isset($value['maxLength']) && $length) {
+        if (($this->scene != Abs::TAG_FILTER) && $isInputItem && !isset($value['maxLength']) && $length) {
             $value['maxLength'] = $length;
         }
 

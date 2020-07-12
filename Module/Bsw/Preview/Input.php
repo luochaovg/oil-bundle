@@ -19,6 +19,31 @@ class Input extends ArgsInput
     public $border = true;
 
     /**
+     * @var string
+     */
+    public $childrenName = Abs::TAG_CHILDREN;
+
+    /**
+     * @var bool
+     */
+    public $expandRows = false;
+
+    /**
+     * @var bool
+     */
+    public $expandRowByClick = false;
+
+    /**
+     * @var int
+     */
+    public $expandIconColumnIndex;
+
+    /**
+     * @var int
+     */
+    public $indentSize = 20;
+
+    /**
      * @var array
      */
     public $scroll = [];
@@ -46,7 +71,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $clsName = 'previewRowClsName';
+    public $rowClsNameMethod = 'previewRowClsName';
 
     /**
      * @var string
@@ -62,4 +87,9 @@ class Input extends ArgsInput
      * @var bool
      */
     public $footer = false;
+
+    /**
+     * @var bool|string
+     */
+    public $parentField = false;
 }

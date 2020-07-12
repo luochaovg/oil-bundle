@@ -64,7 +64,7 @@ abstract class BswWebController extends AbstractController
         }
 
         // don't history when export
-        if (($args['scene'] ?? null) === 'export') {
+        if (($args['scene'] ?? null) === Abs::TAG_EXPORT) {
             return;
         }
 

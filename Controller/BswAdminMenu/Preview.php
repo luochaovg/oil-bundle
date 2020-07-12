@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswAdminMenu;
 
+use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminMenu;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -12,6 +13,7 @@ use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
+ * @property Expr                $expr
  * @property TranslatorInterface $translator
  */
 trait Preview
@@ -27,10 +29,51 @@ trait Preview
     /**
      * @return array
      */
+    public function previewAnnotation(): array
+    {
+        return [
+            'id'    => ['fixed' => false],
+            'value' => [
+                'sort'   => 0.1,
+                'render' => null,
+                'align'  => null,
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function previewQuery()
     {
         return [
             'sort' => ['bam.sort' => Abs::SORT_ASC],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function previewQueryParent()
+    {
+        return [
+            'where' => [$this->expr->eq('bam.menuId', ':menuId')],
+            'args'  => ['menuId' => [0]],
+            'sort'  => ['bam.sort' => Abs::SORT_ASC],
+        ];
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return array
+     */
+    public function previewQueryChildren(Arguments $args)
+    {
+        return [
+            'where' => [$this->expr->eq('bam.menuId', ':menuId')],
+            'args'  => ['menuId' => [$args->parent]],
+            'sort'  => ['bam.sort' => Abs::SORT_ASC],
         ];
     }
 
@@ -100,6 +143,6 @@ trait Preview
             return $args;
         }
 
-        return $this->showPreview();
+        return $this->showPreview(['parentField' => true]);
     }
 }

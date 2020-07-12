@@ -53,7 +53,7 @@
                         <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
                         <a-checkbox
                           :disabled="{{ disabled ? 'true' : 'false' }}"
-                          class="{{ _danger.class }}"
+                          class="bsw-checkbox-middle {{ _danger.class }}"
                           value="{{ value }}">
                           {{ label }}
                         </a-checkbox>
@@ -61,6 +61,7 @@
                     {% else %}
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
+                        class="bsw-checkbox-middle"
                         value="{{ value }}">
                         {{ label }}
                       </a-checkbox>

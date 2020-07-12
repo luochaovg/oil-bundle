@@ -38,7 +38,7 @@ bsw.configure({
             this.pagination(url, null, {{ jump }});
         },
         previewRowClsName(record, index) {
-            return record.rowClsName;
+            return record['{{ constant(scaffold.abs ~ '::TAG_ROW_CLS_NAME') }}'];
         },
     },
     logic: {

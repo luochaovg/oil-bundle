@@ -38,7 +38,7 @@ trait Preview
                 'sort'   => 3.2,
                 'render' => Abs::HTML_CODE,
             ],
-            Abs::TR_ACT       => ['width' => 234],
+            Abs::TR_ACT       => ['width' => 150],
         ];
     }
 

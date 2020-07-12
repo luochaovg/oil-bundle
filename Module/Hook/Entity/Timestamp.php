@@ -17,7 +17,7 @@ class Timestamp extends Hook
     public function preview($value, array $args, array $extraArgs = [])
     {
         $scene = $extraArgs['scene'] ?? null;
-        if ($scene === 'filter' && empty($value)) {
+        if ($scene === Abs::TAG_FILTER && empty($value)) {
             return null;
         }
 

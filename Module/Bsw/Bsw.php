@@ -466,15 +466,17 @@ abstract class Bsw
     /**
      * List entity basic fields
      *
+     * @param array $query
+     *
      * @return array
      * @throws
      */
-    protected function listEntityBasicFields(): array
+    protected function listEntityBasicFields(array $query): array
     {
         $entityList = [];
 
         if ($this->entity) {
-            $entityList[$this->query['alias']] = $this->entity;
+            $entityList[$query['alias']] = $this->entity;
         }
 
         foreach (($this->query['join'] ?? []) as $alias => $item) {

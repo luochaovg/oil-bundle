@@ -298,11 +298,11 @@ trait Preview
         $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
 
         if (in_array($args->hooked['state'], [3, 4])) {
-            $args->hooked['rowClsName'] = 'task-status-done';
+            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-done';
         } elseif ($args->hooked['state'] === 1 && $args->original['startTime'] <= time()) {
-            $args->hooked['rowClsName'] = 'task-status-overdue';
+            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-overdue';
         } elseif ($args->hooked['state'] === 2 && $args->original['endTime'] <= time()) {
-            $args->hooked['rowClsName'] = 'task-status-overdue';
+            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-overdue';
         }
 
         return $args->hooked;

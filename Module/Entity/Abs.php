@@ -240,6 +240,8 @@ class Abs
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
     const TAG_FILTER         = 'filter';
+    const TAG_SEARCH         = 'search';
+    const TAG_EXPORT         = 'export';
     const TAG_ROLL           = 'rollback:';
     const TAG_ROLL_VALIDATOR = 'rollback:validator';
     const TAG_VALIDATOR      = 'validator';
@@ -250,13 +252,27 @@ class Abs
     const TAG_TRANS          = 'transactional:';
     const TAG_TRANS_BEFORE   = 'transactional:before';
     const TAG_TRANS_AFTER    = 'transactional:after';
+    const TAG_CHILDREN       = 'children';
+    const TAG_ROW_CLS_NAME   = 'rowClsName';
 
-    const POS_TOP    = 'top';
-    const POS_RIGHT  = 'right';
-    const POS_BOTTOM = 'bottom';
-    const POS_LEFT   = 'left';
-    const POS_CENTER = 'center';
-    const POS_MIDDLE = 'middle';
+    const POS_TOP           = 'top';
+    const POS_TOP_LEFT      = 'topLeft';
+    const POS_TOP_CENTER    = 'topCenter';
+    const POS_TOP_RIGHT     = 'topRight';
+    const POS_RIGHT         = 'right';
+    const POS_RIGHT_TOP     = 'rightTop';
+    const POS_RIGHT_MIDDLE  = 'rightMiddle';
+    const POS_RIGHT_BOTTOM  = 'rightBottom';
+    const POS_BOTTOM        = 'bottom';
+    const POS_BOTTOM_LEFT   = 'bottomLeft';
+    const POS_BOTTOM_CENTER = 'bottomCenter';
+    const POS_BOTTOM_RIGHT  = 'bottomRight';
+    const POS_LEFT          = 'left';
+    const POS_LEFT_TOP      = 'leftTop';
+    const POS_LEFT_MIDDLE   = 'leftMiddle';
+    const POS_LEFT_BOTTOM   = 'leftBottom';
+    const POS_CENTER        = 'center';
+    const POS_MIDDLE        = 'middle';
 
     const SELECT = 'SELECT'; // doctrine QueryBuilder 0
     const DELETE = 'DELETE'; // doctrine QueryBuilder 1
@@ -427,7 +443,7 @@ class Abs
     const PG_TOTAL_PAGE        = 'total_page';
     const PG_TOTAL_ITEM        = 'total_item';
     const PG_ITEMS             = 'items';
-    const PG_PAGE_SIZE_OPTIONS = [10, 20, 30, 50, 100];
+    const PG_PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50, 100];
 
     const MULTIPLE_PER       = 50;
     const PAGE_DEFAULT_SIZE  = 30;

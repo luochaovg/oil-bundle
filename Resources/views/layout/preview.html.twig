@@ -16,9 +16,16 @@
         :columns="previewColumns"
         :data-source="previewList"
         :bordered="{{ preview.border ? 'true' : 'false' }}"
+        children-column-name="{{ preview.childrenName }}"
+        :default-expand-all-rows="{{ preview.expandRows ? 'true' : 'false' }}"
+        :expand-row-by-click="{{ preview.expandRowByClick ? 'true' : 'false' }}"
+        {% if preview.expandIconColumnIndex ?? false %}
+          :expand-icon-column-index="{{ preview.expandIconColumnIndex }}"
+        {% endif %}
+        :indent-size="{{ preview.indentSize }}"
         :pagination="false"
-        {% if  preview.clsName|length %}
-          :row-class-name="{{ preview.clsName }}"
+        {% if  preview.rowClsNameMethod|length %}
+          :row-class-name="{{ preview.rowClsNameMethod }}"
         {% endif %}
         :row-key="record => `{{ fields }}`"
         {% if preview.choice.enable ?? false %}

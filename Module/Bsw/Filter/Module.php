@@ -36,11 +36,6 @@ class Module extends Bsw
     const FILTER_CORRECT         = 'FilterCorrect';
 
     /**
-     * @var array
-     */
-    protected $query = [];
-
-    /**
      * @return bool
      */
     public function allowAjax(): bool
@@ -122,27 +117,25 @@ class Module extends Bsw
      */
     protected function getQueryOptions(): array
     {
-        if ($this->query) {
-            return $this->query;
+        $query = $this->caller($this->method, self::QUERY, Abs::T_ARRAY, []);
+        if ($this->entity && !isset($query['alias'])) {
+            $query['alias'] = Helper::tableNameToAlias($this->entity);
         }
 
-        $this->query = $this->caller($this->method, self::QUERY, Abs::T_ARRAY, []);
-        if ($this->entity && !isset($this->query['alias'])) {
-            $this->query['alias'] = Helper::tableNameToAlias($this->entity);
-        }
-
-        return $this->query;
+        return $query;
     }
 
     /**
      * List entity fields
      *
+     * @param array $query
+     *
      * @return array
      * @throws
      */
-    protected function listEntityFields(): array
+    protected function listEntityFields(array $query): array
     {
-        $entityList = $this->listEntityBasicFields();
+        $entityList = $this->listEntityBasicFields($query);
 
         $filterAnnotation = [];
         $filterAnnotationFull = [];
@@ -162,7 +155,7 @@ class Module extends Bsw
         }
 
         if ($filterAnnotationFull) {
-            $filterAnnotation = $filterAnnotationFull[$this->query['alias']];
+            $filterAnnotation = $filterAnnotationFull[$query['alias']];
         }
 
         return [$filterAnnotation, $filterAnnotationFull];
@@ -171,16 +164,18 @@ class Module extends Bsw
     /**
      * Annotation handler
      *
+     * @param array $query
+     *
      * @return array
      * @throws
      */
-    protected function handleAnnotation(): array
+    protected function handleAnnotation(array $query): array
     {
         /**
          * filter annotation
          */
 
-        [$filterAnnotation, $filterAnnotationFull] = $this->listEntityFields();
+        [$filterAnnotation, $filterAnnotationFull] = $this->listEntityFields($query);
 
         /**
          * preview annotation only
@@ -262,7 +257,7 @@ class Module extends Bsw
                 continue;
             }
 
-            $item['field'] = Helper::tableFieldAddAlias($item['field'], $this->query['alias']);
+            $item['field'] = Helper::tableFieldAddAlias($item['field'], $query['alias']);
             if (in_array($item['field'], $allowFields)) {
                 $_annotation[$key] = $item;
             }
@@ -295,7 +290,7 @@ class Module extends Bsw
      */
     protected function getFilterData(array $filterAnnotation, array $hooks): array
     {
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'filter']];
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_FILTER]];
         $_hooks = [];
         foreach ($hooks as $hook => $item) {
             $_hooks[$hook] = $item['fields'];
@@ -441,19 +436,18 @@ class Module extends Bsw
         }
 
         $search = new Button('Search', $this->input->route, $this->input->cnf->icon_search);
-        $search->setAttributes(['bsw-method' => 'search']);
+        $search->setAttributes(['bsw-method' => Abs::TAG_SEARCH]);
 
         $export = null;
         if ($this->input->scene === Abs::TAG_PREVIEW && $this->entity && $this->input->showExport) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
-            $export->setAttributes(['bsw-method' => 'export']);
+            $export->setAttributes(['bsw-method' => Abs::TAG_EXPORT]);
             $export->setRouteForAccess($this->input->cnf->route_export);
         }
 
-        $arguments = $this->arguments(compact('search', 'export'));
-        $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, [], $arguments);
-        $operates = array_merge(['search' => $search, 'export' => $export], $operates);
-        $operates = array_filter($operates);
+        $ops = compact('search', 'export');
+        $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, [], $this->arguments($ops));
+        $operates = array_filter(array_merge($ops, $operates));
 
         foreach ($operates as $operate) {
 
@@ -625,8 +619,8 @@ class Module extends Bsw
          * handle annotation
          */
 
-        $this->getQueryOptions();
-        [$filterAnnotation, $hooks] = $this->handleAnnotation();
+        $query = $this->getQueryOptions();
+        [$filterAnnotation, $hooks] = $this->handleAnnotation($query);
 
         [$filter, $condition] = $this->getFilterData($filterAnnotation, $hooks);
         [$filter, $condition] = $this->caller(

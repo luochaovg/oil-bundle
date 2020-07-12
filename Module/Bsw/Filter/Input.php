@@ -10,7 +10,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $key = 'filter';
+    public $key = Abs::TAG_FILTER;
 
     /**
      * @var int
