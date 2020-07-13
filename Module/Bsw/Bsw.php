@@ -479,7 +479,7 @@ abstract class Bsw
             $entityList[$query['alias']] = $this->entity;
         }
 
-        foreach (($this->query['join'] ?? []) as $alias => $item) {
+        foreach (($query['join'] ?? []) as $alias => $item) {
             if (is_string($item['entity'])) {
                 $entityList[$alias] = $item['entity'];
             } elseif (is_array($item['entity']) && isset($item['entity']['from'])) {
