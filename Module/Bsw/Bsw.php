@@ -421,7 +421,7 @@ abstract class Bsw
             $arguments = $this->arguments(compact('enum'), $args);
             $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], $arguments);
 
-            $arguments = $this->arguments(compact('enumExtra', 'enum'), $args);
+            $arguments->set('enumExtra', $enumExtra);
             $enumExtra = $this->caller($this->method, $method, Abs::T_ARRAY, $enumExtra, $arguments);
 
             if (isset($enumExtra)) {

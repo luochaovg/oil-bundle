@@ -130,10 +130,7 @@ abstract class BswApiController extends AbstractFOSRestController
 
                 $message = $this->messageLang('Signature verification failed');
                 $this->logger->error($message, [compact('oldSign', 'newSign')]);
-
-                if (method_exists($this, $fn = Abs::FN_SIGN_FAILED)) {
-                    $this->{$fn}($this->route);
-                }
+                $this->dispatchMethod(Abs::FN_SIGN_FAILED, null, [$this->route]);
 
                 if ($this->development || $this->signDynamic) {
                     $message .= " (Signature: {$newSign})";

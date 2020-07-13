@@ -91,10 +91,8 @@ trait ApiResponse
     public function original(array $data, int $code4http = Response::HTTP_OK): Response
     {
         $this->logger->debug('Response data as follow', $data);
-
-        $fn = Abs::FN_BEFORE_RESPONSE;
-        if ($this->responseEncrypt && method_exists($this, $fn)) {
-            $data = $this->{$fn}($data);
+        if ($this->responseEncrypt) {
+            $data = $this->dispatchMethod(Abs::FN_BEFORE_RESPONSE, $data, [$data]);
         }
 
         $view = $this->view($data, $code4http);
@@ -182,9 +180,9 @@ trait ApiResponse
             throw new Exception($message);
         }
 
-        if (method_exists($this, $fn = Abs::FN_BEFORE_RESPONSE_CODE)) {
-            [$code4logic, $code4http, $message, $data] = $this->{$fn}($code4logic, $code4http, $message, $data);
-        }
+        $arguments = [$code4logic, $code4http, $message, $data];
+        $result = $this->dispatchMethod(Abs::FN_BEFORE_RESPONSE_CODE, $arguments, $arguments);
+        [$code4logic, $code4http, $message, $data] = $result;
 
         $responseKeys = $this->responseKeys();
         unset($responseKeys['args']);

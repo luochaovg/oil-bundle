@@ -96,5 +96,10 @@ class Input extends ArgsInput
     /**
      * @var bool|string
      */
-    public $parentField = false;
+    public $childrenRelationField = false;
+
+    /**
+     * @var string
+     */
+    public $childrenRowClsName = 'preview-children';
 }

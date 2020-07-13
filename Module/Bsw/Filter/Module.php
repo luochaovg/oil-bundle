@@ -205,7 +205,7 @@ class Module extends Bsw
             $fn = self::FILTER_ANNOTATION;
             $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
 
-            $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
+            $arguments->set('target', $filterAnnotationExtra);
             $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
         }
 

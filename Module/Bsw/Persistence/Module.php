@@ -159,16 +159,12 @@ class Module extends Bsw
 
         $fn = self::ANNOTATION_ONLY;
 
-        $arguments = $this->arguments(
-            ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
-            compact('record')
-        );
+        $arguments = $this->arguments(['id' => $this->input->id, 'persistence' => !!$this->input->submit]);
+        $arguments->set('record', $record);
         $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null, $arguments);
 
-        $arguments = $this->arguments(
-            ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
-            compact('persistAnnotation', 'record')
-        );
+        $arguments = $this->arguments(['target' => $persistAnnotationExtra, 'id' => $this->input->id]);
+        $arguments->setMany(compact('persistAnnotation', 'record'));
         $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
@@ -188,16 +184,12 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $arguments = $this->arguments(
-                ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
-                compact('record')
-            );
+            $arguments = $this->arguments(['id' => $this->input->id, 'persistence' => !!$this->input->submit]);
+            $arguments->set('record', $record);
             $persistAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
 
-            $arguments = $this->arguments(
-                ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
-                compact('persistAnnotation', 'record')
-            );
+            $arguments = $this->arguments(['target' => $persistAnnotationExtra, 'id' => $this->input->id]);
+            $arguments->setMany(compact('persistAnnotation', 'record'));
             $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
 
@@ -491,18 +483,15 @@ class Module extends Bsw
          * @return mixed
          */
         $before = function (array $original, array $extraArgs) {
+            $arguments = $this->arguments(compact('original', 'extraArgs'));
+            $original = $this->caller($this->method, self::BEFORE_HOOK, Abs::T_ARRAY, $original, $arguments);
 
-            if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
-                $arguments = $this->arguments(compact('original', 'extraArgs'));
-                $original = $this->web->{$fn}($arguments);
-            }
-
-            $arguments = $this->arguments(
-                ['target' => $original],
-                compact('extraArgs')
+            return $this->tailor(
+                $this->methodTailor,
+                self::BEFORE_HOOK,
+                Abs::T_ARRAY,
+                $arguments->unset('original')->set('target', $original)
             );
-
-            return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         /**
@@ -515,18 +504,15 @@ class Module extends Bsw
          * @return mixed
          */
         $after = function (array $hooked, array $original, array $extraArgs) {
+            $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs'));
+            $hooked = $this->caller($this->method, self::AFTER_HOOK, Abs::T_ARRAY, $hooked, $arguments);
 
-            if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
-                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs'));
-                $hooked = $this->web->{$fn}($arguments);
-            }
-
-            $arguments = $this->arguments(
-                ['target' => $hooked],
-                compact('original', 'extraArgs')
+            return $this->tailor(
+                $this->methodTailor,
+                self::AFTER_HOOK,
+                Abs::T_ARRAY,
+                $arguments->unset('hooked')->set('target', $hooked)
             );
-
-            return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         $persistence = !!$this->input->submit;
@@ -565,7 +551,7 @@ class Module extends Bsw
             return $this->showMessage($record);
         }
 
-        $arguments = $this->arguments(['target' => $record], $args);
+        $arguments->set('target', $record);
         $record = $this->tailor(
             $this->methodTailor,
             self::BEFORE_RENDER,
@@ -686,7 +672,8 @@ class Module extends Bsw
         $submit->setArgs(['id' => $this->input->id]);
         $submit->setAttributes(['bsw-method' => 'submit']);
 
-        $arguments = $this->arguments(compact('submit', 'record', 'hooked', 'original'), ['id' => $this->input->id]);
+        $arguments = $this->arguments(compact('submit', 'record', 'hooked', 'original'));
+        $arguments->set('id', $this->input->id);
         $operates = $this->caller($this->method, self::FORM_OPERATE, Abs::T_ARRAY, [], $arguments);
         $operates = array_merge(['submit' => $submit], $operates);
         $operates = array_filter($operates);
@@ -1060,7 +1047,7 @@ class Module extends Bsw
         } else {
             [$submit, $record, $extraSubmit, $recordBefore, $recordDiff] = $result;
         }
-        
+
         // get annotation
         [$persistAnnotation, $_persistAnnotation, $hooks] = $this->handleAnnotation($record);
 

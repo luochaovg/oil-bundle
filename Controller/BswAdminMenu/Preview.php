@@ -143,6 +143,6 @@ trait Preview
             return $args;
         }
 
-        return $this->showPreview(['parentField' => true]);
+        return $this->showPreview(['childrenRelationField' => true]);
     }
 }

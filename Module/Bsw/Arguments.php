@@ -12,12 +12,31 @@ class Arguments extends stdClass
      *
      * @param string $key
      * @param mixed  $value
+     * @param bool   $unsetWhenNull
      *
      * @return $this
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value, bool $unsetWhenNull = true)
     {
+        if (is_null($value) && $unsetWhenNull) {
+            return $this->unset($key);
+        }
+
         $this->{$key} = $value;
+
+        return $this;
+    }
+
+    /**
+     * Unset
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function unset(string $key)
+    {
+        unset($this->{$key});
 
         return $this;
     }
@@ -26,14 +45,31 @@ class Arguments extends stdClass
      * Set many arguments
      *
      * @param array $target
+     * @param bool  $unsetWhenNull
      *
      * @return $this
      */
-    public function setMany(array $target)
+    public function setMany(array $target, bool $unsetWhenNull = true)
     {
         foreach ($target as $key => $value) {
             $this->set($key, $value);
         }
+
+        return $this;
+    }
+
+    /**
+     * Rename attribute
+     *
+     * @param string $from
+     * @param string $to
+     *
+     * @return $this
+     */
+    public function rename(string $from, string $to)
+    {
+        $this->set($to, $this->get($from));
+        $this->set($from, null);
 
         return $this;
     }

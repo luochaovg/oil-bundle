@@ -141,7 +141,7 @@ class Module extends Bsw
      */
     protected function isChildrenNecessary(): bool
     {
-        return $this->input->parentField && !$this->isExport && !$this->input->condition;
+        return $this->input->childrenRelationField && !$this->isExport && !$this->input->condition;
     }
 
     /**
@@ -420,7 +420,7 @@ class Module extends Bsw
                 $previewAnnotationExtra[$operate] = ['show' => true];
             }
 
-            $arguments = $this->arguments(['target' => $previewAnnotationExtra], compact('previewAnnotation'));
+            $arguments->set('target', $previewAnnotationExtra);
             $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
         }
 
@@ -737,20 +737,20 @@ class Module extends Bsw
          *
          * @return mixed
          */
-        $before = function (array $original, array $extraArgs, int $index) use ($basicNumber) {
-
+        $before = function (array $original, array $extraArgs, int $index) use ($basicNumber, $parentId) {
             $number = $basicNumber + $index;
-            if (method_exists($this->web, $fn = $this->method . self::BEFORE_HOOK)) {
-                $arguments = $this->arguments(compact('original', 'extraArgs', 'number'));
-                $original = $this->web->{$fn}($arguments);
+            if ($parentId) {
+                $original[Abs::TAG_ROW_CLS_NAME] = $this->input->childrenRowClsName;
             }
+            $arguments = $this->arguments(compact('original', 'extraArgs', 'number'));
+            $original = $this->caller($this->method, self::BEFORE_HOOK, Abs::T_ARRAY, $original, $arguments);
 
-            $arguments = $this->arguments(
-                ['target' => $original],
-                compact('extraArgs', 'number')
+            return $this->tailor(
+                $this->methodTailor,
+                self::BEFORE_HOOK,
+                Abs::T_ARRAY,
+                $arguments->unset('original')->set('target', $original)
             );
-
-            return $this->tailor($this->methodTailor, self::BEFORE_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         /**
@@ -764,19 +764,16 @@ class Module extends Bsw
          * @return mixed
          */
         $after = function (array $hooked, array $original, array $extraArgs, int $index) use ($basicNumber) {
-
             $number = $basicNumber + $index;
-            if (method_exists($this->web, $fn = $this->method . self::AFTER_HOOK)) {
-                $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs', 'number'));
-                $hooked = $this->web->{$fn}($arguments);
-            }
+            $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs', 'number'));
+            $hooked = $this->caller($this->method, self::AFTER_HOOK, Abs::T_ARRAY, $hooked, $arguments);
 
-            $arguments = $this->arguments(
-                ['target' => $hooked],
-                compact('original', 'extraArgs', 'number')
+            return $this->tailor(
+                $this->methodTailor,
+                self::AFTER_HOOK,
+                Abs::T_ARRAY,
+                $arguments->unset('hooked')->set('target', $hooked)
             );
-
-            return $this->tailor($this->methodTailor, self::AFTER_HOOK, Abs::T_ARRAY, $arguments);
         };
 
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'preview']];
@@ -799,7 +796,7 @@ class Module extends Bsw
         $arguments = $this->arguments($args);
         $list = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $arguments);
 
-        $arguments = $this->arguments(['target' => $list], $args);
+        $arguments->set('target', $list);
         $list = $this->tailor($this->methodTailor, self::BEFORE_RENDER, Abs::T_ARRAY, $arguments);
 
         /**
@@ -873,10 +870,6 @@ class Module extends Bsw
             $maxButtons = max($maxButtons, $buttonsDisplay);
             $recordOperates = implode(null, $recordOperates);
             $item[$operate] = Html::tag('div', $recordOperates, ['class' => 'bsw-record-action']);
-
-            if ($parentId) {
-                $item[Abs::TAG_ROW_CLS_NAME] = 'preview-children';
-            }
 
             /**
              * field slot
@@ -1061,7 +1054,11 @@ class Module extends Bsw
          */
 
         if ($this->entity && $this->isChildrenNecessary()) {
-            $parentKey = is_string($this->input->parentField) ? $this->input->parentField : $this->repository->pk();
+            if (is_string($this->input->childrenRelationField)) {
+                $parentKey = $this->input->childrenRelationField;
+            } else {
+                $parentKey = $this->repository->pk();
+            }
             $list = $this->getPreviewDataWithChildren(
                 $list,
                 $parentKey,
