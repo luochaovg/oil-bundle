@@ -472,7 +472,7 @@ class Module extends Bsw
          */
 
         $scrollX = 0;
-        $hooks = $columns = $slots = [];
+        $hooks = $columns = $slots = $customRenders = [];
 
         foreach ($previewAnnotation as $field => $item) {
             $this->handleForFieldHook($field, $item['hook'], $hooks);
@@ -509,8 +509,7 @@ class Module extends Bsw
             }
 
             if ($customRender = $item['customRender']) {
-                // TODO
-                // $column['customRender'] = "fn:{$customRender}";
+                $customRenders[$field] = "fn:{$customRender}";
             }
 
             /**
@@ -544,6 +543,7 @@ class Module extends Bsw
         $output->scrollX = $scrollX;
         $output->slots = $slots;
         $output->columns = $columns;
+        $output->customRenders = $customRenders;
 
         return [$hooks, $previewAnnotation, $mixedAnnotation];
     }
@@ -1076,6 +1076,7 @@ class Module extends Bsw
 
         $output->columns = array_values($output->columns);
         $output->columnsJson = Helper::jsonStringify($output->columns, '{}');
+        $output->customRendersJson = Helper::jsonStringify($output->customRenders, '{}');
 
         $output->list = $list;
         $output->listJson = Helper::jsonStringify($output->list, '{}');

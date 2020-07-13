@@ -42,6 +42,15 @@ bsw.configure({
         },
     },
     logic: {
+        previewCustomRenders(v) {
+            let customRenders = bsw.jsonFnHandler({{ preview.customRendersJson|raw }}, 'customRender');
+            for (let item of v.previewColumns) {
+                let field = item.dataIndex;
+                if (typeof customRenders[field] !== 'undefined' && customRenders.hasOwnProperty(field)) {
+                    item.customRender = customRenders[item.dataIndex];
+                }
+            }
+        },
         previewResize(v) {
             let upper = {{ preview.scroll.x ?? preview.scrollX }};
             let columns = v.previewColumns;

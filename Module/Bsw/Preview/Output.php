@@ -30,6 +30,16 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
+    public $customRenders = [];
+
+    /**
+     * @var string
+     */
+    public $customRendersJson;
+
+    /**
+     * @var array
+     */
     public $list = [];
 
     /**
