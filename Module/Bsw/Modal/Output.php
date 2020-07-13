@@ -14,6 +14,16 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
+    public $closable;
+
+    /**
+     * @var int
+     */
+    public $zIndex;
+
+    /**
+     * @var bool
+     */
     public $centered;
 
     /**
@@ -49,22 +59,12 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $cancelText;
+    public $okType;
 
     /**
      * @var string
      */
-    public $okType;
-
-    /**
-     * @var int
-     */
-    public $zIndex;
-
-    /**
-     * @var bool
-     */
-    public $closable;
+    public $cancelText;
 
     /**
      * @var string

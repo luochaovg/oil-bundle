@@ -1,14 +1,15 @@
+{% set maskClosable = result.maskClosable ? 'true' :'false' %}
 <a-modal
   v-model="result.visible"
-  wrap-class-name="bsw-modal"
-  :closable="false"
+  wrap-class-name="{{ ['bsw-result', result.wrapClassName ?? null]|filter(v => v)|join(' ') }}"
+  :closable="typeof result.closable !== 'undefined' ? result.closable : {{ result.closable ? 'true' : 'false' }}"
   :destroy-on-close="true"
-  :mask="true"
-  :mask-closable="false"
-  :keyboard="false"
+  :mask="typeof result.mask !== 'undefined' ? result.mask : {{ result.mask ? 'true' : 'false' }}"
+  :mask-closable="typeof result.maskClosable !== 'undefined' ? result.maskClosable : {{ maskClosable }}"
+  :keyboard="typeof result.keyboard !== 'undefined' ? result.keyboard : {{ result.keyboard ? 'true' : 'false' }}"
   :footer="null"
-  :centered="{{ result.centered ? 'true' : 'false' }}"
-  :width="result.width || {{ result.width }}"
+  :centered="typeof result.centered !== 'undefined' ? result.centered : {{ result.centered ? 'true' : 'false' }}"
+  :width="result.width || {{ result.width|vueType }}"
 >
   <a-result :status="typeof result.status !== 'undefined' ? result.status : '{{ result.status }}'">
     {% set title = result.title|trans({}, 'twig') %}

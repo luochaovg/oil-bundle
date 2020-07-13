@@ -19,12 +19,42 @@ class Output extends ArgsOutput
     /**
      * @var bool
      */
-    public $centered;
+    public $closable;
+
+    /**
+     * @var int
+     */
+    public $zIndex;
 
     /**
      * @var string|int
      */
     public $width;
+
+    /**
+     * @var string
+     */
+    public $wrapClassName;
+
+    /**
+     * @var bool
+     */
+    public $keyboard;
+
+    /**
+     * @var bool
+     */
+    public $mask;
+
+    /**
+     * @var bool
+     */
+    public $maskClosable;
+
+    /**
+     * @var bool
+     */
+    public $centered;
 
     /**
      * @var string
@@ -44,15 +74,15 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
+    public $okType;
+
+    /**
+     * @var string
+     */
     public $cancelText;
 
     /**
      * @var bool
      */
     public $cancelShow;
-
-    /**
-     * @var string
-     */
-    public $okType;
 }

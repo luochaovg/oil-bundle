@@ -15,6 +15,16 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
+    public $closable = true;
+
+    /**
+     * @var int
+     */
+    public $zIndex = 1000;
+
+    /**
+     * @var bool
+     */
     public $centered = true;
 
     /**
@@ -50,22 +60,12 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $cancelText = 'Cancel';
+    public $okType = Abs::THEME_PRIMARY;
 
     /**
      * @var string
      */
-    public $okType = Abs::THEME_PRIMARY;
-
-    /**
-     * @var int
-     */
-    public $zIndex = 1000;
-
-    /**
-     * @var bool
-     */
-    public $closable = true;
+    public $cancelText = 'Cancel';
 
     /**
      * @var array

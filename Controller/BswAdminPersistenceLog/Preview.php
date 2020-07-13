@@ -64,12 +64,12 @@ trait Preview
     }
 
     /**
-     * @param string $field
+     * @param string $label
      * @param string $value
      *
      * @return Charm
      */
-    protected function printJson(string $field, string $value): Charm
+    protected function printJson(string $label, string $value): Charm
     {
         $value = Html::cleanHtml($value, true);
 
@@ -78,12 +78,12 @@ trait Preview
         }
 
         return $this->charmShowContent(
-            $field,
+            $label,
             Html::tag(
                 'div',
                 $value,
                 [
-                    'class' => 'bsw-code bsw-long-text',
+                    'class' => 'bsw-long-text',
                     'style' => ['width' => '99.6%', 'padding' => '12px'],
                 ]
             ),
@@ -98,7 +98,7 @@ trait Preview
      */
     public function previewCharmBefore(Arguments $args)
     {
-        return $this->printJson('before', $args->value);
+        return $this->printJson('BEFORE', $args->value);
     }
 
     /**
@@ -108,7 +108,7 @@ trait Preview
      */
     public function previewCharmLater(Arguments $args)
     {
-        return $this->printJson('later', $args->value);
+        return $this->printJson('LATER', $args->value);
     }
 
     /**
@@ -118,7 +118,7 @@ trait Preview
      */
     public function previewCharmEffect(Arguments $args)
     {
-        return $this->printJson('effect', $args->value);
+        return $this->printJson('EFFECT', $args->value);
     }
 
     /**

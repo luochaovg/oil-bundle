@@ -1,14 +1,15 @@
+{% set maskClosable = drawer.maskClosable ? 'true' :'false' %}
 <a-drawer
   :visible="drawer.visible"
   wrap-class-name="{{ ['bsw-drawer', drawer.wrapClassName ?? null]|filter(v => v)|join(' ') }}"
-  :closable="{{ drawer.closable ? 'true' : 'false' }}"
+  :closable="typeof drawer.closable !== 'undefined' ? drawer.closable : {{ drawer.closable ? 'true' : 'false' }}"
   :destroy-on-close="true"
-  :keyboard="{{ drawer.keyboard ? 'true' : 'false' }}"
-  :mask="{{ drawer.mask ? 'true' : 'false' }}"
-  :mask-closable="{{ drawer.maskClosable ? 'true' : 'false' }}"
+  :mask="typeof drawer.mask !== 'undefined' ? drawer.mask : {{ drawer.mask ? 'true' : 'false' }}"
+  :mask-closable="typeof drawer.maskClosable !== 'undefined' ? drawer.maskClosable : {{ maskClosable }}"
+  :keyboard="typeof drawer.keyboard !== 'undefined' ? drawer.keyboard : {{ drawer.keyboard ? 'true' : 'false' }}"
   :title="drawer.title === false ? '' : (drawer.title || '{{ drawer.title|trans({}, 'twig') }}')"
-  :width="drawer.width || '{{ drawer.width }}'"
-  :height="drawer.height || '{{ drawer.height }}'"
+  :width="drawer.width || {{ drawer.width|vueType }}"
+  :height="drawer.height || {{ drawer.height|vueType }}"
   :z-index="drawer.zIndex || {{ drawer.zIndex }}"
   :placement="drawer.placement || '{{ drawer.placement }}'"
   :mask-style="{{ drawer.maskStyleJson }}"
@@ -21,7 +22,7 @@
   <div v-html="drawer.content"></div>
   <div
     v-if="drawer.footer"
-    :data-bsw.prop="{ok: drawer.ok, cancel: drawer.cancel, extra: result.extra}"
+    :data-bsw.prop="{ok: drawer.ok, cancel: drawer.cancel, extra: drawer.extra}"
     class="bsw-footer-bar"
   >
     <a-button

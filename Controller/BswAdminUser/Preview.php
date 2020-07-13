@@ -38,7 +38,7 @@ trait Preview
                 'sort'   => 3.2,
                 'render' => Abs::HTML_CODE,
             ],
-            Abs::TR_ACT       => ['width' => 150],
+            Abs::TR_ACT       => ['width' => 234],
         ];
     }
 
@@ -101,8 +101,11 @@ trait Preview
                 ->setClick('showModalAfterRequest')
                 ->setArgs(
                     [
-                        'width' => 300,
-                        'id'    => $args->item['id'],
+                        'width'        => 280,
+                        'id'           => $args->item['id'],
+                        'closable'     => false,
+                        'keyboard'     => true,
+                        'maskClosable' => true,
                     ]
                 ),
 

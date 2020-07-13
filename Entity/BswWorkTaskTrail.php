@@ -65,7 +65,7 @@ class BswWorkTaskTrail extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=1024, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT)
+     * @BswAnnotation\Preview(sort=5, width=500, render=BswAbs::HTML_TEXT)
      * @BswAnnotation\Persistence(sort=5, type=BswForm\TextArea::class)
      * @BswAnnotation\Filter(sort=5)
      */

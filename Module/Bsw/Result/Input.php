@@ -20,12 +20,42 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
-    public $centered = true;
+    public $closable = false;
+
+    /**
+     * @var int
+     */
+    public $zIndex = 1000;
 
     /**
      * @var string|int
      */
     public $width = Abs::MEDIA_MIN;
+
+    /**
+     * @var string
+     */
+    public $wrapClassName = null;
+
+    /**
+     * @var bool
+     */
+    public $keyboard = false;
+
+    /**
+     * @var bool
+     */
+    public $mask = true;
+
+    /**
+     * @var bool
+     */
+    public $maskClosable = false;
+
+    /**
+     * @var bool
+     */
+    public $centered = true;
 
     /**
      * @var string
@@ -45,15 +75,15 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $okType = Abs::THEME_PRIMARY;
+
+    /**
+     * @var string
+     */
     public $cancelText = 'Cancel';
 
     /**
      * @var bool
      */
     public $cancelShow = false;
-
-    /**
-     * @var string
-     */
-    public $okType = Abs::THEME_PRIMARY;
 }

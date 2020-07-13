@@ -25,6 +25,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('implode', [$this, 'implode']),
             new TwigFilter('imageStyle', [$this, 'imageStyle']),
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
+            new TwigFilter('vueType', [$this, 'vueType']),
         ];
     }
 
@@ -147,5 +148,21 @@ class AppExtension extends AbstractExtension
         $attributes = implode('; ', $attributes);
 
         return $boundary ? "{ {$attributes} }" : $attributes;
+    }
+
+    /**
+     * Vue type
+     *
+     * @param $target
+     *
+     * @return string
+     */
+    public static function vueType($target)
+    {
+        if (is_numeric($target)) {
+            return $target;
+        }
+
+        return "'{$target}'";
     }
 }

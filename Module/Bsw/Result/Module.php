@@ -76,15 +76,21 @@ class Module extends Bsw
         $output = new Output();
 
         $output->title = $this->input->title;
-        $output->centered = $this->input->centered;
-        $output->width = $this->input->width;
         $output->subTitle = $this->input->subTitle;
+        $output->closable = $this->input->closable;
+        $output->zIndex = $this->input->zIndex;
+        $output->width = $this->input->width;
+        $output->wrapClassName = $this->input->wrapClassName;
+        $output->keyboard = $this->input->keyboard;
+        $output->mask = $this->input->mask;
+        $output->maskClosable = $this->input->maskClosable;
+        $output->centered = $this->input->centered;
         $output->status = $this->input->status;
         $output->okText = $this->input->okText;
         $output->okShow = $this->input->okShow;
+        $output->okType = $this->input->okType;
         $output->cancelText = $this->input->cancelText;
         $output->cancelShow = $this->input->cancelShow;
-        $output->okType = $this->input->okType;
 
         $output = $this->caller(
             $this->method,

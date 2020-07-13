@@ -13,6 +13,16 @@ class Input extends ArgsInput
     public $title = 'Drawer';
 
     /**
+     * @var bool
+     */
+    public $closable = true;
+
+    /**
+     * @var int
+     */
+    public $zIndex = 1000;
+
+    /**
      * @var string|int
      */
     public $width = Abs::MEDIA_SM;
@@ -60,27 +70,17 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $okType = Abs::THEME_PRIMARY;
+
+    /**
+     * @var string
+     */
     public $cancelText = 'Cancel';
 
     /**
      * @var bool
      */
     public $cancelShow = false;
-
-    /**
-     * @var string
-     */
-    public $okType = Abs::THEME_PRIMARY;
-
-    /**
-     * @var int
-     */
-    public $zIndex = 1000;
-
-    /**
-     * @var bool
-     */
-    public $closable = true;
 
     /**
      * @var array

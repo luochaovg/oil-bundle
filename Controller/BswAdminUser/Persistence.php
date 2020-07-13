@@ -93,7 +93,6 @@ trait Persistence
 
         return $this->okayAjax(
             [
-                'width'   => 280,
                 'title'   => $this->twigLang('Scan the qr-code please'),
                 'content' => Html::tag(
                     'img',

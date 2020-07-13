@@ -147,18 +147,20 @@ trait BackendPreset
     }
 
     /**
-     * @param string $field
+     * @param string $label
      * @param string $content
      * @param array  $options
      *
      * @return Charm
      */
-    public function charmShowContent(string $field, string $content, array $options = []): Charm
+    public function charmShowContent(string $label, string $content, array $options = []): Charm
     {
-        $label = Helper::stringToLabel($field);
         $args = [
-            'title'   => $this->twigLang($label),
-            'content' => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
+            'title'        => $this->twigLang($label),
+            'content'      => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
+            'closable'     => false,
+            'keyboard'     => true,
+            'maskClosable' => true,
         ];
 
         $button = (new Button('{value}'))
