@@ -1,6 +1,6 @@
 bsw.configure({
     data: {
-        previewColumns: [],
+        previewColumns: {{ preview.columnsJson|raw }},
         previewList: {{ preview.listJson|raw }},
         previewSelectedRow: [],
         previewDynamicRefresh: {{ preview.dynamic }},
@@ -29,10 +29,10 @@ bsw.configure({
         },
         previewSortData(pagination, filters, sorter) {
             let url = this.previewGetUrl();
-            url = bsw.unsetParamsBeginWith(['sequence'], url);
+            url = bsw.unsetParamsBeginWith(['{{ constant(scaffold.abs ~ '::TAG_SEQUENCE') }}'], url);
             if (typeof sorter.field !== 'undefined') {
                 let key = bsw.humpToUnder(sorter.field);
-                key = `sequence[${key}]`;
+                key = `{{ constant(scaffold.abs ~ '::TAG_SEQUENCE') }}[${key}]`;
                 url = bsw.setParams({[key]: sorter.order}, url);
             }
             this.pagination(url, null, {{ jump }});
@@ -42,9 +42,6 @@ bsw.configure({
         },
     },
     logic: {
-        previewColumnHandler(v) {
-            v.previewColumns = bsw.jsonFnHandler({{ preview.columnsJson|raw }}, 'customRender');
-        },
         previewResize(v) {
             let upper = {{ preview.scroll.x ?? preview.scrollX }};
             let columns = v.previewColumns;

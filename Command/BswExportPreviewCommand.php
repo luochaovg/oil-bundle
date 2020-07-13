@@ -100,27 +100,20 @@ class BswExportPreviewCommand extends ExportCsvCommand
     }
 
     /**
-     * @param array $record
-     *
      * @return array
+     * @throws
      */
-    private function enumParser(array $record): array
+    private function enumParser(): array
     {
-        $enum = [];
-        $enumClass = Enum::class;
-        $prefixTable = strtoupper(Helper::tableNameFromCls($this->entity()));
+        $extraArgs = [
+            'enumClass'          => Enum::class,
+            'doctrinePrefix'     => $this->web->parameter('doctrine_prefix'),
+            'doctrinePrefixMode' => $this->web->parameter('doctrine_prefix_mode'),
+        ];
 
-        foreach ($record as $field => $value) {
-            $label = strtoupper(Helper::camelToUnder($field));
-            if (defined($first = "{$enumClass}::{$label}")) {
-                $enum[$field] = $this->web->enumLang(constant($first));
-                continue;
-            }
-            if (defined($second = "{$enumClass}::{$prefixTable}_{$label}")) {
-                $enum[$field] = $this->web->enumLang(constant($second));
-                continue;
-            }
-        }
+        $previewAnnotation = $this->web->getPreviewAnnotation($this->entity(), $extraArgs);
+        $enum = Helper::arrayColumn($previewAnnotation, 'enum');
+        $enum = array_filter($enum);
 
         return $enum;
     }
@@ -134,7 +127,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
     {
         static $enum;
         if (!isset($enum)) {
-            $enum = $this->enumParser($record);
+            $enum = $this->enumParser();
         }
 
         foreach ($record as $field => $value) {

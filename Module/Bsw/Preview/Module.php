@@ -509,7 +509,8 @@ class Module extends Bsw
             }
 
             if ($customRender = $item['customRender']) {
-                $column['customRender'] = "fn:{$customRender}";
+                // TODO
+                // $column['customRender'] = "fn:{$customRender}";
             }
 
             /**
@@ -529,11 +530,9 @@ class Module extends Bsw
 
             if ($mixed = $mixedAnnotation[$field] ?? null) {
                 foreach ([Abs::ORDER, Abs::SORT] as $keyword) {
-
                     if (!$mixed[$keyword]) {
                         continue;
                     }
-
                     $column['sorter'] = true;
                     $column['sortDirections'] = $mixed["{$keyword}Directions"];
                 }
@@ -589,7 +588,7 @@ class Module extends Bsw
 
         if ($mixedAnnotation) {
 
-            $sequence = $this->web->getArgs('sequence');
+            $sequence = $this->web->getArgs(Abs::TAG_SEQUENCE);
             $sequence = Helper::keyUnderToCamel($sequence ?? []);
 
             foreach ($sequence as $key => $direction) {
@@ -1027,7 +1026,7 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output();
-        $this->isExport = $this->web->getArgs('scene') === Abs::TAG_EXPORT;
+        $this->isExport = $this->web->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT;
 
         /**
          * handle annotation

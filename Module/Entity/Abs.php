@@ -253,6 +253,8 @@ class Abs
     const TAG_TRANS_BEFORE   = 'transactional:before';
     const TAG_TRANS_AFTER    = 'transactional:after';
     const TAG_CHILDREN       = 'children';
+    const TAG_SCENE          = 'scene';
+    const TAG_SEQUENCE       = 'sequence';
     const TAG_ROW_CLS_NAME   = 'rowClsName';
 
     const POS_TOP           = 'top';

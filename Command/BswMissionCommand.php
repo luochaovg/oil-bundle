@@ -140,7 +140,7 @@ class BswMissionCommand extends Command implements CommandInterface
             }
 
             // begin
-            $missionRepo->modify([Abs::PK => $m['id']], ['state' => 2]);
+            //$missionRepo->modify([Abs::PK => $m['id']], ['state' => 2]);
 
             // run command
             $command = $this->getApplication()->find($m['command']);
@@ -160,7 +160,7 @@ class BswMissionCommand extends Command implements CommandInterface
                 $attributes = ['state' => 4, 'remark' => "[{$date}] {$e->getMessage()}"];
             }
 
-            $missionRepo->modify([Abs::PK => $m['id']], $attributes);
+            //$missionRepo->modify([Abs::PK => $m['id']], $attributes);
 
             // send telegram message
             if (isset($condition['receiver'])) {
