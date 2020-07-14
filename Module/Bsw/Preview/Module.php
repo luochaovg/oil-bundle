@@ -968,6 +968,24 @@ class Module extends Bsw
     }
 
     /**
+     * Get children relation field
+     *
+     * @return string|null
+     */
+    protected function getChildrenRelationField(): ?string
+    {
+        if (!$this->input->childrenRelationField) {
+            return null;
+        }
+
+        if (is_string($this->input->childrenRelationField)) {
+            return $this->input->childrenRelationField;
+        }
+
+        return $this->entity ? $this->repository->pk() : null;
+    }
+
+    /**
      * Get preview data with children
      *
      * @param array  $list
@@ -1053,14 +1071,9 @@ class Module extends Bsw
          */
 
         if ($this->entity && $this->isChildrenNecessary()) {
-            if (is_string($this->input->childrenRelationField)) {
-                $parentKey = $this->input->childrenRelationField;
-            } else {
-                $parentKey = $this->repository->pk();
-            }
             $list = $this->getPreviewDataWithChildren(
                 $list,
-                $parentKey,
+                $this->getChildrenRelationField(),
                 $hooks,
                 $output,
                 $previewAnnotation,
