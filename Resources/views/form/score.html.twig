@@ -5,7 +5,7 @@
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
-  v-decorator="['{{ field }}', { initialValue: {{ form.value }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ form.value }} }]"
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   :allow-half="{{ form.allowHalf ? 'true' : 'false' }}"
   {% if form.character %}

@@ -33,19 +33,19 @@
               {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
               {% set end = title ? '</a-popover>' : null %}
               {{ begin|raw }}
-              {% include "form/" ~ form.itemName ~ ".html.twig" %}
+              {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
               {{ end|raw }}
             </a-form-item>
           </transition>
         {% endfor %}
         <a-form-item
           :wrapper-col="{
-          {{ small }}: { span: {{ totalColumn }}, offset: 0 },
-          {{ large }}: { span: {{ totalColumn - labelColumn }}, offset: {{ labelColumn }} }
-        }"
+            {{ small }}: { span: {{ totalColumn }}, offset: 0 },
+            {{ large }}: { span: {{ totalColumn - labelColumn }}, offset: {{ labelColumn }} }
+          }"
         >
           {% for form in persistence.operates %}
-            {% include 'form/button.html.twig' %}
+            {% include 'form/button.html.twig' with {form: form} %}
           {% endfor %}
         </a-form-item>
       </a-form>

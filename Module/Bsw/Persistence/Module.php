@@ -454,9 +454,7 @@ class Module extends Bsw
              * @var Group $form
              */
             foreach ($form->getMember() as $key => $groupForm) {
-                $groupField = $groupForm->getField() ?? $key;
-                $groupField = "{$field}_{$groupField}";
-                $this->datetimeFormat($groupField, $groupForm, $format);
+                $this->datetimeFormat($groupForm->getKey(), $groupForm, $format);
             }
         }
     }
@@ -567,7 +565,7 @@ class Module extends Bsw
         $_record = [];
         $format = [];
 
-        foreach ($persistAnnotation as $field => $item) {
+        foreach ($persistAnnotation as $key => $item) {
 
             /**
              * @var Form $form
@@ -575,12 +573,14 @@ class Module extends Bsw
             $form = $item['type'];
             $label = $item['label'];
 
+            $form->setKey($key);
+            $form->setField(Helper::camelToUnder($key));
             $form->setDisabled($item['disabled']);
             $form->setStyle($item['style']);
 
-            foreach ($item['rules'] as $key => &$rule) {
+            foreach ($item['rules'] as $k => &$rule) {
                 if (!is_array($rule) || !$rule['message']) {
-                    unset($item['rules'][$key]);
+                    unset($item['rules'][$k]);
                 } else {
                     $args = ['{{ field }}' => $this->web->fieldLang($label)];
                     $args = array_merge($args, $rule['args'] ?? []);
@@ -589,8 +589,8 @@ class Module extends Bsw
             }
 
             $form->setRules($item['rules']);
-            if (isset($record[$field])) {
-                $form->setValue($record[$field]);
+            if (isset($record[$key])) {
+                $form->setValue($record[$key]);
             }
 
             if (isset($item['value'])) {
@@ -616,7 +616,7 @@ class Module extends Bsw
             if (in_array(get_class($form), $enumClass)) {
 
                 if (!is_array($item['enum'])) {
-                    $exception = $this->getAnnotationException($field);
+                    $exception = $this->getAnnotationException($key);
                     $enumClassStr = implode("\n", $enumClass);
                     throw new AnnotationException(
                         "{$exception} option `enum` must configure when type is below:\n\n{$enumClassStr}"
@@ -629,13 +629,13 @@ class Module extends Bsw
                 $form->setEnum($this->web->enumLang($item['enum']));
             }
 
-            $this->datetimeFormat($field, $form, $format);
+            $this->datetimeFormat($key, $form, $format);
 
             if (!$form->getPlaceholder()) {
                 $form->setPlaceholder($item['placeholder'] ?: $label);
             }
 
-            $this->formDefaultConfigure($form, $field, $item, $output);
+            $this->formDefaultConfigure($form, $key, $item, $output);
 
             $tipsAuto = $titleAuto = null;
             if (get_class($form) == Select::class && $form->getMode() == Abs::MODE_MULTIPLE) {
@@ -652,11 +652,11 @@ class Module extends Bsw
                     ->setType(Abs::THEME_LINK)
                     ->setSize(Abs::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
-                    ->setArgs(['field' => $field, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
+                    ->setArgs(['field' => $key, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
                 $titleAuto = $this->web->getButtonHtml($button, true);
             }
 
-            $_record[$field] = [
+            $_record[$key] = [
                 'hide'      => $item['hide'],
                 'label'     => $item['trans'] ? $this->web->fieldLang($label) : $label,
                 'tips'      => $item['tips'],

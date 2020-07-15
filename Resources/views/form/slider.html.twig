@@ -22,5 +22,5 @@
   {% endif %}
   :tip-formatter="{{ form.tipFormatter }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: {{ form.value }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ form.value }} }]"
 ></a-slider>

@@ -1,5 +1,5 @@
 <div class="bsw-operate {{ operate.position }}" v-if="{{ operate.buttons ? 'true' : 'false' }}">
   {% for form in operate.buttons %}
-    {% include 'form/button.html.twig' %}
+    {% include 'form/button.html.twig' with {form: form} %}
   {% endfor %}
 </div>

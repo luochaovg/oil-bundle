@@ -74,7 +74,7 @@
         {% endfor %}
         <a-form-item :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}">
           {% for form in persistence.operates %}
-            {% include 'form/button.html.twig' %}
+            {% include 'form/button.html.twig' with {form: form} %}
           {% endfor %}
         </a-form-item>
       </a-form>

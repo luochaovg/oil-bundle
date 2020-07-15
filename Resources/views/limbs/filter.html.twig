@@ -26,14 +26,15 @@
         {% if item.type is iterable %}
           {{ begin|raw }}
           <a-input-group compact>
-            {% for k,v in item.type %}
-              {% include "form/" ~ v.itemName ~ ".html.twig" with {field: v.key, form: v} %}
+            {% for form in item.type %}
+              {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
             {% endfor %}
           </a-input-group>
           {{ end|raw }}
         {% else %}
+          {% set form = item.type %}
           {{ begin|raw }}
-          {% include "form/" ~ item.type.itemName ~ ".html.twig" with {field: key, form: item.type} %}
+          {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
           {{ end|raw }}
         {% endif %}
       </a-form-item>

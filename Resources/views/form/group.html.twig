@@ -10,8 +10,7 @@
     {% endif %}
     <a-col {{ attrString|raw }}>
       <a-form-item>
-        {% set _field = field ~ '_' ~ (item.field ?? key) %}
-        {% include "form/" ~ item.itemName ~ ".html.twig" with {field: _field, form: item} %}
+        {% include "form/" ~ item.itemName ~ ".html.twig" with {form: item} %}
       </a-form-item>
     </a-col>
   {% endfor %}

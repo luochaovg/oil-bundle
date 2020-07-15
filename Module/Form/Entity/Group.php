@@ -13,6 +13,11 @@ class Group extends Form
     protected $member = [];
 
     /**
+     * @var bool
+     */
+    private $memberIsCorrect = false;
+
+    /**
      * @var array
      */
     protected $column = [];
@@ -32,6 +37,13 @@ class Group extends Form
      */
     public function getMember(): array
     {
+        if (!$this->memberIsCorrect) {
+            $this->memberIsCorrect = true;
+            foreach ($this->member as $key => $item) {
+                $item->setKey($this->getKey() . '_' . ($item->getKey() ?? $key));
+            }
+        }
+
         return $this->member;
     }
 

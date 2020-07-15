@@ -18,5 +18,5 @@
   :minute-step="{{ form.minuteStep }}"
   :second-step="{{ form.secondStep }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
 ></a-time-picker>

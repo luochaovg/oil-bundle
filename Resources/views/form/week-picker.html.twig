@@ -15,5 +15,5 @@
   placeholder="{{ form.placeholder }}"
   format="{{ form.format }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
 ></a-week-picker>

@@ -13,5 +13,5 @@
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: {{ form.value ? 'true' : 'false' }}, valuePropName: 'checked' }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ form.value ? 'true' : 'false' }}, valuePropName: 'checked' }]"
 ></a-switch>

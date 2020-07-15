@@ -55,12 +55,12 @@ trait Persistence
                     'column' => [14, 10],
                     'member' => [
                         (new Date())
-                            ->setField('day')
+                            ->setKey('day')
                             ->setPlaceholder('Start date')
                             ->setValue($dateStart ?? null)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select start date please'))]),
                         (new Time())
-                            ->setField('time')
+                            ->setKey('time')
                             ->setPlaceholder('Start time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
@@ -76,12 +76,12 @@ trait Persistence
                     'column' => [14, 10],
                     'member' => [
                         (new Date())
-                            ->setField('day')
+                            ->setKey('day')
                             ->setPlaceholder('End date')
                             ->setValue($dateEnd ?? null)
                             ->setRules([$this->formRuleRequired($this->messageLang('Select end date please'))]),
                         (new Time())
-                            ->setField('time')
+                            ->setKey('time')
                             ->setPlaceholder('End time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)

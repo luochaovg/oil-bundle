@@ -15,6 +15,6 @@
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ field }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
 ></a-input-number>
-{% include 'form/iframe-entrypoint.html.twig' %}
+{% include 'form/iframe-entrypoint.html.twig' with {form: form} %}
