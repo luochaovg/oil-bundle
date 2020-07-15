@@ -425,4 +425,112 @@ class Html
 
         return getArray($dom->documentElement);
     }
+
+    /**
+     * Compress html
+     *
+     * @param string $content
+     *
+     * @return string
+     * */
+    public static function compressHtml(string $content): string
+    {
+        $content = str_replace("\r\n", null, $content);
+        $content = str_replace("\n", null, $content);
+        $content = str_replace("\t", null, $content);
+
+        $pattern = [
+            "/> *([^ ]*) *</",
+            "/[\s]+/",
+            "/<!--[^!]*-->/",
+            "/\" /",
+            "/ \"/",
+            "/\*[^*]*\*/",
+        ];
+        $replace = [
+            '>\\1<',
+            ' ',
+            null,
+            '"',
+            '"',
+            null,
+            null,
+        ];
+
+        return preg_replace($pattern, $replace, $content);
+    }
+
+    /**
+     * Array to xml
+     *
+     * @access public
+     *
+     * @param array $params
+     * @param bool  $weChatModel
+     *
+     * @return string
+     */
+    public static function arrayToXml(array $params, bool $weChatModel = false): string
+    {
+        $params = (array)$params;
+        $xml = '<xml>';
+        foreach ($params as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= '<' . $key . '>' . $val . '</' . $key . '>';
+            } else {
+                $begin = $weChatModel ? '<![CDATA[' : null;
+                $end = $weChatModel ? ']]>' : null;
+                $xml .= '<' . $key . '>' . $begin . $val . $end . '</' . $key . '>';
+            }
+        }
+        $xml .= '</xml>';
+
+        return $xml;
+    }
+
+    /**
+     * Xml to array
+     *
+     * @access public
+     *
+     * @param string $xml
+     *
+     * @return array
+     */
+    public static function xmlToArray(string $xml): array
+    {
+        if (empty($xml)) {
+            return [];
+        }
+
+        libxml_disable_entity_loader(true);
+        $object = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        return json_decode(json_encode($object), true);
+    }
+
+    /**
+     * Send post by form
+     *
+     * @access public
+     *
+     * @param string $url
+     * @param array  $params
+     *
+     * @return string
+     */
+    public static function postForm(string $url, array $params)
+    {
+        $html = "<form id='form' name='form' action='{$url}' method='POST'>";
+        foreach ($params as $key => $value) {
+            $value = str_replace("'", "&apos;", $value);
+            $html .= "<input type='hidden' name='{$key}' value='{$value}'/>";
+        }
+
+        // submit must with not attribute `name`
+        $html .= "<input type='submit' value='ok' style='display:none;'></form>";
+        $html .= "<script>document.forms['form'].submit();</script>";
+
+        return $html;
+    }
 }

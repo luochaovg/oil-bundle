@@ -3109,6 +3109,33 @@ class Helper
         return $str;
     }
 
+
+    /**
+     * Get the rand string of readability
+     *
+     * @access public
+     *
+     * @param $length
+     *
+     * @return string
+     */
+    public static function readability($length)
+    {
+        $string = null;
+        $vocal = explode(' ', 'a e i o u');
+        $consonant = explode(' ', 'b c d f g h j k l m n p r s t v w x y z');
+
+        srand((double)microtime() * 1000000);
+        $max = $length / 2;
+
+        for ($i = 1; $i <= $max; $i++) {
+            $string .= $consonant[rand(0, 19)];
+            $string .= $vocal[rand(0, 4)];
+        }
+
+        return $string;
+    }
+
     /**
      * Is we chat browser
      *
@@ -4803,5 +4830,26 @@ class Helper
         array_push($set, $lastNumber);
 
         return $set;
+    }
+
+    /**
+     * Filter by bytes
+     *
+     * @param string $content
+     * @param int    $bytes
+     *
+     * @return string
+     */
+    public static function filterByBytes(string $content, int $bytes = 4): string
+    {
+        $content = preg_replace_callback(
+            '/./u',
+            function ($match) use ($bytes) {
+                return strlen($match[0]) >= $bytes ? null : $match[0];
+            },
+            $content
+        );
+
+        return $content;
     }
 }
