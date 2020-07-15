@@ -386,7 +386,7 @@ class Module extends Bsw
              * extra enum
              */
 
-            $item = $this->handleForEnum($item, ['scene' => $this->input->scene]);
+            $item = $this->handleForEnum($item, ['scene' => Abs::TAG_FILTER]);
 
             $enumClass = [
                 Select::class,

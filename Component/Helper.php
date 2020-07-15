@@ -1171,8 +1171,8 @@ class Helper
         $options[CURLOPT_CUSTOMREQUEST] = $method;
 
         // url
-        if ($method === Abs::REQ_GET) {
-            $options[CURLOPT_URL] = call_user_func_array([self::class, 'httpBuildQuery'], [$params, $url]);
+        if (in_array($method, [Abs::REQ_GET, Abs::REQ_DELETE])) {
+            $options[CURLOPT_URL] = self::httpBuildQuery($params, $url);
         } else {
             $options[CURLOPT_URL] = $url;
         }

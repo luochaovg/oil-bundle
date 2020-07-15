@@ -230,6 +230,7 @@ class Abs
     const HEX_SIZE_2        = self::HEX_SIZE ** 2;
     const HEX_SIZE_3        = self::HEX_SIZE ** 3;
 
+    const TAG_UNKNOWN        = 'unknown';
     const TAG_MESSAGE        = 'message';
     const TAG_MODAL          = 'modal';
     const TAG_RESULT         = 'result';
@@ -237,8 +238,12 @@ class Abs
     const TAG_FALLBACK       = 'fallback';
     const TAG_SESSION_LANG   = 'lang';
     const TAG_SEO_ACME_KEY   = 'seo_acme';
+    const TAG_BLANK          = 'blank';
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
+    const TAG_PERS_MODIFY    = 'persistence:modify';
+    const TAG_PERS_NEWLY     = 'persistence:newly';
+    const TAG_CHART          = 'chart';
     const TAG_FILTER         = 'filter';
     const TAG_SEARCH         = 'search';
     const TAG_EXPORT         = 'export';
@@ -573,10 +578,11 @@ class Abs
     const PAY_STATE_CLOSE     = 0;
     const PAY_STATE_WAIT_USER = 1;
     const PAY_STATE_WAIT_CALL = 2;
-    const PAY_STATE_ERROR     = 48;
-    const PAY_STATE_FAIL      = 49;
-    const PAY_STATE_DONE      = 50;
-    const PAY_STATE_REFUND    = 51;
+    const PAY_STATE_ERROR     = 20;
+    const PAY_STATE_FAIL      = 40;
+    const PAY_STATE_DONE      = 60;
+    const PAY_STATE_COMPLETE  = 80;
+    const PAY_STATE_REFUND    = 90;
 
     const USER_PLAIN    = 1;
     const USER_INTERNAL = 2;

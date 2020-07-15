@@ -516,7 +516,7 @@ class Module extends Bsw
         };
 
         $persistence = !!$this->input->submit;
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'persistence_' . ($this->input->id ? 'modify' : 'newly')]];
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERS_MODIFY : Abs::TAG_PERS_NEWLY]];
         $_hooks = [];
         foreach ($hooks as $hook => $item) {
             $_hooks[$hook] = $item['fields'];
@@ -605,7 +605,7 @@ class Module extends Bsw
              * extra enum
              */
 
-            $item = $this->handleForEnum($item, ['scene' => $this->input->scene, 'id' => $this->input->id]);
+            $item = $this->handleForEnum($item, ['scene' => Abs::TAG_PERSISTENCE, 'id' => $this->input->id]);
 
             $enumClass = [
                 Select::class,

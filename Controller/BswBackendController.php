@@ -286,7 +286,7 @@ class BswBackendController extends BswWebController
     protected function showModule(array $moduleList, string $view, array $logicArgs = []): Response
     {
         if (empty($logicArgs['scene'])) {
-            $logicArgs['scene'] = 'unknown';
+            $logicArgs['scene'] = Abs::TAG_UNKNOWN;
         }
 
         $ajaxShowArgs = [];
@@ -460,7 +460,7 @@ class BswBackendController extends BswWebController
      */
     protected function showBlank(string $view, array $args = [], array $moduleList = []): Response
     {
-        $args['scene'] = 'blank';
+        $args['scene'] = Abs::TAG_BLANK;
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -484,7 +484,7 @@ class BswBackendController extends BswWebController
      */
     protected function showPreview(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
-        $args['scene'] = 'preview';
+        $args['scene'] = Abs::TAG_PREVIEW;
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -513,7 +513,7 @@ class BswBackendController extends BswWebController
             $args['submit'] = $this->postArgs('submit', false) ?? [];
         }
 
-        $args['scene'] = 'persistence';
+        $args['scene'] = Abs::TAG_PERSISTENCE;
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -535,7 +535,7 @@ class BswBackendController extends BswWebController
      */
     protected function showChart(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
-        $args['scene'] = 'chart';
+        $args['scene'] = Abs::TAG_CHART;
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,

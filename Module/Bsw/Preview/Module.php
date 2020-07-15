@@ -244,7 +244,7 @@ class Module extends Bsw
          * extra enum
          */
 
-        $item = $this->handleForEnum($item, ['scene' => $this->input->scene]);
+        $item = $this->handleForEnum($item, ['scene' => Abs::TAG_PREVIEW]);
 
         /**
          * eradicate xss
@@ -775,7 +775,7 @@ class Module extends Bsw
             );
         };
 
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => 'preview']];
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_PREVIEW]];
         $_hooks = [];
         foreach ($hooks as $hook => $item) {
             $_hooks[$hook] = $item['fields'];

@@ -95,6 +95,7 @@ class Service
         $methods = [
             Abs::REQ_GET,
             Abs::REQ_POST,
+            Abs::REQ_DELETE,
             Abs::REQ_HEAD,
         ];
 
@@ -375,11 +376,11 @@ class Service
 
         $this->url = "{$this->scheme}://{$this->host}{$portString}/{$this->path}";
         if ($this->query) {
-            $this->url = Helper::addParamsForUrl($this->query, $this->url);
+            $this->url = Helper::httpBuildQuery($this->query, $this->url);
         }
 
-        if ($this->method == Abs::REQ_GET && $this->args) {
-            $this->url = Helper::addParamsForUrl($this->args, $this->url);
+        if (in_array($this->method, [Abs::REQ_GET, Abs::REQ_DELETE])) {
+            $this->url = Helper::httpBuildQuery($this->args, $this->url);
         }
 
         // content type
@@ -408,6 +409,8 @@ class Service
                 }
             }
         }
+
+        $options[CURLOPT_CUSTOMREQUEST] = $this->method;
 
         // header
         $header = [];

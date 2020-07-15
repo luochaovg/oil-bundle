@@ -33,6 +33,10 @@ class MysqlSmallint extends Validator
             return false;
         }
 
+        if ($this->args && in_array($this->value, $this->args)) {
+            return true;
+        }
+
         return $this->value >= Abs::MYSQL_SMALLINT_MIN && $this->value <= Abs::MYSQL_SMALLINT_MAX;
     }
 

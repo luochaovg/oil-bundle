@@ -21,8 +21,16 @@ class Timestamp extends Hook
             return null;
         }
 
-        if (empty($value) && !empty($extraArgs["{$scene}_empty"])) {
-            $value = $extraArgs["{$scene}_empty"];
+        if (empty($value)) {
+            $zero = trim("{$scene}_zero", '_');
+            if (!empty($extraArgs[$zero])) { // default value
+                return $extraArgs[$zero];
+            }
+
+            $empty = trim("{$scene}_empty", '_');
+            if (!empty($extraArgs[$empty])) { // default timestamp
+                $value = $extraArgs[$empty];
+            }
         }
 
         return date(current($args) ?: Abs::FMT_FULL, $value);
