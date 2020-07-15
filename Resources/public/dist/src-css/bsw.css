@@ -442,8 +442,11 @@ div.ant-modal-mask {
 .bsw-grant form .ant-checkbox-group {
   line-height: unset;
 }
-.bsw-checkbox-middle input[type=checkbox],
-.bsw-checkbox-middle input[type=radio] {
+.bsw-grant .ant-form-item-label > label {
+  font-size: 16px;
+}
+.bsw-checkbox-middle form input[type=checkbox],
+.bsw-checkbox-middle form input[type=radio] {
   width: 16px;
   height: 16px;
 }
@@ -452,10 +455,10 @@ div.ant-modal-mask {
   height: 18px;
 }
 .bsw-checkbox-middle .ant-checkbox-inner:after {
-  top: 45%;
-  left: 22%;
-  width: 6.2px;
-  height: 10.6px;
+  top: 46%;
+  left: 23%;
+  width: 6.5px;
+  height: 11px;
 }
 .bsw-checkbox-middle .ant-checkbox {
   top: -2px;

@@ -1053,7 +1053,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @return {*}
      */
-    vue(selector = '.bsw-content') {
+    vue(selector = '.bsw-vue') {
         let that = this;
         let conf = {};
         return {
@@ -1636,6 +1636,7 @@ class FoundationAntD extends FoundationTools {
         this.request(data.location).then((res) => {
             this.response(res).then(() => {
                 let options = this.jsonFilter(Object.assign(data, {
+                    width: res.sets.width || data.width || undefined,
                     title: res.sets.title || data.title || this.lang.modal_title,
                     content: res.sets.content,
                 }));

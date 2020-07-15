@@ -20,7 +20,7 @@ window.bsw = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 $(function () {
     // vue
-    bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
+    bsw.vue().template(bsw.config.template || null).data(Object.assign({
 
         bsw: bsw,
         locale: bsw.d.locales[bsw.lang.i18n_ant],

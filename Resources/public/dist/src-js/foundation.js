@@ -1412,7 +1412,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'vue',
         value: function vue() {
-            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-content';
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-vue';
 
             var that = this;
             var conf = {};
@@ -2147,6 +2147,7 @@ var FoundationAntD = function (_FoundationTools) {
             this.request(data.location).then(function (res) {
                 _this3.response(res).then(function () {
                     var options = _this3.jsonFilter(Object.assign(data, {
+                        width: res.sets.width || data.width || undefined,
                         title: res.sets.title || data.title || _this3.lang.modal_title,
                         content: res.sets.content
                     }));
