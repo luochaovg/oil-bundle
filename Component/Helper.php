@@ -139,7 +139,7 @@ class Helper
      *
      * @return string
      */
-    public static function money($number, string $tpl = '￥%s', int $decimals = 1): string
+    public static function money($number, string $tpl = '￥%s', int $decimals = 2): string
     {
         return sprintf($tpl, self::numberFormat($number, $decimals));
     }
