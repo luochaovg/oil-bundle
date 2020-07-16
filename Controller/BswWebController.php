@@ -15,6 +15,8 @@ use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Entity\ErrorSession;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Controller\Traits as CT;
+use Leon\BswBundle\Module\Bsw as BswModule;
+use Leon\BswBundle\Module\Exception\ModuleException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -814,6 +816,63 @@ abstract class BswWebController extends AbstractController
         $view = $this->viewHandler($parameters['scaffold'], $view);
 
         return $this->renderView($view, $parameters);
+    }
+
+    /**
+     * Render module by simple mode
+     *
+     * @param array $moduleList
+     * @param array $logicArgs
+     * @param bool  $directResponseMessage
+     *
+     * @return Response|Message|array
+     * @throws
+     */
+    protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
+    {
+        $showArgs = ['logic' => $logicArgs];
+        $inputArgs = $this->displayArgsScaffold();
+
+        $extraBswArgs = [
+            'expr'       => $this->expr,
+            'translator' => $this->translator,
+            'logger'     => $this->logger,
+        ];
+
+        $bswDispatcher = new BswModule\Dispatcher($this);
+        foreach ($moduleList as $module => $extraArgs) {
+
+            if (is_numeric($module)) {
+                [$module, $extraArgs] = [$extraArgs, []];
+            }
+
+            /**
+             * validator extra
+             */
+            if (!is_array($extraArgs)) {
+                throw new ModuleException('The extra args must be array for ' . $module);
+            }
+
+            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
+            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
+
+            $inputArgs['moduleArgs'][$name]['input'] = $input;
+            $inputArgs['moduleArgs'][$name]['output'] = $output;
+            $inputArgs = array_merge($inputArgs, $output);
+
+            /**
+             * @var BswModule\Message $message
+             */
+            if (($message = $output['message'] ?? null)) {
+                return $directResponseMessage ? $this->messageToResponse($message) : $message;
+            }
+
+            if ($name) {
+                $showArgs[$name] = $output;
+            }
+        }
+
+        return $showArgs;
     }
 
     /**
