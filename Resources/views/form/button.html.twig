@@ -25,7 +25,8 @@
   {% endif %}
   {{ form.label|trans({}, 'twig') }}
   {% if form.selector %}
-    {% set var = 'previewSelectedRow.length' %}
+    {% set varKey = form.selectRowKey ?? 'previewSelectedRow' %}
+    {% set var = '(' ~ varKey ~ ' && ' ~ varKey ~ '.length)' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {% if form.bindVariable %}

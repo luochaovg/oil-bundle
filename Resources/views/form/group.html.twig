@@ -2,6 +2,8 @@
   <!-- xs < sm < md < lg < xl < xxl -->
   {% set small = scaffold.iframe ? 'xs' : 'sm' %}
   {% set large = scaffold.iframe ? 'sm' : 'md' %}
+  {% set totalColumn = constant(scaffold.abs ~ '::PERSISTENCE_TOTAL_COLUMN') %}
+  {% set labelColumn = constant(scaffold.abs ~ '::PERSISTENCE_LABEL_COLUMN') %}
   {% for key, item in form.member %}
     {% if form.responsive %}
       {% set attrString = ':' ~ small ~ '="' ~ totalColumn ~ '" :' ~ large ~ '="' ~ attribute(form.column, key) ~ '"' %}

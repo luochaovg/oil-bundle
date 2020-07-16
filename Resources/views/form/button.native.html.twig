@@ -19,7 +19,8 @@
   data-bsw="{{ form.data }}"
   onclick="bsw.cnf.v.dispatcherByNative(this)"
   {% if form.selector %}
-    {% set var = 'previewSelectedRow.length' %}
+    {% set varKey = form.selectRowKey ?? 'previewSelectedRow' %}
+    {% set var = '(' ~ varKey ~ ' && ' ~ varKey ~ '.length)' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {{ form.attributes|raw }}

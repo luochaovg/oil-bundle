@@ -368,10 +368,10 @@ class Module extends Bsw
              * @var Form $form
              */
             $form = $item['type'];
-            $label = $item['label'];
 
-            $form->setStyle($item['style']);
             $form->setKey($key);
+            $form->setLabel($item['label']);
+            $form->setStyle($item['style']);
             $form->setField($item['field']);
 
             if (isset($item['value'])) {
@@ -422,11 +422,11 @@ class Module extends Bsw
             }
 
             if (!$form->getPlaceholder()) {
-                $form->setPlaceholder($item['placeholder'] ?: $label);
+                $form->setPlaceholder($item['placeholder'] ?: $form->getLabel());
             }
 
             $record[$key] = [
-                'label'  => $item['trans'] ? $this->web->fieldLang($label) : $label,
+                'label'  => $item['trans'] ? $this->web->fieldLang($form->getLabel()) : $form->getLabel(),
                 'column' => $item['column'],
                 'type'   => $form,
                 'sort'   => $item['sort'],

@@ -10,6 +10,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
 use Leon\BswBundle\Module\Form\Entity\Traits\Key;
+use Leon\BswBundle\Module\Form\Entity\Traits\Label;
 use Leon\BswBundle\Module\Form\Entity\Traits\Name;
 use Leon\BswBundle\Module\Form\Entity\Traits\Placeholder;
 use Leon\BswBundle\Module\Form\Entity\Traits\Rules;
@@ -18,6 +19,10 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Value;
 
 abstract class Form
 {
+    use Key;
+    use Field;
+    use Name;
+    use Label;
     use Value;
     use ClassCss;
     use Attributes;
@@ -25,9 +30,6 @@ abstract class Form
     use Style;
     use Placeholder;
     use Rules;
-    use Key;
-    use Field;
-    use Name;
     use Change;
     use AutoFocus;
 

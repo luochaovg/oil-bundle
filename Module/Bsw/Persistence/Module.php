@@ -571,24 +571,16 @@ class Module extends Bsw
              * @var Form $form
              */
             $form = $item['type'];
-            $label = $item['label'];
 
             $form->setKey($key);
-            $form->setField(Helper::camelToUnder($key));
-            $form->setDisabled($item['disabled']);
+            $form->setLabel($item['label']);
             $form->setStyle($item['style']);
+            $form->setField(Helper::camelToUnder($key));
 
-            foreach ($item['rules'] as $k => &$rule) {
-                if (!is_array($rule) || !$rule['message']) {
-                    unset($item['rules'][$k]);
-                } else {
-                    $args = ['{{ field }}' => $this->web->fieldLang($label)];
-                    $args = array_merge($args, $rule['args'] ?? []);
-                    $rule['message'] = $this->web->messageLang($rule['message'], $args);
-                }
-            }
-
+            $form->setDisabled($item['disabled']);
             $form->setRules($item['rules']);
+            $form = $this->web->formRulesHandler($form);
+
             if (isset($record[$key])) {
                 $form->setValue($record[$key]);
             }
@@ -632,7 +624,7 @@ class Module extends Bsw
             $this->datetimeFormat($key, $form, $format);
 
             if (!$form->getPlaceholder()) {
-                $form->setPlaceholder($item['placeholder'] ?: $label);
+                $form->setPlaceholder($item['placeholder'] ?: $form->getLabel());
             }
 
             $this->formDefaultConfigure($form, $key, $item, $output);
@@ -658,7 +650,7 @@ class Module extends Bsw
 
             $_record[$key] = [
                 'hide'      => $item['hide'],
-                'label'     => $item['trans'] ? $this->web->fieldLang($label) : $label,
+                'label'     => $item['trans'] ? $this->web->fieldLang($form->getLabel()) : $form->getLabel(),
                 'tips'      => $item['tips'],
                 'tipsAuto'  => $tipsAuto,
                 'title'     => $item['title'],

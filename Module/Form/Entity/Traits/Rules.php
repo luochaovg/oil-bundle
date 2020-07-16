@@ -12,6 +12,14 @@ trait Rules
     protected $rules = [];
 
     /**
+     * @return array
+     */
+    public function getRulesArray(): array
+    {
+        return $this->rules;
+    }
+
+    /**
      * @return string
      */
     public function getRules(): string

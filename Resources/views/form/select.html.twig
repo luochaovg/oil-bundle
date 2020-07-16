@@ -22,7 +22,8 @@
   not-found-content="{{ form.notFoundContent }}"
   :dropdown-match-select-width="false"
   :dropdown-menu-style="{{ form.dropdownStyle }}"
-  {% if logic.scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+  {% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
     @click.native="persistenceSwitchField = '{{ form.key }}'"
   {% endif %}
   {% if form.change %}

@@ -25,6 +25,7 @@ use Leon\BswBundle\Module\Error\Entity\ErrorUA;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\FileNotExistsException;
 use Leon\BswBundle\Module\Filter\Filter;
+use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
 use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
@@ -1743,6 +1744,29 @@ trait Foundation
         }
 
         return $this->cnf->{$newName} ?? $this->cnf->{$name} ?? $default;
+    }
+
+    /**
+     * Handler of form rules
+     *
+     * @param Form $form
+     *
+     * @return Form
+     */
+    public function formRulesHandler(Form $form): Form
+    {
+        $rules = $form->getRulesArray();
+        foreach ($rules as $k => &$rule) {
+            if (!is_array($rule) || !$rule['message']) {
+                unset($rules[$k]);
+            } else {
+                $args = ['{{ field }}' => $this->fieldLang($form->getLabel())];
+                $args = array_merge($args, $rule['args'] ?? []);
+                $rule['message'] = $this->messageLang($rule['message'], $args);
+            }
+        }
+
+        return $form->setRules($rules);
     }
 
     /**
