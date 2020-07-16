@@ -460,6 +460,14 @@ class Module extends Bsw
     }
 
     /**
+     * @return string
+     */
+    protected function getSize(): string
+    {
+        return $this->input->mobile ? $this->input->formSizeInMobile : $this->input->formSize;
+    }
+
+    /**
      * Persistence data handler
      *
      * @param array  $persistAnnotation
@@ -590,7 +598,18 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($this->input->formSize);
+                $form->setSize($this->getSize());
+            }
+
+            if (Helper::extendClass($form, Group::class, true)) {
+                /**
+                 * @var Group $form
+                 */
+                foreach ($form->getMember() as $f) {
+                    if (method_exists($f, 'setSize')) {
+                        $f->setSize($this->getSize());
+                    }
+                }
             }
 
             /**

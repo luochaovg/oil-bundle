@@ -81,4 +81,9 @@ class Output extends ArgsOutput
      * @var string
      */
     public $textHide;
+
+    /**
+     * @var string
+     */
+    public $size;
 }

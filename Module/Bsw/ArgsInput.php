@@ -71,6 +71,11 @@ abstract class ArgsInput
     /**
      * @var bool
      */
+    public $mobile;
+
+    /**
+     * @var bool
+     */
     public $iframe;
 
     /**
@@ -107,11 +112,6 @@ abstract class ArgsInput
      * @var Expr
      */
     public $expr;
-
-    /**
-     * @var array
-     */
-    public $render = [];
 
     /**
      * @var array

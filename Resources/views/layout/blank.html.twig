@@ -2,33 +2,31 @@
 
 {% block content %}
   <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|filter(v => v)|join(' ') }}">
-    <!-- menu mobile -->
-    {% if menuHtml is defined %}
-      {% block menuMobileBefore %}{% endblock %}
-      {% block menuMobile %}
-        <a-drawer
-          wrap-class-name="bsw-menu-mobile"
-          v-if="bsw.isMobile()"
-          placement="left"
-          :closable="false"
-          :visible="!menuCollapsed"
-          :width="menuWidth"
-          @close="menuTrigger"
-        >
-          {% if 'menu' not in logic.display ?? [] %}
-            {{ (menuHtml ?? null)|raw }}
-          {% endif %}
-        </a-drawer>
-      {% endblock %}
-      {% block menuMobileAfter %}{% endblock %}
-    {% endif %}
-    <!-- menu -->
-    {% if 'menu' not in logic.display ?? [] %}
-      {% block menuBefore %}{% endblock %}
-      {% block menu %}
-        {{ (menuHtml ?? null)|raw }}
-      {% endblock %}
-      {% block menuAfter %}{% endblock %}
+    {% if menuHtml is defined and 'menu' not in logic.display ?? [] %}
+      <!-- menu mobile -->
+      <a-drawer
+        wrap-class-name="bsw-menu-mobile"
+        v-if="bsw.isMobile()"
+        placement="left"
+        :closable="false"
+        :visible="!menuCollapsed"
+        :width="menuWidth"
+        @close="menuTrigger"
+      >
+        {% block menuMobileBefore %}{% endblock %}
+        {% block menuMobile %}
+          {{ menuHtml|raw }}
+        {% endblock %}
+        {% block menuMobileAfter %}{% endblock %}
+      </a-drawer>
+      <!-- menu -->
+      <div class="bsw-menu" v-else>
+        {% block menuBefore %}{% endblock %}
+        {% block menu %}
+          {{ menuHtml|raw }}
+        {% endblock %}
+        {% block menuAfter %}{% endblock %}
+      </div>
     {% endif %}
     <a-layout>
       <!-- header -->

@@ -8,6 +8,7 @@
 .bsw-foundation,
 .bsw-body,
 .bsw-loading,
+.ant-layout-sider,
 .bsw-loading > .ant-spin-container {
   height: 100%;
 }
@@ -169,7 +170,8 @@ div.ant-modal-mask {
   min-height: 200px;
   max-height: 800px;
 }
-.bsw-scaffold {
+.bsw-scaffold,
+.bsw-menu {
   min-height: 100vh;
 }
 .ant-layout-header .logo {
@@ -258,7 +260,7 @@ div.ant-modal-mask {
   padding: 0 10px 45px;
 }
 .ant-layout {
-  min-width: 375px;
+  min-width: 300px;
 }
 .ant-layout .ant-layout-header {
   background: #fff;
@@ -488,7 +490,9 @@ span.ant-time-picker {
 }
 .ant-menu,
 .ant-tag,
-.bsw-menu .logo,
+.bsw-menu-container .logo,
+.bsw-menu,
+.bsw-menu-mobile,
 .bsw-record-action,
 .bsw-operate,
 .bsw-grant form,

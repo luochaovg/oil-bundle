@@ -350,6 +350,14 @@ class Module extends Bsw
     }
 
     /**
+     * @return string
+     */
+    protected function getSize(): string
+    {
+        return $this->input->mobile ? $this->input->filterFormSizeInMobile : $this->input->filterFormSize;
+    }
+
+    /**
      * Filter data handler
      *
      * @param array $filter
@@ -379,7 +387,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($this->input->filterFormSize);
+                $form->setSize($this->getSize());
             }
 
             /**
@@ -439,7 +447,12 @@ class Module extends Bsw
         $search->setAttributes(['bsw-method' => Abs::TAG_SEARCH]);
 
         $export = null;
-        if ($this->input->scene === Abs::TAG_PREVIEW && $this->entity && $this->input->showExport) {
+        if (
+            $this->entity &&
+            $this->input->scene === Abs::TAG_PREVIEW &&
+            $this->input->showExport &&
+            !$this->input->mobile
+        ) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => Abs::TAG_EXPORT]);
             $export->setRouteForAccess($this->input->cnf->route_export);
@@ -466,7 +479,7 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
-            $operate->setSize($this->input->filterFormSize);
+            $operate->setSize($this->getSize());
             $operate->setDisplay($this->web->routeIsAccess($operate->getRouteForAccess()));
         }
 
@@ -558,9 +571,12 @@ class Module extends Bsw
      */
     protected function handleShowList(array $filterAnnotation, Output $output)
     {
-        $output->maxShow = $this->input->maxShow;
-        if ($this->input->iframe) {
+        if ($this->input->mobile) {
+            $output->maxShow = $this->input->maxShowInMobile;
+        } elseif ($this->input->iframe) {
             $output->maxShow = $this->input->maxShowInIframe;
+        } else {
+            $output->maxShow = $this->input->maxShow;
         }
 
         [$output->group, $output->diffuse] = $this->getFilterGroup($filterAnnotation);
@@ -642,6 +658,7 @@ class Module extends Bsw
         $output->columnPx = $this->input->columnPx;
         $output->textShow = $this->input->textShow;
         $output->textHide = $this->input->textHide;
+        $output->size = $this->getSize();
 
         $output = $this->caller(
             $this->method,

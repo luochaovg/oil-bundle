@@ -56,6 +56,7 @@ abstract class BswWebController extends AbstractController
     protected function bootstrap()
     {
         $this->ajax = $this->request()->isXmlHttpRequest();
+        $this->mobile = Helper::isMobile();
 
         // history for last time
         $args = $this->getArgs();
@@ -711,6 +712,7 @@ abstract class BswWebController extends AbstractController
             'fn'        => $fn,
             'access'    => $this->access,
             'ajax'      => $this->ajax,
+            'mobile'    => $this->mobile,
             'iframe'    => empty($getArgs['iframe']) ? false : true,
             'abs'       => static::$abs,
             'enum'      => static::$enum,

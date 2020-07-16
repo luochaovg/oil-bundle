@@ -1096,15 +1096,15 @@ class Module extends Bsw
         $output->slotsJson = Helper::jsonStringify($output->slots, '{}');
         $output->pageJson = Helper::jsonStringify($output->page, '{}');
 
-        $output->choiceFixed = $this->input->choiceFixed;
-        $output->border = $this->input->border;
+        $output->choiceFixed = $this->input->mobile ? false : $this->input->choiceFixed;
+        $output->border = $this->input->mobile ? $this->input->borderInMobile : $this->input->border;
         $output->childrenName = $this->input->childrenName;
         $output->expandRows = $this->input->expandRows;
         $output->expandRowByClick = $this->input->expandRowByClick;
         $output->expandIconColumnIndex = $this->input->expandIconColumnIndex;
         $output->indentSize = $this->input->indentSize;
         $output->scroll = $this->input->scroll;
-        $output->size = $this->input->size;
+        $output->size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
         $output->dynamic = $this->input->dynamic;

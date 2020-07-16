@@ -28,6 +28,11 @@ class Input extends ArgsInput
     public $maxShowInIframe = 4;
 
     /**
+     * @var int
+     */
+    public $maxShowInMobile = 2;
+
+    /**
      * @var string
      */
     public $textShow = 'Show filter';
@@ -51,4 +56,9 @@ class Input extends ArgsInput
      * @var string
      */
     public $filterFormSize = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var string
+     */
+    public $filterFormSizeInMobile = Abs::SIZE_DEFAULT;
 }

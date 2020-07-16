@@ -97,6 +97,7 @@ class Module extends Bsw
 
         $nowScene = $this->input->iframe ? Abs::SCENE_IFRAME : Abs::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
+        $size = $this->input->mobile ? $this->input->operatesSizeInMobile : $this->input->operatesSize;
 
         // buttons handler
         foreach ($buttons as $button) {
@@ -110,7 +111,7 @@ class Module extends Bsw
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be {$buttonCls}[]");
             }
 
-            $button->setSize($this->input->operatesSize);
+            $button->setSize($size);
             $scene = $button->getScene();
             if ($scene === Abs::SCENE_COMMON) {
                 $scene = $nowScene;

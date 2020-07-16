@@ -330,7 +330,6 @@ class BswBackendController extends BswWebController
             /**
              * twig args
              */
-
             $showArgs[$name] = $output;
             $this->bsw[$name] = $output;
             $ajaxShowArgs[$name] = $output;

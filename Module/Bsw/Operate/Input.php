@@ -15,5 +15,10 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $operatesSizeInMobile = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var string
+     */
     public $position = Abs::POS_TOP;
 }

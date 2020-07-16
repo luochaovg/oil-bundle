@@ -53,6 +53,11 @@ class Input extends ArgsInput
     public $formSize = Abs::SIZE_LARGE;
 
     /**
+     * @var string
+     */
+    public $formSizeInMobile = Abs::SIZE_LARGE;
+
+    /**
      * @var array
      */
     public $sets = [];

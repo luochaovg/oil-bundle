@@ -24,6 +24,11 @@ class Input extends ArgsInput
     public $border = true;
 
     /**
+     * @var bool
+     */
+    public $borderInMobile = true;
+
+    /**
      * @var string
      */
     public $childrenName = Abs::TAG_CHILDREN;
@@ -62,6 +67,11 @@ class Input extends ArgsInput
      * @var bool
      */
     public $size = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var bool
+     */
+    public $sizeInMobile = Abs::SIZE_DEFAULT;
 
     /**
      * @var array

@@ -135,6 +135,11 @@ trait Foundation
     protected $ajax;
 
     /**
+     * @var bool
+     */
+    protected $mobile;
+
+    /**
      * @var string
      */
     protected $env;

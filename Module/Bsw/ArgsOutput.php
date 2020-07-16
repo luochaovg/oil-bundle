@@ -8,9 +8,4 @@ class ArgsOutput
      * @var Message
      */
     public $message;
-
-    /**
-     * @var array
-     */
-    public $render = [];
 }
