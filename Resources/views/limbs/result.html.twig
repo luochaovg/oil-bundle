@@ -19,11 +19,13 @@
     <a-icon
       slot="icon"
       v-if="result.icon && result.icon.split(':')[0] === 'a'"
-      :type="result.icon.split(':')[1]"></a-icon>
+      :type="result.icon.split(':')[1]"
+    ></a-icon>
     <b-icon
       slot="icon"
       v-else-if="result.icon && result.icon.split(':')[0] === 'b'"
-      :type="result.icon.split(':')[1]"></b-icon>
+      :type="result.icon.split(':')[1]"
+    ></b-icon>
     <template slot="extra">
       <div
         class="bsw-result-data"

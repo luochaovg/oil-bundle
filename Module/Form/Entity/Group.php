@@ -15,7 +15,7 @@ class Group extends Form
     /**
      * @var bool
      */
-    private $memberIsCorrect = false;
+    private $memberKeyAuto = true;
 
     /**
      * @var array
@@ -37,8 +37,8 @@ class Group extends Form
      */
     public function getMember(): array
     {
-        if (!$this->memberIsCorrect) {
-            $this->memberIsCorrect = true;
+        if ($this->memberKeyAuto) {
+            $this->memberKeyAuto = false;
             foreach ($this->member as $key => $item) {
                 $item->setKey($this->getKey() . '_' . ($item->getKey() ?? $key));
             }
@@ -55,6 +55,18 @@ class Group extends Form
     public function setMember(array $member)
     {
         $this->member = $member;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $memberKeyAuto
+     *
+     * @return $this
+     */
+    public function setMemberKeyAuto(bool $memberKeyAuto = true)
+    {
+        $this->memberKeyAuto = $memberKeyAuto;
 
         return $this;
     }
@@ -77,7 +89,10 @@ class Group extends Form
     public function getColumn(): array
     {
         $count = count($this->member);
+        $keys = array_keys($this->member);
+
         $default = array_fill(0, $count, floor(24 / $count));
+        $default = array_combine($keys, $default);
 
         if (empty($this->column)) {
             return $default;
@@ -87,7 +102,7 @@ class Group extends Form
             return $default;
         }
 
-        return $this->column;
+        return array_combine($keys, $this->column);
     }
 
     /**
@@ -98,6 +113,19 @@ class Group extends Form
     public function setColumn(array $column)
     {
         $this->column = $column;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $index
+     * @param int   $column
+     *
+     * @return $this
+     */
+    public function setColumnSingle($index, int $column)
+    {
+        $this->column[$index] = $column;
 
         return $this;
     }

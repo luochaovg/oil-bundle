@@ -14,7 +14,8 @@
       tip="{{ scaffold.cnf.loadingLabel|trans({}, 'twig') }}"
     {% endif %}
     size="large"
-    wrapper-class-name="bsw-loading">
+    wrapper-class-name="bsw-loading"
+  >
     {% if scaffold.cnf.iconLoading is not empty %}
       {{ scaffold.cnf.iconLoading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
     {% endif %}

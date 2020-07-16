@@ -14,7 +14,8 @@
         <span
           id="tabs_link_{{ link.route }}"
           :data-bsw.prop="{{ link.data }}"
-          slot="tab">
+          slot="tab"
+        >
           {{ link.icon|icon|raw }}{{ link.label|trans({}, 'twig') }}
         </span>
       </a-tab-pane>
