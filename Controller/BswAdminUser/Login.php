@@ -48,17 +48,20 @@ trait Login
         $form = [
             'account' => (new Input())
                 ->setPlaceholder('Phone number')
+                ->setKey('account')
                 ->setIcon($this->cnf->icon_user)
                 ->setIconAttribute(['slot' => 'prefix'])
                 ->setName("account-4-" . ($this->cnf->app_name ?? 'bsw')),
 
             'password' => (new Password())
                 ->setPlaceholder('Password')
+                ->setKey('password')
                 ->setIcon($this->cnf->icon_lock)
                 ->setIconAttribute(['slot' => 'prefix']),
 
             'captcha' => (new Input())
                 ->setPlaceholder('Captcha')
+                ->setKey('captcha')
                 ->setIcon($this->cnf->icon_captcha)
                 ->setIconAttribute(['slot' => 'prefix']),
 
@@ -72,6 +75,7 @@ trait Login
         if ($this->parameter('backend_with_google_secret')) {
             $form['googleCaptcha'] = (new Input())
                 ->setPlaceholder('Google dynamic captcha')
+                ->setKey('google_captcha')
                 ->setIcon($this->cnf->icon_captcha)
                 ->setIconAttribute(['slot' => 'prefix']);
         }
