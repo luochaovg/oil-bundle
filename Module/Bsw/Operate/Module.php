@@ -25,22 +25,6 @@ class Module extends Bsw
     const OPERATES = 'Operates';
 
     /**
-     * @return bool
-     */
-    public function allowAjax(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string
@@ -126,7 +110,10 @@ class Module extends Bsw
             $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
             $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Operate button'));
 
-            $button->setDisplay($this->web->routeIsAccess($button->getRouteForAccess()));
+            if (!$this->web->routeIsAccess($button->getRouteForAccess())) {
+                $button->setDisplay(false);
+            }
+
             $buttonScene[$scene][] = $button;
         }
 

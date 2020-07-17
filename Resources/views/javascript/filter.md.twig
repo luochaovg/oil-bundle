@@ -18,7 +18,7 @@ bsw.configure({
         },
         filterDisplay(key) {
             let list = this.filterExpand ? {{ filter.showFullJson|raw }} : {{ filter.showListJson|raw }};
-            return list.findIndex((v) => {return v === key}) === -1 ? 'none' : 'block';
+            return list.findIndex((v) => {return v === key}) !== -1;
         },
     },
     logic: {

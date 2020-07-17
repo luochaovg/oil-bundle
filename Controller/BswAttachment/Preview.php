@@ -51,9 +51,11 @@ trait Preview
                 ->setClick('showIFrame')
                 ->setArgs(
                     [
-                        'width'  => Abs::MEDIA_MIN,
-                        'height' => 209,
-                        'title'  => false,
+                        'width'        => Abs::MEDIA_MIN,
+                        'height'       => 155,
+                        'title'        => false,
+                        'closable'     => false,
+                        'maskClosable' => true,
                     ]
                 ),
 

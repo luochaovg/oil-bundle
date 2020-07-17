@@ -398,7 +398,7 @@ abstract class BswWebController extends AbstractController
         $options = array_merge(
             [
                 'title' => 'Tips',
-                'width' => Abs::MEDIA_MIN,
+                'width' => Abs::MEDIA_XS,
             ],
             $options
         );
@@ -428,7 +428,7 @@ abstract class BswWebController extends AbstractController
             [
                 'status' => Abs::RESULT_STATUS_SUCCESS,
                 'title'  => 'Operation success',
-                'width'  => Abs::MEDIA_MIN,
+                'width'  => Abs::MEDIA_XS,
             ],
             $options
         );

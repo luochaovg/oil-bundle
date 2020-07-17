@@ -30,7 +30,7 @@ class Input extends ArgsInput
     /**
      * @var string|int
      */
-    public $width = Abs::MEDIA_MIN;
+    public $width = Abs::MEDIA_XS;
 
     /**
      * @var string

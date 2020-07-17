@@ -13,6 +13,22 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 class Module extends Bsw
 {
     /**
+     * @return bool
+     */
+    public function allowAjax(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowIframe(): bool
+    {
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

@@ -1,19 +1,27 @@
 {% extends 'layout/preview.html.twig' %}
 
 {% block pageAfter %}
+  {% set maskClosable = drawer.maskClosable ? 'true' :'false' %}
+  {% set className = ['bsw-drawer', 'bsw-work-task-drawer', drawer.wrapClassName ?? null]|filter(v => v)|join(' ') %}
   <a-drawer
-    v-for="drawer in previewList"
-    wrap-class-name="bsw-drawer bsw-work-task-drawer"
-    :key="drawer.id"
-    title="{{ 'Trail'|trans({}, 'twig') }}"
-    :width="720"
-    placement="left"
-    :closable="false"
-    :visible="trailDrawer[drawer.id]"
+    v-for="item in previewList"
+    :visible="trailDrawer[item.id]"
+    :key="item.id"
+    :wrap-class-name="'{{ className }}' + (typeof drawer.class === 'undefined' ? '' : (' ' + drawer.class))"
+    :closable="typeof drawer.closable !== 'undefined' ? drawer.closable : {{ drawer.closable ? 'true' : 'false' }}"
+    :destroy-on-close="true"
+    :mask="typeof drawer.mask !== 'undefined' ? drawer.mask : {{ drawer.mask ? 'true' : 'false' }}"
+    :mask-closable="typeof drawer.maskClosable !== 'undefined' ? drawer.maskClosable : {{ maskClosable }}"
+    :keyboard="typeof drawer.keyboard !== 'undefined' ? drawer.keyboard : {{ drawer.keyboard ? 'true' : 'false' }}"
+    :title="item.title === false ? '' : (item.title || '{{ drawer.title|trans({}, 'twig') }}')"
+    :width="drawer.width || {{ drawer.width|vueType }}"
+    :height="drawer.height || {{ drawer.height|vueType }}"
+    :z-index="drawer.zIndex || {{ drawer.zIndex }}"
+    :placement="drawer.placement || '{{ drawer.placement }}'"
     @close="trailDrawerClose"
   >
     <a-timeline>
-      <a-timeline-item v-for="item in drawer.trailList" :key="item.id">
+      <a-timeline-item v-for="item in item.trailList" :key="item.id">
         <a-avatar slot="dot" size="large" :style={backgroundColor:item.color}>{{ '{{ item.name }}' }}</a-avatar>
         <div>
           {{ '{{ item.time }}' }}
@@ -21,7 +29,7 @@
         </div>
         <pre class='bsw-pre bsw-long-text' v-html="item.trail"></pre>
       </a-timeline-item>
-      <a-timeline-item v-if="[1,2].indexOf(drawer.state) >= 0">
+      <a-timeline-item v-if="[1,2].indexOf(item.state) >= 0">
         <a-icon slot="dot" type="loading" style="font-size: 24px;"></a-icon>
         Progressing..
       </a-timeline-item>

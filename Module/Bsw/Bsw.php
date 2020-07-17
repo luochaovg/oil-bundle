@@ -84,7 +84,7 @@ abstract class Bsw
      */
     public function allowAjax(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class Bsw
      */
     public function allowIframe(): bool
     {
-        return false;
+        return true;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswMixed;
 
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Component\UploadItem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +63,14 @@ trait Upload
             $this->appendResult(
                 [
                     'title'        => $this->messageLang('File upload done'),
-                    'subTitle'     => "<a target='_blank' href='{$file->url}'>{$file->url}</a>",
+                    'subTitle'     => Html::tag(
+                        'a',
+                        $file->url,
+                        [
+                            'target' => '_blank',
+                            'href'   => $file->url,
+                        ]
+                    ),
                     'subTitleHtml' => true,
                     'icon'         => 'b:icon-download',
                     'ok'           => 'copyFileLink',

@@ -40,8 +40,8 @@ class Abs
     /**
      * About frontend & source
      */
-    const MEDIA_MIN = 375;
-    const MEDIA_XS  = 575;
+    const MEDIA_MIN = 300;
+    const MEDIA_XS  = 375;
     const MEDIA_SM  = 576;
     const MEDIA_MD  = 768;
     const MEDIA_LG  = 992;

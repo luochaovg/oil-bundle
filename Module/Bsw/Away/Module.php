@@ -29,22 +29,6 @@ class Module extends Bsw
     const AFTER_AWAY  = 'AfterAway';
 
     /**
-     * @return bool
-     */
-    public function allowAjax(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string

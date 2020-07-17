@@ -18,9 +18,9 @@ class Module extends Bsw
     /**
      * @return bool
      */
-    public function allowAjax(): bool
+    public function allowIframe(): bool
     {
-        return true;
+        return false;
     }
 
     /**

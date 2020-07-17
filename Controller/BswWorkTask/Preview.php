@@ -201,7 +201,7 @@ trait Preview
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
-                        'width'  => Abs::MEDIA_MIN,
+                        'width'  => Abs::MEDIA_XS,
                         'height' => 220,
                         'title'  => false,
                     ]

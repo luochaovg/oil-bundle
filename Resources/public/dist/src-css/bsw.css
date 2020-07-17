@@ -170,6 +170,20 @@ div.ant-modal-mask {
   min-height: 200px;
   max-height: 800px;
 }
+/* Transition - show */
+.show-enter-to {
+  opacity: 1;
+}
+.show-enter,
+.show-leave-to {
+  opacity: 0;
+}
+.show-enter-active {
+  transition: all 1s;
+}
+.show-leave-active {
+  transition: all .3s;
+}
 .bsw-scaffold,
 .bsw-menu {
   min-height: 100vh;
@@ -658,19 +672,6 @@ blockquote p {
   margin-top: unset;
   margin-bottom: unset;
 }
-.bsw-enter-to {
-  opacity: 1;
-}
-.bsw-enter,
-.bsw-leave-to {
-  opacity: 0;
-}
-.bsw-enter-active {
-  transition: all 1s;
-}
-.bsw-leave-active {
-  transition: all .3s;
-}
 .ant-btn.bsw-btn {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
@@ -868,5 +869,11 @@ textarea[size="large"] {
 }
 .bsw-filter-without-label.ant-form-vertical .ant-form-item {
   padding-bottom: 0;
+}
+.bsw-item-tools-upload {
+  margin: 0;
+}
+.bsw-modal-title-center .ant-modal-title {
+  text-align: center;
 }
 /*# sourceMappingURL=bsw.css.map */

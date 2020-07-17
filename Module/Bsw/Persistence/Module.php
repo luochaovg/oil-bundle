@@ -54,22 +54,6 @@ class Module extends Bsw
     protected $methodTailor = 'tailorPersistence';
 
     /**
-     * @return bool
-     */
-    public function allowAjax(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string
@@ -370,7 +354,9 @@ class Module extends Bsw
              */
             $key = 'persistenceFileListKeyCollect';
             $form->setFileListKey("{$key}.{$field}.list");
-            $form->setDisplay($this->web->routeIsAccess($form->getRouteForAccess()));
+            if (!$this->web->routeIsAccess($form->getRouteForAccess())) {
+                $form->setDisplay(false);
+            }
             $output->fileListKeyCollect[$field] = [
                 'key'  => $key,
                 'list' => [],
@@ -706,7 +692,9 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
-            $operate->setDisplay($this->web->routeIsAccess($operate->getRouteForAccess()));
+            if (!$this->web->routeIsAccess($operate->getRouteForAccess())) {
+                $operate->setDisplay(false);
+            }
         }
 
         return [$_record, $operates, $format, $original];

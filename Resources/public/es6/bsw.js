@@ -402,7 +402,7 @@ $(function () {
         },
 
         copyFileLink(data, element) {
-            this.copy = data.extra.link;
+            this.copy = data.link;
         },
 
         //

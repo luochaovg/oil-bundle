@@ -23,22 +23,6 @@ class Module extends Bsw
     const TABS_LINKS = 'TabsLinks';
 
     /**
-     * @return bool
-     */
-    public function allowAjax(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string

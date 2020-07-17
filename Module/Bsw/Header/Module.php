@@ -26,6 +26,22 @@ class Module extends Bsw
     const LANGUAGE = 'Language';
 
     /**
+     * @return bool
+     */
+    public function allowAjax(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowIframe(): bool
+    {
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

@@ -40,6 +40,11 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $placementInMobile = Abs::POS_BOTTOM;
+
+    /**
+     * @var string
+     */
     public $wrapClassName = null;
 
     /**

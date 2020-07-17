@@ -36,22 +36,6 @@ class Module extends Bsw
     const FILTER_CORRECT         = 'FilterCorrect';
 
     /**
-     * @return bool
-     */
-    public function allowAjax(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string
@@ -505,7 +489,9 @@ class Module extends Bsw
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
             $operate->setSize($this->getSize());
-            $operate->setDisplay($this->web->routeIsAccess($operate->getRouteForAccess()));
+            if (!$this->web->routeIsAccess($operate->getRouteForAccess())) {
+                $operate->setDisplay(false);
+            }
         }
 
         return [$record, $operates, $format];

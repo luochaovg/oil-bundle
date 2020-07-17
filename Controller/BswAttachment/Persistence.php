@@ -49,14 +49,14 @@ trait Persistence
                 'type'     => Upload::class,
                 'typeArgs' => [
                     'flag'        => 'mixed',
+                    'class'       => 'tools-upload',
                     'needId'      => false,
                     'needTips'    => false,
                     'buttonType'  => Abs::THEME_BSW_DARK,
                     'buttonStyle' => [
-                        'display'   => 'block',
                         'font-size' => '16px',
                         'height'    => '64px',
-                        'margin'    => '40px auto 0',
+                        'margin'    => '10px auto 0',
                     ],
                 ],
             ],

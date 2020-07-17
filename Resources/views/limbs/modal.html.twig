@@ -1,7 +1,8 @@
 {% set maskClosable = modal.maskClosable ? 'true' :'false' %}
+{% set className = ['bsw-modal', modal.wrapClassName ?? null]|filter(v => v)|join(' ') %}
 <a-modal
   v-model="modal.visible"
-  wrap-class-name="{{ ['bsw-modal', modal.wrapClassName ?? null]|filter(v => v)|join(' ') }}"
+  :wrap-class-name="'{{ className }}' + (typeof modal.class === 'undefined' ? '' : (' ' + modal.class))"
   :closable="typeof modal.closable !== 'undefined' ? modal.closable : {{ modal.closable ? 'true' : 'false' }}"
   :destroy-on-close="true"
   :mask="typeof modal.mask !== 'undefined' ? modal.mask : {{ modal.mask ? 'true' : 'false' }}"

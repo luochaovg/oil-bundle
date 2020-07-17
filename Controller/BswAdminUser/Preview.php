@@ -106,6 +106,7 @@ trait Preview
                         'closable'     => false,
                         'keyboard'     => true,
                         'maskClosable' => true,
+                        'class'        => 'bsw-modal-title-center',
                     ]
                 ),
 

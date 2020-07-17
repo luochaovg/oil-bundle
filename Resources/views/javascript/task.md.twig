@@ -5,11 +5,12 @@ bsw.configure({
     },
     method: {
         showTrailDrawer(options) {
-            this.current = options.id;
-            this.trailDrawer[this.current] = true;
+            this.drawer.width = 720;
+            this.trailCurrent = options.id;
+            this.trailDrawer[this.trailCurrent] = true;
         },
         trailDrawerClose(e) {
-            this.trailDrawer[this.current] = false;
+            this.trailDrawer[this.trailCurrent] = false;
         }
     },
 });

@@ -2436,9 +2436,9 @@ var FoundationAntD = function (_FoundationTools) {
             var data = element[0].dataBsw;
             if (data[fn]) {
                 if (typeof that.cnf.v[data[fn]] !== 'undefined') {
-                    return that.cnf.v[data[fn]](data, element);
+                    return that.cnf.v[data[fn]](data.extra || {}, element);
                 } else if (typeof that[data[fn]] !== 'undefined') {
-                    return that[data[fn]](data, element);
+                    return that[data[fn]](data.extra || {}, element);
                 }
                 return console.warn('Method ' + data[fn] + ' is undefined.', data);
             }

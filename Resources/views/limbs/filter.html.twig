@@ -6,33 +6,36 @@
     @submit="filterSubmit"
   >
     {% for key, item in filter.filter %}
-      <a-form-item
-        label="{{ filter.showLabel ? item.label : null }}"
-        class="bsw-filter-item"
-        :style="{ width: '{{ item.width }}', display: filterDisplay('{{ key }}') }"
-        {% if item.type is iterable %}
-          class="bsw-form-iterable"
-        {% else %}
-          class="bsw-form-{{ item.type.itemName }}"
-        {% endif %}
-      >
-        {% set begin = item.title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ item.title ~ '</template>' : null %}
-        {% set end = item.title ? '</a-popover>' : null %}
-        {% if item.type is iterable %}
-          {{ begin|raw }}
-          <a-input-group compact>
-            {% for form in item.type %}
-              {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
-            {% endfor %}
-          </a-input-group>
-          {{ end|raw }}
-        {% else %}
-          {% set form = item.type %}
-          {{ begin|raw }}
-          {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
-          {{ end|raw }}
-        {% endif %}
-      </a-form-item>
+      <transition name="show">
+        <a-form-item
+          label="{{ filter.showLabel ? item.label : null }}"
+          class="bsw-filter-item"
+          :style="{ width: '{{ item.width }}' }"
+          v-if="filterDisplay('{{ key }}')"
+          {% if item.type is iterable %}
+            class="bsw-form-iterable"
+          {% else %}
+            class="bsw-form-{{ item.type.itemName }}"
+          {% endif %}
+        >
+          {% set begin = item.title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ item.title ~ '</template>' : null %}
+          {% set end = item.title ? '</a-popover>' : null %}
+          {% if item.type is iterable %}
+            {{ begin|raw }}
+            <a-input-group compact>
+              {% for form in item.type %}
+                {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
+              {% endfor %}
+            </a-input-group>
+            {{ end|raw }}
+          {% else %}
+            {% set form = item.type %}
+            {{ begin|raw }}
+            {% include "form/" ~ form.itemName ~ ".html.twig" with {form: form} %}
+            {{ end|raw }}
+          {% endif %}
+        </a-form-item>
+      </transition>
     {% endfor %}
     {% if filter.filter|length > filter.maxShow %}
       <a-form-item class="bsw-filter-item bsw-filter-action" label="{{ filter.showLabel ? '　' : null }}">

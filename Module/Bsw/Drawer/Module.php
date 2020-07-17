@@ -21,14 +21,6 @@ class Module extends Bsw
     }
 
     /**
-     * @return bool
-     */
-    public function allowIframe(): bool
-    {
-        return true;
-    }
-
-    /**
      * @return string
      */
     public function name(): string
@@ -79,7 +71,7 @@ class Module extends Bsw
         $output->title = $this->input->title;
         $output->width = $this->input->width;
         $output->height = $this->input->height;
-        $output->placement = $this->input->placement;
+        $output->placement = $this->input->mobile ? $this->input->placementInMobile : $this->input->placement;
         $output->wrapClassName = $this->input->wrapClassName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
