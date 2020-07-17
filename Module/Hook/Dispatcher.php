@@ -131,10 +131,6 @@ class Dispatcher
                 $extra = array_merge($extraArgs[Abs::HOOKER_FLAG_ACME], $extra);
             }
 
-            if ($hooker === Enums::class && !isset($extra[Abs::HOOKER_FLAG_ENUMS_SUFFIX])) {
-                $extra[Abs::HOOKER_FLAG_ENUMS_SUFFIX] = Abs::HOOKER_FLAG_ENUMS_INFO;
-            }
-
             $item = $hook->hook($item, $field, $args, $persistence, $extra);
         }
 
