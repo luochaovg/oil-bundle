@@ -556,8 +556,11 @@ span.ant-calendar-picker {
   background: #fafafa;
   border: 1px solid #e8e8e8;
 }
+.bsw-filter-form .ant-form-item {
+  margin: 0 0 8px;
+}
 .bsw-filter-form .bsw-filter-item {
-  margin: 4px;
+  padding: 0 4px 4px;
   float: left;
 }
 .bsw-filter-form .bsw-filter-item > .ant-form-item-label label {

@@ -1085,6 +1085,10 @@ class FoundationAntD extends FoundationTools {
                 conf.watch = item;
                 return this;
             },
+            extra(options = {}) {
+                conf = Object.assign(conf, options);
+                return this;
+            },
             init(logic = self.blank) {
                 conf.el = selector;
                 that.cnf.v = new that.v(conf);

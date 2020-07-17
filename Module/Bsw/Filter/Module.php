@@ -350,11 +350,35 @@ class Module extends Bsw
     }
 
     /**
+     * Get item size
+     *
      * @return string
      */
     protected function getSize(): string
     {
         return $this->input->mobile ? $this->input->filterFormSizeInMobile : $this->input->filterFormSize;
+    }
+
+    /**
+     * Get item width
+     *
+     * @param int $column
+     *
+     * @return string
+     */
+    protected function getWidth(int $column): string
+    {
+        if ($this->input->mobile) {
+            return '100%';
+        }
+
+        if (is_string($this->input->columnPx)) {
+            return $this->input->columnPx;
+        }
+
+        $width = $this->input->columnPx * $column;
+
+        return "{$width}px";
     }
 
     /**
@@ -436,6 +460,7 @@ class Module extends Bsw
             $record[$key] = [
                 'label'  => $item['trans'] ? $this->web->fieldLang($form->getLabel()) : $form->getLabel(),
                 'column' => $item['column'],
+                'width'  => $this->getWidth($item['column']),
                 'type'   => $form,
                 'sort'   => $item['sort'],
                 'group'  => $item['group'],
@@ -597,12 +622,15 @@ class Module extends Bsw
         foreach ($output->group as $name => $members) {
             foreach ($members as $field) {
                 if (!isset($output->filter[$name])) {
+                    $w = $this->getWidth($output->filter[$field]['column']);
+                    dump($w);
                     $output->filter[$name] = [
-                        'group'  => $name,
-                        'type'   => [],
                         'label'  => $output->filter[$field]['label'],
                         'column' => $output->filter[$field]['column'],
+                        'width'  => $this->getWidth($output->filter[$field]['column']),
+                        'type'   => [],
                         'sort'   => $output->filter[$field]['sort'],
+                        'group'  => $name,
                         'title'  => $output->filter[$field]['title'],
                     ];
                 }

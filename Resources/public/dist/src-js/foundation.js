@@ -1459,6 +1459,12 @@ var FoundationAntD = function (_FoundationTools) {
                     conf.watch = item;
                     return this;
                 },
+                extra: function extra() {
+                    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+                    conf = Object.assign(conf, options);
+                    return this;
+                },
                 init: function init() {
                     var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.blank;
 

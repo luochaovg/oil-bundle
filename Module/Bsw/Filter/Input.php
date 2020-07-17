@@ -13,9 +13,9 @@ class Input extends ArgsInput
     public $key = Abs::TAG_FILTER;
 
     /**
-     * @var int
+     * @var int|string
      */
-    public $columnPx = 74;
+    public $columnPx = 80;
 
     /**
      * @var int

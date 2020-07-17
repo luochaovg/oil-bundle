@@ -6,19 +6,10 @@
     @submit="filterSubmit"
   >
     {% for key, item in filter.filter %}
-      {% if scaffold.mobile %}
-        {% set width = '100%' %}
-      {% else %}
-        {% set extra = 0 %}
-        {% if item.column > 2 %}
-          {% set extra = (((item.column - 2) / 2)|round(0, 'ceil')) * 8 %}
-        {% endif %}
-        {% set width = (filter.columnPx * item.column + extra) ~ 'px' %}
-      {% endif %}
       <a-form-item
         label="{{ filter.showLabel ? item.label : null }}"
         class="bsw-filter-item"
-        :style="{ width: '{{ width }}', display: filterDisplay('{{ key }}') }"
+        :style="{ width: '{{ item.width }}', display: filterDisplay('{{ key }}') }"
         {% if item.type is iterable %}
           class="bsw-form-iterable"
         {% else %}
