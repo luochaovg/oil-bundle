@@ -95,6 +95,9 @@ trait Request
 
         if (!isset($args[$type]) || !isset($argsClean[$type])) {
 
+            $input = file_get_contents("php://input", 'r');
+            $input = json_decode($input, true) ?? [];
+
             /**
              * @var $request SfRequest
              */
@@ -113,12 +116,18 @@ trait Request
 
                 case Abs::REQ_POST:
                 case Abs::REQ_PATCH:
-                    $args[$type] = $request->request->all();
+                    $args[$type] = array_merge(
+                        $input,
+                        $request->request->all(),
+                    );
                     break;
 
                 case Abs::REQ_GET:
                 case Abs::REQ_DELETE:
-                    $args[$type] = $request->query->all();
+                    $args[$type] = array_merge(
+                        $input,
+                        $request->query->all()
+                    );
                     break;
 
                 case Abs::REQ_SYMFONY:
@@ -131,6 +140,7 @@ trait Request
 
                 case Abs::REQ_ALL:
                     $args[$type] = array_merge(
+                        $input,
                         $request->request->all(),
                         $request->query->all(),
                         $request->attributes->get('_route_params'),
