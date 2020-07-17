@@ -102,7 +102,6 @@ trait Request
              * @var $request SfRequest
              */
             $request = $this->request();
-
             $header = function () use ($request) {
                 $header = $request->headers->all();
                 foreach ($header as $key => &$item) {
