@@ -622,8 +622,6 @@ class Module extends Bsw
         foreach ($output->group as $name => $members) {
             foreach ($members as $field) {
                 if (!isset($output->filter[$name])) {
-                    $w = $this->getWidth($output->filter[$field]['column']);
-                    dump($w);
                     $output->filter[$name] = [
                         'label'  => $output->filter[$field]['label'],
                         'column' => $output->filter[$field]['column'],
