@@ -13,6 +13,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Scene;
 use Leon\BswBundle\Module\Form\Entity\Traits\Selector;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Entity\Traits\Type;
+use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForSelector;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Traits\Link;
 
@@ -29,6 +30,7 @@ class Button extends Form
     use BindVariable;
     use BindLoading;
     use Link;
+    use VarNameForSelector;
 
     /**
      * Button constructor.
@@ -46,6 +48,8 @@ class Button extends Form
         isset($label) && $this->setLabel($label);
         isset($route) && $this->setRoute($route);
         isset($icon) && $this->setIcon($icon);
+
+        $this->setVarNameForSelector('previewSelectedRow');
     }
 
     /**

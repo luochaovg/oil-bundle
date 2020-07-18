@@ -24,9 +24,8 @@
     {{ form.icon|icon(true, form.iconClass, form.iconAttribute)|raw }}
   {% endif %}
   {{ form.label|trans({}, 'twig') }}
-  {% if form.selector %}
-    {% set varKey = form.selectRowKey ?? 'previewSelectedRow' %}
-    {% set var = '(' ~ varKey ~ ' && ' ~ varKey ~ '.length)' %}
+  {% if form.selector and form.varNameForSelector is not empty %}
+    {% set var = '(' ~ form.varNameForSelector ~ ' && ' ~ form.varNameForSelector ~ '.length)' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {% if form.bindVariable %}

@@ -5,12 +5,19 @@
   :wrap-class-name="'{{ className }}' + (typeof result.class === 'undefined' ? '' : (' ' + result.class))"
   :closable="typeof result.closable !== 'undefined' ? result.closable : {{ result.closable ? 'true' : 'false' }}"
   :destroy-on-close="true"
+  :transition-name="result.animate || '{{ result.animate }}'"
   :mask="typeof result.mask !== 'undefined' ? result.mask : {{ result.mask ? 'true' : 'false' }}"
   :mask-closable="typeof result.maskClosable !== 'undefined' ? result.maskClosable : {{ maskClosable }}"
+  :mask-transition-name="result.maskAnimate || '{{ result.maskAnimate }}'"
   :keyboard="typeof result.keyboard !== 'undefined' ? result.keyboard : {{ result.keyboard ? 'true' : 'false' }}"
-  :footer="null"
+  :title="null"
+  :z-index="result.zIndex || {{ result.zIndex }}"
   :centered="typeof result.centered !== 'undefined' ? result.centered : {{ result.centered ? 'true' : 'false' }}"
   :width="result.width || {{ result.width|vueType }}"
+  :body-style="{{ result.bodyStyleJson }}"
+  :mask-style="{{ result.maskStyleJson }}"
+  :dialog-style="{{ result.dialogStyleJson }}"
+  :footer="null"
 >
   <a-result :status="typeof result.status !== 'undefined' ? result.status : '{{ result.status }}'">
     {% set title = result.title|trans({}, 'twig') %}

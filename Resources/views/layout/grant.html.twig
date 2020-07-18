@@ -8,7 +8,7 @@
   {% block grant %}
     <div class="bsw-persistence">
       <a-form
-        id="persistenceForm"
+        class="{{ ['bsw-grant-form']|filter(v => v)|join(' ') }}"
         :form="persistenceForm"
         @submit="persistenceSubmit"
       >

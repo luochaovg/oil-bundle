@@ -23,6 +23,11 @@ class Input extends ArgsInput
     public $closable = false;
 
     /**
+     * @var string
+     */
+    public $animate = Abs::MODAL_BSW_ZOOM;
+
+    /**
      * @var int
      */
     public $zIndex = 1000;
@@ -51,6 +56,11 @@ class Input extends ArgsInput
      * @var bool
      */
     public $maskClosable = false;
+
+    /**
+     * @var string
+     */
+    public $maskAnimate = Abs::MODAL_FADE;
 
     /**
      * @var bool
@@ -86,4 +96,19 @@ class Input extends ArgsInput
      * @var bool
      */
     public $cancelShow = false;
+
+    /**
+     * @var array
+     */
+    public $bodyStyle = [];
+
+    /**
+     * @var array
+     */
+    public $maskStyle = [];
+
+    /**
+     * @var array
+     */
+    public $dialogStyle = [];
 }

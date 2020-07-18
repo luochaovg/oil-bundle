@@ -84,11 +84,11 @@ class Module extends Bsw
         $output->zIndex = $this->input->zIndex;
         $output->closable = $this->input->closable;
 
-        $output->maskStyleJson = Helper::jsonStringify($this->input->maskStyle, '{}', JSON_FORCE_OBJECT);
-        $output->wrapStyleJson = Helper::jsonStringify($this->input->wrapStyle, '{}', JSON_FORCE_OBJECT);
-        $output->drawerStyleJson = Helper::jsonStringify($this->input->drawerStyle, '{}', JSON_FORCE_OBJECT);
-        $output->headerStyleJson = Helper::jsonStringify($this->input->headerStyle, '{}', JSON_FORCE_OBJECT);
-        $output->bodyStyleJson = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
+        $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);
+        $output->wrapStyleJson = Helper::jsonFlexible($this->input->wrapStyle);
+        $output->drawerStyleJson = Helper::jsonFlexible($this->input->drawerStyle);
+        $output->headerStyleJson = Helper::jsonFlexible($this->input->headerStyle);
+        $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
 
         $output = $this->caller(
             $this->method,

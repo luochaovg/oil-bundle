@@ -281,6 +281,26 @@ class Abs
     const POS_CENTER        = 'center';
     const POS_MIDDLE        = 'middle';
 
+    const MODAL_BSW_ZOOM      = 'bsw-zoom';
+    const MODAL_FADE          = 'fade';
+    const MODAL_ZOOM_HELP     = 'show-help';
+    const MODAL_ZOOM          = 'zoom';
+    const MODAL_ZOOM_BIG      = 'zoom-big';
+    const MODAL_ZOOM_BIG_FAST = 'zoom-big-fast';
+    const MODAL_ZOOM_UP       = 'zoom-up';
+    const MODAL_ZOOM_DOWN     = 'zoom-down';
+    const MODAL_ZOOM_LEFT     = 'zoom-left';
+    const MODAL_ZOOM_RIGHT    = 'zoom-right';
+    const MODAL_SLIDE_UP      = 'slide-up';
+    const MODAL_SLIDE_DOWN    = 'slide-down';
+    const MODAL_SLIDE_LEFT    = 'slide-left';
+    const MODAL_SLIDE_RIGHT   = 'slide-right';
+    const MODAL_MOVE_UP       = 'move-up';
+    const MODAL_MOVE_DOWN     = 'move-down';
+    const MODAL_MOVE_LEFT     = 'move-left';
+    const MODAL_MOVE_RIGHT    = 'move-right';
+
+
     const SELECT = 'SELECT'; // doctrine QueryBuilder 0
     const DELETE = 'DELETE'; // doctrine QueryBuilder 1
     const UPDATE = 'UPDATE'; // doctrine QueryBuilder 2

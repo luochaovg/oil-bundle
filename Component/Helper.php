@@ -3179,6 +3179,36 @@ class Helper
     }
 
     /**
+     * Array to flexible json string
+     *
+     * @param array|object $target
+     *
+     * @return string
+     */
+    public static function jsonFlexible($target): string
+    {
+        $default = '{}';
+
+        if (empty($target)) {
+            return $default;
+        }
+
+        return self::jsonStringify($target, $default);
+    }
+
+    /**
+     * Array to strict json string
+     *
+     * @param array|object $target
+     *
+     * @return string
+     */
+    public static function jsonStrict($target): string
+    {
+        return self::jsonStringify($target, '{}', JSON_FORCE_OBJECT);
+    }
+
+    /**
      * Array to json string and base64 encode
      *
      * @param array  $target

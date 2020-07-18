@@ -20,7 +20,7 @@ trait DropdownStyle
      */
     public function getDropdownStyle(): string
     {
-        return Helper::jsonStringify($this->dropdownStyle, '{}', JSON_FORCE_OBJECT);
+        return Helper::jsonFlexible($this->dropdownStyle);
     }
 
     /**

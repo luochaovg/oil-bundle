@@ -53,11 +53,6 @@ class Output extends ArgsOutput
     public $slots = [];
 
     /**
-     * @var string
-     */
-    public $slotsJson;
-
-    /**
      * @var bool
      */
     public $border;

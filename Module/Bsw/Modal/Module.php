@@ -69,21 +69,23 @@ class Module extends Bsw
         $output = new Output();
 
         $output->title = $this->input->title;
+        $output->closable = $this->input->closable;
+        $output->animate = $this->input->animate;
         $output->centered = $this->input->centered;
         $output->width = $this->input->width;
         $output->wrapClassName = $this->input->wrapClassName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
         $output->maskClosable = $this->input->maskClosable;
+        $output->maskAnimate = $this->input->maskAnimate;
         $output->okText = $this->input->okText;
         $output->cancelText = $this->input->cancelText;
         $output->okType = $this->input->okType;
         $output->zIndex = $this->input->zIndex;
-        $output->closable = $this->input->closable;
 
-        $output->bodyStyleJson = Helper::jsonStringify($this->input->bodyStyle, '{}', JSON_FORCE_OBJECT);
-        $output->maskStyleJson = Helper::jsonStringify($this->input->maskStyle, '{}', JSON_FORCE_OBJECT);
-        $output->dialogStyleJson = Helper::jsonStringify($this->input->dialogStyle, '{}', JSON_FORCE_OBJECT);
+        $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
+        $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);
+        $output->dialogStyleJson = Helper::jsonFlexible($this->input->dialogStyle);
 
         $output = $this->caller(
             $this->method,

@@ -18,6 +18,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ShowSearch;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Entity\Traits\SwitchFieldShape;
 use Leon\BswBundle\Module\Form\Entity\Traits\TokenSeparators;
+use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForKey;
 use Leon\BswBundle\Module\Form\Form;
 
 class Select extends Form
@@ -36,6 +37,7 @@ class Select extends Form
     use TokenSeparators;
     use SwitchFieldShape;
     use DropdownStyle;
+    use VarNameForKey;
 
     /**
      * Select constructor.
@@ -45,6 +47,8 @@ class Select extends Form
         $this->setButtonLabel('Popup for select');
         $this->setMode(Abs::MODE_DEFAULT);
         $this->setOptionFilterProp(Abs::SEARCH_LABEL);
+
+        $this->setVarNameForKey('persistenceSwitchField');
     }
 
     /**
@@ -65,29 +69,5 @@ class Select extends Form
         }
 
         return $this->value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChange(): ?string
-    {
-        if ($this->getSwitchFieldShape()) {
-            return 'switchFieldShapeWithSelect';
-        }
-
-        return parent::getChange();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAllowClear(): bool
-    {
-        if ($this->getSwitchFieldShape()) {
-            return false;
-        }
-
-        return $this->allowClear;
     }
 }

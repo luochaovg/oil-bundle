@@ -6,12 +6,15 @@
     @submit="filterSubmit"
   >
     {% for key, item in filter.filter %}
-      <transition name="show">
+      <transition
+        enter-active-class="animated flipInY"
+        leave-active-class="animated flipOutY"
+      >
         <a-form-item
           label="{{ filter.showLabel ? item.label : null }}"
           class="bsw-filter-item"
           :style="{ width: '{{ item.width }}' }"
-          v-if="filterDisplay('{{ key }}')"
+          v-show="filterDisplay('{{ key }}')"
           {% if item.type is iterable %}
             class="bsw-form-iterable"
           {% else %}

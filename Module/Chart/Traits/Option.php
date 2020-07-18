@@ -36,7 +36,7 @@ trait Option
      */
     public function getOptionStringify(): string
     {
-        return Helper::jsonStringify($this->option, '{}');
+        return Helper::jsonFlexible($this->option);
     }
 
     /**

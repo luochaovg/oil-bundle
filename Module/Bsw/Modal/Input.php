@@ -18,6 +18,11 @@ class Input extends ArgsInput
     public $closable = true;
 
     /**
+     * @var string
+     */
+    public $animate = Abs::MODAL_BSW_ZOOM;
+
+    /**
      * @var int
      */
     public $zIndex = 1000;
@@ -51,6 +56,11 @@ class Input extends ArgsInput
      * @var bool
      */
     public $maskClosable = false;
+
+    /**
+     * @var string
+     */
+    public $maskAnimate = Abs::MODAL_FADE;
 
     /**
      * @var string

@@ -18,9 +18,8 @@
   type="{{ form.htmlType }}"
   data-bsw="{{ form.data }}"
   onclick="bsw.cnf.v.dispatcherByNative(this)"
-  {% if form.selector %}
-    {% set varKey = form.selectRowKey ?? 'previewSelectedRow' %}
-    {% set var = '(' ~ varKey ~ ' && ' ~ varKey ~ '.length)' %}
+  {% if form.selector and form.varNameForSelector is not empty %}
+    {% set var = '(' ~ form.varNameForSelector ~ ' && ' ~ form.varNameForSelector ~ '.length)' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}
   {% endif %}
   {{ form.attributes|raw }}

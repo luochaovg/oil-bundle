@@ -23,8 +23,9 @@
   :dropdown-match-select-width="false"
   :dropdown-menu-style="{{ form.dropdownStyle }}"
   {% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
-  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
-    @click.native="persistenceSwitchField = '{{ form.key }}'"
+  {% set persistenceSence = (scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE')) %}
+  {% if persistenceSence and form.varNameForKey is not empty %}
+    @click.native="{{ form.varNameForKey }} = '{{ form.key }}'"
   {% endif %}
   {% if form.change %}
     @change="{{ form.change }}"

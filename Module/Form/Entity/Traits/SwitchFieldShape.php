@@ -14,6 +14,9 @@ trait SwitchFieldShape
      */
     public function getSwitchFieldShape(): array
     {
+        $this->setAllowClear(false);
+        $this->setChange('switchFieldShapeWithSelect');
+
         foreach ($this->switchFieldShape as &$item) {
             $item = array_map('strval', (array)$item);
         }

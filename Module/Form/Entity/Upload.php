@@ -15,6 +15,8 @@ use Leon\BswBundle\Module\Form\Entity\Traits\NeedId;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedTips;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
 use Leon\BswBundle\Module\Form\Entity\Traits\Url;
+use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForKey;
+use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForTips;
 
 class Upload extends Number
 {
@@ -30,6 +32,8 @@ class Upload extends Number
     use NeedTips;
     use ButtonStyle;
     use ButtonType;
+    use VarNameForKey;
+    use VarNameForTips;
 
     /**
      * Upload constructor.
@@ -41,5 +45,8 @@ class Upload extends Number
         $this->setChange('uploaderChange');
         $this->setButtonType(Abs::THEME_DEFAULT);
         $this->setButtonLabel('Click to select for upload');
+
+        $this->setVarNameForKey('persistenceUploadField');
+        $this->setVarNameForTips('persistenceUploadTipsCollect');
     }
 }

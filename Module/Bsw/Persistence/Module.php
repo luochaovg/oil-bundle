@@ -1114,14 +1114,14 @@ class Module extends Bsw
         $output->id = $this->input->id;
         $output->record = $record;
         $output->operates = $operates;
-        $output->formatJson = Helper::jsonStringify($format, '{}');
+        $output->formatJson = Helper::jsonFlexible($format);
 
-        $output->fileListKeyCollectJson = Helper::jsonStringify($output->fileListKeyCollect, '{}');
-        $output->uploadTipsCollectJson = Helper::jsonStringify($output->uploadTipsCollect, '{}');
-        $output->fieldShapeCollectJson = Helper::jsonStringify($output->fieldShapeCollect, '{}');
+        $output->fileListKeyCollectJson = Helper::jsonFlexible($output->fileListKeyCollect);
+        $output->uploadTipsCollectJson = Helper::jsonFlexible($output->uploadTipsCollect);
+        $output->fieldShapeCollectJson = Helper::jsonFlexible($output->fieldShapeCollect);
 
         $output->style = array_merge($output->style, $this->input->style);
-        $output->styleJson = Helper::jsonStringify($output->style, '{}');
+        $output->styleJson = Helper::jsonFlexible($output->style);
 
         $output = $this->caller(
             $this->method,

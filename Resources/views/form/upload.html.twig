@@ -27,17 +27,19 @@
   :file-list="{{ form.fileListKey }}"
   name="{{ form.flag }}"
   :data="{ file_flag: '{{ form.flag }}' }"
-  @click.native="persistenceUploadField = '{{ form.key }}'"
+  {% if form.varNameForKey is not empty %}
+    @click.native="{{ form.varNameForKey }} = '{{ form.key }}'"
+  {% endif %}
   @change="{{ form.change }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}FileList']"
 >
-  {% if form.needTips %}
+  {% if form.needTips and form.varNameForTips is not empty %}
     <a-popover>
       <template slot="content">
         <a-table
-          :columns="persistenceUploadTipsCollect.{{ form.key }}.columns"
-          :data-source="persistenceUploadTipsCollect.{{ form.key }}.list"
+          :columns="{{ form.varNameForTips }}.{{ form.key }}.columns"
+          :data-source="{{ form.varNameForTips }}.{{ form.key }}.list"
           :pagination="false"
           :scroll="{ x: 340 }"
           bordered

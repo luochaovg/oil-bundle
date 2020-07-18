@@ -1,3 +1,5 @@
-<div class="bsw-welcome" v-if="{{ welcome.speech ? 'true' : 'false' }}">
-  {{ welcome.speech|raw }}
-</div>
+{% if welcome.speech is not empty %}
+  <div class="bsw-welcome">
+    {{ welcome.speech|raw }}
+  </div>
+{% endif %}

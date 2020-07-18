@@ -22,6 +22,11 @@ class Output extends ArgsOutput
     public $closable;
 
     /**
+     * @var string
+     */
+    public $animate;
+
+    /**
      * @var int
      */
     public $zIndex;
@@ -50,6 +55,11 @@ class Output extends ArgsOutput
      * @var bool
      */
     public $maskClosable;
+
+    /**
+     * @var string
+     */
+    public $maskAnimate;
 
     /**
      * @var bool
@@ -85,4 +95,19 @@ class Output extends ArgsOutput
      * @var bool
      */
     public $cancelShow;
+
+    /**
+     * @var string
+     */
+    public $bodyStyleJson;
+
+    /**
+     * @var string
+     */
+    public $maskStyleJson;
+
+    /**
+     * @var string
+     */
+    public $dialogStyleJson;
 }

@@ -138,32 +138,32 @@ class Html
         foreach ($attributes as $name => $value) {
             if (is_bool($value)) {
                 if ($value) {
-                    $html .= " $name";
+                    $html .= " {$name}";
                 }
             } elseif (is_array($value)) {
                 if (in_array($name, static::$dataAttributes)) {
                     foreach ($value as $n => $v) {
                         if (is_array($v)) {
-                            $html .= " $name-$n='" . Helper::jsonStringify($v) . "'";
+                            $html .= " {$name}-{$n}='" . Helper::jsonStringify($v) . "'";
                         } else {
-                            $html .= " $name-$n=\"" . static::encode($v) . '"';
+                            $html .= " {$name}-{$n}=\"" . static::encode($v) . '"';
                         }
                     }
                 } elseif ($name === 'class') {
                     if (empty($value)) {
                         continue;
                     }
-                    $html .= " $name=\"" . static::encode(implode(' ', $value)) . '"';
+                    $html .= " {$name}=\"" . static::encode(implode(' ', $value)) . '"';
                 } elseif ($name === 'style') {
                     if (empty($value)) {
                         continue;
                     }
-                    $html .= " $name=\"" . static::encode(static::cssStyleFromArray($value)) . '"';
+                    $html .= " {$name}=\"" . static::encode(static::cssStyleFromArray($value)) . '"';
                 } else {
-                    $html .= " $name='" . Helper::jsonStringify($value) . "'";
+                    $html .= " {$name}='" . Helper::jsonStringify($value) . "'";
                 }
             } elseif ($value !== null) {
-                $html .= " $name=\"" . static::encode($value) . '"';
+                $html .= " {$name}=\"" . static::encode($value) . '"';
             }
         }
 

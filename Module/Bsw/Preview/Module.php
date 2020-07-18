@@ -297,7 +297,7 @@ class Module extends Bsw
             $dressArray = false;
             if (is_array($item['dress'])) {
                 $dressArray = true;
-                $dressStringify = Helper::jsonStringify($item['dress']);
+                $dressStringify = Helper::jsonFlexible($item['dress']);
                 $item['dress'] = "{$dressStringify}[value]";
             }
 
@@ -1072,13 +1072,12 @@ class Module extends Bsw
         $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $arguments);
 
         $output->columns = array_values($output->columns);
-        $output->columnsJson = Helper::jsonStringify($output->columns, '{}');
-        $output->customRendersJson = Helper::jsonStringify($output->customRenders, '{}');
+        $output->columnsJson = Helper::jsonStringify($output->columns);
+        $output->customRendersJson = Helper::jsonFlexible($output->customRenders);
 
         $output->list = $list;
-        $output->listJson = Helper::jsonStringify($output->list, '{}');
-        $output->slotsJson = Helper::jsonStringify($output->slots, '{}');
-        $output->pageJson = Helper::jsonStringify($output->page, '{}');
+        $output->listJson = Helper::jsonStringify($output->list);
+        $output->pageJson = Helper::jsonFlexible($output->page);
 
         $output->choiceFixed = $this->input->mobile ? false : $this->input->choiceFixed;
         $output->border = $this->input->mobile ? $this->input->borderInMobile : $this->input->border;
@@ -1090,7 +1089,7 @@ class Module extends Bsw
         $output->scroll = $this->input->scroll;
         $output->size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
-        $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions, '{}');
+        $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions);
         $output->dynamic = $this->input->dynamic;
         $output->rowClsNameMethod = $this->input->rowClsNameMethod;
         $output->header = $this->input->header;

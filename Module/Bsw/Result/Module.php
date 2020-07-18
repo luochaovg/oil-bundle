@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Bsw\Result;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
@@ -70,12 +71,14 @@ class Module extends Bsw
         $output->title = $this->input->title;
         $output->subTitle = $this->input->subTitle;
         $output->closable = $this->input->closable;
+        $output->animate = $this->input->animate;
         $output->zIndex = $this->input->zIndex;
         $output->width = $this->input->width;
         $output->wrapClassName = $this->input->wrapClassName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
         $output->maskClosable = $this->input->maskClosable;
+        $output->maskAnimate = $this->input->maskAnimate;
         $output->centered = $this->input->centered;
         $output->status = $this->input->status;
         $output->okText = $this->input->okText;
@@ -83,6 +86,10 @@ class Module extends Bsw
         $output->okType = $this->input->okType;
         $output->cancelText = $this->input->cancelText;
         $output->cancelShow = $this->input->cancelShow;
+
+        $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
+        $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);
+        $output->dialogStyleJson = Helper::jsonFlexible($this->input->dialogStyle);
 
         $output = $this->caller(
             $this->method,

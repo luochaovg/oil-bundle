@@ -594,8 +594,8 @@ class Module extends Bsw
         $output->showFull = $this->getShowFilterItemList($filterAnnotation, $output->group, $output->diffuse);
         $output->showList = array_slice($output->showFull, 0, $output->maxShow);
 
-        $output->showFullJson = Helper::jsonStringify($output->showFull, '{}');
-        $output->showListJson = Helper::jsonStringify($output->showList, '{}');
+        $output->showFullJson = Helper::jsonStringify($output->showFull);
+        $output->showListJson = Helper::jsonStringify($output->showList);
     }
 
     /**
@@ -662,7 +662,7 @@ class Module extends Bsw
         [$output->filter, $output->operates, $format] = $this->handleFilterData($filter);
         $output->showLabel = $this->input->showLabel;
         $output->condition = $condition;
-        $output->formatJson = Helper::jsonStringify($format, '{}');
+        $output->formatJson = Helper::jsonFlexible($format);
 
         $this->handleShowList($filterAnnotation, $output);
         $this->handleFilter($output);
