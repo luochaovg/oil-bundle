@@ -145,7 +145,7 @@ class Helper
     }
 
     /**
-     * Array map for handle items
+     * Array map value for handle items
      *
      * @param array           $target
      * @param string|callable $handler
@@ -154,60 +154,19 @@ class Helper
      */
     public static function arrayMap(array $target, $handler): array
     {
-        foreach ($target as &$item) {
+        foreach ($target as $key => &$item) {
             if (is_callable($handler)) {
-                $item = call_user_func_array($handler, [$item]);
+                $item = call_user_func_array($handler, [$item, $key]);
             } else {
                 if (!is_scalar($item)) {
                     continue;
                 }
-                $item = sprintf($handler, $item);
+                $_item = sprintf($handler, $item);
+                $item = str_replace(['{key}', '{value}'], [$key, $item], $_item);
             }
         }
 
         return $target;
-    }
-
-    /**
-     * Array map for handle items
-     *
-     * @param array  $target
-     * @param string $tpl
-     *
-     * @return array
-     */
-    public static function arrayMapDouble(array $target, string $tpl): array
-    {
-        foreach ($target as &$item) {
-            if (is_scalar($item)) {
-                $item = sprintf($tpl, $item, $item);
-            }
-        }
-
-        return $target;
-    }
-
-    /**
-     * Array map key for handle items
-     *
-     * @param array           $target
-     * @param string|callable $handler
-     *
-     * @return array
-     */
-    public static function arrayMapKey(array $target, $handler): array
-    {
-        $_target = [];
-        foreach ($target as $key => $item) {
-            if (is_callable($handler)) {
-                $key = call_user_func_array($handler, [$key]);
-            } else {
-                $key = sprintf($handler, $key);
-            }
-            $_target[$key] = $item;
-        }
-
-        return $_target;
     }
 
     /**

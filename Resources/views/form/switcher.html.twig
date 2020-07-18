@@ -8,6 +8,7 @@
   size="{{ form.size }}"
   checked-children="{{ form.checkedChildren|trans({}, 'twig') }}"
   un-checked-children="{{ form.unCheckedChildren|trans({}, 'twig') }}"
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}

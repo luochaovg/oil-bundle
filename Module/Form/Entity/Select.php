@@ -16,7 +16,6 @@ use Leon\BswBundle\Module\Form\Entity\Traits\PreviewRoute;
 use Leon\BswBundle\Module\Form\Entity\Traits\ShowArrow;
 use Leon\BswBundle\Module\Form\Entity\Traits\ShowSearch;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
-use Leon\BswBundle\Module\Form\Entity\Traits\SwitchFieldShape;
 use Leon\BswBundle\Module\Form\Entity\Traits\TokenSeparators;
 use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForKey;
 use Leon\BswBundle\Module\Form\Form;
@@ -35,9 +34,13 @@ class Select extends Form
     use ShowArrow;
     use OptionFilterProp;
     use TokenSeparators;
-    use SwitchFieldShape;
     use DropdownStyle;
     use VarNameForKey;
+
+    /**
+     * @var array
+     */
+    protected $switchFieldShape = [];
 
     /**
      * Select constructor.
@@ -69,5 +72,48 @@ class Select extends Form
         }
 
         return $this->value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSwitchFieldShape(): array
+    {
+        if (empty($this->switchFieldShape)) {
+            return $this->switchFieldShape;
+        }
+
+        $this->setAllowClear(false);
+        $this->setChange('switchFieldShapeWithSelect');
+
+        foreach ($this->switchFieldShape as &$item) {
+            $item = array_map('strval', (array)$item);
+        }
+
+        return $this->switchFieldShape;
+    }
+
+    /**
+     * @param array $switchFieldShape
+     *
+     * @return $this
+     */
+    public function setSwitchFieldShape(array $switchFieldShape)
+    {
+        $this->switchFieldShape = $switchFieldShape;
+
+        return $this;
+    }
+
+    /**
+     * @param array $switchFieldShape
+     *
+     * @return $this
+     */
+    public function appendSwitchFieldShape(array $switchFieldShape)
+    {
+        $this->switchFieldShape = array_merge($this->switchFieldShape, $switchFieldShape);
+
+        return $this;
     }
 }

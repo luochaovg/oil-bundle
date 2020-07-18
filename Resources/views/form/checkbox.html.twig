@@ -6,6 +6,7 @@
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
@@ -16,12 +17,10 @@
 >
   <a-row>
     {% for value, label in form.enum %}
-      {% if form.num > 0 %}
-        <a-col :span="{{ 24 / form.num }}">
-          <a-checkbox value="{{ value }}">{{ label }}</a-checkbox>
-        </a-col>
+      {% if form.col is empty %}
+        <a-checkbox value="{{ value }}">{{ label }}</a-checkbox>
       {% else %}
-        <a-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8" :xxl="8">
+        <a-col {{ form.colStringify|raw }}>
           <a-checkbox value="{{ value }}">{{ label }}</a-checkbox>
         </a-col>
       {% endif %}

@@ -9,6 +9,7 @@
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   :data-source="{{ form.dataSource }}"
   :filter-option="{{ form.filterOption }}"
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}

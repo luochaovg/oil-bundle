@@ -409,6 +409,14 @@ $(function () {
         copyFileLink: function copyFileLink(data, element) {
             this.copy = data.link;
         },
+        getFormDataByEvent: function getFormDataByEvent(event) {
+            var field = event.target.id;
+            var value = event.target.value;
+            var data = bsw.getBswData($(event.target));
+            var form = data.form || 'persistenceForm';
+
+            return { field: field, value: value, data: data, form: form };
+        },
 
 
         //

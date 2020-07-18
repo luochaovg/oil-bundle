@@ -922,4 +922,8 @@ textarea[size="large"] {
   padding: 8px 10px;
   width: 99.6%;
 }
+.ant-radio,
+.ant-radio-wrapper {
+  white-space: unset;
+}
 /*# sourceMappingURL=bsw.css.map */

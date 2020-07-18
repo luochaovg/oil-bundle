@@ -19,7 +19,6 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('arrayMap', [Helper::class, 'arrayMap']),
-            new TwigFilter('arrayMapDouble', [Helper::class, 'arrayMapDouble']),
             new TwigFilter('icon', [$this, 'icon']),
             new TwigFilter('nativeIcon', [$this, 'nativeIcon']),
             new TwigFilter('implode', [$this, 'implode']),

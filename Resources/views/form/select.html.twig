@@ -27,6 +27,7 @@
   {% if persistenceSence and form.varNameForKey is not empty %}
     @click.native="{{ form.varNameForKey }} = '{{ form.key }}'"
   {% endif %}
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}

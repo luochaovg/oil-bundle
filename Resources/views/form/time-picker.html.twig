@@ -8,6 +8,7 @@
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   size="{{ form.size }}"
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}

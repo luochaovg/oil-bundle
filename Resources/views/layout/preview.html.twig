@@ -8,7 +8,7 @@
     {% endblock %}
   {% endif %}
   {% block filterAfter %}{% endblock %}
-  {% set fields = '{' ~ (preview.choice.fields ?? [])|arrayMapDouble('"%s":"${record.%s}"')|join(',') ~ '}' %}
+  {% set fields = '{' ~ (preview.choice.fields ?? [])|arrayMap('"{value}":"${record.{value}}"')|join(',') ~ '}' %}
   {% block previewBefore %}{% endblock %}
   {% block preview %}
     <div class="bsw-preview">

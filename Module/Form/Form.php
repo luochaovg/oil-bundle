@@ -9,6 +9,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Change;
 use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
+use Leon\BswBundle\Module\Form\Entity\Traits\FormData;
 use Leon\BswBundle\Module\Form\Entity\Traits\Key;
 use Leon\BswBundle\Module\Form\Entity\Traits\Label;
 use Leon\BswBundle\Module\Form\Entity\Traits\Name;
@@ -32,6 +33,7 @@ abstract class Form
     use Rules;
     use Change;
     use AutoFocus;
+    use FormData;
 
     /**
      * @return string

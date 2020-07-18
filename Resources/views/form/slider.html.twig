@@ -13,6 +13,7 @@
   :range="{{ form.range ? 'true' : 'false' }}"
   :step="{{ form.step }}"
   :vertical="{{ form.vertical ? 'true' : 'false' }}"
+  :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}

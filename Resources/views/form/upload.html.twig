@@ -30,6 +30,7 @@
   {% if form.varNameForKey is not empty %}
     @click.native="{{ form.varNameForKey }} = '{{ form.key }}'"
   {% endif %}
+  :data-bsw.prop="{{ form.formData }}"
   @change="{{ form.change }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}FileList']"

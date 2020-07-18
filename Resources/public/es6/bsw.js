@@ -405,6 +405,15 @@ $(function () {
             this.copy = data.link;
         },
 
+        getFormDataByEvent(event) {
+            let field = event.target.id;
+            let value = event.target.value;
+            let data = bsw.getBswData($(event.target));
+            let form = data.form || 'persistenceForm';
+
+            return {field, value, data, form};
+        },
+
         //
         // for iframe exec in parent
         //
