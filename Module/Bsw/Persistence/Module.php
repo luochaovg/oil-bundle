@@ -254,7 +254,13 @@ class Module extends Bsw
             $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
             $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
-            $arguments = $this->arguments($args, ['id' => $this->input->id]);
+            $arguments = $this->arguments(
+                $args,
+                [
+                    'id'                => $this->input->id,
+                    'passwordValidator' => $this->input->passwordValidator,
+                ]
+            );
             $result = $this->caller(
                 $this->method,
                 self::AFTER_SUBMIT,
@@ -282,7 +288,11 @@ class Module extends Bsw
             $arguments = $this->arguments(
                 ['target' => $submit],
                 $args,
-                ['id' => $this->input->id, 'default' => [$submit, $extraSubmit]]
+                [
+                    'id'                => $this->input->id,
+                    'default'           => [$submit, $extraSubmit],
+                    'passwordValidator' => $this->input->passwordValidator,
+                ]
             );
             $result = $this->tailor(
                 $this->methodTailor,

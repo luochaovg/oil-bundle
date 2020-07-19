@@ -44,7 +44,7 @@ class AttachmentImage extends Tailor
                     "{$this->table}.size AS {$this->keyword}_size",
                 ],
                 'join'   => [
-                    "{$this->table}" => [
+                    $this->table => [
                         'entity' => BswAttachment::class,
                         'left'   => ["{$args->target['alias']}.{$this->fieldCamel}", "{$this->table}.state"],
                         'right'  => ["{$this->table}.id", Abs::NORMAL],
@@ -65,16 +65,17 @@ class AttachmentImage extends Tailor
      */
     public function tailorPreviewAnnotation(Arguments $args): array
     {
-        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'];
         $args->target[$this->table] = [
             'label'  => $this->label,
             'render' => Abs::RENDER_IMAGE,
-            'sort'   => $sort,
+            'sort'   => $sort + .01,
             'width'  => 200,
             'align'  => Abs::POS_CENTER,
         ];
         $args->target["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
+            'sort' => $sort + .02,
             'show' => false,
         ];
 

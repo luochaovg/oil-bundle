@@ -9,13 +9,5 @@ use Leon\BswBundle\Annotation\AnnotationConverter;
  */
 class AccessControlConverter extends AnnotationConverter
 {
-    /**
-     * @param $value
-     *
-     * @return array
-     */
-    protected function freeRole($value)
-    {
-        return array_map('intval', (array)$value);
-    }
+
 }

@@ -16,12 +16,14 @@ trait Telegram
     /**
      * Get telegram bot
      *
+     * @param string $tokenKey
+     *
      * @return Api
      * @throws
      */
-    public function telegram(): Api
+    public function telegram(string $tokenKey = 'telegram_bot_token'): Api
     {
-        $telegram = new Api($this->parameter('telegram_bot_token'));
+        $telegram = new Api($this->parameter($tokenKey));
         $telegram->setTimeOut($this->cnf->curl_timeout_second);
 
         return $telegram;

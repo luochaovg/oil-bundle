@@ -62,15 +62,16 @@ class AttachmentLink extends Tailor
      */
     public function tailorPreviewAnnotation(Arguments $args): array
     {
-        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'] + .01;
+        $sort = $args->previewAnnotation[$this->fieldCamel]['sort'];
         $args->target[$this->alias] = [
             'label'  => $this->label,
             'render' => Abs::RENDER_LINK,
-            'sort'   => $sort,
+            'sort'   => $sort + .01,
             'width'  => 400,
         ];
         $args->target["{$this->keyword}_size"] = [
             'hook' => FileSize::class,
+            'sort' => $sort + .02,
             'show' => false,
         ];
 

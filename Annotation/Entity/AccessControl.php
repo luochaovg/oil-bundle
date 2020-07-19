@@ -20,11 +20,6 @@ class AccessControl extends Annotation
     public $same; // Same to another route
 
     /**
-     * @var int|array Free role
-     */
-    public $freeRole;
-
-    /**
      * @var string
      */
     public $class;

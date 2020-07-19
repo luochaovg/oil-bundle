@@ -5,10 +5,9 @@ namespace Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Tailor;
-use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Error;
-use Leon\BswBundle\Module\Form\Entity\Input;
+use Leon\BswBundle\Module\Form\Entity\Password;
 
 class NewPassword extends Tailor
 {
@@ -26,10 +25,9 @@ class NewPassword extends Tailor
     {
         $sort = $args->persistAnnotation[$this->fieldCamel]['sort'] + .01;
         $args->target[$this->newField] = [
-            'sort'     => $sort,
-            'column'   => 8,
-            'type'     => Input::class,
-            'typeArgs' => ['type' => Abs::TYPE_PASSWORD],
+            'sort'   => $sort,
+            'column' => 8,
+            'type'   => Password::class,
         ];
 
         if (empty($args->id)) {
@@ -51,7 +49,7 @@ class NewPassword extends Tailor
         $newPassword = Helper::dig($args->extraSubmit, $this->newField);
 
         if (isset($newPassword) && strlen($newPassword) > 0) {
-            $result = $this->web->validator($this->newField, $newPassword, ['password']);
+            $result = $this->web->validator($this->newField, $newPassword, [$args->passwordValidator]);
             if ($result === false) {
                 return new ErrorParameter($this->web->pop());
             }

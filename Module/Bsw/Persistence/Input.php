@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Bsw\Persistence;
 
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Validator\Entity\Password;
 
 class Input extends ArgsInput
 {
@@ -61,4 +62,9 @@ class Input extends ArgsInput
      * @var array
      */
     public $sets = [];
+
+    /**
+     * @var string
+     */
+    public $passwordValidator = Password::class;
 }
