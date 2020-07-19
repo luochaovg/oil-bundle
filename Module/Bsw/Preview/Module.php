@@ -1096,7 +1096,7 @@ class Module extends Bsw
         $output->footer = $this->input->footer;
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,

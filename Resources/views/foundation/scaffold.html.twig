@@ -15,29 +15,29 @@
         {% endblock %}
       {% endif %}
       <!-- modal -->
+      {% block modalBefore %}{% endblock %}
       {% if 'modal' not in logic.display ?? [] %}
-        {% block modalBefore %}{% endblock %}
         {% block modal %}
           {{ (modalHtml ?? null)|raw }}
         {% endblock %}
-        {% block modalAfter %}{% endblock %}
       {% endif %}
+      {% block modalAfter %}{% endblock %}
       <!-- drawer -->
+      {% block drawerBefore %}{% endblock %}
       {% if 'drawer' not in logic.display ?? [] %}
-        {% block drawerBefore %}{% endblock %}
         {% block drawer %}
           {{ (drawerHtml ?? null)|raw }}
         {% endblock %}
-        {% block drawerAfter %}{% endblock %}
       {% endif %}
+      {% block drawerAfter %}{% endblock %}
       <!-- result -->
+      {% block resultBefore %}{% endblock %}
       {% if 'result' not in logic.display ?? [] %}
-        {% block resultBefore %}{% endblock %}
         {% block result %}
           {{ (resultHtml ?? null)|raw }}
         {% endblock %}
-        {% block resultAfter %}{% endblock %}
       {% endif %}
+      {% block resultAfter %}{% endblock %}
       <a-config-provider :locale="locale" :auto-insert-space-in-button="true">
         {% block bodyBefore %}{% endblock %}
         {% block body %}{% endblock %}

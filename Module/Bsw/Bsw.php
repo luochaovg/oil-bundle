@@ -148,9 +148,9 @@ abstract class Bsw
         $this->method = Helper::underToCamel($this->input->fn, true, '-');
 
         $this->input = $this->caller(
-            $this->method,
+            $this->method(),
             self::INPUT_ARGS_HANDLER,
-            $this->input(),
+            [get_class($this->input)],
             $this->input,
             $this->arguments(['input' => $this->input])
         );

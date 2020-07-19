@@ -91,7 +91,7 @@ class Module extends Bsw
         $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,

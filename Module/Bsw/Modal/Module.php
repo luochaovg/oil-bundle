@@ -88,7 +88,7 @@ class Module extends Bsw
         $output->dialogStyleJson = Helper::jsonFlexible($this->input->dialogStyle);
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,

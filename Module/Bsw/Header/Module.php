@@ -158,7 +158,7 @@ class Module extends Bsw
         $output->language = $this->caller($this->method(), self::LANGUAGE, Abs::T_ARRAY, []);
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,

@@ -76,7 +76,7 @@ class Module extends Bsw
         $output->speech = $this->caller($this->method, self::WELCOME, Abs::T_STRING);
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,

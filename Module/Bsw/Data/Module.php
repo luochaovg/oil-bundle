@@ -95,7 +95,7 @@ class Module extends Bsw
         }
 
         $output = $this->caller(
-            $this->method,
+            $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
