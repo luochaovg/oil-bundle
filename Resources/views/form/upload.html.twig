@@ -11,7 +11,7 @@
   :max="{{ form.max }}"
   step="{{ form.step }}"
   placeholder="{{ form.placeholder }}"
-  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.formRules }} }]"
 ></a-input-number>
 
 <a-upload

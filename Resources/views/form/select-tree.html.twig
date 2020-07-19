@@ -23,6 +23,6 @@
   {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"
   :tree-default-expand-all="{{ form.expandAll ? 'true' : 'false' }}"
 ></a-tree-select>

@@ -11,7 +11,7 @@
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.formRules }} }]"
 >
   <a-row>
     {% for value, label in form.enum %}

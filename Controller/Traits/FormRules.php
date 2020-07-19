@@ -73,22 +73,6 @@ trait FormRules
     }
 
     /**
-     * Form rule pattern
-     *
-     * @param string $pattern
-     * @param string $message
-     *
-     * @return array
-     */
-    public function formRulePattern(string $pattern, string $message): array
-    {
-        return [
-            'pattern' => $pattern,
-            'message' => $message,
-        ];
-    }
-
-    /**
      * Form rule url
      *
      * @param string|null $message
@@ -115,6 +99,82 @@ trait FormRules
         return [
             'type'    => 'email',
             'message' => $message ?? '{{ field }} Must be email',
+        ];
+    }
+
+    /**
+     * Form rule string
+     *
+     * @param string|null $message
+     *
+     * @return array
+     */
+    public function formRuleString(string $message = null): array
+    {
+        return [
+            'type'    => 'string',
+            'message' => $message ?? '{{ field }} Must be string',
+        ];
+    }
+
+    /**
+     * Form rule number
+     *
+     * @param string|null $message
+     *
+     * @return array
+     */
+    public function formRuleNumber(string $message = null): array
+    {
+        return [
+            'type'    => 'number',
+            'message' => $message ?? '{{ field }} Must be numeric',
+        ];
+    }
+
+    /**
+     * Form rule integer
+     *
+     * @param string|null $message
+     *
+     * @return array
+     */
+    public function formRuleInteger(string $message = null): array
+    {
+        return [
+            'type'    => 'integer',
+            'message' => $message ?? '{{ field }} Must be integer',
+        ];
+    }
+
+    /**
+     * Form rule float
+     *
+     * @param string|null $message
+     *
+     * @return array
+     */
+    public function formRuleFloat(string $message = null): array
+    {
+        return [
+            'type'    => 'float',
+            'message' => $message ?? '{{ field }} Must be float',
+        ];
+    }
+
+    /**
+     * Form rule pattern
+     *
+     * @param string $pattern
+     * @param string $message
+     *
+     * @return array
+     */
+    public function formRulePattern(string $pattern, string $message): array
+    {
+        return [
+            'pattern' => $pattern,
+            'message' => $message,
         ];
     }
 }

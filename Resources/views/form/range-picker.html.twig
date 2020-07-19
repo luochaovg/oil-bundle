@@ -34,5 +34,5 @@
     :disabled-time="{{ form.disabledTime }}"
   {% endif %}
   {{ form.attributes|raw }}
-  v-decorator="['{{ form.key }}', { initialValue: {{ initial }}, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: {{ initial }}, rules: {{ form.formRules }} }]"
 ></a-range-picker>

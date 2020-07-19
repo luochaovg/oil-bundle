@@ -81,9 +81,13 @@ class Persistence extends Annotation
 
     /**
      * @var array
-     * @license https://github.com/yiminghe/async-validator#type
      */
-    public $rules;
+    public $formRules;
+
+    /**
+     * @var array
+     */
+    public $rules = [];
 
     /**
      * @var int

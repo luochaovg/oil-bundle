@@ -16,7 +16,7 @@
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
-  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.rules }} }]"
+  v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.formRules }} }]"
 >
   {% for key, value in form.enum %}
     <a-mentions-option value="{{ value ~ '!' ~ key }}">{{ value }}</a-mentions-option>

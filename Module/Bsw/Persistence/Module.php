@@ -12,6 +12,7 @@ use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\LogicException;
@@ -582,7 +583,7 @@ class Module extends Bsw
             $form->setField(Helper::camelToUnder($key));
 
             $form->setDisabled($item['disabled']);
-            $form->setRules($item['rules']);
+            $form->setFormRules($item['formRules']);
             $form = $this->web->formRulesHandler($form);
 
             if (isset($record[$key])) {
@@ -1075,6 +1076,21 @@ class Module extends Bsw
 
         if ($this->input->submit) {
             if ($this->entity) {
+                /**
+                 * Rules validator
+                 */
+                foreach ($_persistAnnotation as $field => $item) {
+                    $rules = $item['rules'];
+                    if (empty($rules)) {
+                        continue;
+                    }
+                    $value = $this->input->submit[$field] ?? null;
+                    $result = $this->web->validator($field, $value, $rules);
+                    if ($result === false) {
+                        return $this->showError($this->web->pop(), ErrorParameter::CODE);
+                    }
+                }
+
                 return $this->persistence(
                     $submit,
                     $record,

@@ -544,7 +544,6 @@ trait Foundation
         $items = $original->converter([new Input($option)]);
 
         [$error, $args] = $this->parametersValidator(current($items), [$field => $value]);
-
         if (empty($error)) {
             return $args[$field];
         }
@@ -1760,7 +1759,7 @@ trait Foundation
      */
     public function formRulesHandler(Form $form): Form
     {
-        $rules = $form->getRulesArray();
+        $rules = $form->getFormRulesArray();
         foreach ($rules as $k => &$rule) {
             if (!is_array($rule) || !$rule['message']) {
                 unset($rules[$k]);
@@ -1771,7 +1770,7 @@ trait Foundation
             }
         }
 
-        return $form->setRules($rules);
+        return $form->setFormRules($rules);
     }
 
     /**

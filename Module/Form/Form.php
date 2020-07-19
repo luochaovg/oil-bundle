@@ -14,7 +14,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Key;
 use Leon\BswBundle\Module\Form\Entity\Traits\Label;
 use Leon\BswBundle\Module\Form\Entity\Traits\Name;
 use Leon\BswBundle\Module\Form\Entity\Traits\Placeholder;
-use Leon\BswBundle\Module\Form\Entity\Traits\Rules;
+use Leon\BswBundle\Module\Form\Entity\Traits\FormRules;
 use Leon\BswBundle\Module\Form\Entity\Traits\Style;
 use Leon\BswBundle\Module\Form\Entity\Traits\Value;
 
@@ -30,7 +30,7 @@ abstract class Form
     use Disabled;
     use Style;
     use Placeholder;
-    use Rules;
+    use FormRules;
     use Change;
     use AutoFocus;
     use FormData;

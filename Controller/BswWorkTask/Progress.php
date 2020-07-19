@@ -60,9 +60,9 @@ trait Progress
             'id'          => true,
             'donePercent' => ['label' => Helper::cnSpace()],
             'whatToDo'    => [
-                'type'     => Mentions::class,
-                'typeArgs' => ['rows' => 6, 'enum' => $member],
-                'rules'    => [$this->formRuleRequired()],
+                'type'      => Mentions::class,
+                'typeArgs'  => ['rows' => 6, 'enum' => $member],
+                'formRules' => [$this->formRuleRequired()],
             ],
             'state'       => ['show' => false],
         ];

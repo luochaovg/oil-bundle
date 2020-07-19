@@ -41,7 +41,7 @@
               :disabled="{{ item.type.disabled ? 'true' : 'false' }}"
               placeholder="{{ item.type.placeholder }}"
               {{ item.type.attributes|raw }}
-              v-decorator="['{{ index }}', { initialValue: [{{ initial }}], rules: {{ item.type.rules }} }]"
+              v-decorator="['{{ index }}', { initialValue: [{{ initial }}], rules: {{ item.type.formRules }} }]"
             >
               <a-row>
                 {% for value, label in item.type.enum %}

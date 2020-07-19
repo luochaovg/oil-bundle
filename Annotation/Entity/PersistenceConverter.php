@@ -11,6 +11,7 @@ use Leon\BswBundle\Annotation\Entity\Traits\EnumHandlerConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\FormTypeArgsConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\FormTypeConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\HookConverter;
+use Leon\BswBundle\Annotation\Entity\Traits\RulesConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\TransConverter;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
@@ -37,6 +38,7 @@ class PersistenceConverter extends AnnotationConverter
     use TransConverter;
     use FormTypeConverter;
     use FormTypeArgsConverter;
+    use RulesConverter;
 
     /**
      * @var array
@@ -166,7 +168,7 @@ class PersistenceConverter extends AnnotationConverter
      *
      * @return mixed
      */
-    protected function rules($value)
+    protected function formRules($value)
     {
         if ($value === false) {
             return [];
