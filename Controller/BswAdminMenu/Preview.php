@@ -90,7 +90,7 @@ trait Preview
                 ->setClick('multipleAction')
                 ->setConfirm($this->messageLang('Are you sure')),
 
-            (new Button('Sure', null, $this->cnf->icon_submit_form))
+            (new Button('Selected', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
                 ->setScene(Abs::SCENE_IFRAME)

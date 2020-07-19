@@ -1,5 +1,5 @@
 {% set maskClosable = result.maskClosable ? 'true' :'false' %}
-{% set className = ['bsw-result', result.wrapClassName ?? null]|filter(v => v)|join(' ') %}
+{% set className = ['bsw-result', result.wrapClassName]|joinClass %}
 <a-modal
   v-model="result.visible"
   :wrap-class-name="'{{ className }}' + (typeof result.class === 'undefined' ? '' : (' ' + result.class))"

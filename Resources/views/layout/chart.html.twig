@@ -1,5 +1,5 @@
 {% extends 'layout/blank.html.twig' %}
-{% set tplContentClass = ['bsw-chart-container', tplContentClassDiy ?? null]|filter(v => v)|join(' ') %}
+{% set tplContentClass = ['bsw-chart-container', tplContentClassDiy ?? null]|joinClass %}
 
 {% block page %}
   {% block filterBefore %}{% endblock %}

@@ -1,5 +1,5 @@
 {% if operate.buttons is not empty %}
-  <div class="bsw-operate {{ operate.position }}">
+  <div class="{{ ['bsw-operate', operate.position, operate.className]|joinClass }}">
     {% for form in operate.buttons %}
       {% include 'form/button.html.twig' with {form: form} %}
     {% endfor %}

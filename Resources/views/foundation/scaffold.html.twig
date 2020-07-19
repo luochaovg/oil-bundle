@@ -6,7 +6,7 @@
       {% include 'limbs/innocence.html.twig' %}
     {% endblock %}
   {% endif %}
-  <div class="{{ ['bsw-vue', 'bsw-body', tplBodyClass ?? null]|filter(v => v)|join(' ') }}">
+  <div class="{{ ['bsw-vue', 'bsw-body', tplBodyClass ?? null]|joinClass }}">
     <template>
       <!-- init -->
       {% if limbsInit ?? true %}

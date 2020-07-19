@@ -405,8 +405,16 @@ div.ant-modal-mask {
   overflow: hidden;
   white-space: pre-wrap;
 }
-.bsw-operate.top {
+.bsw-align-left {
+  text-align: left;
+}
+.bsw-align-right {
   text-align: right;
+}
+.bsw-align-center {
+  text-align: center;
+}
+.bsw-operate.top {
   margin-bottom: 15px;
 }
 @media screen and (max-width: 992px) {
@@ -416,7 +424,6 @@ div.ant-modal-mask {
   }
 }
 .bsw-operate.bottom {
-  text-align: left;
   margin-top: 15px;
 }
 @media screen and (max-width: 992px) {

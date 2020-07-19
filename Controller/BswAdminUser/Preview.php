@@ -68,7 +68,7 @@ trait Preview
     public function previewOperates()
     {
         return [
-            (new Button('Sure', null, $this->cnf->icon_submit_form))
+            (new Button('Selected', null, $this->cnf->icon_submit_form))
                 ->setSelector(Abs::SELECTOR_RADIO)
                 ->setClick('fillParentForm')
                 ->setScene(Abs::SCENE_IFRAME)

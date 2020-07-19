@@ -659,7 +659,13 @@ class Module extends Bsw
                     ->setType(Abs::THEME_LINK)
                     ->setSize(Abs::SIZE_SMALL)
                     ->setClick('verifyJsonFormat')
-                    ->setArgs(['field' => $key, 'url' => $this->input->cnf->verify_json_url, 'key' => 'json']);
+                    ->setArgs(
+                        [
+                            'field' => $key,
+                            'url'   => $this->input->cnf->verify_json_url,
+                            'key'   => $this->input->cnf->verify_json_key,
+                        ]
+                    );
                 $titleAuto = $this->web->getButtonHtml($button, true);
             }
 

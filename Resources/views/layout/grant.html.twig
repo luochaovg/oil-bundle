@@ -8,7 +8,7 @@
   {% block grant %}
     <div class="bsw-persistence">
       <a-form
-        class="{{ ['bsw-grant-form']|filter(v => v)|join(' ') }}"
+        class="bsw-grant-form"
         :form="persistenceForm"
         @submit="persistenceSubmit"
       >
@@ -53,7 +53,7 @@
                         <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
                         <a-checkbox
                           :disabled="{{ disabled ? 'true' : 'false' }}"
-                          class="bsw-checkbox-middle {{ _danger.class }}"
+                          class="{{ ['bsw-checkbox-middle', _danger.class]|joinClass }}"
                           value="{{ value }}"
                         >
                           {{ label }}

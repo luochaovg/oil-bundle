@@ -4,7 +4,7 @@
 ></a-textarea>
 
 <div
-  class="bsw-ck {{ form.class }}"
+  class="{{ ['bsw-ck', form.class]|joinClass }}"
   name="{{ form.name }}"
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"

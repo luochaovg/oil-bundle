@@ -24,6 +24,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('implode', [$this, 'implode']),
             new TwigFilter('imageStyle', [$this, 'imageStyle']),
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
+            new TwigFilter('joinClass', [$this, 'joinClass']),
             new TwigFilter('vueType', [$this, 'vueType']),
         ];
     }
@@ -147,6 +148,18 @@ class AppExtension extends AbstractExtension
         $attributes = implode('; ', $attributes);
 
         return $boundary ? "{ {$attributes} }" : $attributes;
+    }
+
+    /**
+     * Join class
+     *
+     * @param array $class
+     *
+     * @return string
+     */
+    public static function joinClass(array $class): string
+    {
+        return implode(' ', array_unique(array_filter($class)));
     }
 
     /**

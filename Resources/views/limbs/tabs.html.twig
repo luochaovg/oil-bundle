@@ -1,6 +1,6 @@
 {% if tabs.links is not empty %}
   <a-tabs
-    class="bsw-tabs-links {{ tabs.fit ? 'bsw-tabs-fit' : null }}"
+    class="{{ ['bsw-tabs-links', tabs.fit ? 'bsw-tabs-fit' : null]|joinClass }}"
     active-key="{{ scaffold.route }}"
     @change="tabsLinksSwitch"
     :tab-bar-gutter="{{ tabs.tabBarGutter }}"

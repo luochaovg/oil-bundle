@@ -19,7 +19,7 @@
   </style>
 </head>
 
-<body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|filter(v => v)|join(' ') }}">
+<body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|joinClass }}">
 {% block w3cBefore %}{% endblock %}
 {% block w3c %}{% endblock %}
 {% block w3cAfter %}{% endblock %}

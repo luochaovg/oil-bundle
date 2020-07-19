@@ -1,5 +1,5 @@
 {% set maskClosable = drawer.maskClosable ? 'true' :'false' %}
-{% set className = ['bsw-drawer', drawer.wrapClassName ?? null]|filter(v => v)|join(' ') %}
+{% set className = ['bsw-drawer', drawer.wrapClassName]|joinClass %}
 <a-drawer
   :visible="drawer.visible"
   :wrap-class-name="'{{ className }}' + (typeof drawer.class === 'undefined' ? '' : (' ' + drawer.class))"

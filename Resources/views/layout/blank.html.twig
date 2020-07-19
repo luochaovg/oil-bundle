@@ -1,7 +1,7 @@
 {% extends 'layout/empty.html.twig' %}
 
 {% block content %}
-  <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|filter(v => v)|join(' ') }}">
+  <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|joinClass }}">
     {% if menuHtml is defined and 'menu' not in logic.display ?? [] %}
       <!-- menu mobile -->
       <a-drawer
@@ -68,7 +68,7 @@
           {% endblock %}
         {% endif %}
         {% block tabsAfter %}{% endblock %}
-        <div class="{{ ['bsw-content', tplContentClass ?? null]|filter(v => v)|join(' ') }}">
+        <div class="{{ ['bsw-content', tplContentClass ?? null]|joinClass }}">
           <!-- page -->
           {% block pageBefore %}{% endblock %}
           {% block page %}{% endblock %}

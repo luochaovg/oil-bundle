@@ -1,5 +1,5 @@
 <span
-  class="ant-form-text {{ form.class }}"
+  class="{{ ['ant-form-text', form.class]|joinClass }}"
   :style="{{ form.style }}"
   {{ form.attributes|raw }}
 >{{ form.value }}</span>

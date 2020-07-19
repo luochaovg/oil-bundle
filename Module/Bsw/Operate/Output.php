@@ -22,4 +22,9 @@ class Output extends ArgsOutput
      * @var string
      */
     public $position;
+
+    /**
+     * @var string
+     */
+    public $className;
 }

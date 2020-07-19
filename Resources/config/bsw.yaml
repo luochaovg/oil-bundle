@@ -174,7 +174,8 @@ parameters:
         font_symbol: /bundles/leonbsw/font/iconfont/iconfont.js
         font_symbol_url: /bundles/leonbsw/font/iconfont/demo_index.html
         ant_icon_url: https://www.antdv.com/components/icon-cn
-        verify_json_url: https://www.bejson.com
+        verify_json_url: http://www.ab173.com/json
+        verify_json_key: json
         loading_label: null
         work_task_send_telegram: true
 

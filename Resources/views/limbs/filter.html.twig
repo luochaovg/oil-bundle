@@ -1,6 +1,6 @@
 {% if filter.filter is not empty %}
   <a-form
-    class="{{ ['bsw-filter-form', filter.showLabel ? null : 'bsw-filter-without-label']|filter(v => v)|join(' ') }}"
+    class="{{ ['bsw-filter-form', filter.showLabel ? null : 'bsw-filter-without-label']|joinClass }}"
     :form="filterForm"
     layout="vertical"
     @submit="filterSubmit"

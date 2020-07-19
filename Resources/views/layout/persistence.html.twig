@@ -1,12 +1,12 @@
 {% extends 'layout/blank.html.twig' %}
-{% set tplContentClass = ['bsw-page-container', tplContentClassDiy ?? null]|filter(v => v)|join(' ') %}
+{% set tplContentClass = ['bsw-page-container', tplContentClassDiy ?? null]|joinClass %}
 
 {% block page %}
   {% block persistenceBefore %}{% endblock %}
   {% block persistence %}
     <div class="bsw-persistence">
       <a-form
-        class="{{ ['bsw-persistence-form']|filter(v => v)|join(' ') }}"
+        class="bsw-persistence-form"
         :form="persistenceForm"
         :style="{{ persistence.styleJson }}"
         @submit="persistenceSubmit"
@@ -31,7 +31,7 @@
               :wrapper-col="{ {{ small }}: { span: {{ totalColumn }} }, {{ large }}: { span: {{ wrapperColumn }} }}"
               label="{{ item.label|trans({}, 'twig') }}"
               extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
-              class="{{ ['bsw-form-' ~ form.itemName, formClass]|filter(v => v)|join(' ') }}"
+              class="{{ ['bsw-form-' ~ form.itemName, formClass]|joinClass }}"
             >
               {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
               {% set begin = title ? '<a-popover overlay-class-name="bsw-popover"><template slot="content">' ~ title ~ '</template>' : null %}
