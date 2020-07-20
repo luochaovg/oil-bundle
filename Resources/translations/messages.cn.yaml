@@ -159,6 +159,7 @@ Refunded in full:                           '已全额退款'
 No record:                                  '结果集为空'
 Without change:                             '没有任何变动'
 Please give qualified input:                '请给定符合条件的输入'
+Not supported:                              '操作不被支持'
 
 Is array:                                   '为数组'
 Set default value:                          '设置默认值'

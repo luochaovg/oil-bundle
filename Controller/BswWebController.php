@@ -705,6 +705,7 @@ abstract class BswWebController extends AbstractController
             'env'       => $this->env,
             'debug'     => $this->debug,
             'route'     => $this->route,
+            'lang'      => $this->header->lang,
             'get'       => $getArgs,
             'url'       => $this->urlSafe($this->route, $getArgs, 'Scaffold', true),
             'ctrl'      => $this->controller,

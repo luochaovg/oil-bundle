@@ -1812,7 +1812,20 @@ trait Foundation
      */
     public function __get($name)
     {
-        if (in_array($name, ['session', 'kernel', 'translator', 'redis', 'cache', 'logger', 'expr', 'response'])) {
+        if (in_array(
+            $name,
+            [
+                'session',
+                'kernel',
+                'translator',
+                'redis',
+                'cache',
+                'logger',
+                'expr',
+                'response',
+                'header',
+            ]
+        )) {
             return $this->{$name};
         }
 

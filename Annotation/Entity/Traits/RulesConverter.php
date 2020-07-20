@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Annotation\Entity\Traits;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 
 trait RulesConverter
 {
@@ -14,7 +15,7 @@ trait RulesConverter
     protected function rules($value)
     {
         if (is_string($value)) {
-            $value = Helper::stringToArray($value, true, true, null, '|');
+            $value = Helper::stringToArray($value, true, true, null, Abs::VALIDATION_SPLIT);
             $rulesArr = [];
             foreach ($value as $rule) {
                 $rule = Helper::stringToArray($rule, true, false);
@@ -27,12 +28,14 @@ trait RulesConverter
             $this->exception('rules', 'should be string or array');
         }
 
-        $_value = [];
+        $handling = [];
         foreach ($value as $fn => $args) {
-            is_int($fn) && list($fn, $args) = [$args, []];
-            $_value[$fn] = (array)$args;
+            if (is_int($fn)) {
+                [$fn, $args] = [$args, []];
+            }
+            $handling[$fn] = (array)$args;
         }
 
-        return $_value;
+        return $handling;
     }
 }

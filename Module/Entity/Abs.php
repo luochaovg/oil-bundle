@@ -9,6 +9,7 @@ class Abs
      */
     const FORM_DATA_SPLIT   = ',';
     const VALIDATION_IF_SET = '~';
+    const VALIDATION_SPLIT  = '|';
     const ENTITY_KEY_TRIM   = "\x00*";
     const ENTER             = "\n";
     const DOCTRINE_DEFAULT  = 'default';

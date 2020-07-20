@@ -34,6 +34,11 @@ abstract class ArgsInput
     public $route;
 
     /**
+     * @var string
+     */
+    public $lang;
+
+    /**
      * @var array
      */
     public $get = [];
