@@ -6,6 +6,7 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Filter\Entity\Mixed;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
@@ -23,6 +24,27 @@ trait Preview
     public function previewEntity(): string
     {
         return BswConfig::class;
+    }
+
+    /**
+     * @return array
+     */
+    public function previewFilterAnnotation(): array
+    {
+        return [
+            'text' => [
+                'label'      => 'Key and value',
+                'sort'       => 1.01,
+                'field'      => 'bc.key',
+                'filter'     => Mixed::class,
+                'filterArgs' => [
+                    'fields' => [
+                        'bc.key',
+                        'bc.value',
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

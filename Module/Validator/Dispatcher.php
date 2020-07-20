@@ -89,8 +89,8 @@ class Dispatcher
             );
 
             if (!($validator instanceof Validator)) {
-                $className = Validator::class;
-                throw new ValidatorException("{$rule} rule must extend class `{$className}`");
+                $clsName = Validator::class;
+                throw new ValidatorException("{$rule} rule must extend class `{$clsName}`");
             }
 
             [$result->args, $error] = $validator->validator($extraArgs);

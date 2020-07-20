@@ -238,16 +238,16 @@ class BswDocumentCommand extends Command implements CommandInterface
         /**
          * @param array  $table
          * @param array  $list
-         * @param string $className
+         * @param string $clsName
          * @param int    $indent
          */
-        $appendTable = function (array $table, array $list, string $className, int $indent = 0) use ($append) {
+        $appendTable = function (array $table, array $list, string $clsName, int $indent = 0) use ($append) {
 
             $append(".. list-table::", 1, $indent);
 
             $widths = implode(' ', array_values($table));
             $append(":widths: {$widths}", 1, $indent + 1);
-            $append(":class: {$className}", 2, $indent + 1);
+            $append(":class: {$clsName}", 2, $indent + 1);
 
             // table header
             $max = count($table) - 1;
@@ -295,11 +295,11 @@ class BswDocumentCommand extends Command implements CommandInterface
             $append($api['desc_fn']);
             $append($this->line('-'), 2);
 
-            $class = $api['class'];
-            $className = "\\{$class}";
-            $classStr = addslashes($class);
+            $cls = $api['class'];
+            $clsName = "\\{$cls}";
+            $clsStr = addslashes($cls);
 
-            $docFlag = call_user_func([$className, Abs::FN_API_DOC_FLAG]);
+            $docFlag = call_user_func([$clsName, Abs::FN_API_DOC_FLAG]);
             foreach ($docFlag as &$item) {
                 $item = $this->lang($item);
             }
@@ -314,9 +314,9 @@ class BswDocumentCommand extends Command implements CommandInterface
             $line = $instance->getStartLine();
 
             if (PHP_OS === 'Darwin') {
-                $file = "`{$classStr}::{$api['method']}() <phpstorm://open?file={$file}&line={$line}>`_";
+                $file = "`{$clsStr}::{$api['method']}() <phpstorm://open?file={$file}&line={$line}>`_";
             } else {
-                $file = "`{$classStr}::{$api['method']}() <phpstorm://open?url=file://{$file}&line={$line}>`_";
+                $file = "`{$clsStr}::{$api['method']}() <phpstorm://open?url=file://{$file}&line={$line}>`_";
             }
 
             $host = $this->hostApi ?: $this->web->host();
@@ -683,9 +683,9 @@ class BswDocumentCommand extends Command implements CommandInterface
             $maxKeyLen = $maxDemoLen = 0;
             $fn = ($ajaxRequest ? Abs::FN_RESPONSE_KEYS_AJAX : Abs::FN_RESPONSE_KEYS);
 
-            if (method_exists($className, $fn)) {
+            if (method_exists($clsName, $fn)) {
 
-                $docKeys = call_user_func([$className, $fn]);
+                $docKeys = call_user_func([$clsName, $fn]);
                 $docKeysArgs = Helper::dig($docKeys, 'args');
 
                 $maxKeyLen = max(Helper::arrayLength($docKeys, true, 'key')) + 3;

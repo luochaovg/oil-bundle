@@ -219,10 +219,10 @@ class Module extends Bsw
      * @param string $field
      * @param array  $item
      *
-     * @return string|false
+     * @return string
      * @throws
      */
-    protected function createSlot(string $field, array $item)
+    protected function createSlot(string $field, array $item): string
     {
         /**
          * extra enum
@@ -350,7 +350,7 @@ class Module extends Bsw
             return $this->parseSlot($render, $field, [], Abs::SLOT_CONTAINER);
         }
 
-        return false;
+        return $this->parseSlot('{:value}', $field);
     }
 
     /**
@@ -469,6 +469,7 @@ class Module extends Bsw
                 'dataIndex' => $field,
                 'fixed'     => $item['fixed'],
                 'align'     => $item['align'],
+                'class'     => $item['clsName'],
                 'ellipsis'  => $item['ellipsis'],
                 'colSpan'   => $item['headerColumn'],
             ];
@@ -500,12 +501,8 @@ class Module extends Bsw
              * slot handler
              */
 
-            $slot = $this->createSlot($field, $item);
-
-            if ($slot !== false) {
-                $column['scopedSlots'] = ['customRender' => "__{$field}"];
-                $slots[$field] = $slot;
-            }
+            $column['scopedSlots'] = ['customRender' => "__{$field}"];
+            $slots[$field] = $this->createSlot($field, $item);
 
             /**
              * sorter
@@ -875,14 +872,15 @@ class Module extends Bsw
                         'valueOriginal' => $original[$key][$field],
                     ]
                 );
-                $_value = $this->caller($this->method, $charm, null, null, $arguments);
 
-                if (is_object($_value) && $_value instanceof Charm) {
-                    $var = $_value->getVar();
-                    $var = array_merge($var, ['value' => $_value->getValue()]);
-                    $value = $this->parseSlot($_value->getCharm(), $field, $var);
-                } elseif (is_scalar($_value)) {
-                    $value = $_value;
+                $crm = $this->caller($this->method, $charm, null, null, $arguments);
+
+                if (is_object($crm) && $crm instanceof Charm) {
+                    $var = $crm->getVar();
+                    $var = array_merge($var, ['value' => $crm->getValue()]);
+                    $value = $this->parseSlot($crm->getCharm(), $field, $var);
+                } elseif (is_scalar($crm)) {
+                    $value = $crm;
                 } else {
                     throw new ModuleException("{$this->method}{$charm}() should return scalar or " . Charm::class);
                 }

@@ -20,6 +20,8 @@ use Monolog\Logger;
 trait BackendPreset
 {
     /**
+     * Route name
+     *
      * @param Arguments $args
      *
      * @return array
@@ -30,6 +32,8 @@ trait BackendPreset
     }
 
     /**
+     * Command
+     *
      * @param Arguments $args
      *
      * @return array
@@ -53,6 +57,8 @@ trait BackendPreset
     }
 
     /**
+     * Head time
+     *
      * @param $current
      * @param $hooked
      * @param $original
@@ -69,6 +75,8 @@ trait BackendPreset
     }
 
     /**
+     * Tail time
+     *
      * @param $current
      * @param $hooked
      * @param $original
@@ -81,6 +89,8 @@ trait BackendPreset
     }
 
     /**
+     * Clone to form
+     *
      * @param array $hooked
      *
      * @return array
@@ -99,6 +109,8 @@ trait BackendPreset
     }
 
     /**
+     * Preview filter
+     *
      * @param array $filter
      * @param array $index
      * @param bool  $arrayValueToString
@@ -147,6 +159,8 @@ trait BackendPreset
     }
 
     /**
+     * Charm -> show content
+     *
      * @param string $label
      * @param string $content
      * @param array  $options
@@ -170,6 +184,45 @@ trait BackendPreset
             ->setArgs(array_merge($options, $args));
 
         return new Charm($this->getButtonHtml($button), $label);
+    }
+
+    /**
+     * Charm -> upward infect
+     *
+     * @param string $value
+     * @param string $class
+     * @param int    $level
+     * @param string $tag
+     *
+     * @return Charm
+     */
+    public function charmUpwardInfect(string $value, string $class, int $level = 3, string $tag = 'p'): Charm
+    {
+        $element = Html::tag(
+            $tag,
+            '{value}',
+            [
+                'class'             => 'bsw-upward-infect',
+                'data-infect-class' => $class,
+                'data-infect-level' => $level,
+            ]
+        );
+
+        return new Charm($element, $value);
+    }
+
+    /**
+     * Charm -> add class
+     *
+     * @param string $value
+     * @param string $class
+     * @param string $tag
+     *
+     * @return Charm
+     */
+    public function charmAddClass(string $value, string $class, string $tag = 'p'): Charm
+    {
+        return new Charm(Html::tag($tag, '{value}', ['class' => $class]), $value);
     }
 
     /**
@@ -215,6 +268,8 @@ trait BackendPreset
     }
 
     /**
+     * Upload options
+     *
      * @param string $flag
      * @param array  $option
      *

@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
@@ -105,7 +106,7 @@ trait Preview
             'trail'     => [
                 'width' => 120,
                 'align' => Abs::POS_CENTER,
-                'sort'  => 3.9,
+                'sort'  => 6.1,
                 'html'  => true,
             ],
             Abs::TR_ACT => [
@@ -248,7 +249,7 @@ trait Preview
 
         $left = $this->fieldLang($left);
         $right = $this->fieldLang($right);
-        $html = Abs::HTML_CODE . Abs::LINE_DASHED;
+        $html = Abs::HTML_NORMAL_TEXT . Abs::LINE_DASHED;
 
         [$gap, $tip] = Helper::gapDateDetail(
             $args->value,
@@ -265,7 +266,7 @@ trait Preview
         if ($gap >= 0) {
             $html .= str_replace('{value}', "{$left}: {$tip}", Abs::HTML_GREEN_TEXT);
         } else {
-            $html .= str_replace('{value}', "{$right}: {$tip}", Abs::HTML_ORANGE_TEXT);
+            $html .= str_replace('{value}', "{$right}: {$tip}", Abs::HTML_RED_TEXT);
         }
 
         return new Charm($html, $args->value);
@@ -296,14 +297,6 @@ trait Preview
 
         $args->hooked['trail'] = $this->getButtonHtml($button);
         $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
-
-        if (in_array($args->hooked['state'], [3, 4])) {
-            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-done';
-        } elseif ($args->hooked['state'] === 1 && $args->original['startTime'] <= time()) {
-            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-overdue';
-        } elseif ($args->hooked['state'] === 2 && $args->original['endTime'] <= time()) {
-            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'task-status-overdue';
-        }
 
         return $args->hooked;
     }

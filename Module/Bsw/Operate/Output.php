@@ -26,5 +26,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $className;
+    public $clsName;
 }

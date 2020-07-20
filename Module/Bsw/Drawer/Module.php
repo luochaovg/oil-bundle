@@ -72,7 +72,7 @@ class Module extends Bsw
         $output->width = $this->input->width;
         $output->height = $this->input->height;
         $output->placement = $this->input->mobile ? $this->input->placementInMobile : $this->input->placement;
-        $output->wrapClassName = $this->input->wrapClassName;
+        $output->wrapClsName = $this->input->wrapClsName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
         $output->maskClosable = $this->input->maskClosable;

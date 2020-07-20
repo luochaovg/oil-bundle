@@ -40,6 +40,11 @@ class Preview extends Annotation
     public $align;
 
     /**
+     * @var string
+     */
+    public $clsName;
+
+    /**
      * @var bool
      */
     public $ellipsis = false;

@@ -744,6 +744,7 @@ class Abs
     const HTML_BLUE_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#1890ff;'>{value}</div>";
     const HTML_PURPLE_TEXT = "<div class='ant-tag ant-tag-has-color' style='color:#722ed1;'>{value}</div>";
     const HTML_GRAY_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#d6d6d6;'>{value}</div>";
+    const HTML_NORMAL_TEXT = "<div class='ant-tag ant-tag-has-color' style='color:#939393'>{value}</div>";
 
     const TEXT_PINK   = "<span style='color:#eb2f96;'>{value}</span>";
     const TEXT_RED    = "<span style='color:#f5222d;'>{value}</span>";

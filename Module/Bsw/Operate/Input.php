@@ -25,10 +25,10 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $className = 'bsw-align-right';
+    public $clsName = 'bsw-align-right';
 
     /**
      * @var string
      */
-    public $classNameInIFrame = 'bsw-align-left';
+    public $clsNameInIFrame = 'bsw-align-left';
 }

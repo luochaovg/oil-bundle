@@ -2593,24 +2593,24 @@ class Helper
      * Is extend class
      *
      * @param mixed  $target
-     * @param string $className
+     * @param string $clsName
      * @param bool   $allowSelf
      *
      * @return bool
      */
-    public static function extendClass($target, string $className, bool $allowSelf = false): bool
+    public static function extendClass($target, string $clsName, bool $allowSelf = false): bool
     {
-        $subClassName = is_object($target) ? get_class($target) : $target;
+        $subClsName = is_object($target) ? get_class($target) : $target;
 
-        if (!class_exists($subClassName)) {
+        if (!class_exists($subClsName)) {
             return false;
         }
 
-        if ($allowSelf && $subClassName == $className) {
+        if ($allowSelf && $subClsName == $clsName) {
             return true;
         }
 
-        if (is_subclass_of($subClassName, $className)) {
+        if (is_subclass_of($subClsName, $clsName)) {
             return true;
         }
 

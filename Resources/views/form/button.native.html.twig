@@ -1,4 +1,4 @@
-{% set classNameList = {
+{% set clsNameList = {
   basic: 'ant-btn',
   type: 'ant-btn-' ~ form.type,
   size: {small: 'ant-btn-sm', large: 'ant-btn-lg'}[form.size] ?? null,
@@ -8,7 +8,7 @@
 } %}
 
 <button
-  class="{{ classNameList|joinClass }}"
+  class="{{ clsNameList|joinClass }}"
   name="{{ form.name }}"
   {% if form.styleStringify %}
     style="{{ form.styleStringify }}"

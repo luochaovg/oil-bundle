@@ -120,7 +120,7 @@ class Module extends Bsw
         $output->choice = $choiceScene[$nowScene] ?? $output->choice;
         $output->buttons = $buttonScene[$nowScene] ?? $output->buttons;
         $output->position = $this->input->position;
-        $output->className = $this->input->iframe ? $this->input->classNameInIFrame : $this->input->className;
+        $output->clsName = $this->input->iframe ? $this->input->clsNameInIFrame : $this->input->clsName;
 
         $output = $this->caller(
             $this->method(),

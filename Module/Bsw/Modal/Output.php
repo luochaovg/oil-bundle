@@ -39,7 +39,7 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $wrapClassName;
+    public $wrapClsName;
 
     /**
      * @var bool

@@ -45,7 +45,7 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $wrapClassName = null;
+    public $wrapClsName = null;
 
     /**
      * @var bool

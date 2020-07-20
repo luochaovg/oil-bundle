@@ -74,7 +74,7 @@ class Module extends Bsw
         $output->animate = $this->input->animate;
         $output->zIndex = $this->input->zIndex;
         $output->width = $this->input->width;
-        $output->wrapClassName = $this->input->wrapClassName;
+        $output->wrapClsName = $this->input->wrapClsName;
         $output->keyboard = $this->input->keyboard;
         $output->mask = $this->input->mask;
         $output->maskClosable = $this->input->maskClosable;
