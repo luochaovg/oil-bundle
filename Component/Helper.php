@@ -2403,15 +2403,15 @@ class Helper
     /**
      * Gap second datetime
      *
-     * @param string $left
-     * @param string $right
+     * @param string $leftDate
+     * @param string $rightDate
      *
      * @return int
      */
-    public static function gapDateTime(string $left, string $right): int
+    public static function gapDateTime(string $leftDate, string $rightDate): int
     {
-        $left = strtotime($left);
-        $right = strtotime($right);
+        $left = strtotime($leftDate);
+        $right = strtotime($rightDate);
 
         return abs($left - $right);
     }
@@ -2458,7 +2458,7 @@ class Helper
 
         $info = null;
         foreach ($digit as $key => $value) {
-            if (!empty($$key)) {
+            if (!empty($$key) && !empty($value)) {
                 $info .= "{$$key}{$value}";
             }
         }

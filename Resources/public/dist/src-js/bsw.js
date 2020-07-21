@@ -453,6 +453,7 @@ $(function () {
         }
 
         bsw.initClipboard();
+        bsw.initUpwardInfect();
 
         var timeout = change ? 1000 : 400;
         setTimeout(function () {

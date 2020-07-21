@@ -2,13 +2,11 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Carbon\Carbon;
 use Doctrine\ORM\AbstractQuery;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\BswAdminUser;
-use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Entity\BswWorkTeam;
 use Leon\BswBundle\Module\Bsw\Arguments;
@@ -240,15 +238,12 @@ class Acme extends BswBackendController
      */
     protected function taskTrailHandler(array $list): array
     {
-        $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
         foreach ($list as &$item) {
-
             if (isset($item['type']) && $item['type'] === 2) {
                 $item['name'] = '★';
             }
 
-            $cb = Carbon::createFromFormat(Abs::FMT_FULL, $item['time']);
-            $item['human'] = $cb->locale($lang)->diffForHumans();
+            $item['human'] = $this->humanTimeDiff($item['time']);
             [$item['name'], $item['color']] = $this->nameToColor($item['name']);
             $item['time'] = date('m/d H:i', strtotime($item['time']));
 

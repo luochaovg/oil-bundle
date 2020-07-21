@@ -16,36 +16,12 @@
   display: none;
 }
 
+.ant-layout-sider,
 .bsw-foundation,
 .bsw-body,
 .bsw-loading,
-.ant-layout-sider,
 .bsw-loading > .ant-spin-container {
   height: 100%;
-}
-
-.bsw-page-loading {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 1000;
-  letter-spacing: 3px;
-
-  span {
-    position: absolute;
-    font-size: 18px;
-    font-weight: lighter;
-    top: 38.2%;
-    left: 50%;
-    color: rgba(0, 0, 0, .4);
-    transform: translateY(-50%) translateX(-50%);
-    animation: bsw-breathing-middle 2s infinite;
-  }
-}
-
-.bsw-debug {
-  padding: 10px;
-  border: 10px #e2e1e1 solid;
 }
 
 /* Cover */
@@ -75,13 +51,13 @@ div.ant-modal-mask {
 
 .bsw-zoom-enter,
 .bsw-zoom-appear {
-  animation-duration: 0.2s;
+  animation-duration: .2s;
   animation-fill-mode: both;
   animation-play-state: paused;
 }
 
 .bsw-zoom-leave {
-  animation-duration: 0.2s;
+  animation-duration: .1s;
   animation-fill-mode: both;
   animation-play-state: paused;
 }
@@ -101,11 +77,11 @@ div.ant-modal-mask {
 .bsw-zoom-enter,
 .bsw-zoom-appear {
   opacity: 0;
-  animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+  animation-timing-function: cubic-bezier(.99, .42, 1, .94);
 }
 
 .bsw-zoom-leave {
-  animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+  animation-timing-function: cubic-bezier(.03, 1.26, 1, .94);
 }
 
 /* Animate */
@@ -175,7 +151,7 @@ div.ant-modal-mask {
 
 @keyframes bsw-zoom-in {
   0% {
-    transform: scale(1.3);
+    transform: scale(1.5);
     transform-origin: 50% 50%;
     opacity: 0;
   }
@@ -205,7 +181,7 @@ div.ant-modal-mask {
   max-width: 500px;
 
   .tippy-tooltip.light-theme {
-    color: rgba(0, 0, 0, 0.51);
+    color: rgba(0, 0, 0, .51);
     text-align: left;
     box-shadow: 0 0 10px 2px rgba(154, 161, 177, .2), 0 2px 40px -4px rgba(36, 40, 47, .2), 0 2px 4px -2px rgba(91, 94, 105, .2);
     background-color: #fff;

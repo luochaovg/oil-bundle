@@ -4,9 +4,9 @@ namespace Leon\BswBundle\Controller\BswWorkTask;
 
 use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
+use Leon\BswBundle\Entity\BswWorkTaskTrail;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Filter\Entity\Accurate;
@@ -15,6 +15,7 @@ use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Module\Filter\Entity\WeekIntersect;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
 use Leon\BswBundle\Module\Form\Entity\Week;
+use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
@@ -236,20 +237,16 @@ trait Preview
 
     /**
      * @param Arguments $args
-     * @param string    $left
-     * @param string    $right
+     * @param array     $cnfLeft
+     * @param array     $cnfRight
      *
      * @return Charm
      */
-    public function previewCharmStartTime(Arguments $args, string $left = 'Ready', string $right = 'Consumed')
+    public function chartTime(Arguments $args, array $cnfLeft, array $cnfRight)
     {
         if (!in_array($args->item['state'], [1, 2])) {
             return new Charm(Abs::HTML_CODE, $args->value);
         }
-
-        $left = $this->fieldLang($left);
-        $right = $this->fieldLang($right);
-        $html = Abs::HTML_NORMAL_TEXT . Abs::LINE_DASHED;
 
         [$gap, $tip] = Helper::gapDateDetail(
             $args->value,
@@ -259,14 +256,24 @@ trait Preview
                 'day'    => $this->fieldLang('Day'),
                 'hour'   => $this->fieldLang('Hour'),
                 'minute' => $this->fieldLang('Minute'),
-                'second' => $this->fieldLang('Second'),
+                'second' => null,
             ]
         );
 
+        $html = Abs::HTML_NORMAL_TEXT . Abs::LINE_DASHED;
+
         if ($gap >= 0) {
-            $html .= str_replace('{value}', "{$left}: {$tip}", Abs::HTML_GREEN_TEXT);
+            $left = $this->fieldLang($cnfLeft['lang']);
+            $html .= str_replace('{value}', "{$left}: {$tip}", $cnfLeft['tpl']);
+            if (!empty($cnfRight['infect'])) {
+                $html .= $this->getUpwardInfectHtml($cnfRight['infect'], 3);
+            }
         } else {
-            $html .= str_replace('{value}', "{$right}: {$tip}", Abs::HTML_RED_TEXT);
+            $right = $this->fieldLang($cnfRight['lang']);
+            $html .= str_replace('{value}', "{$right}: {$tip}", $cnfRight['tpl']);
+            if (!empty($cnfRight['infect'])) {
+                $html .= $this->getUpwardInfectHtml($cnfRight['infect'], 3);
+            }
         }
 
         return new Charm($html, $args->value);
@@ -277,9 +284,59 @@ trait Preview
      *
      * @return Charm
      */
+    public function previewCharmStartTime(Arguments $args)
+    {
+        return $this->chartTime(
+            $args,
+            ['lang' => 'Ready', 'tpl' => Abs::HTML_GREEN_TEXT],
+            ['lang' => 'Consumed', 'tpl' => Abs::HTML_ORANGE_TEXT]
+        );
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return Charm
+     */
     public function previewCharmEndTime(Arguments $args)
     {
-        return $this->previewCharmStartTime($args, 'Surplus', 'Expired');
+        return $this->chartTime(
+            $args,
+            ['lang' => 'Surplus', 'tpl' => Abs::HTML_GREEN],
+            ['lang' => 'Expired', 'tpl' => Abs::HTML_RED]
+        );
+    }
+
+    /**
+     * @param Arguments $args
+     *
+     * @return Charm
+     */
+    public function previewCharmTitle(Arguments $args)
+    {
+        /**
+         * @var BswWorkTaskTrailRepository $trailRepo
+         */
+        $trailRepo = $this->repo(BswWorkTaskTrail::class);
+        $trail = $trailRepo->findOneBy(
+            ['taskId' => $args->item['id'], 'reliable' => 1],
+            ['id' => Abs::SORT_DESC]
+        );
+
+        if ($trail) {
+            $tips = '↑' . $this->humanTimeDiff($trail->addTime);
+            $gap = Helper::gapDateTime($trail->addTime, date(Abs::FMT_FULL)) / Abs::TIME_HOUR;
+            if ($gap > Abs::HEX_HOUR_DAY * 3) {
+                $tips = str_replace('{value}', $tips, Abs::BSW_RED);
+            } else {
+                $tips = str_replace('{value}', $tips, Abs::BSW_GREEN);
+            }
+        } else {
+            $tips = '↑Nil';
+            $tips = str_replace('{value}', $tips, Abs::BSW_ORANGE);
+        }
+
+        return new Charm('{value}', "{$args->value} {$tips}");
     }
 
     /**
@@ -295,6 +352,7 @@ trait Preview
             ->setClick('showTrailDrawer')
             ->setArgs(['id' => $args->original['id']]);
 
+        $args->hooked['originalTitle'] = $args->hooked['title'];
         $args->hooked['trail'] = $this->getButtonHtml($button);
         $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
 
@@ -315,11 +373,8 @@ trait Preview
             return $args;
         }
 
-        [$team] = $this->workTaskTeam();
-
         return $this->showPreview(
             [
-                'border'      => !$team,
                 'dynamic'     => 10,
                 'filterJump'  => true,
                 'pageJump'    => true,

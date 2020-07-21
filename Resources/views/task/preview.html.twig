@@ -13,7 +13,7 @@
     :mask="typeof drawer.mask !== 'undefined' ? drawer.mask : {{ drawer.mask ? 'true' : 'false' }}"
     :mask-closable="typeof drawer.maskClosable !== 'undefined' ? drawer.maskClosable : {{ maskClosable }}"
     :keyboard="typeof drawer.keyboard !== 'undefined' ? drawer.keyboard : {{ drawer.keyboard ? 'true' : 'false' }}"
-    :title="item.title === false ? '' : (item.title || '{{ drawer.title|trans({}, 'twig') }}')"
+    :title="item.originalTitle === false ? '' : (item.originalTitle || '{{ drawer.title|trans({}, 'twig') }}')"
     :width="drawer.width || {{ drawer.width|vueType }}"
     :height="drawer.height || {{ drawer.height|vueType }}"
     :z-index="drawer.zIndex || {{ drawer.zIndex }}"

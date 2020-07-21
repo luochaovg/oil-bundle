@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\Traits;
 
+use Carbon\Carbon;
 use EasyWeChat\Factory as WxFactory;
 use Leon\BswBundle\Component\Helper;
 use Mexitek\PHPColors\Color;
@@ -117,6 +118,21 @@ trait Third
         $this->logger->debug("Number captcha in server {$captcha} and user input {$input}");
 
         return (new CaptchaBuilder($captcha))->testPhrase($input);
+    }
+
+    /**
+     * Human time different
+     *
+     * @param string $fullDate
+     *
+     * @return string
+     */
+    public function humanTimeDiff(string $fullDate): string
+    {
+        $lang = $this->langLatest(['cn' => 'zh-CN', 'en' => 'en'], 'en');
+        $cb = Carbon::createFromFormat(Abs::FMT_FULL, $fullDate);
+
+        return $cb->locale($lang)->diffForHumans();
     }
 
     /**

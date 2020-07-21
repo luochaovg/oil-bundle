@@ -2564,6 +2564,26 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Upward infect class
+         *
+         * @param selector
+         */
+
+    }, {
+        key: 'initUpwardInfect',
+        value: function initUpwardInfect() {
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-upward-infect';
+
+            $(selector).each(function () {
+                var element = $(this);
+                for (var i = 0; i < $(this).data('infect-level'); i++) {
+                    element = element.parent();
+                }
+                element.addClass($(this).data('infect-class'));
+            });
+        }
+
+        /**
          * [in parent] Dispatcher by bsw data
          *
          * @param data

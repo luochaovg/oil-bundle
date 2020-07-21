@@ -1996,6 +1996,21 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Upward infect class
+     *
+     * @param selector
+     */
+    initUpwardInfect(selector = '.bsw-upward-infect') {
+        $(selector).each(function () {
+            let element = $(this);
+            for (let i = 0; i < $(this).data('infect-level'); i++) {
+                element = element.parent();
+            }
+            element.addClass($(this).data('infect-class'));
+        });
+    }
+
+    /**
      * [in parent] Dispatcher by bsw data
      *
      * @param data

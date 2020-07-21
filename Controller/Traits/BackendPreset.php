@@ -144,7 +144,7 @@ trait BackendPreset
     }
 
     /**
-     * Get button html
+     * Html -> button
      *
      * @param Button $button
      * @param bool   $vue
@@ -187,6 +187,29 @@ trait BackendPreset
     }
 
     /**
+     * Html -> upward infect
+     *
+     * @param string $class
+     * @param int    $level
+     * @param string $tag
+     * @param string $value
+     *
+     * @return String
+     */
+    public function getUpwardInfectHtml(string $class, int $level = 3, string $tag = 'p', string $value = null): string
+    {
+        return Html::tag(
+            $tag,
+            $value,
+            [
+                'class'             => 'bsw-upward-infect',
+                'data-infect-class' => $class,
+                'data-infect-level' => $level,
+            ]
+        );
+    }
+
+    /**
      * Charm -> upward infect
      *
      * @param string $value
@@ -198,15 +221,7 @@ trait BackendPreset
      */
     public function charmUpwardInfect(string $value, string $class, int $level = 3, string $tag = 'p'): Charm
     {
-        $element = Html::tag(
-            $tag,
-            '{value}',
-            [
-                'class'             => 'bsw-upward-infect',
-                'data-infect-class' => $class,
-                'data-infect-level' => $level,
-            ]
-        );
+        $element = $this->getUpwardInfectHtml($class, $level, $tag, '{value}');
 
         return new Charm($element, $value);
     }

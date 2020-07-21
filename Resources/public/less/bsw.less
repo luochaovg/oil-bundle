@@ -229,13 +229,8 @@
 
 .bsw-long-text {
   word-break: break-all;
-  //word-wrap: break-word;
   overflow: hidden;
   white-space: pre-wrap;
-}
-
-thead.ant-table-thead > tr > th > div {
-  //white-space: nowrap;
 }
 
 .bsw-align-left {
@@ -584,7 +579,7 @@ blockquote {
 }
 
 .ant-breadcrumb-separator {
-  color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, .15);
 }
 
 .ant-empty-normal {
@@ -723,15 +718,19 @@ blockquote {
 }
 
 .preview-children {
-  background-color: rgba(50, 144, 251, 0.03);
+  background-color: rgba(50, 144, 251, .03);
 }
 
-.task-status-done {
-  background-color: rgba(0, 130, 41, 0.1);
+.bsw-status-success {
+  background-color: rgba(0, 128, 0, 1) !important;
 }
 
-.task-status-overdue {
-  background-color: rgba(250, 150, 0, 0.06);
+.bsw-status-warning {
+  background-color: rgba(255, 165, 0, 1) !important;
+}
+
+.bsw-status-error {
+  background-color: rgba(255, 0, 0, 1) !important;
 }
 
 code, kbd, pre, samp {
@@ -781,7 +780,7 @@ textarea[size="large"] {
 .bsw-icon {
   width: 1em;
   height: 1em;
-  vertical-align: -0.125em;
+  vertical-align: -.125em;
   fill: currentColor;
   overflow: hidden;
   display: inline-block;
@@ -848,10 +847,10 @@ textarea[size="large"] {
 .bsw-code {
   display: inline-flex;
   margin: 0 1px;
-  background: rgba(242, 244, 245, 0.5);
-  padding: 0.2em 0.4em;
+  background: rgba(242, 244, 245, .5);
+  padding: .2em .4em;
   border-radius: 3px;
-  font-size: 0.9em;
+  font-size: .9em;
   border: 1px solid #eee;
 
   &.full {
@@ -862,4 +861,45 @@ textarea[size="large"] {
 
 .ant-radio, .ant-radio-wrapper {
   white-space: unset;
+}
+
+.ant-select-selection {
+  border-top: 1px solid #d9d9d9;
+}
+
+.bsw-page-loading {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1000;
+  letter-spacing: 3px;
+
+  span {
+    position: absolute;
+    font-size: 18px;
+    font-weight: lighter;
+    top: 38.2%;
+    left: 50%;
+    color: rgba(0, 0, 0, .4);
+    transform: translateY(-50%) translateX(-50%);
+    animation: bsw-breathing-middle 2s infinite;
+  }
+}
+
+.ant-tag-has-color {
+  border-color: rgba(0, 0, 0, .02);
+}
+
+.bsw-tag {
+  font-size: 12px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 1px 3px;
+  border-radius: 3px;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.bsw-tag-text {
+  font-size: 12px;
 }
