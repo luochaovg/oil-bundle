@@ -657,7 +657,7 @@ a.bsw-preview-link {
 ul.ant-pagination li {
   margin-bottom: 5px;
 }
-blockquote {
+.bsw-blockquote {
   padding: 6px 10px;
   font-style: normal;
   line-height: 1.5;
@@ -665,9 +665,9 @@ blockquote {
   border-left: 5px solid #ccc;
   margin: 10px 0;
   background-color: #fbfbfb;
-  border-radius: 2px;
+  border-radius: 4px;
 }
-blockquote p {
+.bsw-blockquote p {
   margin: 8px 0 !important;
 }
 .ant-breadcrumb-separator {
@@ -902,7 +902,7 @@ textarea[size="large"] {
   margin: 0 1px;
   background: rgba(242, 244, 245, 0.5);
   padding: .2em .4em;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: .9em;
   border: 1px solid #eee;
 }
@@ -936,18 +936,138 @@ textarea[size="large"] {
   animation: bsw-breathing-middle 2s infinite;
 }
 .ant-tag-has-color {
-  border-color: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.03);
 }
 .bsw-tag {
   font-size: 12px;
   border-width: 1px;
   border-style: solid;
   padding: 1px 3px;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
   white-space: pre;
 }
 .bsw-tag-text {
   font-size: 12px;
+}
+body.bsw-theme-thin .ant-btn,
+body.bsw-theme-thin .ant-select-selection,
+body.bsw-theme-thin .ant-select-tree-dropdown .ant-select-dropdown-search .ant-select-search__field,
+body.bsw-theme-thin .ant-input-number,
+body.bsw-theme-thin .ant-input,
+body.bsw-theme-thin .ant-btn-dashed,
+body.bsw-theme-thin .ant-tag,
+body.bsw-theme-thin .bsw-code,
+body.bsw-theme-thin .bsw-tag,
+body.bsw-theme-thin .bsw-filter-form,
+body.bsw-theme-thin .bsw-preview-image,
+body.bsw-theme-thin .bsw-work-task-drawer .ant-timeline-item-tail,
+body.bsw-theme-thin .bsw-work-task-week-report .ant-timeline-item-tail,
+body.bsw-theme-thin .bsw-footer-bar,
+body.bsw-theme-thin .bsw-ck,
+body.bsw-theme-thin .ant-pagination-item-link,
+body.bsw-theme-thin .ant-pagination-item,
+body.bsw-theme-thin .ant-table-bordered .ant-table-tbody > tr > td,
+body.bsw-theme-thin .ant-table-bordered .ant-table-thead > tr > th,
+body.bsw-theme-thin .ant-table-bordered .ant-table-body > table,
+body.bsw-theme-thin .ant-table-bordered .ant-table-fixed-left table,
+body.bsw-theme-thin .ant-table-bordered .ant-table-fixed-right table,
+body.bsw-theme-thin .ant-table-bordered .ant-table-header > table,
+body.bsw-theme-thin .ant-pagination-options-quick-jumper input,
+body.bsw-theme-thin .ant-select-selection--multiple .ant-select-selection__choice,
+body.bsw-theme-thin .ant-input-number-handler-wrap,
+body.bsw-theme-thin .ck.ck-toolbar .ck.ck-toolbar__separator,
+body.bsw-theme-thin .bsw-ck .bsw-ck-toolbar,
+body.bsw-theme-thin .ck .ck-button.ck-color-table__remove-color:not(:focus),
+body.bsw-theme-thin .ck.ck-dropdown__panel,
+body.bsw-theme-thin .ck.ck-input-text,
+body.bsw-theme-thin .ant-calendar-header,
+body.bsw-theme-thin .ant-calendar-footer,
+body.bsw-theme-thin .ant-calendar-input-wrap,
+body.bsw-theme-thin .ant-calendar-time-picker-select,
+body.bsw-theme-thin .ant-calendar,
+body.bsw-theme-thin .ant-checkbox-inner,
+body.bsw-theme-thin .ant-modal-header,
+body.bsw-theme-thin .ant-modal-footer,
+body.bsw-theme-thin .ant-modal-content,
+body.bsw-theme-thin .ant-drawer-header,
+body.bsw-theme-thin .ant-radio-inner,
+body.bsw-theme-thin .ant-table-row-expand-icon,
+body.bsw-theme-thin .ant-table-placeholder,
+body.bsw-theme-thin .ant-divider,
+body.bsw-theme-thin .ant-table-small,
+body.bsw-theme-thin .ant-table-small.ant-table-bordered .ant-table-content,
+body.bsw-theme-thin .bsw-captcha-item .ant-form-item-children > img.bsw-captcha,
+body.bsw-theme-thin .ant-time-picker-input,
+body.bsw-theme-thin .ant-time-picker-panel-input-wrap,
+body.bsw-theme-thin .ant-time-picker-panel-select {
+  border-width: .5px !important;
+}
+body.bsw-theme-thin .ck.ck-toolbar .ck.ck-toolbar__separator {
+  width: .5px !important;
+  min-width: .5px !important;
+}
+body.bsw-theme-thin .ant-radio-inner:after {
+  left: 3.5px;
+  top: 3.5px;
+}
+body.bsw-theme-thin .ant-divider-horizontal {
+  height: .5px !important;
+  border-bottom: none;
+}
+body.bsw-theme-thin .ant-mentions {
+  border-bottom-width: .5px;
+  border-right-width: .5px;
+}
+body.bsw-theme-thin .ant-layout-sider-light .logo,
+body.bsw-theme-thin .ant-layout-header-light .logo {
+  box-shadow: .5px .5px 0 0 #e8e8e8;
+}
+body.bsw-theme-flat .ant-btn,
+body.bsw-theme-flat .ant-select-selection,
+body.bsw-theme-flat .ant-select-dropdown,
+body.bsw-theme-flat .ant-select-tree-dropdown .ant-select-dropdown-search .ant-select-search__field,
+body.bsw-theme-flat .ant-input-number,
+body.bsw-theme-flat .ant-input,
+body.bsw-theme-flat .ant-tag,
+body.bsw-theme-flat .ant-modal,
+body.bsw-theme-flat .bsw-code,
+body.bsw-theme-flat .bsw-preview-image,
+body.bsw-theme-flat .bsw-footer-bar,
+body.bsw-theme-flat .bsw-tag,
+body.bsw-theme-flat .bsw-blockquote,
+body.bsw-theme-flat .bsw-ck,
+body.bsw-theme-flat .ant-pagination-item-link,
+body.bsw-theme-flat .ant-pagination-item,
+body.bsw-theme-flat .ant-table-fixed-left,
+body.bsw-theme-flat .ant-table-fixed-left table,
+body.bsw-theme-flat .ant-dropdown-menu,
+body.bsw-theme-flat .ant-pagination-options-quick-jumper input,
+body.bsw-theme-flat .ant-select-selection--multiple .ant-select-selection__choice,
+body.bsw-theme-flat .ck-rounded-corners .ck.ck-dropdown__panel,
+body.bsw-theme-flat .ck.ck-dropdown__panel.ck-rounded-corners,
+body.bsw-theme-flat .ck-rounded-corners .ck.ck-dropdown .ck-dropdown__panel .ck-list,
+body.bsw-theme-flat .ck.ck-dropdown .ck-dropdown__panel .ck-list.ck-rounded-corners,
+body.bsw-theme-flat .ck.ck-input-text,
+body.bsw-theme-flat .ant-calendar,
+body.bsw-theme-flat .ant-calendar .ant-calendar-ok-btn,
+body.bsw-theme-flat .ant-checkbox-inner,
+body.bsw-theme-flat .ant-modal-header,
+body.bsw-theme-flat .ant-modal-footer,
+body.bsw-theme-flat .ant-modal-content,
+body.bsw-theme-flat .ant-drawer-header,
+body.bsw-theme-flat .ant-popover-inner,
+body.bsw-theme-flat .ant-table-row-expand-icon,
+body.bsw-theme-flat .ant-message-notice-content,
+body.bsw-theme-flat .ant-notification-notice,
+body.bsw-theme-flat .ant-table-placeholder,
+body.bsw-theme-flat .ant-mentions,
+body.bsw-theme-flat .ant-mentions-dropdown-menu-item:first-child,
+body.bsw-theme-flat .ant-mentions-dropdown-menu-item:last-child,
+body.bsw-theme-flat .ant-table-small,
+body.bsw-theme-flat .bsw-captcha-item .ant-form-item-children > img.bsw-captcha,
+body.bsw-theme-flat .ant-time-picker-input,
+body.bsw-theme-flat .ant-time-picker-panel-inner {
+  border-radius: 0 !important;
 }
 /*# sourceMappingURL=bsw.css.map */

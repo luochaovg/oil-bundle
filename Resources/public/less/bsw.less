@@ -563,7 +563,7 @@ ul.ant-pagination li {
   margin-bottom: 5px;
 }
 
-blockquote {
+.bsw-blockquote {
   padding: 6px 10px;
   font-style: normal;
   line-height: 1.5;
@@ -571,7 +571,7 @@ blockquote {
   border-left: 5px solid #ccc;
   margin: 10px 0;
   background-color: #fbfbfb;
-  border-radius: 2px;
+  border-radius: 4px;
 
   p {
     margin: 8px 0 !important;
@@ -849,7 +849,7 @@ textarea[size="large"] {
   margin: 0 1px;
   background: rgba(242, 244, 245, .5);
   padding: .2em .4em;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: .9em;
   border: 1px solid #eee;
 
@@ -887,7 +887,7 @@ textarea[size="large"] {
 }
 
 .ant-tag-has-color {
-  border-color: rgba(0, 0, 0, .02);
+  border-color: rgba(0, 0, 0, .03);
 }
 
 .bsw-tag {
@@ -895,11 +895,142 @@ textarea[size="large"] {
   border-width: 1px;
   border-style: solid;
   padding: 1px 3px;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
   white-space: pre;
 }
 
 .bsw-tag-text {
   font-size: 12px;
+}
+
+body.bsw-theme-thin {
+  .ant-btn,
+  .ant-select-selection,
+  .ant-select-tree-dropdown .ant-select-dropdown-search .ant-select-search__field,
+  .ant-input-number,
+  .ant-input,
+  .ant-btn-dashed,
+  .ant-tag,
+  .bsw-code,
+  .bsw-tag,
+  .bsw-filter-form,
+  .bsw-preview-image,
+  .bsw-work-task-drawer .ant-timeline-item-tail,
+  .bsw-work-task-week-report .ant-timeline-item-tail,
+  .bsw-footer-bar,
+  .bsw-ck,
+  .ant-pagination-item-link,
+  .ant-pagination-item,
+  .ant-table-bordered .ant-table-tbody > tr > td,
+  .ant-table-bordered .ant-table-thead > tr > th,
+  .ant-table-bordered .ant-table-body > table,
+  .ant-table-bordered .ant-table-fixed-left table,
+  .ant-table-bordered .ant-table-fixed-right table,
+  .ant-table-bordered .ant-table-header > table,
+  .ant-pagination-options-quick-jumper input,
+  .ant-select-selection--multiple .ant-select-selection__choice,
+  .ant-input-number-handler-wrap,
+  .ck.ck-toolbar .ck.ck-toolbar__separator,
+  .bsw-ck .bsw-ck-toolbar,
+  .ck .ck-button.ck-color-table__remove-color:not(:focus),
+  .ck.ck-dropdown__panel,
+  .ck.ck-input-text,
+  .ant-calendar-header,
+  .ant-calendar-footer,
+  .ant-calendar-input-wrap,
+  .ant-calendar-time-picker-select,
+  .ant-calendar,
+  .ant-checkbox-inner,
+  .ant-modal-header,
+  .ant-modal-footer,
+  .ant-modal-content,
+  .ant-drawer-header,
+  .ant-radio-inner,
+  .ant-table-row-expand-icon,
+  .ant-table-placeholder,
+  .ant-divider,
+  .ant-table-small,
+  .ant-table-small.ant-table-bordered .ant-table-content,
+  .bsw-captcha-item .ant-form-item-children > img.bsw-captcha,
+  .ant-time-picker-input,
+  .ant-time-picker-panel-input-wrap,
+  .ant-time-picker-panel-select {
+    border-width: .5px !important;
+  }
+
+  .ck.ck-toolbar .ck.ck-toolbar__separator {
+    width: .5px !important;
+    min-width: .5px !important;
+  }
+
+  .ant-radio-inner:after {
+    left: 3.5px;
+    top: 3.5px;
+  }
+
+  .ant-divider-horizontal {
+    height: .5px !important;
+    border-bottom: none;
+  }
+
+  .ant-mentions {
+    border-bottom-width: .5px;
+    border-right-width: .5px;
+  }
+
+  .ant-layout-sider-light .logo,
+  .ant-layout-header-light .logo {
+    box-shadow: .5px .5px 0 0 #e8e8e8;
+  }
+}
+
+body.bsw-theme-flat {
+  .ant-btn,
+  .ant-select-selection,
+  .ant-select-dropdown,
+  .ant-select-tree-dropdown .ant-select-dropdown-search .ant-select-search__field,
+  .ant-input-number,
+  .ant-input,
+  .ant-tag,
+  .ant-modal,
+  .bsw-code,
+  .bsw-preview-image,
+  .bsw-footer-bar,
+  .bsw-tag,
+  .bsw-blockquote,
+  .bsw-ck,
+  .ant-pagination-item-link,
+  .ant-pagination-item,
+  .ant-table-fixed-left,
+  .ant-table-fixed-left table,
+  .ant-dropdown-menu,
+  .ant-pagination-options-quick-jumper input,
+  .ant-select-selection--multiple .ant-select-selection__choice,
+  .ck-rounded-corners .ck.ck-dropdown__panel,
+  .ck.ck-dropdown__panel.ck-rounded-corners,
+  .ck-rounded-corners .ck.ck-dropdown .ck-dropdown__panel .ck-list,
+  .ck.ck-dropdown .ck-dropdown__panel .ck-list.ck-rounded-corners,
+  .ck.ck-input-text,
+  .ant-calendar,
+  .ant-calendar .ant-calendar-ok-btn,
+  .ant-checkbox-inner,
+  .ant-modal-header,
+  .ant-modal-footer,
+  .ant-modal-content,
+  .ant-drawer-header,
+  .ant-popover-inner,
+  .ant-table-row-expand-icon,
+  .ant-message-notice-content,
+  .ant-notification-notice,
+  .ant-table-placeholder,
+  .ant-mentions,
+  .ant-mentions-dropdown-menu-item:first-child,
+  .ant-mentions-dropdown-menu-item:last-child,
+  .ant-table-small,
+  .bsw-captcha-item .ant-form-item-children > img.bsw-captcha,
+  .ant-time-picker-input,
+  .ant-time-picker-panel-inner {
+    border-radius: 0 !important;
+  }
 }
