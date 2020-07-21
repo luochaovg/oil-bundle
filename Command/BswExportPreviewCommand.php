@@ -132,7 +132,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
 
         foreach ($record as $field => $value) {
             if (isset($enum[$field])) {
-                $record[$field] = $enum[$field][$value];
+                $record[$field] = $enum[$field][$value] ?? Abs::DIRTY;
             }
         }
 
