@@ -527,7 +527,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                     $item->method = $item->method ?: implode('|', $api['http']);
 
                     $required = ($required ? 'Y' : 'N');
-                    $signature = ($item->sign ? 'Y' : 'N');
+                    $signature = ($item->sign === Abs::AUTO ? 'AUTO' : ($item->sign ? 'Y' : 'N'));
                     $http = $item->method ?: Abs::REQ_ALL;
 
                     if (in_array($http, $api['http'])) {
