@@ -28,4 +28,9 @@ class AccessControl extends Annotation
      * @var string
      */
     public $title;
+
+    /**
+     * @var bool
+     */
+    public $export = false;
 }

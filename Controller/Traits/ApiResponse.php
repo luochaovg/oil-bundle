@@ -176,7 +176,7 @@ trait ApiResponse
     public function response(int $code4logic, int $code4http, string $message = null, array $data = []): Response
     {
         $response = [];
-        if (strpos($message, Abs::TAG_SQL_ERROR) !== false) {
+        if (strpos($message, Abs::FLAG_SQL_ERROR) !== false) {
             throw new Exception($message);
         }
 

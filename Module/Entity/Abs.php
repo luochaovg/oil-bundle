@@ -19,7 +19,8 @@ class Abs
     const SORT               = 'sort';
     const ORDER              = 'order';
     const AUTO               = 'auto';
-    const TAG_SQL_ERROR      = 'An exception occurred while executing';
+    const FLAG_ROUTE_EXPORT  = '_export';
+    const FLAG_SQL_ERROR     = 'An exception occurred while executing';
     const RULES_REQUIRED     = ['required' => true, 'message' => '{{ field }} Required'];
     const LINE_DASHED        = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
     const BK_RENDER_ARGS     = 1;

@@ -133,7 +133,7 @@ trait Preview
      * Preview record
      *
      * @Route("/bsw-admin-menu/preview", name="app_bsw_admin_menu_preview")
-     * @Access()
+     * @Access(export=true)
      *
      * @return Response
      */

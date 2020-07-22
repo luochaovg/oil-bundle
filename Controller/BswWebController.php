@@ -372,7 +372,7 @@ abstract class BswWebController extends AbstractController
         string $classify = Abs::TAG_CLASSIFY_WARNING,
         string $type = Abs::TAG_TYPE_MESSAGE
     ) {
-        if (strpos($content, Abs::TAG_SQL_ERROR) !== false) {
+        if (strpos($content, Abs::FLAG_SQL_ERROR) !== false) {
             throw new Exception($content);
         }
 
@@ -468,6 +468,23 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
+     * Route is access
+     *
+     * @param string|null $route
+     *
+     * @return mixed
+     */
+    public function routeIsAccess(string $route = null)
+    {
+        $route = $route ?? $this->route;
+        if (empty($route)) {
+            return true;
+        }
+
+        return $this->access[$route] ?? false;
+    }
+
+    /**
      * Valid args
      *
      * @param int  $type
@@ -559,13 +576,6 @@ abstract class BswWebController extends AbstractController
                 $this->usr = (object)$isAuth;
 
                 /**
-                 * access
-                 */
-
-                $this->access = $this->accessBuilder($this->usr);
-                $access = $this->access[$this->route] ?? false;
-
-                /**
                  * strict authorization
                  */
 
@@ -581,6 +591,18 @@ abstract class BswWebController extends AbstractController
                         return $this->responseError($error);
                     }
                 }
+
+                $route = $this->route;
+                if ($this->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT) {
+                    $route .= Abs::FLAG_ROUTE_EXPORT;
+                }
+
+                /**
+                 * access
+                 */
+
+                $this->access = $this->accessBuilder($this->usr);
+                $access = $this->routeIsAccess($route);
 
                 // access denied
                 if (Helper::bitFlagAssert($type, Abs::V_ACCESS) && $access !== true) {
@@ -640,7 +662,6 @@ abstract class BswWebController extends AbstractController
         foreach ($route as $class => $item) {
             [$classify, $access] = $this->getAccessControlAnnotation($class);
             foreach ($access as $method => &$target) {
-
                 if (!isset($item[$method])) {
                     continue;
                 }
@@ -650,9 +671,17 @@ abstract class BswWebController extends AbstractController
                 $target['info'] = $item[$method]['desc_fn'];
 
                 if ($keyByClass) {
+                    if ($target['export']) {
+                        $accessList[$classify][$route . Abs::FLAG_ROUTE_EXPORT] = $target;
+                        $target['export'] = false;
+                    }
                     $accessList[$classify][$route] = $target;
                 } else {
                     $target['classify'] = $classify;
+                    if ($target['export']) {
+                        $accessList[$route . Abs::FLAG_ROUTE_EXPORT] = $target;
+                        $target['export'] = false;
+                    }
                     $accessList[$route] = $target;
                 }
             }
@@ -675,6 +704,9 @@ abstract class BswWebController extends AbstractController
                         'info'  => $this->twigLang($classInfo),
                         'items' => [],
                     ];
+                }
+                if ($item['export']) {
+                    $item['info'] .= ' export';
                 }
                 $item['info'] = $allMenuDetail[$route]['info'] ?? $this->twigLang($item['info']);
                 $_accessList[$id]['items'][$route] = $item;

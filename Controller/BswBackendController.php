@@ -246,15 +246,23 @@ class BswBackendController extends BswWebController
      */
     protected function accessBuilder($usr): array
     {
-        $route = $this->getRouteOfAll(true);
-        if ($this->root($usr)) {
-            return $route;
+        $auto = [];
+        $all = $this->getAccessOfAll();
+        foreach ($all as $route => $item) {
+            if ($item['export']) {
+                $auto[$route] = true;
+            }
         }
 
-        $all = $this->getAccessOfAll();
+        $route = $this->getRouteOfAll(true);
+        $route = array_merge($auto, $route);
+
+        if ($this->root($usr)) {
+            //return $route;
+        }
+
         $render = Helper::arrayValuesSetTo($all, false);
         $user = $this->getAccessOfUserWithRole($usr->{$this->cnf->usr_uid});
-
         $access = array_merge($route, $render, $user);
 
         foreach ($render as $key => $value) {
@@ -743,23 +751,6 @@ class BswBackendController extends BswWebController
                 'avatar'      => $avatar,
             ]
         );
-    }
-
-    /**
-     * Route is access
-     *
-     * @param string|null $route
-     *
-     * @return mixed
-     */
-    public function routeIsAccess(string $route = null)
-    {
-        $route = $route ?? $this->route;
-        if (empty($route)) {
-            return true;
-        }
-
-        return $this->access[$route] ?? false;
     }
 
     /**
