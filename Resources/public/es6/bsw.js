@@ -14,7 +14,7 @@ window.bsw = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 $(function () {
     // vue
-    bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
+    bsw.vue().template(bsw.config.template || null).data(Object.assign({
 
         bsw,
         locale: bsw.d.locales[bsw.lang.i18n_ant],
@@ -402,7 +402,16 @@ $(function () {
         },
 
         copyFileLink(data, element) {
-            this.copy = data.extra.link;
+            this.copy = data.link;
+        },
+
+        getFormDataByEvent(event) {
+            let field = event.target.id;
+            let value = event.target.value;
+            let data = bsw.getBswData($(event.target));
+            let form = data.form || 'persistenceForm';
+
+            return {field, value, data, form};
         },
 
         //
@@ -440,6 +449,7 @@ $(function () {
         }
 
         bsw.initClipboard();
+        bsw.initUpwardInfect();
 
         let timeout = change ? 1000 : 400;
         setTimeout(function () {

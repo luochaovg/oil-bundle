@@ -11,8 +11,8 @@ class FoundationPrototype {
     /**
      * String trim
      *
-     * @param source string
-     * @param haystack string
+     * @param source
+     * @param haystack
      *
      * @return {string}
      */
@@ -24,8 +24,8 @@ class FoundationPrototype {
     /**
      * String left trim
      *
-     * @param source string
-     * @param haystack string
+     * @param source
+     * @param haystack
      *
      * @return {string}
      */
@@ -37,8 +37,8 @@ class FoundationPrototype {
     /**
      * String right trim
      *
-     * @param source string
-     * @param haystack string
+     * @param source
+     * @param haystack
      *
      * @return {string}
      */
@@ -50,10 +50,11 @@ class FoundationPrototype {
     /**
      * String pad
      *
-     * @param target string
-     * @param padStr string
-     * @param length int
-     * @param type string
+     * @param target
+     * @param padStr
+     * @param length
+     * @param type
+     *
      * @return {*}
      */
     pad(target, padStr, length, type) {
@@ -96,10 +97,11 @@ class FoundationPrototype {
     /**
      * String fill
      *
-     * @param target string
-     * @param fillStr string
-     * @param length int
-     * @param type string
+     * @param target
+     * @param fillStr
+     * @param length
+     * @param type
+     *
      * @return {*}
      */
     fill(target, fillStr, length, type) {
@@ -131,8 +133,9 @@ class FoundationPrototype {
     /**
      * String repeat
      *
-     * @param target string
-     * @param num int
+     * @param target
+     * @param num
+     *
      * @return {string}
      */
     repeat(target, num) {
@@ -143,7 +146,8 @@ class FoundationPrototype {
     /**
      * String upper first char of words
      *
-     * @param target string
+     * @param target
+     *
      * @return {*}
      */
     ucWords(target) {
@@ -155,7 +159,8 @@ class FoundationPrototype {
     /**
      * String upper first char
      *
-     * @param target string
+     * @param target
+     *
      * @return {*}
      */
     ucFirst(target) {
@@ -165,7 +170,8 @@ class FoundationPrototype {
     /**
      * String lower first char
      *
-     * @param target string
+     * @param target
+     *
      * @return {*}
      */
     lcFirst(target) {
@@ -175,8 +181,9 @@ class FoundationPrototype {
     /**
      * String big hump style
      *
-     * @param target string
-     * @param split string
+     * @param target
+     * @param split
+     *
      * @return {*}
      */
     bigHump(target, split = '_') {
@@ -187,8 +194,9 @@ class FoundationPrototype {
     /**
      * String small hump style
      *
-     * @param target string
-     * @param split string
+     * @param target
+     * @param split
+     *
      * @return {*}
      */
     smallHump(target, split = '_') {
@@ -200,7 +208,8 @@ class FoundationPrototype {
      *
      * @param target
      * @param split
-     * @returns {void | string | *}
+     *
+     * @returns {*}
      */
     humpToUnder(target, split = '_') {
         return this.leftTrim(target.replace(/([A-Z])/g, `${split}$1`).toLowerCase(), split);
@@ -209,8 +218,9 @@ class FoundationPrototype {
     /**
      * Date format
      *
-     * @param target Date
-     * @param fmt string
+     * @param target
+     * @param fmt
+     *
      * @return {*}
      */
     format(target, fmt = 'yyyy-MM-dd hh:mm:ss') {
@@ -246,8 +256,9 @@ class FoundationPrototype {
     /**
      * Array unique
      *
-     * @param target string
-     * @return {any[]}
+     * @param target
+     *
+     * @returns {*}
      */
     arrayUnique(target) {
         return Array.from(new Set(target));
@@ -256,8 +267,9 @@ class FoundationPrototype {
     /**
      * Array remove by value
      *
-     * @param target array
-     * @param value mixed
+     * @param target
+     * @param value
+     *
      * @return {*}
      */
     arrayRemoveValue(target, value) {
@@ -271,8 +283,9 @@ class FoundationPrototype {
     /**
      * Array intersect
      *
-     * @param first array
-     * @param second array
+     * @param first
+     * @param second
+     *
      * @return {*}
      */
     arrayIntersect(first, second) {
@@ -282,8 +295,9 @@ class FoundationPrototype {
     /**
      * Array difference
      *
-     * @param first array
-     * @param second array
+     * @param first
+     * @param second
+     *
      * @return {*}
      */
     arrayDifference(first, second) {
@@ -293,8 +307,9 @@ class FoundationPrototype {
     /**
      * Array complement
      *
-     * @param first array
-     * @param second array
+     * @param first
+     * @param second
+     *
      * @return {*}
      */
     arrayComplement(first, second) {
@@ -304,8 +319,9 @@ class FoundationPrototype {
     /**
      * Array union
      *
-     * @param first array
-     * @param second array
+     * @param first
+     * @param second
+     *
      * @return {*}
      */
     arrayUnion(first, second) {
@@ -315,9 +331,9 @@ class FoundationPrototype {
     /**
      * Array swap
      *
-     * @param source array
-     * @param first int
-     * @param last int
+     * @param source
+     * @param first
+     * @param last
      *
      * @return {array}
      */
@@ -329,8 +345,8 @@ class FoundationPrototype {
     /**
      * Array up
      *
-     * @param source array
-     * @param index int
+     * @param source
+     * @param index
      *
      * @return {array}
      */
@@ -344,8 +360,8 @@ class FoundationPrototype {
     /**
      * Array down
      *
-     * @param source array
-     * @param index int
+     * @param source
+     * @param index
      *
      * @return {array}
      */
@@ -372,7 +388,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is array
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isArray(value) {
@@ -385,7 +402,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is object
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isObject(value) {
@@ -398,7 +416,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is null
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isNull(value) {
@@ -411,7 +430,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is json
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isJson(value) {
@@ -424,7 +444,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is string
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isString(value) {
@@ -437,7 +458,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is numeric
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isNumeric(value) {
@@ -450,7 +472,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is boolean
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isBoolean(value) {
@@ -463,7 +486,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Is function
      *
-     * @param value mixed
+     * @param value
+     *
      * @return {boolean}
      */
     isFunction(value) {
@@ -476,7 +500,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Get json length
      *
-     * @param target json
+     * @param target
+     *
      * @return {number}
      */
     jsonLength(target) {
@@ -493,7 +518,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Get element offset
      *
-     * @param element object
+     * @param element
+     *
      * @return {{left: *, top: *, width: number, height: number}}
      */
     offset(element) {
@@ -510,7 +536,7 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Timestamp
      *
-     * @param second boolean
+     * @param second
      *
      * @return {int}
      */
@@ -522,8 +548,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Parse query string
      *
-     * @param url string
-     * @param hostPart boolean
+     * @param url
+     * @param hostPart
      *
      * @returns {array}
      */
@@ -560,9 +586,9 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Json to query string
      *
-     * @param source json
-     * @param returnObject bool
-     * @param needEncode bool
+     * @param source
+     * @param returnObject
+     * @param needEncode
      *
      * @return {string}
      */
@@ -615,9 +641,9 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Url add items
      *
-     * @param items json
-     * @param url string
-     * @param needEncode bool
+     * @param items
+     * @param url
+     * @param needEncode
      *
      * @return {string}
      */
@@ -636,10 +662,10 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Url remove items
      *
-     * @param items json
-     * @param url string
-     * @param needEncode bool
-     * @param effect json
+     * @param items
+     * @param url
+     * @param needEncode
+     * @param effect
      *
      * @return {string}
      */
@@ -664,10 +690,10 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Url remove items
      *
-     * @param items json
-     * @param url string
-     * @param needEncode bool
-     * @param effect json
+     * @param items
+     * @param url
+     * @param needEncode
+     * @param effect
      *
      * @return {string}
      */
@@ -697,10 +723,10 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Count px of padding and margin
      *
-     * @param element object
-     * @param length int
-     * @param type string|array
-     * @param pos string|array
+     * @param element
+     * @param length
+     * @param type
+     * @param pos
      * @return {number}
      */
     pam(element, length, type, pos) {
@@ -752,8 +778,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Rand a number
      *
-     * @param end int
-     * @param begin int
+     * @param end
+     * @param begin
      * @return {*}
      */
     rand(end, begin) {
@@ -767,10 +793,10 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Bind key down
      *
-     * @param num int
-     * @param callback callable
-     * @param element object
-     * @param ctrl bool
+     * @param num
+     * @param callback
+     * @param element
+     * @param ctrl
      */
     keyBind(num, callback, element, ctrl = false) {
         element = element || $(document);
@@ -807,7 +833,7 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Int value
      *
-     * @param value mixed
+     * @param value
      *
      * @return int
      */
@@ -858,11 +884,11 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Get next value with map use cookie
      *
-     * @param name string
-     * @param map json
-     * @param def mixed
-     * @param set bool
-     * @param tips string
+     * @param name
+     * @param map
+     * @param def
+     * @param set
+     * @param tips
      *
      * @return mixed
      */
@@ -882,9 +908,9 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Get current value with map use cookie
      *
-     * @param name string
-     * @param map json
-     * @param def mixed
+     * @param name
+     * @param map
+     * @param def
      *
      * @return mixed
      */
@@ -897,8 +923,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Eval expression
      *
-     * @param expression string
-     * @param def mixed
+     * @param expression
+     * @param def
      *
      * @returns {{}}
      */
@@ -917,9 +943,9 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Switch class name
      *
-     * @param cls string
-     * @param add bool
-     * @param selector string
+     * @param cls
+     * @param add
+     * @param selector
      */
     switchClass(cls, add, selector = 'html') {
         let container = $(selector);
@@ -930,8 +956,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Check json keys exists
      *
-     * @param target object
-     * @param keys array
+     * @param target
+     * @param keys
      *
      * @returns boolean
      */
@@ -951,8 +977,8 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Json filter
      *
-     * @param target json
-     * @param filter array
+     * @param target
+     * @param filter
      */
     jsonFilter(target, filter = ['', null]) {
         for (let i in target) {
@@ -976,10 +1002,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Constructor
      *
-     * @param jQuery object
-     * @param Vue object
-     * @param AntD object
-     * @param lang object
+     * @param jQuery
+     * @param Vue
+     * @param AntD
+     * @param lang
      */
     constructor(jQuery, Vue, AntD, lang = {}) {
         super();
@@ -1009,7 +1035,7 @@ class FoundationAntD extends FoundationTools {
     /**
      * Page configure
      *
-     * @param config json
+     * @param config
      */
     configure(config) {
         for (let key in config) {
@@ -1023,11 +1049,11 @@ class FoundationAntD extends FoundationTools {
     /**
      * Init with VUE
      *
-     * @param selector string
+     * @param selector
      *
      * @return {*}
      */
-    vue(selector = '.bsw-content') {
+    vue(selector = '.bsw-vue') {
         let that = this;
         let conf = {};
         return {
@@ -1059,6 +1085,10 @@ class FoundationAntD extends FoundationTools {
                 conf.watch = item;
                 return this;
             },
+            extra(options = {}) {
+                conf = Object.assign(conf, options);
+                return this;
+            },
             init(logic = self.blank) {
                 conf.el = selector;
                 that.cnf.v = new that.v(conf);
@@ -1080,10 +1110,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show use notification
      *
-     * @param type string
-     * @param description string
-     * @param duration float
-     * @param onClose callable
+     * @param type
+     * @param description
+     * @param duration
+     * @param onClose
      *
      * @returns {*}
      */
@@ -1111,10 +1141,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show use message
      *
-     * @param type string
-     * @param description string
-     * @param duration float
-     * @param onClose callable
+     * @param type
+     * @param description
+     * @param duration
+     * @param onClose
      *
      * @returns {*}
      */
@@ -1129,11 +1159,11 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show use confirm
      *
-     * @param type string
-     * @param description string
-     * @param duration float
-     * @param onClose callable
-     * @param options json
+     * @param type
+     * @param description
+     * @param duration
+     * @param onClose
+     * @param options
      *
      * @returns {*}
      */
@@ -1173,10 +1203,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show success
      *
-     * @param description string
-     * @param duration float
-     * @param onClose callable
-     * @param type string
+     * @param description
+     * @param duration
+     * @param onClose
+     * @param type
      *
      * @returns {*}
      */
@@ -1187,10 +1217,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show info
      *
-     * @param description string
-     * @param duration float
-     * @param onClose callable
-     * @param type string
+     * @param description
+     * @param duration
+     * @param onClose
+     * @param type
      *
      * @returns {*}
      */
@@ -1201,10 +1231,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show warning
      *
-     * @param description string
-     * @param duration float
-     * @param onClose callable
-     * @param type string
+     * @param description
+     * @param duration
+     * @param onClose
+     * @param type
      *
      * @returns {*}
      */
@@ -1215,10 +1245,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show error
      *
-     * @param description string
-     * @param duration float
-     * @param onClose callable
-     * @param type string
+     * @param description
+     * @param duration
+     * @param onClose
+     * @param type
      *
      * @returns {*}
      */
@@ -1229,9 +1259,9 @@ class FoundationAntD extends FoundationTools {
     /**
      * Show confirm
      *
-     * @param content string
-     * @param title string
-     * @param options json
+     * @param content
+     * @param title
+     * @param options
      *
      * @return {*}
      */
@@ -1249,11 +1279,11 @@ class FoundationAntD extends FoundationTools {
     /**
      * Request
      *
-     * @param url string
-     * @param data json
-     * @param type string
-     * @param upload boolean
-     * @param times integer
+     * @param url
+     * @param data
+     * @param type
+     * @param upload
+     * @param times
      *
      * @returns {Promise}
      */
@@ -1307,10 +1337,10 @@ class FoundationAntD extends FoundationTools {
     /**
      * Handler for response
      *
-     * @param result json
-     * @param successSameHandler callable
-     * @param failedSameHandler callable
-     * @param duration int
+     * @param result
+     * @param successSameHandler
+     * @param failedSameHandler
+     * @param duration
      */
     response(result, successSameHandler, failedSameHandler, duration) {
         if (typeof result.code === 'undefined') {
@@ -1384,7 +1414,7 @@ class FoundationAntD extends FoundationTools {
     /**
      * Encrypt by rsa public key
      *
-     * @param text string
+     * @param text
      *
      * @returns string
      */
@@ -1399,6 +1429,7 @@ class FoundationAntD extends FoundationTools {
      * Base64 decode
      *
      * @param text
+     *
      * @returns {string}
      */
     base64Decode(text) {
@@ -1409,6 +1440,7 @@ class FoundationAntD extends FoundationTools {
      * Base64 decode (array)
      *
      * @param target
+     *
      * @returns {*}
      */
     arrayBase64Decode(target) {
@@ -1426,9 +1458,43 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Json fn handler
+     *
+     * @param target
+     * @param fnPrefix
+     * @param fnTag
+     *
+     * @returns {*}
+     */
+    jsonFnHandler(target, fnPrefix, fnTag = 'fn') {
+        let that = this;
+        for (let key in target) {
+            if (!target.hasOwnProperty(key)) {
+                continue;
+            }
+            let item = target[key];
+            if (that.isJson(item)) {
+                target[key] = that.jsonFnHandler(item, fnPrefix, fnTag);
+            } else if (that.isString(item) && item.startsWith(`${fnTag}:`)) {
+                let fn = that.ucFirst(item.split(':')[1]);
+                fn = `${fnPrefix}${fn}`;
+                if (typeof that.cnf.v[fn] !== 'undefined') {
+                    target[key] = that.cnf.v[fn];
+                } else if (typeof that[fn] !== 'undefined') {
+                    target[key] = that[fn];
+                } else {
+                    target[key] = that.blank;
+                    console.warn(`Method ${fn} is undefined.`, target);
+                }
+            }
+        }
+        return target;
+    }
+
+    /**
      * Create chart
      *
-     * @param option object
+     * @param option
      *
      * @returns void
      */
@@ -1437,23 +1503,7 @@ class FoundationAntD extends FoundationTools {
         let o = option.option;
         let chart = echarts.init(document.getElementById(`chart-${option.id}`), option.theme);
 
-        let replaceHandler = function (target) {
-            for (let key in target) {
-                if (!target.hasOwnProperty(key)) {
-                    continue;
-                }
-                let item = target[key];
-                if (that.isJson(item)) {
-                    target[key] = replaceHandler(item);
-                } else if (that.isString(item) && item.startsWith('fn:')) {
-                    let fn = that.ucFirst(item.split(':')[1]);
-                    target[key] = that[`chartHandler${fn}`];
-                }
-            }
-            return target;
-        };
-
-        chart.setOption(replaceHandler(o));
+        chart.setOption(that.jsonFnHandler(o, 'chartHandler'));
         this.cnf.v.$nextTick(function () {
             chart.resize();
         });
@@ -1465,6 +1515,7 @@ class FoundationAntD extends FoundationTools {
      * Chart handler -> tooltip stack
      *
      * @param params
+     *
      * @returns {string}
      */
     chartHandlerTooltipStack(params) {
@@ -1489,6 +1540,7 @@ class FoundationAntD extends FoundationTools {
      * Chart handler -> tooltip normal
      *
      * @param params
+     *
      * @returns {string}
      */
     chartHandlerTooltipNormal(params) {
@@ -1503,6 +1555,7 @@ class FoundationAntD extends FoundationTools {
      * @param dom
      * @param rect
      * @param size
+     *
      * @returns {{top: number}}
      */
     chartHandlerTooltipPositionFixed(pos, params, dom, rect, size) {
@@ -1776,6 +1829,7 @@ class FoundationAntD extends FoundationTools {
      * Get bsw data
      *
      * @param object
+     *
      * @returns {*|{}}
      */
     getBswData(object) {
@@ -1831,9 +1885,9 @@ class FoundationAntD extends FoundationTools {
         let data = element[0].dataBsw;
         if (data[fn]) {
             if (typeof that.cnf.v[data[fn]] !== 'undefined') {
-                return that.cnf.v[data[fn]](data, element);
+                return that.cnf.v[data[fn]](data.extra || {}, element);
             } else if (typeof that[data[fn]] !== 'undefined') {
-                return that[data[fn]](data, element);
+                return that[data[fn]](data.extra || {}, element);
             }
             return console.warn(`Method ${data[fn]} is undefined.`, data);
         }
@@ -1843,7 +1897,7 @@ class FoundationAntD extends FoundationTools {
      * Redirect (by bsw data)
      *
      * @param data
-     * @returns {*}
+     * {*}
      */
     redirect(data) {
         if (data.function && data.function !== 'redirect') {
@@ -1867,6 +1921,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @param input
      * @param option
+     *
      * @returns {boolean}
      */
     formItemFilterOption(input, option) {
@@ -1937,6 +1992,21 @@ class FoundationAntD extends FoundationTools {
         clipboard.on('error', function (e) {
             that.error(that.lang.copy_failed, 3);
             console.warn('Clipboard operation error', e);
+        });
+    }
+
+    /**
+     * Upward infect class
+     *
+     * @param selector
+     */
+    initUpwardInfect(selector = '.bsw-upward-infect') {
+        $(selector).each(function () {
+            let element = $(this);
+            for (let i = 0; i < $(this).data('infect-level'); i++) {
+                element = element.parent();
+            }
+            element.addClass($(this).data('infect-class'));
         });
     }
 

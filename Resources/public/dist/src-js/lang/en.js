@@ -1,6 +1,6 @@
 'use strict';
 
-window.lang = {
+window.lang = Object.assign(window.lang || {}, {
     i18n_ant: 'en_US',
     i18n_editor: 'en-gb',
     success: 'Success',
@@ -28,4 +28,4 @@ window.lang = {
     export_mission: 'Export mission',
     copy_success: 'Content copied success',
     copy_failed: 'Content copied failed'
-};
+});

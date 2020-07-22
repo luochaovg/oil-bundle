@@ -20,7 +20,7 @@ window.bsw = new FoundationAntD(jQuery, Vue, antd, window.lang || {});
 
 $(function () {
     // vue
-    bsw.vue('.bsw-body').template(bsw.config.template || null).data(Object.assign({
+    bsw.vue().template(bsw.config.template || null).data(Object.assign({
 
         bsw: bsw,
         locale: bsw.d.locales[bsw.lang.i18n_ant],
@@ -407,7 +407,15 @@ $(function () {
             });
         },
         copyFileLink: function copyFileLink(data, element) {
-            this.copy = data.extra.link;
+            this.copy = data.link;
+        },
+        getFormDataByEvent: function getFormDataByEvent(event) {
+            var field = event.target.id;
+            var value = event.target.value;
+            var data = bsw.getBswData($(event.target));
+            var form = data.form || 'persistenceForm';
+
+            return { field: field, value: value, data: data, form: form };
         },
 
 
@@ -445,6 +453,7 @@ $(function () {
         }
 
         bsw.initClipboard();
+        bsw.initUpwardInfect();
 
         var timeout = change ? 1000 : 400;
         setTimeout(function () {
