@@ -155,9 +155,7 @@ trait Preview
     public function previewRecordOperates(Arguments $args): array
     {
         [$team, $leader] = $this->workTaskTeam();
-
         $isMyTask = $args->item['userId'] === $this->usr('usr_uid');
-        $isMyTeam = $team === $this->getUserById($args->item['userId'])->teamId;
 
         return [
             (new Button('Progress'))
@@ -165,7 +163,7 @@ trait Preview
                 ->setRoute('app_bsw_work_task_progress')
                 ->setIcon('b:icon-process')
                 ->setClick('showIFrame')
-                ->setDisabled(!($isMyTask || ($isMyTeam && $leader)))
+                ->setDisabled(!$isMyTask)
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
