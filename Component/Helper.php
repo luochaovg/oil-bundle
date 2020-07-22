@@ -375,26 +375,6 @@ class Helper
     }
 
     /**
-     * helloWorld2020 to hello_world_2020
-     *
-     * @param string $str
-     * @param bool   $onlyNumeric
-     * @param string $split
-     *
-     * @return string
-     */
-    public static function camelToUnderWithNumeric(string $str, bool $onlyNumeric = false, string $split = '_'): string
-    {
-        if (!$onlyNumeric) {
-            $str = self::camelToUnder($str, $split);
-        }
-
-        $chunk = preg_split("/([a-zA-Z\{$split}]+)/", $str, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-
-        return implode($split, $chunk);
-    }
-
-    /**
      * helloWorld to hello_world
      *
      * @param string $str

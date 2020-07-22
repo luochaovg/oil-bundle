@@ -279,6 +279,7 @@ trait Annotation
                     ]
                 );
 
+                $split = Abs::FILTER_INDEX_SPLIT;
                 $annotation = $converter->resolveProperty($class, $property, $extraArgs);
                 $properties = [];
                 foreach ($annotation as $attribute => $item) {
@@ -288,7 +289,8 @@ trait Annotation
 
                     foreach ($item[Filter::class] as $index => $filter) {
                         $filter->index = $filter->index ?? $index;
-                        $properties["{$attribute}{$filter->index}"] = (array)$filter;
+                        $filter->name = $filter->name ?: $attribute;
+                        $properties["{$filter->name}{$split}{$filter->index}"] = (array)$filter;
                     }
                 }
 

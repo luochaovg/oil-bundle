@@ -36,7 +36,7 @@ class FilterConverter extends AnnotationConverter
      */
     protected function field($value)
     {
-        return $value ?: $this->target;
+        return $value ?: $this->item->value ?: $this->target;
     }
 
     /**

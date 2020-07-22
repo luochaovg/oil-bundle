@@ -798,9 +798,6 @@ ul.ant-pagination li {
 .bsw-work-task-week-report .ant-timeline-item-tail {
   border-left: 1px dotted #8ab9ff;
 }
-.preview-children {
-  background-color: rgba(50, 144, 251, 0.03);
-}
 .bsw-status-success {
   background-color: #008000 !important;
 }
@@ -949,5 +946,17 @@ textarea[size="large"] {
 }
 .bsw-tag-text {
   font-size: 12px;
+}
+.bsw-row-children {
+  background-color: rgba(50, 144, 251, 0.03);
+}
+.bsw-row-status-green {
+  background-color: rgba(0, 128, 0, 0.1);
+}
+.bsw-row-status-orange {
+  background-color: rgba(255, 165, 0, 0.1);
+}
+.bsw-row-status-red {
+  background-color: rgba(255, 0, 0, 0.1);
 }
 /*# sourceMappingURL=bsw.css.map */

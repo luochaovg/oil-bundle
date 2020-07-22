@@ -166,7 +166,8 @@ class Acme extends BswBackendController
             return "{$team}";
         }
 
-        return "{$team}-{$this->usr('usr_uid')}";
+        // return "{$team}-{$this->usr('usr_uid')}";
+        return "{$team}";
     }
 
     /**

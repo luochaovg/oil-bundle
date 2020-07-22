@@ -12,6 +12,11 @@ class Filter extends Annotation
     /**
      * @var string
      */
+    public $name;
+
+    /**
+     * @var string
+     */
     public $field;
 
     /**

@@ -354,6 +354,10 @@ trait Preview
         $args->hooked['trail'] = $this->getButtonHtml($button);
         $args->hooked['trailList'] = $this->listTaskTrail($args->original['id']);
 
+        if (in_array($args->hooked['state'], [3, 4])) {
+            $args->hooked[Abs::TAG_ROW_CLS_NAME] = 'bsw-row-status-green';
+        }
+
         return $args->hooked;
     }
 

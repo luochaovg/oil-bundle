@@ -119,28 +119,28 @@ trait BackendPreset
      */
     public function previewFilter(array $filter, array $index = [], bool $arrayValueToString = true): array
     {
-        $_filter = [];
+        $handling = [];
         foreach ($filter as $key => $value) {
 
-            $k = Helper::camelToUnderWithNumeric($key);
-            if (!is_numeric(Helper::arrayLatestItem($k))) {
-                $k = "{$k}_" . ($index[$key] ?? 0);
+            $k = Helper::camelToUnder($key);
+            if (strpos($k, Abs::FILTER_INDEX_SPLIT) === false) {
+                $k = $k . Abs::FILTER_INDEX_SPLIT . ($index[$key] ?? 0);
             }
 
             if (is_scalar($value)) {
-                $_filter[$k] = $value;
+                $handling[$k] = $value;
             } elseif (is_array($value)) {
                 if ($arrayValueToString) {
-                    $_filter[$k] = implode(Abs::FORM_DATA_SPLIT, $value);
+                    $handling[$k] = implode(Abs::FORM_DATA_SPLIT, $value);
                 } else {
                     foreach ($value as $index => $item) {
-                        $_filter[$k][$index] = $item;
+                        $handling[$k][$index] = $item;
                     }
                 }
             }
         }
 
-        return ['filter' => $_filter];
+        return ['filter' => $handling];
     }
 
     /**

@@ -203,9 +203,9 @@ class Module extends Bsw
             $defaultIndex = 0;
             [$field, $item] = $this->handleForAnnotationExtraItem($field, $item, $filterAnnotationFull, $defaultIndex);
 
-            $_field = Helper::camelToUnderWithNumeric($field, true);
-            if (!is_numeric(Helper::arrayLatestItem($_field))) {
-                $field = "{$field}{$defaultIndex}";
+            $_field = Helper::camelToUnder($field);
+            if (strpos($_field, Abs::FILTER_INDEX_SPLIT) === false) {
+                $field = $field . Abs::FILTER_INDEX_SPLIT . $defaultIndex;
             }
 
             if (!is_array($item)) {
@@ -235,7 +235,7 @@ class Module extends Bsw
 
         $_annotation = [];
         foreach ($filterAnnotation as $key => $item) {
-            $key = Helper::camelToUnderWithNumeric($key);
+            $key = Helper::camelToUnder($key);
             if (!$this->entity) {
                 $_annotation[$key] = $item;
                 continue;
@@ -298,18 +298,18 @@ class Module extends Bsw
             }
 
             $field = $item['field'];
-            if (!$item['group']) {
+            if ($item['group']) {
+                if (!isset($condition[$field]) || is_scalar($condition[$field]['value'])) {
+                    $condition[$field] = $this->web->createFilter(Senior::class, []);
+                }
+
+                $groupName = $diffuse[$key];
+                $index = array_search($key, $group[$groupName]);
+                $condition[$field]['value'][$index] = $filterAnnotation[$key]['value'];
+
+            } else {
                 $condition[$field] = $this->web->createFilter($item['filter'], $filterAnnotation[$key]['value']);
-                continue;
             }
-
-            if (!isset($condition[$field]) || is_scalar($condition[$field]['value'])) {
-                $condition[$field] = $this->web->createFilter(Senior::class, []);
-            }
-
-            $groupName = $diffuse[$key];
-            $index = array_search($key, $group[$groupName]);
-            $condition[$field]['value'][$index] = $filterAnnotation[$key]['value'];
         }
 
         foreach ($_hooks as $hook => $fields) {

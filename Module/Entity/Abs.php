@@ -7,21 +7,22 @@ class Abs
     /**
      * Mixed
      */
-    const FORM_DATA_SPLIT   = ',';
-    const VALIDATION_IF_SET = '~';
-    const VALIDATION_SPLIT  = '|';
-    const ENTITY_KEY_TRIM   = "\x00*";
-    const ENTER             = "\n";
-    const DOCTRINE_DEFAULT  = 'default';
-    const TMP_PATH          = '/tmp';
-    const PK                = 'id';
-    const SORT              = 'sort';
-    const ORDER             = 'order';
-    const AUTO              = 'auto';
-    const TAG_SQL_ERROR     = 'An exception occurred while executing';
-    const RULES_REQUIRED    = ['required' => true, 'message' => '{{ field }} Required'];
-    const LINE_DASHED       = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
-    const BK_RENDER_ARGS    = 1;
+    const FORM_DATA_SPLIT    = ',';
+    const VALIDATION_IF_SET  = '~';
+    const FILTER_INDEX_SPLIT = '@';
+    const VALIDATION_SPLIT   = '|';
+    const ENTITY_KEY_TRIM    = "\x00*";
+    const ENTER              = "\n";
+    const DOCTRINE_DEFAULT   = 'default';
+    const TMP_PATH           = '/tmp';
+    const PK                 = 'id';
+    const SORT               = 'sort';
+    const ORDER              = 'order';
+    const AUTO               = 'auto';
+    const TAG_SQL_ERROR      = 'An exception occurred while executing';
+    const RULES_REQUIRED     = ['required' => true, 'message' => '{{ field }} Required'];
+    const LINE_DASHED        = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
+    const BK_RENDER_ARGS     = 1;
 
     const CODE_BASIC     = 1000024;
     const CODE_DIST      = 'gz8xjdt3h7rcypfvewkm4aun2'; // 25

@@ -111,5 +111,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $childrenRowClsName = 'preview-children';
+    public $childrenRowClsName = 'bsw-row-children';
 }
