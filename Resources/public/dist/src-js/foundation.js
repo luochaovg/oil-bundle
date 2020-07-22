@@ -32,8 +32,8 @@ var FoundationPrototype = function () {
         /**
          * String trim
          *
-         * @param source
-         * @param haystack
+         * @param source string
+         * @param haystack string
          *
          * @return {string}
          */
@@ -45,8 +45,8 @@ var FoundationPrototype = function () {
         /**
          * String left trim
          *
-         * @param source
-         * @param haystack
+         * @param source string
+         * @param haystack string
          *
          * @return {string}
          */
@@ -61,8 +61,8 @@ var FoundationPrototype = function () {
         /**
          * String right trim
          *
-         * @param source
-         * @param haystack
+         * @param source string
+         * @param haystack string
          *
          * @return {string}
          */
@@ -77,11 +77,10 @@ var FoundationPrototype = function () {
         /**
          * String pad
          *
-         * @param target
-         * @param padStr
-         * @param length
-         * @param type
-         *
+         * @param target string
+         * @param padStr string
+         * @param length int
+         * @param type string
          * @return {*}
          */
 
@@ -131,11 +130,10 @@ var FoundationPrototype = function () {
         /**
          * String fill
          *
-         * @param target
-         * @param fillStr
-         * @param length
-         * @param type
-         *
+         * @param target string
+         * @param fillStr string
+         * @param length int
+         * @param type string
          * @return {*}
          */
         value: function fill(target, fillStr, length, type) {
@@ -170,9 +168,8 @@ var FoundationPrototype = function () {
         /**
          * String repeat
          *
-         * @param target
-         * @param num
-         *
+         * @param target string
+         * @param num int
          * @return {string}
          */
         value: function repeat(target, num) {
@@ -186,8 +183,7 @@ var FoundationPrototype = function () {
         /**
          * String upper first char of words
          *
-         * @param target
-         *
+         * @param target string
          * @return {*}
          */
         value: function ucWords(target) {
@@ -202,8 +198,7 @@ var FoundationPrototype = function () {
         /**
          * String upper first char
          *
-         * @param target
-         *
+         * @param target string
          * @return {*}
          */
         value: function ucFirst(target) {
@@ -216,8 +211,7 @@ var FoundationPrototype = function () {
         /**
          * String lower first char
          *
-         * @param target
-         *
+         * @param target string
          * @return {*}
          */
         value: function lcFirst(target) {
@@ -230,9 +224,8 @@ var FoundationPrototype = function () {
         /**
          * String big hump style
          *
-         * @param target
-         * @param split
-         *
+         * @param target string
+         * @param split string
          * @return {*}
          */
         value: function bigHump(target) {
@@ -248,9 +241,8 @@ var FoundationPrototype = function () {
         /**
          * String small hump style
          *
-         * @param target
-         * @param split
-         *
+         * @param target string
+         * @param split string
          * @return {*}
          */
         value: function smallHump(target) {
@@ -267,8 +259,7 @@ var FoundationPrototype = function () {
          *
          * @param target
          * @param split
-         *
-         * @returns {*}
+         * @returns {void | string | *}
          */
         value: function humpToUnder(target) {
             var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
@@ -282,9 +273,8 @@ var FoundationPrototype = function () {
         /**
          * Date format
          *
-         * @param target
-         * @param fmt
-         *
+         * @param target Date
+         * @param fmt string
          * @return {*}
          */
         value: function format(target) {
@@ -322,9 +312,8 @@ var FoundationPrototype = function () {
         /**
          * Array unique
          *
-         * @param target
-         *
-         * @returns {*}
+         * @param target string
+         * @return {any[]}
          */
         value: function arrayUnique(target) {
             return Array.from(new Set(target));
@@ -333,9 +322,8 @@ var FoundationPrototype = function () {
         /**
          * Array remove by value
          *
-         * @param target
-         * @param value
-         *
+         * @param target array
+         * @param value mixed
          * @return {*}
          */
 
@@ -352,9 +340,8 @@ var FoundationPrototype = function () {
         /**
          * Array intersect
          *
-         * @param first
-         * @param second
-         *
+         * @param first array
+         * @param second array
          * @return {*}
          */
 
@@ -369,9 +356,8 @@ var FoundationPrototype = function () {
         /**
          * Array difference
          *
-         * @param first
-         * @param second
-         *
+         * @param first array
+         * @param second array
          * @return {*}
          */
 
@@ -386,9 +372,8 @@ var FoundationPrototype = function () {
         /**
          * Array complement
          *
-         * @param first
-         * @param second
-         *
+         * @param first array
+         * @param second array
          * @return {*}
          */
 
@@ -405,9 +390,8 @@ var FoundationPrototype = function () {
         /**
          * Array union
          *
-         * @param first
-         * @param second
-         *
+         * @param first array
+         * @param second array
          * @return {*}
          */
 
@@ -422,9 +406,9 @@ var FoundationPrototype = function () {
         /**
          * Array swap
          *
-         * @param source
-         * @param first
-         * @param last
+         * @param source array
+         * @param first int
+         * @param last int
          *
          * @return {array}
          */
@@ -439,8 +423,8 @@ var FoundationPrototype = function () {
         /**
          * Array up
          *
-         * @param source
-         * @param index
+         * @param source array
+         * @param index int
          *
          * @return {array}
          */
@@ -457,8 +441,8 @@ var FoundationPrototype = function () {
         /**
          * Array down
          *
-         * @param source
-         * @param index
+         * @param source array
+         * @param index int
          *
          * @return {array}
          */
@@ -501,8 +485,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is array
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -518,8 +501,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is object
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -535,8 +517,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is null
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -552,8 +533,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is json
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -569,8 +549,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is string
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -586,8 +565,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is numeric
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -603,8 +581,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is boolean
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -620,8 +597,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Is function
          *
-         * @param value
-         *
+         * @param value mixed
          * @return {boolean}
          */
 
@@ -637,8 +613,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Get json length
          *
-         * @param target
-         *
+         * @param target json
          * @return {number}
          */
 
@@ -658,8 +633,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Get element offset
          *
-         * @param element
-         *
+         * @param element object
          * @return {{left: *, top: *, width: number, height: number}}
          */
 
@@ -679,7 +653,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Timestamp
          *
-         * @param second
+         * @param second boolean
          *
          * @return {int}
          */
@@ -696,8 +670,8 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Parse query string
          *
-         * @param url
-         * @param hostPart
+         * @param url string
+         * @param hostPart boolean
          *
          * @returns {array}
          */
@@ -761,9 +735,9 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Json to query string
          *
-         * @param source
-         * @param returnObject
-         * @param needEncode
+         * @param source json
+         * @param returnObject bool
+         * @param needEncode bool
          *
          * @return {string}
          */
@@ -830,9 +804,9 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Url add items
          *
-         * @param items
-         * @param url
-         * @param needEncode
+         * @param items json
+         * @param url string
+         * @param needEncode bool
          *
          * @return {string}
          */
@@ -857,10 +831,10 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Url remove items
          *
-         * @param items
-         * @param url
-         * @param needEncode
-         * @param effect
+         * @param items json
+         * @param url string
+         * @param needEncode bool
+         * @param effect json
          *
          * @return {string}
          */
@@ -912,10 +886,10 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Url remove items
          *
-         * @param items
-         * @param url
-         * @param needEncode
-         * @param effect
+         * @param items json
+         * @param url string
+         * @param needEncode bool
+         * @param effect json
          *
          * @return {string}
          */
@@ -972,10 +946,10 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Count px of padding and margin
          *
-         * @param element
-         * @param length
-         * @param type
-         * @param pos
+         * @param element object
+         * @param length int
+         * @param type string|array
+         * @param pos string|array
          * @return {number}
          */
 
@@ -1037,8 +1011,8 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Rand a number
          *
-         * @param end
-         * @param begin
+         * @param end int
+         * @param begin int
          * @return {*}
          */
 
@@ -1055,10 +1029,10 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Bind key down
          *
-         * @param num
-         * @param callback
-         * @param element
-         * @param ctrl
+         * @param num int
+         * @param callback callable
+         * @param element object
+         * @param ctrl bool
          */
 
     }, {
@@ -1103,7 +1077,7 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Int value
          *
-         * @param value
+         * @param value mixed
          *
          * @return int
          */
@@ -1177,11 +1151,11 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Get next value with map use cookie
          *
-         * @param name
-         * @param map
-         * @param def
-         * @param set
-         * @param tips
+         * @param name string
+         * @param map json
+         * @param def mixed
+         * @param set bool
+         * @param tips string
          *
          * @return mixed
          */
@@ -1207,9 +1181,9 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Get current value with map use cookie
          *
-         * @param name
-         * @param map
-         * @param def
+         * @param name string
+         * @param map json
+         * @param def mixed
          *
          * @return mixed
          */
@@ -1225,8 +1199,8 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Eval expression
          *
-         * @param expression
-         * @param def
+         * @param expression string
+         * @param def mixed
          *
          * @returns {{}}
          */
@@ -1250,9 +1224,9 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Switch class name
          *
-         * @param cls
-         * @param add
-         * @param selector
+         * @param cls string
+         * @param add bool
+         * @param selector string
          */
 
     }, {
@@ -1268,8 +1242,8 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Check json keys exists
          *
-         * @param target
-         * @param keys
+         * @param target object
+         * @param keys array
          *
          * @returns boolean
          */
@@ -1313,8 +1287,8 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Json filter
          *
-         * @param target
-         * @param filter
+         * @param target json
+         * @param filter array
          */
 
     }, {
@@ -1347,10 +1321,10 @@ var FoundationAntD = function (_FoundationTools) {
     /**
      * Constructor
      *
-     * @param jQuery
-     * @param Vue
-     * @param AntD
-     * @param lang
+     * @param jQuery object
+     * @param Vue object
+     * @param AntD object
+     * @param lang object
      */
     function FoundationAntD(jQuery, Vue, AntD) {
         var lang = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
@@ -1386,7 +1360,7 @@ var FoundationAntD = function (_FoundationTools) {
     /**
      * Page configure
      *
-     * @param config
+     * @param config json
      */
 
 
@@ -1404,7 +1378,7 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Init with VUE
          *
-         * @param selector
+         * @param selector string
          *
          * @return {*}
          */
@@ -1412,7 +1386,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'vue',
         value: function vue() {
-            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-vue';
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-content';
 
             var that = this;
             var conf = {};
@@ -1459,12 +1433,6 @@ var FoundationAntD = function (_FoundationTools) {
                     conf.watch = item;
                     return this;
                 },
-                extra: function extra() {
-                    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-                    conf = Object.assign(conf, options);
-                    return this;
-                },
                 init: function init() {
                     var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.blank;
 
@@ -1488,10 +1456,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show use notification
          *
-         * @param type
-         * @param description
-         * @param duration
-         * @param onClose
+         * @param type string
+         * @param description string
+         * @param duration float
+         * @param onClose callable
          *
          * @returns {*}
          */
@@ -1524,10 +1492,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show use message
          *
-         * @param type
-         * @param description
-         * @param duration
-         * @param onClose
+         * @param type string
+         * @param description string
+         * @param duration float
+         * @param onClose callable
          *
          * @returns {*}
          */
@@ -1547,11 +1515,11 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show use confirm
          *
-         * @param type
-         * @param description
-         * @param duration
-         * @param onClose
-         * @param options
+         * @param type string
+         * @param description string
+         * @param duration float
+         * @param onClose callable
+         * @param options json
          *
          * @returns {*}
          */
@@ -1597,10 +1565,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show success
          *
-         * @param description
-         * @param duration
-         * @param onClose
-         * @param type
+         * @param description string
+         * @param duration float
+         * @param onClose callable
+         * @param type string
          *
          * @returns {*}
          */
@@ -1614,10 +1582,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show info
          *
-         * @param description
-         * @param duration
-         * @param onClose
-         * @param type
+         * @param description string
+         * @param duration float
+         * @param onClose callable
+         * @param type string
          *
          * @returns {*}
          */
@@ -1631,10 +1599,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show warning
          *
-         * @param description
-         * @param duration
-         * @param onClose
-         * @param type
+         * @param description string
+         * @param duration float
+         * @param onClose callable
+         * @param type string
          *
          * @returns {*}
          */
@@ -1648,10 +1616,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show error
          *
-         * @param description
-         * @param duration
-         * @param onClose
-         * @param type
+         * @param description string
+         * @param duration float
+         * @param onClose callable
+         * @param type string
          *
          * @returns {*}
          */
@@ -1665,9 +1633,9 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Show confirm
          *
-         * @param content
-         * @param title
-         * @param options
+         * @param content string
+         * @param title string
+         * @param options json
          *
          * @return {*}
          */
@@ -1690,11 +1658,11 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Request
          *
-         * @param url
-         * @param data
-         * @param type
-         * @param upload
-         * @param times
+         * @param url string
+         * @param data json
+         * @param type string
+         * @param upload boolean
+         * @param times integer
          *
          * @returns {Promise}
          */
@@ -1756,10 +1724,10 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Handler for response
          *
-         * @param result
-         * @param successSameHandler
-         * @param failedSameHandler
-         * @param duration
+         * @param result json
+         * @param successSameHandler callable
+         * @param failedSameHandler callable
+         * @param duration int
          */
 
     }, {
@@ -1840,7 +1808,7 @@ var FoundationAntD = function (_FoundationTools) {
         /**
          * Encrypt by rsa public key
          *
-         * @param text
+         * @param text string
          *
          * @returns string
          */
@@ -1858,7 +1826,6 @@ var FoundationAntD = function (_FoundationTools) {
          * Base64 decode
          *
          * @param text
-         *
          * @returns {string}
          */
 
@@ -1872,7 +1839,6 @@ var FoundationAntD = function (_FoundationTools) {
          * Base64 decode (array)
          *
          * @param target
-         *
          * @returns {*}
          */
 
@@ -1893,48 +1859,9 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
-         * Json fn handler
-         *
-         * @param target
-         * @param fnPrefix
-         * @param fnTag
-         *
-         * @returns {*}
-         */
-
-    }, {
-        key: 'jsonFnHandler',
-        value: function jsonFnHandler(target, fnPrefix) {
-            var fnTag = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'fn';
-
-            var that = this;
-            for (var key in target) {
-                if (!target.hasOwnProperty(key)) {
-                    continue;
-                }
-                var item = target[key];
-                if (that.isJson(item)) {
-                    target[key] = that.jsonFnHandler(item, fnPrefix, fnTag);
-                } else if (that.isString(item) && item.startsWith(fnTag + ':')) {
-                    var fn = that.ucFirst(item.split(':')[1]);
-                    fn = '' + fnPrefix + fn;
-                    if (typeof that.cnf.v[fn] !== 'undefined') {
-                        target[key] = that.cnf.v[fn];
-                    } else if (typeof that[fn] !== 'undefined') {
-                        target[key] = that[fn];
-                    } else {
-                        target[key] = that.blank;
-                        console.warn('Method ' + fn + ' is undefined.', target);
-                    }
-                }
-            }
-            return target;
-        }
-
-        /**
          * Create chart
          *
-         * @param option
+         * @param option object
          *
          * @returns void
          */
@@ -1946,7 +1873,23 @@ var FoundationAntD = function (_FoundationTools) {
             var o = option.option;
             var chart = echarts.init(document.getElementById('chart-' + option.id), option.theme);
 
-            chart.setOption(that.jsonFnHandler(o, 'chartHandler'));
+            var replaceHandler = function replaceHandler(target) {
+                for (var key in target) {
+                    if (!target.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    var item = target[key];
+                    if (that.isJson(item)) {
+                        target[key] = replaceHandler(item);
+                    } else if (that.isString(item) && item.startsWith('fn:')) {
+                        var fn = that.ucFirst(item.split(':')[1]);
+                        target[key] = that['chartHandler' + fn];
+                    }
+                }
+                return target;
+            };
+
+            chart.setOption(replaceHandler(o));
             this.cnf.v.$nextTick(function () {
                 chart.resize();
             });
@@ -1960,7 +1903,6 @@ var FoundationAntD = function (_FoundationTools) {
          * Chart handler -> tooltip stack
          *
          * @param params
-         *
          * @returns {string}
          */
 
@@ -2030,7 +1972,6 @@ var FoundationAntD = function (_FoundationTools) {
          * Chart handler -> tooltip normal
          *
          * @param params
-         *
          * @returns {string}
          */
 
@@ -2048,7 +1989,6 @@ var FoundationAntD = function (_FoundationTools) {
          * @param dom
          * @param rect
          * @param size
-         *
          * @returns {{top: number}}
          */
 
@@ -2371,7 +2311,6 @@ var FoundationAntD = function (_FoundationTools) {
          * Get bsw data
          *
          * @param object
-         *
          * @returns {*|{}}
          */
 
@@ -2436,9 +2375,9 @@ var FoundationAntD = function (_FoundationTools) {
             var data = element[0].dataBsw;
             if (data[fn]) {
                 if (typeof that.cnf.v[data[fn]] !== 'undefined') {
-                    return that.cnf.v[data[fn]](data.extra || {}, element);
+                    return that.cnf.v[data[fn]](data, element);
                 } else if (typeof that[data[fn]] !== 'undefined') {
-                    return that[data[fn]](data.extra || {}, element);
+                    return that[data[fn]](data, element);
                 }
                 return console.warn('Method ' + data[fn] + ' is undefined.', data);
             }
@@ -2448,7 +2387,7 @@ var FoundationAntD = function (_FoundationTools) {
          * Redirect (by bsw data)
          *
          * @param data
-         * {*}
+         * @returns {*}
          */
 
     }, {
@@ -2475,7 +2414,6 @@ var FoundationAntD = function (_FoundationTools) {
          *
          * @param input
          * @param option
-         *
          * @returns {boolean}
          */
 
@@ -2560,26 +2498,6 @@ var FoundationAntD = function (_FoundationTools) {
             clipboard.on('error', function (e) {
                 that.error(that.lang.copy_failed, 3);
                 console.warn('Clipboard operation error', e);
-            });
-        }
-
-        /**
-         * Upward infect class
-         *
-         * @param selector
-         */
-
-    }, {
-        key: 'initUpwardInfect',
-        value: function initUpwardInfect() {
-            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-upward-infect';
-
-            $(selector).each(function () {
-                var element = $(this);
-                for (var i = 0; i < $(this).data('infect-level'); i++) {
-                    element = element.parent();
-                }
-                element.addClass($(this).data('infect-class'));
             });
         }
 

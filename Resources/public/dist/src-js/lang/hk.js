@@ -1,6 +1,6 @@
 'use strict';
 
-window.lang = Object.assign(window.lang || {}, {
+window.lang = {
     i18n_ant: 'zh_CN',
     i18n_editor: 'zh-cn',
     success: '成功',
@@ -28,4 +28,4 @@ window.lang = Object.assign(window.lang || {}, {
     export_mission: '導出任務',
     copy_success: '內容復制成功',
     copy_failed: '內容復制出錯'
-});
+};
