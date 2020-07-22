@@ -178,7 +178,7 @@ trait Request
                 'method' => $request->getRealMethod(),
                 'uri'    => $this->host() . $request->getRequestUri(),
                 'ip'     => $this->getClientIp(),
-                'locale' => $request->getLocale(),
+                'locale' => $this->header->lang,
             ],
             'SERVER'      => $request->server->all(),
             'FILES'       => $request->files->all(),

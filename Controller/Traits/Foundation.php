@@ -8,8 +8,6 @@ use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Component\MysqlDoc;
 use Leon\BswBundle\Component\Pinyin;
 use Leon\BswBundle\Component\Reflection;
-use Leon\BswBundle\Component\Aes;
-use Leon\BswBundle\Component\Service;
 use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Entity\BswToken;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -1105,68 +1103,6 @@ trait Foundation
     }
 
     /**
-     * Call service api
-     *
-     * @param string $path
-     * @param array  $args
-     * @param string $method
-     *
-     * @return object
-     * @throws
-     */
-    public function service(string $path, array $args = [], string $method = Abs::REQ_GET)
-    {
-        $serviceHost = $args['service_host'] ?? $this->cnf->service_host;
-        $serviceSalt = $args['service_salt'] ?? $this->parameter('service_salt');
-        $path = str_replace('.', '/', trim($path, '/.'));
-
-        if (empty($serviceHost)) {
-            throw new Exception("Service host is required when call `{$path}`");
-        }
-
-        if (empty($serviceSalt)) {
-            throw new Exception("Service salt is required when call `{$path}`");
-        }
-
-        $host = rtrim($serviceHost, '/');
-        $header = Helper::signature($args, $serviceSalt);
-        $header['lang'] = $this->request()->getLocale();
-
-        $server = new Service();
-        $server->host($host);
-        $server->path($path);
-        $server->header($header);
-        $server->args($args);
-        $server->method($method);
-
-        try {
-            $result = $server->request();
-        } catch (ServiceException $e) {
-
-            /**
-             * @var Aes $aes
-             */
-            $aes = $this->component('AesService');
-
-            $aesResult = $e->getMessage();
-            $jsonResult = $aes->AESDecode($aesResult) ?: $aesResult;
-            $result = Helper::parseJsonString($jsonResult) ?? $jsonResult;
-
-            if (!is_array($result)) {
-                throw new ServiceException("Service caller {$host}/{$path} got exception\n\n{$result}");
-            }
-        }
-
-        if (!empty($result['error'])) {
-            throw new ServiceException(
-                "Service caller {$host}/{$path} got error\n\n[{$result['error']}] {$result['message']}"
-            );
-        }
-
-        return (object)$result;
-    }
-
-    /**
      * Encrypt password
      *
      * @param string $password
@@ -1733,14 +1669,9 @@ trait Foundation
      */
     public function cnfWithLocate(string $name, $default = null, bool $strict = false)
     {
+        $newName = $name;
         if (!empty($this->header->lang)) {
             $newName = "{$this->header->lang}_{$name}";
-        } elseif ($lang = $this->request()->getSession()->get(Abs::TAG_SESSION_LANG)) {
-            $newName = "{$lang}_{$name}";
-        } elseif ($lang = $this->request()->getLocale()) {
-            $newName = "{$lang}_{$name}";
-        } else {
-            $newName = $name;
         }
 
         if ($strict) {

@@ -283,7 +283,15 @@ class Module extends Bsw
 
         $filter = $this->web->getArgs($this->input->key) ?? [];
         $filter = Helper::numericValues($filter);
-        $filter = $this->web->hooker($_hooks, $filter, true, null, null, $extraArgs);
+
+        $_filter = [];
+        foreach ($filter as $key => $value) {
+            if (strpos($key, Abs::FILTER_INDEX_SPLIT) === false) {
+                $key = $key . Abs::FILTER_INDEX_SPLIT . 0;
+            }
+            $_filter[$key] = $value;
+        }
+        $filter = $this->web->hooker($_hooks, $_filter, true, null, null, $extraArgs);
 
         $condition = [];
         [$group, $diffuse] = $this->getFilterGroup($filterAnnotation);
