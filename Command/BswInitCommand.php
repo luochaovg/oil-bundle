@@ -33,32 +33,28 @@ class BswInitCommand extends Command implements CommandInterface
      */
     public function args(): array
     {
+        $opt = InputOption::VALUE_OPTIONAL;
+
         return [
-            'doctrine'           => [null, InputOption::VALUE_OPTIONAL, 'Doctrine database flag'],
-            'force'              => [null, InputOption::VALUE_OPTIONAL, 'Force init again', 'no'],
-            'app'                => [null, InputOption::VALUE_OPTIONAL, 'App flag for scaffold suffix'],
-            'project'            => [null, InputOption::VALUE_OPTIONAL, 'App name for config', 'customer'],
-            'scheme-prefix'      => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix'],
-            'scheme-prefix-mode' => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme prefix mode add or remove', 'add'],
-            'scheme-bsw'         => [null, InputOption::VALUE_OPTIONAL, 'Bsw scheme required?', 'yes'],
-            'scheme-extra'       => [null, InputOption::VALUE_OPTIONAL, 'Extra scheme path'],
-            'scheme-only'        => [null, InputOption::VALUE_OPTIONAL, 'Only scheme split by comma'],
-            'scheme-start-only'  => [null, InputOption::VALUE_OPTIONAL, 'Only scheme start with string'],
-            'scheme-force'       => [null, InputOption::VALUE_OPTIONAL, 'Force rebuild scheme', 'no'],
-            'scheme-reverse'     => [null, InputOption::VALUE_OPTIONAL, 'Reverse scheme split by comma'],
-            'scaffold-need'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold need?', 'yes'],
-            'scaffold-cover'     => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file rewrite?', 12],
-            'scaffold-path'      => [null, InputOption::VALUE_OPTIONAL, 'Scaffold file save path'],
-            'scaffold-namespace' => [
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Scaffold namespace for Controller\Entity\Repository',
-            ],
-            'acme'               => [
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Acme controller class for preview/persistence/filter annotation hint',
-            ],
+            'doctrine'           => [null, $opt, 'Doctrine database flag'],
+            'force'              => [null, $opt, 'Force init again', 'no'],
+            'app'                => [null, $opt, 'App flag for scaffold suffix'],
+            'project'            => [null, $opt, 'App name for config', 'customer'],
+            'scheme-prefix'      => [null, $opt, 'Bsw scheme prefix'],
+            'scheme-prefix-mode' => [null, $opt, 'Bsw scheme prefix mode add or remove', 'add'],
+            'scheme-bsw'         => [null, $opt, 'Bsw scheme required?', 'yes'],
+            'scheme-extra'       => [null, $opt, 'Extra scheme path'],
+            'scheme-only'        => [null, $opt, 'Only scheme split by comma'],
+            'scheme-start-only'  => [null, $opt, 'Only scheme start with string'],
+            'scheme-force'       => [null, $opt, 'Force rebuild scheme', 'no'],
+            'scheme-reverse'     => [null, $opt, 'Reverse scheme split by comma'],
+            'scaffold-need'      => [null, $opt, 'Scaffold need?', 'yes'],
+            'scaffold-cover'     => [null, $opt, 'Scaffold file rewrite?', 12],
+            'scaffold-path'      => [null, $opt, 'Scaffold file save path'],
+            'scaffold-ns'        => [null, $opt, 'Scaffold namespace for MVC class'],
+            'config-need'        => [null, $opt, 'Config need?', 'yes'],
+            'document-need'      => [null, $opt, 'Document need?', 'yes'],
+            'acme'               => [null, $opt, 'Acme controller class for annotation hint'],
         ];
     }
 
@@ -340,7 +336,7 @@ class BswInitCommand extends Command implements CommandInterface
                 'wx_official_default'        => [
                     'app_id'        => 'app-id',
                     'secret'        => 'secret',
-                    'token'         => 'CCUUSSTTOOMMEERR',
+                    'token'         => 'token',
                     'aes_key'       => 'aes-key',
                     'response_type' => 'object',
                     'oauth'         => [
@@ -404,20 +400,23 @@ class BswInitCommand extends Command implements CommandInterface
         /**
          * Config
          */
-        $config = [
-            'devJmsSerializer'  => "{$project}/config/packages/dev/jms_serializer.yaml",
-            'prodJmsSerializer' => "{$project}/config/packages/prod/jms_serializer.yaml",
-            'cache'             => "{$project}/config/packages/cache.yaml",
-            'fosRest'           => "{$project}/config/packages/fos_rest.yaml",
-            'framework'         => "{$project}/config/packages/framework.yaml",
-            'jmsSerializer'     => "{$project}/config/packages/jms_serializer.yaml",
-            'sncRedis'          => "{$project}/config/packages/snc_redis.yaml",
-            'translation'       => "{$project}/config/packages/translation.yaml",
-            'twig'              => "{$project}/config/packages/twig.yaml",
-            'annotation'        => "{$project}/config/routes/annotations.yaml",
-            'routes'            => "{$project}/config/routes.yaml",
-            'services'          => "{$project}/config/services.yaml",
-        ];
+        $config = [];
+        if ($params['config-need'] === 'yes') {
+            $config = [
+                'devJmsSerializer'  => "{$project}/config/packages/dev/jms_serializer.yaml",
+                'prodJmsSerializer' => "{$project}/config/packages/prod/jms_serializer.yaml",
+                'cache'             => "{$project}/config/packages/cache.yaml",
+                'fosRest'           => "{$project}/config/packages/fos_rest.yaml",
+                'framework'         => "{$project}/config/packages/framework.yaml",
+                'jmsSerializer'     => "{$project}/config/packages/jms_serializer.yaml",
+                'sncRedis'          => "{$project}/config/packages/snc_redis.yaml",
+                'translation'       => "{$project}/config/packages/translation.yaml",
+                'twig'              => "{$project}/config/packages/twig.yaml",
+                'annotation'        => "{$project}/config/routes/annotations.yaml",
+                'routes'            => "{$project}/config/routes.yaml",
+                'services'          => "{$project}/config/services.yaml",
+            ];
+        }
 
         foreach ($config as $name => $file) {
 
@@ -434,8 +433,10 @@ class BswInitCommand extends Command implements CommandInterface
          * Document
          */
         $documentFileList = [];
-        Helper::directoryIterator(__DIR__ . '/document', $documentFileList);
-        $documentFileList = Helper::multipleToOne($documentFileList);
+        if ($params['document-need'] === 'yes') {
+            Helper::directoryIterator(__DIR__ . '/document', $documentFileList);
+            $documentFileList = Helper::multipleToOne($documentFileList);
+        }
 
         foreach ($documentFileList as $file) {
             $targetFile = str_replace(__DIR__, $project, $file);
@@ -530,7 +531,7 @@ class BswInitCommand extends Command implements CommandInterface
                             '--app'       => $this->app,
                             '--cover'     => $params['scaffold-cover'] ?: 'no',
                             '--path'      => $params['scaffold-path'] ?: null,
-                            '--namespace' => $params['scaffold-namespace'] ?: null,
+                            '--namespace' => $params['scaffold-ns'] ?: null,
                             '--acme'      => $params['acme'],
                         ]
                     ),
