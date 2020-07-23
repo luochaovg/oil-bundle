@@ -724,23 +724,26 @@ class FoundationTools extends FoundationPrototype {
      * Count px of padding and margin
      *
      * @param element
-     * @param length
-     * @param type
-     * @param pos
-     * @return {number}
+     * @returns {{column: number, row: number}}
      */
-    pam(element, length, type, pos) {
-        length = length || 1;
-        type = type || ['margin', 'padding'];
-        pos = pos || ['left', 'right'];
-
-        let px = 0;
-        type.each(function (m) {
-            pos.each(function (n) {
-                px += parseInt(element.css(m + '-' + n)) * length;
-            });
-        });
-
+    pam(element) {
+        let px = {
+            row: 0,
+            column: 0
+        };
+        for (let m of ['margin', 'padding']) {
+            if (typeof px[m] === 'undefined') {
+                px[m] = {};
+            }
+            for (let n of ['left', 'right', 'top', 'bottom']) {
+                px[m][n] = parseInt(element.css(`${m}-${n}`));
+                if (n === 'left' || n === 'right') {
+                    px.row += px[m][n];
+                } else if (n === 'top' || n === 'bottom') {
+                    px.column += px[m][n];
+                }
+            }
+        }
         return px;
     }
 
@@ -1399,16 +1402,27 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {{width: number, height: number}}
      */
-    popupCosySize(honest = false) {
-        let width = document.body.clientWidth;
-        let height = document.body.clientHeight;
+    popupCosySize(honest = false, d = document) {
+        let width = d.body.clientWidth;
+        let height = d.body.clientHeight;
 
         if (!honest) {
             width *= (width < 1285 ? 1 : .7);
-            height *= (height < 666 ? .9 : .75);
+            height *= (height < 666 ? .85 : .75);
         }
 
-        return {width, height};
+        return {
+            width,
+            height,
+            offset: {
+                width: d.body.offsetWidth,
+                height: d.body.offsetHeight,
+            },
+            scroll: {
+                width: d.body.scrollWidth,
+                height: d.body.scrollHeight,
+            }
+        };
     }
 
     /**
@@ -1654,6 +1668,37 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Auto adjust iframe height
+     */
+    autoIFrameHeight() {
+        let iframe = $(parent.document).find('iframe.bsw-iframe-modal');
+        if (iframe.length === 0) {
+            return;
+        }
+
+        let minHeight = parseInt(iframe.data('min-height'));
+        if (!minHeight) {
+            return;
+        }
+
+        let content = $('.bsw-content');
+        let height = content.height() + this.pam(content.parent()).column;
+        let maxHeight = this.popupCosySize(false, parent.document).height;
+
+        if (minHeight > maxHeight) {
+            minHeight = maxHeight;
+        }
+
+        if (height < minHeight) {
+            iframe.animate({height: minHeight});
+        } else if (height > maxHeight) {
+            iframe.animate({height: maxHeight});
+        } else {
+            iframe.animate({height});
+        }
+    }
+
+    /**
      * Show iframe by popup (modal/drawer)
      *
      * @param data
@@ -1666,17 +1711,25 @@ class FoundationAntD extends FoundationTools {
         let repair = $(element).prev().attr('id');
         data.location = that.setParams({iframe: true, repair}, data.location);
 
+        let mode = data.shape || 'modal';
+        let clsName = ['bsw-iframe', `bsw-iframe-${mode}`].join(' ');
+
+        let attributes = [];
+        if (data.minHeight) {
+            attributes.push(`data-min-height="${data.minHeight}"`);
+        }
+        attributes = attributes.join(' ');
+
         let options = that.jsonFilter(Object.assign(data, {
             width: data.width || size.width,
             title: data.title === false ? data.title : (data.title || that.lang.please_select),
-            content: `<iframe id="bsw-iframe" src="${data.location}"></iframe>`,
+            content: `<iframe class="${clsName}" ${attributes} src="${data.location}"></iframe>`,
         }));
 
-        let mode = data.shape || 'modal';
         if (mode === 'drawer') {
             that.showDrawer(options);
             v.$nextTick(function () {
-                let iframe = $("#bsw-iframe");
+                let iframe = $(`.bsw-iframe-${mode}`);
                 let headerHeight = options.title ? 55 : 0;
                 let footerHeight = options.footer ? 73 : 0;
                 let height = that.popupCosySize(true).height;
@@ -1684,14 +1737,14 @@ class FoundationAntD extends FoundationTools {
                     height = options.height || 512;
                 }
                 iframe.height(height - headerHeight - footerHeight);
-                iframe.parents("div.ant-drawer-body").css({margin: 0, padding: 0});
+                iframe.parents('div.ant-drawer-body').css({margin: 0, padding: 0});
             });
         } else {
             that.showModal(options);
             v.$nextTick(function () {
-                let iframe = $("#bsw-iframe");
+                let iframe = $(`.bsw-iframe-${mode}`);
                 iframe.height(data.height || size.height);
-                iframe.parents("div.ant-modal-body").css({margin: 0, padding: 0});
+                iframe.parents('div.ant-modal-body').css({margin: 0, padding: 0});
             });
         }
     }
@@ -2066,8 +2119,10 @@ class FoundationAntD extends FoundationTools {
      */
     handleResponseInParent(data, element) {
         let that = this;
-        this.modalOnCancel();
-        this.drawerOnCancel();
+        if (data.response.classify === 'success') {
+            that.modalOnCancel();
+            that.drawerOnCancel();
+        }
         this.cnf.v.$nextTick(function () {
             that.response(data.response).catch((reason => {
                 console.warn(reason);
@@ -2112,12 +2167,12 @@ class FoundationAntD extends FoundationTools {
      */
     wxJsApiPay(config) {
         if (!window.WeixinJSBridge) {
-            console.log("The api just work in WeChat browser.");
+            console.log('The api just work in WeChat browser.');
             return;
         }
         WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
                 console.log(result);
-                if (result.err_msg === "get_brand_wcpay_request:ok") {
+                if (result.err_msg === 'get_brand_wcpay_request:ok') {
                     console.log('Success');
                 }
             }

@@ -102,7 +102,7 @@ $(function () {
         showIFrameWithChecked(data, element) {
             let ids = this.selectedRowHandler(data.selector).join(',');
             let args = {ids};
-            if (typeof data.form !== "undefined") {
+            if (typeof data.form !== 'undefined') {
                 let key = `fill[${data.form}]`;
                 args = {[key]: ids};
             }
@@ -180,7 +180,7 @@ $(function () {
                     that.previewUrl = url;
                     that.previewPaginationData = res.sets.preview.page;
                     that.previewImageChange();
-                    history.replaceState({}, "", url);
+                    history.replaceState({}, '', url);
                 }).catch((reason => {
                     console.warn(reason);
                 }));
@@ -256,8 +256,9 @@ $(function () {
                 bsw.response(res).then(() => {
                     let data = {
                         title: bsw.lang.export_mission,
-                        width: 768,
+                        width: 700,
                         height: 700,
+                        minHeight: 700
                     };
                     data.location = bsw.setParams(res.sets, this.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
@@ -456,6 +457,7 @@ $(function () {
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
                 bsw.messageAutoDiscovery(v.init);
+                bsw.autoIFrameHeight();
             });
         }, timeout);
     });

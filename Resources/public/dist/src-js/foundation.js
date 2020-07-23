@@ -973,26 +973,33 @@ var FoundationTools = function (_FoundationPrototype) {
          * Count px of padding and margin
          *
          * @param element
-         * @param length
-         * @param type
-         * @param pos
-         * @return {number}
+         * @returns {{column: number, row: number}}
          */
 
     }, {
         key: 'pam',
-        value: function pam(element, length, type, pos) {
-            length = length || 1;
-            type = type || ['margin', 'padding'];
-            pos = pos || ['left', 'right'];
-
-            var px = 0;
-            type.each(function (m) {
-                pos.each(function (n) {
-                    px += parseInt(element.css(m + '-' + n)) * length;
-                });
-            });
-
+        value: function pam(element) {
+            var px = {
+                row: 0,
+                column: 0
+            };
+            var _arr = ['margin', 'padding'];
+            for (var _i = 0; _i < _arr.length; _i++) {
+                var m = _arr[_i];
+                if (typeof px[m] === 'undefined') {
+                    px[m] = {};
+                }
+                var _arr2 = ['left', 'right', 'top', 'bottom'];
+                for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+                    var n = _arr2[_i2];
+                    px[m][n] = parseInt(element.css(m + '-' + n));
+                    if (n === 'left' || n === 'right') {
+                        px.row += px[m][n];
+                    } else if (n === 'top' || n === 'bottom') {
+                        px.column += px[m][n];
+                    }
+                }
+            }
             return px;
         }
 
@@ -1825,16 +1832,28 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'popupCosySize',
         value: function popupCosySize() {
             var honest = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 
-            var width = document.body.clientWidth;
-            var height = document.body.clientHeight;
+            var width = d.body.clientWidth;
+            var height = d.body.clientHeight;
 
             if (!honest) {
                 width *= width < 1285 ? 1 : .7;
-                height *= height < 666 ? .9 : .75;
+                height *= height < 666 ? .85 : .75;
             }
 
-            return { width: width, height: height };
+            return {
+                width: width,
+                height: height,
+                offset: {
+                    width: d.body.offsetWidth,
+                    height: d.body.offsetHeight
+                },
+                scroll: {
+                    width: d.body.scrollWidth,
+                    height: d.body.scrollHeight
+                }
+            };
         }
 
         /**
@@ -2167,6 +2186,40 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Auto adjust iframe height
+         */
+
+    }, {
+        key: 'autoIFrameHeight',
+        value: function autoIFrameHeight() {
+            var iframe = $(parent.document).find('iframe.bsw-iframe-modal');
+            if (iframe.length === 0) {
+                return;
+            }
+
+            var minHeight = parseInt(iframe.data('min-height'));
+            if (!minHeight) {
+                return;
+            }
+
+            var content = $('.bsw-content');
+            var height = content.height() + this.pam(content.parent()).column;
+            var maxHeight = this.popupCosySize(false, parent.document).height;
+
+            if (minHeight > maxHeight) {
+                minHeight = maxHeight;
+            }
+
+            if (height < minHeight) {
+                iframe.animate({ height: minHeight });
+            } else if (height > maxHeight) {
+                iframe.animate({ height: maxHeight });
+            } else {
+                iframe.animate({ height: height });
+            }
+        }
+
+        /**
          * Show iframe by popup (modal/drawer)
          *
          * @param data
@@ -2182,17 +2235,25 @@ var FoundationAntD = function (_FoundationTools) {
             var repair = $(element).prev().attr('id');
             data.location = that.setParams({ iframe: true, repair: repair }, data.location);
 
+            var mode = data.shape || 'modal';
+            var clsName = ['bsw-iframe', 'bsw-iframe-' + mode].join(' ');
+
+            var attributes = [];
+            if (data.minHeight) {
+                attributes.push('data-min-height="' + data.minHeight + '"');
+            }
+            attributes = attributes.join(' ');
+
             var options = that.jsonFilter(Object.assign(data, {
                 width: data.width || size.width,
                 title: data.title === false ? data.title : data.title || that.lang.please_select,
-                content: '<iframe id="bsw-iframe" src="' + data.location + '"></iframe>'
+                content: '<iframe class="' + clsName + '" ' + attributes + ' src="' + data.location + '"></iframe>'
             }));
 
-            var mode = data.shape || 'modal';
             if (mode === 'drawer') {
                 that.showDrawer(options);
                 v.$nextTick(function () {
-                    var iframe = $("#bsw-iframe");
+                    var iframe = $('.bsw-iframe-' + mode);
                     var headerHeight = options.title ? 55 : 0;
                     var footerHeight = options.footer ? 73 : 0;
                     var height = that.popupCosySize(true).height;
@@ -2200,14 +2261,14 @@ var FoundationAntD = function (_FoundationTools) {
                         height = options.height || 512;
                     }
                     iframe.height(height - headerHeight - footerHeight);
-                    iframe.parents("div.ant-drawer-body").css({ margin: 0, padding: 0 });
+                    iframe.parents('div.ant-drawer-body').css({ margin: 0, padding: 0 });
                 });
             } else {
                 that.showModal(options);
                 v.$nextTick(function () {
-                    var iframe = $("#bsw-iframe");
+                    var iframe = $('.bsw-iframe-' + mode);
                     iframe.height(data.height || size.height);
-                    iframe.parents("div.ant-modal-body").css({ margin: 0, padding: 0 });
+                    iframe.parents('div.ant-modal-body').css({ margin: 0, padding: 0 });
                 });
             }
         }
@@ -2653,8 +2714,10 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'handleResponseInParent',
         value: function handleResponseInParent(data, element) {
             var that = this;
-            this.modalOnCancel();
-            this.drawerOnCancel();
+            if (data.response.classify === 'success') {
+                that.modalOnCancel();
+                that.drawerOnCancel();
+            }
             this.cnf.v.$nextTick(function () {
                 that.response(data.response).catch(function (reason) {
                     console.warn(reason);
@@ -2708,12 +2771,12 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'wxJsApiPay',
         value: function wxJsApiPay(config) {
             if (!window.WeixinJSBridge) {
-                console.log("The api just work in WeChat browser.");
+                console.log('The api just work in WeChat browser.');
                 return;
             }
             WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
                 console.log(result);
-                if (result.err_msg === "get_brand_wcpay_request:ok") {
+                if (result.err_msg === 'get_brand_wcpay_request:ok') {
                     console.log('Success');
                 }
             });

@@ -102,7 +102,7 @@ $(function () {
         showIFrameWithChecked: function showIFrameWithChecked(data, element) {
             var ids = this.selectedRowHandler(data.selector).join(',');
             var args = { ids: ids };
-            if (typeof data.form !== "undefined") {
+            if (typeof data.form !== 'undefined') {
                 var key = 'fill[' + data.form + ']';
                 args = _defineProperty({}, key, ids);
             }
@@ -179,7 +179,7 @@ $(function () {
                     that.previewUrl = url;
                     that.previewPaginationData = res.sets.preview.page;
                     that.previewImageChange();
-                    history.replaceState({}, "", url);
+                    history.replaceState({}, '', url);
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -263,8 +263,9 @@ $(function () {
                 bsw.response(res).then(function () {
                     var data = {
                         title: bsw.lang.export_mission,
-                        width: 768,
-                        height: 700
+                        width: 700,
+                        height: 700,
+                        minHeight: 700
                     };
                     data.location = bsw.setParams(res.sets, _this2.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
@@ -460,6 +461,7 @@ $(function () {
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
                 bsw.messageAutoDiscovery(v.init);
+                bsw.autoIFrameHeight();
             });
         }, timeout);
     });
