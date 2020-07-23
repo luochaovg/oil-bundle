@@ -190,7 +190,9 @@ class Service
             $this->port($items['port']);
         }
 
-        $this->host = trim($items['host'], '/ ');
+        if (isset($items['host'])) {
+            $this->host = trim($items['host'], '/ ');
+        }
 
         return $this->hostChecker();
     }

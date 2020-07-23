@@ -763,7 +763,19 @@ abstract class BswWebController extends AbstractController
             'enum'      => static::$enum,
             'uuid'      => $this->uuid,
             'configure' => $configure ? Helper::jsonStringify($configure) : null,
+            'app'       => $this->appType,
+            'api'       => [],
         ];
+
+        if ($this->appType == Abs::APP_TYPE_BACKEND) {
+            $scaffold['api'] = [
+                'login'         => $this->url($this->cnf->route_login_handler),
+                'upload'        => $this->url($this->cnf->route_upload),
+                'export'        => $this->url($this->cnf->route_export),
+                'language'      => $this->url($this->cnf->route_language),
+                'third_message' => $this->url($this->cnf->route_thrid_message),
+            ];
+        }
 
         if ($forView) {
             $scaffold = array_merge(

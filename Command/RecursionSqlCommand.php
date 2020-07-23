@@ -187,7 +187,7 @@ abstract class RecursionSqlCommand extends Command implements CommandInterface
      */
     public function done(int $page)
     {
-        $this->output->writeln("<info> Sql recursion done\n </info>");
+        $this->output->writeln("<info> \nSql recursion done.\n </info>");
     }
 
     /**

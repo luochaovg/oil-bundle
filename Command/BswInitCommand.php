@@ -270,14 +270,19 @@ class BswInitCommand extends Command implements CommandInterface
      */
     protected function routesCnf(): array
     {
-        if ($this->app !== Abs::APP_TYPE_BACKEND) {
-            return [];
+        if ($this->app == Abs::APP_TYPE_BACKEND) {
+            return [
+                'leon_bsw_bundle' => [
+                    'resource' => '@LeonBswBundle/Controller',
+                    'type'     => 'annotation',
+                ],
+            ];
         }
 
         return [
-            'leon_bsw_bundle' => [
-                'resource' => '@LeonBswBundle/Controller',
-                'type'     => 'annotation',
+            'app_captcha' => [
+                'path'       => '/captcha',
+                'controller' => 'Leon\BswBundle\Controller\BswMixed\Acme::numberCaptcha',
             ],
         ];
     }
@@ -292,6 +297,11 @@ class BswInitCommand extends Command implements CommandInterface
         $debugDevil = Helper::randString(16, 'mixed');
 
         $project = Helper::underToCamel(str_replace("-", "_", $this->project), false);
+        $routeDefault = [
+            Abs::APP_TYPE_BACKEND => 'backend_homepage',
+            Abs::APP_TYPE_API     => 'api_welcome',
+            Abs::APP_TYPE_WEB     => 'web_homepage',
+        ];
 
         return [
             'parameters' => [
@@ -368,6 +378,7 @@ class BswInitCommand extends Command implements CommandInterface
                     'debug_devil'           => $debugDevil,
                     'debug_uuid'            => '_',
                     'debug_cost'            => true,
+                    'route_default'         => $routeDefault[$this->app],
                 ],
             ],
             'services'   => [],
@@ -419,9 +430,11 @@ class BswInitCommand extends Command implements CommandInterface
         }
 
         foreach ($config as $name => $file) {
-
             $fileContent = Yaml::parseFile($file) ?? [];
             $customContent = $this->{"{$name}Cnf"}();
+            if (empty($customContent)) {
+                continue;
+            }
 
             $content = Helper::mergeWeak(true, false, true, $customContent, $fileContent);
             file_put_contents($file, $dumper->dump($content, 4, 0, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE));
@@ -541,6 +554,6 @@ class BswInitCommand extends Command implements CommandInterface
         }
 
         file_put_contents($doneFile, date(Abs::FMT_FULL));
-        $output->writeln("<info> \n project initialization done\n </info>");
+        $output->writeln("<info> \n Project initialization done.\n </info>");
     }
 }

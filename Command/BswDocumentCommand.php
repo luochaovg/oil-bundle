@@ -128,7 +128,7 @@ class BswDocumentCommand extends Command implements CommandInterface
         // run sphinx build
         `sphinx-build -b html {$this->path}/ {$this->path}/{$this->build}`;
 
-        return $output->writeln('<info> Document use sphinx build done. </info>');
+        return $output->writeln('<info> \n Document use sphinx build done.\n </info>');
     }
 
     /**

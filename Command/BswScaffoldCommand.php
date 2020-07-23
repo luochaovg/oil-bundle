@@ -251,7 +251,7 @@ class BswScaffoldCommand extends Command implements CommandInterface
             $output->writeln("<info> Mission: {$info} </info>");
         }
 
-        return $output->writeln('<info> Scaffold build done </info>');
+        return $output->writeln('<info> \nScaffold build done.\n </info>');
     }
 
     /**

@@ -87,7 +87,7 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
      */
     public function done(int $page)
     {
-        $this->output->writeln("<info> Csv import done\n </info>");
+        $this->output->writeln("<info> \nCsv import done.\n </info>");
     }
 
     /**
