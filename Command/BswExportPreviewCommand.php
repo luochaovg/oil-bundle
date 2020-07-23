@@ -16,7 +16,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
     /**
      * @var int
      */
-    protected $limit = 5000;
+    protected $limit = 500;
 
     /**
      * @var BswCommandQueueRepository
@@ -103,7 +103,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
      * @return array
      * @throws
      */
-    private function enumParser(): array
+    private function enumsParser(): array
     {
         $extraArgs = [
             'enumClass'          => Enum::class,
@@ -112,10 +112,10 @@ class BswExportPreviewCommand extends ExportCsvCommand
         ];
 
         $previewAnnotation = $this->web->getPreviewAnnotation($this->entity(), $extraArgs);
-        $enum = Helper::arrayColumn($previewAnnotation, 'enum');
-        $enum = array_filter($enum);
+        $enums = Helper::arrayColumn($previewAnnotation, 'enum');
+        $enums = array_filter($enums);
 
-        return $enum;
+        return $enums;
     }
 
     /**
@@ -125,14 +125,16 @@ class BswExportPreviewCommand extends ExportCsvCommand
      */
     public function handleRecord(array $record)
     {
-        static $enum;
-        if (!isset($enum)) {
-            $enum = $this->enumParser();
+        static $enums;
+        if (!isset($enums)) {
+            $enums = $this->enumsParser();
         }
 
         foreach ($record as $field => $value) {
-            if (isset($enum[$field])) {
-                $record[$field] = $enum[$field][$value] ?? Abs::DIRTY;
+            $enum = $enums[$field] ?? null;
+            if (isset($enum)) {
+                $enum = $this->web->enumLang($enum);
+                $record[$field] = $enum[$value] ?? Abs::DIRTY;
             }
         }
 

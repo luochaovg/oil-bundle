@@ -365,7 +365,7 @@ trait Preview
      * Preview record
      *
      * @Route("/bsw-work-task/preview", name="app_bsw_work_task_preview")
-     * @Access()
+     * @Access(export=true)
      *
      * @return Response
      */

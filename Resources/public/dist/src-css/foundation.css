@@ -62,36 +62,36 @@ div.ant-modal-mask {
 /* Animate */
 @keyframes bsw-breathing {
   0% {
-    opacity: .1;
-  }
-  45%,
-  65% {
     opacity: 1;
   }
-  100% {
+  20%,
+  30% {
     opacity: .1;
+  }
+  50% {
+    opacity: 1;
   }
 }
 @keyframes bsw-breathing-middle {
   0% {
+    opacity: .8;
+  }
+  25% {
     opacity: .2;
   }
   50% {
     opacity: .8;
   }
-  100% {
-    opacity: .2;
-  }
 }
 @keyframes bsw-breathing-top {
   0% {
+    opacity: 1;
+  }
+  25% {
     opacity: .3;
   }
   50% {
     opacity: 1;
-  }
-  100% {
-    opacity: .3;
   }
 }
 @keyframes bsw-rotate-360 {

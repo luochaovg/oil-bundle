@@ -1,6 +1,6 @@
 bsw.configure({
     method: {
-        selectAll() {
+        changeSelectedList(handler) {
             let that = this;
             let form = 'persistenceForm';
             $.each(this.init.selectedList, function (key, meta) {
@@ -8,30 +8,25 @@ bsw.configure({
                 let selected = that[form].getFieldValue(key);
                 let values = [];
                 for (let v of meta) {
-                    if (disabled.includes(v)) {
-                        if (selected.includes(v)) {
-                            values.push(v);
-                        }
-                    } else {
+                    let result = handler(v, disabled, selected);
+                    if (result) {
                         values.push(v);
                     }
                 }
                 that[form].setFieldsValue({[key]: values});
             });
         },
-        unSelectAll() {
-            let that = this;
-            let form = 'persistenceForm';
-            $.each(this.init.selectedList, function (key, meta) {
-                let disabled = bsw.arrayIntersect(meta, that.init.disabledList);
-                let selected = that[form].getFieldValue(key);
-                let values = [];
-                for (let v of meta) {
-                    if (disabled.includes(v) && selected.includes(v)) {
-                        values.push(v);
-                    }
+        selectAll() {
+            this.changeSelectedList(function (v, disabled, selected) {
+                if (disabled.includes(v)) {
+                    return selected.includes(v);
                 }
-                that[form].setFieldsValue({[key]: values});
+                return true;
+            });
+        },
+        unSelectAll() {
+            this.changeSelectedList(function (v, disabled, selected) {
+                return disabled.includes(v) && selected.includes(v);
             });
         },
     },

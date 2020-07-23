@@ -99,10 +99,10 @@ class BswMissionCommand extends Command implements CommandInterface
         foreach ($queue as $m) {
 
             $date = date('Y-m-d H:i');
-            $condition = Helper::parseJsonString($m['condition']);
+            $condition = $m['condition'] ? Helper::parseJsonString($m['condition']) : [];
 
             if (!empty($condition['entity'])) {
-                if (!Helper::validateSign($condition)) {
+                if (!Helper::validateSignature($condition, $this->web->parameter('salt'))) {
                     $missionRepo->modify(
                         [Abs::PK => $m['id']],
                         ['state' => 4, 'remark' => "[{$date}] validate signature failed"]
@@ -111,7 +111,7 @@ class BswMissionCommand extends Command implements CommandInterface
                 }
             }
 
-            Helper::arrayPop($condition, ['time', '_signature']);
+            Helper::arrayPop($condition, ['time', 'signature']);
 
             if (!empty($condition['args']) && !is_array($condition['args'])) {
                 $args = Helper::jsonArray64($condition['args']);
@@ -160,6 +160,7 @@ class BswMissionCommand extends Command implements CommandInterface
                 $attributes = ['state' => 4, 'remark' => "[{$date}] {$e->getMessage()}"];
             }
 
+            // end
             $missionRepo->modify([Abs::PK => $m['id']], $attributes);
 
             // send telegram message

@@ -1173,76 +1173,146 @@ class Helper
     }
 
     /**
-     * Create Sign
+     * Create sign
      *
      * @param array  $param
+     * @param string $salt
+     * @param bool   $debug
+     * @param string $timeKey
      * @param string $signKey
+     * @param string $splitSalt
      *
      * @return array
      */
-    public static function createSign(array $param, string $signKey = '_signature'): array
-    {
-        if (!isset($param['time'])) {
-            $param['time'] = time();
+    public static function createSign(
+        array $param,
+        string $salt,
+        bool $debug,
+        string $timeKey = 'time',
+        string $signKey = 'signature',
+        string $splitSalt = '#'
+    ): array {
+        if (!isset($param[$timeKey])) {
+            $param[$timeKey] = time();
         }
 
         $param = http_build_query($param);
         parse_str($param, $params);
         ksort($params);
 
-        $params[$signKey] = strtoupper(sha1(self::strReverse(md5(self::jsonStringify($params)))));
+        $sign = self::jsonStringify($params) . $splitSalt . $salt;
+        $params[$signKey] = $debug ? $sign : strtolower(sha1(md5($sign)));
 
         return $params;
     }
 
     /**
-     * Validation Sign
+     * Validation sign
      *
      * @param array  $param
+     * @param string $salt
+     * @param bool   $debug
+     * @param string $timeKey
      * @param string $signKey
+     * @param string $splitSalt
      *
      * @return bool
      */
-    public static function validateSign(array $param, string $signKey = '_signature'): bool
-    {
+    public static function validateSign(
+        array $param,
+        string $salt,
+        bool $debug,
+        string $timeKey = 'time',
+        string $signKey = 'signature',
+        string $splitSalt = '#'
+    ): bool {
         if (empty($param[$signKey])) {
             return false;
         }
 
-        $_sign = self::dig($param, $signKey);
-        $sign = self::createSign($param, $signKey);
+        $oldSign = self::dig($param, $signKey);
+        $newSign = self::createSign($param, $salt, $debug, $timeKey, $signKey, $splitSalt);
+        $newSign = $newSign[$signKey];
 
-        return strcmp($sign[$signKey], $_sign) === 0;
+        return strcmp($oldSign, $newSign) === 0;
     }
 
     /**
-     * Signature
+     * Create signature
      *
-     * @param array  $args
+     * @param array  $param
      * @param string $salt
-     * @param int    $t
-     * @param array  $split
+     * @param bool   $debug
+     * @param string $timeKey
+     * @param string $signKey
+     * @param string $splitKvp
+     * @param string $splitArgs
+     * @param string $splitSalt
      *
      * @return array
      */
-    public static function signature(array $args, string $salt, int $t = null, array $split = []): array
-    {
-        $time = $t ?? time();
-        [$kvSplit, $argsSplit, $saltSplit] = $split + [' is ', ' and ', ' & '];
-
-        $args['time'] = $time;
-        krsort($args);
-
-        $sign = [];
-        foreach ($args as $key => $value) {
-            array_push($sign, "{$key}{$kvSplit}{$value}");
+    public static function createSignature(
+        array $param,
+        string $salt,
+        bool $debug = false,
+        string $timeKey = 'time',
+        string $signKey = 'signature',
+        string $splitKvp = ' is ',
+        string $splitArgs = ' and ',
+        string $splitSalt = ' & '
+    ): array {
+        if (!isset($param[$timeKey])) {
+            $param[$timeKey] = time();
         }
 
-        $sign = implode($argsSplit, $sign) . "{$saltSplit}{$salt}";
-        $sign = $t ? $sign : strtolower(md5($sign));
+        krsort($param);
 
-        return compact('time', 'sign');
+        $sign = [];
+        foreach ($param as $key => $value) {
+            array_push($sign, $key . $splitKvp . $value);
+        }
+
+        $sign = implode($splitArgs, $sign) . $splitSalt . $salt;
+        $param[$signKey] = $debug ? $sign : strtolower(md5($sign));
+
+        return $param;
     }
+
+    /**
+     * Validation signature
+     *
+     * @param array  $param
+     * @param string $salt
+     * @param bool   $debug
+     * @param string $timeKey
+     * @param string $signKey
+     * @param string $splitKvp
+     * @param string $splitArgs
+     * @param string $splitSalt
+     *
+     * @return bool
+     */
+    public static function validateSignature(
+        array $param,
+        string $salt,
+        bool $debug = false,
+        string $timeKey = 'time',
+        string $signKey = 'signature',
+        string $splitKvp = ' is ',
+        string $splitArgs = ' and ',
+        string $splitSalt = ' & '
+    ): bool {
+        if (empty($param[$signKey])) {
+            return false;
+        }
+
+        $oldSign = self::dig($param, $signKey);
+        $newSign = self::createSignature($param, $salt, $debug, $timeKey, $signKey, $splitKvp, $splitArgs, $splitSalt);
+        $newSign = $newSign[$signKey];
+
+        return strcmp($oldSign, $newSign) === 0;
+    }
+
 
     /**
      * Transformation image to base64

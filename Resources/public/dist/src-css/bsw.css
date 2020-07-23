@@ -62,36 +62,36 @@ div.ant-modal-mask {
 /* Animate */
 @keyframes bsw-breathing {
   0% {
-    opacity: .1;
-  }
-  45%,
-  65% {
     opacity: 1;
   }
-  100% {
+  20%,
+  30% {
     opacity: .1;
+  }
+  50% {
+    opacity: 1;
   }
 }
 @keyframes bsw-breathing-middle {
   0% {
+    opacity: .8;
+  }
+  25% {
     opacity: .2;
   }
   50% {
     opacity: .8;
   }
-  100% {
-    opacity: .2;
-  }
 }
 @keyframes bsw-breathing-top {
   0% {
+    opacity: 1;
+  }
+  25% {
     opacity: .3;
   }
   50% {
     opacity: 1;
-  }
-  100% {
-    opacity: .3;
   }
 }
 @keyframes bsw-rotate-360 {
@@ -482,10 +482,10 @@ div.ant-modal-mask {
   height: 18px;
 }
 .bsw-checkbox-middle .ant-checkbox-inner:after {
-  top: 46%;
-  left: 23%;
-  width: 6.5px;
-  height: 11px;
+  top: 44%;
+  left: 24%;
+  width: 6px;
+  height: 10px;
 }
 .bsw-checkbox-middle .ant-checkbox {
   top: -2px;
@@ -599,7 +599,7 @@ span.ant-calendar-picker {
   background: white;
 }
 .ant-form-item-required:before {
-  animation: bsw-breathing 2s infinite;
+  animation: bsw-breathing 4s infinite;
 }
 .bsw-chart-container {
   background: white;
@@ -625,7 +625,8 @@ div.modal-container-center div.ant-modal-body > div {
 }
 .ant-checkbox-wrapper.danger {
   color: #f54f4f;
-  animation: bsw-breathing-top 1s infinite;
+  animation-delay: 2s;
+  animation: bsw-breathing-top 4s infinite;
 }
 a.bsw-preview-link {
   padding-right: 5px;
@@ -930,7 +931,7 @@ textarea[size="large"] {
   color: rgba(0, 0, 0, 0.4);
   -ms-transform: translateY(-50%) translateX(-50%);
       transform: translateY(-50%) translateX(-50%);
-  animation: bsw-breathing-middle 2s infinite;
+  animation: bsw-breathing-middle 4s infinite;
 }
 .ant-tag-has-color {
   border-color: rgba(0, 0, 0, 0.03);

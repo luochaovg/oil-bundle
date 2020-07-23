@@ -468,20 +468,32 @@ abstract class BswWebController extends AbstractController
     }
 
     /**
-     * Route is access
+     * Routes is access
      *
-     * @param string|null $route
+     * @param array $routes
+     * @param int   $passNeed
      *
      * @return mixed
      */
-    public function routeIsAccess(string $route = null)
+    public function routeIsAccess(array $routes, ?int $passNeed = null)
     {
-        $route = $route ?? $this->route;
-        if (empty($route)) {
+        if (empty($routes)) {
             return true;
         }
 
-        return $this->access[$route] ?? false;
+        $passNow = 0;
+        $passNeed = $passNeed ?? count($routes);
+
+        foreach ($routes as $route) {
+            if (empty($route)) {
+                $passNow += 1;
+            } else {
+                $access = $this->access[$route] ?? false;
+                $passNow += ($access === true ? 1 : 0);
+            }
+        }
+
+        return $passNow >= $passNeed;
     }
 
     /**
@@ -602,7 +614,7 @@ abstract class BswWebController extends AbstractController
                  */
 
                 $this->access = $this->accessBuilder($this->usr);
-                $access = $this->routeIsAccess($route);
+                $access = $this->routeIsAccess([$route]);
 
                 // access denied
                 if (Helper::bitFlagAssert($type, Abs::V_ACCESS) && $access !== true) {

@@ -643,14 +643,15 @@ class Module extends Bsw
             $query = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
 
             if ($this->isExport) {
-                return $this->showMessage(
-                    (new Message())->setSets(
-                        [
-                            'entity' => base64_encode($this->entity),
-                            'query'  => Helper::objectToString($query),
-                        ]
-                    )->setSignature()
+                $sets = Helper::createSignature(
+                    [
+                        'entity' => base64_encode($this->entity),
+                        'query'  => Helper::objectToString($query),
+                    ],
+                    $this->web->parameter('salt')
                 );
+
+                return $this->showMessage((new Message())->setSets($sets));
             }
 
             $list = $this->repository->lister($query);
@@ -1026,7 +1027,7 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output();
-        $this->isExport = $this->web->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT;
+        $this->isExport = $this->input->ajax && ($this->web->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT);
 
         /**
          * handle annotation

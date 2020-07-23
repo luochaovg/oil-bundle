@@ -16,13 +16,21 @@
         {% set labelColumn = 4 %}
         {% set danger = logic.danger %}
         {% set realColumn = (totalColumn - labelColumn) %}
-        <a-form-item
-          :label-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
-          :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
-        >
-          <a-button @click="selectAll" type="primary">{{ 'Select all'|trans({}, 'twig') }}</a-button>
-          <a-button @click="unSelectAll">{{ 'Un select all'|trans({}, 'twig') }}</a-button>
-        </a-form-item>
+        <a-affix :offset-top="20">
+          <a-form-item
+            :label-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
+            :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
+          >
+            <a-button @click="selectAll" type="primary">
+              {{ 'b:icon-success1'|icon|raw }}
+              {{ 'Select all'|trans({}, 'twig') }}
+            </a-button>
+            <a-button @click="unSelectAll">
+              {{ 'b:icon-icon-37'|icon|raw }}
+              {{ 'Un select all'|trans({}, 'twig') }}
+            </a-button>
+          </a-form-item>
+        </a-affix>
         <a-form-item v-show="false">
           <a-input-number v-decorator="['id', { initialValue: `{{ logic.id }}` }]"></a-input-number>
         </a-form-item>
@@ -73,11 +81,13 @@
             </a-checkbox-group>
           </a-form-item>
         {% endfor %}
-        <a-form-item :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}">
-          {% for form in persistence.operates %}
-            {% include 'form/button.html.twig' with {form: form} %}
-          {% endfor %}
-        </a-form-item>
+        <a-affix :offset-bottom="20">
+          <a-form-item :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}">
+            {% for form in persistence.operates %}
+              {% include 'form/button.html.twig' with {form: form} %}
+            {% endfor %}
+          </a-form-item>
+        </a-affix>
       </a-form>
     </div>
   {% endblock %}

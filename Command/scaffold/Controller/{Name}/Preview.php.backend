@@ -47,7 +47,7 @@ trait Preview
      * Preview record
      *
      * @Route("/{RouteUri}/preview", name="app_{Route}_preview")
-     * @Access()
+     * @Access(export=true)
      *
      * @return Response
      */

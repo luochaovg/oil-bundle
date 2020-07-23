@@ -258,7 +258,7 @@ class BswBackendController extends BswWebController
         $route = array_merge($auto, $route);
 
         if ($this->root($usr)) {
-            //return $route;
+            return $route;
         }
 
         $render = Helper::arrayValuesSetTo($all, false);

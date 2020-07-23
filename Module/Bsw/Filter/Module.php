@@ -472,7 +472,8 @@ class Module extends Bsw
         ) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => Abs::TAG_EXPORT]);
-            $export->setRouteForAccess($this->input->cnf->route_export);
+            $export->pushRouteForAccess($this->input->cnf->route_export);
+            $export->pushRouteForAccess($this->input->route . Abs::FLAG_ROUTE_EXPORT);
         }
 
         $ops = compact('search', 'export');

@@ -10,9 +10,9 @@ trait Route
     protected $route;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $routeForAccess;
+    protected $routeForAccess = [];
 
     /**
      * @param string $route
@@ -37,13 +37,23 @@ trait Route
     }
 
     /**
-     * @param string $routeForAccess
-     *
-     * @return string
+     * @return array
      */
-    public function getRouteForAccess(string $routeForAccess = ''): string
+    public function getRouteForAccess(): array
     {
-        return $this->routeForAccess ?? $this->route ?? $routeForAccess;
+        return $this->routeForAccess ?? [$this->route];
+    }
+
+    /**
+     * @param array $routeForAccess
+     *
+     * @return $this
+     */
+    public function setRouteForAccess(array $routeForAccess)
+    {
+        $this->routeForAccess = $routeForAccess;
+
+        return $this;
     }
 
     /**
@@ -51,9 +61,9 @@ trait Route
      *
      * @return $this
      */
-    public function setRouteForAccess(string $routeForAccess)
+    public function pushRouteForAccess(string $routeForAccess)
     {
-        $this->routeForAccess = $routeForAccess;
+        array_push($this->routeForAccess, $routeForAccess);
 
         return $this;
     }

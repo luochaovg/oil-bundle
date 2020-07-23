@@ -263,16 +263,4 @@ class Message
 
         return $this;
     }
-
-    /**
-     * @return $this
-     */
-    public function setSignature()
-    {
-        $sets = $this->getSets();
-        $sets = Helper::createSign($sets);
-        $this->setSets($sets);
-
-        return $this;
-    }
 }

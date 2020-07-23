@@ -23,17 +23,16 @@ trait Export
      */
     public function exportAnnotation(): array
     {
-        $condition = $this->getArgs(['entity', 'query', 'time', '_signature']);
+        $condition = $this->getArgs(['entity', 'query', 'time', 'signature']);
         $condition = array_map('urldecode', $condition);
-        $condition = Helper::formatPrintJson($condition, 4, ': ');
 
         return [
             'command'   => [
                 'value' => 'mission:export-preview',
             ],
             'condition' => [
-                'value'    => $condition,
-                'disabled' => true,
+                'value' => Helper::formatPrintJson($condition, 4, ': '),
+                'hide'  => true,
             ],
         ];
     }
