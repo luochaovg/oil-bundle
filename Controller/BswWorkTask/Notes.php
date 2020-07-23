@@ -56,10 +56,7 @@ trait Notes
          * @var Button $submit
          */
         $submit = $args->submit;
-        $submit
-            ->setBlock(true)
-            ->setIcon('b:icon-form')
-            ->setLabel('Write notes');
+        $submit->setIcon('b:icon-form')->setLabel('Write notes');
 
         return compact('submit');
     }

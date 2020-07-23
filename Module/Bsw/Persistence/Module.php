@@ -708,6 +708,10 @@ class Module extends Bsw
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
+            if ($this->input->iframe ? $this->input->formOperatesBlockInIFrame : $this->input->formOperatesBlock) {
+                $operate->setBlock(true);
+            }
+
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
             if (!$this->web->routeIsAccess($operate->getRouteForAccess())) {
                 $operate->setDisplay(false);
@@ -1032,15 +1036,19 @@ class Module extends Bsw
         }
 
         [$result, $before, $after] = $result;
-
-        return $this->showSuccess(
-            $newly ? $this->input->i18nNewly : $this->input->i18nModify,
-            $this->input->sets,
+        $args = array_merge(
+            $this->input->i18nArgs,
             [
                 '{{ result }}' => $result,
                 '{{ before }}' => $before,
                 '{{ after }}'  => $after,
-            ],
+            ]
+        );
+
+        return $this->showSuccess(
+            $newly ? $this->input->i18nNewly : $this->input->i18nModify,
+            $this->input->sets,
+            $args,
             isset($this->input->sets['function']) ? null : $this->input->nextRoute
         );
     }

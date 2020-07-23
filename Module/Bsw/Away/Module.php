@@ -170,6 +170,6 @@ class Module extends Bsw
 
         $this->web->databaseOperationLogger($this->entity, $type, $relation, $result, ['effect' => $count]);
 
-        return $this->showSuccess($this->input->i18nAway);
+        return $this->showSuccess($this->input->i18nAway, [], $this->input->i18nArgs);
     }
 }

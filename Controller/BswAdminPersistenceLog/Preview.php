@@ -30,7 +30,7 @@ trait Preview
     {
         return [
             'alias'  => 'pl',
-            'select' => ['pl', 'u.name AS userId'],
+            'select' => ['pl', 'u.name AS userId', 'u.phone'],
             'join'   => [
                 'u' => [
                     'entity' => BswAdminUser::class,

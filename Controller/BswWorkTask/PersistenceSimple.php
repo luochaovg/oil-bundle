@@ -54,10 +54,7 @@ trait PersistenceSimple
          * @var Button $submit
          */
         $submit = $args->submit;
-        $submit
-            ->setBlock(true)
-            ->setIcon('a:bug')
-            ->setLabel('New task');
+        $submit->setIcon('a:bug')->setLabel('New task');
 
         return compact('submit');
     }

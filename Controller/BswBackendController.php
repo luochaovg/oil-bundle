@@ -309,6 +309,7 @@ class BswBackendController extends BswWebController
 
         $bswDispatcher = new BswModule\Dispatcher($this);
         $moduleList = Helper::sortArray($moduleList, 'sort');
+        $logic = &$showArgs['logic'];
 
         foreach ($moduleList as $module => $extraArgs) {
             /**
@@ -328,6 +329,12 @@ class BswBackendController extends BswWebController
              * @var BswModule\Message $message
              */
             if ($message = $output['message'] ?? null) {
+                $messageHandler = Helper::dig($logic, 'messageHandler');
+                if (is_callable($messageHandler)) {
+                    $message = $messageHandler($message);
+                    Helper::callReturnType($message, BswModule\Message::class, 'Message handler');
+                }
+
                 return $this->messageToResponse($message);
             }
 
@@ -355,7 +362,6 @@ class BswBackendController extends BswWebController
             $ajaxShowArgs["{$name}Html"] = $html;
         }
 
-        $logic = &$showArgs['logic'];
         $afterModule = Helper::dig($logic, 'afterModule') ?? [];
         Helper::callReturnType($afterModule, Abs::T_ARRAY, 'Handler after module');
 

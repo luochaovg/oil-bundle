@@ -47,10 +47,7 @@ trait Transfer
          * @var Button $submit
          */
         $submit = $args->submit;
-        $submit
-            ->setBlock(true)
-            ->setIcon('b:icon-feng')
-            ->setLabel('Transfer task');
+        $submit->setIcon('b:icon-feng')->setLabel('Transfer task');
 
         return compact('submit');
     }

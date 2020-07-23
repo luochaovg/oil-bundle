@@ -20,4 +20,9 @@ class Input extends ArgsInput
      * @var string
      */
     public $i18nAway = 'Away record done';
+
+    /**
+     * @var array
+     */
+    public $i18nArgs = [];
 }

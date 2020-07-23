@@ -31,7 +31,7 @@ class NewPassword extends Tailor
         ];
 
         if (empty($args->id)) {
-            $args->target[$this->newField]['rules'] = [$this->web->formRuleRequired()];
+            $args->target[$this->newField]['formRules'] = [$this->web->formRuleRequired()];
         } else {
             $args->target[$this->newField]['tips'] = 'Do not fill if not need';
         }

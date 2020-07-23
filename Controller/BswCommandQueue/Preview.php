@@ -40,8 +40,8 @@ trait Preview
     {
         return [
             'order' => [
-                'bcq.state'        => Abs::SORT_ASC,
-                'bcq.resourceNeed' => Abs::SORT_ASC,
+                'bcq.state' => Abs::SORT_ASC,
+                'bcq.id'    => Abs::SORT_DESC,
             ],
         ];
     }

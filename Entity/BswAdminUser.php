@@ -100,7 +100,7 @@ class BswAdminUser extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=8, align="center", width=140, enum=true, dress="blue")
-     * @BswAnnotation\Persistence(sort=8, type=BswForm\Select::class, enum=true)
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\Radio::class, enum=true)
      * @BswAnnotation\Filter(sort=8, type=BswForm\Select::class, enum=true)
      */
     protected $sex = 0;

@@ -44,6 +44,11 @@ class Input extends ArgsInput
     public $i18nModify = 'Modify record done';
 
     /**
+     * @var array
+     */
+    public $i18nArgs = [];
+
+    /**
      * @var string
      */
     public $nextRoute = '';
@@ -67,4 +72,14 @@ class Input extends ArgsInput
      * @var string
      */
     public $passwordValidator = Password::class;
+
+    /**
+     * @var bool
+     */
+    public $formOperatesBlock = false;
+
+    /**
+     * @var bool
+     */
+    public $formOperatesBlockInIFrame = true;
 }
