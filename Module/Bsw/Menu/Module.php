@@ -92,6 +92,7 @@ class Module extends Bsw
 
                 foreach ($list as $item) {
                     $item['args'] = Helper::parseJsonString($item['args'], []);
+                    $item['label'] = $this->web->twigLang($item['label']);
                     array_push($menuList, (new Menu())->attributes($item));
                 }
 

@@ -154,6 +154,8 @@ Operation success:                          '操作成功'
 Operation failed:                           '操作失败'
 Operation done:                             '操作完成'
 Copied it and close:                        '复制文件地址，并关闭窗口'
+Mixed controller:                           '无明确分类'
+Homepage controller:                        '缺省页面'
 
 Validation when not blank:                                      '不为空字符串时执行后续验证<br><b>否则不验证当前字段</b>'
 Basic info:                                                     '基本信息'
