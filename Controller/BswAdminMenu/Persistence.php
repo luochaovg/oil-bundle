@@ -31,17 +31,31 @@ trait Persistence
      */
     public function persistenceAnnotation(): array
     {
-        $iconA = (new Button('a:class'))
-            ->setType(Abs::THEME_DEFAULT)
-            ->setSize(Abs::SIZE_SMALL)
-            ->setArgs(['location' => $this->cnf->ant_icon_url, 'window' => true]);
-        $iconA = $this->getButtonHtml($iconA, true);
+        $iconA = $this->getButtonHtml(
+            (new Button('a:class'))
+                ->setType(Abs::THEME_DEFAULT)
+                ->setSize(Abs::SIZE_SMALL)
+                ->setArgs(
+                    [
+                        'location' => $this->cnf->ant_icon_url,
+                        'window'   => true,
+                    ]
+                ),
+            true
+        );
 
-        $iconB = (new Button('b:symbol'))
-            ->setType(Abs::THEME_DEFAULT)
-            ->setSize(Abs::SIZE_SMALL)
-            ->setArgs(['location' => $this->cnf->font_symbol_url, 'window' => true]);
-        $iconB = $this->getButtonHtml($iconB, true);
+        $iconB = $this->getButtonHtml(
+            (new Button('b:symbol'))
+                ->setType(Abs::THEME_DEFAULT)
+                ->setSize(Abs::SIZE_SMALL)
+                ->setArgs(
+                    [
+                        'location' => $this->cnf->font_symbol_url,
+                        'window'   => true,
+                    ]
+                ),
+            true
+        );
 
         return [
             'icon' => [

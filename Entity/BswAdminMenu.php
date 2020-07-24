@@ -36,7 +36,7 @@ class BswAdminMenu extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=2, align="center", enumExtra=true, width=200)
-     * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true, typeArgs={"previewRoute": "app_bsw_admin_menu_preview", "previewArgs": {"filter": {"menu_id_0": 0}}})
+     * @BswAnnotation\Persistence(sort=2, type=BswForm\Select::class, enumExtra=true, typeArgs={"previewRoute": "app_bsw_admin_menu_preview", "previewArgs": {"filter": {"menu_id@0": 0}}})
      * @BswAnnotation\Filter(sort=2, type=BswForm\Select::class, enumExtra=true)
      */
     protected $menuId = 0;
@@ -69,7 +69,7 @@ class BswAdminMenu extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=32, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT, width=200, align="center")
+     * @BswAnnotation\Preview(sort=5, render=BswAbs::HTML_TEXT, width=200, align="center", hook={0:BswHook\TwigTrans::class})
      * @BswAnnotation\Persistence(sort=5)
      * @BswAnnotation\Filter(sort=5)
      */

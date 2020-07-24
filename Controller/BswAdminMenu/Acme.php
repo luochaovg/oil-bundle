@@ -41,6 +41,13 @@ class Acme extends BswBackendController
         $menu = $this->repo(BswAdminMenu::class)->kvp(['value'], Abs::PK, null, $filter);
         $menu = [0 => '(Top Menu)'] + $menu;
 
+        $menu = array_map(
+            function ($v) {
+                return $this->twigLang($v);
+            },
+            $menu
+        );
+
         return $menu;
     }
 }
