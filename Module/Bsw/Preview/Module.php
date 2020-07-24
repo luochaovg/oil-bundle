@@ -214,6 +214,26 @@ class Module extends Bsw
     }
 
     /**
+     * Render handler
+     *
+     * @param string $render
+     *
+     * @return string
+     */
+    protected function renderHandler(string $render): string
+    {
+        if (Helper::strEndWith($render, Abs::HTML_SUFFIX)) {
+            $render = $this->web->caching(
+                function () use ($render) {
+                    return $this->web->renderPart($render);
+                }
+            );
+        }
+
+        return $render;
+    }
+
+    /**
      * Create slot template
      *
      * @param string $field
@@ -339,15 +359,7 @@ class Module extends Bsw
          */
 
         if ($render = $item['render']) {
-            if (Helper::strEndWith($render, Abs::HTML_SUFFIX)) {
-                $render = $this->web->caching(
-                    function () use ($render) {
-                        return $this->web->renderPart($render);
-                    }
-                );
-            }
-
-            return $this->parseSlot($render, $field, [], Abs::SLOT_CONTAINER);
+            return $this->parseSlot($this->renderHandler($render), $field, [], Abs::SLOT_CONTAINER);
         }
 
         return $this->parseSlot('{:value}', $field);
@@ -879,7 +891,8 @@ class Module extends Bsw
                 if (is_object($crm) && $crm instanceof Charm) {
                     $var = $crm->getVar();
                     $var = array_merge($var, ['value' => $crm->getValue()]);
-                    $value = $this->parseSlot($crm->getCharm(), $field, $var);
+                    $render = $this->renderHandler($crm->getCharm());
+                    $value = $this->parseSlot($render, $field, $var);
                 } elseif (is_scalar($crm)) {
                     $value = $crm;
                 } else {

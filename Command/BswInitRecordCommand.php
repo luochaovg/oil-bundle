@@ -86,7 +86,7 @@ class BswInitRecordCommand extends Command implements CommandInterface
             [1, 'app_bsw_captcha_preview', 'b:icon-assessedbadge', 'Bsw captcha', 9907],
             [1, 'app_bsw_attachment_preview', 'b:icon-icon-57', 'Bsw attachment', 9908],
             [1, 'app_bsw_command_queue_preview', 'b:icon-process', 'Bsw command queue', 9909],
-            [1, 'app_bsw_token_preview', 'b:icon-anquan', 'Bsw token', 9910],
+            [1, 'app_bsw_token_preview', 'b:b:icon-qianming', 'Bsw token', 9910],
             [1, 'app_enum_dict', 'b:icon-office', 'Bsw enum dict', 9911],
         ];
 

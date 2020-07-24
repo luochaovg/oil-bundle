@@ -149,6 +149,9 @@ $(function () {
 
         previewImageChange() {
             let that = this;
+            if (that.previewColumns.length === 0) {
+                return;
+            }
             let doChecker = setInterval(() => checker(), 50);
             let checker = function () {
                 let img = $('img');
