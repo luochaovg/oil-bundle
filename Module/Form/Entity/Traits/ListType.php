@@ -2,12 +2,14 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 trait ListType
 {
     /**
      * @var string
      */
-    protected $listType;
+    protected $listType = Abs::LIST_TYPE_TEXT;
 
     /**
      * @return string

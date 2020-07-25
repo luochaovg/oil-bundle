@@ -17,7 +17,6 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ShowArrow;
 use Leon\BswBundle\Module\Form\Entity\Traits\ShowSearch;
 use Leon\BswBundle\Module\Form\Entity\Traits\Size;
 use Leon\BswBundle\Module\Form\Entity\Traits\TokenSeparators;
-use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForKey;
 use Leon\BswBundle\Module\Form\Form;
 
 class Select extends Form
@@ -35,7 +34,6 @@ class Select extends Form
     use OptionFilterProp;
     use TokenSeparators;
     use DropdownStyle;
-    use VarNameForKey;
 
     /**
      * @var array
@@ -50,8 +48,6 @@ class Select extends Form
         $this->setButtonLabel('Popup for select');
         $this->setMode(Abs::MODE_DEFAULT);
         $this->setOptionFilterProp(Abs::SEARCH_LABEL);
-
-        $this->setVarNameForKey('persistenceSwitchField');
     }
 
     /**

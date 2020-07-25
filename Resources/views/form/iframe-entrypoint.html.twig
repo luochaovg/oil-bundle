@@ -1,7 +1,9 @@
 {% if form.previewRoute %}
   <a-button
-    class="bsw-popup-select"
+    size="{{ form.size }}"
+    :block="true"
     :disabled="{{ form.disabled ? 'true' : 'false' }}"
+    :style="{{ form.buttonStyle }}"
     :data-bsw.prop="{{ form.previewIframeArgs|merge({location: path(form.previewRoute, form.previewArgs)})|stringify }}"
     @click="showIFrameByVue"
   >

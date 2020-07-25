@@ -322,16 +322,14 @@ $(function () {
             }));
         },
 
-        uploaderChange({file, fileList, event}, form = 'persistenceForm') {
+        uploaderChange({file, fileList}, field, form = 'persistenceForm') {
             if (file.status === 'done') {
                 this.spinning = false;
             } else if (file.status === 'uploading') {
                 this.spinning = true;
             }
 
-            let field = this.persistenceUploadField;
             let collect = this.persistenceFileListKeyCollect[field];
-
             if (!file.response) {
                 collect.list = fileList;
                 return;
@@ -378,8 +376,7 @@ $(function () {
             }
         },
 
-        switchFieldShapeWithSelect(value, option) {
-            let field = this.persistenceSwitchField;
+        switchFieldShapeWithSelect(value, option, field) {
             let now = this.persistenceFieldShapeNow;
             let collect = this.persistenceFieldShapeCollect[field];
             for (let f in collect) {

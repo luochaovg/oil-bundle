@@ -10,7 +10,7 @@ trait ButtonStyle
     /**
      * @var array
      */
-    protected $buttonStyle = [];
+    protected $buttonStyle = ['marginTop' => '6px'];
 
     /**
      * @return string

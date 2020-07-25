@@ -2,20 +2,17 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
-use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\Accept;
 use Leon\BswBundle\Module\Form\Entity\Traits\Args;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
-use Leon\BswBundle\Module\Form\Entity\Traits\ButtonStyle;
-use Leon\BswBundle\Module\Form\Entity\Traits\ButtonType;
 use Leon\BswBundle\Module\Form\Entity\Traits\FileItems;
 use Leon\BswBundle\Module\Form\Entity\Traits\Flag;
 use Leon\BswBundle\Module\Form\Entity\Traits\ListType;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedId;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedTips;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
+use Leon\BswBundle\Module\Form\Entity\Traits\ShowList;
 use Leon\BswBundle\Module\Form\Entity\Traits\Url;
-use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForKey;
 use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForTips;
 
 class Upload extends Number
@@ -24,15 +21,13 @@ class Upload extends Number
     use Args;
     use ButtonLabel;
     use Accept;
+    use ShowList;
     use ListType;
     use Flag;
     use FileItems;
     use Url;
     use NeedId;
     use NeedTips;
-    use ButtonStyle;
-    use ButtonType;
-    use VarNameForKey;
     use VarNameForTips;
 
     /**
@@ -41,12 +36,8 @@ class Upload extends Number
     public function __construct()
     {
         parent::__construct();
-        $this->setListType(Abs::LIST_TYPE_TEXT);
         $this->setChange('uploaderChange');
-        $this->setButtonType(Abs::THEME_DEFAULT);
         $this->setButtonLabel('Click to select for upload');
-
-        $this->setVarNameForKey('persistenceUploadField');
         $this->setVarNameForTips('persistenceUploadTipsCollect');
     }
 }

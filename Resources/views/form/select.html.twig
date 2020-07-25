@@ -24,12 +24,9 @@
   :dropdown-menu-style="{{ form.dropdownStyle }}"
   {% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
   {% set persistenceSence = (scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE')) %}
-  {% if persistenceSence and form.varNameForKey is not empty %}
-    @click.native="{{ form.varNameForKey }} = '{{ form.key }}'"
-  {% endif %}
   :data-bsw.prop="{{ form.formData }}"
   {% if form.change %}
-    @change="{{ form.change }}"
+    @change="((value, option) => {this.{{ form.change }}(value, option, '{{ form.key }}')})"
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"

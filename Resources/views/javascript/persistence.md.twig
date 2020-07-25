@@ -2,10 +2,8 @@ bsw.configure({
     data: {
         persistenceForm: null,
         persistenceFormat: {{ persistence.formatJson|raw }},
-        persistenceUploadField: null,
         persistenceFileListKeyCollect: {{ persistence.fileListKeyCollectJson|raw }},
         persistenceUploadTipsCollect: {{ persistence.uploadTipsCollectJson|raw }},
-        persistenceSwitchField: null,
         persistenceFieldShapeNow: {},
         persistenceFieldShapeCollect: {{ persistence.fieldShapeCollectJson|raw }},
     },
@@ -25,10 +23,9 @@ bsw.configure({
                     if (!v.persistenceFieldShapeCollect.hasOwnProperty(field)) {
                         continue;
                     }
-                    v.persistenceSwitchField = field;
-                    let value = v.persistenceForm.getFieldValue(v.persistenceSwitchField);
-                    v.persistenceForm.setFieldsValue({[v.persistenceSwitchField]: value});
-                    v.switchFieldShapeWithSelect(value);
+                    let value = v.persistenceForm.getFieldValue(field);
+                    v.persistenceForm.setFieldsValue({[field]: value}); // fixed bug
+                    v.switchFieldShapeWithSelect(value, {}, field);
                 }
             });
         }
