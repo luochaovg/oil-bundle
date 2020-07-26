@@ -53,27 +53,25 @@
             >
               <a-row>
                 {% for value, label in item.type.enum %}
-                  {% set disabled = attribute(logic.disabled, value) ?? false %}
                   {% set _danger = attribute(danger, value) ?? null %}
                   <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
-                    {% if _danger is not null %}
-                      <a-popover overlay-class-name="bsw-popover">
-                        <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
-                        <a-checkbox
-                          :disabled="{{ disabled ? 'true' : 'false' }}"
-                          class="{{ ['bsw-checkbox-middle', _danger.class]|joinClass }}"
-                          value="{{ value }}"
-                        >
-                          {{ label }}
-                        </a-checkbox>
-                      </a-popover>
-                    {% else %}
+                    {% macro checkbox(logic, value, label, _danger) %}
+                      {% set disabled = attribute(logic.disabled, value) ?? false %}
                       <a-checkbox
                         :disabled="{{ disabled ? 'true' : 'false' }}"
-                        class="bsw-checkbox-middle"
-                        value="{{ value }}">
+                        class="{{ ['bsw-checkbox-middle', _danger.class ?? null]|joinClass }}"
+                        value="{{ value }}"
+                      >
                         {{ label }}
                       </a-checkbox>
+                    {% endmacro %}
+                    {% if _danger is not null %}
+                      <a-popover>
+                        <template slot="content">{{ _danger.title|trans({}, 'twig') }}</template>
+                        {{ _self.checkbox(logic, value, label, _danger) }}
+                      </a-popover>
+                    {% else %}
+                      {{ _self.checkbox(logic, value, label, _danger) }}
                     {% endif %}
                   </a-col>
                 {% endfor %}

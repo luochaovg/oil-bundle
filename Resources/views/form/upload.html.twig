@@ -32,6 +32,17 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}FileList']"
 >
+  {% macro button(scaffold, form) %}
+    <a-button
+      size="{{ form.size }}"
+      :block="true"
+      :disabled="{{ form.disabled ? 'true' : 'false' }}"
+      :style="{{ form.buttonStyle }}"
+    >
+      {{ scaffold.cnf.iconUpload|icon|raw }}
+      {{ form.buttonLabel|trans({}, 'twig') }}
+    </a-button>
+  {% endmacro %}
   {% if form.needTips and form.varNameForTips is not empty %}
     <a-popover>
       <template slot="content">
@@ -44,25 +55,9 @@
           size="small"
         ></a-table>
       </template>
-      <a-button
-        size="{{ form.size }}"
-        :block="true"
-        :disabled="{{ form.disabled ? 'true' : 'false' }}"
-        :style="{{ form.buttonStyle }}"
-      >
-        {{ scaffold.cnf.iconUpload|icon|raw }}
-        {{ form.buttonLabel|trans({}, 'twig') }}
-      </a-button>
+      {{ _self.button(scaffold, form) }}
     </a-popover>
   {% else %}
-    <a-button
-      size="{{ form.size }}"
-      :block="true"
-      :disabled="{{ form.disabled ? 'true' : 'false' }}"
-      :style="{{ form.buttonStyle }}"
-    >
-      {{ scaffold.cnf.iconUpload|icon|raw }}
-      {{ form.buttonLabel|trans({}, 'twig') }}
-    </a-button>
+    {{ _self.button(scaffold, form) }}
   {% endif %}
 </a-upload>
