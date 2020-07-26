@@ -20,7 +20,9 @@
   {% endif %}
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
-  accept="{{ form.accept }}"
+  {% if not form.needDrag %}
+    accept="{{ form.accept }}"
+  {% endif %}
   action="{{ form.url }}"
   :show-upload-list="{{ form.showList ? 'true' : 'false' }}"
   list-type="{{ form.listType }}"

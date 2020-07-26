@@ -8,6 +8,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\FileItems;
 use Leon\BswBundle\Module\Form\Entity\Traits\Flag;
 use Leon\BswBundle\Module\Form\Entity\Traits\ListType;
+use Leon\BswBundle\Module\Form\Entity\Traits\NeedDrag;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedId;
 use Leon\BswBundle\Module\Form\Entity\Traits\NeedTips;
 use Leon\BswBundle\Module\Form\Entity\Traits\Route;
@@ -20,6 +21,7 @@ class Upload extends Number
     use Route;
     use Args;
     use ButtonLabel;
+    use NeedDrag;
     use Accept;
     use ShowList;
     use ListType;
