@@ -36,6 +36,7 @@
 >
   {% macro button(scaffold, form) %}
     <a-button
+      type="dashed"
       size="{{ form.size }}"
       :block="true"
       :disabled="{{ form.disabled ? 'true' : 'false' }}"

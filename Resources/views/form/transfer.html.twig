@@ -1,0 +1,25 @@
+{% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
+
+<a-transfer
+  {% if form.class %}
+    class="{{ form.class }}"
+  {% endif %}
+  :data-source="{{ form.treeData }}"
+  :titles="['Source', 'Target']"
+  :operations="['>', '<']"
+  :target-keys="{{ form.targetKeys }}"
+  :selected-keys="{{ form.selectedKeys }}"
+  :render="(record) => record.title"
+  :data-bsw.prop="{{ form.formData }}"
+  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  :show-search="{{ form.showSearch ? 'true' : 'false' }}"
+  :filter-option="(inputValue, item) => item.title.indexOf(inputValue) !== -1"
+  :show-select-all="{{ form.showSelectAll ? 'true' : 'false' }}"
+  :style="{{ form.style }}"
+  {% if form.change %}
+    @change="{{ form.change }}"
+  {% endif %}
+  {{ form.attributes|raw }}
+  v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"
+>
+</a-transfer>
