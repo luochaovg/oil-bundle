@@ -145,6 +145,9 @@ $(function () {
         },
         previewImageChange: function previewImageChange() {
             var that = this;
+            if (that.previewColumns.length === 0) {
+                return;
+            }
             var doChecker = setInterval(function () {
                 return checker();
             }, 50);
@@ -325,11 +328,10 @@ $(function () {
                 console.warn(reason);
             });
         },
-        uploaderChange: function uploaderChange(_ref) {
+        uploaderChange: function uploaderChange(_ref, field) {
             var file = _ref.file,
-                fileList = _ref.fileList,
-                event = _ref.event;
-            var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'persistenceForm';
+                fileList = _ref.fileList;
+            var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
 
             if (file.status === 'done') {
                 this.spinning = false;
@@ -337,9 +339,7 @@ $(function () {
                 this.spinning = true;
             }
 
-            var field = this.persistenceUploadField;
             var collect = this.persistenceFileListKeyCollect[field];
-
             if (!file.response) {
                 collect.list = fileList;
                 return;
@@ -382,8 +382,7 @@ $(function () {
                 });
             }
         },
-        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value, option) {
-            var field = this.persistenceSwitchField;
+        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value, option, field) {
             var now = this.persistenceFieldShapeNow;
             var collect = this.persistenceFieldShapeCollect[field];
             for (var f in collect) {
