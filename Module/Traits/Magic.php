@@ -17,7 +17,7 @@ trait Magic
     protected function getAttribute(string $name)
     {
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+            throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
         }
 
         return $this->{$name};
@@ -69,7 +69,7 @@ trait Magic
     protected function setAttribute(string $name, $value)
     {
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+            throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
         }
 
         $this->{$name} = $value;
@@ -86,7 +86,7 @@ trait Magic
     {
         foreach ($attributes as $name => $value) {
             if (!property_exists($this, $name)) {
-                throw new InvalidArgumentException(static::class . " has no property named `{$name}`");
+                throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
             }
             $this->{$name} = $value;
         }

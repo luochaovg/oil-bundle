@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Entity\BswAdminLogin;
@@ -27,18 +28,25 @@ use Leon\BswBundle\Module\Hook\Entity\MessagesTrans;
 use Leon\BswBundle\Module\Hook\Entity\SeoTrans;
 use Leon\BswBundle\Module\Hook\Entity\Timestamp;
 use Leon\BswBundle\Module\Hook\Entity\TwigTrans;
+use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu as MenuItem;
+use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
+use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Repository\BswAdminLoginRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu as MenuItem;
-use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
-use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Exception;
 
+/**
+ * @method moduleHeaderMenuMixin()
+ * @method moduleHeaderSettingMixin(array $setting)
+ * @method moduleHeaderLinksMixin(array $links)
+ * @method moduleHeaderLanguageMixin(array $lang)
+ */
 class BswBackendController extends BswWebController
 {
-    use CT\BackendEntityHint,
+    use MT\Mixin,
+        CT\BackendEntityHint,
         CT\BackendPreset;
 
     /**
@@ -84,10 +92,17 @@ class BswBackendController extends BswWebController
 
     /**
      * Bootstrap
+     *
+     * @throws
      */
     protected function bootstrap()
     {
         parent::bootstrap();
+
+        $mixinClass = $this->parameter('backend_mixin_class', null, false);
+        if (class_exists($mixinClass)) {
+            self::mixin($mixinClass);
+        }
 
         if ($this->bswSrc) {
             $lang = $this->langLatest($this->langMap, 'en');
@@ -786,7 +801,7 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderMenu(): array
     {
-        return [];
+        return $this->moduleHeaderMenuMixin() ?? [];
     }
 
     /**
@@ -796,7 +811,7 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderSetting(): array
     {
-        return [
+        $setting = [
             new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
             new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
             new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch'),
@@ -806,6 +821,8 @@ class BswBackendController extends BswWebController
                 ->setClick('fullScreenToggle')
                 ->setArgs(['element' => 'html']),
         ];
+
+        return $this->moduleHeaderSettingMixin($setting) ?? $setting;
     }
 
     /**
@@ -830,7 +847,7 @@ class BswBackendController extends BswWebController
             $links = Helper::arrayInsert($links, 1, [$link]);
         }
 
-        return $links;
+        return $this->moduleHeaderLinksMixin($links) ?? $links;
     }
 
     /**
@@ -840,10 +857,12 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderLanguage(): array
     {
-        return [
+        $lang = [
             'cn' => '简体中文',
             'hk' => '繁體中文',
             'en' => 'English',
         ];
+
+        return $this->moduleHeaderLanguageMixin($lang) ?? $lang;
     }
 }

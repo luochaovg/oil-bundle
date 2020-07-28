@@ -18,7 +18,7 @@ class FoundationEntity
     public function __get(string $name)
     {
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+            throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
         }
 
         return $this->{$name};
@@ -35,7 +35,7 @@ class FoundationEntity
     public function __set(string $name, $value)
     {
         if (!property_exists($this, $name)) {
-            throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+            throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
         }
 
         $this->{$name} = $value;

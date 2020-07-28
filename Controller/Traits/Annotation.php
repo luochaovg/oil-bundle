@@ -37,12 +37,12 @@ trait Annotation
         static $pool = [];
 
         if (!class_exists($class)) {
-            throw new AnnotationException("Annotation class not exists ({$class})");
+            throw new AnnotationException("The annotation class {$class} is not found");
         }
 
         $converter = "{$class}Converter";
         if (!class_exists($converter)) {
-            throw new AnnotationException("Annotation converter class not exists ({$converter})");
+            throw new AnnotationException("The annotation converter class {$converter} not exists ({$converter})");
         }
 
         if ($new) {

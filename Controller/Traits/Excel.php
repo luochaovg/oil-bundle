@@ -98,7 +98,7 @@ trait Excel
         $diff = array_diff($fieldsMap, $field);
         if (!empty($diff)) {
             $diffField = current($diff);
-            throw new Exception("Field `{$diffField}` not exists in the document");
+            throw new Exception("Field `{$diffField}` not found in the document");
         }
 
         if (empty($field)) {
@@ -188,7 +188,7 @@ trait Excel
         $diff = array_diff($fields, array_keys($firstData));
         if (!empty($diff)) {
             $diffField = current($diff);
-            throw new Exception("Field `{$diffField}` not exists in the data");
+            throw new Exception("Field `{$diffField}` not found in the data");
         }
 
         foreach ($data as &$item) {

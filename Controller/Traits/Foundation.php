@@ -966,13 +966,13 @@ trait Foundation
 
         $component = $this->parameters('component') ?? [];
         if (!isset($component[$class])) {
-            throw new InvalidArgumentException("Component config not exists `{$class}`");
+            throw new InvalidArgumentException("Component config for `{$class}` is not defined");
         }
 
         $component = $component[$class];
         if (!class_exists($class)) {
             if (!isset($component['class'])) {
-                throw new InvalidArgumentException("Component class not exists `{$class}`");
+                throw new InvalidArgumentException("Component class `{$class}` is not defined");
             }
             $class = $component['class'];
         }
@@ -1760,6 +1760,6 @@ trait Foundation
             return $this->{$name};
         }
 
-        throw new InvalidArgumentException(static::class . " property '{$name}' does not exist");
+        throw new InvalidArgumentException("Property " . static::class . "::{$name} is not defined");
     }
 }

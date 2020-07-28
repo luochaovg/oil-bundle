@@ -150,7 +150,7 @@ class Reflection
     public function getClsDoc(string $cls, bool $prototype = false): array
     {
         if (!class_exists($cls)) {
-            throw new InvalidArgumentException("Class {$cls} does not exist");
+            throw new InvalidArgumentException("Class {$cls} is not found");
         }
 
         $instance = new ReflectionClass($cls);
@@ -251,11 +251,11 @@ class Reflection
     public function getFnDoc(string $cls, string $method, bool $prototype = false): array
     {
         if (!class_exists($cls)) {
-            throw new InvalidArgumentException("Class {$cls} does not exist");
+            throw new InvalidArgumentException("Class {$cls} is not found");
         }
 
         if (!method_exists($cls, $method)) {
-            throw new InvalidArgumentException("Class {$cls} method '{$method}' does not exist");
+            throw new InvalidArgumentException("Method {$cls}::{$method}() is not defined");
         }
 
         $instance = new ReflectionMethod($cls, $method);
@@ -339,11 +339,11 @@ class Reflection
     public function getAttrDoc(string $cls, string $property, bool $prototype = false): array
     {
         if (!class_exists($cls)) {
-            throw new InvalidArgumentException("Class {$cls} does not exist");
+            throw new InvalidArgumentException("Class {$cls} is not found");
         }
 
         if (!property_exists($cls, $property)) {
-            throw new InvalidArgumentException("Class {$cls} property '{$property}' does not exist");
+            throw new InvalidArgumentException("Property {$cls}::{$property} is not defined");
         }
 
         $instance = new ReflectionProperty($cls, $property);
@@ -426,7 +426,7 @@ class Reflection
     public function getConstDoc(string $cls, string $const, bool $prototype = false): array
     {
         if (!class_exists($cls)) {
-            throw new InvalidArgumentException("Class {$cls} does not exist");
+            throw new InvalidArgumentException("Class {$cls} is not found");
         }
 
         $instance = new ReflectionClassConstant($cls, $const);

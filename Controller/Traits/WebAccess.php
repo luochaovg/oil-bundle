@@ -23,7 +23,7 @@ trait WebAccess
      */
     protected function root($usr): bool
     {
-        return $usr->{$this->cnf->usr_uid} === $this->parameter('backend_auth_root_id');
+        return in_array($usr->{$this->cnf->usr_uid}, $this->parameter('backend_auth_root_ids'));
     }
 
     /**
