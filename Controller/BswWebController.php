@@ -765,6 +765,7 @@ abstract class BswWebController extends AbstractController
             'configure' => $configure ? Helper::jsonStringify($configure) : null,
             'app'       => $this->appType,
             'api'       => [],
+            'version'   => $this->debug ? mt_rand() : $this->parameter('version'),
         ];
 
         if ($this->appType == Abs::APP_TYPE_BACKEND) {

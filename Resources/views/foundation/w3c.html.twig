@@ -10,6 +10,8 @@
   {% set void = 'javascript:void(null);' %}
   {% set top = constant(scaffold.abs ~ '::POS_TOP') %}
   {% set bottom = constant(scaffold.abs ~ '::POS_BOTTOM') %}
+  {% set v = '?version=' ~ scaffold.version %}
+  {% set vv = '&version=' ~ scaffold.version %}
   {% include 'limbs/css.html.twig' with {position: top} %}
   {% include 'limbs/js.html.twig' with {position: top} %}
   <style>
