@@ -272,9 +272,231 @@ class BswInitCommand extends Command implements CommandInterface
     {
         if ($this->app == Abs::APP_TYPE_BACKEND) {
             return [
+                /*
                 'leon_bsw_bundle' => [
                     'resource' => '@LeonBswBundle/Controller',
                     'type'     => 'annotation',
+                ],
+                */
+                'app_bsw_admin_access_control_preview'          => [
+                    'path'       => '/bsw-admin-access-control/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminAccessControl::preview',
+                ],
+                'app_bsw_admin_access_control_persistence'      => [
+                    'path'       => '/bsw-admin-access-control/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminAccessControl::persistence',
+                ],
+                'app_bsw_admin_access_control_grant'            => [
+                    'path'       => '/bsw-admin-access-control/grant',
+                    'controller' => 'App\Controller\BackendCover\BswAdminAccessControl::grant',
+                ],
+                'app_bsw_admin_login_preview'                   => [
+                    'path'       => '/bsw-admin-login/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminLogin::preview',
+                ],
+                'app_bsw_admin_login_persistence'               => [
+                    'path'       => '/bsw-admin-login/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminLogin::persistence',
+                ],
+                'app_bsw_admin_menu_preview'                    => [
+                    'path'       => '/bsw-admin-menu/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminMenu::preview',
+                ],
+                'app_bsw_admin_menu_persistence'                => [
+                    'path'       => '/bsw-admin-menu/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminMenu::persistence',
+                ],
+                'app_bsw_admin_menu_sort'                       => [
+                    'path'       => '/bsw-admin-menu/sort/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminMenu::sort',
+                ],
+                'app_bsw_admin_menu_multiple_encase'            => [
+                    'path'       => '/bsw-admin-menu/multiple-encase',
+                    'controller' => 'App\Controller\BackendCover\BswAdminMenu::multipleEncase',
+                ],
+                'app_bsw_admin_persistence_log_preview'         => [
+                    'path'       => '/bsw-admin-persistence-log/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminPersistenceLog::preview',
+                ],
+                'app_bsw_admin_persistence_log_persistence'     => [
+                    'path'       => '/bsw-admin-persistence-log/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminPersistenceLog::persistence',
+                ],
+                'app_bsw_admin_role_preview'                    => [
+                    'path'       => '/bsw-admin-role/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminRole::preview',
+                ],
+                'app_bsw_admin_role_persistence'                => [
+                    'path'       => '/bsw-admin-role/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminRole::persistence',
+                ],
+                'app_bsw_admin_role_access_control_preview'     => [
+                    'path'       => '/bsw-admin-role-access-control/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminRoleAccessControl::preview',
+                ],
+                'app_bsw_admin_role_access_control_persistence' => [
+                    'path'       => '/bsw-admin-role-access-control/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminRoleAccessControl::persistence',
+                ],
+                'app_bsw_admin_role_access_control_grant'       => [
+                    'path'       => '/bsw-admin-role-access-control/grant',
+                    'controller' => 'App\Controller\BackendCover\BswAdminRoleAccessControl::grant',
+                ],
+                'app_bsw_admin_user_preview'                    => [
+                    'path'       => '/bsw-admin-user/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::preview',
+                ],
+                'app_bsw_admin_user_persistence'                => [
+                    'path'       => '/bsw-admin-user/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::persistence',
+                ],
+                'app_bsw_admin_user_google_qr_code'             => [
+                    'path'       => '/bsw-admin-user/google-qr-code/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::googleQrCode',
+                ],
+                'app_bsw_admin_user_login'                      => [
+                    'path'       => '/bsw-admin-user/login',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::getLoginAction',
+                ],
+                'app_bsw_admin_user_login_handler'              => [
+                    'path'       => '/bsw-admin-user/login-handler',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::postSignInAction',
+                ],
+                'app_bsw_admin_user_logout'                     => [
+                    'path'       => '/bsw-admin-user/logout',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::getLogoutAction',
+                ],
+                'app_bsw_admin_user_profile'                    => [
+                    'path'       => '/bsw-admin-user/profile',
+                    'controller' => 'App\Controller\BackendCover\BswAdminUser::profile',
+                ],
+                'app_bsw_attachment_preview'                    => [
+                    'path'       => '/bsw-attachment/preview',
+                    'controller' => 'App\Controller\BackendCover\BswAttachment::preview',
+                ],
+                'app_bsw_attachment_persistence'                => [
+                    'path'       => '/bsw-attachment/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswAttachment::persistence',
+                ],
+                'app_bsw_attachment_upload_file'                => [
+                    'path'       => '/bsw-attachment/upload-file',
+                    'controller' => 'App\Controller\BackendCover\BswAttachment::uploadFile',
+                ],
+                'app_bsw_captcha_preview'                       => [
+                    'path'       => '/bsw-captcha/preview',
+                    'controller' => 'App\Controller\BackendCover\BswCaptcha::preview',
+                ],
+                'app_bsw_captcha_persistence'                   => [
+                    'path'       => '/bsw-captcha/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswCaptcha::persistence',
+                ],
+                'app_bsw_command_queue_preview'                 => [
+                    'path'       => '/bsw-command-queue/preview',
+                    'controller' => 'App\Controller\BackendCover\BswCommandQueue::preview',
+                ],
+                'app_bsw_command_queue_persistence'             => [
+                    'path'       => '/bsw-command-queue/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswCommandQueue::persistence',
+                ],
+                'app_bsw_config_preview'                        => [
+                    'path'       => '/bsw-config/preview',
+                    'controller' => 'App\Controller\BackendCover\BswConfig::preview',
+                ],
+                'app_bsw_configured_preview'                    => [
+                    'path'       => '/bsw-configured/preview',
+                    'controller' => 'App\Controller\BackendCover\BswConfig::configured',
+                ],
+                'app_bsw_config_persistence'                    => [
+                    'path'       => '/bsw-config/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswConfig::persistence',
+                ],
+                'app_bsw_config_away'                           => [
+                    'path'       => '/bsw-config/away/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswConfig::away',
+                ],
+                'app_clean_backend'                             => [
+                    'path'       => '/cache/backend',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::getCleanBackendAction',
+                ],
+                'app_export'                                    => [
+                    'path'       => '/export',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::export',
+                ],
+                'app_language'                                  => [
+                    'path'       => ' /i18n',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::postLanguageAction',
+                ],
+                'app_captcha'                                   => [
+                    'path'       => '/captcha',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::numberCaptcha',
+                ],
+                'app_site_index'                                => [
+                    'path'       => '/',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::siteIndex',
+                ],
+                'app_third_message'                             => [
+                    'path'       => '/third-message',
+                    'controller' => 'App\Controller\BackendCover\BswMixed::thirdMessageAction',
+                ],
+                'app_bsw_token_preview'                         => [
+                    'path'       => '/bsw-token/preview',
+                    'controller' => 'App\Controller\BackendCover\BswToken::preview',
+                ],
+                'app_bsw_token_persistence'                     => [
+                    'path'       => '/bsw-token/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswToken::persistence',
+                ],
+                'app_bsw_work_task_preview'                     => [
+                    'path'       => '/bsw-work-task/preview',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::preview',
+                ],
+                'app_bsw_work_task_persistence'                 => [
+                    'path'       => '/bsw-work-task/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::persistence',
+                ],
+                'app_bsw_work_task_simple'                      => [
+                    'path'       => '/bsw-work-task/simple/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::simple',
+                ],
+                'app_bsw_work_task_weight'                      => [
+                    'path'       => '/bsw-work-task/weight/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::weight',
+                ],
+                'app_bsw_work_task_progress'                    => [
+                    'path'       => '/bsw-work-task/progress/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::progress',
+                ],
+                'app_bsw_work_task_close'                       => [
+                    'path'       => '/bsw-work-task/close/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::close',
+                ],
+                'app_bsw_work_week_report'                      => [
+                    'path'       => '/bsw-work-week-report',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::weekReport',
+                ],
+                'app_bsw_work_task_notes'                       => [
+                    'path'       => '/bsw-work-task/notes/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::notes',
+                ],
+                'app_bsw_work_task_transfer'                    => [
+                    'path'       => '/bsw-work-task/transfer/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTask::transfer',
+                ],
+                'app_bsw_work_task_trail_preview'               => [
+                    'path'       => '/bsw-work-task-trail/preview',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTaskTrail::preview',
+                ],
+                'app_bsw_work_task_trail_persistence'           => [
+                    'path'       => '/bsw-work-task-trail/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTaskTrail::persistence',
+                ],
+                'app_bsw_work_team_preview'                     => [
+                    'path'       => '/bsw-work-team/preview',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTeam::preview',
+                ],
+                'app_bsw_work_team_persistence'                 => [
+                    'path'       => '/bsw-work-team/persistence/{id}',
+                    'controller' => 'App\Controller\BackendCover\BswWorkTeam::persistence',
                 ],
             ];
         }
