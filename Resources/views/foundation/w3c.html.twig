@@ -9,11 +9,14 @@
   <title>{{ tplTitle ?? scaffold.seo.title }}</title>
   {% set void = 'javascript:void(null);' %}
   {% set top = constant(scaffold.abs ~ '::POS_TOP') %}
+  {% set topApp = constant(scaffold.abs ~ '::POS_TOP_APP') %}
   {% set bottom = constant(scaffold.abs ~ '::POS_BOTTOM') %}
+  {% set bottomApp = constant(scaffold.abs ~ '::POS_BOTTOM_APP') %}
   {% set v = '?version=' ~ scaffold.version %}
   {% set vv = '&version=' ~ scaffold.version %}
-  {% include 'limbs/css.html.twig' with {position: top} %}
-  {% include 'limbs/js.html.twig' with {position: top} %}
+  {% for src in [['css', top], ['css', topApp], ['js', top], ['js', topApp]] %}
+    {% include 'limbs/'~ src[0] ~'.html.twig' with {position: src[1]} %}
+  {% endfor %}
   <style>
     {% block stylesheetsBefore %}{% endblock %}
     {% block stylesheets %}{% endblock %}
@@ -27,8 +30,9 @@
 {% block w3cBefore %}{% endblock %}
 {% block w3c %}{% endblock %}
 {% block w3cAfter %}{% endblock %}
-{% include 'limbs/css.html.twig' with {position: bottom} %}
-{% include 'limbs/js.html.twig' with {position: bottom} %}
+{% for src in [['css', bottom], ['css', bottomApp], ['js', bottom], ['js', bottomApp]] %}
+  {% include 'limbs/'~ src[0] ~'.html.twig' with {position: src[1]} %}
+{% endfor %}
 <script>
   {% block javascriptBefore %}{% endblock %}
   {% block javascript %}{% endblock %}

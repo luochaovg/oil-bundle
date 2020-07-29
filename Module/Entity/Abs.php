@@ -266,6 +266,7 @@ class Abs
     const TAG_ROW_CLS_NAME   = 'rowClsName';
 
     const POS_TOP           = 'top';
+    const POS_TOP_APP       = 'topSource'; // just for source
     const POS_TOP_LEFT      = 'topLeft';
     const POS_TOP_CENTER    = 'topCenter';
     const POS_TOP_RIGHT     = 'topRight';
@@ -274,6 +275,7 @@ class Abs
     const POS_RIGHT_MIDDLE  = 'rightMiddle';
     const POS_RIGHT_BOTTOM  = 'rightBottom';
     const POS_BOTTOM        = 'bottom';
+    const POS_BOTTOM_APP    = 'bottomSource'; // just for source
     const POS_BOTTOM_LEFT   = 'bottomLeft';
     const POS_BOTTOM_CENTER = 'bottomCenter';
     const POS_BOTTOM_RIGHT  = 'bottomRight';
