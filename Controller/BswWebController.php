@@ -377,7 +377,7 @@ abstract class BswWebController extends AbstractController
         }
 
         $message = [
-            'type'     => $type,
+            'type'     => $this->responseMessageTypeMap($type),
             'duration' => $duration,
             'classify' => $classify,
             'content'  => Html::cleanHtml($this->messageLang($content)),

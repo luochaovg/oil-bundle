@@ -28,7 +28,6 @@ use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
 use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
 use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
-use Leon\BswBundle\Module\Exception\ServiceException;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Repository\BswTokenRepository;
