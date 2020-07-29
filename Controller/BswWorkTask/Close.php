@@ -6,9 +6,9 @@ use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Repository\BswWorkTaskRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Close
 {

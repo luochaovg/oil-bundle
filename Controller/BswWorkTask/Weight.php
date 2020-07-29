@@ -6,10 +6,10 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange;
 use Leon\BswBundle\Module\Error\Error;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Weight
 {

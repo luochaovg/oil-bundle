@@ -3,33 +3,18 @@
 namespace Leon\BswBundle\Controller\BswAdminAccessControl;
 
 use Leon\BswBundle\Controller\BswBackendController;
-use Leon\BswBundle\Entity\BswAdminUser;
-use Leon\BswBundle\Module\Bsw\Arguments;
-use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Annotation\Entity\Input as I;
 use Leon\BswBundle\Annotation\Entity\Output as O;
+use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Bsw admin access control
  */
 class Acme extends BswBackendController
 {
+    use Common;
     use Preview;
     use Persistence;
     use Grant;
-
-    /**
-     * @param Arguments $args
-     *
-     * @return array
-     * @throws
-     */
-    public function acmeEnumExtraUserId(Arguments $args): array
-    {
-        $role = $this->repo(BswAdminUser::class)->kvp(['name']);
-        $role = [0 => Abs::NIL] + $role;
-
-        return $role;
-    }
 }

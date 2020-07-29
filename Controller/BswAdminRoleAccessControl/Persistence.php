@@ -3,9 +3,9 @@
 namespace Leon\BswBundle\Controller\BswAdminRoleAccessControl;
 
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
-use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Persistence
 {

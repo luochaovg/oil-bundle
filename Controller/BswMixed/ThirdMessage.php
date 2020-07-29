@@ -6,11 +6,9 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorNoRecord;
-use Predis\Client;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Leon\BswBundle\Annotation\Entity\Input as I;
-use Leon\BswBundle\Annotation\Entity\Output as O;
+use Symfony\Component\HttpFoundation\Response;
+use Predis\Client;
 
 /**
  * @property Client $redis

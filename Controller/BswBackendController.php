@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Controller;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
-use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Entity\BswAdminLogin;
@@ -37,16 +36,9 @@ use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 
-/**
- * @method moduleHeaderMenuMixin()
- * @method moduleHeaderSettingMixin(array $setting)
- * @method moduleHeaderLinksMixin(array $links)
- * @method moduleHeaderLanguageMixin(array $lang)
- */
 class BswBackendController extends BswWebController
 {
-    use MT\Mixin,
-        CT\BackendEntityHint,
+    use CT\BackendEntityHint,
         CT\BackendPreset;
 
     /**
@@ -98,11 +90,6 @@ class BswBackendController extends BswWebController
     protected function bootstrap()
     {
         parent::bootstrap();
-
-        $mixinClass = $this->parameter('backend_mixin_class', null, false);
-        if (class_exists($mixinClass)) {
-            self::mixin($mixinClass);
-        }
 
         if ($this->bswSrc) {
             $lang = $this->langLatest($this->langMap, 'en');
@@ -801,7 +788,7 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderMenu(): array
     {
-        return $this->moduleHeaderMenuMixin() ?? [];
+        return [];
     }
 
     /**
@@ -811,7 +798,7 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderSetting(): array
     {
-        $setting = [
+        return [
             new Setting('Switch theme', $this->cnf->icon_theme, 'themeSwitch'),
             new Setting('Switch color weak', $this->cnf->icon_bulb, 'colorWeakSwitch'),
             new Setting('Switch third message', $this->cnf->icon_message, 'thirdMessageSwitch'),
@@ -821,8 +808,6 @@ class BswBackendController extends BswWebController
                 ->setClick('fullScreenToggle')
                 ->setArgs(['element' => 'html']),
         ];
-
-        return $this->moduleHeaderSettingMixin($setting) ?? $setting;
     }
 
     /**
@@ -847,7 +832,7 @@ class BswBackendController extends BswWebController
             $links = Helper::arrayInsert($links, 1, [$link]);
         }
 
-        return $this->moduleHeaderLinksMixin($links) ?? $links;
+        return $links;
     }
 
     /**
@@ -857,12 +842,10 @@ class BswBackendController extends BswWebController
      */
     public function moduleHeaderLanguage(): array
     {
-        $lang = [
+        return [
             'cn' => '简体中文',
             'hk' => '繁體中文',
             'en' => 'English',
         ];
-
-        return $this->moduleHeaderLanguageMixin($lang) ?? $lang;
     }
 }

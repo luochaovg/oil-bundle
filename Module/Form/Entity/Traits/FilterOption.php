@@ -7,7 +7,7 @@ trait FilterOption
     /**
      * @var string
      */
-    protected $filterOption = 'bsw.formItemFilterOption';
+    protected $filterOption;
 
     /**
      * @return string

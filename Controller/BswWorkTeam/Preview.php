@@ -3,11 +3,11 @@
 namespace Leon\BswBundle\Controller\BswWorkTeam;
 
 use Leon\BswBundle\Entity\BswWorkTeam;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Preview
 {

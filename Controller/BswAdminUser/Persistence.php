@@ -2,16 +2,17 @@
 
 namespace Leon\BswBundle\Controller\BswAdminUser;
 
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\QrCode;
 use Leon\BswBundle\Component\GoogleAuthenticator;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
 
 trait Persistence
 {

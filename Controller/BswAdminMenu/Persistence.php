@@ -2,16 +2,16 @@
 
 namespace Leon\BswBundle\Controller\BswAdminMenu;
 
-use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminMenu;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence;
 use Leon\BswBundle\Repository\BswAdminMenuRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\Input as I;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @property Expr $expr

@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Arguments;
@@ -11,10 +10,11 @@ use Leon\BswBundle\Module\Error\Entity\ErrorProgress;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Mentions;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @property Expr $expr

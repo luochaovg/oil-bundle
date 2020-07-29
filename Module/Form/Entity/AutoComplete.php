@@ -25,5 +25,6 @@ class AutoComplete extends Form
     public function __construct()
     {
         $this->setAllowClear(false);
+        $this->setFilterOption('bsw.filterOptionForAutoComplete');
     }
 }

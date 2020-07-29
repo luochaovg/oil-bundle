@@ -7,11 +7,11 @@ use Leon\BswBundle\Entity\BswConfig;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Filter\Entity\Mixed;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @property TranslatorInterface $translator

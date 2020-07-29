@@ -42,7 +42,6 @@ parameters:
     backend_captcha_digit: 4
     backend_auth_root_ids: [1]
     backend_db_logger: true
-    backend_mixin_class: App\Controller\Mixin
 
     aes_key: KHkBMKsNdc8Ttkjl
     aes_iv: KHkBMKsNdc8Ttkjl

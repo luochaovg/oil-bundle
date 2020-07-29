@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswAdminUser;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @property Session $session

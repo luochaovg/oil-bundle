@@ -3,11 +3,10 @@
 namespace Leon\BswBundle\Controller\BswAttachment;
 
 use Leon\BswBundle\Entity\BswAttachment;
-use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Upload;
-use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Persistence
 {
@@ -52,7 +51,6 @@ trait Persistence
                     'class'       => 'tools-upload',
                     'needId'      => false,
                     'needTips'    => false,
-                    'buttonType'  => Abs::THEME_BSW_DARK,
                     'buttonStyle' => [
                         'font-size' => '16px',
                         'height'    => '64px',

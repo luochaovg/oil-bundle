@@ -2,12 +2,13 @@
 
 namespace Leon\BswBundle\Controller\BswMixed;
 
-use Doctrine\DBAL\Connection;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\DBAL\Connection;
 
 /**
  * @property TranslatorInterface $translator

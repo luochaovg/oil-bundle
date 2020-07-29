@@ -5,11 +5,12 @@ namespace Leon\BswBundle\Controller\BswAttachment;
 use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @property TranslatorInterface $translator
@@ -52,7 +53,7 @@ trait Preview
                 ->setArgs(
                     [
                         'width'        => Abs::MEDIA_MIN,
-                        'height'       => 155,
+                        'height'       => 157,
                         'title'        => false,
                         'closable'     => false,
                         'maskClosable' => true,

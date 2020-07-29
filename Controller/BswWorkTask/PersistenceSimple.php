@@ -6,9 +6,9 @@ use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait PersistenceSimple
 {

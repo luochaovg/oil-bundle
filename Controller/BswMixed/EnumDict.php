@@ -7,10 +7,11 @@ use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Select;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Leon\BswBundle\Component\Reflection;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @property TranslatorInterface $translator

@@ -3,13 +3,12 @@
 namespace Leon\BswBundle\Controller\BswMixed;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswCommandQueue;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
-use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Export
 {

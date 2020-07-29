@@ -5,15 +5,15 @@
     class="{{ form.class }}"
   {% endif %}
   :data-source="{{ form.treeData }}"
-  :titles="['Source', 'Target']"
-  :operations="['>', '<']"
+  :titles="['{{ form.sourceTitle }}', '{{ form.targetTitle }}']"
+  :operations="['{{ form.sourceOperate }}', '{{ form.targetOperate }}']"
   :target-keys="{{ form.targetKeys }}"
   :selected-keys="{{ form.selectedKeys }}"
   :render="(record) => record.title"
   :data-bsw.prop="{{ form.formData }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :show-search="{{ form.showSearch ? 'true' : 'false' }}"
-  :filter-option="(inputValue, item) => item.title.indexOf(inputValue) !== -1"
+  :filter-option="{{ form.filterOption }}"
   :show-select-all="{{ form.showSelectAll ? 'true' : 'false' }}"
   :style="{{ form.style }}"
   {% if form.change %}

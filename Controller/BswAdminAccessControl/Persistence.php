@@ -2,9 +2,9 @@
 
 namespace Leon\BswBundle\Controller\BswAdminAccessControl;
 
-use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Symfony\Component\HttpFoundation\Response;
-use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
+use Symfony\Component\Routing\Annotation\Route;
+use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
 trait Persistence

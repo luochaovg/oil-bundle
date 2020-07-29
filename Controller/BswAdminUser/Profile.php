@@ -4,8 +4,9 @@ namespace Leon\BswBundle\Controller\BswAdminUser;
 
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Module\Bsw\Arguments;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Persistence\Tailor;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Profile
 {

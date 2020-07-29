@@ -29,5 +29,6 @@ class Mentions extends Form
         $this->setPrefix('@');
         $this->setSeparator(' ');
         $this->setFilterOption('');
+        $this->setFilterOption('bsw.filterOptionForMentions');
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Leon\BswBundle\Controller\BswAdminAccessControl;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Module\Bsw\Arguments;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 
 trait Preview

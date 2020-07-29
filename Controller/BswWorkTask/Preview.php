@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
-use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswWorkTask;
@@ -16,11 +15,12 @@ use Leon\BswBundle\Module\Filter\Entity\WeekIntersect;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
 use Leon\BswBundle\Module\Form\Entity\Week;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @property Expr $expr
@@ -168,7 +168,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 426,
+                        'height' => 428,
                         'title'  => false,
                     ]
                 ),
@@ -188,7 +188,7 @@ trait Preview
                         'fill'   => ['taskId' => $args->item['id']],
                         'type'   => $this->isTeamTask ? 'team' : 'member',
                         'width'  => $this->isTeamTask ? Abs::MEDIA_SM : 500,
-                        'height' => $this->isTeamTask ? 433 : 313,
+                        'height' => $this->isTeamTask ? 435 : 315,
                         'title'  => false,
                     ]
                 ),
@@ -202,7 +202,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => Abs::MEDIA_XS,
-                        'height' => 220,
+                        'height' => 222,
                         'title'  => false,
                     ]
                 ),
@@ -217,7 +217,7 @@ trait Preview
                     [
                         'id'     => $args->item['id'],
                         'width'  => 500,
-                        'height' => 253,
+                        'height' => 255,
                         'title'  => false,
                     ]
                 ),

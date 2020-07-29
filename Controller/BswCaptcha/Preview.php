@@ -4,10 +4,10 @@ namespace Leon\BswBundle\Controller\BswCaptcha;
 
 use Leon\BswBundle\Entity\BswCaptcha;
 use Leon\BswBundle\Module\Bsw\Arguments;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Preview
 {

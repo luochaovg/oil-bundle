@@ -2,16 +2,16 @@
 
 namespace Leon\BswBundle\Controller\BswAdminRole;
 
-use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Entity\BswAdminRole;
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Repository\BswAdminRoleAccessControlRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Bsw\Preview\Tailor;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @property Expr $expr
