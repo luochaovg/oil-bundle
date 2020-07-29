@@ -21,6 +21,8 @@
   </style>
 </head>
 
+<!-- Global class variable -->
+<!-- tplFoundationClass >> tplBodyClass >> tplScaffoldClass >> tplContentClass -->
 <body class="{{ ['bsw-foundation', tplFoundationClass ?? null]|joinClass }}">
 {% block w3cBefore %}{% endblock %}
 {% block w3c %}{% endblock %}

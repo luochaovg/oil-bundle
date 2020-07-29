@@ -448,18 +448,6 @@ div.ant-modal-mask {
     padding: 40px 30px !important;
   }
 }
-.bsw-grant .bsw-persistence {
-  padding: 80px 120px;
-}
-.bsw-grant form {
-  max-width: unset;
-}
-.bsw-grant form .ant-checkbox-group {
-  line-height: unset;
-}
-.bsw-grant .ant-form-item-label > label {
-  font-size: 16px;
-}
 .bsw-checkbox-middle form input[type=checkbox],
 .bsw-checkbox-middle form input[type=radio] {
   width: 16px;
@@ -583,23 +571,35 @@ span.ant-calendar-picker {
 .bsw-filter-form .bsw-filter-item.bsw-filter-action button {
   margin: 0;
 }
-.bsw-page-container {
-  background: white;
-}
 .ant-form-item-required:before {
   animation: bsw-breathing 4s infinite;
 }
-.bsw-chart-container {
+.bsw-content-persistence {
   background: white;
 }
-.bsw-chart-container .bsw-filter-form {
+.bsw-content-chart {
+  background: white;
+}
+.bsw-content-chart .bsw-filter-form {
   border: none;
 }
-.bsw-chart-container .bsw-filter-form {
+.bsw-content-chart .bsw-filter-form {
   margin-bottom: 0;
 }
-.bsw-chart-container .ant-divider {
+.bsw-content-chart .ant-divider {
   margin: 0;
+}
+.bsw-content-grant .bsw-persistence {
+  padding: 80px 120px;
+}
+.bsw-content-grant form {
+  max-width: unset;
+}
+.bsw-content-grant form .ant-checkbox-group {
+  line-height: unset;
+}
+.bsw-content-grant .ant-form-item-label > label {
+  font-size: 16px;
 }
 div.modal-container-center div.ant-modal-body > div {
   text-align: center;

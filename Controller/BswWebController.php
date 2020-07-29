@@ -673,6 +673,7 @@ abstract class BswWebController extends AbstractController
 
         foreach ($route as $class => $item) {
             [$classify, $access] = $this->getAccessControlAnnotation($class);
+            $classify = Helper::stringToLabel($classify);
             foreach ($access as $method => &$target) {
                 if (!isset($item[$method])) {
                     continue;

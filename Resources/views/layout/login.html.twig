@@ -1,13 +1,14 @@
 {% extends 'layout/empty.html.twig' %}
+{% set tplBodyClass = 'bsw-body-login' %}
 
 {% block stylesheets %}
-  div.ant-spin-container {{ scaffold.cnf|imageStyle('login', true) }}
+  .bsw-body-login {{ scaffold.cnf|imageStyle('login', true) }}
 {% endblock %}
 
 {% block content %}
   {% block loginBefore %}{% endblock %}
   {% block login %}
-    <div class="{{ scaffold.cnf.loginContainerClass }}">
+    <div class="{{ ['bsw-login-container', scaffold.cnf.loginContainerClass ?? null]|joinClass }}">
       <div class="header">
         <a href="{{ void }}">
           <img src="{{ scaffold.cnf.appLogo }}{{ v }}">

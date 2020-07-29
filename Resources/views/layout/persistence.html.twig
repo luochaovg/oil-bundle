@@ -1,5 +1,5 @@
 {% extends 'layout/blank.html.twig' %}
-{% set tplContentClass = ['bsw-page-container', tplContentClassDiy ?? null]|joinClass %}
+{% set tplContentClass = ['bsw-content-persistence', tplContentChildrenClass ?? null]|joinClass %}
 
 {% block page %}
   {% block persistenceBefore %}{% endblock %}

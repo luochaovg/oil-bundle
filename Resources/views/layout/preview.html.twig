@@ -1,4 +1,5 @@
 {% extends 'layout/blank.html.twig' %}
+{% set tplContentClass = ['bsw-content-preview', tplContentChildrenClass ?? null]|joinClass %}
 
 {% block page %}
   {% block filterBefore %}{% endblock %}
