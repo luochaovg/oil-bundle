@@ -194,6 +194,7 @@ parameters:
         login_container_class: null # "login-container dark" dark is option
 
         icon_tag: b:icon-tag
+        icon_click: b:icon-dianji
         icon_search: b:icon-search
         icon_badge: b:icon-assessedbadge
         icon_two_box: b:icon-similarproduct
@@ -252,11 +253,11 @@ parameters:
         app_bsw_work_task_progress: app_bsw_work_task_preview
 
     bsw_crumbs_keyword_to_icon_map:
-        home: a:home
-        preview: b:icon-form
-        persistence: b:icon-edit
-        away: b:icon-delete
-        sort: a:sort-descending
+        home: b:icon-home
+        preview: b:icon-caidan
+        persistence: b:icon-bianji1
+        away: b:icon-delete1
+        sort: a:icon-pin
         export: b:icon-export4
         import: b:icon-import1
         grant: b:icon-assessedbadge

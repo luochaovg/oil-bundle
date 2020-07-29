@@ -452,7 +452,7 @@ $(function () {
         bsw.initClipboard();
         bsw.initUpwardInfect();
 
-        let timeout = change ? 1000 : 400;
+        let timeout = change ? 1200 : 500;
         setTimeout(function () {
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {

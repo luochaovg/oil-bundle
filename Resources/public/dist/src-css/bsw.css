@@ -21,10 +21,7 @@
   z-index: 998;
 }
 .ant-spin-blur:after {
-  opacity: .2;
-}
-.ant-spin-container:after {
-  background: #000000;
+  opacity: 0;
 }
 div.ant-modal-mask {
   background-color: rgba(0, 0, 0, 0.2);
@@ -343,6 +340,7 @@ div.ant-modal-mask {
   padding: 20px;
   background: #fff;
   margin-bottom: 15px;
+  border: 1px solid #e8e8e8;
 }
 .ant-layout .ant-layout-content .bsw-content {
   overflow: auto;
@@ -547,9 +545,6 @@ span.ant-calendar-picker {
   margin: 10px 0 0;
   text-align: center;
 }
-.bsw-chart-list {
-  margin: 50px 30px 30px;
-}
 .bsw-filter-form {
   padding: 16px 20px;
   overflow: hidden;
@@ -576,18 +571,15 @@ span.ant-calendar-picker {
 }
 .bsw-content-persistence {
   background: white;
-}
-.bsw-content-chart {
-  background: white;
-}
-.bsw-content-chart .bsw-filter-form {
-  border: none;
-}
-.bsw-content-chart .bsw-filter-form {
-  margin-bottom: 0;
+  border: 1px solid #e8e8e8;
 }
 .bsw-content-chart .ant-divider {
   margin: 0;
+}
+.bsw-content-chart .bsw-chart-list {
+  background: white;
+  border: 1px solid #e8e8e8;
+  padding: 50px 30px 30px;
 }
 .bsw-content-grant .bsw-persistence {
   padding: 80px 120px;
@@ -937,7 +929,7 @@ textarea[size="large"] {
   font-size: 12px;
 }
 .bsw-row-children {
-  background-color: rgba(50, 144, 251, 0.03);
+  background-color: rgba(50, 144, 251, 0.05);
 }
 .bsw-row-status-green {
   background-color: rgba(0, 128, 0, 0.1);

@@ -8,7 +8,7 @@
     :data-bsw.prop="{{ form.previewIframeArgs|merge({location: path(form.previewRoute, form.previewArgs)})|stringify }}"
     @click="showIFrameByVue"
   >
-    {{ scaffold.cnf.iconTag|icon|raw }}
+    {{ scaffold.cnf.iconClick|icon|raw }}
     {{ form.buttonLabel|trans({}, 'twig') }}
   </a-button>
 {% endif %}
