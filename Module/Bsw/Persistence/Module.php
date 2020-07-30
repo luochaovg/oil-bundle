@@ -1093,7 +1093,7 @@ class Module extends Bsw
                         continue;
                     }
                     $value = $this->input->submit[$field] ?? null;
-                    $result = $this->web->validator($field, $value, $rules);
+                    $result = $this->web->validator($field, $value, $rules, ['label' => $item['label']]);
                     if ($result === false) {
                         return $this->showError($this->web->pop(), ErrorParameter::CODE);
                     }
