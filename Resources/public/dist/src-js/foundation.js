@@ -1339,6 +1339,27 @@ var FoundationTools = function (_FoundationPrototype) {
             }
             return target;
         }
+
+        /**
+         * Clone json
+         *
+         * @param target
+         * @returns {[]|{}}
+         */
+
+    }, {
+        key: 'cloneJson',
+        value: function cloneJson(target) {
+            var newObj = Array.isArray(target) ? [] : {};
+            if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === "object") {
+                for (var key in target) {
+                    if (target.hasOwnProperty(key)) {
+                        newObj[key] = target && _typeof(target[key]) === 'object' ? this.cloneJson(target[key]) : target[key];
+                    }
+                }
+            }
+            return newObj;
+        }
     }]);
 
     return FoundationTools;
@@ -1506,7 +1527,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'notification',
         value: function notification(type, description, duration) {
-            var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
+            var _onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
 
             if (typeof duration === 'undefined') {
                 duration = this.cnf.notificationDuration;
@@ -1519,12 +1540,17 @@ var FoundationAntD = function (_FoundationTools) {
                 error: this.lang.error
             }[type];
 
-            return this.cnf.v.$notification[type]({
-                placement: this.cnf.notificationPlacement,
-                message: message,
-                description: description,
-                duration: duration,
-                onClose: onClose
+            return new Promise(function (resolve) {
+                this.cnf.v.$notification[type]({
+                    placement: this.cnf.notificationPlacement,
+                    message: message,
+                    description: description,
+                    duration: duration,
+                    onClose: function onClose() {
+                        resolve();
+                        _onClose && _onClose();
+                    }
+                });
             });
         }
 
@@ -1580,25 +1606,26 @@ var FoundationAntD = function (_FoundationTools) {
                 options.width = this.popupCosySize().width;
             }
 
-            var modal = this.cnf.v['$' + type](Object.assign({
-                title: title,
-                content: description,
-                okText: this.lang.i_got_it,
-                onOk: options.onOk || onClose,
-                onCancel: onClose
-            }, options));
+            return new Promise(function (resolve) {
+                var modal = this.cnf.v['$' + type](Object.assign({
+                    title: title,
+                    content: description,
+                    okText: this.lang.i_got_it,
+                    onOk: options.onOk || onClose,
+                    onCancel: onClose
+                }, options));
 
-            if (typeof duration === 'undefined') {
-                duration = this.cnf.confirmDuration;
-            }
+                if (typeof duration === 'undefined') {
+                    duration = this.cnf.confirmDuration;
+                }
 
-            if (duration) {
-                setTimeout(function () {
-                    modal.destroy();
-                }, duration * 1000);
-            }
-
-            return modal;
+                if (duration) {
+                    setTimeout(function () {
+                        modal.destroy();
+                        resolve(modal);
+                    }, duration * 1000);
+                }
+            });
         }
 
         /**
@@ -2109,11 +2136,11 @@ var FoundationAntD = function (_FoundationTools) {
         value: function showModal(options) {
             var v = this.cnf.v;
             v.modal.visible = false;
-            options.visible = true;
             if (typeof options.width === 'undefined') {
                 options.width = this.popupCosySize().width;
             }
-            options = Object.assign(v.modal, options);
+            var meta = this.cloneJson(v.modalMeta);
+            options = Object.assign(meta, options);
             if (options.footer) {
                 v.footer = '_footer';
             } else {
@@ -2133,11 +2160,11 @@ var FoundationAntD = function (_FoundationTools) {
         value: function showDrawer(options) {
             var v = this.cnf.v;
             v.drawer.visible = false;
-            options.visible = true;
             if (typeof options.width === 'undefined') {
                 options.width = this.popupCosySize().width;
             }
-            options = Object.assign(v.drawer, options);
+            var meta = this.cloneJson(v.drawerMeta);
+            options = Object.assign(meta, options);
             v.drawer = options;
         }
 
@@ -2152,8 +2179,8 @@ var FoundationAntD = function (_FoundationTools) {
         value: function showResult(options) {
             var v = this.cnf.v;
             v.result.visible = false;
-            options.visible = true;
-            options = Object.assign(v.result, options);
+            var meta = this.cloneJson(v.resultMeta);
+            options = Object.assign(meta, options);
             v.result = options;
         }
 
@@ -2532,7 +2559,7 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
-         * Form item filter option
+         * Filter option for mentions
          *
          * @param input
          * @param option
@@ -2541,9 +2568,39 @@ var FoundationAntD = function (_FoundationTools) {
          */
 
     }, {
-        key: 'formItemFilterOption',
-        value: function formItemFilterOption(input, option) {
+        key: 'filterOptionForMentions',
+        value: function filterOptionForMentions(input, option) {
             return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+        }
+
+        /**
+         * Filter option for auto complete
+         *
+         * @param input
+         * @param option
+         *
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'filterOptionForAutoComplete',
+        value: function filterOptionForAutoComplete(input, option) {
+            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+        }
+
+        /**
+         * Filter option for transfer
+         *
+         * @param input
+         * @param option
+         *
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'filterOptionForTransfer',
+        value: function filterOptionForTransfer(input, option) {
+            return option.title.indexOf(input) !== -1;
         }
 
         /**

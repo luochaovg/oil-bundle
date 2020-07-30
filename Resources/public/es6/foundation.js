@@ -638,6 +638,7 @@ class FoundationTools extends FoundationPrototype {
         return query.length ? query.substr(0, query.length - 1) : query;
     }
 
+
     /**
      * Url add items
      *
@@ -994,6 +995,24 @@ class FoundationTools extends FoundationPrototype {
         }
         return target;
     }
+
+    /**
+     * Clone json
+     *
+     * @param target
+     * @returns {[]|{}}
+     */
+    cloneJson(target) {
+        let newObj = Array.isArray(target) ? [] : {};
+        if (target && typeof target === "object") {
+            for (let key in target) {
+                if (target.hasOwnProperty(key)) {
+                    newObj[key] = (target && typeof target[key] === 'object') ? this.cloneJson(target[key]) : target[key];
+                }
+            }
+        }
+        return newObj
+    }
 }
 
 //
@@ -1132,12 +1151,17 @@ class FoundationAntD extends FoundationTools {
             error: this.lang.error,
         }[type];
 
-        return this.cnf.v.$notification[type]({
-            placement: this.cnf.notificationPlacement,
-            message,
-            description,
-            duration,
-            onClose,
+        return new Promise(function (resolve) {
+            this.cnf.v.$notification[type]({
+                placement: this.cnf.notificationPlacement,
+                message,
+                description,
+                duration,
+                onClose() {
+                    resolve();
+                    onClose && onClose();
+                },
+            });
         });
     }
 
@@ -1182,25 +1206,26 @@ class FoundationAntD extends FoundationTools {
             options.width = this.popupCosySize().width;
         }
 
-        let modal = this.cnf.v[`$${type}`](Object.assign({
-            title,
-            content: description,
-            okText: this.lang.i_got_it,
-            onOk: options.onOk || onClose,
-            onCancel: onClose,
-        }, options));
+        return new Promise(function (resolve) {
+            let modal = this.cnf.v[`$${type}`](Object.assign({
+                title,
+                content: description,
+                okText: this.lang.i_got_it,
+                onOk: options.onOk || onClose,
+                onCancel: onClose,
+            }, options));
 
-        if (typeof duration === 'undefined') {
-            duration = this.cnf.confirmDuration;
-        }
+            if (typeof duration === 'undefined') {
+                duration = this.cnf.confirmDuration;
+            }
 
-        if (duration) {
-            setTimeout(function () {
-                modal.destroy();
-            }, duration * 1000);
-        }
-
-        return modal;
+            if (duration) {
+                setTimeout(function () {
+                    modal.destroy();
+                    resolve(modal);
+                }, duration * 1000);
+            }
+        });
     }
 
     /**
@@ -1372,9 +1397,9 @@ class FoundationAntD extends FoundationTools {
                     let duration = that.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(() => {
                         failedHandler(result);
-                    }).catch((reason => {
+                    }).catch(reason => {
                         console.warn(reason);
-                    }));
+                    });
                 } else {
                     failedHandler(result);
                 }
@@ -1386,9 +1411,9 @@ class FoundationAntD extends FoundationTools {
                     let duration = that.isNull(result.duration) ? undefined : result.duration;
                     that[result.classify](result.message, duration, null, result.type).then(function () {
                         successHandler(result);
-                    }).catch((reason => {
+                    }).catch(reason => {
                         console.warn(reason);
-                    }));
+                    });
                 } else {
                     successHandler(result);
                 }
@@ -1602,11 +1627,11 @@ class FoundationAntD extends FoundationTools {
     showModal(options) {
         let v = this.cnf.v;
         v.modal.visible = false;
-        options.visible = true;
         if (typeof options.width === 'undefined') {
             options.width = this.popupCosySize().width;
         }
-        options = Object.assign(v.modal, options);
+        let meta = this.cloneJson(v.modalMeta);
+        options = Object.assign(meta, options);
         if (options.footer) {
             v.footer = '_footer';
         } else {
@@ -1623,11 +1648,11 @@ class FoundationAntD extends FoundationTools {
     showDrawer(options) {
         let v = this.cnf.v;
         v.drawer.visible = false;
-        options.visible = true;
         if (typeof options.width === 'undefined') {
             options.width = this.popupCosySize().width;
         }
-        options = Object.assign(v.drawer, options);
+        let meta = this.cloneJson(v.drawerMeta);
+        options = Object.assign(meta, options);
         v.drawer = options;
     }
 
@@ -1639,8 +1664,8 @@ class FoundationAntD extends FoundationTools {
     showResult(options) {
         let v = this.cnf.v;
         v.result.visible = false;
-        options.visible = true;
-        options = Object.assign(v.result, options);
+        let meta = this.cloneJson(v.resultMeta);
+        options = Object.assign(meta, options);
         v.result = options;
     }
 
@@ -1651,7 +1676,7 @@ class FoundationAntD extends FoundationTools {
      * @param element
      */
     showModalAfterRequest(data, element) {
-        this.request(data.location).then((res) => {
+        this.request(data.location).then(res => {
             this.response(res).then(() => {
                 let options = this.jsonFilter(Object.assign(data, {
                     width: res.sets.width || data.width || undefined,
@@ -1659,12 +1684,12 @@ class FoundationAntD extends FoundationTools {
                     content: res.sets.content,
                 }));
                 this.showModal(options);
-            }).catch((reason => {
+            }).catch(reason => {
                 console.warn(reason);
-            }));
-        }).catch((reason => {
+            });
+        }).catch(reason => {
             console.warn(reason);
-        }));
+        });
     }
 
     /**
@@ -1970,15 +1995,39 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
-     * Form item filter option
+     * Filter option for mentions
      *
      * @param input
      * @param option
      *
      * @returns {boolean}
      */
-    formItemFilterOption(input, option) {
+    filterOptionForMentions(input, option) {
         return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+    }
+
+    /**
+     * Filter option for auto complete
+     *
+     * @param input
+     * @param option
+     *
+     * @returns {boolean}
+     */
+    filterOptionForAutoComplete(input, option) {
+        return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+    }
+
+    /**
+     * Filter option for transfer
+     *
+     * @param input
+     * @param option
+     *
+     * @returns {boolean}
+     */
+    filterOptionForTransfer(input, option) {
+        return option.title.indexOf(input) !== -1;
     }
 
     /**
@@ -2124,9 +2173,9 @@ class FoundationAntD extends FoundationTools {
             that.drawerOnCancel();
         }
         this.cnf.v.$nextTick(function () {
-            that.response(data.response).catch((reason => {
+            that.response(data.response).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         });
     }
 

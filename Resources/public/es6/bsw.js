@@ -41,15 +41,18 @@ $(function () {
             result: {}
         },
         footer: 'footer',
-        modal: {
-            visible: false,
+        modal: {},
+        modalMeta: {
+            visible: true,
             centered: true,
         },
-        drawer: {
-            visible: false,
+        drawer: {},
+        drawerMeta: {
+            visible: true,
         },
-        result: {
-            visible: false,
+        result: {},
+        resultMeta: {
+            visible: true,
         },
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
@@ -90,13 +93,13 @@ $(function () {
             if (ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
             }
-            bsw.request(data.location, {ids: ids}).then((res) => {
-                bsw.response(res).catch((reason => {
+            bsw.request(data.location, {ids: ids}).then(res => {
+                bsw.response(res).catch(reason => {
                     console.warn(reason);
-                }));
-            }).catch((reason => {
+                });
+            }).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         },
 
         showIFrameWithChecked(data, element) {
@@ -176,7 +179,7 @@ $(function () {
             if (jump || typeof that.previewList === 'undefined' || that.previewList.length === 0) {
                 return location.href = url;
             }
-            bsw.request(url).then((res) => {
+            bsw.request(url).then(res => {
                 bsw.response(res).then(() => {
                     that.previewList = res.sets.preview.list;
                     that.previewPageNumber = page;
@@ -184,12 +187,12 @@ $(function () {
                     that.previewPaginationData = res.sets.preview.page;
                     that.previewImageChange();
                     history.replaceState({}, '', url);
-                }).catch((reason => {
+                }).catch(reason => {
                     console.warn(reason);
-                }));
-            }).catch((reason => {
+                });
+            }).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         },
 
         filterFormAction(event, jump = false, form, dateFormat) {
@@ -255,7 +258,7 @@ $(function () {
             url = bsw.unsetParams(['page'], url);
             url = bsw.setParams({filter: values, scene: 'export'}, url);
 
-            bsw.request(url).then((res) => {
+            bsw.request(url).then(res => {
                 bsw.response(res).then(() => {
                     let data = {
                         title: bsw.lang.export_mission,
@@ -265,12 +268,12 @@ $(function () {
                     };
                     data.location = bsw.setParams(res.sets, this.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
-                }).catch((reason => {
+                }).catch(reason => {
                     console.warn(reason);
-                }));
-            }).catch((reason => {
+                });
+            }).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         },
 
         submitFormAction(event, form, dateFormat) {
@@ -306,20 +309,20 @@ $(function () {
         },
 
         submitPersistenceForm(values) {
-            bsw.request(this.submitFormUrl, {submit: values}).then((res) => {
+            bsw.request(this.submitFormUrl, {submit: values}).then(res => {
                 let params = bsw.parseQueryString();
                 if (params.iframe) {
                     res.sets.arguments = bsw.parseQueryString();
                     let fn = res.sets.function || 'handleResponse';
                     parent.postMessage({response: res, function: fn}, '*');
                 } else {
-                    bsw.response(res).catch((reason => {
+                    bsw.response(res).catch(reason => {
                         console.warn(reason);
-                    }));
+                    });
                 }
-            }).catch((reason => {
+            }).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         },
 
         uploaderChange({file, fileList}, field, form = 'persistenceForm') {
@@ -370,9 +373,9 @@ $(function () {
                 let fn = file.response.sets.function || 'handleResponse';
                 parent.postMessage({response: file.response, function: fn}, '*');
             } else {
-                bsw.response(file.response).catch((reason => {
+                bsw.response(file.response).catch(reason => {
                     console.warn(reason);
-                }));
+                });
             }
         },
 
@@ -389,17 +392,17 @@ $(function () {
 
         requestByAjax(data, element) {
             let that = this;
-            bsw.request(data.location).then((res) => {
+            bsw.request(data.location).then(res => {
                 bsw.response(res).then(() => {
                     if (typeof data.refresh !== 'undefined' && data.refresh) {
                         that.previewPaginationRefresh(false);
                     }
-                }).catch((reason => {
+                }).catch(reason => {
                     console.warn(reason);
-                }));
-            }).catch((reason => {
+                });
+            }).catch(reason => {
                 console.warn(reason);
-            }));
+            });
         },
 
         copyFileLink(data, element) {

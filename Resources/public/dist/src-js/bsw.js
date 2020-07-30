@@ -47,15 +47,18 @@ $(function () {
             result: {}
         },
         footer: 'footer',
-        modal: {
-            visible: false,
+        modal: {},
+        modalMeta: {
+            visible: true,
             centered: true
         },
-        drawer: {
-            visible: false
+        drawer: {},
+        drawerMeta: {
+            visible: true
         },
-        result: {
-            visible: false
+        result: {},
+        resultMeta: {
+            visible: true
         }
 
     }, bsw.config.data)).computed(Object.assign({}, bsw.config.computed || {})).method(Object.assign({
