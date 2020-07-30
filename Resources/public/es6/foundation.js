@@ -1047,6 +1047,8 @@ class FoundationAntD extends FoundationTools {
             alertType: 'message',
             alertTypeForce: null,
             notificationPlacement: 'topRight',
+            transitionName: 'bsw-zoom',
+            maskTransitionName: 'fade',
             v: null,
             method: {
                 get: 'GET',
@@ -1112,7 +1114,7 @@ class FoundationAntD extends FoundationTools {
                 conf = Object.assign(conf, options);
                 return this;
             },
-            init(logic = self.blank) {
+            init(logic = bsw.blank) {
                 conf.el = selector;
                 that.cnf.v = new that.v(conf);
                 that.cnf.v.$nextTick(function () {
@@ -1140,7 +1142,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {*}
      */
-    notification(type, description, duration, onClose = self.blank) {
+    notification(type, description, duration, onClose = bsw.blank) {
         let that = this;
         if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'notification') {
             return that[that.cnf.alertTypeForce](type, description, duration, onClose);
@@ -1181,7 +1183,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {*}
      */
-    message(type, description, duration, onClose = self.blank) {
+    message(type, description, duration, onClose = bsw.blank) {
         let that = this;
         if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'message') {
             return that[that.cnf.alertTypeForce](type, description, duration, onClose);
@@ -1203,7 +1205,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {*}
      */
-    confirm(type, description, duration, onClose = self.blank, options = {}) {
+    confirm(type, description, duration, onClose = bsw.blank, options = {}) {
         let that = this;
         if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'confirm') {
             return that[that.cnf.alertTypeForce](type, description, duration, onClose);
@@ -1227,6 +1229,9 @@ class FoundationAntD extends FoundationTools {
                 okText: that.lang.i_got_it,
                 onOk: options.onOk || onClose,
                 onCancel: onClose,
+                keyboard: false,
+                transitionName: that.cnf.transitionName,
+                maskTransitionName: that.cnf.maskTransitionName,
             }, options));
 
             if (typeof duration === 'undefined') {
@@ -1295,26 +1300,6 @@ class FoundationAntD extends FoundationTools {
      */
     error(description, duration, onClose, type) {
         return this[type || this.cnf.alertType]('error', description, duration, onClose);
-    }
-
-    /**
-     * Show confirm
-     *
-     * @param content
-     * @param title
-     * @param options
-     *
-     * @return {*}
-     */
-    showConfirm(content, title, options = {}) {
-        return this.cnf.v.$confirm(Object.assign({
-            title,
-            content,
-            keyboard: false,
-            width: 320,
-            okText: this.lang.confirm,
-            cancelText: this.lang.cancel,
-        }, options));
     }
 
     /**
@@ -1653,6 +1638,28 @@ class FoundationAntD extends FoundationTools {
         v.modal = options;
     }
 
+
+    /**
+     * Show confirm
+     *
+     * @param options
+     *
+     * @return {*}
+     */
+    showConfirm(options) {
+        return this.cnf.v.$confirm(Object.assign({
+            title: options.title,
+            content: options.content,
+            keyboard: false,
+            width: 350,
+            okText: this.lang.confirm,
+            cancelText: this.lang.cancel,
+            onCancel: options.onClose || bsw.blank,
+            transitionName: this.cnf.transitionName,
+            maskTransitionName: this.cnf.maskTransitionName,
+        }, options));
+    }
+
     /**
      * Show drawer popup
      *
@@ -1941,6 +1948,7 @@ class FoundationAntD extends FoundationTools {
             parent.postMessage({data, function: 'dispatcherByBswData'}, '*');
             return;
         }
+
         let action = function () {
             if (!data.function || data.function.length === 0) {
                 return console.warn(`Attribute function should be configure in options.`, data);
@@ -1955,7 +1963,10 @@ class FoundationAntD extends FoundationTools {
         if (typeof data.confirm === 'undefined') {
             return action();
         }
-        that.showConfirm(data.confirm, that.lang.confirm_title, {
+
+        that.showConfirm({
+            title: that.lang.confirm_title,
+            content: data.confirm,
             onOk: () => {
                 action();
                 return false;

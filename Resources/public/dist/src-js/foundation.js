@@ -1403,6 +1403,8 @@ var FoundationAntD = function (_FoundationTools) {
             alertType: 'message',
             alertTypeForce: null,
             notificationPlacement: 'topRight',
+            transitionName: 'bsw-zoom',
+            maskTransitionName: 'fade',
             v: null,
             method: {
                 get: 'GET',
@@ -1495,7 +1497,7 @@ var FoundationAntD = function (_FoundationTools) {
                     return this;
                 },
                 init: function init() {
-                    var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.blank;
+                    var logic = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : bsw.blank;
 
                     conf.el = selector;
                     that.cnf.v = new that.v(conf);
@@ -1528,7 +1530,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'notification',
         value: function notification(type, description, duration) {
-            var _onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
+            var _onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : bsw.blank;
 
             var that = this;
             if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'notification') {
@@ -1574,7 +1576,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'message',
         value: function message(type, description, duration) {
-            var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
+            var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : bsw.blank;
 
             var that = this;
             if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'message') {
@@ -1601,7 +1603,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'confirm',
         value: function confirm(type, description, duration) {
-            var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
+            var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : bsw.blank;
             var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
 
             var that = this;
@@ -1626,7 +1628,10 @@ var FoundationAntD = function (_FoundationTools) {
                     content: description,
                     okText: that.lang.i_got_it,
                     onOk: options.onOk || onClose,
-                    onCancel: onClose
+                    onCancel: onClose,
+                    keyboard: false,
+                    transitionName: that.cnf.transitionName,
+                    maskTransitionName: that.cnf.maskTransitionName
                 }, options));
 
                 if (typeof duration === 'undefined') {
@@ -1707,31 +1712,6 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'error',
         value: function error(description, duration, onClose, type) {
             return this[type || this.cnf.alertType]('error', description, duration, onClose);
-        }
-
-        /**
-         * Show confirm
-         *
-         * @param content
-         * @param title
-         * @param options
-         *
-         * @return {*}
-         */
-
-    }, {
-        key: 'showConfirm',
-        value: function showConfirm(content, title) {
-            var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-            return this.cnf.v.$confirm(Object.assign({
-                title: title,
-                content: content,
-                keyboard: false,
-                width: 320,
-                okText: this.lang.confirm,
-                cancelText: this.lang.cancel
-            }, options));
         }
 
         /**
@@ -2163,6 +2143,30 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Show confirm
+         *
+         * @param options
+         *
+         * @return {*}
+         */
+
+    }, {
+        key: 'showConfirm',
+        value: function showConfirm(options) {
+            return this.cnf.v.$confirm(Object.assign({
+                title: options.title,
+                content: options.content,
+                keyboard: false,
+                width: 350,
+                okText: this.lang.confirm,
+                cancelText: this.lang.cancel,
+                onCancel: options.onClose || bsw.blank,
+                transitionName: this.cnf.transitionName,
+                maskTransitionName: this.cnf.maskTransitionName
+            }, options));
+        }
+
+        /**
          * Show drawer popup
          *
          * @param options
@@ -2497,6 +2501,7 @@ var FoundationAntD = function (_FoundationTools) {
                 parent.postMessage({ data: data, function: 'dispatcherByBswData' }, '*');
                 return;
             }
+
             var action = function action() {
                 if (!data.function || data.function.length === 0) {
                     return console.warn('Attribute function should be configure in options.', data);
@@ -2511,7 +2516,10 @@ var FoundationAntD = function (_FoundationTools) {
             if (typeof data.confirm === 'undefined') {
                 return action();
             }
-            that.showConfirm(data.confirm, that.lang.confirm_title, {
+
+            that.showConfirm({
+                title: that.lang.confirm_title,
+                content: data.confirm,
                 onOk: function onOk() {
                     action();
                     return false;
