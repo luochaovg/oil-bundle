@@ -170,7 +170,7 @@ class BswExportPreviewCommand extends ExportCsvCommand
         try {
             $file = $this->web->uploadOneCore($file, $options);
         } catch (Exception $e) {
-            $this->output->writeln("<error> Manual upload file error: {$e->getMessage()} </error>");
+            $this->output->writeln("<error>\n Manual upload file error: {$e->getMessage()}\n </error>");
         }
 
         $this->missionRepo->modify([Abs::PK => $this->params->args->id], ['fileAttachmentId' => $file->id]);

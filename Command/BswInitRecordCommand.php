@@ -97,6 +97,6 @@ class BswInitRecordCommand extends Command implements CommandInterface
         }
 
         file_put_contents($doneFile, date(Abs::FMT_FULL));
-        $output->writeln("<info> \n Project record initialization done.\n </info>");
+        $output->writeln("<info>\n Project record initialization done.\n </info>");
     }
 }

@@ -93,7 +93,7 @@ class BswMissionCommand extends Command implements CommandInterface
         }
 
         if (!$queue) {
-            return $output->writeln("<info> None mission in queue after election </info>");
+            return $output->writeln("<info>\n None mission in queue after election\n </info>");
         }
 
         foreach ($queue as $m) {

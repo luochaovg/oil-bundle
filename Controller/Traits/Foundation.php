@@ -923,13 +923,14 @@ trait Foundation
 
                     $_item = array_merge(
                         [
-                            'route'  => $key,
-                            'uri'    => $item->getPath(),
-                            'http'   => $item->getMethods(),
-                            'app'    => Helper::cutString($class, ['\\^-2']),
-                            'class'  => $class,
-                            'method' => $method,
-                            'path'   => "{$class}::{$method}",
+                            'route'    => $key,
+                            'uri'      => $item->getPath(),
+                            'http'     => $item->getMethods(),
+                            'app'      => Helper::cutString($class, ['\\^-2']),
+                            'class'    => $class,
+                            'method'   => $method,
+                            'path'     => "{$class}::{$method}",
+                            'instance' => $item,
                         ],
                         $getDoc($class, $method)
                     );
