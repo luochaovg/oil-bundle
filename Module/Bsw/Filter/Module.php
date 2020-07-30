@@ -468,7 +468,8 @@ class Module extends Bsw
             $this->entity &&
             $this->input->scene === Abs::TAG_PREVIEW &&
             $this->input->showExport &&
-            !$this->input->mobile
+            !$this->input->mobile &&
+            !$this->input->iframe
         ) {
             $export = new Button('Export', $this->input->route, $this->input->cnf->icon_export, Abs::THEME_DEFAULT);
             $export->setAttributes(['bsw-method' => Abs::TAG_EXPORT]);

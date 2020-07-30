@@ -85,7 +85,6 @@ class Module extends Bsw
 
         // buttons handler
         foreach ($buttons as $button) {
-
             /**
              * @var Button $button
              */
