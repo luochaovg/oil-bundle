@@ -238,7 +238,7 @@ $(function () {
                     }
                     _values[field] = values[field];
                 }
-                return this[`${this.submitFormMethod}FilterForm`](_values, jump);
+                return that[`${that.submitFormMethod}FilterForm`](_values, jump);
             });
         },
 
@@ -254,6 +254,7 @@ $(function () {
         },
 
         exportFilterForm(values) {
+            let that = this;
             let url = bsw.unsetParamsBeginWith(['filter']);
             url = bsw.unsetParams(['page'], url);
             url = bsw.setParams({filter: values, scene: 'export'}, url);
@@ -266,7 +267,7 @@ $(function () {
                         height: 700,
                         minHeight: 700
                     };
-                    data.location = bsw.setParams(res.sets, this.init.exportApiUrl, true);
+                    data.location = bsw.setParams(res.sets, that.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
                 }).catch(reason => {
                     console.warn(reason);
@@ -304,7 +305,7 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return this[`${this.submitFormMethod}PersistenceForm`](values);
+                return that[`${that.submitFormMethod}PersistenceForm`](values);
             });
         },
 

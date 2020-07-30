@@ -82,22 +82,6 @@ trait WebResponse
     }
 
     /**
-     * Adjust response message type
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    public function responseMessageTypeMap(string $type): string
-    {
-        if (!property_exists($this, $map = Abs::ATTR_MESSAGE_TYPE_MAP)) {
-            return $type;
-        }
-
-        return $this->{$map}[$type] ?? $type;
-    }
-
-    /**
      * Resolve args for query params and trans args
      *
      * @param array $args
@@ -145,8 +129,6 @@ trait WebResponse
         if (!$this->debug && strpos($message, Abs::FLAG_SQL_ERROR) !== false) {
             throw new Exception($message);
         }
-
-        $type = $this->responseMessageTypeMap($type);
 
         $response = [];
         $responseKeys = $this->responseKeysAjax();

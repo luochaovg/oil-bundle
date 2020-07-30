@@ -446,7 +446,6 @@ class Abs
     const FN_VALIDATOR_ARGS          = 'validatorExtraArgs';
     const FN_UPLOAD_OPTIONS          = 'uploadOptionsHandler';
     const FN_BEFORE_LOGIC            = 'beforeLogic';
-    const ATTR_MESSAGE_TYPE_MAP      = 'responseMessageTypeMap';
 
     const FMT_YEAR_ONLY       = 'Y';
     const FMT_MONTH_ONLY      = 'm';

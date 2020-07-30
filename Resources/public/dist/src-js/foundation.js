@@ -1401,6 +1401,7 @@ var FoundationAntD = function (_FoundationTools) {
             messageDuration: 5,
             confirmDuration: 5,
             alertType: 'message',
+            alertTypeForce: null,
             notificationPlacement: 'topRight',
             v: null,
             method: {
@@ -1529,20 +1530,25 @@ var FoundationAntD = function (_FoundationTools) {
         value: function notification(type, description, duration) {
             var _onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
 
+            var that = this;
+            if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'notification') {
+                return that[that.cnf.alertTypeForce](type, description, duration, _onClose);
+            }
+
             if (typeof duration === 'undefined') {
-                duration = this.cnf.notificationDuration;
+                duration = that.cnf.notificationDuration;
             }
 
             var message = {
-                success: this.lang.success,
-                info: this.lang.info,
-                warning: this.lang.warning,
-                error: this.lang.error
+                success: that.lang.success,
+                info: that.lang.info,
+                warning: that.lang.warning,
+                error: that.lang.error
             }[type];
 
             return new Promise(function (resolve) {
-                this.cnf.v.$notification[type]({
-                    placement: this.cnf.notificationPlacement,
+                that.cnf.v.$notification[type]({
+                    placement: that.cnf.notificationPlacement,
                     message: message,
                     description: description,
                     duration: duration,
@@ -1570,10 +1576,13 @@ var FoundationAntD = function (_FoundationTools) {
         value: function message(type, description, duration) {
             var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
 
+            var that = this;
+            if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'message') {
+                return that[that.cnf.alertTypeForce](type, description, duration, onClose);
+            }
             if (typeof duration === 'undefined') {
                 duration = this.cnf.messageDuration;
             }
-
             return this.cnf.v.$message[type](description, duration, onClose);
         }
 
@@ -1595,30 +1604,34 @@ var FoundationAntD = function (_FoundationTools) {
             var onClose = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : self.blank;
             var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
 
+            var that = this;
+            if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'confirm') {
+                return that[that.cnf.alertTypeForce](type, description, duration, onClose);
+            }
+
             var title = options.title || {
-                success: this.lang.success,
-                info: this.lang.info,
-                warning: this.lang.warning,
-                error: this.lang.error
+                success: that.lang.success,
+                info: that.lang.info,
+                warning: that.lang.warning,
+                error: that.lang.error
             }[type];
 
             if (type === 'confirm' && typeof options.width === 'undefined') {
-                options.width = this.popupCosySize().width;
+                options.width = that.popupCosySize().width;
             }
 
             return new Promise(function (resolve) {
-                var modal = this.cnf.v['$' + type](Object.assign({
+                var modal = that.cnf.v['$' + type](Object.assign({
                     title: title,
                     content: description,
-                    okText: this.lang.i_got_it,
+                    okText: that.lang.i_got_it,
                     onOk: options.onOk || onClose,
                     onCancel: onClose
                 }, options));
 
                 if (typeof duration === 'undefined') {
-                    duration = this.cnf.confirmDuration;
+                    duration = that.cnf.confirmDuration;
                 }
-
                 if (duration) {
                     setTimeout(function () {
                         modal.destroy();
@@ -1993,7 +2006,7 @@ var FoundationAntD = function (_FoundationTools) {
             var chart = echarts.init(document.getElementById('chart-' + option.id), option.theme);
 
             chart.setOption(that.jsonFnHandler(o, 'chartHandler'));
-            this.cnf.v.$nextTick(function () {
+            that.cnf.v.$nextTick(function () {
                 chart.resize();
             });
 
@@ -2194,16 +2207,15 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showModalAfterRequest',
         value: function showModalAfterRequest(data, element) {
-            var _this3 = this;
-
-            this.request(data.location).then(function (res) {
-                _this3.response(res).then(function () {
-                    var options = _this3.jsonFilter(Object.assign(data, {
+            var that = this;
+            that.request(data.location).then(function (res) {
+                that.response(res).then(function () {
+                    var options = that.jsonFilter(Object.assign(data, {
                         width: res.sets.width || data.width || undefined,
-                        title: res.sets.title || data.title || _this3.lang.modal_title,
+                        title: res.sets.title || data.title || that.lang.modal_title,
                         content: res.sets.content
                     }));
-                    _this3.showModal(options);
+                    that.showModal(options);
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -2256,8 +2268,8 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showIFrame',
         value: function showIFrame(data, element) {
-            var v = this.cnf.v;
             var that = this;
+            var v = that.cnf.v;
             var size = that.popupCosySize();
             var repair = $(element).prev().attr('id');
             data.location = that.setParams({ iframe: true, repair: repair }, data.location);
@@ -2620,7 +2632,7 @@ var FoundationAntD = function (_FoundationTools) {
                 return;
             }
             var that = this;
-            var v = this.cnf.v;
+            var v = that.cnf.v;
             $(selector).each(function () {
                 var em = this;
                 var id = $(em).prev('textarea').attr('id');
@@ -2714,7 +2726,7 @@ var FoundationAntD = function (_FoundationTools) {
             var that = this;
             this.modalOnCancel();
             this.drawerOnCancel();
-            this.cnf.v.$nextTick(function () {
+            that.cnf.v.$nextTick(function () {
                 if (typeof data.data.location !== 'undefined') {
                     data.data.location = that.unsetParams(['iframe'], data.data.location);
                 }
@@ -2775,7 +2787,7 @@ var FoundationAntD = function (_FoundationTools) {
                 that.modalOnCancel();
                 that.drawerOnCancel();
             }
-            this.cnf.v.$nextTick(function () {
+            that.cnf.v.$nextTick(function () {
                 that.response(data.response).catch(function (reason) {
                     console.warn(reason);
                 });

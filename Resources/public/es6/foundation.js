@@ -1045,6 +1045,7 @@ class FoundationAntD extends FoundationTools {
             messageDuration: 5,
             confirmDuration: 5,
             alertType: 'message',
+            alertTypeForce: null,
             notificationPlacement: 'topRight',
             v: null,
             method: {
@@ -1140,20 +1141,25 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     notification(type, description, duration, onClose = self.blank) {
+        let that = this;
+        if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'notification') {
+            return that[that.cnf.alertTypeForce](type, description, duration, onClose);
+        }
+
         if (typeof duration === 'undefined') {
-            duration = this.cnf.notificationDuration;
+            duration = that.cnf.notificationDuration;
         }
 
         let message = {
-            success: this.lang.success,
-            info: this.lang.info,
-            warning: this.lang.warning,
-            error: this.lang.error,
+            success: that.lang.success,
+            info: that.lang.info,
+            warning: that.lang.warning,
+            error: that.lang.error,
         }[type];
 
         return new Promise(function (resolve) {
-            this.cnf.v.$notification[type]({
-                placement: this.cnf.notificationPlacement,
+            that.cnf.v.$notification[type]({
+                placement: that.cnf.notificationPlacement,
                 message,
                 description,
                 duration,
@@ -1176,10 +1182,13 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     message(type, description, duration, onClose = self.blank) {
+        let that = this;
+        if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'message') {
+            return that[that.cnf.alertTypeForce](type, description, duration, onClose);
+        }
         if (typeof duration === 'undefined') {
             duration = this.cnf.messageDuration;
         }
-
         return this.cnf.v.$message[type](description, duration, onClose);
     }
 
@@ -1195,30 +1204,34 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     confirm(type, description, duration, onClose = self.blank, options = {}) {
+        let that = this;
+        if (that.cnf.alertTypeForce && that.cnf.alertTypeForce !== 'confirm') {
+            return that[that.cnf.alertTypeForce](type, description, duration, onClose);
+        }
+
         let title = options.title || {
-            success: this.lang.success,
-            info: this.lang.info,
-            warning: this.lang.warning,
-            error: this.lang.error,
+            success: that.lang.success,
+            info: that.lang.info,
+            warning: that.lang.warning,
+            error: that.lang.error,
         }[type];
 
         if (type === 'confirm' && typeof options.width === 'undefined') {
-            options.width = this.popupCosySize().width;
+            options.width = that.popupCosySize().width;
         }
 
         return new Promise(function (resolve) {
-            let modal = this.cnf.v[`$${type}`](Object.assign({
+            let modal = that.cnf.v[`$${type}`](Object.assign({
                 title,
                 content: description,
-                okText: this.lang.i_got_it,
+                okText: that.lang.i_got_it,
                 onOk: options.onOk || onClose,
                 onCancel: onClose,
             }, options));
 
             if (typeof duration === 'undefined') {
-                duration = this.cnf.confirmDuration;
+                duration = that.cnf.confirmDuration;
             }
-
             if (duration) {
                 setTimeout(function () {
                     modal.destroy();
@@ -1543,7 +1556,7 @@ class FoundationAntD extends FoundationTools {
         let chart = echarts.init(document.getElementById(`chart-${option.id}`), option.theme);
 
         chart.setOption(that.jsonFnHandler(o, 'chartHandler'));
-        this.cnf.v.$nextTick(function () {
+        that.cnf.v.$nextTick(function () {
             chart.resize();
         });
 
@@ -1676,14 +1689,15 @@ class FoundationAntD extends FoundationTools {
      * @param element
      */
     showModalAfterRequest(data, element) {
-        this.request(data.location).then(res => {
-            this.response(res).then(() => {
-                let options = this.jsonFilter(Object.assign(data, {
+        let that = this;
+        that.request(data.location).then(res => {
+            that.response(res).then(() => {
+                let options = that.jsonFilter(Object.assign(data, {
                     width: res.sets.width || data.width || undefined,
-                    title: res.sets.title || data.title || this.lang.modal_title,
+                    title: res.sets.title || data.title || that.lang.modal_title,
                     content: res.sets.content,
                 }));
-                this.showModal(options);
+                that.showModal(options);
             }).catch(reason => {
                 console.warn(reason);
             });
@@ -1730,8 +1744,8 @@ class FoundationAntD extends FoundationTools {
      * @param element
      */
     showIFrame(data, element) {
-        let v = this.cnf.v;
         let that = this;
+        let v = that.cnf.v;
         let size = that.popupCosySize();
         let repair = $(element).prev().attr('id');
         data.location = that.setParams({iframe: true, repair}, data.location);
@@ -2041,7 +2055,7 @@ class FoundationAntD extends FoundationTools {
             return;
         }
         let that = this;
-        let v = this.cnf.v;
+        let v = that.cnf.v;
         $(selector).each(function () {
             let em = this;
             let id = $(em).prev('textarea').attr('id');
@@ -2122,7 +2136,7 @@ class FoundationAntD extends FoundationTools {
         let that = this;
         this.modalOnCancel();
         this.drawerOnCancel();
-        this.cnf.v.$nextTick(function () {
+        that.cnf.v.$nextTick(function () {
             if (typeof data.data.location !== 'undefined') {
                 data.data.location = that.unsetParams(['iframe'], data.data.location);
             }
@@ -2172,7 +2186,7 @@ class FoundationAntD extends FoundationTools {
             that.modalOnCancel();
             that.drawerOnCancel();
         }
-        this.cnf.v.$nextTick(function () {
+        that.cnf.v.$nextTick(function () {
             that.response(data.response).catch(reason => {
                 console.warn(reason);
             });

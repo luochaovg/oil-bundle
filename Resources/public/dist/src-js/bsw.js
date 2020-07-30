@@ -195,9 +195,6 @@ $(function () {
         },
         filterFormAction: function filterFormAction(event) {
             var jump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-            var _this = this;
-
             var form = arguments[2];
             var dateFormat = arguments[3];
 
@@ -243,7 +240,7 @@ $(function () {
                     }
                     _values[_field] = values[_field];
                 }
-                return _this[_this.submitFormMethod + 'FilterForm'](_values, jump);
+                return that[that.submitFormMethod + 'FilterForm'](_values, jump);
             });
         },
         searchFilterForm: function searchFilterForm(values) {
@@ -259,8 +256,7 @@ $(function () {
             this.pagination(url, null, jump);
         },
         exportFilterForm: function exportFilterForm(values) {
-            var _this2 = this;
-
+            var that = this;
             var url = bsw.unsetParamsBeginWith(['filter']);
             url = bsw.unsetParams(['page'], url);
             url = bsw.setParams({ filter: values, scene: 'export' }, url);
@@ -273,7 +269,7 @@ $(function () {
                         height: 700,
                         minHeight: 700
                     };
-                    data.location = bsw.setParams(res.sets, _this2.init.exportApiUrl, true);
+                    data.location = bsw.setParams(res.sets, that.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
                 }).catch(function (reason) {
                     console.warn(reason);
@@ -283,8 +279,6 @@ $(function () {
             });
         },
         submitFormAction: function submitFormAction(event, form, dateFormat) {
-            var _this3 = this;
-
             var that = this;
             event.preventDefault();
             that[form].validateFields(function (err, values) {
@@ -312,7 +306,7 @@ $(function () {
                         delete values[field];
                     }
                 }
-                return _this3[_this3.submitFormMethod + 'PersistenceForm'](values);
+                return that[that.submitFormMethod + 'PersistenceForm'](values);
             });
         },
         submitPersistenceForm: function submitPersistenceForm(values) {

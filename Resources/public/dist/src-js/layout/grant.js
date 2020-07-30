@@ -7,7 +7,7 @@ bsw.configure({
         changeSelectedList: function changeSelectedList(handler) {
             var that = this;
             var form = 'persistenceForm';
-            $.each(this.init.selectedList, function (key, meta) {
+            $.each(that.init.selectedList, function (key, meta) {
                 var disabled = bsw.arrayIntersect(meta, that.init.disabledList);
                 var selected = that[form].getFieldValue(key);
                 var values = [];
