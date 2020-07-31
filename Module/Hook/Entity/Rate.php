@@ -4,7 +4,7 @@ namespace Leon\BswBundle\Module\Hook\Entity;
 
 use Leon\BswBundle\Component\Helper;
 
-class Rate extends RateStringify
+class Rate extends Money
 {
     /**
      * @param mixed $value

@@ -526,15 +526,15 @@ trait Foundation
     /**
      * Validator
      *
-     * @param string $field
-     * @param mixed  $value
-     * @param array  $rules
-     * @param array  $option
+     * @param string       $field
+     * @param mixed        $value
+     * @param array|string $rules
+     * @param array        $option
      *
      * @return mixed|false
      * @throws
      */
-    public function validator(string $field, $value, array $rules, array $option = [])
+    public function validator(string $field, $value, $rules, array $option = [])
     {
         $original = $this->annotation(Input::class, true);
         $option = array_merge($option, ['field' => $field, 'rules' => $rules]);

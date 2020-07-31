@@ -25,17 +25,9 @@ class Difference extends Validator
     /**
      * @inheritdoc
      */
-    protected function proveArgs(): bool
-    {
-        return is_string(current($this->args));
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function prove(array $extra = []): bool
     {
-        return $this->value != ($extra[current($this->args)] ?? null);
+        return $this->value != current($this->args);
     }
 
     /**
