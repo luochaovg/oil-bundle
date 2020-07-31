@@ -18,7 +18,7 @@ class Gte extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must greater than or equal to {{ arg1 }}';
     }

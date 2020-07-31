@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Command;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use Leon\BswBundle\Module\Exception\CommandException;
 use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -67,6 +68,16 @@ class BswDocumentCommand extends Command implements CommandInterface
     protected $routeStart = [];
 
     /**
+     * @var array
+     */
+    protected $billError = [];
+
+    /**
+     * @var array
+     */
+    protected $billValidator = [];
+
+    /**
      * @return array
      */
     public function args(): array
@@ -77,6 +88,7 @@ class BswDocumentCommand extends Command implements CommandInterface
             'lang'        => [null, InputOption::VALUE_OPTIONAL, 'Language for document', 'cn'],
             'json-strict' => [null, InputOption::VALUE_OPTIONAL, 'Strict json response', 'yes'],
             'route-start' => [null, InputOption::VALUE_OPTIONAL, 'Just route start with collect', 'api'],
+            'bill-only'   => [null, InputOption::VALUE_OPTIONAL, 'Bill for `Error` and `Validator` only', 'no'],
         ];
     }
 
@@ -122,6 +134,24 @@ class BswDocumentCommand extends Command implements CommandInterface
         $this->jsonStrict = $params['json-strict'] === 'yes';
         $this->routeStart = Helper::stringToArray($params['route-start'] ?? '');
 
+        $this->billError = $this->web->apiErrorBill($this->lang);
+        $this->billValidator = $this->web->apiValidatorBill($this->lang);
+
+        if ($params['bill-only'] == 'yes') {
+            foreach ($this->billError as $item) {
+                $class = ltrim($item['class'], '\\');
+                $output->writeln("<info>| {$class} | {$item['description']} |</info>");
+            }
+
+            $output->writeln("\n<error> ------ </error>\n");
+
+            foreach ($this->billValidator as $item) {
+                $class = ltrim($item['class'], '\\');
+                $output->writeln("<info>| {$class} | {$item['description']} | {$item['message']} |</info>");
+            }
+            exit(ErrorDebugExit::CODE);
+        }
+
         $route = $this->web->getRouteCollection();
         $this->buildRstFile($route);
 
@@ -164,10 +194,10 @@ class BswDocumentCommand extends Command implements CommandInterface
         $errorBill .= "{$this->indent}  - Tiny{$n}";
         $errorBill .= "{$this->indent}  - Description for logger{$n2}";
 
-        foreach ($this->web->apiErrorBill() as $errorCode => $error) {
-            $errorBill .= "{$this->indent}* - **{$errorCode}**{$n}";
-            $errorBill .= "{$this->indent}  - ``{$error['tiny']}``{$n}";
-            $errorBill .= "{$this->indent}  - {$error['description']}{$n2}";
+        foreach ($this->billError as $item) {
+            $errorBill .= "{$this->indent}* - **{$item['code']}**{$n}";
+            $errorBill .= "{$this->indent}  - ``{$item['tiny']}``{$n}";
+            $errorBill .= "{$this->indent}  - {$item['description']}{$n2}";
         }
 
         file_put_contents("{$this->path}/rst/api_error.rst", $errorBill);
@@ -274,12 +304,13 @@ class BswDocumentCommand extends Command implements CommandInterface
         if (empty($classInfo)) {
             throw new CommandException(current($apiList)['class'] . ' has no description');
         }
+
         $append($classInfo);
         $append($this->line('='), 2);
 
         $maxOrder = count($apiList) - 1;
-        $validatorBill = $this->web->apiValidatorBill($this->lang);
-        $validatorBill[Abs::VALIDATION_IF_SET] = $this->lang('Validation when not blank');
+        $billValidator = array_column($this->billValidator, 'description', 'rule');
+        $billValidator[Abs::VALIDATION_IF_SET] = $this->lang('Validation when not blank');
 
         $tagsMap = [
             '[AUTH]' => '{AUTH}',
@@ -505,7 +536,7 @@ class BswDocumentCommand extends Command implements CommandInterface
                             $indent = $i ? $argsIndent + 2 : $argsIndent;
                             $_indent = $argsIndent + 3;
 
-                            $_ruleBill = $validatorBill[$fn];
+                            $_ruleBill = $billValidator[$fn];
                             if (!isset($arg)) {
                                 $_rule = $fn;
                             } else {

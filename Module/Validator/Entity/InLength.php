@@ -18,7 +18,7 @@ class InLength extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Length must in value {{ args }}';
     }

@@ -125,14 +125,15 @@ trait ApiDocument
     /**
      * Api error bill
      *
-     * @param array $paths
+     * @param string $lang
+     * @param array  $paths
      *
      * @return array
      */
-    public function apiErrorBill(array $paths = []): array
+    public function apiErrorBill(string $lang, array $paths = []): array
     {
         return $this->caching(
-            function () use ($paths) {
+            function () use ($lang, $paths) {
 
                 $bill = [];
                 $errorBill = $this->classBill($paths, 'Error');
@@ -149,10 +150,11 @@ trait ApiDocument
                         throw new Exception("Error code {$code} has repeat in {$error}");
                     }
 
-                    $description = $this->messageLang($e->description());
-                    $bill[$code] = [
-                        'tiny'        => $e->tiny(),
-                        'description' => $description,
+                    $bill[] = [
+                        'class'       => $error,
+                        'code'        => $code,
+                        'tiny'        => $this->messageLang($e->tiny(), [], $lang),
+                        'description' => $this->messageLang($e->description(), [], $lang),
                     ];
                 }
 
@@ -187,7 +189,14 @@ trait ApiDocument
                     $v = new $validator(null, [], $this->translator, $lang);
 
                     $rule = Helper::camelToUnder(Helper::clsName($validator));
-                    $bill[$rule] = $this->messageLang($v->description());
+                    $field = $this->fieldLang('Field', [], $lang);
+
+                    $bill[] = [
+                        'class'       => $validator,
+                        'rule'        => $rule,
+                        'description' => $this->messageLang($v->description(), [], $lang),
+                        'message'     => $this->messageLang($v->message(), ['{{ field }}' => $field], $lang),
+                    ];
                 }
 
                 return $bill;

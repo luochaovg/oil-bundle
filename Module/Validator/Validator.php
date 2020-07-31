@@ -84,7 +84,7 @@ abstract class Validator
      *
      * @return string
      */
-    abstract protected function message(): string;
+    abstract public function message(): string;
 
     /**
      * Prove the value

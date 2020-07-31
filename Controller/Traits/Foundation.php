@@ -1223,16 +1223,17 @@ trait Foundation
     /**
      * Lang the enum
      *
-     * @param array $enum
-     * @param bool  $encode
-     * @param array $args
+     * @param array  $enum
+     * @param bool   $encode
+     * @param array  $args
+     * @param string $locale
      *
      * @return array|string
      */
-    public function enumLang(array $enum, bool $encode = false, array $args = [])
+    public function enumLang(array $enum, bool $encode = false, array $args = [], string $locale = null)
     {
         foreach ($enum as &$label) {
-            $label = $this->translator->trans($label, $args, 'enum');
+            $label = $this->translator->trans($label, $args, 'enum', $locale);
         }
 
         return $encode ? Helper::jsonStringify($enum) : $enum;
@@ -1243,16 +1244,17 @@ trait Foundation
      *
      * @param string|null $label
      * @param array       $args
+     * @param string      $locale
      *
      * @return string|null
      */
-    public function fieldLang(?string $label, array $args = []): ?string
+    public function fieldLang(?string $label, array $args = [], string $locale = null): ?string
     {
         if (empty($label)) {
             return $label;
         }
 
-        return $this->translator->trans($label, $args, 'fields');
+        return $this->translator->trans($label, $args, 'fields', $locale);
     }
 
     /**
@@ -1260,16 +1262,17 @@ trait Foundation
      *
      * @param string|null $label
      * @param array       $args
+     * @param string      $locale
      *
      * @return string|null
      */
-    public function messageLang(?string $label, array $args = []): ?string
+    public function messageLang(?string $label, array $args = [], string $locale = null): ?string
     {
         if (empty($label)) {
             return $label;
         }
 
-        return $this->translator->trans($label, $args, 'messages');
+        return $this->translator->trans($label, $args, 'messages', $locale);
     }
 
     /**
@@ -1277,16 +1280,17 @@ trait Foundation
      *
      * @param string|null $label
      * @param array       $args
+     * @param string      $locale
      *
      * @return string|null
      */
-    public function twigLang(?string $label, array $args = []): ?string
+    public function twigLang(?string $label, array $args = [], string $locale = null): ?string
     {
         if (empty($label)) {
             return $label;
         }
 
-        return $this->translator->trans($label, $args, 'twig');
+        return $this->translator->trans($label, $args, 'twig', $locale);
     }
 
     /**
@@ -1294,16 +1298,17 @@ trait Foundation
      *
      * @param string|null $label
      * @param array       $args
+     * @param string      $locale
      *
      * @return string|null
      */
-    public function seoLang(?string $label, array $args = []): ?string
+    public function seoLang(?string $label, array $args = [], string $locale = null): ?string
     {
         if (empty($label)) {
             return $label;
         }
 
-        return $this->translator->trans($label, $args, 'seo');
+        return $this->translator->trans($label, $args, 'seo', $locale);
     }
 
     /**

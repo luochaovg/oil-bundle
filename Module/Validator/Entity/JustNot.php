@@ -17,7 +17,7 @@ class JustNot extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Just not equal to {{ arg1 }}';
     }

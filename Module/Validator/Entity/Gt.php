@@ -18,7 +18,7 @@ class Gt extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must greater than {{ arg1 }}';
     }

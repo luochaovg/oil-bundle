@@ -18,7 +18,7 @@ class Length extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Length must equal to {{ arg1 }}';
     }

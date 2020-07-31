@@ -18,7 +18,7 @@ class Lte extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must less than or equal to {{ arg1 }}';
     }

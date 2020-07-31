@@ -23,7 +23,7 @@ class Password extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Standard must be password';
     }

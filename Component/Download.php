@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Component;
 
 use Exception;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 
 class Download
 {
@@ -251,6 +252,6 @@ class Download
         }
 
         fclose($fp);
-        exit();
+        exit(ErrorDebugExit::CODE);
     }
 }

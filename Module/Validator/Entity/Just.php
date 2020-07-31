@@ -17,7 +17,7 @@ class Just extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Just equal to {{ arg1 }}';
     }

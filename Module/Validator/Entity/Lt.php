@@ -18,7 +18,7 @@ class Lt extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must less than {{ arg1 }}';
     }

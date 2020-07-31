@@ -18,7 +18,7 @@ class Min extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Length must greater than or equal to {{ arg1 }}';
     }

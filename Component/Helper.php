@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Component;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
 use InvalidArgumentException;
+use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use ZipArchive;
 use Exception;
 use DateTime;
@@ -125,7 +126,7 @@ class Helper
         }
 
         echo($output);
-        $exit && exit();
+        $exit && exit(ErrorDebugExit::CODE);
 
         return null;
     }

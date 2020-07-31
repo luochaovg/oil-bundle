@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Component;
 
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use Leon\BswBundle\Module\Exception\CurlException;
 use Leon\BswBundle\Module\Exception\ServiceException;
 
@@ -424,7 +425,7 @@ class Service
         // debug
         if ($this->debug) {
             dump($options);
-            exit(0);
+            exit(ErrorDebugExit::CODE);
         }
 
         // request

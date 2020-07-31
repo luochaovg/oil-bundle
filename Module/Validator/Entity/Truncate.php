@@ -18,7 +18,7 @@ class Truncate extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '';
     }

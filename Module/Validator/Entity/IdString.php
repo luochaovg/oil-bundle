@@ -23,7 +23,7 @@ class IdString extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must be id string split by comma';
     }

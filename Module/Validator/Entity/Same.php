@@ -17,7 +17,7 @@ class Same extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must same to args {{ arg1 }}';
     }

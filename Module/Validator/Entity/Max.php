@@ -18,7 +18,7 @@ class Max extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Length must less than or equal to {{ arg1 }}';
     }

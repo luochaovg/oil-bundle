@@ -17,7 +17,7 @@ class Arr extends Validator
     /**
      * @inheritdoc
      */
-    protected function message(): string
+    public function message(): string
     {
         return '{{ field }} Must be array';
     }

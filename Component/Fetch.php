@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Leon\BswBundle\Module\Entity\Abs;
 use Exception;
+use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 
 class Fetch
 {
@@ -191,6 +192,6 @@ class Fetch
     public function debug(bool $exit = true)
     {
         dump($this->sql, $this->params, $this->types);
-        $exit && exit(0);
+        $exit && exit(ErrorDebugExit::CODE);
     }
 }
