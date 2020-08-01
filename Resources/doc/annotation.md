@@ -1,20 +1,20 @@
 
-## Annotation 的含义
+# Annotation 的含义
 
-> 直译过来的意思是注释，这也是目前很多主流框架都在使用的一个功能，我们可以通过对属性/方法进行注释，在注视中使用特定的语法书写从而实现部分功能。  
-> 比如 Symfony 的路由就是由 Annotation 完成，当然它实质上依赖的是 `Symfony\Component\Routing\Annotation\Route::class` 这个类。  
+直译过来的意思是注释，这也是目前很多主流框架都在使用的一个功能，我们可以通过对属性/方法进行注释，在注视中使用特定的语法书写从而实现部分功能。  
+比如 `Symfony` 的路由就是由 `Annotation` 完成，当然它实质上依赖的是 `Symfony\Component\Routing\Annotation\Route::class` 这个类。  
 
-## 本框架实现的 Annotation
+# 本框架实现的 Annotation
 
-### 参数输入 (Input::class)
+## 参数输入 (**@Input**)
 
-#### 功能介绍
+### 功能介绍
 
-> 主要用于过滤输入的参数，使其合法和安全；在 Api 类项目中运用较为频繁，当然，其他类型项目都可以使用。
+主要用于过滤输入的参数，使其合法和安全；在 `Api` 类项目中运用较为频繁，当然，其他类型项目都可以使用。
 
-#### 属性/参数
+### 属性/参数
 
-- 字段名
+- **字段名**
 
     ```php
     /**
@@ -23,7 +23,7 @@
     public $field;
     ```
 
-- 自定义验证器
+- **自定义验证器**
 
     ```php
     /**
@@ -32,11 +32,11 @@
     public $validator = false;
     ```
     
-    > 如果 rules 参数无法满足你的需求，同时你也不想新增一个自定义 rules, 因为可能只有特殊的某一个或很少地方需要使用自定义验证；  
-    此时你可以通过设置该参数达到你的目的，如果为 true 则默认与 field 同名，或者手动字符串指定。  
-    如 `$validator = 'phone'` 即调用所在类的类方法 `public function phoneValidator()` 进行验证，该方法返回 Response 对象或 true。
+    > 如果 `rules` 参数无法满足你的需求，同时你也不想新增一个自定义 `rules`, 因为可能只有特殊的某一个或很少地方需要使用自定义验证；  
+    此时你可以通过设置该参数达到你的目的，如果为 `true` 则默认与 `field` 同名，或者手动字符串指定。  
+    如 `$validator = 'phone'` 即调用所在类的类方法 `public function phoneValidator()` 进行验证，该方法返回 `Response` 对象或 `true`。
 
-- 验证器
+- **验证器**
 
     ```php
     /**
@@ -47,7 +47,7 @@
     
     > 参数验证器，默认不能为空；如果你需要多个验证器请使用数组，验证器列表请查看模块介绍章节。
 
-- 验证器参数处理器
+- **验证器参数处理器**
 
     ```php
     /**
@@ -56,10 +56,11 @@
     public $rulesArgsHandler = [];
     ```
   
-    > 验证器可以是数组，每个验证器也可以携带自己的参数，比如 `rules={"required", "trim": "-+"}`，包含了两验证，有时候要对验证器的参数进行一些处理，你就可以像这样使用：  
-    `rulesArgsHandler={"trim": [Helper::class, 'split']}`
+    > 验证器可以是数组，每个验证器也可以携带自己的参数，比如 `rules={"required", "trim": "-+"}`，包含了两个验证，有时候要对验证器的参数进行一些处理，你就可以像这样使用：  
+    >  
+    > `rulesArgsHandler={"trim": [Helper::class, 'split']}`
 
-- 是否参与签名 （Api类项目专用）
+- **是否参与签名 （`Api` 类项目专用）**
     
     ```php
     /**
@@ -68,9 +69,9 @@
     public $sign = true;
     ```
   
-    > 默认为 true, 为 false 时在进行签名计算时前后端都不应该携带该参数；如果设为 `Abs::AUTO` 的话则表示该参数 `isset` 时参与签名，否则不参与。  
+    > 默认为 `true`, 为 `false` 时在进行签名计算时前后端都不应该携带该参数；如果设为 `Abs::AUTO` 的话则表示该参数 `isset` 时参与签名，否则不参与。  
 
-- 验证失败返回的错误码
+- **验证失败返回的错误码**
 
     ```php
     /**
@@ -79,7 +80,7 @@
     public $error = ErrorParameter::class;
     ```
 
-- 提示短语
+- **提示短语**
 
     ```php
     /**
@@ -88,9 +89,9 @@
     public $label;
     ```
   
-    > 未设置则默认与 field 保持一致，并转换人人性化短语，如 `field="myApp"` 则 label="My app"。  
+    > 未设置则默认与 `field` 保持一致，并转换人性化短语，如 `field="myApp"` 则 `label="My app"`。  
 
-- 备注，用于文档辅助
+- **备注，用于文档辅助**
     
     ```php
     /**
@@ -99,16 +100,16 @@
     public $remark;
     ```
 
-- 是否需要对 label 进行 i18n
+- **是否需要对 `label` 进行 `I18N`**
     
     ```php
     /**
-     * @var bool Need trans for label?
+     * @var bool
      */
     public $trans;
     ```
 
-- 参数类型，用于文档辅助
+- **参数类型，用于文档辅助**
 
     ```php
     /**
@@ -117,29 +118,29 @@
     public $type;
     ```
 
-- 参数从何 method 中获取
+- **参数从何 `Method` 中获取**
 
     ```php
     /**
-     * @var string Http method
+     * @var string
      */
     public $method;
     ```
   
-    > 默认与当前请求的 method 一致，比如你需要从 POST 请求获取 GET 参数，这时候你就可以手动设置，当然，这是不被推荐的行为！  
+    > 默认与当前请求的 `method` 一致，比如你需要从 `POST` 请求获取 `GET` 参数，这时候你就可以手动设置，当然，这是~~不被推荐的行为~~！  
 
-- 是否支持 html
+- **是否支持 `HTML`**
 
     ```php
     /**
-     * @var bool Allow html code
+     * @var bool
      */
     public $html = false;
     ```
   
-    > 默认所有参数都不支持 html 标签，特殊参数可以放宽，但是涉及项目安全请谨慎使用。
+    > 默认所有参数都不支持 `HTML` 标签，特殊参数可以放宽，但是涉及项目安全请谨慎使用。
 
-#### 如何使用
+### 如何使用
 
 ```php
 /**
@@ -165,19 +166,19 @@ public function postSignInAction(): Response
 }
 ```
 
-> 参上为一个标准的登入接口，使用 @Route 定义了路由，使用 @Input 定义了输入参数。  
+> 参上为一个标准的登入接口，使用 `@Route` 定义了路由，使用 `@Input` 定义了输入参数。  
 > 你可能注意到了，在方法体中的这几行是必须的，通过这个对参数进行了验证和获取，接下来你可以使用它们。  
-> Notes: @Input 仅用于方法注释。
+> Notes: `@Input` 仅用于方法注释。
 
-### 参数输出 (Output::class)
+## 参数输出 (**@Output**)
 
-#### 功能介绍
+### 功能介绍
 
-> 主要用于文档的辅助，如果你想要生成文档，你可能需要配置此类 Annotation
+主要用于文档的辅助，如果你想要生成文档，你可能需要配置此类 `Annotation`。
 
-#### 属性/参数
+### 属性/参数
 
-- 字段名
+- **字段名**
 
     ```php
     /**
@@ -186,7 +187,7 @@ public function postSignInAction(): Response
     public $field;
     ```
 
-- 额外的输出参数
+- **额外的输出参数**
     
     ```php
     /**
@@ -195,20 +196,20 @@ public function postSignInAction(): Response
     public $extra;
     ```
   
-    > 该参数接受一个字符串，如 `extra="login"`，参数生成时会自动找到当前类方法 `$this->apiOutputDocLogin() :array` 的返回值进行填充。
+    > 该参数接受一个字符串，如 `extra="login"`，参数生成时会自动找到当前类方法 `$this->apiOutputDocLogin():array` 的返回值进行填充。
 
-- 当 extra 被设置时该参数生效表示填充位置
+- **当 `extra` 被设置时该参数生效表示填充位置**
 
     ```php
     /**
      * @var string
      */
-    public $position = Abs::POS_BOTTOM; // Effect just when extra not null
+    public $position = Abs::POS_BOTTOM;
     ```
     
     > 可填充至开头或结尾，甚至指定某个字段之后。  
     
-- 前缀
+- **前缀**
     
     ```php
     /**
@@ -217,7 +218,7 @@ public function postSignInAction(): Response
     public $prefix;
     ```
     
-- 文档处是否需要缩进
+- **文档处是否需要缩进**
     
     ```php
     /**
@@ -228,7 +229,7 @@ public function postSignInAction(): Response
 
     > 多级数组或对象时可能会使用到该参数。  
 
-- 提示短语，同 Input::class
+- **提示短语（同 `@Input`）**
 
     ```php
     /**
@@ -237,16 +238,16 @@ public function postSignInAction(): Response
     public $label;
     ```
     
-- 是否对 label 进行 i18n，同 Input::class
+- **是否对 `label` 进行 `I18N`（同 `@Input`）**
     
     ```php
     /**
-     * @var bool Need trans for label?
+     * @var bool
      */
     public $trans;
     ```
     
-- 参数类型，同 Input::class
+- **参数类型（同 `@Input`）**
     
     ```php
     /**
@@ -255,7 +256,7 @@ public function postSignInAction(): Response
     public $type = Abs::T_STRING;
     ```
     
-- 枚举类型时的枚举列表
+- **枚举类型时的枚举列表**
     
     ```php
     /**
@@ -264,7 +265,7 @@ public function postSignInAction(): Response
     public $enum;
     ```
 
-#### 如何使用
+### 如何使用
 
 ```php
 /**
@@ -288,35 +289,35 @@ public function getTgSetHooksAction()
 
 > Notes: @Output 仅用于方法注释。
 
-### 权限控制 (AccessControl::class)
+## 权限控制 (**@AccessControl**)
 
-#### 功能介绍
+### 功能介绍
 
-> 权限控制，仅用于 Admin 类项目。
+权限控制，仅用于 `Admin` 类项目。
 
-#### 属性/参数
+### 属性/参数
 
-- 当前路由是否参与权限管理
+- **当前路由是否参与权限管理**
 
     ```php
     /**
      * @var bool
      */
-    public $join = true; // Join to manage?
+    public $join = true;
     ```
 
-- 权限控制同指定路由
+- **权限控制同指定路由**
 
     ```php
     /**
      * @var string
      */
-    public $same; // Same to another route
+    public $same;
     ```
   
     > 如果你不想要对该路由单独授权，想让其与某一个路由权限保持一致，你就可以指定为目标路由名；但要注意的是请勿多层关联，仅支持一层。  
 
-- 权限列表管理页的 class (html标签属性)
+- **权限列表管理页的 `class` (`HTML` 属性)**
 
     ```php
     /**
@@ -325,7 +326,7 @@ public function getTgSetHooksAction()
     public $class;
     ```
 
-- 权限列表管理员的 title (html标签属性)
+- **权限列表管理员的 `title` (`HTML` 属性)**
 
     ```php
     /**
@@ -334,7 +335,7 @@ public function getTgSetHooksAction()
     public $title;
     ```
 
-- 在路由为 preview 类路由是，是否复制出导出权限控制
+- **在路由为 `preview` 类路由是，是否复制为导出权限**
 
     ```php
     /**
@@ -343,9 +344,9 @@ public function getTgSetHooksAction()
     public $export = false;
     ```
   
-    > 设为 true 时，为 preview 类权限将完全复制出一个权限为导出时所需。否则该路由将不会自动生成无导出功能。  
+    > 设为 `true` 时，为 `preview` 类权限将完全复制出一个权限为导出时所需。否则该路由将不会自动生成无导出功能。  
 
-#### 如何使用
+### 如何使用
 
 ```php
  /**
@@ -365,17 +366,17 @@ public function preview(): Response
 ```
 
 > 此时该页面将被纳入权限控制系统，根据用户分配的权限进行约束，禁止或放行用户的访问。  
-> Notes: @AccessControl 仅用于方法注释。
+> Notes: `@AccessControl` 仅用于方法注释。
 
-### 过滤器 (Filter::class)
+## 过滤器 (**@Filter**)
 
-#### 功能介绍
+### 功能介绍
 
-> 过滤器在 Admin 类项目的数据列表页使用的较为频繁；你可以通过该 Annotation 控制每个字段是否要生成对应的过滤器。  
+过滤器在 `Admin` 类项目的数据列表页使用的较为频繁；你可以通过该 `Annotation` 控制每个字段是否要生成对应的过滤器。  
 
-#### 属性/参数
+### 属性/参数
 
-- 名称
+- **名称**
 
     ```php
     /**
@@ -384,9 +385,9 @@ public function preview(): Response
     public $name;
     ```
   
-    > 过滤器名称，默认与字段名保持一致；通常与 index 参数一起使用，体现在过滤时 url 的参数名上。
+    > 过滤器名称，默认与字段名保持一致；通常与 `index` 参数一起使用，体现在过滤时 `url` 的参数名上。
 
-- 名称索引值
+- **名称索引值**
 
     ```php
     /**
@@ -395,9 +396,9 @@ public function preview(): Response
     public $index;
     ```
   
-    > 过器名称索引，默认从 0 开始；通常与 name 参数一起使用，体现在过滤时 url 的参数名上。
+    > 过器名称索引，默认从 `0` 开始；通常与 `name` 参数一起使用，体现在过滤时 `url` 的参数名上。
 
-- 字段名
+- **字段名**
 
     ```php
     /**
@@ -406,9 +407,9 @@ public function preview(): Response
     public $field;
     ```
   
-    > 与 name 不同，实际上在执行数据库查询的时候使用的是 field 作为字段名，显示时使用 name 从而可以达到隐藏字段名的目的。  
+    > 与 `name` 不同，实际上在执行数据库查询的时候使用的是 `field` 作为字段名，显示时使用 `name` 从而可以达到隐藏字段名的目的。  
 
-- 表单组件，请查看 Form 模块
+- **表单组件，请查看 `Form` 模块**
     
     ```php
     /**
@@ -417,7 +418,7 @@ public function preview(): Response
     public $type;
     ```
 
-- 表单组件所需参数
+- **表单组件所需参数**
 
     ```php
     /**
@@ -426,7 +427,7 @@ public function preview(): Response
     public $typeArgs = [];
     ```
 
-- 群组名
+- **组名**
 
     ```php
     /**
@@ -438,7 +439,7 @@ public function preview(): Response
     > 默认不需要使用组功能，当你需用在某个字段使用高级搜索时，需要渲染两个或更多的表单组件，这个时候你就需要创建组；  
     同一个组的表单组件请保持同名，可以参考菜单页的排序字段。
 
-- 过滤器的类型，请查看 Filter 模块
+- **过滤器的类型，请查看 `Filter` 模块**
 
     ```php
     /**
@@ -447,7 +448,7 @@ public function preview(): Response
     public $filter;
     ```
 
-- 过滤器类型所需参数
+- **过滤器类型所需参数**
 
     ```php
     /**
@@ -456,7 +457,7 @@ public function preview(): Response
     public $filterArgs = [];
     ```
 
-- 排序值
+- **排序值**
 
     ```php
     /**
@@ -467,7 +468,7 @@ public function preview(): Response
   
     > 组件渲染的排序值，你可以通过设置它的大小进行顺序调节；越小越靠前。
 
-- 是否显示
+- **是否显示**
     
     ```php
     /**
@@ -478,7 +479,7 @@ public function preview(): Response
   
     > 该组件是否显示，一般用于流函数中进行动态控制用。
 
-- 显示的优先级
+- **显示的优先级**
 
     ```php
     /**
@@ -487,11 +488,11 @@ public function preview(): Response
     public $showPriority = 0;
     ```
   
-    > 默认主键和 state 的优先级最高，其次是数值类型，最后是字符串类型；  
-    当然你也可以手动指定，加入一个表中有50个字段，默认脚手架根据表字段一一对应生成过滤器，就相当于列表页要显示50个过滤器，这显得有的草率；  
-    于是就出现了这个参数，默认仅显示6个过滤器，但是6个并不是根据 sort 而定，而是根据当前参数而定，值越大优先级越高。  
+    > 默认主键和 `state` 字段的优先级最高，其次是数值类型，最后是字符串类型；  
+    当然你也可以手动指定，假如一个表中有 `50` 个字段，默认脚手架根据表字段一一对应生成过滤器，就相当于列表页要显示 `50` 个过滤器，这显得有的草率；  
+    于是就出现了这个参数，默认仅显示 `6` 个过滤器，但是 `6` 个并不是根据 `sort` 参数而定的，而是根据当前参数而定，值越大优先级越高。  
 
-- 数据钩子，查看 Hook 模块
+- **数据钩子，查看 `Hook` 模块**
 
     ```php
     /**
@@ -500,7 +501,7 @@ public function preview(): Response
     public $hook;
     ```
 
-- 渲染信息，默认与 field 保持一致
+- **渲染信息，默认与 `field` 保持一致**
 
     ```php
     /**
@@ -509,16 +510,16 @@ public function preview(): Response
     public $label;
     ```
 
-- 是否对 label 进行 i18n
+- **是否对 `label` 进行 `I18N`**
 
     ```php
     /**
-     * @var bool Need trans for label?
+     * @var bool
      */
     public $trans;
     ```
 
-- 枚举值
+- **枚举值**
 
     ```php
     /**
@@ -527,11 +528,11 @@ public function preview(): Response
     public $enum;
     ```
   
-    > 当你使用是枚举类型的 Form 组件时（Checkbox、Select、Radio等），有必要提供枚举值；  
-    > * 当枚举值为 true 时，首先根据当前字段名转大写到 Enum::class 中找同名枚举常量，必要时也会添加表名前缀，如果找到则返回，否则为空数组。  
-    > * 当枚举值为 array 时，该值即为枚举值。  
+    > 当你使用是枚举类型的 `Form` 组件时（`Checkbox`、`Select`、`Radio`等），有必要提供枚举值；  
+    > * 当枚举值为 `true` 时，首先根据当前字段名转大写然后到 `Enum::class` 中找同名枚举常量，必要时也会添加表名前缀，如果找到则返回，否则为空数组。  
+    > * 当枚举值为 `array` 时，该值即为枚举值。  
 
-- 枚举扩展值
+- **枚举扩展值**
 
     ```php
     /**
@@ -541,11 +542,11 @@ public function preview(): Response
     ```
   
     > 有的时候你的枚举值可能并不是你当下就能决定的，可能会与数据库相关联。  
-    > * 当扩展值为 true 时，实质为字段名的字符串，根据字符串找到流函数类似 `previewEnumExtraFieldName(array $enum): array` 进行调用从而获取枚举扩展值。  
+    > * 当扩展值为 `true` 时，实质为字段名的字符串，根据字符串找到流函数类似 `previewEnumExtraFieldName(array $enum):array` 进行调用从而获取枚举扩展值。  
     > * 当扩展值为字符串时后续逻辑同上。  
-    > * 当扩展值为 array 时，该值即为枚举扩展值。  
+    > * 当扩展值为 `array` 时，该值即为枚举扩展值。  
 
-- 枚举值处理函数
+- **枚举值处理函数**
 
     ```php
     /**
@@ -554,7 +555,7 @@ public function preview(): Response
     public $enumHandler;
     ```
 
-- 前端样式
+- **前端样式**
 
     ```php
     /**
@@ -563,7 +564,7 @@ public function preview(): Response
     public $style = [];
     ```
 
-- 表单占位字符串
+- **表单占位字符串**
 
     ```php
     /**
@@ -572,7 +573,7 @@ public function preview(): Response
     public $placeholder;
     ```
 
-- 表单列数
+- **表单列数**
 
     ```php
     /**
@@ -581,9 +582,9 @@ public function preview(): Response
     public $column;
     ```
   
-    > 每列的宽度值在模块 Bsw/Preview 的输入参数中设置。  
+    > 每列的宽度值在模块 `Bsw/Preview` 的输入参数中设置。  
 
-- 渲染组件的 title (html标签属性)
+- **渲染组件的 `title` (`HTML` 属性)**
 
     ```php
     /**
@@ -592,7 +593,7 @@ public function preview(): Response
     public $title;
     ```
 
-- 默认值
+- **默认值**
 
     ```php
     /**
@@ -601,9 +602,9 @@ public function preview(): Response
     public $value;
     ```
 
-#### 如何使用
+### 如何使用
 
-- 在 Entity Annotation 中
+- **在 `Entity` `Annotation` 中**
 
     ```php
     /**
@@ -614,7 +615,7 @@ public function preview(): Response
     protected $sort = 0;
     ```
 
-- 在流函数中
+- **在流函数中**
 
     ```php
     /**
@@ -645,17 +646,17 @@ public function preview(): Response
     }
     ```
   
-    > 流函数中配置将可能覆盖 Entity 中的配置。  
+    > 流函数中配置将可能覆盖 `Entity` 中的配置。  
 
-### 数据展示 (Preview::class)
+## 数据展示 (**@Preview**)
 
-#### 功能介绍
+### 功能介绍
 
-> 仅在数据列表页中使用（表格）
+仅在数据列表页中使用（表格）
 
-#### 属性/参数
+### 属性/参数
 
-- 字段的列顺序，越小越靠前
+- **字段的列顺序，越小越靠前**
 
     ```php
     /**
@@ -664,7 +665,7 @@ public function preview(): Response
     public $sort = 99;
     ```
 
-- 是否显示该列
+- **是否显示该列**
     
     ```php
     /**
@@ -673,7 +674,7 @@ public function preview(): Response
     public $show = true;
     ```
 
-- 数据的正向钩子
+- **数据的正向钩子**
     
     ```php
     /**
@@ -682,7 +683,7 @@ public function preview(): Response
     public $hook;
     ```
 
-- 字段标题，默认与 field 保持一致
+- **字段标题，默认与 `field` 保持一致**
     
     ```php
     /**
@@ -691,16 +692,16 @@ public function preview(): Response
     public $label;
     ```
 
-- 是否对 label 进行 i18n
+- **是否对 `label` 进行 `I18N`**
     
     ```php
     /**
-     * @var bool Need trans for label?
+     * @var bool
      */
     public $trans;
     ```
 
-- 渲染时值是否需要在单元格中对其
+- **渲染时值单元格对其方式**
     
     ```php
     /**
@@ -709,9 +710,9 @@ public function preview(): Response
     public $align;
     ```
   
-    > 默认 left，可选 center，right
+    > 默认 `left`，可选 `center`，`right`
 
-- 列的类名 (html属性)
+- **列的类名 (`HTML` 属性)**
     
     ```php
     /**
@@ -720,7 +721,7 @@ public function preview(): Response
     public $clsName;
     ```
 
-- 单元格显示不下时是否缩略
+- **单元格显示不下时是否缩略**
     
     ```php
     /**
@@ -729,7 +730,7 @@ public function preview(): Response
     public $ellipsis = false;
     ```
 
-- 头部单元格合并
+- **头部单元格合并**
     
     ```php
     /**
@@ -738,7 +739,7 @@ public function preview(): Response
     public $headerColumn = 1;
     ```
 
-- 自定义单元格渲染函数
+- **自定义单元格渲染函数**
     
     ```php
     /**
@@ -747,7 +748,7 @@ public function preview(): Response
     public $customRender;
     ```
 
-- 是否固定当前列
+- **是否固定当前列**
     
     ```php
     /**
@@ -756,9 +757,9 @@ public function preview(): Response
     public $fixed;
     ```
   
-    > 可选值为 left、right
+    > 默认为 `false`，可选值为 `left`、`right`
 
-- 渲染列的宽度（数值类型）
+- **渲染列的宽度（数值类型）**
     
     ```php
     /**
@@ -767,43 +768,44 @@ public function preview(): Response
     public $width;
     ```
   
-    > 可以视之单位为px，实质上在屏幕宽度大于所有列宽和的情况下会按百分比进行缩放。  
+    > 可以视之单位为 `PX`，实质上在屏幕宽度大于所有列宽和的情况下会按百分比进行缩放。  
 
-- 是否允许 html 代码被渲染
+- **是否允许 `HTML` 代码被渲染**
     
     ```php
     /**
-     * @var bool (Priority first)
+     * @var bool
      */
     public $html = false;
     ```
   
-    > html、dress、render 三个参数都是渲染用，他们的优先级按顺序从高到低，其中一个满足渲染要求则后续渲染模式不再生效。  
+    > `html`、`dress`、`render` 三个参数都是作渲染用，他们的优先级按顺序从高到低，其中一个满足渲染要求则后续渲染模式不再生效。  
 
-- 渲染的外观
+- **渲染的外观**
     
     ```php
     /**
-     * @var array|string (Priority second)
+     * @var array|string
      */
     public $dress;
     ```
   
-    > 类似标签样式，可选值有 pink、red、orange、green、cyan、blue、purple  
-    在字段为枚举值的情况下你也可以指定枚举值对应的 dress 为数组对象, 如 `dress={0: "orange", 1: "green"}`。
+    > 类似标签样式，可选值有 `pink`、`red`、`orange`、`green`、`cyan`、`blue`、`purple`  
+    在字段为枚举值的情况下你也可以指定枚举值对应的 `dress` 为数组对象, 如 `dress={0: "orange", 1: "green"}`。
 
-- 高级渲染
+- **高级渲染**
     
     ```php
     /**
-     * @var string For vue-slot (Priority latest)
+     * @var string
      */
     public $render;
     ```
   
     > 有时候你需要一些特定的场景渲染，比如长文本、图片、链接等，这些都已经配置为常用模板了，以 `Abs::RENDER_` 开头的都可以用在当前参数上。  
+    其实就是 `vue-slot`，熟悉前端的开发者可以自己编写。
 
-- 双向状态值，当前仅用于 state 字段
+- **双向状态值，当前仅用于 `state` 字段**
     
     ```php
     /**
@@ -812,7 +814,7 @@ public function preview(): Response
     public $status = false;
     ```
 
-- 枚举值，同 @Filter
+- **枚举值（同 `@Filter`）**
     
     ```php
     /**
@@ -821,7 +823,7 @@ public function preview(): Response
     public $enum;
     ```
 
-- 枚举扩展值，同 @Filter
+- **枚举扩展值（同 @Filter）**
     
     ```php
     /**
@@ -830,7 +832,7 @@ public function preview(): Response
     public $enumExtra;
     ```
 
-- 枚举值处理函数
+- **枚举值处理函数**
     
     ```php
     /**
@@ -839,9 +841,9 @@ public function preview(): Response
     public $enumHandler;
     ```
 
-#### 如何使用
+### 如何使用
 
-- 在 Entity Annotation 中
+- **在 `Entity` `Annotation` 中**
 
     ```php
     /**
@@ -850,7 +852,7 @@ public function preview(): Response
     protected $value;
     ```
 
-- 在流函数中
+- **在流函数中**
 
     ```php
     /**
@@ -868,17 +870,17 @@ public function preview(): Response
     }
     ```
   
-    > 流函数中配置将可能覆盖 Entity 中的配置。  
+    > 流函数中配置将可能覆盖 `Entity` 中的配置。  
 
-### 数据表单 (Persistence::class)
+## 数据表单 (**@Persistence**)
 
-#### 功能介绍
+### 功能介绍
 
-> 在数据编辑和新增的时候需要渲染表单，该 Annotation 仅在持久化页面有效。  
+在数据编辑和新增的时候需要渲染表单，该 `Annotation` 仅在持久化页面有效。  
 
-#### 属性/参数
+### 属性/参数
 
-- 表单组件
+- **表单组件**
 
     ```php
     /**
@@ -887,7 +889,7 @@ public function preview(): Response
     public $type;
     ```
 
-- 表单组件参数
+- **表单组件参数**
     
     ```php
     /**
@@ -896,7 +898,7 @@ public function preview(): Response
     public $typeArgs = [];
     ```
 
-- 排序值
+- **排序值**
     
     ```php
     /**
@@ -905,29 +907,29 @@ public function preview(): Response
     public $sort = 99;
     ```
 
-- 是否渲染
+- **是否渲染**
     
     ```php
     /**
      * @var bool
      */
-    public $show = true; // No element
+    public $show = true;
     ```
   
-    > 该组件将不会出现在 html 中，即不产生节点。
+    > 该组件将不会出现在 `HTML` 中，即不产生节点。
 
-- 是否隐藏
+- **是否隐藏**
     
     ```php
     /**
      * @var bool
      */
-    public $hide; // Render to element but display none
+    public $hide;
     ```
   
-    > 该组件会被渲染在 html 中，但根据当前值判断是否会隐藏，常用于类似 id 字段。
+    > 该组件会被渲染在 `HTML` 中，但根据当前值判断是否会隐藏，常用于类似 `id` 字段。
 
-- 数据钩子
+- **数据钩子**
     
     ```php
     /**
@@ -936,7 +938,7 @@ public function preview(): Response
     public $hook;
     ```
 
-- 标题信息
+- **标题信息**
     
     ```php
     /**
@@ -945,16 +947,16 @@ public function preview(): Response
     public $label;
     ```
 
-- 是否对 label 进行 i18n 
+- **是否对 `label` 进行 `I18N`**
     
     ```php
     /**
-     * @var bool Need trans for label?
+     * @var bool
      */
     public $trans;
     ```
 
-- 表单禁用状态
+- **禁用表单**
     
     ```php
     /**
@@ -963,7 +965,7 @@ public function preview(): Response
     public $disabled = false;
     ```
 
-- 枚举值
+- **枚举值**
     
     ```php
     /**
@@ -972,7 +974,7 @@ public function preview(): Response
     public $enum;
     ```
 
-- 枚举扩展值
+- **枚举扩展值**
     
     ```php
     /**
@@ -981,7 +983,7 @@ public function preview(): Response
     public $enumExtra;
     ```
 
-- 枚举值处理函数
+- **枚举值处理函数**
     
     ```php
     /**
@@ -990,7 +992,7 @@ public function preview(): Response
     public $enumHandler;
     ```
 
-- 前端样式
+- **前端样式**
     
     ```php
     /**
@@ -999,7 +1001,7 @@ public function preview(): Response
     public $style = [];
     ```
 
-- 占位字符串
+- **表单占位字符串**
     
     ```php
     /**
@@ -1008,7 +1010,7 @@ public function preview(): Response
     public $placeholder;
     ```
 
-- 表单验证器
+- **表单验证器**
     
     ```php
     /**
@@ -1016,8 +1018,10 @@ public function preview(): Response
      */
     public $formRules;
     ```
+    
+    > [AntD 表单校验规则](https://www.antdv.com/components/form-cn/#%E6%A0%A1%E9%AA%8C%E8%A7%84%E5%88%99)
    
-- 验证器，查看 Validator 模块
+- **验证器，查看 `Validator` 模块**
     
     ```php
     /**
@@ -1026,7 +1030,7 @@ public function preview(): Response
     public $rules = [];
     ```
 
-- 列宽，最大20, (label占用了4)
+- **列宽**
     
     ```php
     /**
@@ -1034,8 +1038,10 @@ public function preview(): Response
      */
     public $column;
     ```
+    
+    > 最大 `20`，栅格系统每行为 `24`，由于 `label` 占用了 `4`。
 
-- 提示短语，出现在表单组件下方
+- **提示短语，出现在表单组件下方**
     
     ```php
     /**
@@ -1044,7 +1050,7 @@ public function preview(): Response
     public $tips;
     ```
 
-- 标题 (html属性)
+- **标题 (`HTML` 属性)**
     
     ```php
     /**
@@ -1053,7 +1059,7 @@ public function preview(): Response
     public $title;
     ```
 
-- 提交后是否允许 html
+- **是否允许 `HTML`**
     
     ```php
     /**
@@ -1062,7 +1068,7 @@ public function preview(): Response
     public $html = false;
     ```
 
-- 忽略空值
+- **忽略空值**
     
     ```php
     /**
@@ -1071,9 +1077,9 @@ public function preview(): Response
     public $ignoreBlank = false;
     ```
   
-    > 当该配置为 true 并且当前字段提交上来的值为空时将忽略该字段的新增或更新。  
+    > 当该配置为 `true` 并且当前字段提交上来的值为空时将忽略该字段的新增或更新。  
 
-- 是否忽略
+- **是否强行忽略**
     
     ```php
     /**
@@ -1082,7 +1088,7 @@ public function preview(): Response
     public $ignore = false;
     ```
 
-- 默认值
+- **默认值**
 
     ```php
     /**
@@ -1094,9 +1100,9 @@ public function preview(): Response
     > 当你需要强行忽略某个字段的新增或更新时可以使用该参数。  
 
 
-#### 如何使用
+### 如何使用
 
-- 在 Entity Annotation 中
+- **在 `Entity` `Annotation` 中**
 
     ```php
      /**
@@ -1105,7 +1111,7 @@ public function preview(): Response
     protected $addTime;
     ```
 
-- 在流函数中
+- **在流函数中**
 
     ```php
     /**
@@ -1119,13 +1125,13 @@ public function preview(): Response
     }
     ```
   
-    > 流函数中配置将可能覆盖 Entity 中的配置。  
+    > 流函数中配置将可能覆盖 `Entity` 中的配置。  
 
 
-## 如何实现自己的 Annotation
+# 如何实现自己的 Annotation
 
-> 你只需要继承基类 `Leon\BswBundle\Annotation\Annotation` 并实现该 Annotation 的 AnnotationConverter 类即可；  
-> 当然 AnnotationConverter 也是需要继承一个基类 `Leon\BswBundle\Annotation\AnnotationConverter` 去实现的。  
->  
-> 然后你就可以像上面一样去使用他们！  
+你只需要继承基类 `Leon\BswBundle\Annotation\Annotation` 并实现该 `Annotation` 对应的 `AnnotationConverter` 类即可； 
+当然 `AnnotationConverter` 也是需要继承一个基类 `Leon\BswBundle\Annotation\AnnotationConverter` 去实现的，它主要是对每个参数进行了前置处理，使其兼容性更强。  
+  
+以上都完成后，你就可以像上面一样去使用他们！  
 

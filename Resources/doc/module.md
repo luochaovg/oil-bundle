@@ -1,31 +1,33 @@
 
-## 概览
+# 概览
 
-> 项目基于 Symfony4.3 (bundle) 开发，如果你对该框架了解的话能更快得入手，如果不了解没关系，因为你只要关注你自己的业务即可。  
-> 模块化让本框架与业务完全解耦，开发者和通过各式组合完成自己想要的功能。
+项目基于 `Symfony4.3` (`bundle`) 开发，如果你对该框架了解的话能更快得入手，如果不了解没关系，因为你只要关注你自己的业务即可。  
+模块化让本框架与业务完全解耦，开发者和通过各式组合完成自己想要的功能。
 
-## 通用的模块
+# 通用的模块
 
-### **Error** `错误消息模块`
+## **Error** `错误消息模块`
 
-> 主要用于接口返回、用户提示等操作，每个错误独立封装成一个 class 类；  
-> 如果你需要自定义错误类请继承基类 `Leon\BswBundle\Module\Error\Error`，该类为抽象类，必须实现类中属性/方法。  
+主要用于接口返回、用户提示等操作，每个错误独立封装成一个 `class` 类；  
+如果你需要自定义错误类请继承基类 `Leon\BswBundle\Module\Error\Error`，该类为抽象类，必须实现类中属性/方法。  
 
-#### 抽象类主要属性/方法
+### 抽象类主要属性/方法
 
-- 错误码  
+- **错误码**  
 
+    > 错误码为整形，不可重复（如果在创建文档时发现重复将无法生成文档并提示错误）
+    
     ```php
     /**
      * @const int
      */
     const CODE = 0;
     ```
-
-    > 错误码为整形，不可重复（如果在创建文档时发现重复将无法生成文档并提示错误）  
     
-- 错误短语  
+- **错误短语**  
 
+    > 错误短语用于直面用户，当然你可以使用 `i18n` 的 `key` 替代，在呈现时将根据当前语言自动翻译。 
+    
     ```php
     /**
      * @var string
@@ -33,10 +35,10 @@
     protected $tiny = 'Oops';
     ```
 
-    > 错误短语用于直面用户，当然你可以使用 i18n 的 key 替代，在呈现时将根据当前语言自动翻译。  
+- **错误描述**  
 
-- 错误描述  
-
+    > 错误得详细描述，如果为空则视为与 `tiny` 保持一致，用于写日志用方便错误分析。  
+    
     ```php
     /**
      * @var string
@@ -44,9 +46,7 @@
     protected $description;
     ```
 
-    > 错误得详细描述，如果为空则视为与 `tiny` 保持一致，用于写日志用方便错误分析。  
-    
-#### 目前框架自带的错误
+### 目前框架自带的错误
 
 | 错误类 | 错误场景(短语) |  
 | ------- |  ------ |
@@ -124,34 +124,33 @@
 | Leon\BswBundle\Module\Error\Entity\ErrorAppleReceipt | 苹果支付凭据非法 |
 | Leon\BswBundle\Module\Error\Entity\ErrorSession | 用户会话已变更 |
 
-#### 如何使用
+### 如何使用
 
-> 你只需要在需用用到的地方直接实例化即可。  
-
+你只需要在需用用到的地方直接实例化即可。  
         
-### **Chart** `图表绘制模块`
+## **Chart** `图表绘制模块`
 
-> 主要负责数据展示，直观的表现用于运营分析等场景；  
-> 如果你需要自定义图表类请继承基类 `Leon\BswBundle\Module\Chart\Chart`，该类为抽象类，必须实现类中属性/方法。  
+主要负责数据展示，直观的表现用于运营分析等场景；  
+如果你需要自定义图表类请继承基类 `Leon\BswBundle\Module\Chart\Chart`，该类为抽象类，必须实现类中属性/方法。  
 
-#### 目前框架实现的图表类
+### 目前框架实现的图表类
 
-- 折线图  
-`Leon\BswBundle\Module\Chart\Entity\Line::class`  
+- **折线图**  
+*`Leon\BswBundle\Module\Chart\Entity\Line`*  
 
-- 柱状图  
-`Leon\BswBundle\Module\Chart\Entity\Bar::class`  
+- **柱状图**  
+*`Leon\BswBundle\Module\Chart\Entity\Bar`*  
 
-- 饼状图  
-`Leon\BswBundle\Module\Chart\Entity\Pie::class`  
+- **饼状图**  
+*`Leon\BswBundle\Module\Chart\Entity\Pie`*  
 
-- 地图  
-`Leon\BswBundle\Module\Chart\Entity\Map::class`  
+- **地图**  
+*`Leon\BswBundle\Module\Chart\Entity\Map`*  
 
-> 图形绘制模块基于 ECharts，由于官方文档配置过于强大和复杂所以框架封装了常用的四种绘图类；  
+> 图形绘制模块基于 `ECharts`，由于官方文档配置过于强大和复杂所以框架封装了常用的四种绘图类；  
 > 你可以根据上诉提到的方法封装其他图形类，在此之前最好对 [ECharts](https://echarts.apache.org/zh/option.html#title) 做一定的了解。  
     
-#### 如何使用
+### 如何使用
 
 ```php
 use Leon\BswBundle\Module\Chart\Entity\Line;
@@ -169,65 +168,65 @@ dd($options);
 // 当然在 Admin 类后台你可以更加方便和高效地使用它们。
 ```
     
-### **Filter** `过滤器模块`
+## **Filter** `过滤器模块`
 
-> 过滤器仅用于 Admin 类项目和 Web 类项目，并且在 Admin 类项目中使用比较频繁；  
-> 如果你需要自定义过滤器类请继承基类 `Leon\BswBundle\Module\Filter\Filter`，该类为抽象类，必须实现类中属性/方法。  
+过滤器仅用于 `Admin` 类项目和 `Web` 类项目，并且在 `Admin` 类项目中使用比较频繁；  
+如果你需要自定义过滤器类请继承基类 `Leon\BswBundle\Module\Filter\Filter`，该类为抽象类，必须实现类中属性/方法。  
     
-#### 目前框架实现的过滤器
+### 目前框架实现的过滤器
 
 | 过滤器 | 作用 | 经典场景 |  
 | ------- | :-------: |  :------: |  
-| Leon\BswBundle\Module\Filter\Entity\Accurate::class | 精确过滤器 | 数字类型 |  
-| Leon\BswBundle\Module\Filter\Entity\Between::class | 区间过滤器 | 时间区间 |  
-| Leon\BswBundle\Module\Filter\Entity\Like::class | 相似匹配过滤器 | 字符串搜索 |  
-| Leon\BswBundle\Module\Filter\Entity\Mixed::class | 混合过滤器 | 多字段使用同一个输入框进行过滤 |  
-| Leon\BswBundle\Module\Filter\Entity\Senior::class | 高级过滤器 | 常规的过滤条件都将在这里找到 |  
+| Leon\BswBundle\Module\Filter\Entity\Accurate | 精确过滤器 | 数字类型 |  
+| Leon\BswBundle\Module\Filter\Entity\Between | 区间过滤器 | 时间区间 |  
+| Leon\BswBundle\Module\Filter\Entity\Like | 相似匹配过滤器 | 字符串搜索 |  
+| Leon\BswBundle\Module\Filter\Entity\Mixed | 混合过滤器 | 多字段使用同一个输入框进行过滤 |  
+| Leon\BswBundle\Module\Filter\Entity\Senior | 高级过滤器 | 常规的过滤条件都将在这里找到 |  
 
 > 过滤器提供了两种模式产出，分别是 `DQL` 和 `SQL`；  
 > 就是说你也可以使用过滤器产出原生 `SQL` 条件语句部分，`DQL` 为默认模式，配合 `Doctrine` 使用。
 
-#### 如何使用
+### 如何使用
     
-> 目前过滤器不单独使用，一般配合 Form 组件使用。  
+目前过滤器不单独使用，一般配合 `Form` 组件使用。  
 
-### **Form** `表单组件模块`
+## **Form** `表单组件模块`
 
-> 表单类用于快速生成满足于 `AntD` 框架规范的表单组件。  
-> 每个组件都有自己的配置和方法请参照 [AntD官方配置](https://www.antdv.com/components/form-cn/) 。  
-> 如果你需要自定义表单组件类请继承基类 `Leon\BswBundle\Module\Form\Form`，该类为抽象类，必须实现类中属性/方法。  
+表单类用于快速生成满足于 `AntD` 框架规范的表单组件。  
+每个组件都有自己的配置和方法请参照 [AntD官方配置](https://www.antdv.com/components/form-cn/) 。  
+如果你需要自定义表单组件类请继承基类 `Leon\BswBundle\Module\Form\Form`，该类为抽象类，必须实现类中属性/方法。  
 
-#### 目前框架实现的表单组件
+### 目前框架实现的表单组件
 
 | 表单组件 | 形态 |
 | ------- | ------- |
-| Leon\BswBundle\Module\Form\Entity\AutoComplete::class | 自动完成，类似各大搜索引擎在输入部分字符后进行提示 |
-| Leon\BswBundle\Module\Form\Entity\Button::class | 按钮 |
-| Leon\BswBundle\Module\Form\Entity\Checkbox::class | 复选框 |
-| Leon\BswBundle\Module\Form\Entity\CkEditor::class | 富文本编辑框 |
-| Leon\BswBundle\Module\Form\Entity\Date::class | 日期选择器 |
-| Leon\BswBundle\Module\Form\Entity\DateRange::class | 日期范围选择器 |
-| Leon\BswBundle\Module\Form\Entity\Datetime::class | 日期选择器(含时间) |
-| Leon\BswBundle\Module\Form\Entity\DatetimeRange::class | 日期范围选择器(含时间) |
-| Leon\BswBundle\Module\Form\Entity\Group::class | 组（一行渲染多个组件时使用） |
-| Leon\BswBundle\Module\Form\Entity\Input::class | 输入框 |
-| Leon\BswBundle\Module\Form\Entity\Mentions::class | 提及框，即艾特功能 |
-| Leon\BswBundle\Module\Form\Entity\Month::class | 月份选择器 |
-| Leon\BswBundle\Module\Form\Entity\Number::class | 数值输入框 |
-| Leon\BswBundle\Module\Form\Entity\Password::class | 密码输入框 |
-| Leon\BswBundle\Module\Form\Entity\Radio::class | 单选框 |
-| Leon\BswBundle\Module\Form\Entity\Score::class | 评分组件 |
-| Leon\BswBundle\Module\Form\Entity\Select::class | 下拉选择器 |
-| Leon\BswBundle\Module\Form\Entity\SelectTree::class | 下拉选择器(树状) |
-| Leon\BswBundle\Module\Form\Entity\Slider::class | 进度条组件 |
-| Leon\BswBundle\Module\Form\Entity\Switcher::class | 开关组件 |
-| Leon\BswBundle\Module\Form\Entity\Text::class | 文本组件 |
-| Leon\BswBundle\Module\Form\Entity\TextArea::class | 多行文本输入框 |
-| Leon\BswBundle\Module\Form\Entity\Time::class | 时间选择器(仅) |
-| Leon\BswBundle\Module\Form\Entity\Upload::class | 文件上传组件 |
-| Leon\BswBundle\Module\Form\Entity\Week::class | 周(期)选择器 |
+| Leon\BswBundle\Module\Form\Entity\AutoComplete | 自动完成，类似各大搜索引擎在输入部分字符后进行提示 |
+| Leon\BswBundle\Module\Form\Entity\Button | 按钮 |
+| Leon\BswBundle\Module\Form\Entity\Checkbox | 复选框 |
+| Leon\BswBundle\Module\Form\Entity\CkEditor | 富文本编辑框 |
+| Leon\BswBundle\Module\Form\Entity\Date | 日期选择器 |
+| Leon\BswBundle\Module\Form\Entity\DateRange | 日期范围选择器 |
+| Leon\BswBundle\Module\Form\Entity\Datetime | 日期选择器(含时间) |
+| Leon\BswBundle\Module\Form\Entity\DatetimeRange | 日期范围选择器(含时间) |
+| Leon\BswBundle\Module\Form\Entity\Group | 组（一行渲染多个组件时使用） |
+| Leon\BswBundle\Module\Form\Entity\Input | 输入框 |
+| Leon\BswBundle\Module\Form\Entity\Mentions | 提及框，即艾特功能 |
+| Leon\BswBundle\Module\Form\Entity\Month | 月份选择器 |
+| Leon\BswBundle\Module\Form\Entity\Number | 数值输入框 |
+| Leon\BswBundle\Module\Form\Entity\Password | 密码输入框 |
+| Leon\BswBundle\Module\Form\Entity\Radio | 单选框 |
+| Leon\BswBundle\Module\Form\Entity\Score | 评分组件 |
+| Leon\BswBundle\Module\Form\Entity\Select | 下拉选择器 |
+| Leon\BswBundle\Module\Form\Entity\SelectTree | 下拉选择器(树状) |
+| Leon\BswBundle\Module\Form\Entity\Slider | 进度条组件 |
+| Leon\BswBundle\Module\Form\Entity\Switcher | 开关组件 |
+| Leon\BswBundle\Module\Form\Entity\Text | 文本组件 |
+| Leon\BswBundle\Module\Form\Entity\TextArea | 多行文本输入框 |
+| Leon\BswBundle\Module\Form\Entity\Time | 时间选择器(仅) |
+| Leon\BswBundle\Module\Form\Entity\Upload | 文件上传组件 |
+| Leon\BswBundle\Module\Form\Entity\Week | 周(期)选择器 |
 
-#### 如何使用
+### 如何使用
 
 ```php
 // php中直接实例化，然后对实例进行配置即可；
@@ -235,17 +234,19 @@ dd($options);
 // Admin类项目的数据交互过程已经封装好可直接使用。
 ```
 
-### **Hook** `数据钩子模块`
+## **Hook** `数据钩子模块`
 
-> 在数据处理的过程中，往往很多场景需要对数据进行双向处理；  
-> 比如价格字段，在存入的时候希望存入分单位，在显示的时候希望渲染为元单位；  
-> 又比如用户手机号在数据库存为加密，但却需要正常显示，这个时候钩子就很容易应付这类无趣的业务。  
-> 如果你需要自定义数据钩子类请继承基类 `Leon\BswBundle\Module\Hook\Hook`，该类为抽象类，必须实现类中属性/方法。  
+在数据处理的过程中，往往很多场景需要对数据进行双向处理；  
+比如价格字段，在存入的时候希望存入分单位，在显示的时候希望渲染为元单位；  
+又比如用户手机号在数据库存为加密，但却需要正常显示，这个时候钩子就很容易应付这类无趣的业务。  
+如果你需要自定义数据钩子类请继承基类 `Leon\BswBundle\Module\Hook\Hook`，该类为抽象类，必须实现类中属性/方法。  
 
-#### 抽象类主要属性/方法
+### 抽象类主要属性/方法
 
-- 正向处理
+- **正向处理**
 
+    > 当数据从元状态转为想要的状态时我们称之为正向处理（从数据库读取后转为渲染格式）。  
+    
     ```php
     /**
      * @param mixed $value
@@ -256,11 +257,11 @@ dd($options);
      */
     protected function preview($value, array $args, array $extraArgs = []) {}
     ```
+
+- **反向处理**
+
+    > 当数据从渲染状态转为元状态时我们称之为反向处理（将表单渲染数据写入数据库前的处理）。  
     
-    > 当数据从元状态转为想要的状态时我们称之为正向处理（从数据库读取后转为渲染格式）。  
-
-- 反向处理
-
     ```php
     /**
      * @param mixed $value
@@ -272,67 +273,68 @@ dd($options);
     protected function persistence($value, array $args, array $extraArgs = []) {}
     ```
     
-    > 当数据从渲染状态转为元状态时我们称之为反向处理（将表单渲染数据写入数据库前的处理）。  
-    
-#### 目前框架实现的钩子
+### 目前框架实现的钩子
     
 | 钩子 | 正向功能 | 反向功能 |
 | ------- | :-------: | :-------: |
-| Leon\BswBundle\Module\Hook\Entity\Aes::class | AES解密 | AES加密 |
-| Leon\BswBundle\Module\Hook\Entity\ByteGB::class | byte转GB | GB转byte |
-| Leon\BswBundle\Module\Hook\Entity\ByteMB::class | byte转MB | MB转byte |
-| Leon\BswBundle\Module\Hook\Entity\DefaultDatetime::class | - | 为空时取当前日期/时间 |
-| Leon\BswBundle\Module\Hook\Entity\DefaultTimestamp::class | - | 为空时取当前时间戳 |
-| Leon\BswBundle\Module\Hook\Entity\Enums::class | 枚举类型key转value | 枚举类型value转key |
-| Leon\BswBundle\Module\Hook\Entity\EnumTrans::class | 使用enum包翻译 | - |
-| Leon\BswBundle\Module\Hook\Entity\FieldsTrans::class | 使用fields包翻译 | - |
-| Leon\BswBundle\Module\Hook\Entity\FileSize::class | 将byte转为人性化描述 | - |
-| Leon\BswBundle\Module\Hook\Entity\HourDay::class | 小时转天 | 天转小时 |
-| Leon\BswBundle\Module\Hook\Entity\HourDuration::class | 小时转人性化描述 | - |
-| Leon\BswBundle\Module\Hook\Entity\HtmlUbb::class | ubb转html | html转ubb |
-| Leon\BswBundle\Module\Hook\Entity\Json::class | json串转数组 | 数组转json串 |
-| Leon\BswBundle\Module\Hook\Entity\JsonStringify::class | json串转人性化描述 | - |
-| Leon\BswBundle\Module\Hook\Entity\MbGB::class | MB转GB | GB转MB |
-| Leon\BswBundle\Module\Hook\Entity\MessagesTrans::class | 使用messages包翻译 | - |
-| Leon\BswBundle\Module\Hook\Entity\Money::class | 金额缩小100倍 | 金额放大100倍 |
-| Leon\BswBundle\Module\Hook\Entity\MoneyStringify::class | 金额转人性化描述 | - |
-| Leon\BswBundle\Module\Hook\Entity\Rate::class | 数值转百分比 | - |
-| Leon\BswBundle\Module\Hook\Entity\RateStringify::class | 数值转人性化描述百分比 | - |
-| Leon\BswBundle\Module\Hook\Entity\Safety::class | 过滤html | 过滤html |
-| Leon\BswBundle\Module\Hook\Entity\SeoTrans::class | 使用seo包翻译 | - |
-| Leon\BswBundle\Module\Hook\Entity\Times::class | 次数转人性化描述 | - |
-| Leon\BswBundle\Module\Hook\Entity\Timestamp::class | 时间戳转日期 | 日期转时间戳 |
-| Leon\BswBundle\Module\Hook\Entity\TwigTrans::class | 使用twig包翻译 | - |
-| Leon\BswBundle\Module\Hook\Entity\UrlCode::class | url解码 | url编码 |
+| Leon\BswBundle\Module\Hook\Entity\Aes | `AES` 解密 | `AES` 加密 |
+| Leon\BswBundle\Module\Hook\Entity\ByteGB | `byte` 转 `GB` | `GB` 转 `byte` |
+| Leon\BswBundle\Module\Hook\Entity\ByteMB | `byte` 转 `MB` | `MB` 转 `byte` |
+| Leon\BswBundle\Module\Hook\Entity\DefaultDatetime | - | 为空时取当前日期/时间 |
+| Leon\BswBundle\Module\Hook\Entity\DefaultTimestamp | - | 为空时取当前时间戳 |
+| Leon\BswBundle\Module\Hook\Entity\Enums | 枚举类型 `key` 转 `value` | 枚举类型 `value` 转 `key` |
+| Leon\BswBundle\Module\Hook\Entity\EnumTrans | 使用 `enum` 包翻译 | - |
+| Leon\BswBundle\Module\Hook\Entity\FieldsTrans | 使用 `fields` 包翻译 | - |
+| Leon\BswBundle\Module\Hook\Entity\FileSize | 将 `byte` 转为人性化描述 | - |
+| Leon\BswBundle\Module\Hook\Entity\HourDay | 小时转天 | 天转小时 |
+| Leon\BswBundle\Module\Hook\Entity\HourDuration | 小时转人性化描述 | - |
+| Leon\BswBundle\Module\Hook\Entity\HtmlUbb | `ubb` 转 `html` | `html` 转 `ubb` |
+| Leon\BswBundle\Module\Hook\Entity\Json | `json` 串转数组 | 数组转 `json` 串 |
+| Leon\BswBundle\Module\Hook\Entity\JsonStringify | `json` 串转人性化描述 | - |
+| Leon\BswBundle\Module\Hook\Entity\MbGB | `MB` 转 `GB` | `GB` 转 `MB` |
+| Leon\BswBundle\Module\Hook\Entity\MessagesTrans | 使用 `messages` 包翻译 | - |
+| Leon\BswBundle\Module\Hook\Entity\Money | 金额缩小100倍 | 金额放大100倍 |
+| Leon\BswBundle\Module\Hook\Entity\MoneyStringify | 金额转人性化描述 | - |
+| Leon\BswBundle\Module\Hook\Entity\Rate | 数值转百分比 | - |
+| Leon\BswBundle\Module\Hook\Entity\RateStringify | 数值转人性化描述百分比 | - |
+| Leon\BswBundle\Module\Hook\Entity\Safety | 过滤 `html` | 过滤 `html` |
+| Leon\BswBundle\Module\Hook\Entity\SeoTrans | 使用 `seo` 包翻译 | - |
+| Leon\BswBundle\Module\Hook\Entity\Times | 次数转人性化描述 | - |
+| Leon\BswBundle\Module\Hook\Entity\Timestamp | 时间戳转日期 | 日期转时间戳 |
+| Leon\BswBundle\Module\Hook\Entity\TwigTrans | 使用 `twig` 包翻译 | - |
+| Leon\BswBundle\Module\Hook\Entity\UrlCode | `url` 解码 | `url` 编码 |
 
-#### 如何使用
+### 如何使用
 
-- 在 Annotation 中使用
+- **在 `Annotation` 中使用**
 
     ```php
     /**
-     * @BswAnnotation\Preview(hook={0:BswHook\Money::class})
-     * @BswAnnotation\Persistence(hook={0:BswHook\Money::class})
+     * @BswAnnotation\Preview(hook={0:BswHook\Money})
+     * @BswAnnotation\Persistence(hook={0:BswHook\Money})
      */
      protected $money = 0;
     ```
 
-- 在流函数中使用
+- **在流函数中使用**
  
     ```php
+    /**
+     * @return array
+     */
     public function previewAnnotation() :array
     {
         return [
            'money' => [
-               'hook' => [Money::class]
+               'hook' => [Money]
            ]
        ];
     }
     ```
  
-    > 是的，你可能发现了一个规律，hook 的值是一维数组，每个字段可以对应多个钩子，钩子是按顺序执行的。  
+    > 是的，你可能发现了一个规律，`hook` 的值是一维数组，每个字段可以对应多个钩子，钩子是按顺序执行的。  
 
-- 你可以通过全局流函数配置钩子参数
+- **你可以通过全局流函数配置钩子参数**
  
     ```php
     /**
@@ -344,16 +346,16 @@ dd($options);
     {
         return Helper::merge(
             [
-                Aes::class           => [
+                Aes           => [
                     'aes_iv'     => $this->parameter('aes_iv'),
                     'aes_key'    => $this->parameter('aes_key'),
                     'aes_method' => $this->parameter('aes_method'),
                     'plaintext'  => $this->plaintextSensitive,
                 ],
-                Timestamp::class     => [
+                Timestamp     => [
                     'persistence_newly_empty' => time(),
                 ],
-                HourDuration::class  => [
+                HourDuration  => [
                     'digit' => [
                         'year'  => $this->fieldLang('Year'),
                         'month' => $this->fieldLang('Month'),
@@ -361,22 +363,22 @@ dd($options);
                         'hour'  => $this->fieldLang('Hour'),
                     ],
                 ],
-                Enums::class         => [
+                Enums         => [
                     'trans' => $this->translator,
                 ],
-                MessagesTrans::class => [
+                MessagesTrans => [
                     'trans' => $this->translator,
                 ],
-                TwigTrans::class     => [
+                TwigTrans     => [
                     'trans' => $this->translator,
                 ],
-                FieldsTrans::class   => [
+                FieldsTrans   => [
                     'trans' => $this->translator,
                 ],
-                EnumTrans::class     => [
+                EnumTrans     => [
                     'trans' => $this->translator,
                 ],
-                SeoTrans::class      => [
+                SeoTrans      => [
                     'trans' => $this->translator,
                 ],
             ],
@@ -385,17 +387,17 @@ dd($options);
     }
     ```
 
-- 在 Annotation 中这样配置个性化参数
+- **在 `Annotation` 中这样配置个性化参数**
 
     ```php
     /**
-     * @BswAnnotation\Preview(hook={BswHook\Aes::class:{"aes_iv": "good", "aes_key": "job"}})
-     * @BswAnnotation\Persistence(hook={BswHook\Aes::class:{"aes_iv": "good", "aes_key": "job"}})
+     * @BswAnnotation\Preview(hook={BswHook\Aes:{"aes_iv": "good", "aes_key": "job"}})
+     * @BswAnnotation\Persistence(hook={BswHook\Aes:{"aes_iv": "good", "aes_key": "job"}})
      */
     protected $money = 0;
     ```
  
-- 在流函数中这样配置个性化参数
+- **在流函数中这样配置个性化参数**
 
     ```php
     public function previewAnnotation() :array
@@ -403,7 +405,7 @@ dd($options);
         return [
             'money' => [
                 'hook' => [
-                    Aes::class => [
+                    Aes => [
                         'aes_iv' => 'good',
                         'aes_key' => 'job',
                     ]
@@ -413,7 +415,7 @@ dd($options);
     }
     ```
  
-- 手动执行数据钩子处理
+- **手动执行数据钩子处理**
  
     ```php
     $list = [
@@ -424,7 +426,7 @@ dd($options);
      
     $list = $this->web->hooker(
         [
-            Money::class => ['money'],
+            Money => ['money'],
         ],
         $list,
         true, # true 为反向，false 为正向
@@ -434,14 +436,16 @@ dd($options);
     );
     ```
     
-### **Validator** `验证器模块`
+## **Validator** `验证器模块`
 
-> 参数验证器常用于验证用户输入，避免不必要的安全隐患。  
-> 如果你需要自定义验证器类请继承基类 `Leon\BswBundle\Module\Validator\Error`，该类为抽象类，必须实现类中属性/方法。  
+参数验证器常用于验证用户输入，避免不必要的安全隐患。  
+如果你需要自定义验证器类请继承基类 `Leon\BswBundle\Module\Validator\Error`，该类为抽象类，必须实现类中属性/方法。  
 
-#### 抽象类主要属性/方法
+### 抽象类主要属性/方法
 
-- 验证器描述短语
+- **验证器描述短语**
+
+    > 用于辅助文档生产。支持 `i18n` 的 `key` 串。  
 
     ```php
     /**
@@ -451,10 +455,8 @@ dd($options);
      */
     public function description(): string {}
     ```
-  
-    > 用于辅助文档生产。支持 i18n 的 key 串。  
 
-- 验证器错误提示短语
+- **验证器错误提示短语**
 
     ```php  
     /**
@@ -465,9 +467,9 @@ dd($options);
     protected function message(): string {}
     ```
     
-    > 直面用户提示。支持 i18n 的 key 串。  
+    > 直面用户提示。支持 `i18n` 的 `key` 串。  
     
-- 进行验证逻辑
+- **进行验证逻辑**
     
     ```php
     /**
@@ -480,8 +482,10 @@ dd($options);
     protected function prove(array $extra = []): bool {}
     ```
     
-- 验证通过后对数据的后置处理
+- **验证通过后对数据的后置处理**
     
+    > 比如做一些数据类型转换等工作。  
+
     ```php  
     /**
      * Handle value when prove return true
@@ -490,66 +494,64 @@ dd($options);
      */
     protected function handler() {}
     ```
-  
-    > 比如做一些数据类型转换等工作。  
-
-#### 目前框架实现的钩子
+    
+### 目前框架实现的验证器
     
 | 钩子 | 文档短语 | 错误提示 |
 | ------- | ------- | ------ |
 | Leon\BswBundle\Module\Validator\Entity\Replace | 替换字符串 | 字段必须为字符串 |
 | Leon\BswBundle\Module\Validator\Entity\NotBlank | 不为空字符 | 字段不能为空字符串 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsSmallint | 为MySQL无符号小整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\InLength | 在长度集合中 | 字段长度必须在{{ args }}值中出现 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlInt | 为MySQL有符号整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlTinyint | 为MySQL有符号微整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\JustNot | 仅不为 | 字段仅不能设置为{{ arg1 }} |
-| Leon\BswBundle\Module\Validator\Entity\Length | 长度等于 | 字段长度必须等于{{ arg1 }} |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsSmallint | 为 `MySQL` 无符号小整数 | 字段值必须在 `arg1` 到  `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\InLength | 在长度集合中 | 字段长度必须在 `args` 值中出现 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlInt | 为 `MySQL` 有符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlTinyint | 为 `MySQL` 有符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\JustNot | 仅不为 | 字段仅不能设置为 `arg1`  |
+| Leon\BswBundle\Module\Validator\Entity\Length | 长度等于 | 字段长度必须等于 `arg1`  |
 | Leon\BswBundle\Module\Validator\Entity\Arr | 为数组 | 字段必须是数组 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlBigint | 为MySQL有符号大整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Order | 为排序类型 | 字段 Must be order type {{ args }} |
-| Leon\BswBundle\Module\Validator\Entity\Limit | 长度在区间内 | 字段长度必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Json | 为Json串 | 字段必须为JSON格式化字符串 |
-| Leon\BswBundle\Module\Validator\Entity\Password | 为规范密码串 | 字段密码串须含大小写字母和数字且最少{{ arg1 }}位 |
-| Leon\BswBundle\Module\Validator\Entity\Url | 为Url | 字段必须为URL地址 |
-| Leon\BswBundle\Module\Validator\Entity\Lt | 值小于 | 字段值必须小于{{ arg1 }} |
+| Leon\BswBundle\Module\Validator\Entity\MysqlBigint | 为 `MySQL` 有符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Order | 为排序类型 | 字段必须为排序类型  `args`  |
+| Leon\BswBundle\Module\Validator\Entity\Limit | 长度在区间内 | 字段长度必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Json | 为 `JSON` 串 | 字段必须为 `JSON` 格式化字符串 |
+| Leon\BswBundle\Module\Validator\Entity\Password | 为规范密码串 | 字段密码串须含大小写字母和数字且最少 `arg1` 位 |
+| Leon\BswBundle\Module\Validator\Entity\Url | 为 `URL` | 字段必须为 `URL` 地址 |
+| Leon\BswBundle\Module\Validator\Entity\Lt | 值小于 | 字段值必须小于 `arg1`  |
 | Leon\BswBundle\Module\Validator\Entity\Integer | 为整数 | 字段必须为整数 |
 | Leon\BswBundle\Module\Validator\Entity\Email | 为邮箱地址 | 字段必须是邮箱地址格式 |
 | Leon\BswBundle\Module\Validator\Entity\Required | 必须 | 字段必须设置 |
-| Leon\BswBundle\Module\Validator\Entity\Difference | 不同于参数 | 字段必须与参数{{ arg1 }}值不同 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlMediumint | 为MySQL有符号中整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Gte | 值大于等于 | 字段值必须大于或等于{{ arg1 }} |
-| Leon\BswBundle\Module\Validator\Entity\Max | 长度小于等于 | 字段长度必须小于或等于{{ arg1 }} |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsTinyint | 为MySQL无符号微整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Just | 仅为 | 字段仅能设置为{{ arg1 }} |
-| Leon\BswBundle\Module\Validator\Entity\MysqlSmallint | 为MySQL有符号小整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Endpoint | Endpoint字符串 | 字段必须为Endpoint字符串, 格式(ip:port) |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsMediumint | 为MySQL无符号中整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Def | 设置默认值 |  |
-| Leon\BswBundle\Module\Validator\Entity\Ip | 为IP地址 | 字段必须为合法的IP地址 |
-| Leon\BswBundle\Module\Validator\Entity\Gt | 值大于 | 字段值必须大于{{ arg1 }} |
+| Leon\BswBundle\Module\Validator\Entity\Difference | 不同于参数 | 字段必须与参数 `arg1` 值不同 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlMediumint | 为 `MySQL` 有符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Gte | 值大于等于 | 字段值必须大于或等于 `arg1`  |
+| Leon\BswBundle\Module\Validator\Entity\Max | 长度小于等于 | 字段长度必须小于或等于 `arg1`  |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsTinyint | 为 `MySQL` 无符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Just | 仅为 | 字段仅能设置为 `arg1`  |
+| Leon\BswBundle\Module\Validator\Entity\MysqlSmallint | 为 `MySQL` 有符号小整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Endpoint | `Endpoint` 字符串 | 字段必须为 `Endpoint` 字符串, 格式(`ip`:`port`) |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsMediumint | 为 `MySQL` 无符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Def | 设置默认值 | - |
+| Leon\BswBundle\Module\Validator\Entity\Ip | 为 `IP` 地址 | 字段必须为合法的 `IP` 地址 |
+| Leon\BswBundle\Module\Validator\Entity\Gt | 值大于 | 字段值必须大于 `arg1`  |
 | Leon\BswBundle\Module\Validator\Entity\NotEmpty | 不为空 | 字段不能为空 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsBigint | 为MySQL无符号大整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsInt | 为MySQL无符号整数 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\In | 在数组值中 | 字段必须在数组{{ args }}值中出现 |
-| Leon\BswBundle\Module\Validator\Entity\Lte | 值小于等于 | 字段值必须小于或等于{{ arg1 }} |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsBigint | 为 `MySQL` 无符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsInt | 为 `MySQL` 无符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\In | 在数组值中 | 字段必须在数组 `args` 值中出现 |
+| Leon\BswBundle\Module\Validator\Entity\Lte | 值小于等于 | 字段值必须小于或等于 `arg1`  |
 | Leon\BswBundle\Module\Validator\Entity\Phone | 为电话号码 | 字段必须是电话号码格式 |
-| Leon\BswBundle\Module\Validator\Entity\Trim | 剔除 |  |
+| Leon\BswBundle\Module\Validator\Entity\Trim | 剔除 | - |
 | Leon\BswBundle\Module\Validator\Entity\UnsInteger | 为正整数 | 字段必须为正整数 |
-| Leon\BswBundle\Module\Validator\Entity\Truncate | 截断 |  |
-| Leon\BswBundle\Module\Validator\Entity\InKey | 在数组键中 | 字段必须在数组{{ args }}键中出现 |
-| Leon\BswBundle\Module\Validator\Entity\Between | 值在区间内 | 字段值必须在{{ arg1 }}到{{ arg2 }}之间 |
-| Leon\BswBundle\Module\Validator\Entity\Same | 一致于参数 | 字段必须与参数{{ arg1 }}值一致 |
-| Leon\BswBundle\Module\Validator\Entity\Min | 长度大于等于 | 字段长度必须大于或等于{{ arg1 }} |
-| Leon\BswBundle\Module\Validator\Entity\Rsa | RSA加密串 | 字段为非法的RSA加密串 |
-| Leon\BswBundle\Module\Validator\Entity\IdString | ID字符串 | 字段必须为ID字串, 多个用逗号分隔 |
-| Leon\BswBundle\Module\Validator\Entity\StringToArray | 字符串转数组 |  |
+| Leon\BswBundle\Module\Validator\Entity\Truncate | 截断 | - |
+| Leon\BswBundle\Module\Validator\Entity\InKey | 在数组键中 | 字段必须在数组 `args` 键中出现 |
+| Leon\BswBundle\Module\Validator\Entity\Between | 值在区间内 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Same | 一致于参数 | 字段必须与参数 `arg1` 值一致 |
+| Leon\BswBundle\Module\Validator\Entity\Min | 长度大于等于 | 字段长度必须大于或等于 `arg1`  |
+| Leon\BswBundle\Module\Validator\Entity\Rsa | `RSA` 加密串 | 字段为非法的 `RSA` 加密串 |
+| Leon\BswBundle\Module\Validator\Entity\IdString | `ID` 字符串 | 字段必须为 `ID` 字串, 多个用逗号分隔 |
+| Leon\BswBundle\Module\Validator\Entity\StringToArray | 字符串转数组 | - |
 | Leon\BswBundle\Module\Validator\Entity\Numeric | 为数值 | 字段必须为数值 |
 | Leon\BswBundle\Module\Validator\Entity\Str | 为字符串 | 字段必须为字符串 |
 
-#### 如何使用
+### 如何使用
 
-- 在 Persistence Annotation 中使用 (可用像下面一样使用数组)  
+- **在 `Annotation` `@Persistence` 中使用 (可用像下面一样使用数组)**  
 
     ```php
     /**
@@ -558,7 +560,7 @@ dd($options);
     protected $phone;
     ```
 
-- 在 Input Annotation 中使用 (可用像上面一样使用字符串)  
+- **在 `Annotation` `@Input` 中使用 (可用像上面一样使用字符串)**  
 
     ```php
     /**
@@ -567,9 +569,12 @@ dd($options);
     public function registerApi() {}
     ```
 
-- 在流函数中使用  
+- **在流函数中使用**  
 
     ```php
+    /**
+     * @return array
+     */
     public function persistenceAnnotation() :array 
     {
         return [
@@ -585,7 +590,7 @@ dd($options);
     }
     ```
 
-- 配置全局验证器参数
+- **配置全局验证器参数**
 
     ```php
     /**
@@ -593,11 +598,11 @@ dd($options);
      */
     protected function validatorExtraArgs(): array
     {
-        return [Rsa::class => $this->component(ComponentRsa::class)];
+        return [Rsa => $this->component(ComponentRsa)];
     }
     ```
 
-- 手动对数据验证
+- **手动对数据验证**
     
     ```php
     $rules = []; // 同上，可字符串可数组

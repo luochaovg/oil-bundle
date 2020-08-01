@@ -1,7 +1,7 @@
 
 ## 环境介绍
 
-> 仅做了解，使用 bsw 命令安装时这些步骤都是静默自动执行的，无需做任何的手动操作。
+仅做了解，使用 bsw 命令安装时这些步骤都是静默自动执行的，无需做任何的手动操作。
 
 - 克隆项目
 
@@ -13,12 +13,11 @@
 
 - 使用 [`DaoCloud`](https://www.daocloud.io/mirror) 为 `Docker` 加速
 
-    > 注册后可获取加速 `ID` 用替换以下备用 `ID`。
+    注册后可获取加速 `ID` 用替换以下备用 `ID`。
 
     ```bash
-
     curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://{ID}.m.daocloud.io
-
+    
     # 例子
     curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://8dd58468.m.daocloud.io
     sudo service docker restart
