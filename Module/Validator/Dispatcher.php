@@ -85,7 +85,7 @@ class Dispatcher
                 $args,
                 $this->translator,
                 $this->locale,
-                $extraArgs['_args_handler'][$fn] ?? null
+                $extraArgs[Abs::RULES_FLAG_HANDLER][$fn] ?? null
             );
 
             if (!($validator instanceof Validator)) {

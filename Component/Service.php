@@ -452,7 +452,7 @@ class Service
             !empty($part[$item]) && $this->{$item}($part[$item]);
         }
 
-        $_result = $this
+        $resultHandling = $this
             ->methodChecker()
             ->schemeChecker()
             ->hostChecker()
@@ -460,8 +460,8 @@ class Service
             ->timeoutChecker()
             ->curl();
 
-        if (!$result = Helper::jsonArray($_result)) {
-            throw new ServiceException($_result);
+        if (!$result = Helper::jsonArray($resultHandling)) {
+            throw new ServiceException($resultHandling);
         }
 
         return $result;

@@ -26,7 +26,7 @@
     bsw --app myapp --type [backend|web|api] --port 1100 --host myapp --database myapp [--install]
     ```
 
-- [问题A] Docker pull 较慢的情况下
+- `问题A` Docker pull 较慢的情况下
 
     ```
     vim /etc/docker/daemon.json
@@ -41,7 +41,7 @@
     systemctl restart docker
     ```
   
-- [问题B] Docker apt-get update 联网失败
+-  `问题B` Docker apt-get update 联网失败
 
     ```
     vim /etc/docker/daemon.json

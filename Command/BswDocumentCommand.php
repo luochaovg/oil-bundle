@@ -488,17 +488,17 @@ class BswDocumentCommand extends Command implements CommandInterface
 
                         if ($params) {
 
-                            $_params = $validator->arrayArgs();
-                            $_class = get_class($validator);
+                            $paramsHandling = $validator->arrayArgs();
+                            $classHandling = get_class($validator);
 
-                            if (in_array($_class, [In::class])) {
-                                $enumDocument .= $this->enumDocument($_params, false);
+                            if (in_array($classHandling, [In::class])) {
+                                $enumDocument .= $this->enumDocument($paramsHandling, false);
                                 $argsString = false;
-                            } elseif (in_array($_class, [InKey::class])) {
-                                $enumDocument .= $this->enumDocument($_params, true);
+                            } elseif (in_array($classHandling, [InKey::class])) {
+                                $enumDocument .= $this->enumDocument($paramsHandling, true);
                                 $argsString = false;
                             } else {
-                                $argsString = Helper::printArray($_params, '%s', false, ', ');
+                                $argsString = Helper::printArray($paramsHandling, '%s', false, ', ');
                             }
                         }
 
@@ -534,19 +534,19 @@ class BswDocumentCommand extends Command implements CommandInterface
                             }
 
                             $indent = $i ? $argsIndent + 2 : $argsIndent;
-                            $_indent = $argsIndent + 3;
+                            $indentHandling = $argsIndent + 3;
 
-                            $_ruleBill = $billValidator[$fn];
+                            $ruleBill = $billValidator[$fn];
                             if (!isset($arg)) {
-                                $_rule = $fn;
+                                $ruleHanding = $fn;
                             } else {
-                                $_rule = "{$fn}({$arg})";
+                                $ruleHanding = "{$fn}({$arg})";
                             }
 
                             $rulesStr .= $append(".. div:: show-tips", 2, $indent, true);
-                            $rulesStr .= $append($_rule, 1, $_indent, true);
-                            $rulesStr .= $append(".. div:: show-tips-hidden", 2, $_indent - 1, true);
-                            $rulesStr .= $append(rawurlencode($_ruleBill), 1, $_indent, true);
+                            $rulesStr .= $append($ruleHanding, 1, $indentHandling, true);
+                            $rulesStr .= $append(".. div:: show-tips-hidden", 2, $indentHandling - 1, true);
+                            $rulesStr .= $append(rawurlencode($ruleBill), 1, $indentHandling, true);
 
                             $i++;
                         }
@@ -633,20 +633,20 @@ class BswDocumentCommand extends Command implements CommandInterface
             }
 
             // output params (table)
-            $_property = [];
+            $propertyHanding = [];
             foreach ($property as $name => $item) {
                 $item['indent'] = Helper::cnSpace($item['tab']) . ($item['tab'] ? Abs::DOC_TAG_TREE : null);
                 $item['field'] = current(array_reverse(explode('.', $name)));
                 $item['label'] = $item['label'] ?? $item['field'];
-                $_property[$name] = $item;
+                $propertyHanding[$name] = $item;
             }
 
             $propertyIndent = 0;
             $propertyList = [];
 
-            foreach ($property = $_property as $name => $item) {
+            foreach ($property = $propertyHanding as $name => $item) {
 
-                if ($item['field'] === '__line__') {
+                if ($item['field'] === Abs::DOC_KEY_LINE) {
                     $item['field'] = $item['type'] = Abs::DOC_TAG_LINE;
                     $item['label'] = "**{$item['label']}**";
                     $item['trans'] = false;

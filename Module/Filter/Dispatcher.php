@@ -47,8 +47,8 @@ class Dispatcher
         }
 
         if (!Helper::extendClass($filter, Filter::class)) {
-            $_filter = is_object($filter) ? get_class($filter) : $filter;
-            throw new FilterException("Filter `{$_filter}` is invalid with field `{$field}`");
+            $filterHandling = is_object($filter) ? get_class($filter) : $filter;
+            throw new FilterException("Filter `{$filterHandling}` is invalid with field `{$field}`");
         }
 
         if (!is_object($filter)) {

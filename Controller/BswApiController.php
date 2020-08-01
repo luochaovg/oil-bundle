@@ -173,11 +173,11 @@ abstract class BswApiController extends AbstractFOSRestController
                  */
 
                 if ($this->usrStrict && Helper::bitFlagAssert($type, Abs::V_STRICT_AUTH)) {
-                    $_strict = $this->dispatchMethod(Abs::FN_STRICT_AUTH);
+                    $strictHandling = $this->dispatchMethod(Abs::FN_STRICT_AUTH);
 
-                    if ($_strict !== true) {
+                    if ($strictHandling !== true) {
 
-                        $error = ($_strict instanceof Error) ? $_strict : new ErrorSession();
+                        $error = ($strictHandling instanceof Error) ? $strictHandling : new ErrorSession();
                         $this->logger->warning($this->messageLang($error->description()));
                         $this->iNeedCost(Abs::END_VALID);
 

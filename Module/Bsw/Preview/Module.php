@@ -426,14 +426,14 @@ class Module extends Bsw
 
         foreach ($previewAnnotationExtra as $field => $item) {
 
-            $_item = $item;
+            $itemHandling = $item;
             [$field, $item] = $this->handleForAnnotationExtraItem($field, $item, $previewAnnotationFull);
 
             if (!is_array($item)) {
                 throw new ModuleException("Preview {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
-            if ($_item === false) {
+            if ($itemHandling === false) {
                 $previewAnnotation[$field]['show'] = false;
             }
 
@@ -770,14 +770,14 @@ class Module extends Bsw
         };
 
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_PREVIEW]];
-        $_hooks = [];
+        $hooksHandling = [];
         foreach ($hooks as $hook => $item) {
-            $_hooks[$hook] = $item['fields'];
+            $hooksHandling[$hook] = $item['fields'];
             $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
         }
 
         $original = $list;
-        $list = $this->web->hooker($_hooks, $list, false, $before, $after, $extraArgs);
+        $list = $this->web->hooker($hooksHandling, $list, false, $before, $after, $extraArgs);
         $hooked = $list;
 
         /**
@@ -797,9 +797,9 @@ class Module extends Bsw
          */
 
         $charmList = [];
-        $_list = $list ? current($list) : [];
+        $listHandling = $list ? current($list) : [];
 
-        foreach ($_list as $field => $value) {
+        foreach ($listHandling as $field => $value) {
             $charm = self::CHARM . ucfirst($field);
             if (!method_exists($this->web, $this->method . $charm)) {
                 continue;

@@ -203,21 +203,21 @@ trait Excel
 
         // write title
         $col = 'A';
-        $_fields = [];
+        $fieldsHandling = [];
         foreach ($fields as $value) {
             if (!$offset) {
                 $lang = $fieldsLabel[$value] ?? $value;
                 $lang = $this->fieldLang($lang);
                 $this->excelCellRender($worksheet->getCell("{$col}1"), $lang);
             }
-            $_fields[$col] = $value;
+            $fieldsHandling[$col] = $value;
             $col++;
         }
 
         // write data
         $row = $beginLine;
         foreach ($data as $record) {
-            foreach ($_fields as $col => $name) {
+            foreach ($fieldsHandling as $col => $name) {
                 $this->excelCellRender($worksheet->getCell("{$col}{$row}"), $record[$name] ?? null);
             }
             $row++;

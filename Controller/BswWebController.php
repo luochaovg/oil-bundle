@@ -592,11 +592,11 @@ abstract class BswWebController extends AbstractController
                  */
 
                 if ($this->usrStrict && Helper::bitFlagAssert($type, Abs::V_STRICT_AUTH)) {
-                    $_strict = $this->dispatchMethod(Abs::FN_STRICT_AUTH);
+                    $strictHanding = $this->dispatchMethod(Abs::FN_STRICT_AUTH);
 
-                    if ($_strict !== true) {
+                    if ($strictHanding !== true) {
 
-                        $error = ($_strict instanceof Error) ? $_strict : new ErrorSession();
+                        $error = ($strictHanding instanceof Error) ? $strictHanding : new ErrorSession();
                         $this->logger->warning($this->messageLang($error->description()));
                         $this->iNeedCost(Abs::END_VALID);
 
@@ -704,7 +704,7 @@ abstract class BswWebController extends AbstractController
             return $accessList;
         }
 
-        $_accessList = [];
+        $accessListHandling = [];
         $masterMenuDetail = $menuAssist['masterMenuDetailForRender'] ?? [];
         $slaveMenuDetail = $menuAssist['slaveMenuDetailForRender'] ?? [];
         $allMenuDetail = array_merge($masterMenuDetail, $slaveMenuDetail);
@@ -712,8 +712,8 @@ abstract class BswWebController extends AbstractController
         foreach ($accessList as $classInfo => $items) {
             $id = md5($classInfo);
             foreach ($items as $route => $item) {
-                if (!isset($_accessList[$id])) {
-                    $_accessList[$id] = [
+                if (!isset($accessListHandling[$id])) {
+                    $accessListHandling[$id] = [
                         'info'  => $this->twigLang($classInfo),
                         'items' => [],
                     ];
@@ -722,11 +722,11 @@ abstract class BswWebController extends AbstractController
                     $item['info'] .= ' export';
                 }
                 $item['info'] = $allMenuDetail[$route]['info'] ?? $this->twigLang($item['info']);
-                $_accessList[$id]['items'][$route] = $item;
+                $accessListHandling[$id]['items'][$route] = $item;
             }
         }
 
-        return array_values($_accessList);
+        return array_values($accessListHandling);
     }
 
     /**

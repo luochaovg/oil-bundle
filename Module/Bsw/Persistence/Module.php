@@ -184,7 +184,7 @@ class Module extends Bsw
 
         foreach ($persistAnnotationExtra as $field => $item) {
 
-            $_item = $item;
+            $itemHandling = $item;
             if (is_bool($item)) {
                 $item = [];
             }
@@ -193,7 +193,7 @@ class Module extends Bsw
                 throw new ModuleException("Persistence {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
-            if ($_item === false) {
+            if ($itemHandling === false) {
                 $persistAnnotation[$field]['show'] = false;
             }
 
@@ -216,7 +216,7 @@ class Module extends Bsw
          */
 
         $hooks = [];
-        $_persistAnnotation = $persistAnnotation;
+        $persistAnnotationHandling = $persistAnnotation;
 
         foreach ($persistAnnotation as $field => $item) {
             $this->handleForFieldHook($field, $item['hook'], $hooks);
@@ -225,7 +225,7 @@ class Module extends Bsw
             }
         }
 
-        return [$persistAnnotation, $_persistAnnotation, $hooks];
+        return [$persistAnnotation, $persistAnnotationHandling, $hooks];
     }
 
     /**
@@ -520,14 +520,14 @@ class Module extends Bsw
 
         $persistence = !!$this->input->submit;
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERS_MODIFY : Abs::TAG_PERS_NEWLY]];
-        $_hooks = [];
+        $hooksHandling = [];
         foreach ($hooks as $hook => $item) {
-            $_hooks[$hook] = $item['fields'];
+            $hooksHandling[$hook] = $item['fields'];
             $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
         }
 
         $original = $record;
-        $record = $this->web->hooker($_hooks, $record, $persistence, $before, $after, $extraArgs);
+        $record = $this->web->hooker($hooksHandling, $record, $persistence, $before, $after, $extraArgs);
         $hooked = $record;
 
         if ($persistence) {
@@ -567,7 +567,7 @@ class Module extends Bsw
             return $this->showMessage($record);
         }
 
-        $_record = [];
+        $recordHandling = [];
         $format = [];
 
         foreach ($persistAnnotation as $key => $item) {
@@ -670,7 +670,7 @@ class Module extends Bsw
                 $titleAuto = $this->web->getButtonHtml($button, true);
             }
 
-            $_record[$key] = [
+            $recordHandling[$key] = [
                 'hide'      => $item['hide'],
                 'label'     => $item['trans'] ? $this->web->fieldLang($form->getLabel()) : $form->getLabel(),
                 'tips'      => $item['tips'],
@@ -718,7 +718,7 @@ class Module extends Bsw
             }
         }
 
-        return [$_record, $operates, $format, $original];
+        return [$recordHandling, $operates, $format, $original];
     }
 
     /**
@@ -733,8 +733,8 @@ class Module extends Bsw
         $extraSubmit = [];
         $document = $this->entityDocument();
         foreach ($submit as $field => $value) {
-            $_field = Helper::camelToUnder($field);
-            if (!isset($document[$_field])) {
+            $fieldHandling = Helper::camelToUnder($field);
+            if (!isset($document[$fieldHandling])) {
                 $extraSubmit[$field] = $value;
                 unset($submit[$field]);
                 continue;
@@ -749,7 +749,7 @@ class Module extends Bsw
      *
      * @param array  $submit
      * @param array  $record
-     * @param array  $_persistAnnotation
+     * @param array  $persistAnnotationHandling
      * @param array  $extraSubmit
      * @param string $multipleField
      *
@@ -758,7 +758,7 @@ class Module extends Bsw
     protected function recordHandler(
         array $submit,
         array $record,
-        array $_persistAnnotation,
+        array $persistAnnotationHandling,
         array $extraSubmit,
         string $multipleField = null
     ): array {
@@ -766,34 +766,34 @@ class Module extends Bsw
         $document = $this->entityDocument();
         foreach ($record as $field => $value) {
 
-            $_field = Helper::camelToUnder($field);
+            $fieldHandling = Helper::camelToUnder($field);
 
             // Field don't exists
-            if (!isset($_persistAnnotation[$field])) {
+            if (!isset($persistAnnotationHandling[$field])) {
                 unset($record[$field]);
                 continue;
             }
 
             // Force ignore
-            if ($_persistAnnotation[$field]['ignore']) {
+            if ($persistAnnotationHandling[$field]['ignore']) {
                 unset($record[$field]);
                 continue;
             }
 
             // No show and not in submit
-            if (!$_persistAnnotation[$field]['show'] && !isset($submit[$field])) {
+            if (!$persistAnnotationHandling[$field]['show'] && !isset($submit[$field])) {
                 unset($record[$field]);
                 continue;
             }
 
             // When field is null but default is not null
-            if (is_null($value) && $document[$_field]['default'] !== null) {
+            if (is_null($value) && $document[$fieldHandling]['default'] !== null) {
                 unset($record[$field]);
                 continue;
             }
 
             // Ignore when blank
-            if ($_persistAnnotation[$field]['ignoreBlank'] && trim($value) === '') {
+            if ($persistAnnotationHandling[$field]['ignoreBlank'] && trim($value) === '') {
                 unset($record[$field]);
                 continue;
             }
@@ -801,16 +801,16 @@ class Module extends Bsw
 
         foreach ($extraSubmit as $field => $value) {
 
-            $_field = Helper::camelToUnder($field);
+            $fieldHandling = Helper::camelToUnder($field);
 
             // Field not in annotation
-            if (!isset($_persistAnnotation[$field])) {
+            if (!isset($persistAnnotationHandling[$field])) {
                 unset($extraSubmit[$field]);
                 continue;
             }
 
             // Field not in entity
-            if (!isset($document[$_field])) {
+            if (!isset($document[$fieldHandling])) {
                 unset($extraSubmit[$field]);
                 continue;
             }
@@ -845,14 +845,14 @@ class Module extends Bsw
         foreach ($recordList as $key => $item) {
             foreach ($item as $field => $value) {
 
-                if (!$_persistAnnotation[$field]['html']) {
+                if (!$persistAnnotationHandling[$field]['html']) {
                     $value = $recordCleanList[$key][$field];
                 }
 
                 /**
                  * validator type
                  */
-                $type = $_persistAnnotation[$field]['validatorType'];
+                $type = $persistAnnotationHandling[$field]['validatorType'];
                 if (strpos($type, 'int') !== false) {
                     $recordList[$key][$field] = intval($value);
                 } elseif (!is_null($value)) {
@@ -870,7 +870,7 @@ class Module extends Bsw
      * @param array $submit
      * @param array $record
      * @param array $original
-     * @param array $_persistAnnotation
+     * @param array $persistAnnotationHandling
      * @param array $extraSubmit
      * @param array $recordBefore
      * @param array $recordDiff
@@ -882,7 +882,7 @@ class Module extends Bsw
         array $submit,
         array $record,
         array $original,
-        array $_persistAnnotation,
+        array $persistAnnotationHandling,
         array $extraSubmit,
         array $recordBefore,
         array $recordDiff
@@ -900,7 +900,7 @@ class Module extends Bsw
                 $submit,
                 $record,
                 $original,
-                $_persistAnnotation,
+                $persistAnnotationHandling,
                 $extraSubmit,
                 $recordBefore,
                 $recordDiff,
@@ -946,7 +946,7 @@ class Module extends Bsw
                      */
 
                     $multipleField = null;
-                    foreach ($_persistAnnotation as $field => $item) {
+                    foreach ($persistAnnotationHandling as $field => $item) {
                         if (is_array($record[$field] ?? null)) {
                             $multipleField = $field;
                             break; // multiple allow one only
@@ -955,7 +955,7 @@ class Module extends Bsw
 
                     $loggerType = $multipleField ? 2 : 1;
                     $recordBefore = $recordDiff = [];
-                    $record = $this->recordHandler($record, $record, $_persistAnnotation, $extraSubmit, $multipleField);
+                    $record = $this->recordHandler($record, $record, $persistAnnotationHandling, $extraSubmit, $multipleField);
 
                     if ($multipleField) {
                         $result = $this->repository->newlyMultiple($record);
@@ -970,7 +970,7 @@ class Module extends Bsw
                      */
 
                     $loggerType = 3;
-                    $record = $this->recordHandler($submit, $record, $_persistAnnotation, $extraSubmit);
+                    $record = $this->recordHandler($submit, $record, $persistAnnotationHandling, $extraSubmit);
                     $result = $this->repository->modify([$pk => Helper::dig($record, $pk)], $record);
                 }
 
@@ -1073,7 +1073,7 @@ class Module extends Bsw
         }
 
         // get annotation
-        [$persistAnnotation, $_persistAnnotation, $hooks] = $this->handleAnnotation($record);
+        [$persistAnnotation, $persistAnnotationHandling, $hooks] = $this->handleAnnotation($record);
 
         $result = $this->handlePersistenceData($persistAnnotation, $record, $hooks, $output);
         if ($result instanceof ArgsOutput) {
@@ -1087,7 +1087,7 @@ class Module extends Bsw
                 /**
                  * Rules validator
                  */
-                foreach ($_persistAnnotation as $field => $item) {
+                foreach ($persistAnnotationHandling as $field => $item) {
                     $rules = $item['rules'];
                     if (empty($rules)) {
                         continue;
@@ -1103,7 +1103,7 @@ class Module extends Bsw
                     $submit,
                     $record,
                     $original,
-                    $_persistAnnotation,
+                    $persistAnnotationHandling,
                     $extraSubmit,
                     $recordBefore,
                     $recordDiff
@@ -1118,7 +1118,7 @@ class Module extends Bsw
 
             $result = call_user_func_array(
                 $this->input->handler,
-                [$this->input->submit, $_persistAnnotation]
+                [$this->input->submit, $persistAnnotationHandling]
             );
 
             if ($result instanceof Error) {

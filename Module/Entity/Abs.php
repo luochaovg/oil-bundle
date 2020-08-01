@@ -39,6 +39,8 @@ class Abs
     const HOOKER_FLAG_ENUMS_INFO   = '__info';
     const RECORD_LOGGER_EFFECT     = '__effect';
     const RECORD_LOGGER_EXTRA      = '__extra';
+    const RULES_FLAG_HANDLER       = '__args_handler';
+    const FLAG_SEARCH_ALL          = '__search_all_value';
 
     /**
      * About frontend & source
@@ -396,6 +398,7 @@ class Abs
     const DOC_TAG_RIGHT = '¹';
     const DOC_TAG_WRONG = 'º';
     const DOC_TAG_TREE  = '└ ';
+    const DOC_KEY_LINE  = '__line__';
     const DOC_TAG_LINE  = '``›››››``';
 
     const FORMAT_JSON = 'json';

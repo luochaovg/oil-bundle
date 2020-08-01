@@ -98,19 +98,19 @@ trait Annotation
 
                 $list = $this->annotation(Output::class)->resolveMethod($class, $method);
                 $list = $list[Output::class] ?? [];
-                $_list = [];
+                $listHandling = [];
 
                 /**
                  * @param string $position
                  * @param array  $extra
                  */
-                $merge = function (string $position, array $extra) use (&$_list) {
+                $merge = function (string $position, array $extra) use (&$listHandling) {
                     if ($position == Abs::POS_BOTTOM) {
-                        $_list = array_merge($_list, $extra);
+                        $listHandling = array_merge($listHandling, $extra);
                     } elseif ($position == Abs::POS_TOP) {
-                        $_list = array_merge($extra, $_list);
+                        $listHandling = array_merge($extra, $listHandling);
                     } else {
-                        $_list = Helper::arrayInsertAssoc($_list, $position, $extra);
+                        $listHandling = Helper::arrayInsertAssoc($listHandling, $position, $extra);
                     }
                 };
 
@@ -138,12 +138,11 @@ trait Annotation
                         continue;
                     }
 
-                    $fn = Abs::FN_API_DOC_OUTPUT . ucfirst($item->extra);
-                    if (!method_exists($class, $fn)) {
+                    if (!method_exists($class, $item->extra)) {
                         continue;
                     }
 
-                    $output = call_user_func([$class, $fn]) ?? [];
+                    $output = call_user_func([$class, $item->extra]) ?? [];
                     $item->tab = $item->tab ?? 0;
 
                     foreach ($output as $field => $meta) {
@@ -164,7 +163,7 @@ trait Annotation
                     $merge($item->position, $extra);
                 }
 
-                return $_list;
+                return $listHandling;
             }
         );
     }

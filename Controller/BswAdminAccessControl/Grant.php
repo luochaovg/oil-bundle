@@ -147,15 +147,15 @@ trait Grant
                         throw new RepositoryException($access->pop());
                     }
 
-                    $_routes = [];
+                    $routesHandling = [];
                     foreach ($routes as $route) {
-                        $_routes[] = [
+                        $routesHandling[] = [
                             'userId'    => $id,
                             'routeName' => $route,
                         ];
                     }
 
-                    $effect = $access->newlyMultiple($_routes);
+                    $effect = $access->newlyMultiple($routesHandling);
                     if ($effect === false) {
                         throw new RepositoryException($access->pop());
                     }

@@ -176,23 +176,23 @@ abstract class FoundationRepository extends SFRepository
     protected function error(ConstraintViolationListInterface $error, int $index = 0): array
     {
         $message = $error->get($index)->getMessage();
-        $_message = $this->translator->trans($message, [], 'messages');
+        $messageHandling = $this->translator->trans($message, [], 'messages');
 
         $fields = $error->get($index)->getPropertyPath();
-        $fields = $_fields = Helper::stringToArray($fields);
+        $fields = $fieldsHanding = Helper::stringToArray($fields);
 
-        foreach ($_fields as $key => $field) {
+        foreach ($fieldsHanding as $key => $field) {
             $field = Helper::stringToLabel($field);
             $field = $this->translator->trans($field, [], 'fields');
-            $_fields[$key] = $field;
+            $fieldsHanding[$key] = $field;
         }
 
         $fields = implode(', ', $fields);
-        $_fields = implode(', ', $_fields);
+        $fieldsHanding = implode(', ', $fieldsHanding);
 
-        $this->logger->error("Persistence error with field `{$fields}` in {$this->entity}, {$message}, {$_message}");
+        $this->logger->error("Persistence error with field `{$fields}` in {$this->entity}, {$message}, {$messageHandling}");
 
-        return ["{$_message} ({$_fields})", "{$message} ({$fields})"];
+        return ["{$messageHandling} ({$fieldsHanding})", "{$message} ({$fields})"];
     }
 
     /**
@@ -657,7 +657,7 @@ abstract class FoundationRepository extends SFRepository
         $joinMode = ['left', 'inner'];
         $join = array_filter($join);
 
-        foreach ($join as $_alias => $item) {
+        foreach ($join as $aliasHandling => $item) {
 
             if (!is_array($item)) {
                 throw new RepositoryException('Item of variable `join` should be array');
@@ -674,7 +674,7 @@ abstract class FoundationRepository extends SFRepository
             }
 
             $mode = "{$mode}Join";
-            $join[$_alias]['alias'] = $_alias;
+            $join[$aliasHandling]['alias'] = $aliasHandling;
 
             $onLeft = $item['left'] ?? [];
             $onRight = $item['right'] ?? [];
@@ -689,7 +689,7 @@ abstract class FoundationRepository extends SFRepository
             if (empty($onLeft)) {
                 $joinTable = lcfirst(Helper::clsName($entity));
                 array_push($onLeft, "{$alias}.{$joinTable}" . ucfirst($this->pk));
-                array_push($onRight, "{$_alias}.{$this->pk}");
+                array_push($onRight, "{$aliasHandling}.{$this->pk}");
             }
 
             $joinOn = [];
@@ -701,12 +701,12 @@ abstract class FoundationRepository extends SFRepository
 
             // join sub query
             if (is_array($entity)) {
-                $_model = $this->getQueryBuilder($entity);
-                $entity = "({$_model->getDQL()})";
+                $modelHandling = $this->getQueryBuilder($entity);
+                $entity = "({$modelHandling->getDQL()})";
             }
 
             $joinOn = implode(' AND ', $joinOn);
-            $model->{$mode}($entity, $_alias, Expr\Join::WITH, "({$joinOn})");
+            $model->{$mode}($entity, $aliasHandling, Expr\Join::WITH, "({$joinOn})");
         }
 
         /*
@@ -731,21 +731,21 @@ abstract class FoundationRepository extends SFRepository
             $aliasEntity[$alias] = $this->entity;
             $aliasLength = count($aliasEntity);
 
-            $_select = [];
+            $selectHandling = [];
             $select = array_unique(array_filter($select));
 
             foreach ($select as $name) {
                 if (!isset($aliasEntity[$name]) || $aliasLength == 1) {
-                    array_push($_select, $name);
+                    array_push($selectHandling, $name);
                     continue;
                 }
 
                 $fields = array_keys(Helper::entityToArray(new $aliasEntity[$name]));
                 $fields = Helper::arrayMap($fields, "{$name}.%s");
-                $_select = array_merge($_select, $fields);
+                $selectHandling = array_merge($selectHandling, $fields);
             }
 
-            $model->select($_select);
+            $model->select($selectHandling);
 
         } elseif ($method === Abs::DELETE) {
 
@@ -1081,16 +1081,16 @@ abstract class FoundationRepository extends SFRepository
             $handler = implode(' ', $handler);
         }
 
-        $_list = [];
+        $listHandling = [];
         foreach ($list as $key => $item) {
             if (is_callable($handler)) {
-                $_list[$key] = $handler($item, $key);
+                $listHandling[$key] = $handler($item, $key);
             } else {
-                $_list[$key] = sprintf((string)$handler, ...array_values($item));
+                $listHandling[$key] = sprintf((string)$handler, ...array_values($item));
             }
         }
 
-        return $_list;
+        return $listHandling;
     }
 
     /**

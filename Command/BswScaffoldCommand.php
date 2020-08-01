@@ -271,17 +271,17 @@ class BswScaffoldCommand extends Command implements CommandInterface
         if (is_int($cover = $this->cover)) {
 
             $row = substr_count(@file_get_contents($file), "\n");
-            $_cover = ($row >= $this->cover ? 'no' : 'yes');
+            $coverAble = ($row >= $this->cover ? 'no' : 'yes');
 
             $map = [
-                '/Controller/' => $_cover,
-                '/Repository/' => $_cover,
+                '/Controller/' => $coverAble,
+                '/Repository/' => $coverAble,
                 '/Entity/'     => 'yes',
             ];
 
-            foreach ($map as $keyword => $_cover) {
+            foreach ($map as $keyword => $coverAble) {
                 if (strpos($file, $keyword) !== false) {
-                    $cover = $_cover;
+                    $cover = $coverAble;
                     break;
                 }
             }
@@ -607,16 +607,16 @@ class BswScaffoldCommand extends Command implements CommandInterface
                     continue;
                 }
                 $unique = true;
-                $_fields = [];
-                foreach ($v['fields'] as $_field) {
-                    $_fields[] = Helper::underToCamel($_field);
+                $fieldsHanding = [];
+                foreach ($v['fields'] as $f) {
+                    $fieldsHanding[] = Helper::underToCamel($f);
                 }
                 if (count($v['fields']) <= 1) {
-                    $uniques = '"' . current($_fields) . '"';
-                    $errorPath = current($_fields);
+                    $uniques = '"' . current($fieldsHanding) . '"';
+                    $errorPath = current($fieldsHanding);
                 } else {
-                    $uniques = '{"' . implode('", "', $_fields) . '"}';
-                    $errorPath = implode(',', $_fields);
+                    $uniques = '{"' . implode('", "', $fieldsHanding) . '"}';
+                    $errorPath = implode(',', $fieldsHanding);
                 }
                 array_push(
                     $EntityClassMap['uniques'],

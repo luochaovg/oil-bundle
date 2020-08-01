@@ -75,7 +75,7 @@ trait ApiDocument
             $this->parameter('module_extra_path', [])
         );
 
-        $_paths = [];
+        $pathsHandling = [];
 
         foreach ($paths as $key => $item) {
             if (!isset($item['bundle']) || !isset($item['namespace']) || !isset($item['path'])) {
@@ -83,22 +83,22 @@ trait ApiDocument
             }
 
             if ($item['bundle']) {
-                $_path = $this->kernel->getBundle($key)->getPath();
+                $p = $this->kernel->getBundle($key)->getPath();
             } else {
-                $_path = $this->kernel->getProjectDir();
+                $p = $this->kernel->getProjectDir();
             }
 
-            $namespace = str_replace(['{path}', '{module}'], [$_path, $module], $item['namespace']);
-            $path = str_replace(['{path}', '{module}'], [$_path, $module], $item['path']);
+            $namespace = str_replace(['{path}', '{module}'], [$p, $module], $item['namespace']);
+            $path = str_replace(['{path}', '{module}'], [$p, $module], $item['path']);
 
             if (file_exists($path)) {
                 $namespace = '\\' . trim($namespace, '\\') . '\\';
-                $_paths[$namespace] = rtrim($path, '/') . '/';
+                $pathsHandling[$namespace] = rtrim($path, '/') . '/';
             }
         }
 
         $classBill = [];
-        foreach ($_paths as $ns => $path) {
+        foreach ($pathsHandling as $ns => $path) {
             Helper::directoryIterator(
                 $path,
                 $classBill,

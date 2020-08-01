@@ -261,8 +261,8 @@ abstract class Bsw
         $tailorCore = function (string $class, string $method, $field) use ($type, &$args, $argument) {
 
             $tailor = new $class($this->web, $field);
-            $_args = $args ? [$args] : [];
-            $argument = call_user_func_array([$tailor, $method], $_args) ?? $argument;
+            $argsHandling = $args ? [$args] : [];
+            $argument = call_user_func_array([$tailor, $method], $argsHandling) ?? $argument;
             $args->target = $argument;
 
             if ($type) {
@@ -336,7 +336,7 @@ abstract class Bsw
          */
 
         if (!isset($constants)) {
-            $_constants = (new ReflectionClass(Abs::class))->getConstants();
+            $constantsHandling = (new ReflectionClass(Abs::class))->getConstants();
             $beginWith = [
                 'NIL',
                 'DIRTY',
@@ -349,7 +349,7 @@ abstract class Bsw
                 'TPL_',
                 'SLOT_',
             ];
-            foreach ($_constants as $key => $value) {
+            foreach ($constantsHandling as $key => $value) {
                 foreach ($beginWith as $target) {
                     if (strpos($key, $target) === 0) {
                         $constants["Abs::{$key}"] = $value;
@@ -519,24 +519,24 @@ abstract class Bsw
             return [$field, $item];
         }
 
-        $_table = Helper::dig($item, 'table');
-        $_field = Helper::dig($item, 'field');
+        $tableHandling = Helper::dig($item, 'table');
+        $fieldHandling = Helper::dig($item, 'field');
 
         if (is_null($defaultIndex)) {
-            $_item = $previewAnnotationFull[$_table][$_field] ?? [];
-            $item = array_merge($_item, $item);
+            $itemHandling = $previewAnnotationFull[$tableHandling][$fieldHandling] ?? [];
+            $item = array_merge($itemHandling, $item);
 
             return [$field, $item];
         }
 
-        $_index = Helper::dig($item, 'index') ?? $defaultIndex;
-        $item['field'] = "{$_table}.{$_field}";
-        $_field = "{$_field}{$_index}";
+        $indexHandling = Helper::dig($item, 'index') ?? $defaultIndex;
+        $item['field'] = "{$tableHandling}.{$fieldHandling}";
+        $fieldHandling = "{$fieldHandling}{$indexHandling}";
 
-        $_item = $filterAnnotationFull[$_table][$_field] ?? [];
-        $item = array_merge($_item, $item);
+        $itemHandling = $filterAnnotationFull[$tableHandling][$fieldHandling] ?? [];
+        $item = array_merge($itemHandling, $item);
 
-        return ["{$field}{$_index}", $item];
+        return ["{$field}{$indexHandling}", $item];
     }
 
     /**

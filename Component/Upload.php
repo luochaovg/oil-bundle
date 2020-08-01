@@ -223,20 +223,20 @@ class Upload
         $tips->allowMime = implode('、', $tips->allowMime);
 
         $key = 0;
-        $_tips = [];
+        $tipsHandling = [];
         foreach ($tips as $type => $condition) {
             $type = Helper::stringToLabel($type);
             if (is_callable($labelHandler)) {
                 $type = call_user_func_array($labelHandler, [$type]);
             }
-            $_tips[] = [
+            $tipsHandling[] = [
                 'key'       => ++$key,
                 'type'      => $type,
                 'condition' => $condition,
             ];
         }
 
-        return [$_tips, $tips->allowSuffix, $tips->allowMime];
+        return [$tipsHandling, $tips->allowSuffix, $tips->allowMime];
     }
 
     /**

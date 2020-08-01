@@ -199,12 +199,12 @@ class Module extends Bsw
 
         foreach ($filterAnnotationExtra as $field => $item) {
 
-            $_item = $item;
+            $itemHandling = $item;
             $defaultIndex = 0;
             [$field, $item] = $this->handleForAnnotationExtraItem($field, $item, $filterAnnotationFull, $defaultIndex);
 
-            $_field = Helper::camelToUnder($field);
-            if (strpos($_field, Abs::FILTER_INDEX_SPLIT) === false) {
+            $fieldHandling = Helper::camelToUnder($field);
+            if (strpos($fieldHandling, Abs::FILTER_INDEX_SPLIT) === false) {
                 $field = $field . Abs::FILTER_INDEX_SPLIT . $defaultIndex;
             }
 
@@ -212,7 +212,7 @@ class Module extends Bsw
                 throw new ModuleException("Filter {$this->class}::{$this->method}{$fn}() return must be array[]");
             }
 
-            if ($_item === false) {
+            if ($itemHandling === false) {
                 $filterAnnotation[$field]['show'] = false;
             }
 
@@ -222,7 +222,7 @@ class Module extends Bsw
 
             $original = $this->web->annotation(Filter::class, true);
             $original->class = $this->class;
-            $original->target = $_field;
+            $original->target = $fieldHandling;
 
             $item = $original->converter([new Filter($item)]);
             $filterAnnotation[$field] = (array)current($item[Filter::class]);
@@ -233,21 +233,21 @@ class Module extends Bsw
             $allowFields = array_merge($allowFields, array_column($item, 'field'));
         }
 
-        $_annotation = [];
+        $annotationHandling = [];
         foreach ($filterAnnotation as $key => $item) {
             $key = Helper::camelToUnder($key);
             if (!$this->entity) {
-                $_annotation[$key] = $item;
+                $annotationHandling[$key] = $item;
                 continue;
             }
 
             $item['field'] = Helper::tableFieldAddAlias($item['field'], $query['alias']);
             if (in_array($item['field'], $allowFields)) {
-                $_annotation[$key] = $item;
+                $annotationHandling[$key] = $item;
             }
         }
 
-        $filterAnnotation = Helper::sortArray($_annotation, 'sort');
+        $filterAnnotation = Helper::sortArray($annotationHandling, 'sort');
 
         /**
          * hooks
@@ -275,23 +275,23 @@ class Module extends Bsw
     protected function getFilterData(array $filterAnnotation, array $hooks): array
     {
         $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_FILTER]];
-        $_hooks = [];
+        $hooksHandling = [];
         foreach ($hooks as $hook => $item) {
-            $_hooks[$hook] = $item['fields'];
+            $hooksHandling[$hook] = $item['fields'];
             $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
         }
 
         $filter = $this->web->getArgs($this->input->key) ?? [];
         $filter = Helper::numericValues($filter);
 
-        $_filter = [];
+        $filterHandling = [];
         foreach ($filter as $key => $value) {
             if (strpos($key, Abs::FILTER_INDEX_SPLIT) === false) {
                 $key = $key . Abs::FILTER_INDEX_SPLIT . 0;
             }
-            $_filter[$key] = $value;
+            $filterHandling[$key] = $value;
         }
-        $filter = $this->web->hooker($_hooks, $_filter, true, null, null, $extraArgs);
+        $filter = $this->web->hooker($hooksHandling, $filterHandling, true, null, null, $extraArgs);
 
         $condition = [];
         [$group, $diffuse] = $this->getFilterGroup($filterAnnotation);
@@ -320,19 +320,19 @@ class Module extends Bsw
             }
         }
 
-        foreach ($_hooks as $hook => $fields) {
+        foreach ($hooksHandling as $hook => $fields) {
             foreach ($fields as $index => $field) {
                 if (!isset($filter[$field])) {
-                    unset($_hooks[$hook][$index]);
+                    unset($hooksHandling[$hook][$index]);
                 }
             }
-            if (empty($_hooks[$hook])) {
-                unset($_hooks[$hook]);
+            if (empty($hooksHandling[$hook])) {
+                unset($hooksHandling[$hook]);
             }
         }
 
         $filterAnnotationValue = Helper::arrayColumn($filterAnnotation, 'value');
-        $filterAnnotationValue = $this->web->hooker($_hooks, $filterAnnotationValue, false, null, null, $extraArgs);
+        $filterAnnotationValue = $this->web->hooker($hooksHandling, $filterAnnotationValue, false, null, null, $extraArgs);
 
         foreach ($filterAnnotation as $key => $item) {
             $filterAnnotation[$key]['value'] = $filterAnnotationValue[$key];

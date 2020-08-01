@@ -208,14 +208,14 @@ class Dispatcher
      */
     public function executeAny(array $items, bool $persistence = true, array $extraArgs = [])
     {
-        $_items = [];
+        $itemsHandling = [];
         foreach ($items as $key => $item) {
             $item = $this->execute($item, $key, $persistence, $extraArgs);
             if ($item) {
-                $_items[$key] = $item;
+                $itemsHandling[$key] = $item;
             }
         }
 
-        return $_items;
+        return $itemsHandling;
     }
 }

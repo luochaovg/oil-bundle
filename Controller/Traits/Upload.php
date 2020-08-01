@@ -102,8 +102,8 @@ trait Upload
         foreach ($maps as $item) {
             $mime = array_merge($mime, array_keys($item));
 
-            $_suffix = Helper::stringToArray(implode(',', array_values($item)));
-            $suffix = array_merge($suffix, $_suffix);
+            $suffixHandling = Helper::stringToArray(implode(',', array_values($item)));
+            $suffix = array_merge($suffix, $suffixHandling);
         }
 
         return [

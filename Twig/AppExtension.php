@@ -139,9 +139,9 @@ class AppExtension extends AbstractExtension
         foreach ($map as $tag => $tpl) {
             $key = Helper::underToCamel("{$flag}_background_{$tag}");
             if (!empty($config[$key])) {
-                $_key = "background-{$tag}";
+                $keyHandling = "background-{$tag}";
                 $val = sprintf($tpl, $config[$key]);
-                array_push($attributes, "{$_key}: {$val}");
+                array_push($attributes, "{$keyHandling}: {$val}");
             }
         }
 

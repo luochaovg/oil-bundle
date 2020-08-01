@@ -91,11 +91,11 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
      */
     public function handler(array $record)
     {
-        static $keys, $_keys, $header;
+        static $keys, $keysHanding, $header;
         if (!isset($header)) {
             $keys = array_keys(current($record));
             $header = $this->header($keys);
-            $_keys = array_keys($header);
+            $keysHanding = array_keys($header);
         }
 
         if ($this->hasCnText) {
@@ -104,7 +104,7 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
 
         $record = $this->handleAllRecord($record);
         foreach ($record as $key => &$item) {
-            $item = Helper::arrayPull($item, $_keys, false, '');
+            $item = Helper::arrayPull($item, $keysHanding, false, '');
             $item = $this->handleRecord($item);
             if ($item === false) {
                 unset($record[$key]);
@@ -112,14 +112,14 @@ abstract class ExportCsvCommand extends RecursionSqlCommand
         }
 
         if ($this->params->page == 1) {
-            $_header = [];
+            $headerHanding = [];
             foreach ($keys as $key) {
                 if (!isset($header[$key])) {
                     continue;
                 }
-                $_header[] = $header[$key];
+                $headerHanding[] = $header[$key];
             }
-            array_unshift($record, $_header);
+            array_unshift($record, $headerHanding);
         }
 
         $this->csvWriter($record);

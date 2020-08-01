@@ -123,11 +123,11 @@ class BswMissionCommand extends Command implements CommandInterface
 
             $condition['args'] = array_merge($args ?? [], $m);
 
-            $_condition = [];
+            $conditionHandling = [];
             foreach ($condition as $key => $value) {
                 $key = strpos($key, '-') === 0 ? $key : "--{$key}";
                 $value = is_array($value) ? Helper::jsonStringify64($value) : $value;
-                $_condition[$key] = $value;
+                $conditionHandling[$key] = $value;
             }
 
             if (isset($condition['receiver'])) {
@@ -146,7 +146,7 @@ class BswMissionCommand extends Command implements CommandInterface
             $command = $this->getApplication()->find($m['command']);
 
             try {
-                $status = $command->run(new ArrayInput($_condition), $output);
+                $status = $command->run(new ArrayInput($conditionHandling), $output);
                 if ($status === 0) {
                     if ($m['cronReuse']) {
                         $attributes = ['state' => 1, 'donePercent' => 0, 'remark' => "[{$date}] execute success"];

@@ -162,8 +162,8 @@ class Helper
                 if (!is_scalar($item)) {
                     continue;
                 }
-                $_item = sprintf($handler, $item);
-                $item = str_replace(['{key}', '{value}'], [$key, $item], $_item);
+                $itemHandling = sprintf($handler, $item);
+                $item = str_replace(['{key}', '{value}'], [$key, $item], $itemHandling);
             }
         }
 
@@ -182,7 +182,7 @@ class Helper
      */
     public static function arrayPull(array &$target, array $pull, bool $popTarget = false, $default = null): array
     {
-        $_target = [];
+        $targetHandling = [];
         foreach ($pull as $oldKey => $newKey) {
             $oldKey = is_numeric($oldKey) ? $newKey : $oldKey;
 
@@ -193,13 +193,13 @@ class Helper
                 continue;
             }
 
-            $_target[$newKey] = $value ?? $default;
+            $targetHandling[$newKey] = $value ?? $default;
             if ($popTarget) {
                 unset($target[$oldKey]);
             }
         }
 
-        return $_target;
+        return $targetHandling;
     }
 
     /**
@@ -274,25 +274,25 @@ class Helper
             return array_column($target, $valueKeys, $keyKey);
         }
 
-        $_target = [];
+        $targetHandling = [];
         foreach ($target as $key => $item) {
-            $_key = $keyKey ? ($item[$keyKey] ?? ($keyKeyStrict ? null : $key)) : $key;
-            if (is_null($_key)) {
+            $keyHandling = $keyKey ? ($item[$keyKey] ?? ($keyKeyStrict ? null : $key)) : $key;
+            if (is_null($keyHandling)) {
                 continue;
             }
             if (is_string($valueKeys) || is_numeric($valueKeys)) {
-                $_target[$_key] = $item[$valueKeys] ?? null;
+                $targetHandling[$keyHandling] = $item[$valueKeys] ?? null;
             } elseif (is_array($valueKeys)) {
-                $_target[$_key] = self::arrayPull($item, $valueKeys);
+                $targetHandling[$keyHandling] = self::arrayPull($item, $valueKeys);
             } elseif ($valueKeys === true) {
-                $_target[$_key] = $item;
+                $targetHandling[$keyHandling] = $item;
             } elseif ($valueKeys === false) {
                 self::arrayPop($item, [$keyKey]);
-                $_target[$_key] = $item;
+                $targetHandling[$keyHandling] = $item;
             }
         }
 
-        return $_target;
+        return $targetHandling;
     }
 
     /**
@@ -314,7 +314,7 @@ class Helper
         array $extra = []
     ): array {
 
-        $_target = [];
+        $targetHandling = [];
         $index = 0;
         foreach ($target as $key => $value) {
             $index += 1;
@@ -322,10 +322,10 @@ class Helper
             $itemKey = [$keyKey => $key];
             $itemValue = is_array($value) ? $value : [$valueKey => $value];
 
-            $_target[] = array_merge($itemIndex, $itemKey, $itemValue, $extra);
+            $targetHandling[] = array_merge($itemIndex, $itemKey, $itemValue, $extra);
         }
 
-        return $_target;
+        return $targetHandling;
     }
 
     /**
@@ -416,12 +416,12 @@ class Helper
      */
     public static function keyCamelToUnder(array $source, string $split = '_'): array
     {
-        $_source = [];
+        $sourceHandling = [];
         foreach ($source as $key => $value) {
-            $_source[self::camelToUnder($key, $split)] = $value;
+            $sourceHandling[self::camelToUnder($key, $split)] = $value;
         }
 
-        return $_source;
+        return $sourceHandling;
     }
 
     /**
@@ -452,12 +452,12 @@ class Helper
      */
     public static function keyUnderToCamel(array $source, bool $small = true, string $split = '_'): array
     {
-        $_source = [];
+        $sourceHandling = [];
         foreach ($source as $key => $value) {
-            $_source[self::underToCamel($key, $small, $split)] = $value;
+            $sourceHandling[self::underToCamel($key, $small, $split)] = $value;
         }
 
-        return $_source;
+        return $sourceHandling;
     }
 
     /**
@@ -803,9 +803,9 @@ class Helper
                     if ($assocOnly && self::typeofArray($v, Abs::T_ARRAY_INDEX)) {
                         $target[$k] = $v;
                     } else {
-                        $_items = [$target[$k], $v];
-                        $transpose && $_items = array_reverse($_items);
-                        $target[$k] = self::mergeWeak($assocOnly, $transpose, $lowerNull, ...$_items);
+                        $itemsHandling = [$target[$k], $v];
+                        $transpose && $itemsHandling = array_reverse($itemsHandling);
+                        $target[$k] = self::mergeWeak($assocOnly, $transpose, $lowerNull, ...$itemsHandling);
                     }
                 } else {
                     if (!$lowerNull || ($lowerNull && !is_null($v))) {
@@ -3383,13 +3383,12 @@ class Helper
             return $target;
         }
 
-        $field = '_search_with_all_value';
         foreach ($target as $key => $item) {
-            $target[$key][$field] = serialize($item);
+            $target[$key][Abs::FLAG_SEARCH_ALL] = serialize($item);
         }
 
         if ($searchValue === true) {
-            $searchValue = $field;
+            $searchValue = Abs::FLAG_SEARCH_ALL;
         }
 
         foreach ($target as $key => $item) {
@@ -3406,7 +3405,7 @@ class Helper
         }
 
         foreach ($target as $item) {
-            unset($item[$field]);
+            unset($item[Abs::FLAG_SEARCH_ALL]);
         }
 
         return $target;
@@ -3628,7 +3627,7 @@ class Helper
     public static function joinString(string $split, ...$items): string
     {
         $total = count($items) - 1;
-        $_items = [];
+        $itemsHanding = [];
 
         foreach ($items as $key => $value) {
 
@@ -3641,15 +3640,15 @@ class Helper
             }
 
             if ($key == 0) {
-                $_items[] = rtrim($value, $split);
+                $itemsHanding[] = rtrim($value, $split);
             } elseif ($key == $total - 1) {
-                $_items[] = ltrim($value, $split);
+                $itemsHanding[] = ltrim($value, $split);
             } else {
-                $_items[] = trim($value, $split);
+                $itemsHanding[] = trim($value, $split);
             }
         }
 
-        return implode($split, $_items);
+        return implode($split, $itemsHanding);
     }
 
     /**
@@ -4100,12 +4099,12 @@ class Helper
     public static function nDimension2one(array $items, string $key = null, string $split = '.'): array
     {
         $result = [];
-        foreach ($items as $_key => $item) {
-            $_key = ($key ? $key . $split : null) . $_key;
+        foreach ($items as $k => $item) {
+            $k = ($key ? $key . $split : null) . $k;
             if (!is_array($item)) {
-                $result[$_key] = $item;
+                $result[$k] = $item;
             } else {
-                $result = array_merge($result, self::nDimension2one($item, $_key, $split));
+                $result = array_merge($result, self::nDimension2one($item, $k, $split));
             }
         }
 

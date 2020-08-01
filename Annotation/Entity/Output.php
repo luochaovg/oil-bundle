@@ -23,7 +23,7 @@ class Output extends Annotation
     /**
      * @var string
      */
-    public $position = Abs::POS_BOTTOM; // Effect when extra not null
+    public $position = Abs::POS_BOTTOM; // Effect just when extra not null
 
     /**
      * @var string

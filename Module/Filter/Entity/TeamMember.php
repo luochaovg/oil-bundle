@@ -76,10 +76,10 @@ class TeamMember extends Filter
             return "{$team}";
         }
 
-        $_value = $this->parse($value);
-        $_value = array_combine(['team', 'member'], $_value);
+        $valueHandling = $this->parse($value);
+        $valueHandling = array_combine(['team', 'member'], $valueHandling);
 
-        if ($_value['team'] != $team) {
+        if ($valueHandling['team'] != $team) {
             return "{$team}";
         }
 

@@ -66,9 +66,9 @@ trait WebCrumbs
                                 continue;
                             }
 
-                            $_route = str_replace("_{$keyword}", '_preview', $route);
+                            $routeHandling = str_replace("_{$keyword}", '_preview', $route);
 
-                            return $inStack($_route, $stack);
+                            return $inStack($routeHandling, $stack);
                         }
                     }
 

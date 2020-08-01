@@ -587,15 +587,15 @@ trait Foundation
                 $label = $item->field;
             }
 
-            $extraArgs['_args_handler'] = $item->rulesArgsHandler;
+            $extraArgs[Abs::RULES_FLAG_HANDLER] = $item->rulesArgsHandler;
             $result = $dispatcher->execute($item->field, $item->rules, $value, $extraArgs, $item->sign, $label);
 
             if (!empty($result->error)) {
-                $_class = $item->error;
-                if (!isset($errorList[$_class])) {
-                    $errorList[$_class] = [];
+                $classHandling = $item->error;
+                if (!isset($errorList[$classHandling])) {
+                    $errorList[$classHandling] = [];
                 }
-                $errorList[$_class] = array_merge($errorList[$_class], $result->error);
+                $errorList[$classHandling] = array_merge($errorList[$classHandling], $result->error);
             }
 
             if ($result->args !== false) {
@@ -921,7 +921,7 @@ trait Foundation
                     $controller = $item->getDefault('_controller');
                     [$class, $method] = explode('::', $controller);
 
-                    $_item = array_merge(
+                    $itemHandling = array_merge(
                         [
                             'route'    => $key,
                             'uri'      => $item->getPath(),
@@ -936,9 +936,9 @@ trait Foundation
                     );
 
                     if ($keyByClass) {
-                        $routeArr[$class][$method] = $_item;
+                        $routeArr[$class][$method] = $itemHandling;
                     } else {
-                        $routeArr[$controller] = $_item;
+                        $routeArr[$controller] = $itemHandling;
                     }
                 }
 
@@ -1028,8 +1028,8 @@ trait Foundation
 
         $hooker = new HookerDispatcher();
 
-        $_extraArgs = $this->dispatchMethod(Abs::FN_HOOKER_ARGS, []);
-        $extraArgs = Helper::merge($_extraArgs, $extraArgs);
+        $extraArgsHandling = $this->dispatchMethod(Abs::FN_HOOKER_ARGS, []);
+        $extraArgs = Helper::merge($extraArgsHandling, $extraArgs);
 
         $item = $hooker
             ->setHooks($hooks)
