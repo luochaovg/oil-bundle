@@ -443,10 +443,29 @@ class BswBackendController extends BswWebController
             $moduleList,
             [
                 BswModule\Filter\Module::class => ['sort' => Abs::MODULE_FILTER_SORT],
+                BswModule\Data\Module::class   => ['sort' => Abs::MODULE_DATA_SORT],
             ]
         );
 
         return $this->showModule($moduleList, $view, $args);
+    }
+
+    /**
+     * Render empty
+     *
+     * @param string $view
+     * @param array  $args
+     * @param array  $moduleList
+     *
+     * @return Response|array
+     * @throws
+     */
+    protected function showEmpty(string $view, array $args = [], array $moduleList = []): Response
+    {
+        $args['scene'] = Abs::TAG_EMPTY;
+        $args['display'] = ['menu', 'header', 'crumbs', 'footer'];
+
+        return $this->showBlank($view, $args, $moduleList);
     }
 
     /**

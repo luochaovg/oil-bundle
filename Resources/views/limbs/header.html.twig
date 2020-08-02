@@ -60,7 +60,7 @@
         </a-menu>
       </a-dropdown>
     {% endif %}
-    {% if header.links is not empty %}
+    {% if header.links is not empty and scaffold.usr is not empty %}
       <a-dropdown placement="bottomRight" overlay-class-name="header-menu">
         <span class="item action ant-dropdown-link">
           {% set avatar = attribute(scaffold.usr, scaffold.cnf.usrAvatar) %}

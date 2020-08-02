@@ -811,9 +811,11 @@ abstract class BswWebController extends AbstractController
             } else {
                 $view = "{$scaffold['cls']}/{$scaffold['fn']}{$suffix}";
             }
-
-        } elseif (strpos($view, $suffix) === false) {
+        } elseif (Helper::strEndWith($view, '#')) {
             // just it
+            $view = rtrim($view, '#');
+        } elseif (strpos($view, $suffix) === false) {
+            // append suffix
             $view .= $suffix;
         }
 

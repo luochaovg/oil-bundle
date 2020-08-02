@@ -75,7 +75,8 @@ class Module extends Bsw
             [
                 'condition' => $this->input->condition,
                 'query'     => $this->input->query,
-            ]
+            ],
+            $this->input->args
         );
 
         $result = $this->caller(

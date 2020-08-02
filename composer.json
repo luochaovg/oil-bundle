@@ -70,7 +70,8 @@
     "yansongda/pay": "^2.9",
     "mexitek/phpcolors": "^0.4.0",
     "envms/fluentpdo": "^2.1",
-    "markrogoyski/math-php": "1.*"
+    "markrogoyski/math-php": "1.*",
+    "erusev/parsedown": "^1.7"
   },
   "config": {
     "preferred-install": {

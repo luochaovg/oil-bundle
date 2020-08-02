@@ -195,6 +195,7 @@ class Abs
     const CSS_BSW       = 'diy;bsw.css';
     const CSS_WEB       = 'diy;web.css';
     const CSS_EDITOR    = 'diy;third/ckeditor5.css';
+    const CSS_MARKDOWN  = 'diy;markdown.css';
 
     /**
      * About framework
@@ -244,6 +245,7 @@ class Abs
     const TAG_SESSION_LANG   = 'lang';
     const TAG_SEO_ACME_KEY   = 'seo_acme';
     const TAG_BLANK          = 'blank';
+    const TAG_EMPTY          = 'empty';
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
     const TAG_PERS_MODIFY    = 'persistence:modify';
