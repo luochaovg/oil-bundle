@@ -18,7 +18,7 @@
 $userRepo = $this->repo(Entity\User::class);
 
 $userRepo->count(['state' => Abs::NORMAL]);
-$userRepo->lister([]);  // 列表方法的参数为数组，较为复杂，请参考方法实现
+$userRepo->lister([]);  // 列表方法的参数为数组，较为复杂，更多请查看源码
 ```
 
 ### 创建 `Query builder` 对象
@@ -49,13 +49,13 @@ $this->allArgs(['page', 'limit']);      // $_GET、$_POST、$_REQUEST 获取多�
 ### 获取客户端 `IP`
 
 ```php
-$this->getClientIp();
+$clientIp = $this->getClientIp();
 ```
 
 ### 获取指定 `IP` 定位
 
 ```php
-$location = $this->ip2regionIPDB('10.1.2.3');
+$location = $this->ip2regionIPDB($clientIp);
 ```
 
 ### 给当前页面添加资源文件
@@ -63,28 +63,31 @@ $location = $this->ip2regionIPDB('10.1.2.3');
 ```php
 $this->appendSrcCss('diy:app.css');
 $this->appendSrcJs('diy:app.js');
-# 或者合并以上两个
-$this->currentSrc('diy:app');   // 分别下发 css 和 js
+
+$this->currentSrc('diy:app');   // 合并以上两中资源，分别下发 css 和 js
 ```
 
 ### 使用缓存
 
 ```php
 $this->caching(function() {
-    // logic and return data
+    // 你获取数据的逻辑并返回
 });
 ```
 
-### 获取用户信息
+### 用户信息
 
 ```php
-dump($this->usr);
+dd($this->usr);
 ```
 
 ### 获取配置信息
 
 ```php
-dump($this->cnf);
+// 指的是 services.yaml > parameters > cnf 下的配置
+// 也可以从 bsw_config 表中读取并覆盖前面的配置
+
+dd($this->cnf);
 ```
 
 ### 获取 `service.yml` 配置
@@ -103,7 +106,7 @@ $this->request();
 
 ```php
 $this->url('app_route_name');
-$this->urlSafe('app_route_name');   // without error when no router
+$this->urlSafe('app_route_name');   // 安全模式，当路由不存在时不产生致命错误
 ```
 
 ### 获取当前项目所有的路由
@@ -122,36 +125,36 @@ $rsa = $this->component(Component\Rsa::class);  // 这种方式会根据你预�
 ### `I18N`
 
 ```php
-$this->fieldLang('Key in fields.locale.yml');
-$this->messageLang('Key in messages.locale.yml');
-$this->twigLang('Key in twig.locale.yml');
-$this->seoLang('Key in seo.locale.yml');
+$this->fieldLang('Add time');           // 从 fields.locale.yaml 中翻译
+$this->messageLang('Operate success');  // 从 messages.locale.yaml 中翻译
+$this->twigLang('Select all');          // 从 twig.locale.yaml 中翻译
+$this->seoLang('App keyword');          // 从 seo.locale.yaml 中翻译
+$this->enumLang([]);                    // 从 enum.locale.yaml 中翻译，直接传入一个枚举数组
 ```
 
 ### `Api` 类项目响应请求
 
 ```php
 $this->okay([]);
-$this->success('operate done.');
-$this->failed('operate failed.');
+$this->success('operate done');
+$this->failed('operate failed');
 ```
 
 ### `Web` 类和 `Admin` 类项目响应请求
 
 ```php
-// ajax 类
-$this->okayAjax([]);
-$this->successAjax('operate done.');
-$this->failedAjax('operate failed.');
+$this->okayAjax([]);                    // ajax 返回数据
+$this->successAjax('operate done');     // ajax 返回成功提示
+$this->failedAjax('operate failed');    // ajax 返回失败提示
 
-// ajax 类强化
-$this->responseMessage(Bsw\Message $message);
-$this->responseMessageWithAjax(Bsw\Message $message);   // 当前方法和上面三个 ajax 方法的区别在于返回前要 flush 一个 Message
-$this->responseSuccess('operate done.');                // 调用 responseMessage
-$this->responseError('operate failed.');                // 调用 responseMessage
+// Web 类项目和 Admn 类项目专用
+$this->responseMessage(Bsw\Message $message);           // append flash 消息后，进行跳转提示
+$this->responseMessageWithAjax(Bsw\Message $message);   // append flash 消息后，ajax 返回数据
+$this->responseSuccess('operate done');                 // 调用 responseMessage
+$this->responseError('operate failed');                 // 调用 responseMessage
 
-// 页面渲染类
-$this->show(['time' => '2o2o/o8/o1'], 'index.html');
+// Web 类项目和 Admn 类项目专用
+$this->show(['time' => '2o2o/o8/o1']);  // 渲染页面，默认模板视当前路由而定，你也可以手动指定
 
 // Admin 类项目专用
 $this->showBlank([]);           // 渲染一个空页面（带框架，仅主内容块为空）
