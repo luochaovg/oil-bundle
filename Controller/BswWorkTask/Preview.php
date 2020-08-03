@@ -84,6 +84,7 @@ trait Preview
     public function previewQuery(): array
     {
         return [
+            'limit'  => 100,
             'select' => ['bwt'],
             'join'   => [
                 'bau' => [
