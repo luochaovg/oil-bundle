@@ -2034,7 +2034,7 @@ class FoundationAntD extends FoundationTools {
      * @returns {boolean}
      */
     filterOptionForMentions(input, option) {
-        return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+        return option.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
     }
 
     /**
