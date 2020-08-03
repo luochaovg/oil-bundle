@@ -28,7 +28,7 @@
 
 - **问题A** docker pull 较慢的情况下
 
-    ```
+    ```bash
     vim /etc/docker/daemon.json
   
     # 添加阿里源
@@ -43,7 +43,7 @@
   
 -  **问题B** docker apt-get update 联网失败
 
-    ```
+    ```bash
     vim /etc/docker/daemon.json
   
     # 添加 dns 服务器
