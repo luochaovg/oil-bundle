@@ -93,7 +93,10 @@ trait Preview
                     'right'  => ['bau.id'],
                 ],
             ],
-            'sort'   => ['bwt.id' => Abs::SORT_DESC],
+            'order'  => [
+                'bwt.userId' => Abs::SORT_ASC,
+                'bwt.id'     => Abs::SORT_ASC,
+            ],
         ];
     }
 
