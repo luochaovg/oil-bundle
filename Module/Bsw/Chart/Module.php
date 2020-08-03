@@ -91,7 +91,7 @@ class Module extends Bsw
         // resource
         $this->web->appendSrcJsWithKey('e-charts', Abs::JS_CHART);
         foreach ($output->items as $item) {
-            $this->web->appendSrcJs($item->getTheme());
+            $this->web->appendSrcJsWithKey('e-charts-theme', $item->getTheme());
         }
 
         $output = $this->caller(

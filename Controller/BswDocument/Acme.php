@@ -13,5 +13,5 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class Acme extends BswBackendController
 {
-    use Index;
+    use Document;
 }

@@ -43,7 +43,7 @@ trait Login
             return $args;
         }
 
-        $this->currentSrc('diy;layout/login');
+        $this->appendSrc('diy;layout/login', 'login');
         $this->appendSrcJsWithKey('rsa', Abs::JS_RSA);
 
         $form = [

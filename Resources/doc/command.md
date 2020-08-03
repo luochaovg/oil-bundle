@@ -60,7 +60,7 @@ Options:
 
 > 这个命令看上去有点复杂，的确；所以我们基本上不会去使用这个命令，都是脚本自动去执行的。  
 > 我们也为你准备了命令别名，你可以更容易得去接受和使用它们。  
-> 标 **[*]** 参数为你在使用以下别名命令时可能需要经常用到的。  
+> 标 **[\*]** 参数为你在使用以下别名命令时可能需要经常用到的。  
 
 ## 命令别名
 
@@ -68,7 +68,7 @@ Options:
 如果这个目录你修改了，以下的别名命令可能有些参数需要手动修改。  
 并且这些别名命令的参数与 `app-sf-bin bsw:init` 一致。
     
-### bin.app-api
+### `bin.app-api`
 
 ```bash
 $ bin.app-api --scheme-only=user,user_extend --scaffold-need=no
@@ -76,7 +76,7 @@ $ bin.app-api --scheme-only=user,user_extend --scaffold-need=no
 
 命令功能与 `app-sf-bin bsw:init` 一致，主要用于 `Api` 类项目。生成 `Entity` 在各类项目中有所区别。
 
-### bin.app-web
+### `bin.app-web`
 
 ```bash
 $ bin.app-web --scheme-only=user,user_extend --scaffold-need=yes
@@ -84,7 +84,7 @@ $ bin.app-web --scheme-only=user,user_extend --scaffold-need=yes
 
 命令功能与 `app-sf-bin bsw:init` 一致，主要用于 `Web` 类项目。生成 `Entity` 在各类项目中有所区别。
 
-### bin.app-backend
+### `bin.app-backend`
 
 ```bash
 $ bin.app-backend --scaffold-need=yes --acme=App\\Controller\\AcmeBackendController

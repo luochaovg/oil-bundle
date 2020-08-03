@@ -71,7 +71,7 @@ class Module extends Bsw
      */
     public function javascript(): ?array
     {
-        return ['diy;module/scaffold.js'];
+        return ['module-scaffold' => 'diy;module/scaffold.js'];
     }
 
     /**

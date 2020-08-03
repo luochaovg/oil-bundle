@@ -220,9 +220,10 @@ abstract class Bsw
 
         $args = $args ? [$args] : [];
         $data = call_user_func_array([$this->web, $call], $args) ?? $default;
+
         if ($type) {
             $type = (array)$type;
-            $method = get_class($this->web) . "::{$call}():" . Helper::printArray($type, '[%s]', '');
+            $method = get_class($this->web) . "::{$call}():" . Helper::printArray($type, '[%s]', '', ' | ');
             Helper::callReturnType($data, $type, $method);
         }
 

@@ -64,7 +64,17 @@ $location = $this->ip2regionIPDB($clientIp);
 $this->appendSrcCss('diy:app.css');
 $this->appendSrcJs('diy:app.js');
 
-$this->currentSrc('diy:app');   // 合并以上两中资源，分别下发 css 和 js
+// 使用 key 进行标记为了方便后续修正资源
+$this->appendSrcCssWithKey('app', 'diy:app.css');
+$this->appendSrcJsWithKey('app', 'diy:app.js');
+
+$this->appendSrc('diy:app');   // 合并以上两种资源，分别下发 css 和 js
+$this->appendSrc('diy:app', 'app');
+
+// 删除已经分配的资源
+$this->removeSrcJs(['key1', 'key2']);
+$this->removeSrcCss(['key1', 'key2']);
+$this->removeSrc(['key1', 'key2']);
 ```
 
 ### 使用缓存

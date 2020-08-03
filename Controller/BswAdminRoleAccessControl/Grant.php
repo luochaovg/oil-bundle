@@ -84,7 +84,7 @@ trait Grant
             return $args;
         }
 
-        $this->appendSrcJs('diy;layout/grant');
+        $this->appendSrcJsWithKey('grant', 'diy;layout/grant');
         if ($target = $this->getArgs('target')) {
             $this->changeCrumbs("%s >> {$target}");
         }

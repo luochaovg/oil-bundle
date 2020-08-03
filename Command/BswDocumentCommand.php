@@ -116,6 +116,32 @@ class BswDocumentCommand extends Command implements CommandInterface
     }
 
     /**
+     * Handle string for document
+     *
+     * @param string $target
+     *
+     * @return string
+     */
+    public function stringForDocument(string $target): string
+    {
+        $target = preg_replace(
+            [
+                '/\{\{ (.*?) \}\}/',
+                '/([\w]+)/',
+            ],
+            [
+                '$1',
+                ' `$1` ',
+            ],
+            $target
+        );
+
+        $target = trim($target, ' ');
+
+        return $target ?: '-';
+    }
+
+    /**
      * Logic
      *
      * @param InputInterface  $input
@@ -140,15 +166,19 @@ class BswDocumentCommand extends Command implements CommandInterface
         if ($params['bill-only'] == 'yes') {
             foreach ($this->billError as $item) {
                 $class = ltrim($item['class'], '\\');
-                $output->writeln("<info>| {$class} | {$item['description']} |</info>");
+                $description = $this->stringForDocument($item['description']);
+                $output->writeln("<info>| {$class} | {$description} |</info>");
             }
 
             $output->writeln("\n<error> ------ </error>\n");
 
             foreach ($this->billValidator as $item) {
                 $class = ltrim($item['class'], '\\');
-                $output->writeln("<info>| {$class} | {$item['description']} | {$item['message']} |</info>");
+                $description = $this->stringForDocument($item['description']);
+                $message = $this->stringForDocument($item['message']);
+                $output->writeln("<info>| {$class} | {$description} | {$message} |</info>");
             }
+
             exit(ErrorDebugExit::CODE);
         }
 
@@ -745,8 +775,16 @@ class BswDocumentCommand extends Command implements CommandInterface
                 }
 
                 // handle the sets
+                $correctMap = [];
                 $correctList = [];
-                $correctMap = array_combine(array_keys($setsTypeMap), array_fill(0, count($setsTypeMap), []));
+
+                foreach ($setsTypeMap as $key => $value) {
+                    if (strpos($key, 'array') !== false || strpos($key, '[]') !== false) {
+                        $correctMap[$key] = [];
+                    } else {
+                        $correctMap[$key] = new stdClass();
+                    }
+                }
 
                 foreach ($json[$dataKey] ?? [] as $key => $value) {
                     if (isset($correctMap[$value])) {

@@ -43,7 +43,7 @@
 
 - 部分备用命令
 
-    ```
+    ```bash
     # 删除所有的容器
     sudo docker rm $(sudo docker ps -a -q)
    

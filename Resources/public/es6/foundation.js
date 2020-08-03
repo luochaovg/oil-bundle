@@ -724,10 +724,11 @@ class FoundationTools extends FoundationPrototype {
     /**
      * Count px of padding and margin
      *
+     * @param parentElement
      * @param element
      * @returns {{column: number, row: number}}
      */
-    pam(element) {
+    pam(parentElement, element) {
         let px = {
             row: 0,
             column: 0
@@ -737,7 +738,7 @@ class FoundationTools extends FoundationPrototype {
                 px[m] = {};
             }
             for (let n of ['left', 'right', 'top', 'bottom']) {
-                px[m][n] = parseInt(element.css(`${m}-${n}`));
+                px[m][n] = parseInt(parentElement.css(`${m}-${n}`));
                 if (n === 'left' || n === 'right') {
                     px.row += px[m][n];
                 } else if (n === 'top' || n === 'bottom') {
@@ -745,6 +746,12 @@ class FoundationTools extends FoundationPrototype {
                 }
             }
         }
+        if (element) {
+            let borderWidth = parseInt(element.css('border-width')) * 2;
+            px.row += borderWidth;
+            px.column += borderWidth;
+        }
+
         return px;
     }
 
@@ -1638,7 +1645,6 @@ class FoundationAntD extends FoundationTools {
         v.modal = options;
     }
 
-
     /**
      * Show confirm
      *
@@ -1728,7 +1734,7 @@ class FoundationAntD extends FoundationTools {
         }
 
         let content = $('.bsw-content');
-        let height = content.height() + this.pam(content.parent()).column;
+        let height = content.height() + this.pam(content.parent(), content).column;
         let maxHeight = this.popupCosySize(false, parent.document).height;
 
         if (minHeight > maxHeight) {

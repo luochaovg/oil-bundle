@@ -48,81 +48,81 @@
 
 ### 目前框架自带的错误
 
-| 错误类 | 错误场景(短语) |  
+| 错误类 | 错误场景/短语 |  
 | ------- |  ------ |
-| Leon\BswBundle\Module\Error\Entity\ErrorTimeout | 执行超时 |
-| Leon\BswBundle\Module\Error\Entity\ErrorProgress | 进度必须向上更新 |
-| Leon\BswBundle\Module\Error\Entity\ErrorGooglePayPayment | 谷歌支付失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoPopup | 没有弹窗消息提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorSns | SNS服务异常 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoBootstrap | 没有启动页提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOldPassword | 原密码错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorWxPay | 微信支付失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorMaxTimes | 次数已达上限 |
-| Leon\BswBundle\Module\Error\Entity\ErrorUsername | 账号错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoNewVersion | 没有新版本提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorRequestOften | 请求太频繁 |
-| Leon\BswBundle\Module\Error\Entity\ErrorProhibitedCountry | 当前区域受限 |
-| Leon\BswBundle\Module\Error\Entity\ErrorUA | 设备用户代理不能为空 |
-| Leon\BswBundle\Module\Error\Entity\ErrorSignature | 签名错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOAuthExpiredToken | Token参数已过期 |
-| Leon\BswBundle\Module\Error\Entity\ErrorSamePassword | 密码不能与原密码一致 |
-| Leon\BswBundle\Module\Error\Entity\ErrorValidate | 验证失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAliPay | 支付宝支付失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPassword | 密码错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorDevice | 设备唯一标识不能为空 |
-| Leon\BswBundle\Module\Error\Entity\ErrorParameter | 参数不符合预期 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAttachment | 非法附件 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPermissionDenied | 权限不足 |
-| Leon\BswBundle\Module\Error\Entity\ErrorThirdService | 第三方服务异常 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoCarousel | 没有文字轮播提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOAuthNotFoundToken | Token不存在 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAlreadyJoined | 请勿重复参与 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAuthorization | 授权验证失败, 请重新登录 |
-| Leon\BswBundle\Module\Error\Entity\ErrorScoreNotEnough | 可用积分不足 |
-| Leon\BswBundle\Module\Error\Entity\ErrorDebugExit | 调试并终止脚本 |
-| Leon\BswBundle\Module\Error\Entity\ErrorBetsSealed | 赛事即将开赛, 当前竞猜已封盘 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoPatch | 没有补丁提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorCaptcha | 验证码错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAreaCode | 手机区号不规范 |
-| Leon\BswBundle\Module\Error\Entity\ErrorUnknown | 未知错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange | 没有任何变动 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAccess | 权限不足, 拒绝访问 |
-| Leon\BswBundle\Module\Error\Entity\ErrorBetsParticipated | 已参与过该竞猜 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoActivity | 暂无该类活动 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPurchaseLimit | 已达最大限购次数 |
-| Leon\BswBundle\Module\Error\Entity\ErrorMetaData | 预期之外的元数据, 请反馈该问题 |
-| Leon\BswBundle\Module\Error\Entity\ErrorActivityStillProgress | 活动尚未结束 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOAuthNotFoundToken | `Token` 不存在 |
 | Leon\BswBundle\Module\Error\Entity\ErrorUsedReceipt | 订单凭据已失效 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOAuthInvalidToken | Token参数不合法 |
-| Leon\BswBundle\Module\Error\Entity\ErrorScript | 脚本运行异常 |
-| Leon\BswBundle\Module\Error\Entity\ErrorGooglePayVerify | 谷歌支付验证失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOAuthMalformedToken | 客户端或其他数据不合法 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNotTourist | 非游客用户 |
-| Leon\BswBundle\Module\Error\Entity\ErrorRefundedFull | 已全额退款 |
-| Leon\BswBundle\Module\Error\Entity\ErrorTouristAlreadyBind | 该游客已被绑定, 请使用绑定账号登录 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPurchaseProcessing | 订单处理中, 稍后再试 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPay | 支付操作失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence | 数据写入失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorPayMethod | 支付方式不被支持 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOS | 设备操作系统不能为空 |
+| Leon\BswBundle\Module\Error\Entity\ErrorSamePassword | 密码不能与原密码一致 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOutStock | 当前库存不足 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAliPay | 支付宝支付失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPurchaseLimit | 已达最大限购次数 |
+| Leon\BswBundle\Module\Error\Entity\ErrorException | 模块运行异常 |
+| Leon\BswBundle\Module\Error\Entity\ErrorMetaData | 预期之外的元数据, 请反馈该问题 |
+| Leon\BswBundle\Module\Error\Entity\ErrorTimeout | 执行超时 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAlreadyJoined | 请勿重复参与 |
+| Leon\BswBundle\Module\Error\Entity\ErrorActivityStillProgress | 活动尚未结束 |
 | Leon\BswBundle\Module\Error\Entity\ErrorNoSourceFile | 没有资源文件提供 |
 | Leon\BswBundle\Module\Error\Entity\ErrorRefundExceed | 退款金额超实付金额 |
-| Leon\BswBundle\Module\Error\Entity\ErrorMaxDevice | 设备数已达上限 |
-| Leon\BswBundle\Module\Error\Entity\ErrorInviteCode | 错误的邀请码 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNotSupported | 操作不被支持 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAccountFrozen | 账号被冻结 |
-| Leon\BswBundle\Module\Error\Entity\ErrorException | 模块运行异常 |
-| Leon\BswBundle\Module\Error\Entity\ErrorGoogleCaptcha | 谷歌验证码错误 |
-| Leon\BswBundle\Module\Error\Entity\ErrorExpired | 已过期 |
-| Leon\BswBundle\Module\Error\Entity\ErrorOutStock | 当前库存不足 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoAdvert | 没有广告提供 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNoRecord | 结果集为空 |
-| Leon\BswBundle\Module\Error\Entity\ErrorNotThird | 非第三方用户 |
-| Leon\BswBundle\Module\Error\Entity\ErrorUpload | 上传失败 |
-| Leon\BswBundle\Module\Error\Entity\ErrorAjaxRequest | 必须为Ajax请求 |
 | Leon\BswBundle\Module\Error\Entity\ErrorAppleReceipt | 苹果支付凭据非法 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAreaCode | 手机区号不规范 |
+| Leon\BswBundle\Module\Error\Entity\ErrorProhibitedCountry | 当前区域受限 |
+| Leon\BswBundle\Module\Error\Entity\ErrorParameter | 参数不符合预期 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoBootstrap | 没有启动页提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAuthorization | 授权验证失败, 请重新登录 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPayMethod | 支付方式不被支持 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAccess | 权限不足, 拒绝访问 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoAdvert | 没有广告提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoNewVersion | 没有新版本提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOAuthMalformedToken | 客户端或其他数据不合法 |
+| Leon\BswBundle\Module\Error\Entity\ErrorTouristAlreadyBind | 该游客已被绑定, 请使用绑定账号登录 |
+| Leon\BswBundle\Module\Error\Entity\ErrorBetsParticipated | 已参与过该竞猜 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoActivity | 暂无该类活动 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNotThird | 非第三方用户 |
+| Leon\BswBundle\Module\Error\Entity\ErrorProgress | 进度必须向上更新 |
+| Leon\BswBundle\Module\Error\Entity\ErrorMaxDevice | 设备数已达上限 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAttachment | 非法附件 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAjaxRequest | 必须为 `Ajax` 请求 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoCarousel | 没有文字轮播提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorThirdService | 第三方服务异常 |
+| Leon\BswBundle\Module\Error\Entity\ErrorExpired | 已过期 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoPatch | 没有补丁提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOldPassword | 原密码错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoPopup | 没有弹窗消息提供 |
+| Leon\BswBundle\Module\Error\Entity\ErrorGooglePayVerify | 谷歌支付验证失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNotSupported | 操作不被支持 |
+| Leon\BswBundle\Module\Error\Entity\ErrorScoreNotEnough | 可用积分不足 |
+| Leon\BswBundle\Module\Error\Entity\ErrorGooglePayPayment | 谷歌支付失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorScript | 脚本运行异常 |
+| Leon\BswBundle\Module\Error\Entity\ErrorUsername | 账号错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorRequestOften | 请求太频繁 |
+| Leon\BswBundle\Module\Error\Entity\ErrorAccountFrozen | 账号被冻结 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPermissionDenied | 权限不足 |
+| Leon\BswBundle\Module\Error\Entity\ErrorCaptcha | 验证码错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorWxPay | 微信支付失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorDevice | 设备唯一标识不能为空 |
+| Leon\BswBundle\Module\Error\Entity\ErrorWithoutChange | 没有任何变动 |
+| Leon\BswBundle\Module\Error\Entity\ErrorUpload | 上传失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorBetsSealed | 赛事即将开赛, 当前竞猜已封盘 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNotTourist | 非游客用户 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOAuthExpiredToken | `Token` 参数已过期 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOAuthInvalidToken | `Token` 参数不合法 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPassword | 密码错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorDebugExit | 调试并终止脚本 |
+| Leon\BswBundle\Module\Error\Entity\ErrorUA | 设备用户代理不能为空 |
+| Leon\BswBundle\Module\Error\Entity\ErrorOS | 设备操作系统不能为空 |
+| Leon\BswBundle\Module\Error\Entity\ErrorUnknown | 未知错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorSignature | 签名错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorValidate | 验证失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorInviteCode | 错误的邀请码 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPay | 支付操作失败 |
+| Leon\BswBundle\Module\Error\Entity\ErrorRefundedFull | 已全额退款 |
+| Leon\BswBundle\Module\Error\Entity\ErrorSns | `SNS` 服务异常 |
+| Leon\BswBundle\Module\Error\Entity\ErrorPurchaseProcessing | 订单处理中, 稍后再试 |
+| Leon\BswBundle\Module\Error\Entity\ErrorGoogleCaptcha | 谷歌验证码错误 |
+| Leon\BswBundle\Module\Error\Entity\ErrorDbPersistence | 数据写入失败 |
 | Leon\BswBundle\Module\Error\Entity\ErrorSession | 用户会话已变更 |
+| Leon\BswBundle\Module\Error\Entity\ErrorNoRecord | 结果集为空 |
+| Leon\BswBundle\Module\Error\Entity\ErrorMaxTimes | 次数已达上限 |
 
 ### 如何使用
 
@@ -497,57 +497,57 @@ dd($options);
     
 ### 目前框架实现的验证器
     
-| 钩子 | 文档短语 | 错误提示 |
+| 验证器 | 文档短语 | 错误提示 |
 | ------- | ------- | ------ |
-| Leon\BswBundle\Module\Validator\Entity\Replace | 替换字符串 | 字段必须为字符串 |
-| Leon\BswBundle\Module\Validator\Entity\NotBlank | 不为空字符 | 字段不能为空字符串 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsSmallint | 为 `MySQL` 无符号小整数 | 字段值必须在 `arg1` 到  `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\InLength | 在长度集合中 | 字段长度必须在 `args` 值中出现 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlInt | 为 `MySQL` 有符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlTinyint | 为 `MySQL` 有符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\JustNot | 仅不为 | 字段仅不能设置为 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Length | 长度等于 | 字段长度必须等于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Arr | 为数组 | 字段必须是数组 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlBigint | 为 `MySQL` 有符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Order | 为排序类型 | 字段必须为排序类型  `args`  |
-| Leon\BswBundle\Module\Validator\Entity\Limit | 长度在区间内 | 字段长度必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Json | 为 `JSON` 串 | 字段必须为 `JSON` 格式化字符串 |
-| Leon\BswBundle\Module\Validator\Entity\Password | 为规范密码串 | 字段密码串须含大小写字母和数字且最少 `arg1` 位 |
-| Leon\BswBundle\Module\Validator\Entity\Url | 为 `URL` | 字段必须为 `URL` 地址 |
-| Leon\BswBundle\Module\Validator\Entity\Lt | 值小于 | 字段值必须小于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Integer | 为整数 | 字段必须为整数 |
-| Leon\BswBundle\Module\Validator\Entity\Email | 为邮箱地址 | 字段必须是邮箱地址格式 |
-| Leon\BswBundle\Module\Validator\Entity\Required | 必须 | 字段必须设置 |
-| Leon\BswBundle\Module\Validator\Entity\Difference | 不同于参数 | 字段必须与参数 `arg1` 值不同 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlMediumint | 为 `MySQL` 有符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Gte | 值大于等于 | 字段值必须大于或等于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Max | 长度小于等于 | 字段长度必须小于或等于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsTinyint | 为 `MySQL` 无符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Just | 仅为 | 字段仅能设置为 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\MysqlSmallint | 为 `MySQL` 有符号小整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Endpoint | `Endpoint` 字符串 | 字段必须为 `Endpoint` 字符串, 格式(`ip`:`port`) |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsMediumint | 为 `MySQL` 无符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Def | 设置默认值 | - |
-| Leon\BswBundle\Module\Validator\Entity\Ip | 为 `IP` 地址 | 字段必须为合法的 `IP` 地址 |
-| Leon\BswBundle\Module\Validator\Entity\Gt | 值大于 | 字段值必须大于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\NotEmpty | 不为空 | 字段不能为空 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsBigint | 为 `MySQL` 无符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\MysqlUnsInt | 为 `MySQL` 无符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\In | 在数组值中 | 字段必须在数组 `args` 值中出现 |
-| Leon\BswBundle\Module\Validator\Entity\Lte | 值小于等于 | 字段值必须小于或等于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Phone | 为电话号码 | 字段必须是电话号码格式 |
-| Leon\BswBundle\Module\Validator\Entity\Trim | 剔除 | - |
-| Leon\BswBundle\Module\Validator\Entity\UnsInteger | 为正整数 | 字段必须为正整数 |
-| Leon\BswBundle\Module\Validator\Entity\Truncate | 截断 | - |
-| Leon\BswBundle\Module\Validator\Entity\InKey | 在数组键中 | 字段必须在数组 `args` 键中出现 |
-| Leon\BswBundle\Module\Validator\Entity\Between | 值在区间内 | 字段值必须在 `arg1` 到 `arg2` 之间 |
-| Leon\BswBundle\Module\Validator\Entity\Same | 一致于参数 | 字段必须与参数 `arg1` 值一致 |
-| Leon\BswBundle\Module\Validator\Entity\Min | 长度大于等于 | 字段长度必须大于或等于 `arg1`  |
-| Leon\BswBundle\Module\Validator\Entity\Rsa | `RSA` 加密串 | 字段为非法的 `RSA` 加密串 |
-| Leon\BswBundle\Module\Validator\Entity\IdString | `ID` 字符串 | 字段必须为 `ID` 字串, 多个用逗号分隔 |
 | Leon\BswBundle\Module\Validator\Entity\StringToArray | 字符串转数组 | - |
+| Leon\BswBundle\Module\Validator\Entity\Json | 为 `JSON` 串 | 字段必须为 `JSON` 格式化字符串 |
+| Leon\BswBundle\Module\Validator\Entity\Arr | 为数组 | 字段必须是数组 |
+| Leon\BswBundle\Module\Validator\Entity\Integer | 为整数 | 字段必须为整数 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlBigint | 为 `MySQL` 有符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsMediumint | 为 `MySQL` 无符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Max | 长度小于等于 | 字段长度必须小于或等于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Password | 为规范密码串 | 字段密码串须含大小写字母和数字且最少 `arg1` 位 |
 | Leon\BswBundle\Module\Validator\Entity\Numeric | 为数值 | 字段必须为数值 |
+| Leon\BswBundle\Module\Validator\Entity\IdString | `ID` 字符串 | 字段必须为 `ID` 字串, 多个用逗号分隔 |
+| Leon\BswBundle\Module\Validator\Entity\Gt | 值大于 | 字段值必须大于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Length | 长度等于 | 字段长度必须等于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Lt | 值小于 | 字段值必须小于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\JustNot | 仅不为 | 字段仅不能设置为 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\InLength | 在长度集合中 | 字段长度必须在 `args` 值中出现 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlMediumint | 为 `MySQL` 有符号中整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Rsa | `RSA` 加密串 | 字段为非法的 `RSA` 加密串 |
+| Leon\BswBundle\Module\Validator\Entity\Ip | 为 `IP` 地址 | 字段必须为合法的 `IP` 地址 |
+| Leon\BswBundle\Module\Validator\Entity\UnsInteger | 为正整数 | 字段必须为正整数 |
+| Leon\BswBundle\Module\Validator\Entity\Required | 必须 | 字段必须设置 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsTinyint | 为 `MySQL` 无符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Email | 为邮箱地址 | 字段必须是邮箱地址格式 |
+| Leon\BswBundle\Module\Validator\Entity\Difference | 不同于参数 | 字段必须与参数 `arg1` 值不同 |
+| Leon\BswBundle\Module\Validator\Entity\Url | 为 `URL` | 字段必须为 `URL` 地址 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsSmallint | 为 `MySQL` 无符号小整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsBigint | 为 `MySQL` 无符号大整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Def | 设置默认值 | - |
+| Leon\BswBundle\Module\Validator\Entity\Same | 一致于参数 | 字段必须与参数 `arg1` 值一致 |
+| Leon\BswBundle\Module\Validator\Entity\Between | 值在区间内 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlSmallint | 为 `MySQL` 有符号小整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\NotBlank | 不为空字符 | 字段不能为空字符串 |
+| Leon\BswBundle\Module\Validator\Entity\Trim | 剔除 | - |
+| Leon\BswBundle\Module\Validator\Entity\Replace | 替换字符串 | 字段必须为字符串 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlInt | 为 `MySQL` 有符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\In | 在数组值中 | 字段必须在数组 `args` 值中出现 |
+| Leon\BswBundle\Module\Validator\Entity\Order | 为排序类型 | 字段必须为排序类型 `args` |
+| Leon\BswBundle\Module\Validator\Entity\Gte | 值大于等于 | 字段值必须大于或等于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Just | 仅为 | 字段仅能设置为 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Lte | 值小于等于 | 字段值必须小于或等于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Truncate | 截断 | - |
 | Leon\BswBundle\Module\Validator\Entity\Str | 为字符串 | 字段必须为字符串 |
+| Leon\BswBundle\Module\Validator\Entity\NotEmpty | 不为空 | 字段不能为空 |
+| Leon\BswBundle\Module\Validator\Entity\Limit | 长度在区间内 | 字段长度必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\MysqlUnsInt | 为 `MySQL` 无符号整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\InKey | 在数组键中 | 字段必须在数组 `args` 键中出现 |
+| Leon\BswBundle\Module\Validator\Entity\Min | 长度大于等于 | 字段长度必须大于或等于 `arg1` |
+| Leon\BswBundle\Module\Validator\Entity\Endpoint | `Endpoint` 字符串 | 字段必须为 `Endpoint` 字符串, 格式( `ip` : `port` ) |
+| Leon\BswBundle\Module\Validator\Entity\MysqlTinyint | 为 `MySQL` 有符号微整数 | 字段值必须在 `arg1` 到 `arg2` 之间 |
+| Leon\BswBundle\Module\Validator\Entity\Phone | 为电话号码 | 字段必须是电话号码格式 |
 
 ### 如何使用
 

@@ -972,13 +972,14 @@ var FoundationTools = function (_FoundationPrototype) {
         /**
          * Count px of padding and margin
          *
+         * @param parentElement
          * @param element
          * @returns {{column: number, row: number}}
          */
 
     }, {
         key: 'pam',
-        value: function pam(element) {
+        value: function pam(parentElement, element) {
             var px = {
                 row: 0,
                 column: 0
@@ -992,7 +993,7 @@ var FoundationTools = function (_FoundationPrototype) {
                 var _arr2 = ['left', 'right', 'top', 'bottom'];
                 for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
                     var n = _arr2[_i2];
-                    px[m][n] = parseInt(element.css(m + '-' + n));
+                    px[m][n] = parseInt(parentElement.css(m + '-' + n));
                     if (n === 'left' || n === 'right') {
                         px.row += px[m][n];
                     } else if (n === 'top' || n === 'bottom') {
@@ -1000,6 +1001,12 @@ var FoundationTools = function (_FoundationPrototype) {
                     }
                 }
             }
+            if (element) {
+                var borderWidth = parseInt(element.css('border-width')) * 2;
+                px.row += borderWidth;
+                px.column += borderWidth;
+            }
+
             return px;
         }
 
@@ -2246,7 +2253,7 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             var content = $('.bsw-content');
-            var height = content.height() + this.pam(content.parent()).column;
+            var height = content.height() + this.pam(content.parent(), content).column;
             var maxHeight = this.popupCosySize(false, parent.document).height;
 
             if (minHeight > maxHeight) {

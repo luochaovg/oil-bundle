@@ -2611,7 +2611,7 @@ class Helper
             }
         }
 
-        $type = implode('/', $type);
+        $type = implode(' | ', $type);
         throw new BadFunctionCallException("{$info} should return `{$type}` but got `{$dataType}`");
     }
 

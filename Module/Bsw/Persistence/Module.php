@@ -955,7 +955,13 @@ class Module extends Bsw
 
                     $loggerType = $multipleField ? 2 : 1;
                     $recordBefore = $recordDiff = [];
-                    $record = $this->recordHandler($record, $record, $persistAnnotationHandling, $extraSubmit, $multipleField);
+                    $record = $this->recordHandler(
+                        $record,
+                        $record,
+                        $persistAnnotationHandling,
+                        $extraSubmit,
+                        $multipleField
+                    );
 
                     if ($multipleField) {
                         $result = $this->repository->newlyMultiple($record);
@@ -1144,7 +1150,10 @@ class Module extends Bsw
                 $form->setValue($fillData[$key]);
             }
             if (get_class($form) == CkEditor::class) {
-                $this->web->appendSrcJs([Abs::JS_EDITOR_LANG[$this->web->langLatest($this->web->langMap)]]);
+                $this->web->appendSrcJsWithKey(
+                    'ck-editor-lang',
+                    Abs::JS_EDITOR_LANG[$this->web->langLatest($this->web->langMap)]
+                );
                 $this->web->appendSrcJsWithKey('ck-editor', Abs::JS_EDITOR);
                 $this->web->appendSrcJsWithKey('ck-editor-custom', Abs::JS_EDITOR_CUSTOM);
                 $this->web->appendSrcCssWithKey('ck-editor', Abs::CSS_EDITOR);

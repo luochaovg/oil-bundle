@@ -21,8 +21,10 @@ class AttachmentImage extends Tailor
      */
     protected function initial()
     {
-        $this->web->appendSrcJs([Abs::JS_FANCY_BOX, Abs::JS_LAZY_LOAD]);
-        $this->web->appendSrcCss(Abs::CSS_FANCY_BOX);
+        $this->web->appendSrcJsWithKey('fancy-box', Abs::JS_FANCY_BOX);
+        $this->web->appendSrcCssWithKey('fancy-box', Abs::JS_FANCY_BOX);
+        $this->web->appendSrcJsWithKey('lazy-load', Abs::JS_LAZY_LOAD);
+        $this->web->appendSrcCssWithKey('lazy-load', Abs::CSS_FANCY_BOX);
 
         $this->table = "_tailor_{$this->keyword}";
     }

@@ -285,6 +285,18 @@ trait WebSource
     }
 
     /**
+     * Remove css by keys
+     *
+     * @param array|string $keys
+     */
+    public function removeSrcCss($keys)
+    {
+        foreach ((array)$keys as $key) {
+            $this->appendSrcCssWithKey($key, null);
+        }
+    }
+
+    /**
      * Append js to stack with non-key
      *
      * @param array|string $js
@@ -338,38 +350,49 @@ trait WebSource
     }
 
     /**
-     * Source for current page with non-key
+     * Remove js by keys
      *
-     * @param array|string|bool $value
-     * @param string            $key
-     * @param string            $position
-     * @param string            $insert
-     * @param bool              $before
+     * @param array|string $keys
+     */
+    public function removeSrcJs($keys)
+    {
+        foreach ((array)$keys as $key) {
+            $this->appendSrcJsWithKey($key, null);
+        }
+    }
+
+    /**
+     * Append css and js
+     *
+     * @param string|bool $value
+     * @param string      $key
+     * @param string      $position
+     * @param string      $insert
+     * @param bool        $before
      *
      * @return void
      */
-    public function currentSrc(
+    public function appendSrc(
         $value,
         ?string $key = null,
         string $position = Abs::POS_BOTTOM,
         ?string $insert = null,
         bool $before = false
     ) {
-        if (is_bool($value)) {
-            $this->appendSrcCSS($value, $position, $insert, $before);
-            $this->appendSrcJs($value, $position, $insert, $before);
+        $key = $key ?: $this->route;
 
-            return;
-        }
+        $this->appendSrcCssWithKey($key, $value, $position, $insert, $before);
+        $this->appendSrcJsWithKey($key, $value, $position, $insert, $before);
+    }
 
-        if (is_string($value) && $key) {
-            $this->appendSrcCssWithKey($key, $value, $position, $insert, $before);
-            $this->appendSrcJsWithKey($key, $value, $position, $insert, $before);
-
-            return;
-        }
-
-        $this->appendSrcCss($value, $position, $insert, $before);
-        $this->appendSrcJs($value, $position, $insert, $before);
+    /**
+     * Remove css and js by keys
+     *
+     * @param array|string $keys
+     */
+    public function removeSrc($keys)
+    {
+        $this->removeSrcCss($keys);
+        $this->removeSrcJs($keys);
     }
 }
