@@ -83,6 +83,17 @@ trait Preview
      */
     public function previewQuery(): array
     {
+        if ($this->isTeamTask) {
+            $order = [
+                'bwt.id' => Abs::SORT_DESC,
+            ];
+        } else {
+            $order = [
+                'bwt.userId' => Abs::SORT_ASC,
+                'bwt.id'     => Abs::SORT_ASC,
+            ];
+        }
+
         return [
             'limit'  => 100,
             'select' => ['bwt'],
@@ -93,10 +104,7 @@ trait Preview
                     'right'  => ['bau.id'],
                 ],
             ],
-            'order'  => [
-                'bwt.userId' => Abs::SORT_ASC,
-                'bwt.id'     => Abs::SORT_ASC,
-            ],
+            'order'  => $order,
         ];
     }
 
