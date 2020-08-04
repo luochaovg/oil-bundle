@@ -531,13 +531,15 @@ abstract class Bsw
         }
 
         $indexHandling = Helper::dig($item, 'index') ?? $defaultIndex;
+        $indexSplit = Abs::FILTER_INDEX_SPLIT;
+
         $item['field'] = "{$tableHandling}.{$fieldHandling}";
-        $fieldHandling = "{$fieldHandling}{$indexHandling}";
+        $fieldHandling = "{$fieldHandling}{$indexSplit}{$indexHandling}";
 
         $itemHandling = $filterAnnotationFull[$tableHandling][$fieldHandling] ?? [];
         $item = array_merge($itemHandling, $item);
 
-        return ["{$field}{$indexHandling}", $item];
+        return ["{$field}{$indexSplit}{$indexHandling}", $item];
     }
 
     /**

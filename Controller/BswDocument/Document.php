@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Controller\BswDocument;
 
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Parsedown;

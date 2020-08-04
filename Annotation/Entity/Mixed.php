@@ -23,7 +23,7 @@ class Mixed extends Annotation
     /**
      * @var array
      */
-    public $orderDirections = [Abs::SORT_DESC_LONG, Abs::SORT_ASC_LONG];
+    public $orderDirections = [Abs::SORT_ASC_LONG, Abs::SORT_DESC_LONG];
 
     /**
      * @var bool

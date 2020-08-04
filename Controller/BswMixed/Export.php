@@ -7,6 +7,7 @@ use Leon\BswBundle\Entity\BswCommandQueue;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Leon\BswBundle\Module\Form\Entity\Upload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,22 +24,26 @@ trait Export
     /**
      * @return array
      */
-    public function exportAnnotation(): array
+    public function exportAnnotationOnly(): array
     {
         $condition = $this->getArgs(['entity', 'query', 'time', 'signature']);
         $condition = array_map('urldecode', $condition);
 
         return [
-            'command'   => [
+            'title'            => true,
+            'command'          => [
                 'value' => 'mission:export-preview',
                 'hide'  => true,
             ],
-            'condition' => [
+            'condition'        => [
                 'value' => Helper::formatPrintJson($condition, 4, ': '),
                 'hide'  => true,
             ],
-            'remark'    => false,
-            'state'     => false,
+            'telegramReceiver' => true,
+            'cronReuse'        => [
+                'value' => 1,
+                'hide'  => true,
+            ],
         ];
     }
 

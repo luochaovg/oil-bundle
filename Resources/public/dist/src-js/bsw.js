@@ -265,9 +265,8 @@ $(function () {
                 bsw.response(res).then(function () {
                     var data = {
                         title: bsw.lang.export_mission,
-                        width: 700,
-                        height: 700,
-                        minHeight: 700
+                        width: 500,
+                        height: 385
                     };
                     data.location = bsw.setParams(res.sets, that.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);

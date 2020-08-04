@@ -58,7 +58,12 @@ trait Progress
 
         return [
             'id'          => true,
-            'donePercent' => ['label' => Helper::cnSpace()],
+            'donePercent' => [
+                'label'    => Helper::cnSpace(),
+                'typeArgs' => [
+                    'step' => 5,
+                ],
+            ],
             'whatToDo'    => [
                 'type'      => Mentions::class,
                 'typeArgs'  => ['rows' => 6, 'enum' => $member],

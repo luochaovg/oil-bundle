@@ -1729,13 +1729,16 @@ class FoundationAntD extends FoundationTools {
         }
 
         let minHeight = parseInt(iframe.data('min-height'));
-        if (!minHeight) {
+        let maxHeight = parseInt(iframe.data('max-height'));
+        if (!minHeight && !maxHeight) {
             return;
         }
 
         let content = $('.bsw-content');
         let height = content.height() + this.pam(content.parent(), content).column;
-        let maxHeight = this.popupCosySize(false, parent.document).height;
+        if (!maxHeight) {
+            maxHeight = this.popupCosySize(false, parent.document).height;
+        }
 
         if (minHeight > maxHeight) {
             minHeight = maxHeight;
@@ -1769,6 +1772,9 @@ class FoundationAntD extends FoundationTools {
         let attributes = [];
         if (data.minHeight) {
             attributes.push(`data-min-height="${data.minHeight}"`);
+        }
+        if (data.maxHeight) {
+            attributes.push(`data-max-height="${data.maxHeight}"`);
         }
         attributes = attributes.join(' ');
 

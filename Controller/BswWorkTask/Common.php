@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller\BswWorkTask;
 
+use Doctrine\ORM\Query\Expr;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Entity\BswAdminUser;
@@ -18,7 +19,12 @@ use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\AbstractQuery;
 use MathPHP\Algebra;
+use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * @property Session $session
+ * @property Expr    $expr
+ */
 trait Common
 {
     /**
@@ -284,7 +290,12 @@ trait Common
             ],
         ];
 
-        return $this->repo(BswAdminUser::class)->kvp(
+        /**
+         * @var BswAdminUserRepository $adminRepo
+         */
+        $adminRepo = $this->repo(BswAdminUser::class);
+
+        return $adminRepo->kvp(
             ['kvp.name', 'bwt.name AS team'],
             Abs::PK,
             function ($v) {
@@ -555,7 +566,7 @@ trait Common
                 ->setArgs(
                     [
                         'width'  => Abs::MEDIA_SM,
-                        'height' => 421,
+                        'height' => 410,
                         'title'  => $this->twigLang('New task'),
                     ]
                 ),
@@ -603,7 +614,12 @@ trait Common
                 return $record;
             }
 
-            $user = $this->repo(BswAdminUser::class)->lister(
+            /**
+             * @var BswAdminUserRepository $adminRepo
+             */
+            $adminRepo = $this->repo(BswAdminUser::class);
+
+            $user = $adminRepo->lister(
                 [
                     'limit' => 1,
                     'where' => [

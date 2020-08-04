@@ -27,13 +27,22 @@ bsw.configure({
         previewPagination(page, pageSize) {
             this.pagination(this.previewGetUrl(), page, {{ jump }});
         },
-        previewSortData(pagination, filters, sorter) {
+        previewChange(pagination, filters, sorter) {
             let url = this.previewGetUrl();
-            url = bsw.unsetParamsBeginWith(['{{ constant(scaffold.abs ~ '::TAG_SEQUENCE') }}'], url);
+            let query = bsw.parseQueryString(url);
+            let arrKey = '{{ constant(scaffold.abs ~ '::TAG_SEQUENCE') }}';
+            url = bsw.unsetParamsBeginWith([arrKey], url);
             if (typeof sorter.field !== 'undefined') {
-                let key = bsw.humpToUnder(sorter.field);
-                key = `{{ constant(scaffold.abs ~ '::TAG_SEQUENCE') }}[${key}]`;
-                url = bsw.setParams({[key]: sorter.order}, url);
+                let field = bsw.humpToUnder(sorter.field);
+                let key = `${arrKey}[${field}]`;
+                if (typeof sorter.column === 'undefined') {
+                    next = null;
+                } else {
+                    let dir = sorter.column.sortDirections;
+                    let index = dir.findIndex((v) => {return v === query[key] || null})
+                    next = (index + 1) >= dir.length ? null : dir[index + 1];
+                }
+                url = bsw.setParams({[key]: next}, url);
             }
             this.pagination(url, null, {{ jump }});
         },

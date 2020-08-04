@@ -2248,13 +2248,16 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             var minHeight = parseInt(iframe.data('min-height'));
-            if (!minHeight) {
+            var maxHeight = parseInt(iframe.data('max-height'));
+            if (!minHeight && !maxHeight) {
                 return;
             }
 
             var content = $('.bsw-content');
             var height = content.height() + this.pam(content.parent(), content).column;
-            var maxHeight = this.popupCosySize(false, parent.document).height;
+            if (!maxHeight) {
+                maxHeight = this.popupCosySize(false, parent.document).height;
+            }
 
             if (minHeight > maxHeight) {
                 minHeight = maxHeight;
@@ -2291,6 +2294,9 @@ var FoundationAntD = function (_FoundationTools) {
             var attributes = [];
             if (data.minHeight) {
                 attributes.push('data-min-height="' + data.minHeight + '"');
+            }
+            if (data.maxHeight) {
+                attributes.push('data-max-height="' + data.maxHeight + '"');
             }
             attributes = attributes.join(' ');
 
@@ -2597,7 +2603,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'filterOptionForMentions',
         value: function filterOptionForMentions(input, option) {
-            return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+            return option.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0;
         }
 
         /**
