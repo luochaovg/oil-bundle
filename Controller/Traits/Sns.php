@@ -58,6 +58,7 @@ trait Sns
                 ->version('2017-05-25')
                 ->action('SendSms')
                 ->method('POST')
+                ->host('dysmsapi.aliyuncs.com')
                 ->timeout($this->cnf->curl_timeout_second)
                 ->connectTimeout($this->cnf->curl_timeout_second)
                 ->options(
