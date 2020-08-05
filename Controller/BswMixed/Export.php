@@ -41,7 +41,7 @@ trait Export
             ],
             'telegramReceiver' => true,
             'cronReuse'        => [
-                'value' => 1,
+                'value' => 0,
                 'hide'  => true,
             ],
         ];
