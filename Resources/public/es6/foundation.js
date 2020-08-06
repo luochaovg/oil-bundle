@@ -1730,6 +1730,9 @@ class FoundationAntD extends FoundationTools {
 
         let minHeight = parseInt(iframe.data('min-height'));
         let maxHeight = parseInt(iframe.data('max-height'));
+
+        minHeight = minHeight ? minHeight : 0;
+        maxHeight = maxHeight ? maxHeight : 0;
         if (!minHeight && !maxHeight) {
             return;
         }

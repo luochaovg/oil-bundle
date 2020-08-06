@@ -11,14 +11,13 @@ class Enums extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         $value = $args[$value] ?? Abs::DIRTY;
-        $trans = $extraArgs['trans'] ?? null;
+        $trans = $args['trans'] ?? null;
 
         if (is_object($trans) && $trans instanceof TranslatorInterface) {
             return $trans->trans($value, [], 'enum');
@@ -30,11 +29,10 @@ class Enums extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         return array_flip($args)[$value] ?? null;
     }

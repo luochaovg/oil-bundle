@@ -10,14 +10,13 @@ class MoneyStringify extends Money
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         $value /= static::REDOUBLE;
-        $tpl = $extraArgs['tpl'] ?? '%s';
+        $tpl = $args['tpl'] ?? '%s';
 
         return Helper::money($value, $tpl);
     }

@@ -9,11 +9,10 @@ class JsonStringify extends Json
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         return Helper::formatPrintJson(parent::preview($value, $args, $extraArgs), 4, ': ');
     }

@@ -519,15 +519,10 @@ class Module extends Bsw
         };
 
         $persistence = !!$this->input->submit;
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERS_MODIFY : Abs::TAG_PERS_NEWLY]];
-        $hooksHandling = [];
-        foreach ($hooks as $hook => $item) {
-            $hooksHandling[$hook] = $item['fields'];
-            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
-        }
 
         $original = $record;
-        $record = $this->web->hooker($hooksHandling, $record, $persistence, $before, $after, $extraArgs);
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERS_MODIFY : Abs::TAG_PERS_NEWLY]];
+        $record = $this->web->hooker($hooks, $record, $persistence, $before, $after, $extraArgs);
         $hooked = $record;
 
         if ($persistence) {
@@ -569,6 +564,7 @@ class Module extends Bsw
 
         $recordHandling = [];
         $format = [];
+        $view = $this->web->getArgs($this->input->view);
 
         foreach ($persistAnnotation as $key => $item) {
 
@@ -582,7 +578,7 @@ class Module extends Bsw
             $form->setStyle($item['style']);
             $form->setField(Helper::camelToUnder($key));
 
-            $form->setDisabled($item['disabled']);
+            $form->setDisabled($view ? true : $item['disabled']);
             $form->setFormRules($item['formRules']);
             $form = $this->web->formRulesHandler($form);
 

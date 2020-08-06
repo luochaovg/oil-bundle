@@ -68,26 +68,26 @@ Options:
 如果这个目录你修改了，以下的别名命令可能有些参数需要手动修改。  
 并且这些别名命令的参数与 `app-sf-bin bsw:init` 一致。
     
-### `bin.app-api`
+### `> bin.app-api`
 
 ```bash
-$ bin.app-api --scheme-only=user,user_extend --scaffold-need=no
+$ bin.app-api --scaffold-need=no --scheme-only=user,user_extend
 ```
 
 命令功能与 `app-sf-bin bsw:init` 一致，主要用于 `Api` 类项目。生成 `Entity` 在各类项目中有所区别。
 
-### `bin.app-web`
+### `> bin.app-web`
 
 ```bash
-$ bin.app-web --scheme-only=user,user_extend --scaffold-need=yes
+$ bin.app-web --scheme-only=user,user_extend
 ```
 
 命令功能与 `app-sf-bin bsw:init` 一致，主要用于 `Web` 类项目。生成 `Entity` 在各类项目中有所区别。
 
-### `bin.app-backend`
+### `> bin.app-backend`
 
 ```bash
-$ bin.app-backend --scaffold-need=yes --acme=App\\Controller\\AcmeBackendController
+$ bin.app-backend --acme=App\\Controller\\AcmeBackendController --scheme-only=user
 ```
 
 命令功能与 `app-sf-bin bsw:init` 一致，主要用于 `Admin` 类项目。生成 `Entity` 在各类项目中有所区别。

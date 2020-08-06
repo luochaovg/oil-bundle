@@ -11,11 +11,10 @@ class HourDuration extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         if (!Helper::isIntNumeric($value)) {
             return null;
@@ -24,7 +23,7 @@ class HourDuration extends Hook
         // return Helper::humanDuration($value);
 
         $date = date(Abs::FMT_FULL, time() + $value * 3600);
-        [$_, $info] = Helper::gapDateDetail($date, $extraArgs['digit'] ?? []);
+        [$_, $info] = Helper::gapDateDetail($date, $args['digit'] ?? []);
 
         return $info;
     }
@@ -32,11 +31,10 @@ class HourDuration extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         return $value;
     }

@@ -21,6 +21,9 @@
   min-height: 220px;
   overflow-y: scroll;
 }
+.bsw-ck .bsw-ck-editor p {
+  margin-bottom: 8px;
+}
 .ck-content ul {
   padding-left: 24px;
 }

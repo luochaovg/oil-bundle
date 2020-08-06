@@ -4,7 +4,8 @@
 {% block page %}
   {% block persistenceBefore %}{% endblock %}
   {% block persistence %}
-    <div class="bsw-persistence">
+    {% set view = scaffold.get.view ?? false %}
+    <div class="{{ ['bsw-persistence', view ? 'bsw-persistence-view' : null]|joinClass }}">
       <a-form
         class="bsw-persistence-form"
         :form="persistenceForm"

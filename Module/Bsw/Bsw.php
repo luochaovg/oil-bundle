@@ -368,7 +368,9 @@ abstract class Bsw
             [
                 'uuid'   => "__{$field}",
                 ':value' => 'value',
-                'value'  => '{{ value }}',
+                '@value' => '{{ value }}',
+                '#value' => '{{ value === null ? "{Abs::NIL}" : value }}',
+                'value'  => '{{ value }}', // may be covered, then set @value
                 'title'  => $var['title'] ?? null,
                 'field'  => Helper::camelToUnder($field, '-'),
             ],
@@ -458,8 +460,7 @@ abstract class Bsw
                 continue;
             }
             if (isset($hook) && isset($hookArgs)) {
-                $hooks[$hook]['fields'][] = $field;
-                $hooks[$hook]['args'] = $hookArgs;
+                $hooks[$hook][$field] = $hookArgs;
             }
         }
     }
@@ -496,7 +497,7 @@ abstract class Bsw
      *
      * @param string $field
      * @param mixed  $item
-     * @param array  $filterAnnotationFull
+     * @param array  $annotationFull
      * @param int    $defaultIndex
      *
      * @return array
@@ -504,7 +505,7 @@ abstract class Bsw
     protected function handleForAnnotationExtraItem(
         string $field,
         $item,
-        array $filterAnnotationFull,
+        array $annotationFull,
         ?int $defaultIndex = null
     ): array {
 
@@ -524,7 +525,7 @@ abstract class Bsw
         $fieldHandling = Helper::dig($item, 'field');
 
         if (is_null($defaultIndex)) {
-            $itemHandling = $previewAnnotationFull[$tableHandling][$fieldHandling] ?? [];
+            $itemHandling = $annotationFull[$tableHandling][$fieldHandling] ?? [];
             $item = array_merge($itemHandling, $item);
 
             return [$field, $item];
@@ -536,7 +537,7 @@ abstract class Bsw
         $item['field'] = "{$tableHandling}.{$fieldHandling}";
         $fieldHandling = "{$fieldHandling}{$indexSplit}{$indexHandling}";
 
-        $itemHandling = $filterAnnotationFull[$tableHandling][$fieldHandling] ?? [];
+        $itemHandling = $annotationFull[$tableHandling][$fieldHandling] ?? [];
         $item = array_merge($itemHandling, $item);
 
         return ["{$field}{$indexSplit}{$indexHandling}", $item];

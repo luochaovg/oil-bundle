@@ -344,7 +344,6 @@ class Module extends Bsw
          */
 
         if (!isset($item['dress']) && $item['enum']) {
-
             $enumStringify = $this->web->enumLang($item['enum'], true);
             $var = [
                 'Abs::SLOT_NOT_BLANK' => "{$enumStringify}[value]",
@@ -769,15 +768,9 @@ class Module extends Bsw
             );
         };
 
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_PREVIEW]];
-        $hooksHandling = [];
-        foreach ($hooks as $hook => $item) {
-            $hooksHandling[$hook] = $item['fields'];
-            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
-        }
-
         $original = $list;
-        $list = $this->web->hooker($hooksHandling, $list, false, $before, $after, $extraArgs);
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_PREVIEW]];
+        $list = $this->web->hooker($hooks, $list, false, $before, $after, $extraArgs);
         $hooked = $list;
 
         /**

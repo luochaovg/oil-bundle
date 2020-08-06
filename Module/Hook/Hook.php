@@ -28,22 +28,20 @@ abstract class Hook
      *
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    abstract protected function preview($value, array $args, array $extraArgs = []);
+    abstract protected function preview($value, array $args);
 
     /**
      * For persistence
      *
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    abstract protected function persistence($value, array $args, array $extraArgs = []);
+    abstract protected function persistence($value, array $args);
 
     /**
      * Hook
@@ -80,7 +78,8 @@ abstract class Hook
         }
 
         // to hook
-        $this->item->{$this->field} = $this->{$fn}($value, $args, $extraArgs);
+        $args = array_merge($extraArgs, $args);
+        $this->item->{$this->field} = $this->{$fn}($value, $args);
 
         return $this->object ? $this->item : (array)$this->item;
     }

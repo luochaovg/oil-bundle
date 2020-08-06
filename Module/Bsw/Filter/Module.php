@@ -274,13 +274,6 @@ class Module extends Bsw
      */
     protected function getFilterData(array $filterAnnotation, array $hooks): array
     {
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_FILTER]];
-        $hooksHandling = [];
-        foreach ($hooks as $hook => $item) {
-            $hooksHandling[$hook] = $item['fields'];
-            $extraArgs[$hook] = array_merge($extraArgs[$hook] ?? [], $item['args']);
-        }
-
         $filter = $this->web->getArgs($this->input->key) ?? [];
         $filter = Helper::numericValues($filter);
 
@@ -291,7 +284,9 @@ class Module extends Bsw
             }
             $filterHandling[$key] = $value;
         }
-        $filter = $this->web->hooker($hooksHandling, $filterHandling, true, null, null, $extraArgs);
+
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => Abs::TAG_FILTER]];
+        $filter = $this->web->hooker($hooks, $filterHandling, true, null, null, $extraArgs);
 
         $condition = [];
         [$group, $diffuse] = $this->getFilterGroup($filterAnnotation);
@@ -320,19 +315,26 @@ class Module extends Bsw
             }
         }
 
-        foreach ($hooksHandling as $hook => $fields) {
-            foreach ($fields as $index => $field) {
+        foreach ($hooks as $hook => $fields) {
+            foreach ($fields as $field => $args) {
                 if (!isset($filter[$field])) {
-                    unset($hooksHandling[$hook][$index]);
+                    unset($hooks[$hook][$field]);
                 }
             }
-            if (empty($hooksHandling[$hook])) {
-                unset($hooksHandling[$hook]);
+            if (empty($hooks[$hook])) {
+                unset($hooks[$hook]);
             }
         }
 
         $filterAnnotationValue = Helper::arrayColumn($filterAnnotation, 'value');
-        $filterAnnotationValue = $this->web->hooker($hooksHandling, $filterAnnotationValue, false, null, null, $extraArgs);
+        $filterAnnotationValue = $this->web->hooker(
+            $hooks,
+            $filterAnnotationValue,
+            false,
+            null,
+            null,
+            $extraArgs
+        );
 
         foreach ($filterAnnotation as $key => $item) {
             $filterAnnotation[$key]['value'] = $filterAnnotationValue[$key];

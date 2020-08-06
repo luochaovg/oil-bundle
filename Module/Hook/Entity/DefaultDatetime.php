@@ -10,11 +10,10 @@ class DefaultDatetime extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         return $value;
     }
@@ -22,17 +21,16 @@ class DefaultDatetime extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         $value = strtotime($value);
         if ($value !== false) {
             return $value;
         }
 
-        return date(current($args) ?: Abs::FMT_FULL);
+        return date($args['format'] ?? Abs::FMT_FULL);
     }
 }

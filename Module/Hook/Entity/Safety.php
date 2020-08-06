@@ -10,11 +10,10 @@ class Safety extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         return Html::cleanHtml($value);
     }
@@ -22,11 +21,10 @@ class Safety extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         return Html::cleanHtml($value);
     }

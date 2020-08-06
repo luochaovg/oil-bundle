@@ -10,11 +10,10 @@ class Json extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         if (!$value) {
             return null;
@@ -26,11 +25,10 @@ class Json extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         if (empty($value)) {
             return null;

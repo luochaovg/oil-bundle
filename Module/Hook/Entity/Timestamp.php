@@ -10,40 +10,38 @@ class Timestamp extends Hook
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
-        $scene = $extraArgs['scene'] ?? null;
+        $scene = $args['scene'] ?? null;
         if ($scene === Abs::TAG_FILTER && empty($value)) {
             return null;
         }
 
         if (empty($value)) {
             $zero = trim("{$scene}_zero", '_');
-            if (!empty($extraArgs[$zero])) { // default value
-                return $extraArgs[$zero];
+            if (!empty($args[$zero])) { // default value
+                return $args[$zero];
             }
 
             $empty = trim("{$scene}_empty", '_');
-            if (!empty($extraArgs[$empty])) { // default timestamp
-                $value = $extraArgs[$empty];
+            if (!empty($args[$empty])) { // default timestamp
+                $value = $args[$empty];
             }
         }
 
-        return date(current($args) ?: Abs::FMT_FULL, $value);
+        return date($args['format'] ?? Abs::FMT_FULL, $value);
     }
 
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function persistence($value, array $args, array $extraArgs = [])
+    public function persistence($value, array $args)
     {
         if (!empty($value)) {
             return strtotime($value);

@@ -421,7 +421,7 @@ div.ant-modal-mask {
   font-size: 12px;
 }
 .bsw-persistence {
-  padding: 80px 40px;
+  padding: 80px 40px 70px;
   overflow: hidden;
   transition: padding 0.6s ease-out;
 }
@@ -939,5 +939,19 @@ textarea[size="large"] {
 }
 .bsw-row-status-red {
   background-color: rgba(255, 0, 0, 0.1);
+}
+.bsw-persistence-view.bsw-persistence {
+  padding: 80px 40px 50px;
+}
+.bsw-persistence-view .ant-input[disabled],
+.bsw-persistence-view .ant-input-number-disabled,
+.bsw-persistence-view .ant-select-disabled,
+.bsw-persistence-view .ant-select-disabled .ant-select-selection {
+  color: rgba(0, 0, 0, 0.65);
+  background-color: transparent;
+}
+.bsw-persistence-view .ant-form-item button,
+.bsw-persistence-view .bsw-ck-toolbar {
+  display: none;
 }
 /*# sourceMappingURL=bsw.css.map */

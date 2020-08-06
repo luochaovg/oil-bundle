@@ -163,7 +163,7 @@
       margin: 5px;
 
       .bsw-persistence {
-        padding: 60px 40px;
+        padding: 60px 40px 30px;
         @media screen and (max-width: @mobile-lg) {
           padding: 30px !important;
         }
@@ -281,7 +281,7 @@
 }
 
 .bsw-persistence {
-  padding: 80px 40px;
+  padding: 80px 40px 70px;
   overflow: hidden;
   transition: padding .6s ease-out;
 
@@ -646,6 +646,18 @@ ul.ant-pagination li {
     background-color: #343a40 !important;
     border-color: #343a40 !important;
   }
+
+  &.ant-btn-bsw-link, &.ant-btn-bsw-link:hover, &.ant-btn-bsw-link:active {
+    background-color: transparent !important;
+    border-color: transparent !important;
+
+    &.bsw-btn {
+      color: #1890ff;
+      text-shadow: unset;
+      box-shadow: unset;
+      white-space: unset;
+    }
+  }
 }
 
 .bsw-tabs-fit .ant-tabs-bar {
@@ -897,4 +909,23 @@ textarea[size="large"] {
 
 .bsw-row-status-red {
   background-color: rgba(255, 0, 0, .1);
+}
+
+.bsw-persistence-view {
+  &.bsw-persistence {
+    padding: 80px 40px 50px;
+  }
+
+  .ant-input[disabled],
+  .ant-input-number-disabled,
+  .ant-select-disabled,
+  .ant-select-disabled .ant-select-selection {
+    color: rgba(0, 0, 0, .65);
+    background-color: transparent;
+  }
+
+  .ant-form-item button,
+  .bsw-ck-toolbar {
+    display: none;
+  }
 }

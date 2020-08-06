@@ -9,11 +9,10 @@ class Rate extends Money
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         $value /= static::REDOUBLE;
 

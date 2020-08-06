@@ -650,13 +650,14 @@ public function previewChoice(Arguments $args)
 
 **BeforeRender**
 
-> 在数据渲染到页面之前的最后处理。
+> 在数据渲染到页面之前的最后处理。  
+> 与前面不同的是，前面大部分是针对单个字段或者单行数据处理，该流函数是针对当前页数据处理，是一个二维数组。
 
 **作用：**
 
 ```php
-$args->hooked;     // 对应元数据 hook 后的数据
-$args->original;   // 当前行的元数据
+$args->hooked;     // [多行] 对应元数据 hook 后的数据
+$args->original;   // [多行] 当前行的元数据
 ```
 
 **用法：**

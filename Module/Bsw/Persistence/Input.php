@@ -29,6 +29,11 @@ class Input extends ArgsInput
     public $fill = 'fill';
 
     /**
+     * @var string
+     */
+    public $view = 'view';
+
+    /**
      * @var array
      */
     public $style = [];

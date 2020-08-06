@@ -9,14 +9,13 @@ class RateStringify extends Rate
     /**
      * @param mixed $value
      * @param array $args
-     * @param array $extraArgs
      *
      * @return mixed
      */
-    public function preview($value, array $args, array $extraArgs = [])
+    public function preview($value, array $args)
     {
         $value /= static::REDOUBLE;
-        $tpl = $extraArgs['tpl'] ?? '%.2f %%';
+        $tpl = $args['tpl'] ?? '%.2f %%';
 
         return sprintf($tpl, Helper::numberFormat($value, 2));
     }

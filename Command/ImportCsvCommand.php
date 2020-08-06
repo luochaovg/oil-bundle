@@ -131,7 +131,15 @@ abstract class ImportCsvCommand extends Command implements CommandInterface
             $this->process
         );
 
-        return "<info> {$info} </info>";
+        if ($roundSuccess == 0) {
+            $type = '<fg=red> %s </>';
+        } elseif ($roundSuccess < $roundTotal) {
+            $type = '<fg=yellow> %s </>';
+        } else {
+            $type = '<fg=green> %s </>';
+        }
+
+        return sprintf($type, $info);
     }
 
     /**

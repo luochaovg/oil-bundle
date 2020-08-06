@@ -58,7 +58,7 @@
   
     > 验证器可以是数组，每个验证器也可以携带自己的参数，比如 `rules={"required", "trim": "-+"}`，包含了两个验证，有时候要对验证器的参数进行一些处理，你就可以像这样使用：  
     >  
-    > `rulesArgsHandler={"trim": [Helper::class, 'split']}`
+    > `rulesArgsHandler={"trim": Helper::split}`
 
 - **是否参与签名 （`Api` 类项目专用）**
     
