@@ -12,20 +12,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 trait WebSession
 {
     /**
-     * Set session
-     *
-     * @param string $sessionKey
-     * @param mixed  $setValue
-     *
-     * @return array
+     * @var string
      */
-    public function sessionSet(string $sessionKey, $setValue)
-    {
-        $origin = is_array($setValue) ? Helper::jsonStringify($setValue) : $setValue;
-        $this->session->set($sessionKey, $origin);
-
-        return $origin;
-    }
+    protected $skWebsiteToken = 'session-key-website-token';
 
     /**
      * Set array item in session
@@ -43,26 +32,6 @@ trait WebSession
 
         $origin[$setKey] = $setValue;
         $this->session->set($sessionKey, $origin);
-
-        return $origin;
-    }
-
-    /**
-     * Get session
-     *
-     * @param string $sessionKey
-     * @param bool   $delete
-     *
-     * @return mixed
-     */
-    public function sessionGet(string $sessionKey, bool $delete = false)
-    {
-        $origin = $this->session->get($sessionKey);
-        $origin = Helper::parseJsonString($origin);
-
-        if ($delete) {
-            $this->session->remove($sessionKey);
-        }
 
         return $origin;
     }
@@ -91,5 +60,70 @@ trait WebSession
         }
 
         return $item;
+    }
+
+    /**
+     * Create website token
+     *
+     * @param int $liveTimes
+     * @param int $liveSecond
+     *
+     * @return string
+     */
+    public function createWebsiteToken(int $liveTimes = 1, int $liveSecond = 0): string
+    {
+        $token = Helper::generateToken();
+        $value = [
+            'times'  => $liveTimes,
+            'expire' => $liveSecond ? (time() + $liveSecond) : 0,
+        ];
+
+        $this->sessionArraySet($this->skWebsiteToken, $token, $value);
+
+        return $token;
+    }
+
+    /**
+     * Validation the website token
+     *
+     * @param string $token
+     *
+     * @return bool
+     */
+    public function validWebsiteToken(string $token): bool
+    {
+        $value = $this->sessionArrayGet($this->skWebsiteToken, $token);
+        if (empty($value)) {
+            return false;
+        }
+
+        if ($value['expire'] && $value['expire'] < time()) {
+            $this->sessionArrayGet($this->skWebsiteToken, $token, true);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove the website token
+     *
+     * @param string $token
+     * @param int    $times
+     */
+    public function invalidWebsiteToken(string $token, int $times = 1)
+    {
+        $value = $this->sessionArrayGet($this->skWebsiteToken, $token);
+        if (empty($value)) {
+            return;
+        }
+
+        if ($value['times'] > $times) {
+            $value['times'] -= $times;
+            $this->sessionArraySet($this->skWebsiteToken, $token, $value);
+        } else {
+            $this->sessionArrayGet($this->skWebsiteToken, $token, true);
+        }
     }
 }

@@ -10,8 +10,8 @@
   :block="{{ form.block ? 'true' : 'false' }}"
   :ghost="{{ form.ghost ? 'true' : 'false' }}"
   html-type="{{ form.htmlType }}"
-  {% if form.circle %}
-    shape="circle"
+  {% if form.shape %}
+    shape="{{ form.shape }}"
   {% endif %}
   :data-bsw.prop="{{ form.data }}"
   @click="dispatcherByVue"

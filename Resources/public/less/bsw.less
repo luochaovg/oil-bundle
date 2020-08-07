@@ -805,11 +805,12 @@ textarea[size="large"] {
   }
 
   .ant-result-title {
-    font-size: 20px;
+    font-size: 18px;
+    color: rgba(0, 0, 0, .65);
   }
 
   .ant-result-subtitle {
-    margin-top: 10px;
+    margin-top: 12px;
   }
 }
 
@@ -833,6 +834,10 @@ textarea[size="large"] {
 
 .bsw-filter-form .ant-form-item {
   animation-duration: .3s;
+}
+
+.f5-just-now .ant-form-item {
+  animation-duration: 0s;
 }
 
 .bsw-code {
@@ -927,5 +932,23 @@ textarea[size="large"] {
   .ant-form-item button,
   .bsw-ck-toolbar {
     display: none;
+  }
+}
+
+.bsw-scroll-x-container {
+  width: 100%;
+  background: rgba(0, 0, 0, .03);
+  margin-top: 1px;
+  overflow: hidden;
+
+  .slider {
+    width: 100px;
+    height: 16px;
+    background: rgba(0, 0, 0, .2);
+    border-radius: 8px;
+
+    &:hover {
+      background: rgba(0, 0, 0, .3);
+    }
   }
 }

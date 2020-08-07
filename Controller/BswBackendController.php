@@ -13,6 +13,7 @@ use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw as BswModule;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
@@ -79,6 +80,7 @@ class BswBackendController extends BswWebController
     protected $currentSrcJs = [
         'fulls' => Abs::JS_FULL_SCREEN,
         'copy'  => Abs::JS_COPY,
+        'drag'  => Abs::JS_DRAG,
         'bsw'   => Abs::JS_BSW,
     ];
 
@@ -299,6 +301,63 @@ class BswBackendController extends BswWebController
     }
 
     /**
+     * Render module by simple mode
+     *
+     * @param array $moduleList
+     * @param array $logicArgs
+     * @param bool  $directResponseMessage
+     *
+     * @return Response|Message|array
+     * @throws
+     */
+    protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
+    {
+        $showArgs = ['logic' => $logicArgs];
+        $inputArgs = $this->displayArgsScaffold();
+
+        $extraBswArgs = [
+            'expr'       => $this->expr,
+            'translator' => $this->translator,
+            'logger'     => $this->logger,
+        ];
+
+        $bswDispatcher = new BswModule\Dispatcher($this);
+        foreach ($moduleList as $module => $extraArgs) {
+
+            if (is_numeric($module)) {
+                [$module, $extraArgs] = [$extraArgs, []];
+            }
+
+            /**
+             * validator extra
+             */
+            if (!is_array($extraArgs)) {
+                throw new ModuleException('The extra args must be array for ' . $module);
+            }
+
+            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
+            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
+
+            $inputArgs['moduleArgs'][$name]['input'] = $input;
+            $inputArgs['moduleArgs'][$name]['output'] = $output;
+            $inputArgs = array_merge($inputArgs, $output);
+
+            /**
+             * @var BswModule\Message $message
+             */
+            if (($message = $output['message'] ?? null)) {
+                return $directResponseMessage ? $this->messageToResponse($message) : $message;
+            }
+
+            if ($name) {
+                $showArgs[$name] = $output;
+            }
+        }
+
+        return $showArgs;
+    }
+
+    /**
      * Render module
      *
      * @param array  $moduleList
@@ -376,8 +435,10 @@ class BswBackendController extends BswWebController
              */
             $html = $this->renderPart($twig, array_merge($showArgs, [$name => $output]));
 
-            $showArgs["{$name}Html"] = $html;
-            $ajaxShowArgs["{$name}Html"] = $html;
+            $name = str_replace('-', '_', $name);
+            $name = Helper::underToCamel("{$name}_html");
+            $showArgs[$name] = $html;
+            $ajaxShowArgs[$name] = $html;
         }
 
         $afterModule = Helper::dig($logic, 'afterModule') ?? [];

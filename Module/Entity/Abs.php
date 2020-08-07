@@ -41,6 +41,7 @@ class Abs
     const RECORD_LOGGER_EXTRA      = '__extra';
     const RULES_FLAG_HANDLER       = '__args_handler';
     const FLAG_SEARCH_ALL          = '__search_all_value';
+    const FLAG_WEBSITE_TOKEN       = '__c_s_r_f';
 
     /**
      * About frontend & source
@@ -55,6 +56,9 @@ class Abs
 
     const SHAPE_MODAL  = 'modal';
     const SHAPE_DRAWER = 'drawer';
+
+    const SHAPE_ROUND  = 'round';
+    const SHAPE_CIRCLE = 'circle';
 
     const TAG_TYPE_NOTICE  = 'notification';
     const TAG_TYPE_MESSAGE = 'message';
@@ -154,6 +158,7 @@ class Abs
     const JS_JQUERY         = 'npm;jquery/dist/jquery.min.js';
     const JS_RSA            = 'npm;jsencrypt/bin/jsencrypt.min.js';
     const JS_COPY           = 'npm;clipboard/dist/clipboard.min.js';
+    const JS_DRAG           = 'npm;dragdealer/src/dragdealer.js';
     const JS_SORTABLE       = 'npm;sortablejs/Sortable.min.js';
     const JS_CROPPER        = 'npm;cropper/dist/cropper.min.js';
     const JS_CHART          = 'npm;echarts/dist/echarts.min.js';

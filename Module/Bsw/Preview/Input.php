@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Module\Bsw\Preview;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Button;
 
 class Input extends ArgsInput
 {
@@ -112,4 +113,14 @@ class Input extends ArgsInput
      * @var string
      */
     public $childrenRowClsName = 'bsw-row-children';
+
+    /**
+     * @var string|null
+     */
+    public $scrollXSelector = '.ant-table-body';
+
+    /**
+     * @var int
+     */
+    public $scrollXBottom = 3;
 }

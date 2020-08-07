@@ -4,7 +4,7 @@
   size: {small: 'ant-btn-sm', large: 'ant-btn-lg'}[form.size] ?? null,
   block: form.ghost ? 'ant-btn-block' : null,
   ghost: form.ghost ? 'ant-btn-background-ghost' : null,
-  circle: form.circle ? 'ant-btn-circle' : null
+  shape: form.shape ? ('ant-btn-' ~ form.shape) : null
 } %}
 
 <button

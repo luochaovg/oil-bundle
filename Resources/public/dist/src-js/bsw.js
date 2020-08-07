@@ -37,6 +37,7 @@ $(function () {
         menuCollapsed: false,
         mobileDefaultCollapsed: true,
         ckEditor: {},
+        f5JustNow: true,
 
         noLoadingOnce: false,
         spinning: false,
@@ -453,10 +454,12 @@ $(function () {
 
         var timeout = change ? 1200 : 500;
         setTimeout(function () {
+            bsw.initScrollX();
             $(window).resize();
             $('.bsw-page-loading').fadeOut(300, function () {
                 bsw.messageAutoDiscovery(v.init);
                 bsw.autoIFrameHeight();
+                v.f5JustNow = false;
             });
         }, timeout);
     });

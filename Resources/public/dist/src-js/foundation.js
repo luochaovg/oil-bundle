@@ -2249,6 +2249,9 @@ var FoundationAntD = function (_FoundationTools) {
 
             var minHeight = parseInt(iframe.data('min-height'));
             var maxHeight = parseInt(iframe.data('max-height'));
+
+            minHeight = minHeight ? minHeight : 0;
+            maxHeight = maxHeight ? maxHeight : 0;
             if (!minHeight && !maxHeight) {
                 return;
             }
@@ -2711,6 +2714,57 @@ var FoundationAntD = function (_FoundationTools) {
             clipboard.on('error', function (e) {
                 that.error(that.lang.copy_failed, 3);
                 console.warn('Clipboard operation error', e);
+            });
+        }
+
+        /**
+         * Init scroll-x
+         *
+         * @param selector
+         */
+
+    }, {
+        key: 'initScrollX',
+        value: function initScrollX() {
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-scroll-x-container';
+
+            var instance = void 0;
+            var maxScrollLeft = void 0;
+            var bar = $(selector);
+
+            var scrollDiff = bar.data('scroll-diff');
+            if (bar.length === 0 || document.body.scrollHeight - document.body.clientHeight < scrollDiff) {
+                $(selector).hide();
+                return;
+            }
+
+            var outer = $(bar.data('target-selector'));
+            var inner = $(outer.children().get(0));
+            var init = function init() {
+                bar.find('.slider').width(Math.ceil(outer.width() / inner.width() * bar.width()));
+                maxScrollLeft = outer[0].scrollWidth - outer[0].clientWidth;
+                if (maxScrollLeft < 1) {
+                    $(selector).hide();
+                    return;
+                }
+                $(selector).show();
+                if (typeof instance === 'undefined') {
+                    instance = new Dragdealer(bar[0], {
+                        handleClass: 'slider',
+                        animationCallback: function animationCallback(x, y) {
+                            outer.scrollLeft(maxScrollLeft * x);
+                        }
+                    });
+                } else {
+                    instance.reflow();
+                }
+                outer.off('scroll').on('scroll', function () {
+                    instance.setValue(outer.scrollLeft() / maxScrollLeft, 0, true);
+                });
+            };
+            init();
+            $(window).resize(function () {
+                init();
             });
         }
 

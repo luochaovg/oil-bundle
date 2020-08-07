@@ -326,7 +326,7 @@ div.ant-modal-mask {
   margin: 5px;
 }
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
-  padding: 60px 40px;
+  padding: 60px 40px 30px;
 }
 @media screen and (max-width: 992px) {
   .ant-layout .ant-layout-content.iframe .bsw-persistence {
@@ -739,6 +739,20 @@ ul.ant-pagination li {
   background-color: #343a40 !important;
   border-color: #343a40 !important;
 }
+.ant-btn.ant-btn-bsw-link,
+.ant-btn.ant-btn-bsw-link:hover,
+.ant-btn.ant-btn-bsw-link:active {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+.ant-btn.ant-btn-bsw-link.bsw-btn,
+.ant-btn.ant-btn-bsw-link:hover.bsw-btn,
+.ant-btn.ant-btn-bsw-link:active.bsw-btn {
+  color: #1890ff;
+  text-shadow: unset;
+  box-shadow: unset;
+  white-space: unset;
+}
 .bsw-tabs-fit .ant-tabs-bar {
   margin: 0;
   border-bottom: none;
@@ -854,10 +868,11 @@ textarea[size="large"] {
   font-size: 56px;
 }
 .ant-result .ant-result-title {
-  font-size: 20px;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.65);
 }
 .ant-result .ant-result-subtitle {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .bsw-filter-without-label.ant-form-vertical .ant-form-item {
   padding-bottom: 0;
@@ -873,6 +888,9 @@ textarea[size="large"] {
 }
 .bsw-filter-form .ant-form-item {
   animation-duration: .3s;
+}
+.f5-just-now .ant-form-item {
+  animation-duration: 0s;
 }
 .bsw-code {
   display: -ms-inline-flexbox;
@@ -953,5 +971,20 @@ textarea[size="large"] {
 .bsw-persistence-view .ant-form-item button,
 .bsw-persistence-view .bsw-ck-toolbar {
   display: none;
+}
+.bsw-scroll-x-container {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.03);
+  margin-top: 1px;
+  overflow: hidden;
+}
+.bsw-scroll-x-container .slider {
+  width: 100px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.bsw-scroll-x-container .slider:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 /*# sourceMappingURL=bsw.css.map */

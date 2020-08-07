@@ -3,7 +3,6 @@
 namespace Leon\BswBundle\Controller;
 
 use Leon\BswBundle\Component\Helper;
-use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Crumbs\Entity\Crumb;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -15,8 +14,6 @@ use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Entity\ErrorSession;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Controller\Traits as CT;
-use Leon\BswBundle\Module\Bsw as BswModule;
-use Leon\BswBundle\Module\Exception\ModuleException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +30,7 @@ abstract class BswWebController extends AbstractController
         CT\WebResponse,
         CT\WebSeo,
         CT\WebSession,
+        CT\WebFlash,
         CT\WebSource;
 
     /**
@@ -354,146 +352,6 @@ abstract class BswWebController extends AbstractController
             $message->getType(),
             $message->getDuration()
         );
-    }
-
-    /**
-     * Append message
-     *
-     * @param string $content
-     * @param int    $duration
-     * @param string $classify
-     * @param string $type
-     *
-     * @throws
-     */
-    public function appendMessage(
-        string $content,
-        int $duration = null,
-        string $classify = Abs::TAG_CLASSIFY_WARNING,
-        string $type = Abs::TAG_TYPE_MESSAGE
-    ) {
-        if (strpos($content, Abs::FLAG_SQL_ERROR) !== false) {
-            throw new Exception($content);
-        }
-
-        $message = [
-            'type'     => $type,
-            'duration' => $duration,
-            'classify' => $classify,
-            'content'  => Html::cleanHtml($this->messageLang($content)),
-        ];
-        $message = Helper::arrayBase64EncodeForJs($message);
-
-        // message to flash
-        $this->addFlash(Abs::TAG_MESSAGE, Helper::jsonStringify($message));
-    }
-
-    /**
-     * Append modal
-     *
-     * @param array $options
-     */
-    public function appendModal(array $options)
-    {
-        $options = array_merge(
-            [
-                'title' => 'Tips',
-                'width' => Abs::MEDIA_XS,
-            ],
-            $options
-        );
-
-        foreach (['title', 'content'] as $key) {
-            if (!isset($options[$key])) {
-                continue;
-            }
-            if (!($options["{$key}Html"] ?? false)) {
-                $options[$key] = Html::cleanHtml($options[$key]);
-            }
-        }
-        $options = Helper::arrayBase64EncodeForJs($options);
-
-        // message to flash
-        $this->addFlash(Abs::TAG_MODAL, Helper::jsonStringify($options));
-    }
-
-    /**
-     * Append result
-     *
-     * @param array $options
-     */
-    public function appendResult(array $options)
-    {
-        $options = array_merge(
-            [
-                'status' => Abs::RESULT_STATUS_SUCCESS,
-                'title'  => 'Operation success',
-                'width'  => Abs::MEDIA_XS,
-            ],
-            $options
-        );
-
-        foreach (['title', 'subTitle'] as $key) {
-            if (!isset($options[$key])) {
-                continue;
-            }
-            if (!($options["{$key}Html"] ?? false)) {
-                $options[$key] = Html::cleanHtml($options[$key]);
-            }
-        }
-        $options = Helper::arrayBase64EncodeForJs($options);
-
-        // message to flash
-        $this->addFlash(Abs::TAG_RESULT, Helper::jsonStringify($options));
-    }
-
-    /**
-     * Get latest message
-     *
-     * @param string $key
-     * @param bool   $jsonDecode
-     *
-     * @return mixed
-     */
-    public function latestMessage(string $key, bool $jsonDecode = false)
-    {
-        $list = $this->session->getFlashBag()->get($key);
-        $latest = end($list);
-
-        if (!$latest) {
-            return $jsonDecode ? [] : null;
-        }
-
-        return $jsonDecode ? Helper::jsonArray($latest) : $latest;
-    }
-
-    /**
-     * Routes is access
-     *
-     * @param array $routes
-     * @param int   $passNeed
-     *
-     * @return mixed
-     */
-    public function routeIsAccess(array $routes, ?int $passNeed = null)
-    {
-        if (empty($routes)) {
-            return true;
-        }
-
-        $passNow = 0;
-        $passNeed = $passNeed ?? count($routes);
-
-        foreach ($routes as $route) {
-            if (empty($route)) {
-                $passNow += 1;
-            } else {
-                $access = $this->access[$route] ?? false;
-                $passNow += ($access === true ? 1 : 0);
-            }
-        }
-
-        return $passNow >= $passNeed;
     }
 
     /**
@@ -879,63 +737,6 @@ abstract class BswWebController extends AbstractController
         $view = $this->viewHandler($parameters['scaffold'], $view);
 
         return $this->renderView($view, $parameters);
-    }
-
-    /**
-     * Render module by simple mode
-     *
-     * @param array $moduleList
-     * @param array $logicArgs
-     * @param bool  $directResponseMessage
-     *
-     * @return Response|Message|array
-     * @throws
-     */
-    protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
-    {
-        $showArgs = ['logic' => $logicArgs];
-        $inputArgs = $this->displayArgsScaffold();
-
-        $extraBswArgs = [
-            'expr'       => $this->expr,
-            'translator' => $this->translator,
-            'logger'     => $this->logger,
-        ];
-
-        $bswDispatcher = new BswModule\Dispatcher($this);
-        foreach ($moduleList as $module => $extraArgs) {
-
-            if (is_numeric($module)) {
-                [$module, $extraArgs] = [$extraArgs, []];
-            }
-
-            /**
-             * validator extra
-             */
-            if (!is_array($extraArgs)) {
-                throw new ModuleException('The extra args must be array for ' . $module);
-            }
-
-            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
-
-            $inputArgs['moduleArgs'][$name]['input'] = $input;
-            $inputArgs['moduleArgs'][$name]['output'] = $output;
-            $inputArgs = array_merge($inputArgs, $output);
-
-            /**
-             * @var BswModule\Message $message
-             */
-            if (($message = $output['message'] ?? null)) {
-                return $directResponseMessage ? $this->messageToResponse($message) : $message;
-            }
-
-            if ($name) {
-                $showArgs[$name] = $output;
-            }
-        }
-
-        return $showArgs;
     }
 
     /**

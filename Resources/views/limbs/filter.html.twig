@@ -1,6 +1,7 @@
 {% if filter.filter is not empty %}
+  {% set clsName = ['bsw-filter-form', filter.showLabel ? null : 'bsw-filter-without-label']|joinClass %}
   <a-form
-    class="{{ ['bsw-filter-form', filter.showLabel ? null : 'bsw-filter-without-label']|joinClass }}"
+    :class="{'{{ clsName }}': true, 'f5-just-now': f5JustNow}"
     :form="filterForm"
     layout="vertical"
     @submit="filterSubmit"

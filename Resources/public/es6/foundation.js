@@ -2138,6 +2138,52 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Init scroll-x
+     *
+     * @param selector
+     */
+    initScrollX(selector = '.bsw-scroll-x-container') {
+        let instance;
+        let maxScrollLeft;
+        let bar = $(selector);
+
+        let scrollDiff = bar.data('scroll-diff');
+        if (bar.length === 0 || document.body.scrollHeight - document.body.clientHeight < scrollDiff) {
+            $(selector).hide();
+            return;
+        }
+
+        let outer = $(bar.data('target-selector'));
+        let inner = $(outer.children().get(0));
+        let init = function () {
+            bar.find('.slider').width(Math.ceil(outer.width() / inner.width() * bar.width()));
+            maxScrollLeft = outer[0].scrollWidth - outer[0].clientWidth;
+            if (maxScrollLeft < 1) {
+                $(selector).hide();
+                return;
+            }
+            $(selector).show();
+            if (typeof instance === 'undefined') {
+                instance = new Dragdealer(bar[0], {
+                    handleClass: 'slider',
+                    animationCallback: function (x, y) {
+                        outer.scrollLeft(maxScrollLeft * x);
+                    }
+                });
+            } else {
+                instance.reflow();
+            }
+            outer.off('scroll').on('scroll', function () {
+                instance.setValue(outer.scrollLeft() / maxScrollLeft, 0, true);
+            });
+        };
+        init();
+        $(window).resize(() => {
+            init()
+        });
+    }
+
+    /**
      * Upward infect class
      *
      * @param selector

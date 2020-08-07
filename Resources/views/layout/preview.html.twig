@@ -58,6 +58,20 @@
           </template>
         {% endif %}
       </a-table>
+      {% if preview.scrollXSelector is not empty %}
+        <a-affix
+          :style="{width: '100%'}"
+          :offset-bottom="{{ preview.scrollXBottom }}"
+        >
+          <div
+            class="bsw-scroll-x-container"
+            data-target-selector="{{ preview.scrollXSelector }}"
+            data-scroll-diff="300"
+          >
+            <div class="slider"></div>
+          </div>
+        </a-affix>
+      {% endif %}
       <a-pagination
         :show-quick-jumper="true"
         :hide-on-single-page="true"

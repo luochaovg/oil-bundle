@@ -13,6 +13,7 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
+use Leon\BswBundle\Module\Error\Entity\ErrorRequestOften;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\LogicException;
@@ -27,6 +28,7 @@ use Leon\BswBundle\Module\Form\Entity\Datetime;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Entity\Upload;
+use Leon\BswBundle\Module\Form\Entity\Input as FormInput;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Hook\Entity\JsonStringify;
 use Leon\BswBundle\Component\Upload as Uploader;
@@ -181,6 +183,13 @@ class Module extends Bsw
         /**
          * annotation handler with extra
          */
+        $persistAnnotationExtra[Abs::FLAG_WEBSITE_TOKEN] = [
+            'label' => 'Website token',
+            'sort'  => .001,
+            'type'  => FormInput::class,
+            'value' => $this->web->createWebsiteToken(),
+            'hide'  => true,
+        ];
 
         foreach ($persistAnnotationExtra as $field => $item) {
 
@@ -251,7 +260,7 @@ class Module extends Bsw
             $record = new $this->entity;
             [$submit, $extraSubmit] = $this->resolveSubmit($this->input->submit);
 
-            $recordBefore = $this->web->sessionGet($key) ?? [];
+            $recordBefore = $this->web->session->get($key) ?? [];
             $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
             $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
@@ -338,7 +347,7 @@ class Module extends Bsw
         }
 
         $record = Helper::entityToArray($record);
-        $this->web->sessionSet($key, $record);
+        $this->web->session->set($key, $record);
 
         return [[], $record, [], $record, $record];
     }
@@ -987,6 +996,8 @@ class Module extends Bsw
                     }
                 }
 
+                $this->web->invalidWebsiteToken($extraSubmit[Abs::FLAG_WEBSITE_TOKEN]);
+
                 $recordDiff[Abs::RECORD_LOGGER_EFFECT] = $result;
                 $record[Abs::RECORD_LOGGER_EXTRA] = $extraSubmit;
                 $this->web->databaseOperationLogger($this->entity, $loggerType, $recordBefore, $record, $recordDiff);
@@ -1085,6 +1096,11 @@ class Module extends Bsw
         }
 
         if ($this->input->submit) {
+
+            if (!$this->web->validWebsiteToken($extraSubmit[Abs::FLAG_WEBSITE_TOKEN])) {
+                return $this->showError('Form submission exception or so often', ErrorRequestOften::CODE);
+            }
+
             if ($this->entity) {
                 /**
                  * Rules validator

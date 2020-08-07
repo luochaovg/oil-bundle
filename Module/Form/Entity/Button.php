@@ -6,7 +6,7 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\BindLoading;
 use Leon\BswBundle\Module\Form\Entity\Traits\BindVariable;
 use Leon\BswBundle\Module\Form\Entity\Traits\Block;
-use Leon\BswBundle\Module\Form\Entity\Traits\Circle;
+use Leon\BswBundle\Module\Form\Entity\Traits\Shape;
 use Leon\BswBundle\Module\Form\Entity\Traits\Ghost;
 use Leon\BswBundle\Module\Form\Entity\Traits\HtmlType;
 use Leon\BswBundle\Module\Form\Entity\Traits\Scene;
@@ -23,7 +23,7 @@ class Button extends Form
     use Scene;
     use Block;
     use Ghost;
-    use Circle;
+    use Shape;
     use Selector;
     use Type;
     use HtmlType;
@@ -50,18 +50,5 @@ class Button extends Form
         isset($icon) && $this->setIcon($icon);
 
         $this->setVarNameForSelector('previewSelectedRow');
-    }
-
-    /**
-     * @param bool $circle
-     *
-     * @return $this
-     */
-    public function setCircle(bool $circle = true)
-    {
-        $this->label = null;
-        $this->circle = $circle;
-
-        return $this;
     }
 }

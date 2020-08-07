@@ -391,15 +391,16 @@ class Helper
     /**
      * hello_world to helloWorld
      *
-     * @param string $str
-     * @param bool   $small Camel of case
-     * @param string $split
+     * @param string       $str
+     * @param bool         $small
+     * @param string|array $split
      *
      * @return string
      */
-    public static function underToCamel(string $str, bool $small = true, string $split = '_'): string
+    public static function underToCamel(string $str, bool $small = true, $split = '_'): string
     {
-        $str = str_replace($split, self::enSpace(), $str);
+        $split = (array)$split;
+        $str = str_replace($split, array_fill(0, count($split), self::enSpace()), $str);
         $str = ucwords($str);
         $str = str_replace(self::enSpace(), null, $str);
 
@@ -444,13 +445,13 @@ class Helper
     /**
      * Array key hello_world to helloWorld
      *
-     * @param array  $source
-     * @param bool   $small
-     * @param string $split
+     * @param array        $source
+     * @param bool         $small
+     * @param string|array $split
      *
      * @return array
      */
-    public static function keyUnderToCamel(array $source, bool $small = true, string $split = '_'): array
+    public static function keyUnderToCamel(array $source, bool $small = true, $split = '_'): array
     {
         $sourceHandling = [];
         foreach ($source as $key => $value) {

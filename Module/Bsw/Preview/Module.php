@@ -1100,6 +1100,11 @@ class Module extends Bsw
         $output->header = $this->input->header;
         $output->footer = $this->input->footer;
 
+        if (!$this->input->mobile) {
+            $output->scrollXSelector = $this->input->scrollXSelector;
+            $output->scrollXBottom = $this->input->scrollXBottom;
+        }
+
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,
