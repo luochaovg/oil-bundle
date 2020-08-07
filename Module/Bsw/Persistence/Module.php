@@ -183,13 +183,16 @@ class Module extends Bsw
         /**
          * annotation handler with extra
          */
-        $persistAnnotationExtra[Abs::FLAG_WEBSITE_TOKEN] = [
-            'label' => 'Website token',
-            'sort'  => .001,
-            'type'  => FormInput::class,
-            'value' => $this->web->createWebsiteToken(),
-            'hide'  => true,
-        ];
+
+        if (!$this->input->submit) {
+            $persistAnnotationExtra[Abs::FLAG_WEBSITE_TOKEN] = [
+                'label' => 'Website token',
+                'sort'  => .001,
+                'type'  => FormInput::class,
+                'value' => $this->web->createWebsiteToken(),
+                'hide'  => true,
+            ];
+        }
 
         foreach ($persistAnnotationExtra as $field => $item) {
 
@@ -246,7 +249,7 @@ class Module extends Bsw
     protected function getPersistenceData()
     {
         if (empty($this->entity)) {
-            return [[], [], [], [], []];
+            return [[], [], [], [], []]; // just interlude, basically useless
         }
 
         $key = "{$this->input->route}:record:before";
@@ -535,7 +538,7 @@ class Module extends Bsw
         $hooked = $record;
 
         if ($persistence) {
-            return [$record, [], [], $original];
+            return [$record, [], [], $original];  // just interlude, basically useless
         }
 
         /**
@@ -996,7 +999,9 @@ class Module extends Bsw
                     }
                 }
 
-                $this->web->invalidWebsiteToken($extraSubmit[Abs::FLAG_WEBSITE_TOKEN]);
+                if ($token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
+                    $this->web->invalidWebsiteToken($token);
+                }
 
                 $recordDiff[Abs::RECORD_LOGGER_EFFECT] = $result;
                 $record[Abs::RECORD_LOGGER_EXTRA] = $extraSubmit;
@@ -1097,7 +1102,8 @@ class Module extends Bsw
 
         if ($this->input->submit) {
 
-            if (!$this->web->validWebsiteToken($extraSubmit[Abs::FLAG_WEBSITE_TOKEN])) {
+            $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null;
+            if ($token && !$this->web->validWebsiteToken($token)) {
                 return $this->showError('Form submission exception or so often', ErrorRequestOften::CODE);
             }
 
@@ -1139,8 +1145,18 @@ class Module extends Bsw
                 [$this->input->submit, $persistAnnotationHandling]
             );
 
+            Helper::callReturnType($result, [Error::class, Message::class], 'The handler of submit');
+
             if ($result instanceof Error) {
                 return $this->showError($result->tiny());
+            }
+
+            /**
+             * @var Message $result
+             */
+
+            if ($result->isSuccessClassify() && $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
+                $this->web->invalidWebsiteToken($token);
             }
 
             return $this->showMessage($result);
