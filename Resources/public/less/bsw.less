@@ -890,14 +890,26 @@ textarea[size="large"] {
   font-size: 12px;
   border-width: 1px;
   border-style: solid;
-  padding: 1px 3px;
+  padding: 2px 4px;
   border-radius: 4px;
   overflow: hidden;
   white-space: pre;
+
+  &.small {
+    padding: 1px 3px;
+  }
 }
 
 .bsw-tag-text {
   font-size: 12px;
+}
+
+.ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  background: rgba(230, 247, 255, .5);
+  // background: #e6f7ff;
 }
 
 .bsw-row-children {
