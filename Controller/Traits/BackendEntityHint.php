@@ -141,7 +141,7 @@ trait BackendEntityHint
         if (in_array($item->name, ['cdkey', 'google_auth_secret'])) {
             $options->width = 150;
             $options->align = 'center';
-            $options->render = 'BswAbs::RENDER_SECRET_2';
+            $options->render = 'BswAbs::RENDER_SECRET';
         }
 
         $needMoneyHook = false;

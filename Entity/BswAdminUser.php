@@ -120,7 +120,7 @@ class BswAdminUser extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @Assert\Length(max=16, groups={"modify"})
-     * @BswAnnotation\Preview(sort=10, align="center", render=BswAbs::RENDER_SECRET_2, width=150)
+     * @BswAnnotation\Preview(sort=10, align="center", render=BswAbs::RENDER_SECRET, width=150)
      * @BswAnnotation\Persistence(sort=10, show=false, ignoreBlank=true)
      * @BswAnnotation\Filter(sort=10, show=false)
      */

@@ -22,6 +22,8 @@ class Abs
     const FLAG_ROUTE_EXPORT  = '_export';
     const FLAG_SQL_ERROR     = 'An exception occurred while executing';
     const RULES_REQUIRED     = ['required' => true, 'message' => '{{ field }} Required'];
+    const BR                 = '<br>';
+    const HR                 = '<hr>';
     const LINE_DASHED        = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
     const BK_RENDER_ARGS     = 1;
 
@@ -719,8 +721,7 @@ class Abs
     const RENDER_CODE_FULL       = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-code full bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_DISABLE         = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_TEXT            = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-long-text'>{value}</div>{Abs::TPL_ELSE_NIL}";
-    const RENDER_SECRET_1        = "<div class='bsw-disable'>{Abs::SECRET}</div>";
-    const RENDER_SECRET_2        = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
+    const RENDER_SECRET          = "<div v-if='{Abs::SLOT_NOT_BLANK}' class='bsw-disable'>{Abs::SECRET}</div>{Abs::TPL_ELSE_NIL}";
     const RENDER_ROUND_PERCENT   = "<a-progress type='circle' :percent='{:value}' :width='60' :stroke-width='6'></a-progress>";
     const RENDER_BAR_PERCENT     = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='6' status='active' ></a-progress>";
     const RENDER_BAR_PERCENT_BIG = "<a-progress type='line' :percent='{:value}' size='small' :stroke-width='12' status='active' ></a-progress>";
@@ -764,15 +765,24 @@ class Abs
     const HTML_GRAY_TEXT   = "<div class='ant-tag ant-tag-has-color' style='color:#d6d6d6;'>{value}</div>";
     const HTML_NORMAL_TEXT = "<div class='ant-tag ant-tag-has-color' style='color:#939393'>{value}</div>";
 
-    const BSW_PINK   = "<span class='bsw-tag' style='color:#eb2f96;'>{value}</span>";
-    const BSW_RED    = "<span class='bsw-tag' style='color:#f5222d;'>{value}</span>";
-    const BSW_ORANGE = "<span class='bsw-tag' style='color:#fa8c16;'>{value}</span>";
-    const BSW_GREEN  = "<span class='bsw-tag' style='color:#52c41a;'>{value}</span>";
-    const BSW_CYAN   = "<span class='bsw-tag' style='color:#13c2c2;'>{value}</span>";
-    const BSW_BLUE   = "<span class='bsw-tag' style='color:#1890ff;'>{value}</span>";
-    const BSW_PURPLE = "<span class='bsw-tag' style='color:#722ed1;'>{value}</span>";
-    const BSW_GRAY   = "<span class='bsw-tag' style='color:#d6d6d6;'>{value}</span>";
-    const BSW_NORMAL = "<span class='bsw-tag' style='color:#939393'>{value}</span>";
+    const BSW_PINK         = "<span class='bsw-tag' style='color:#eb2f96;'>{value}</span>";
+    const BSW_PINK_SMALL   = "<span class='bsw-tag small' style='color:#eb2f96;'>{value}</span>";
+    const BSW_RED          = "<span class='bsw-tag' style='color:#f5222d;'>{value}</span>";
+    const BSW_RED_SMALL    = "<span class='bsw-tag small' style='color:#f5222d;'>{value}</span>";
+    const BSW_ORANGE       = "<span class='bsw-tag' style='color:#fa8c16;'>{value}</span>";
+    const BSW_ORANGE_SMALL = "<span class='bsw-tag small' style='color:#fa8c16;'>{value}</span>";
+    const BSW_GREEN        = "<span class='bsw-tag' style='color:#52c41a;'>{value}</span>";
+    const BSW_GREEN_SMALL  = "<span class='bsw-tag small' style='color:#52c41a;'>{value}</span>";
+    const BSW_CYAN         = "<span class='bsw-tag' style='color:#13c2c2;'>{value}</span>";
+    const BSW_CYAN_SMALL   = "<span class='bsw-tag small' style='color:#13c2c2;'>{value}</span>";
+    const BSW_BLUE         = "<span class='bsw-tag' style='color:#1890ff;'>{value}</span>";
+    const BSW_BLUE_SMALL   = "<span class='bsw-tag small' style='color:#1890ff;'>{value}</span>";
+    const BSW_PURPLE       = "<span class='bsw-tag' style='color:#722ed1;'>{value}</span>";
+    const BSW_PURPLE_SMALL = "<span class='bsw-tag small' style='color:#722ed1;'>{value}</span>";
+    const BSW_GRAY         = "<span class='bsw-tag' style='color:#d6d6d6;'>{value}</span>";
+    const BSW_GRAY_SMALL   = "<span class='bsw-tag small' style='color:#d6d6d6;'>{value}</span>";
+    const BSW_NORMAL       = "<span class='bsw-tag' style='color:#939393'>{value}</span>";
+    const BSW_NORMAL_SMALL = "<span class='bsw-tag small' style='color:#939393'>{value}</span>";
 
     const BSW_PINK_TEXT   = "<span class='bsw-tag-text' style='color:#eb2f96;'>{value}</span>";
     const BSW_RED_TEXT    = "<span class='bsw-tag-text' style='color:#f5222d;'>{value}</span>";

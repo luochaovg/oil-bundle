@@ -875,7 +875,7 @@ class Module extends Bsw
                         'hooked'        => $hooked[$key],
                         'original'      => $original[$key],
                         'valueHooked'   => $hooked[$key][$field],
-                        'valueOriginal' => $original[$key][$field],
+                        'valueOriginal' => $original[$key][$field] ?? null, // when addition by yourself it's be null
                     ]
                 );
 

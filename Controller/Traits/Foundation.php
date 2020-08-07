@@ -1710,6 +1710,19 @@ trait Foundation
     }
 
     /**
+     * Use tpl
+     *
+     * @param string $tpl
+     * @param string $content
+     *
+     * @return string
+     */
+    public function useTpl(string $tpl, string $content): string
+    {
+        return str_replace(['{value}', '{#value}', '{:value}'], [$content, $content, $content], $tpl);
+    }
+
+    /**
      * Handle error with diff env
      *
      * @param Exception|string $error

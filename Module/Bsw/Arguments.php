@@ -49,10 +49,10 @@ class Arguments extends stdClass
      *
      * @return $this
      */
-    public function setMany(array $target, bool $unsetWhenNull = true)
+    public function setMany(array $target, bool $unsetWhenNull = false)
     {
         foreach ($target as $key => $value) {
-            $this->set($key, $value);
+            $this->set($key, $value, $unsetWhenNull);
         }
 
         return $this;

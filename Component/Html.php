@@ -79,7 +79,7 @@ class Html
      *
      * @return string the encoded content
      */
-    public static function encode($content, $doubleEncode = true)
+    public static function encode(string $content, bool $doubleEncode = true): string
     {
         return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEncode);
     }
@@ -91,7 +91,7 @@ class Html
      *
      * @return string the decoded content
      */
-    public static function decode($content)
+    public static function decode(string $content): string
     {
         return htmlspecialchars_decode($content, ENT_QUOTES);
     }
@@ -100,12 +100,12 @@ class Html
      * Generates a complete HTML tag.
      *
      * @param string|bool|null $name    the tag name.
-     * @param string           $content the content to be enclosed between the start and end tags.
+     * @param string|null      $content the content to be enclosed between the start and end tags.
      * @param array            $options the HTML tag attributes (HTML options) in terms of name-value pairs.
      *
      * @return string the generated HTML tag
      */
-    public static function tag($name, $content = '', $options = [])
+    public static function tag($name, $content = '', array $options = [])
     {
         if ($name === null || $name === false) {
             return $content;
@@ -122,7 +122,7 @@ class Html
      *
      * @return string the rendering result.
      */
-    public static function renderTagAttributes($attributes)
+    public static function renderTagAttributes(array $attributes): string
     {
         if (count($attributes) > 1) {
             $sorted = [];
@@ -177,7 +177,7 @@ class Html
      *
      * @return string the CSS style string.
      */
-    public static function cssStyleFromArray(array $style)
+    public static function cssStyleFromArray(array $style): ?string
     {
         $result = '';
         foreach ($style as $name => $value) {
@@ -191,13 +191,13 @@ class Html
     /**
      * Create table
      *
-     * @param array $tableOptions
-     * @param array $head
      * @param array $body
+     * @param array $head
+     * @param array $options
      *
      * @return string
      */
-    public static function table(array $tableOptions = [], array $head = [], array $body = [])
+    public static function table(array $body = [], array $head = [], array $options = []): string
     {
         $th = null;
         foreach ($head as $item) {
@@ -206,31 +206,23 @@ class Html
 
         $tb = null;
         foreach ($body as $item) {
-
             $td = null;
             foreach ($item as $v) {
-
                 if (is_callable($v['handler'] ?? null)) {
                     $v['value'] = $v['handler']($v['value']);
                 }
-
                 if (is_string($v['tpl'] ?? false)) {
                     $v['value'] = sprintf($v['tpl'], $v['value']);
                 }
-
                 $td .= self::tag('td', $v['value'], $v['options'] ?? []);
             }
             $tb .= self::tag('tr', $td);
         }
 
-        $table = self::tag(
-            'table',
-            self::tag('thead', self::tag('tr', $th)) .
-            self::tag('tbody', $tb),
-            $tableOptions
-        );
+        $thead = self::tag('thead', self::tag('tr', $th), $options['thead'] ?? []);
+        $tbody = self::tag('tbody', $tb, $options['tbody'] ?? []);
 
-        return $table;
+        return self::tag('table', "{$thead}{$tbody}", $options['table'] ?? []);
     }
 
     /**
@@ -240,7 +232,7 @@ class Html
      *
      * @return string
      */
-    public static function perfectHtml(string $html)
+    public static function perfectHtml(string $html): string
     {
         // strip fraction of open or close tag from end
         // (e.g. if we take first x characters, we might cut off a tag at the end!)
@@ -295,7 +287,7 @@ class Html
      *
      * @return string
      */
-    public static function cleanHtml(string $str, bool $entity = false)
+    public static function cleanHtml(string $str, bool $entity = false): string
     {
         if ($entity) {
             return htmlentities($str);
@@ -519,7 +511,7 @@ class Html
      *
      * @return string
      */
-    public static function postForm(string $url, array $params)
+    public static function postForm(string $url, array $params): string
     {
         $html = "<form id='form' name='form' action='{$url}' method='POST'>";
         foreach ($params as $key => $value) {

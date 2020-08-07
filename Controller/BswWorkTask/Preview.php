@@ -274,13 +274,13 @@ trait Preview
 
         if ($gap >= 0) {
             $left = $this->fieldLang($cnfLeft['lang']);
-            $html .= str_replace('{value}', "{$left}: {$tip}", $cnfLeft['tpl']);
+            $html .= $this->useTpl($cnfLeft['tpl'], "{$left}: {$tip}");
             if (!empty($cnfRight['infect'])) {
                 $html .= $this->getUpwardInfectHtml($cnfRight['infect'], 3);
             }
         } else {
             $right = $this->fieldLang($cnfRight['lang']);
-            $html .= str_replace('{value}', "{$right}: {$tip}", $cnfRight['tpl']);
+            $html .= $this->useTpl($cnfRight['tpl'], "{$right}: {$tip}");
             if (!empty($cnfRight['infect'])) {
                 $html .= $this->getUpwardInfectHtml($cnfRight['infect'], 3);
             }
@@ -337,13 +337,13 @@ trait Preview
             $tips = '↑' . $this->humanTimeDiff($trail->addTime);
             $gap = Helper::gapDateTime($trail->addTime, date(Abs::FMT_FULL)) / Abs::TIME_HOUR;
             if ($gap > Abs::HEX_HOUR_DAY * 3) {
-                $tips = str_replace('{value}', $tips, Abs::BSW_RED);
+                $tips = $this->useTpl(Abs::BSW_RED_SMALL, $tips);
             } else {
-                $tips = str_replace('{value}', $tips, Abs::BSW_GREEN);
+                $tips = $this->useTpl(Abs::BSW_GREEN_SMALL, $tips);
             }
         } else {
             $tips = '↑Nil';
-            $tips = str_replace('{value}', $tips, Abs::BSW_ORANGE);
+            $tips = $this->useTpl(Abs::BSW_ORANGE_SMALL, $tips);
         }
 
         return new Charm('{value}', "{$args->value} {$tips}");
