@@ -2,26 +2,28 @@
 
 bsw.configure({
     logic: {
-        markdown: function markdown(v) {
-            var content = $('div.content-markdown > div.content');
-            content.find('h3').each(function () {
-                var h3 = $(this);
-                var h3v = h3.html();
-                var h2v = '';
-                var h1v = '';
-                var v = h3v;
-                var h2 = h3.prev('h2');
-                if (h2.length) {
-                    h2v = h2.html();
-                    v = h2v + '_' + v;
-                    var h1 = h2.prev('h1');
-                    if (h1.length) {
-                        h1v = h1.html();
-                        v = h1v + '_' + v;
-                    }
+        init: function init(v) {
+            hljs.initHighlighting();
+            var allLi = $('.markdown-content .index li');
+            var anchor = bsw.leftTrim(window.location.hash, '#');
+            var currentLi = $('li.id-' + anchor);
+            var currentMd = $('#' + anchor);
+            $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
+            $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
+            currentLi.addClass('current');
+            allLi.click(function () {
+                var thisLi = $(this);
+                var url = thisLi.find('a').attr('href');
+                var urlItems = bsw.parseQueryString(url, true);
+                var currentItems = bsw.parseQueryString(null, true);
+                if (urlItems['hostPart'] !== currentItems['hostPart']) {
+                    return;
                 }
-                v = md5(v);
-                h3.html(h3v + ('<a class="anchor" href="#' + v + '">\u266A</a>'));
+                allLi.removeClass('current');
+                thisLi.addClass('current');
+                setTimeout(function () {
+                    return bsw.prominentAnchor();
+                }, 100);
             });
         }
     }

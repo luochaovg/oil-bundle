@@ -4892,4 +4892,86 @@ class Helper
 
         return $content;
     }
+
+    /**
+     * Integer to roman
+     *
+     * @param int $num
+     *
+     * @return string
+     */
+    public static function intToRoman(int $num): string
+    {
+        $dict = [
+            'M'  => 1000,
+            'CM' => 900,
+            'D'  => 500,
+            'CD' => 400,
+            'C'  => 100,
+            'XC' => 90,
+            'L'  => 50,
+            'XL' => 40,
+            'X'  => 10,
+            'IX' => 9,
+            'V'  => 5,
+            'IV' => 4,
+            'I'  => 1,
+        ];
+
+        $roman = '';
+        foreach ($dict as $roman_char => $arabic_value) {
+            if ($arabic_value > $num) {
+                continue;
+            }
+            $tmp = (int)($num / $arabic_value);
+            $roman .= str_repeat($roman_char, $tmp);
+            $num -= $tmp * $arabic_value;
+        }
+
+        return $roman;
+    }
+
+    /**
+     * Roman to integer
+     *
+     * @param string $roman
+     *
+     * @return int
+     */
+    public static function romanToInt(string $roman): int
+    {
+        $dict = [
+            'I'  => 1,
+            'IV' => 4,
+            'V'  => 5,
+            'IX' => 9,
+            'X'  => 10,
+            'XL' => 40,
+            'L'  => 50,
+            'XC' => 90,
+            'C'  => 100,
+            'CD' => 400,
+            'D'  => 500,
+            'CM' => 900,
+            'M'  => 1000,
+        ];
+        $roman = strtoupper($roman);
+        if (isset($dict[$roman])) {
+            return $dict[$roman];
+        }
+        $len = strlen($roman);
+        $value = 0;
+        for ($i = 0; $i < $len; $i++) {
+            $less = $roman[$i];
+            $value += $dict[$less];
+            if (($i - 1) >= 0) {
+                $fLess = $roman[$i - 1];
+                if ($fLess && $dict[$fLess] < $dict[$less]) {
+                    $value -= ($dict[$fLess] * 2);
+                }
+            }
+        }
+
+        return $value;
+    }
 }

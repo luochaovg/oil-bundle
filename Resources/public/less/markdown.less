@@ -22,10 +22,16 @@ body {
   flex-direction: row;
   height: 100vh;
 
-  .before(@text) {
+  .before(@text, @a: .2) {
     content: @text;
-    margin-right: 2px;
-    color: rgba(0, 0, 0, .2);
+    margin-right: 3px;
+    color: rgba(0, 0, 0, @a);
+  }
+
+  .after(@text, @a: .2) {
+    content: @text;
+    margin-left: 3px;
+    color: rgba(0, 0, 0, @a);
   }
 
   > .index, > .content {
@@ -47,6 +53,8 @@ body {
           margin-top: 10px;
           list-style: none;
           font-size: 120%;
+          background-color: rgba(0, 0, 0, .03);
+          padding: 3px 0 3px 8px;
         }
 
         &.indent-h2 {
@@ -65,6 +73,10 @@ body {
 
         &.current a {
           color: rgba(0, 109, 203, .6);
+
+          &:after {
+            .after('♬', 1);
+          }
         }
       }
     }
@@ -121,7 +133,6 @@ body {
 
     &.anchor {
       color: #d9d9d9;
-      font-size: 80%;
       font-weight: 400;
       padding-left: 5px;
       user-select: none;

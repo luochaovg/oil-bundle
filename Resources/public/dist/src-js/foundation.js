@@ -709,12 +709,20 @@ var FoundationTools = function (_FoundationPrototype) {
             var hostPart = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
             url = decodeURIComponent(url || location.href);
+            if (url.indexOf('#') === -1) {
+                url = url + '#';
+            }
+
+            var items = {};
+            var urlArr = url.split('#');
+            items['anchorPart'] = urlArr[1];
+            url = urlArr[0];
+
             if (url.indexOf('?') === -1) {
                 url = url + '?';
             }
 
-            var items = {};
-            var urlArr = url.split('?');
+            urlArr = url.split('?');
             if (hostPart) {
                 items['hostPart'] = urlArr[0];
             }

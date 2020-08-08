@@ -7,6 +7,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-decoupled-document": "^18.0.0",
     "@fancyapps/fancybox": "^3.5.7",
+    "@highlightjs/cdn-assets": "^10.1.2",
     "animate.css": "^3.6.1",
     "ant-design-vue": "1.6.3",
     "antd": "^3.15.2",

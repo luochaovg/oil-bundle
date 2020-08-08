@@ -170,12 +170,14 @@ class Abs
     const JS_FANCY_BOX      = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.js';
     const JS_LAZY_LOAD      = 'npm;layzr.js/dist/layzr.js';
     const JS_FULL_SCREEN    = 'npm;screenfull/dist/screenfull.js';
+    const JS_MD5            = 'npm;blueimp-md5/js/md5.min.js';
+    const JS_EDITOR         = 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js';
+    const JS_HIGHLIGHT      = 'npm;@highlightjs/cdn-assets/highlight.min.js';
     const JS_FOUNDATION     = 'diy;foundation.js';
     const JS_BSW            = 'diy;bsw.js';
     const JS_WEB            = 'diy;web.js';
-    const JS_EDITOR         = 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js';
     const JS_EDITOR_CUSTOM  = 'diy;third/ckeditor5-custom.js';
-    const JS_MD5            = 'npm;blueimp-md5/js/md5.min.js';
+    const JS_MARKDOWN       = 'diy;markdown.js';
 
     const JS_LANG = [
         'cn' => 'diy;lang/cn.js',
@@ -201,6 +203,7 @@ class Abs
     const CSS_CROPPER   = 'npm;cropper/dist/cropper.min.css';
     const CSS_PHOTOS    = 'npm;photoswipe/dist/photoswipe.css';
     const CSS_FANCY_BOX = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.css';
+    const CSS_HIGHLIGHT = 'npm;@highlightjs/cdn-assets/styles/default.min.css';
     const CSS_BSW       = 'diy;bsw.css';
     const CSS_WEB       = 'diy;web.css';
     const CSS_EDITOR    = 'diy;third/ckeditor5.css';

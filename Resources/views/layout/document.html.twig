@@ -9,18 +9,3 @@
     <div class="content">{{ data.data.document|raw }}</div>
   </div>
 {% endblock %}
-
-{% block javascript %}
-bsw.configure({
-    logic: {
-        current(v) {
-            let current = bsw.leftTrim(window.location.hash, '#');
-            $(`li.id-${current}`).addClass('current');
-            $('.markdown-content .index li').click(function () {
-                $('.markdown-content .index li').removeClass('current');
-                $(this).addClass('current');
-            });
-        },
-    }
-});
-{% endblock %}

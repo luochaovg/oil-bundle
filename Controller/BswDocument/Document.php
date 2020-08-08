@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Controller\BswDocument;
 
 use App\Kernel;
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,11 +32,17 @@ trait Document
         $basic = $this->kernel->getBundle('LeonBswBundle')->getPath();
         $all = $this->parseMdInPath(
             "{$basic}/Resources/doc",
-            function ($file, $id) {
+            function ($file, $id, $n, $text) use ($args) {
                 $name = pathinfo($file, PATHINFO_FILENAME);
-                $url = $this->url('app_bsw_document', compact('name'));
+                if ($n == 1 && $index = intval($name)) {
+                    $roman = Helper::intToRoman($index);
+                    $text = "{$roman}. {$text}";
+                }
 
-                return "{$url}#{$id}";
+                $url = $this->url('app_bsw_document', compact('name'));
+                $url = "{$url}#{$id}";
+
+                return [$url, $text];
             }
         );
 
@@ -61,6 +68,9 @@ trait Document
         }
 
         $this->appendSrcCssWithKey('markdown', Abs::CSS_MARKDOWN);
+        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT);
+        $this->appendSrcJsWithKey('markdown', Abs::JS_MARKDOWN);
+        $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
 
         return $this->showEmpty('layout/document.html', ['args' => compact('name')]);
     }

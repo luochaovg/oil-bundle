@@ -555,12 +555,20 @@ class FoundationTools extends FoundationPrototype {
      */
     parseQueryString(url = null, hostPart = false) {
         url = decodeURIComponent(url || location.href);
+        if (url.indexOf('#') === -1) {
+            url = url + '#';
+        }
+
+        let items = {};
+        let urlArr = url.split('#');
+        items['anchorPart'] = urlArr[1];
+        url = urlArr[0];
+
         if (url.indexOf('?') === -1) {
             url = url + '?';
         }
 
-        let items = {};
-        let urlArr = url.split('?');
+        urlArr = url.split('?');
         if (hostPart) {
             items['hostPart'] = urlArr[0];
         }
