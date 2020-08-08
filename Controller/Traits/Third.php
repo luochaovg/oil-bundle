@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Controller\Traits;
 use Carbon\Carbon;
 use EasyWeChat\Factory as WxFactory;
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Component\Html;
 use Mexitek\PHPColors\Color;
 use Yansongda\Pay\Gateways\Alipay;
 use Yansongda\Pay\Pay as WxAliPayment;
@@ -19,6 +20,7 @@ use Endroid\QrCode\QrCode;
 use Monolog\Logger;
 use App\Kernel;
 use OTPHP\TOTP;
+use Parsedown;
 
 /**
  * @property Kernel  $kernel
@@ -157,6 +159,93 @@ trait Third
         }
 
         return [$target, $color];
+    }
+
+    /**
+     * Parse markdown content and toc
+     *
+     * @param string   $markdownOrFile
+     * @param callable $linkHandler
+     *
+     * @return array
+     */
+    public function parseMdContentAndToc(string $markdownOrFile, callable $linkHandler = null): array
+    {
+        $parseMarkdown = new Parsedown();
+        if (file_exists($markdownOrFile)) {
+            $markdown = file_get_contents($markdownOrFile);
+        } else {
+            $markdown = $markdownOrFile;
+        }
+        $content = $parseMarkdown->text($markdown);
+
+        $toc = [];
+        $content = preg_replace_callback(
+            '/\<h([1-3])\>(.*?)\<\/h[1-3]\>/',
+            function ($matches) use ($markdownOrFile, $linkHandler, &$toc) {
+                [$_, $n, $html] = $matches;
+
+                $id = substr(Helper::generateToken(), 2, 6);
+                if ($linkHandler) {
+                    $link = call_user_func_array($linkHandler, [$markdownOrFile, $id]);
+                } else {
+                    $link = "#{$id}";
+                }
+                $a = Html::tag('a', Html::cleanHtml($html), ['href' => $link]);
+                array_push($toc, Html::tag('li', $a, ['class' => "indent-h{$n} id-{$id}"]));
+
+                $content = Html::tag(
+                    'a',
+                    '♪',
+                    [
+                        'class' => 'anchor',
+                        'href'  => "#{$id}",
+                    ]
+                );
+
+                return Html::tag("h{$n}", "{$html}{$content}", ['id' => $id]);
+            },
+            $content
+        );
+
+        return [
+            'toc'     => Html::tag('ul', implode("\n", $toc)),
+            'content' => $content,
+        ];
+    }
+
+    /**
+     * Parse markdown in path
+     *
+     * @param string   $path
+     * @param callable $linkHandler
+     *
+     * @return array
+     */
+    public function parseMdInPath(string $path, callable $linkHandler = null): array
+    {
+        return $this->caching(
+            function () use ($path, $linkHandler) {
+                $tree = [];
+                Helper::directoryIterator(
+                    $path,
+                    $tree,
+                    function ($file) {
+                        return Helper::strEndWith($file, '.md') ? $file : false;
+                    }
+                );
+                asort($tree);
+
+                $markdown = [];
+                foreach ($tree as $file) {
+                    $markdown[$file] = $this->parseMdContentAndToc($file, $linkHandler);
+                }
+
+                return $markdown;
+            },
+            "md-path-{$path}",
+            Abs::TIME_DAY
+        );
     }
 
     /**

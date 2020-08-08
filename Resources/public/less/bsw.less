@@ -908,8 +908,7 @@ textarea[size="large"] {
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
 .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
 .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-  background: rgba(230, 247, 255, .5);
-  // background: #e6f7ff;
+  background: rgba(230, 247, 255, .6);
 }
 
 .bsw-row-children {
@@ -947,20 +946,35 @@ textarea[size="large"] {
   }
 }
 
-.bsw-scroll-x-container {
-  width: 100%;
-  background: rgba(0, 0, 0, .03);
-  margin-top: 1px;
-  overflow: hidden;
+.bsw-scroll-x {
+  height: 56px;
 
-  .slider {
-    width: 100px;
-    height: 16px;
-    background: rgba(0, 0, 0, .2);
-    border-radius: 8px;
+  .left, .right {
+    width: 56px;
+    height: 56px;
+    background: rgba(0, 0, 0, 0.08);
+    font-size: 36px;
+    line-height: 56px;
+    text-align: center;
+    color: white;
+    font-weight: 300;
+    cursor: pointer;
+    transition: background-color .8s;
+  }
 
-    &:hover {
-      background: rgba(0, 0, 0, .3);
-    }
+  .left {
+    float: left;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .right {
+    float: right;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  .left:hover, .right:hover {
+    background: rgba(0, 0, 0, .3);
   }
 }

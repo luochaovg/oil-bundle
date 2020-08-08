@@ -1,0 +1,3 @@
+/*! Anyone */
+/*! BackendSteeringWheel4AntD - v0.0.1 - 2020-08-08 */
+"use strict";bsw.configure({logic:{markdown:function(a){var b=$("div.content-markdown > div.content");b.find("h3").each(function(){var a=$(this),b=a.html(),c="",d="",e=b,f=a.prev("h2");if(f.length){c=f.html(),e=c+"_"+e;var g=f.prev("h1");g.length&&(d=g.html(),e=d+"_"+e)}e=md5(e),a.html(b+('<a class="anchor" href="#'+e+'">♪</a>'))})}}});

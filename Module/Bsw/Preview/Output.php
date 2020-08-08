@@ -142,14 +142,4 @@ class Output extends ArgsOutput
      * @var bool
      */
     public $footer;
-
-    /**
-     * @var string|null
-     */
-    public $scrollXSelector;
-
-    /**
-     * @var int
-     */
-    public $scrollXBottom;
 }

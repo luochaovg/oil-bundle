@@ -113,14 +113,4 @@ class Input extends ArgsInput
      * @var string
      */
     public $childrenRowClsName = 'bsw-row-children';
-
-    /**
-     * @var string|null
-     */
-    public $scrollXSelector = '.ant-table-body';
-
-    /**
-     * @var int
-     */
-    public $scrollXBottom = 3;
 }

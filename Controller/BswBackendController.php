@@ -80,7 +80,6 @@ class BswBackendController extends BswWebController
     protected $currentSrcJs = [
         'fulls' => Abs::JS_FULL_SCREEN,
         'copy'  => Abs::JS_COPY,
-        'drag'  => Abs::JS_DRAG,
         'bsw'   => Abs::JS_BSW,
     ];
 

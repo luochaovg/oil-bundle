@@ -2138,49 +2138,83 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
-     * Init scroll-x
+     * Init scroll x
      *
      * @param selector
      */
-    initScrollX(selector = '.bsw-scroll-x-container') {
-        let instance;
-        let maxScrollLeft;
-        let bar = $(selector);
-
-        let scrollDiff = bar.data('scroll-diff');
-        if (bar.length === 0 || document.body.scrollHeight - document.body.clientHeight < scrollDiff) {
-            $(selector).hide();
+    initScrollX(selector = '.bsw-scroll-x') {
+        let parent = $(selector);
+        let affix = parent.parent();
+        let target = $(parent.data('target-selector'));
+        if (target.length === 0) {
             return;
         }
+        let arrow = parent.children('div');
+        let maxScrollTop = () => document.body.scrollHeight - document.body.clientHeight;
+        let maxScrollLeft = () => target[0].scrollWidth - target[0].clientWidth;
+        arrow.off('click').on('click', function () {
+            let nowScrollLeft = target.scrollLeft();
+            let position = $(this).hasClass('left') ? -1 : 1;
+            if (position === -1 && nowScrollLeft <= 0) {
+                return bsw.warning(bsw.lang.is_far_left, 1);
+            }
+            if (position === 1 && nowScrollLeft >= maxScrollLeft()) {
+                return bsw.warning(bsw.lang.is_far_right, 1);
+            }
+            let step = parseInt(parent.data('step')) * position;
+            target.stop().animate({scrollLeft: `${nowScrollLeft + step}px`})
+        });
+        $(window).resize(function () {
+            let x = maxScrollLeft();
+            let y = maxScrollTop();
+            if (x > 0 && y > 300) {
+                affix.fadeIn();
+            } else {
+                affix.fadeOut();
+            }
+        });
+    }
 
-        let outer = $(bar.data('target-selector'));
-        let inner = $(outer.children().get(0));
-        let init = function () {
-            bar.find('.slider').width(Math.ceil(outer.width() / inner.width() * bar.width()));
-            maxScrollLeft = outer[0].scrollWidth - outer[0].clientWidth;
-            if (maxScrollLeft < 1) {
-                $(selector).hide();
+    /**
+     * Do animate css
+     *
+     * @param selector
+     * @param animation
+     * @param duration
+     * @param prefix
+     */
+    doAnimateCSS(selector, animation, duration = '1s', prefix = '') {
+        new Promise((resolve, reject) => {
+            let animationName = `${prefix}${animation}`;
+            let node = $(selector);
+            if (selector.length === 0) {
                 return;
             }
-            $(selector).show();
-            if (typeof instance === 'undefined') {
-                instance = new Dragdealer(bar[0], {
-                    handleClass: 'slider',
-                    animationCallback: function (x, y) {
-                        outer.scrollLeft(maxScrollLeft * x);
-                    }
-                });
-            } else {
-                instance.reflow();
+            node.css('animation-duration', duration);
+            node.addClass(`${prefix}animated ${animationName}`);
+
+            function handleAnimationEnd() {
+                node.removeClass(`${prefix}animated ${animationName}`);
+                node.off('animationend', handleAnimationEnd);
+                resolve(animationName);
             }
-            outer.off('scroll').on('scroll', function () {
-                instance.setValue(outer.scrollLeft() / maxScrollLeft, 0, true);
-            });
-        };
-        init();
-        $(window).resize(() => {
-            init()
+
+            node.on('animationend', handleAnimationEnd);
         });
+    }
+
+    /**
+     * Prominent the anchor
+     *
+     * @param animate
+     * @param duration
+     */
+    prominentAnchor(animate = 'flash', duration = '.65s') {
+        let anchor = this.leftTrim(window.location.hash, '#');
+        if ($(`#${anchor}`).length === 0) {
+            return;
+        }
+        this.doAnimateCSS(`#${anchor}`, animate, duration);
     }
 
     /**

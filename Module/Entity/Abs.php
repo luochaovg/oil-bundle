@@ -175,6 +175,7 @@ class Abs
     const JS_WEB            = 'diy;web.js';
     const JS_EDITOR         = 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js';
     const JS_EDITOR_CUSTOM  = 'diy;third/ckeditor5-custom.js';
+    const JS_MD5            = 'npm;blueimp-md5/js/md5.min.js';
 
     const JS_LANG = [
         'cn' => 'diy;lang/cn.js',

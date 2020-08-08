@@ -455,16 +455,25 @@ $(function () {
 
         bsw.initClipboard();
         bsw.initUpwardInfect();
-
-        let timeout = change ? 1200 : 500;
-        setTimeout(function () {
+        v.$nextTick(function () {
             bsw.initScrollX();
+        });
+
+        let timeout = change ? 1200 : 600;
+        setTimeout(function () {
             $(window).resize();
-            $('.bsw-page-loading').fadeOut(300, function () {
+            let operates = function () {
                 bsw.messageAutoDiscovery(v.init);
                 bsw.autoIFrameHeight();
+                bsw.prominentAnchor();
                 v.f5JustNow = false;
-            });
+            };
+            let loadingDiv = $('.bsw-page-loading');
+            if (loadingDiv.length) {
+                loadingDiv.fadeOut(300, () => operates());
+            } else {
+                operates();
+            }
         }, timeout);
     });
 

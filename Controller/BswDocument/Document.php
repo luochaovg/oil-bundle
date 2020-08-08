@@ -2,13 +2,16 @@
 
 namespace Leon\BswBundle\Controller\BswDocument;
 
+use App\Kernel;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Entity\Abs;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Parsedown;
 use Exception;
 
+/**
+ * @property Kernel $kernel
+ */
 trait Document
 {
     /**
@@ -20,36 +23,45 @@ trait Document
     public function documentDataGenerator(Arguments $args)
     {
         try {
-            $file = $this->getFilePath("{$args->title}.md", 'doc');
-            $md = file_get_contents($file);
+            $file = $this->getFilePath("{$args->name}.md", 'doc');
         } catch (Exception $e) {
             throw new Exception("The document is not found");
         }
 
-        $parseMarkdown = new Parsedown();
-        $document = $parseMarkdown->text($md);
+        $basic = $this->kernel->getBundle('LeonBswBundle')->getPath();
+        $all = $this->parseMdInPath(
+            "{$basic}/Resources/doc",
+            function ($file, $id) {
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $url = $this->url('app_bsw_document', compact('name'));
 
-        return compact('document');
+                return "{$url}#{$id}";
+            }
+        );
+
+        return [
+            'index'    => implode("\n", array_column($all, 'toc')),
+            'document' => $all[$file]['content'],
+        ];
     }
 
     /**
      * Document index
      *
-     * @Route("/bsw/document/{title}", name="app_bsw_document", requirements={"title": "[\w\-]+"})
+     * @Route("/bsw/document/{name}", name="app_bsw_document", requirements={"name": "[a-zA-Z0-9\-\.]+"})
      *
-     * @param string $title
+     * @param string $name
      *
      * @return Response
      */
-    public function document(string $title = 'index'): Response
+    public function document(string $name = '1.overview'): Response
     {
         if (($args = $this->valid(Abs::V_NOTHING)) instanceof Response) {
             return $args;
         }
 
         $this->appendSrcCssWithKey('markdown', Abs::CSS_MARKDOWN);
-        $this->removeSrcCss(['ant-d', 'bsw', 'animate']);
 
-        return $this->showEmpty('layout/document.html', ['args' => compact('title')]);
+        return $this->showEmpty('layout/document.html', ['args' => compact('name')]);
     }
 }

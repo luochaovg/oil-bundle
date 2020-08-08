@@ -2718,7 +2718,7 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
-         * Init scroll-x
+         * Init scroll x
          *
          * @param selector
          */
@@ -2726,46 +2726,96 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'initScrollX',
         value: function initScrollX() {
-            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-scroll-x-container';
+            var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-scroll-x';
 
-            var instance = void 0;
-            var maxScrollLeft = void 0;
-            var bar = $(selector);
-
-            var scrollDiff = bar.data('scroll-diff');
-            if (bar.length === 0 || document.body.scrollHeight - document.body.clientHeight < scrollDiff) {
-                $(selector).hide();
+            var parent = $(selector);
+            var affix = parent.parent();
+            var target = $(parent.data('target-selector'));
+            if (target.length === 0) {
                 return;
             }
+            var arrow = parent.children('div');
+            var maxScrollTop = function maxScrollTop() {
+                return document.body.scrollHeight - document.body.clientHeight;
+            };
+            var maxScrollLeft = function maxScrollLeft() {
+                return target[0].scrollWidth - target[0].clientWidth;
+            };
+            arrow.off('click').on('click', function () {
+                var nowScrollLeft = target.scrollLeft();
+                var position = $(this).hasClass('left') ? -1 : 1;
+                if (position === -1 && nowScrollLeft <= 0) {
+                    return bsw.warning(bsw.lang.is_far_left, 1);
+                }
+                if (position === 1 && nowScrollLeft >= maxScrollLeft()) {
+                    return bsw.warning(bsw.lang.is_far_right, 1);
+                }
+                var step = parseInt(parent.data('step')) * position;
+                target.stop().animate({ scrollLeft: nowScrollLeft + step + 'px' });
+            });
+            $(window).resize(function () {
+                var x = maxScrollLeft();
+                var y = maxScrollTop();
+                if (x > 0 && y > 300) {
+                    affix.fadeIn();
+                } else {
+                    affix.fadeOut();
+                }
+            });
+        }
 
-            var outer = $(bar.data('target-selector'));
-            var inner = $(outer.children().get(0));
-            var init = function init() {
-                bar.find('.slider').width(Math.ceil(outer.width() / inner.width() * bar.width()));
-                maxScrollLeft = outer[0].scrollWidth - outer[0].clientWidth;
-                if (maxScrollLeft < 1) {
-                    $(selector).hide();
+        /**
+         * Do animate css
+         *
+         * @param selector
+         * @param animation
+         * @param duration
+         * @param prefix
+         */
+
+    }, {
+        key: 'doAnimateCSS',
+        value: function doAnimateCSS(selector, animation) {
+            var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1s';
+            var prefix = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
+            new Promise(function (resolve, reject) {
+                var animationName = '' + prefix + animation;
+                var node = $(selector);
+                if (selector.length === 0) {
                     return;
                 }
-                $(selector).show();
-                if (typeof instance === 'undefined') {
-                    instance = new Dragdealer(bar[0], {
-                        handleClass: 'slider',
-                        animationCallback: function animationCallback(x, y) {
-                            outer.scrollLeft(maxScrollLeft * x);
-                        }
-                    });
-                } else {
-                    instance.reflow();
+                node.css('animation-duration', duration);
+                node.addClass(prefix + 'animated ' + animationName);
+
+                function handleAnimationEnd() {
+                    node.removeClass(prefix + 'animated ' + animationName);
+                    node.off('animationend', handleAnimationEnd);
+                    resolve(animationName);
                 }
-                outer.off('scroll').on('scroll', function () {
-                    instance.setValue(outer.scrollLeft() / maxScrollLeft, 0, true);
-                });
-            };
-            init();
-            $(window).resize(function () {
-                init();
+
+                node.on('animationend', handleAnimationEnd);
             });
+        }
+
+        /**
+         * Prominent the anchor
+         *
+         * @param animate
+         * @param duration
+         */
+
+    }, {
+        key: 'prominentAnchor',
+        value: function prominentAnchor() {
+            var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'flash';
+            var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.65s';
+
+            var anchor = this.leftTrim(window.location.hash, '#');
+            if ($('#' + anchor).length === 0) {
+                return;
+            }
+            this.doAnimateCSS('#' + anchor, animate, duration);
         }
 
         /**

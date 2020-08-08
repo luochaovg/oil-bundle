@@ -27,5 +27,7 @@ window.lang = Object.assign(window.lang || {}, {
     total: '總計',
     export_mission: '導出任務',
     copy_success: '內容復制成功',
-    copy_failed: '內容復制出錯'
+    copy_failed: '內容復制出錯',
+    is_far_left: '已達最左側',
+    is_far_right: '已達最右側'
 });

@@ -26,4 +26,6 @@ window.lang = Object.assign(window.lang || {}, {
     export_mission: 'Export mission',
     copy_success: 'Content copied success',
     copy_failed: 'Content copied failed',
+    is_far_left: 'It\'s far left',
+    is_far_right: 'It\'s far right',
 });

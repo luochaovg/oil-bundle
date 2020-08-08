@@ -1,11 +1,6 @@
 
-.ant-layout {
-  background: white;
-}
-
 body {
-  margin: 40px;
-  color: rgba(0, 0, 0, .65);
+  color: rgba(0, 0, 0, .9);
   font-size: 16px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-variant: tabular-nums;
@@ -14,10 +9,80 @@ body {
   font-feature-settings: "tnum";
 }
 
-.content-markdown {
+.ant-layout {
+  background: white;
+
+  .ant-layout-content {
+    margin: 0;
+  }
+}
+
+.markdown-content {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+
+  .before(@text) {
+    content: @text;
+    margin-right: 2px;
+    color: rgba(0, 0, 0, .2);
+  }
+
+  > .index, > .content {
+    overflow: auto;
+    padding: 20px;
+  }
+
+  > .index {
+    flex: 0 0 380px;
+    padding-right: 20px;
+    border-right: 1px solid rgba(214, 219, 223, .2);
+
+    ul {
+      padding-left: 10px;
+
+      li {
+        &.indent-h1 {
+          text-indent: 0;
+          margin-top: 10px;
+          list-style: none;
+          font-size: 120%;
+        }
+
+        &.indent-h2 {
+          text-indent: 1.5em;
+          margin-top: 6px;
+        }
+
+        &.indent-h3 {
+          text-indent: 3em;
+          margin-top: 3px;
+        }
+
+        a {
+          color: rgba(0, 0, 0, .6);
+        }
+
+        &.current a {
+          color: rgba(0, 109, 203, .6);
+        }
+      }
+    }
+  }
+
+  > .content {
+    flex: 1 1 auto;
+    padding-left: 20px;
+  }
+
+  p, code, blockquote, table, ul, ol {
+    color: rgba(0, 0, 0, .65);
+  }
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
+    margin-top: .83em;
+    margin-bottom: .83em;
   }
 
   h1 {
@@ -30,12 +95,16 @@ body {
 
   h3 {
     font-size: 18.72px;
-    border-bottom: 1px dashed #d6dbdf;
-    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(214, 219, 223, .5);
+    padding-bottom: 10px;
   }
 
   h4 {
     font-size: 16px;
+
+    &:before {
+      .before('♯');
+    }
   }
 
   h5 {
@@ -47,7 +116,20 @@ body {
   }
 
   a {
+    color: #006dcb;
     text-decoration: none;
+
+    &.anchor {
+      color: #d9d9d9;
+      font-size: 80%;
+      font-weight: 400;
+      padding-left: 5px;
+      user-select: none;
+
+      &:hover {
+        color: #006dcb;
+      }
+    }
   }
 
   p {
@@ -68,7 +150,7 @@ body {
     margin: 20px 0;
     padding: 10px 15px;
     border-left-style: solid;
-    border-left-width: 5px;
+    border-left-width: 3px;
     border-color: #D6DBDF;
     background: none repeat scroll 0 0 rgba(102, 128, 153, .05);
 
@@ -97,11 +179,22 @@ body {
     }
   }
 
+  pre > code {
+    white-space: unset;
+    display: block;
+  }
+
   hr {
     border-style: solid;
     border-width: 1px;
     border-bottom: none;
-    color: #d6dbdf;
+    color: rgba(214, 219, 223, .5);
     margin: 30px 0;
+  }
+
+  ul {
+    li {
+      list-style-type: circle;
+    }
   }
 }

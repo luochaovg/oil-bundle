@@ -451,16 +451,27 @@ $(function () {
 
         bsw.initClipboard();
         bsw.initUpwardInfect();
-
-        var timeout = change ? 1200 : 500;
-        setTimeout(function () {
+        v.$nextTick(function () {
             bsw.initScrollX();
+        });
+
+        var timeout = change ? 1200 : 600;
+        setTimeout(function () {
             $(window).resize();
-            $('.bsw-page-loading').fadeOut(300, function () {
+            var operates = function operates() {
                 bsw.messageAutoDiscovery(v.init);
                 bsw.autoIFrameHeight();
+                bsw.prominentAnchor();
                 v.f5JustNow = false;
-            });
+            };
+            var loadingDiv = $('.bsw-page-loading');
+            if (loadingDiv.length) {
+                loadingDiv.fadeOut(300, function () {
+                    return operates();
+                });
+            } else {
+                operates();
+            }
         }, timeout);
     });
 
