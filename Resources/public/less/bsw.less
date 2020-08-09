@@ -947,34 +947,31 @@ textarea[size="large"] {
 }
 
 .bsw-scroll-x {
+  width: 56px;
   height: 56px;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 36px;
+  line-height: 56px;
+  text-align: center;
+  color: white;
+  font-weight: 300;
+  cursor: pointer;
+  transition: background-color .8s;
 
-  .left, .right {
-    width: 56px;
-    height: 56px;
-    background: rgba(0, 0, 0, 0.08);
-    font-size: 36px;
-    line-height: 56px;
-    text-align: center;
-    color: white;
-    font-weight: 300;
-    cursor: pointer;
-    transition: background-color .8s;
-  }
-
-  .left {
-    float: left;
+  &.left {
+    left: 0;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
   }
 
-  .right {
-    float: right;
+  &.right {
+    right: 0;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
 
-  .left:hover, .right:hover {
+  &:hover {
     background: rgba(0, 0, 0, .3);
   }
 }

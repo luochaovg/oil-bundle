@@ -38,7 +38,6 @@ $(function () {
         mobileDefaultCollapsed: true,
         ckEditor: {},
         f5JustNow: true,
-        showAffix: false,
 
         noLoadingOnce: false,
         spinning: false,
@@ -452,12 +451,10 @@ $(function () {
 
         bsw.initClipboard();
         bsw.initUpwardInfect();
-        v.$nextTick(function () {
-            bsw.initScrollX();
-        });
 
         var timeout = change ? 1200 : 600;
         setTimeout(function () {
+            bsw.initScrollX();
             $(window).resize();
             var operates = function operates() {
                 bsw.messageAutoDiscovery(v.init);

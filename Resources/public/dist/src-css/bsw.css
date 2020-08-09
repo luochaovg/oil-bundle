@@ -982,12 +982,9 @@ textarea[size="large"] {
   display: none;
 }
 .bsw-scroll-x {
-  height: 56px;
-}
-.bsw-scroll-x .left,
-.bsw-scroll-x .right {
   width: 56px;
   height: 56px;
+  position: fixed;
   background: rgba(0, 0, 0, 0.08);
   font-size: 36px;
   line-height: 56px;
@@ -997,18 +994,17 @@ textarea[size="large"] {
   cursor: pointer;
   transition: background-color 0.8s;
 }
-.bsw-scroll-x .left {
-  float: left;
+.bsw-scroll-x.left {
+  left: 0;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
-.bsw-scroll-x .right {
-  float: right;
+.bsw-scroll-x.right {
+  right: 0;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 }
-.bsw-scroll-x .left:hover,
-.bsw-scroll-x .right:hover {
+.bsw-scroll-x:hover {
   background: rgba(0, 0, 0, 0.3);
 }
 /*# sourceMappingURL=bsw.css.map */

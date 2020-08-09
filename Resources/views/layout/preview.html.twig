@@ -59,12 +59,18 @@
         {% endif %}
       </a-table>
       {% block scrollX %}
-        <a-affix :offset-bottom="44" :style="{width: '100%'}">
-          <div class="bsw-scroll-x" data-step="500" data-target-selector=".ant-table-body">
-            <div class="left">{{ 'b:icon-back'|icon|raw }}</div>
-            <div class="right">{{ 'b:icon-more'|icon|raw }}</div>
-          </div>
-        </a-affix>
+        <div
+          class="bsw-scroll-x left"
+          data-step="500"
+          data-target-selector=".ant-table-body"
+          :style="{bottom: '44px'}"
+        >{{ 'b:icon-back'|icon|raw }}</div>
+        <div
+          class="bsw-scroll-x right"
+          data-step="500"
+          data-target-selector=".ant-table-body"
+          :style="{bottom: '44px'}"
+        >{{ 'b:icon-more'|icon|raw }}</div>
       {% endblock %}
       {% block pagination %}
         <a-pagination

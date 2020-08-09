@@ -670,7 +670,9 @@ var FoundationTools = function (_FoundationPrototype) {
             var pos = element.offset();
             return {
                 left: pos.left,
+                right: document.body.offsetWidth - (pos.left + element[0].offsetWidth),
                 top: pos.top,
+                bottom: document.body.offsetHeight - (pos.top + element[0].offsetHeight),
                 width: element[0].offsetWidth,
                 height: element[0].offsetHeight
             };
@@ -2736,39 +2738,48 @@ var FoundationAntD = function (_FoundationTools) {
         value: function initScrollX() {
             var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-scroll-x';
 
-            var parent = $(selector);
-            var affix = parent.parent();
-            var target = $(parent.data('target-selector'));
-            if (target.length === 0) {
-                return;
-            }
-            var arrow = parent.children('div');
-            var maxScrollTop = function maxScrollTop() {
-                return document.body.scrollHeight - document.body.clientHeight;
-            };
-            var maxScrollLeft = function maxScrollLeft() {
-                return target[0].scrollWidth - target[0].clientWidth;
-            };
-            arrow.off('click').on('click', function () {
-                var nowScrollLeft = target.scrollLeft();
+            $(selector).each(function () {
+                var arrow = $(this);
+                var step = parseInt(arrow.data('step'));
+                var target = $(arrow.data('target-selector'));
+                if (target.length === 0) {
+                    return true;
+                }
+
+                var offset = bsw.offset(arrow.parent());
                 var position = $(this).hasClass('left') ? -1 : 1;
-                if (position === -1 && nowScrollLeft <= 1) {
-                    return bsw.warning(bsw.lang.is_far_left, 1);
+                if (position === -1) {
+                    arrow.css({ left: offset.left });
+                } else if (position === 1) {
+                    arrow.css({ right: offset.right });
                 }
-                if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
-                    return bsw.warning(bsw.lang.is_far_right, 1);
-                }
-                var step = parseInt(parent.data('step')) * position;
-                target.stop().animate({ scrollLeft: nowScrollLeft + step + 'px' });
-            });
-            $(window).resize(function () {
-                var x = maxScrollLeft();
-                var y = maxScrollTop();
-                if (x > 0 && y > 300) {
-                    affix.fadeIn();
-                } else {
-                    affix.fadeOut();
-                }
+
+                var maxScrollTop = function maxScrollTop() {
+                    return document.body.scrollHeight - document.body.clientHeight;
+                };
+                var maxScrollLeft = function maxScrollLeft() {
+                    return target[0].scrollWidth - target[0].clientWidth;
+                };
+                arrow.off('click').on('click', function () {
+                    var nowScrollLeft = target.scrollLeft();
+                    if (position === -1 && nowScrollLeft <= 1) {
+                        return bsw.warning(bsw.lang.is_far_left, 1);
+                    }
+                    if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
+                        return bsw.warning(bsw.lang.is_far_right, 1);
+                    }
+                    target.stop().animate({ scrollLeft: nowScrollLeft + step * position + 'px' });
+                });
+
+                $(window).resize(function () {
+                    var x = maxScrollLeft();
+                    var y = maxScrollTop();
+                    if (x > 0 && y > 300) {
+                        arrow.fadeIn(100);
+                    } else {
+                        arrow.fadeOut(100);
+                    }
+                });
             });
         }
 

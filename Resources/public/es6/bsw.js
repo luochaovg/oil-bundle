@@ -455,12 +455,10 @@ $(function () {
 
         bsw.initClipboard();
         bsw.initUpwardInfect();
-        v.$nextTick(function () {
-            bsw.initScrollX();
-        });
 
         let timeout = change ? 1200 : 600;
         setTimeout(function () {
+            bsw.initScrollX();
             $(window).resize();
             let operates = function () {
                 bsw.messageAutoDiscovery(v.init);
