@@ -6,11 +6,13 @@ bsw.configure({
             hljs.initHighlighting();
             var allLi = $('.markdown-content .index li');
             var anchor = bsw.leftTrim(window.location.hash, '#');
-            var currentLi = $('li.id-' + anchor);
-            var currentMd = $('#' + anchor);
-            $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
-            $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
-            currentLi.addClass('current');
+            if (anchor.length) {
+                var currentLi = $('li.id-' + anchor);
+                var currentMd = $('#' + anchor);
+                $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
+                $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
+                currentLi.addClass('current');
+            }
             allLi.click(function () {
                 var thisLi = $(this);
                 var url = thisLi.find('a').attr('href');

@@ -38,6 +38,7 @@ $(function () {
         mobileDefaultCollapsed: true,
         ckEditor: {},
         f5JustNow: true,
+        showAffix: false,
 
         noLoadingOnce: false,
         spinning: false,

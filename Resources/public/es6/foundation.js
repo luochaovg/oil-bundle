@@ -2163,10 +2163,10 @@ class FoundationAntD extends FoundationTools {
         arrow.off('click').on('click', function () {
             let nowScrollLeft = target.scrollLeft();
             let position = $(this).hasClass('left') ? -1 : 1;
-            if (position === -1 && nowScrollLeft <= 0) {
+            if (position === -1 && nowScrollLeft <= 1) {
                 return bsw.warning(bsw.lang.is_far_left, 1);
             }
-            if (position === 1 && nowScrollLeft >= maxScrollLeft()) {
+            if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
                 return bsw.warning(bsw.lang.is_far_right, 1);
             }
             let step = parseInt(parent.data('step')) * position;
@@ -2219,7 +2219,7 @@ class FoundationAntD extends FoundationTools {
      */
     prominentAnchor(animate = 'flash', duration = '.65s') {
         let anchor = this.leftTrim(window.location.hash, '#');
-        if ($(`#${anchor}`).length === 0) {
+        if (anchor.length === 0 || $(`#${anchor}`).length === 0) {
             return;
         }
         this.doAnimateCSS(`#${anchor}`, animate, duration);

@@ -4,11 +4,13 @@ bsw.configure({
             hljs.initHighlighting();
             let allLi = $('.markdown-content .index li');
             let anchor = bsw.leftTrim(window.location.hash, '#');
-            let currentLi = $(`li.id-${anchor}`);
-            let currentMd = $(`#${anchor}`);
-            $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
-            $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
-            currentLi.addClass('current');
+            if (anchor.length) {
+                let currentLi = $(`li.id-${anchor}`);
+                let currentMd = $(`#${anchor}`);
+                $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
+                $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
+                currentLi.addClass('current');
+            }
             allLi.click(function () {
                 let thisLi = $(this);
                 let url = thisLi.find('a').attr('href');

@@ -2752,10 +2752,10 @@ var FoundationAntD = function (_FoundationTools) {
             arrow.off('click').on('click', function () {
                 var nowScrollLeft = target.scrollLeft();
                 var position = $(this).hasClass('left') ? -1 : 1;
-                if (position === -1 && nowScrollLeft <= 0) {
+                if (position === -1 && nowScrollLeft <= 1) {
                     return bsw.warning(bsw.lang.is_far_left, 1);
                 }
-                if (position === 1 && nowScrollLeft >= maxScrollLeft()) {
+                if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
                     return bsw.warning(bsw.lang.is_far_right, 1);
                 }
                 var step = parseInt(parent.data('step')) * position;
@@ -2820,7 +2820,7 @@ var FoundationAntD = function (_FoundationTools) {
             var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.65s';
 
             var anchor = this.leftTrim(window.location.hash, '#');
-            if ($('#' + anchor).length === 0) {
+            if (anchor.length === 0 || $('#' + anchor).length === 0) {
                 return;
             }
             this.doAnimateCSS('#' + anchor, animate, duration);
