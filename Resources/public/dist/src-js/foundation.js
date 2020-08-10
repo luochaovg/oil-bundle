@@ -855,11 +855,16 @@ var FoundationTools = function (_FoundationPrototype) {
 
             var queryParams = this.parseQueryString(url, true);
             var host = queryParams.hostPart;
+            var anchor = queryParams.anchorPart;
             delete queryParams.hostPart;
+            delete queryParams.anchorPart;
 
             items = Object.assign(queryParams, this.jsonBuildQuery(items, true, needEncode));
             var queryString = this.jsonBuildQuery(items);
             url = host + '?' + queryString;
+            if (anchor.length) {
+                url = this.trim(url, '?') + '#' + anchor;
+            }
 
             return this.trim(url, '?');
         }
@@ -913,9 +918,15 @@ var FoundationTools = function (_FoundationPrototype) {
             }
 
             var host = queryParams.hostPart;
+            var anchor = queryParams.anchorPart;
             delete queryParams.hostPart;
+            delete queryParams.anchorPart;
 
             url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
+            if (anchor.length) {
+                url = this.trim(url, '?') + '#' + anchor;
+            }
+
             return this.trim(url, '?');
         }
 
@@ -973,9 +984,15 @@ var FoundationTools = function (_FoundationPrototype) {
             }
 
             var host = queryParams.hostPart;
+            var anchor = queryParams.anchorPart;
             delete queryParams.hostPart;
+            delete queryParams.anchorPart;
 
             url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
+            if (anchor.length) {
+                url = this.trim(url, '?') + '#' + anchor;
+            }
+
             return this.trim(url, '?');
         }
 

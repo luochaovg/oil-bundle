@@ -14,9 +14,9 @@ class Input extends ArgsInput
     public $id = 0;
 
     /**
-     * @var callable
+     * @var bool
      */
-    public $handler;
+    public $customHandler = false;
 
     /**
      * @var array

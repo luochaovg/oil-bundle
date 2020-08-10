@@ -50,6 +50,7 @@ class Module extends Bsw
     const AFTER_SUBMIT       = 'AfterSubmit';
     const BEFORE_PERSISTENCE = 'BeforePersistence';
     const AFTER_PERSISTENCE  = 'AfterPersistence';
+    const CUSTOM_HANDLER     = 'CustomHandler';
 
     /**
      * @var string
@@ -1102,64 +1103,72 @@ class Module extends Bsw
 
         if ($this->input->submit) {
 
-            $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null;
-            if ($token && !$this->web->validWebsiteToken($token)) {
-                return $this->showError('Form submission exception or so often', ErrorRequestOften::CODE);
-            }
-
-            if ($this->entity) {
-                /**
-                 * Rules validator
-                 */
-                foreach ($persistAnnotationHandling as $field => $item) {
-                    $rules = $item['rules'];
-                    if (empty($rules)) {
-                        continue;
-                    }
-                    $value = $this->input->submit[$field] ?? null;
-                    $result = $this->web->validator($field, $value, $rules, ['label' => $item['label']]);
-                    if ($result === false) {
-                        return $this->showError($this->web->pop(), ErrorParameter::CODE);
-                    }
+            // handle by framework
+            if (!$this->input->customHandler) {
+                $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null;
+                if ($token && !$this->web->validWebsiteToken($token)) {
+                    return $this->showError('Form submission exception or so often', ErrorRequestOften::CODE);
                 }
 
-                return $this->persistence(
-                    $submit,
-                    $record,
-                    $original,
-                    $persistAnnotationHandling,
-                    $extraSubmit,
-                    $recordBefore,
-                    $recordDiff
+                if ($this->entity) {
+                    /**
+                     * Rules validator
+                     */
+                    foreach ($persistAnnotationHandling as $field => $item) {
+                        $rules = $item['rules'];
+                        if (empty($rules)) {
+                            continue;
+                        }
+                        $value = $this->input->submit[$field] ?? null;
+                        $result = $this->web->validator($field, $value, $rules, ['label' => $item['label']]);
+                        if ($result === false) {
+                            return $this->showError($this->web->pop(), ErrorParameter::CODE);
+                        }
+                    }
+
+                    return $this->persistence(
+                        $submit,
+                        $record,
+                        $original,
+                        $persistAnnotationHandling,
+                        $extraSubmit,
+                        $recordBefore,
+                        $recordDiff
+                    );
+                }
+
+            } else {
+
+                // handle by custom
+                $arguments = $this->arguments(
+                    [
+                        'submit'                => $this->input->submit,
+                        'persistenceAnnotation' => $persistAnnotationHandling,
+                    ],
+                    $this->input->args
                 );
-            }
-
-            if (empty($this->input->handler) || !is_callable($this->input->handler)) {
-                throw new Exception(
-                    "Persistence handler should be configured and callable when entity not configured"
+                $result = $this->caller(
+                    $this->method,
+                    self::CUSTOM_HANDLER,
+                    [Message::class, Error::class],
+                    null,
+                    $arguments
                 );
+
+                if ($result instanceof Error) {
+                    return $this->showError($result->tiny());
+                }
+
+                /**
+                 * @var Message $result
+                 */
+
+                if ($result->isSuccessClassify() && $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
+                    $this->web->invalidWebsiteToken($token);
+                }
+
+                return $this->showMessage($result);
             }
-
-            $result = call_user_func_array(
-                $this->input->handler,
-                [$this->input->submit, $persistAnnotationHandling]
-            );
-
-            Helper::callReturnType($result, [Error::class, Message::class], 'The handler of submit');
-
-            if ($result instanceof Error) {
-                return $this->showError($result->tiny());
-            }
-
-            /**
-             * @var Message $result
-             */
-
-            if ($result->isSuccessClassify() && $token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
-                $this->web->invalidWebsiteToken($token);
-            }
-
-            return $this->showMessage($result);
         }
 
         /**

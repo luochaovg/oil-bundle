@@ -661,11 +661,16 @@ class FoundationTools extends FoundationPrototype {
     setParams(items, url = null, needEncode = false) {
         let queryParams = this.parseQueryString(url, true);
         let host = queryParams.hostPart;
+        let anchor = queryParams.anchorPart;
         delete queryParams.hostPart;
+        delete queryParams.anchorPart;
 
         items = Object.assign(queryParams, this.jsonBuildQuery(items, true, needEncode));
         let queryString = this.jsonBuildQuery(items);
         url = `${host}?${queryString}`;
+        if (anchor.length) {
+            url = this.trim(url, '?') + '#' + anchor;
+        }
 
         return this.trim(url, '?');
     }
@@ -692,9 +697,15 @@ class FoundationTools extends FoundationPrototype {
         }
 
         let host = queryParams.hostPart;
+        let anchor = queryParams.anchorPart;
         delete queryParams.hostPart;
+        delete queryParams.anchorPart;
 
         url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
+        if (anchor.length) {
+            url = this.trim(url, '?') + '#' + anchor;
+        }
+
         return this.trim(url, '?');
     }
 
@@ -725,9 +736,15 @@ class FoundationTools extends FoundationPrototype {
         }
 
         let host = queryParams.hostPart;
+        let anchor = queryParams.anchorPart;
         delete queryParams.hostPart;
+        delete queryParams.anchorPart;
 
         url = host + '?' + this.jsonBuildQuery(queryParams, needEncode);
+        if (anchor.length) {
+            url = this.trim(url, '?') + '#' + anchor;
+        }
+
         return this.trim(url, '?');
     }
 

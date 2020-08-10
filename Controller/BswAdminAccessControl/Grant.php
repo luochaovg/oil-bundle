@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswAdminAccessControl;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
+use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\RepositoryException;
@@ -99,6 +100,62 @@ trait Grant
     }
 
     /**
+     * Grant custom handler
+     *
+     * @param Arguments $args
+     *
+     * @return Message
+     * @throws
+     */
+    public function grantCustomHandler(Arguments $args)
+    {
+        $form = $args->submit;
+
+        $id = intval(Helper::dig($form, 'id'));
+        $id = $id > 0 ? $id : null;
+        $routes = $form ? array_merge(...array_values($form)) : [];
+
+        [$disabled] = $this->disabled($id);
+        $routes = array_diff($routes, array_keys($disabled));
+
+        /**
+         * @var BswAdminAccessControlRepository $access
+         */
+        $access = $this->repo(BswAdminAccessControl::class);
+        $result = $access->transactional(
+            function () use ($access, $id, $routes) {
+
+                $effect = $access->away(['userId' => $id]);
+                if ($effect === false) {
+                    throw new RepositoryException($access->pop());
+                }
+
+                $routesHandling = [];
+                foreach ($routes as $route) {
+                    $routesHandling[] = [
+                        'userId'    => $id,
+                        'routeName' => $route,
+                    ];
+                }
+
+                $effect = $access->newlyMultiple($routesHandling);
+                if ($effect === false) {
+                    throw new RepositoryException($access->pop());
+                }
+            }
+        );
+
+        if ($result === false) {
+            return (new Message('Authorized failed'))
+                ->setClassify(Abs::TAG_CLASSIFY_ERROR);
+        }
+
+        return (new Message('Authorized success'))
+            ->setClassify(Abs::TAG_CLASSIFY_SUCCESS)
+            ->setRoute('app_bsw_admin_user_preview');
+    }
+
+    /**
      * Grant authorization for user
      *
      * @Route("/bsw-admin-access-control/grant", name="app_bsw_admin_access_control_grant")
@@ -119,69 +176,16 @@ trait Grant
             $this->changeCrumbs("%s >> {$target}");
         }
 
-        /**
-         * Grant role
-         *
-         * @param array $form
-         *
-         * @return Message
-         */
-        $grantRole = function (array $form): Message {
-
-            $id = intval(Helper::dig($form, 'id'));
-            $id = $id > 0 ? $id : null;
-            $routes = $form ? array_merge(...array_values($form)) : [];
-
-            [$disabled] = $this->disabled($id);
-            $routes = array_diff($routes, array_keys($disabled));
-
-            /**
-             * @var BswAdminAccessControlRepository $access
-             */
-            $access = $this->repo(BswAdminAccessControl::class);
-            $result = $access->transactional(
-                function () use ($access, $id, $routes) {
-
-                    $effect = $access->away(['userId' => $id]);
-                    if ($effect === false) {
-                        throw new RepositoryException($access->pop());
-                    }
-
-                    $routesHandling = [];
-                    foreach ($routes as $route) {
-                        $routesHandling[] = [
-                            'userId'    => $id,
-                            'routeName' => $route,
-                        ];
-                    }
-
-                    $effect = $access->newlyMultiple($routesHandling);
-                    if ($effect === false) {
-                        throw new RepositoryException($access->pop());
-                    }
-                }
-            );
-
-            if ($result === false) {
-                return (new Message('Authorized failed'))
-                    ->setClassify(Abs::TAG_CLASSIFY_ERROR);
-            }
-
-            return (new Message('Authorized success'))
-                ->setClassify(Abs::TAG_CLASSIFY_SUCCESS)
-                ->setRoute('app_bsw_admin_user_preview');
-        };
-
         [$disabled, $danger] = $this->disabled($args->id);
 
         return $this->showPersistence(
             [
-                'id'           => $args->id,
-                'danger'       => $danger,
-                'disabled'     => $disabled,
-                'disabledJson' => Helper::jsonStringify(array_keys($disabled)),
-                'handler'      => $grantRole,
-                'afterModule'  => [
+                'id'            => $args->id,
+                'danger'        => $danger,
+                'disabled'      => $disabled,
+                'disabledJson'  => Helper::jsonStringify(array_keys($disabled)),
+                'customHandler' => true,
+                'afterModule'   => [
                     'form'   => function (array $logic) {
                         return $this->listForm($logic['id']);
                     },
