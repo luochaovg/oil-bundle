@@ -7,9 +7,13 @@ bsw.configure({
             if (anchor.length) {
                 let currentLi = $(`li.id-${anchor}`);
                 let currentMd = $(`#${anchor}`);
-                $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
-                $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
-                currentLi.addClass('current');
+                if (currentLi.length) {
+                    $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
+                    currentLi.addClass('current');
+                }
+                if (currentMd.length) {
+                    $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
+                }
             }
             allLi.click(function () {
                 let thisLi = $(this);

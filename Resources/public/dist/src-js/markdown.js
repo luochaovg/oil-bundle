@@ -9,9 +9,13 @@ bsw.configure({
             if (anchor.length) {
                 var currentLi = $('li.id-' + anchor);
                 var currentMd = $('#' + anchor);
-                $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
-                $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
-                currentLi.addClass('current');
+                if (currentLi.length) {
+                    $('.markdown-content .index').scrollTop(bsw.offset(currentLi).top);
+                    currentLi.addClass('current');
+                }
+                if (currentMd.length) {
+                    $('.markdown-content .content').scrollTop(bsw.offset(currentMd).top);
+                }
             }
             allLi.click(function () {
                 var thisLi = $(this);

@@ -22,7 +22,7 @@ class AttachmentImage extends Tailor
     protected function initial()
     {
         $this->web->appendSrcJsWithKey('fancy-box', Abs::JS_FANCY_BOX);
-        $this->web->appendSrcCssWithKey('fancy-box', Abs::JS_FANCY_BOX);
+        $this->web->appendSrcCssWithKey('fancy-box', Abs::CSS_FANCY_BOX);
         $this->web->appendSrcJsWithKey('lazy-load', Abs::JS_LAZY_LOAD);
         $this->web->appendSrcCssWithKey('lazy-load', Abs::CSS_FANCY_BOX);
 

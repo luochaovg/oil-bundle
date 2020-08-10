@@ -72,6 +72,8 @@ trait Document
         $this->appendSrcJsWithKey('markdown', Abs::JS_MARKDOWN);
         $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
 
+        $this->cnf->font_symbol = null; // Not load iconfont.js
+
         return $this->showEmpty('layout/document.html', ['args' => compact('name')]);
     }
 }
