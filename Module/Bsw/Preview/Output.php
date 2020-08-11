@@ -119,6 +119,11 @@ class Output extends ArgsOutput
     public $pageSizeOptionsJson;
 
     /**
+     * @var string
+     */
+    public $paginationClsName;
+
+    /**
      * @var int
      */
     public $dynamic;

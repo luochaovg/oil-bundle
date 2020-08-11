@@ -57,7 +57,12 @@ class Filter extends Annotation
     /**
      * @var bool
      */
-    public $show = true;
+    public $show = true; // No element
+
+    /**
+     * @var bool
+     */
+    public $hide; // Render to element but display none
 
     /**
      * @var int

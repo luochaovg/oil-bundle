@@ -90,7 +90,7 @@ class Module extends Bsw
         $output = new Output();
 
         // Menu
-        $menu = $this->caller($this->method(), self::MENU, Abs::T_ARRAY, []);
+        $menu = $this->caller($this->method(), self::MENU, Abs::T_ARRAY, [], $this->arguments($this->input->args));
         $method = $this->method() . self::MENU;
 
         foreach ($menu as $item) {
@@ -125,7 +125,13 @@ class Module extends Bsw
         }
 
         // Setting
-        $setting = $this->caller($this->method(), self::SETTING, Abs::T_ARRAY, []);
+        $setting = $this->caller(
+            $this->method(),
+            self::SETTING,
+            Abs::T_ARRAY,
+            [],
+            $this->arguments($this->input->args)
+        );
         $method = $this->method() . self::SETTING;
 
         foreach ($setting as $item) {
@@ -140,7 +146,7 @@ class Module extends Bsw
         }
 
         // Links
-        $links = $this->caller($this->method(), self::LINKS, Abs::T_ARRAY, []);
+        $links = $this->caller($this->method(), self::LINKS, Abs::T_ARRAY, [], $this->arguments($this->input->args));
         $method = $this->method() . self::SETTING;
 
         foreach ($links as $item) {
@@ -155,14 +161,20 @@ class Module extends Bsw
         }
 
         // Links
-        $output->language = $this->caller($this->method(), self::LANGUAGE, Abs::T_ARRAY, []);
+        $output->language = $this->caller(
+            $this->method(),
+            self::LANGUAGE,
+            Abs::T_ARRAY,
+            [],
+            $this->arguments($this->input->args)
+        );
 
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

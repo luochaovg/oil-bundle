@@ -9,17 +9,22 @@ trait Col
     /**
      * @var array
      */
-    protected $col = [
-        //'xs'  => 24,
-        //'sm'  => 24,
-        //'md'  => 12,
-        //'lg'  => 8,
-        //'xl'  => 8,
-        //'xxl' => 6,
+    protected $col = [];
+
+    /**
+     * @var array
+     */
+    protected $colDefault = [
+        'xs'  => 24,
+        'sm'  => 24,
+        'md'  => 12,
+        'lg'  => 8,
+        'xl'  => 8,
+        'xxl' => 6,
     ];
 
     /**
-     * @return int
+     * @return array
      */
     public function getCol(): array
     {
@@ -62,6 +67,16 @@ trait Col
     public function setColNumber(string $key, int $number)
     {
         $this->col[$key] = $number;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setColByDefault()
+    {
+        $this->col = $this->colDefault;
 
         return $this;
     }

@@ -75,12 +75,14 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output();
+        $output->footerClsName = $this->input->footerClsName;
+
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

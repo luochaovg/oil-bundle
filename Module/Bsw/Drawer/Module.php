@@ -89,13 +89,14 @@ class Module extends Bsw
         $output->drawerStyleJson = Helper::jsonFlexible($this->input->drawerStyle);
         $output->headerStyleJson = Helper::jsonFlexible($this->input->headerStyle);
         $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
+        $output->drawerClsName = $this->input->drawerClsName;
 
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

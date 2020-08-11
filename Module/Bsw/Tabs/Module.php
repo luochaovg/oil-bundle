@@ -71,7 +71,7 @@ class Module extends Bsw
         $output = new Output();
 
         // links
-        $links = $this->caller($this->method, self::TABS_LINKS, Abs::T_ARRAY, []);
+        $links = $this->caller($this->method, self::TABS_LINKS, Abs::T_ARRAY, [], $this->arguments($this->input->args));
         foreach ($links as $item) {
             $fn = $this->method . self::TABS_LINKS;
             Helper::objectInstanceOf(
@@ -93,13 +93,14 @@ class Module extends Bsw
         $output->type = $this->input->type;
         $output->tabBarGutter = $this->input->tabBarGutter;
         $output->position = $this->input->position;
+        $output->tabsClsName = $this->input->tabsClsName;
 
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

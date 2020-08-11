@@ -31,4 +31,9 @@ class Input extends ArgsInput
      * @var string
      */
     public $position = Abs::POS_TOP;
+
+    /**
+     * @var string
+     */
+    public $tabsClsName = 'bsw-align-center';
 }

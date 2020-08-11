@@ -80,7 +80,7 @@ class Module extends Bsw
         ];
 
         $nowScene = $this->input->iframe ? Abs::SCENE_IFRAME : Abs::SCENE_NORMAL;
-        $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, []);
+        $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $this->arguments($this->input->args));
         $size = $this->input->mobile ? $this->input->operatesSizeInMobile : $this->input->operatesSize;
 
         // buttons handler
@@ -126,7 +126,7 @@ class Module extends Bsw
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

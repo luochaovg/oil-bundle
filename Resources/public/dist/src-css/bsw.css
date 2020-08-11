@@ -269,10 +269,12 @@ div.ant-modal-mask {
 .ant-layout-header-dark .ant-layout-sider-trigger:hover {
   background: rgba(255, 255, 255, 0.06);
 }
-.ant-pagination {
+ul.ant-pagination {
   margin: 40px 0 0;
-  text-align: center;
   padding: 0 10px 45px;
+}
+ul.ant-pagination li {
+  margin-bottom: 5px;
 }
 .ant-layout {
   min-width: 300px;
@@ -358,7 +360,6 @@ div.ant-modal-mask {
   }
 }
 .ant-layout .ant-layout-footer {
-  text-align: center;
   padding: 20px 50px 25px;
 }
 .bsw-menu-mobile .ant-drawer-body {
@@ -389,6 +390,12 @@ div.ant-modal-mask {
 }
 .bsw-align-center {
   text-align: center;
+}
+.bsw-float-left {
+  float: left;
+}
+.bsw-float-right {
+  float: right;
 }
 .bsw-operate.top {
   margin-bottom: 15px;
@@ -543,14 +550,19 @@ span.ant-calendar-picker {
 }
 .bsw-tabs-links {
   margin: 10px 0 0;
-  text-align: center;
 }
 .bsw-filter-form {
-  padding: 16px 20px;
+  padding: 16px 20px 14px;
   overflow: hidden;
   margin-bottom: 10px;
   background: #fafafa;
   border: 1px solid #e8e8e8;
+}
+.bsw-filter-form.bsw-filter-without-label {
+  padding: 24px 20px 12px;
+}
+.bsw-filter-form.bsw-filter-without-label.ant-form-vertical .ant-form-item {
+  padding-bottom: 0;
 }
 .bsw-filter-form .ant-form-item {
   margin: 0 0 8px;
@@ -593,9 +605,6 @@ span.ant-calendar-picker {
 .bsw-content-grant .ant-form-item-label > label {
   font-size: 16px;
 }
-div.modal-container-center div.ant-modal-body > div {
-  text-align: center;
-}
 .modal-block-only {
   display: block;
   margin: 0 auto;
@@ -634,9 +643,6 @@ a.bsw-preview-link {
   overflow-x: hidden;
   padding: 0;
   border-radius: 4px;
-}
-ul.ant-pagination li {
-  margin-bottom: 5px;
 }
 .bsw-blockquote {
   padding: 6px 10px;
@@ -832,7 +838,6 @@ textarea[size="large"] {
   width: 100%;
   border-top: 1px solid #e8e8e8;
   padding: 20px;
-  text-align: right;
   left: 0;
   background: #fff;
   border-radius: 0 0 4px 4px;
@@ -874,11 +879,11 @@ textarea[size="large"] {
 .ant-result .ant-result-subtitle {
   margin-top: 12px;
 }
-.bsw-filter-without-label.ant-form-vertical .ant-form-item {
-  padding-bottom: 0;
-}
 .bsw-item-tools-upload {
   margin: 0;
+}
+div.modal-container-center div.ant-modal-body > div {
+  text-align: center;
 }
 .bsw-modal-title-center .ant-modal-title {
   text-align: center;
@@ -993,6 +998,7 @@ textarea[size="large"] {
   font-weight: 300;
   cursor: pointer;
   transition: background-color 0.8s;
+  z-index: 999;
 }
 .bsw-scroll-x.left {
   left: 0;

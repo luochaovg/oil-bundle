@@ -105,4 +105,9 @@ class Output extends ArgsOutput
      * @var string
      */
     public $bodyStyleJson;
+
+    /**
+     * @var string
+     */
+    public $drawerClsName;
 }

@@ -82,6 +82,9 @@ class FilterConverter extends AnnotationConverter
 
         $filter = $this->item->filter;
         foreach ($value as $key => $val) {
+            if (is_int($key)) {
+                [$key, $val] = [$val, null];
+            }
             $fn = 'set' . Helper::underToCamel($key, false);
             if (!method_exists($filter, $fn)) {
                 $this->exception(

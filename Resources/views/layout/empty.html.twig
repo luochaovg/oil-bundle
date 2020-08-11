@@ -12,7 +12,9 @@
     {% if scaffold.cnf.iconLoading is not empty %}
       {{ scaffold.cnf.iconLoading|icon(true, {}, {slot:'indicator', spin:true})|raw }}
     {% endif %}
-    <a-back-top></a-back-top>
+    {% if not scaffold.iframe %}
+      <a-back-top></a-back-top>
+    {% endif %}
     {% block contentBefore %}{% endblock %}
     {% block content %}{% endblock %}
     {% block contentAfter %}{% endblock %}

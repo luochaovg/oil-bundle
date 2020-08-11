@@ -101,7 +101,7 @@ class Module extends Bsw
      */
     protected function getQueryOptions(): array
     {
-        $query = $this->caller($this->method, self::QUERY, Abs::T_ARRAY, []);
+        $query = $this->caller($this->method, self::QUERY, Abs::T_ARRAY, [], $this->arguments($this->input->args));
         if ($this->entity && !isset($query['alias'])) {
             $query['alias'] = Helper::tableNameToAlias($this->entity);
         }
@@ -166,9 +166,19 @@ class Module extends Bsw
          */
 
         $fn = self::FILTER_ANNOTATION_ONLY;
-        $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
+        $filterAnnotationExtra = $this->caller(
+            $this->method,
+            $fn,
+            Abs::T_ARRAY,
+            null,
+            $this->arguments($this->input->args)
+        );
 
-        $arguments = $this->arguments(['target' => $filterAnnotationExtra], compact('filterAnnotation'));
+        $arguments = $this->arguments(
+            ['target' => $filterAnnotationExtra],
+            compact('filterAnnotation'),
+            $this->input->args
+        );
         $filterAnnotationExtra = $this->tailor($this->method, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
@@ -187,7 +197,13 @@ class Module extends Bsw
              */
 
             $fn = self::FILTER_ANNOTATION;
-            $filterAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+            $filterAnnotationExtra = $this->caller(
+                $this->method,
+                $fn,
+                Abs::T_ARRAY,
+                [],
+                $this->arguments($this->input->args)
+            );
 
             $arguments->set('target', $filterAnnotationExtra);
             $filterAnnotationExtra = $this->tailor($this->method, $fn, Abs::T_ARRAY, $arguments);
@@ -395,8 +411,13 @@ class Module extends Bsw
              */
             $form = $item['type'];
 
+            $label = $item['label'];
+            if ($item['trans']) {
+                $label = $this->web->fieldLang($label);
+            }
+
             $form->setKey($key);
-            $form->setLabel($item['label']);
+            $form->setLabel($label);
             $form->setStyle($item['style']);
             $form->setField($item['field']);
 
@@ -448,11 +469,13 @@ class Module extends Bsw
             }
 
             if (!$form->getPlaceholder()) {
-                $form->setPlaceholder($item['placeholder'] ?: $form->getLabel());
+                $placeholder = $this->input->showLabel ? $item['label'] : $form->getLabel();
+                $form->setPlaceholder($item['placeholder'] ?: $placeholder);
             }
 
             $record[$key] = [
-                'label'  => $item['trans'] ? $this->web->fieldLang($form->getLabel()) : $form->getLabel(),
+                'hide'   => $item['hide'],
+                'label'  => $form->getLabel(),
                 'column' => $item['column'],
                 'width'  => $this->getWidth($item['column']),
                 'type'   => $form,
@@ -480,7 +503,13 @@ class Module extends Bsw
         }
 
         $ops = compact('search', 'export');
-        $operates = $this->caller($this->method, self::FILTER_OPERATE, Abs::T_ARRAY, [], $this->arguments($ops));
+        $operates = $this->caller(
+            $this->method,
+            self::FILTER_OPERATE,
+            Abs::T_ARRAY,
+            [],
+            $this->arguments($ops, $this->input->args)
+        );
         $operates = array_filter(array_merge($ops, $operates));
 
         foreach ($operates as $operate) {
@@ -621,6 +650,7 @@ class Module extends Bsw
             foreach ($members as $field) {
                 if (!isset($output->filter[$name])) {
                     $output->filter[$name] = [
+                        'hide'   => $output->filter[$field]['hide'],
                         'label'  => $output->filter[$field]['label'],
                         'column' => $output->filter[$field]['column'],
                         'width'  => $this->getWidth($output->filter[$field]['column']),
@@ -668,7 +698,7 @@ class Module extends Bsw
             self::FILTER_CORRECT,
             Abs::T_ARRAY,
             [$filter, $condition],
-            $this->arguments(compact('filter', 'condition'))
+            $this->arguments(compact('filter', 'condition'), $this->input->args)
         );
 
         [$output->filter, $output->operates, $format] = $this->handleFilterData($filter);
@@ -689,7 +719,7 @@ class Module extends Bsw
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

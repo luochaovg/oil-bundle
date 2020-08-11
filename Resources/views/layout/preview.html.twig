@@ -74,6 +74,7 @@
       {% endblock %}
       {% block pagination %}
         <a-pagination
+          class="{{ preview.paginationClsName }}"
           :show-quick-jumper="true"
           :hide-on-single-page="true"
           :show-total="(total, range) => `${bsw.lang.total} ${total}`"

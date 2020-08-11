@@ -374,8 +374,8 @@ class BswBackendController extends BswWebController
 
         $ajaxShowArgs = [];
         $inputArgs = $this->displayArgsScaffold();
-        $globalLogic = Helper::dig($inputArgs, 'logic');
-        $showArgs = ['logic' => array_merge((array)$globalLogic, $logicArgs)];
+        $globalLogic = (array)Helper::dig($inputArgs, 'logic');
+        $showArgs = ['logic' => array_merge($globalLogic, $logicArgs)];
 
         $extraBswArgs = [
             'expr'       => $this->expr,
@@ -395,10 +395,12 @@ class BswBackendController extends BswWebController
                 throw new ModuleException('The extra args must be array for ' . $module);
             }
 
+            $extraArgs = array_merge($extraArgs, (array)($globalLogic[$module] ?? []));
+
             /**
              * @var Bsw $bsw
              */
-            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
+            $inputArgs = array_merge($globalLogic, $inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
             [$name, $twig, $inputArgs, $output] = $bswDispatcher->execute($module, $inputArgs);
 
             /**

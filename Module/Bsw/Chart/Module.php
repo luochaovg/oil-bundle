@@ -71,7 +71,10 @@ class Module extends Bsw
         $output = new Output();
 
         // items
-        $arguments = $this->arguments(['condition' => $this->input->condition, 'data' => $this->input->data]);
+        $arguments = $this->arguments(
+            ['condition' => $this->input->condition, 'data' => $this->input->data],
+            $this->input->args
+        );
         $result = $this->caller(
             $this->method,
             self::CHART_ITEMS,
@@ -99,7 +102,7 @@ class Module extends Bsw
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

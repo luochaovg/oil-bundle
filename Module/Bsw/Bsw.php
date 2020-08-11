@@ -156,13 +156,26 @@ abstract class Bsw
         );
 
         // tailor
-        $this->tailor = $this->caller($this->method, self::TAILOR, Abs::T_ARRAY, []);
+        $this->tailor = $this->caller(
+            $this->method,
+            self::TAILOR,
+            Abs::T_ARRAY,
+            [],
+            $this->arguments($this->input->args)
+        );
 
         // entity
         $entityFlag = self::ENTITY;
         $method = $this->method . $entityFlag;
 
-        $this->entity = $this->input->entity ?? $this->caller($this->method, $entityFlag, Abs::T_STRING);
+        $this->entity = $this->input->entity ?? $this->caller(
+                $this->method,
+                $entityFlag,
+                Abs::T_STRING,
+                null,
+                $this->arguments($this->input->args)
+            );
+
         if (empty($this->entity)) {
             return;
         }
@@ -421,7 +434,7 @@ abstract class Bsw
             $method = self::ENUM_EXTRA . ucfirst($item['enumExtra']);
             $enum = (array)$item['enum'];
 
-            $arguments = $this->arguments(compact('enum'), $args);
+            $arguments = $this->arguments(compact('enum'), $args, $this->input->args);
             $enumExtra = $this->caller('acme', $method, Abs::T_ARRAY, [], $arguments);
 
             $arguments->set('enumExtra', $enumExtra);

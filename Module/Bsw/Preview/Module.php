@@ -155,7 +155,7 @@ class Module extends Bsw
     protected function getQueryOptions(?int $parentId = null): array
     {
         $fn = $this->choiceQueryMethod($parentId);
-        $arguments = $parentId ? $this->arguments(['parent' => $parentId]) : null;
+        $arguments = $parentId ? $this->arguments(['parent' => $parentId], $this->input->args) : null;
         $query = $this->caller($this->method, $fn, Abs::T_ARRAY, [], $arguments);
 
         if ($fn === self::QUERY_CHILDREN && empty($query)) {
@@ -390,7 +390,11 @@ class Module extends Bsw
 
         $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, null);
 
-        $arguments = $this->arguments(['target' => $previewAnnotationExtra], compact('previewAnnotation'));
+        $arguments = $this->arguments(
+            ['target' => $previewAnnotationExtra],
+            compact('previewAnnotation'),
+            $this->input->args
+        );
         $previewAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
@@ -410,7 +414,13 @@ class Module extends Bsw
 
             $fn = self::ANNOTATION;
 
-            $previewAnnotationExtra = $this->caller($this->method, $fn, Abs::T_ARRAY, []);
+            $previewAnnotationExtra = $this->caller(
+                $this->method,
+                $fn,
+                Abs::T_ARRAY,
+                [],
+                $this->arguments($this->input->args)
+            );
             if (!isset($previewAnnotationExtra[$operate])) {
                 $previewAnnotationExtra[$operate] = ['show' => true];
             }
@@ -453,7 +463,7 @@ class Module extends Bsw
         /**
          * mixed annotation handler
          */
-        $arguments = $this->arguments(['mixed' => $mixedAnnotation]);
+        $arguments = $this->arguments(['mixed' => $mixedAnnotation], $this->input->args);
         $mixedAnnotation = $this->caller(
             $this->method,
             self::MIXED_HANDLER,
@@ -550,7 +560,7 @@ class Module extends Bsw
      */
     protected function manualLister(array $query): array
     {
-        $arguments = $this->arguments(['condition' => $this->input->condition]);
+        $arguments = $this->arguments(['condition' => $this->input->condition], $this->input->args);
         $previewData = $this->caller($this->method, self::PREVIEW_DATA, Abs::T_ARRAY, null, $arguments);
 
         if (!is_array($previewData)) {
@@ -650,7 +660,7 @@ class Module extends Bsw
                 $query[Abs::ORDER] = ["{$query['alias']}.{$pk}" => Abs::SORT_DESC];
             }
 
-            $arguments = $this->arguments(['target' => $query]);
+            $arguments = $this->arguments(['target' => $query], $this->input->args);
             $query = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
 
             if ($this->isExport) {
@@ -668,7 +678,7 @@ class Module extends Bsw
             $list = $this->repository->lister($query);
 
         } else {
-            $arguments = $this->arguments(['target' => $query]);
+            $arguments = $this->arguments(['target' => $query], $this->input->args);
             $query = $this->tailor($this->methodTailor, $fn, Abs::T_ARRAY, $arguments);
             $list = $this->manualLister($query);
         }
@@ -734,7 +744,7 @@ class Module extends Bsw
             if ($parentId) {
                 $original[Abs::TAG_ROW_CLS_NAME] = $this->input->childrenRowClsName;
             }
-            $arguments = $this->arguments(compact('original', 'extraArgs', 'number'));
+            $arguments = $this->arguments(compact('original', 'extraArgs', 'number'), $this->input->args);
             $original = $this->caller($this->method, self::BEFORE_HOOK, Abs::T_ARRAY, $original, $arguments);
 
             return $this->tailor(
@@ -757,7 +767,7 @@ class Module extends Bsw
          */
         $after = function (array $hooked, array $original, array $extraArgs, int $index) use ($basicNumber) {
             $number = $basicNumber + $index;
-            $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs', 'number'));
+            $arguments = $this->arguments(compact('hooked', 'original', 'extraArgs', 'number'), $this->input->args);
             $hooked = $this->caller($this->method, self::AFTER_HOOK, Abs::T_ARRAY, $hooked, $arguments);
 
             return $this->tailor(
@@ -779,7 +789,7 @@ class Module extends Bsw
 
         $args = compact('hooked', 'original');
 
-        $arguments = $this->arguments($args);
+        $arguments = $this->arguments($args, $this->input->args);
         $list = $this->caller($this->method, self::BEFORE_RENDER, Abs::T_ARRAY, $hooked, $arguments);
 
         $arguments->set('target', $list);
@@ -815,7 +825,8 @@ class Module extends Bsw
                     'hooked'    => $hooked[$key],
                     'original'  => $original[$key],
                     'condition' => $this->input->condition,
-                ]
+                ],
+                $this->input->args
             );
 
             $recordOperates = [];
@@ -876,7 +887,8 @@ class Module extends Bsw
                         'original'      => $original[$key],
                         'valueHooked'   => $hooked[$key][$field],
                         'valueOriginal' => $original[$key][$field] ?? null, // when addition by yourself it's be null
-                    ]
+                    ],
+                    $this->input->args
                 );
 
                 $crm = $this->caller($this->method, $charm, null, null, $arguments);
@@ -1071,9 +1083,9 @@ class Module extends Bsw
         }
 
         $choice = $this->input->choice ?? new Choice();
-        $arguments = $this->arguments(compact('choice'));
+        $arguments = $this->arguments(compact('choice'), $this->input->args);
         $choice = $this->caller($this->method, self::CHOICE, Choice::class, $choice, $arguments);
-        $arguments = $this->arguments(['target' => $choice]);
+        $arguments = $this->arguments(['target' => $choice], $this->input->args);
         $output->choice = $this->tailor($this->methodTailor, self::CHOICE, Choice::class, $arguments);
 
         $output->columns = array_values($output->columns);
@@ -1095,6 +1107,7 @@ class Module extends Bsw
         $output->size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions);
+        $output->paginationClsName = $this->input->paginationClsName;
         $output->dynamic = $this->input->dynamic;
         $output->rowClsNameMethod = $this->input->rowClsNameMethod;
         $output->header = $this->input->header;
@@ -1105,7 +1118,7 @@ class Module extends Bsw
             self::OUTPUT_ARGS_HANDLER,
             Output::class,
             $output,
-            $this->arguments(compact('output'))
+            $this->arguments(compact('output'), $this->input->args)
         );
 
         return $output;

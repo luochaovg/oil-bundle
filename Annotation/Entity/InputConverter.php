@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Annotation\Entity;
 
+use Doctrine\ORM\Mapping\Id;
 use Leon\BswBundle\Annotation\Entity\Traits\FieldConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\LabelConverter;
 use Leon\BswBundle\Annotation\Entity\Traits\RulesConverter;
@@ -22,6 +23,20 @@ class InputConverter extends AnnotationConverter
     use TransConverter;
     use ValidatorConverter;
     use RulesConverter;
+
+    /**
+     * @param $value
+     *
+     * @return bool
+     */
+    protected function hide($value)
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        return false;
+    }
 
     /**
      * @param $value

@@ -12,10 +12,11 @@
         leave-active-class="animated flipOutY"
       >
         <a-form-item
+          v-if="{{ item.hide ? 'false' : 'true' }}"
+          v-show="filterDisplay('{{ key }}')"
           label="{{ filter.showLabel ? item.label : null }}"
           class="bsw-filter-item"
           :style="{ width: '{{ item.width }}' }"
-          v-show="filterDisplay('{{ key }}')"
           {% if item.type is iterable %}
             class="bsw-form-iterable"
           {% else %}

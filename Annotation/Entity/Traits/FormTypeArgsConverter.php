@@ -29,6 +29,9 @@ trait FormTypeArgsConverter
 
         $form = $this->item->type;
         foreach ($value as $key => $val) {
+            if (is_int($key)) {
+                [$key, $val] = [$val, null];
+            }
             $fn = 'set' . Helper::underToCamel($key, false);
             if (!method_exists($form, $fn)) {
                 $this->exception(

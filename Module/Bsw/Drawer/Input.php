@@ -111,4 +111,9 @@ class Input extends ArgsInput
      * @var array
      */
     public $bodyStyle = [];
+
+    /**
+     * @var string
+     */
+    public $drawerClsName = 'bsw-align-right';
 }
