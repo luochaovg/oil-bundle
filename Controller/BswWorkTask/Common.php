@@ -43,16 +43,20 @@ trait Common
     }
 
     /**
+     * @param bool $leader
+     *
      * @return array
      * @throws
      */
-    protected function weightTypeArgs(): array
+    protected function weightTypeArgs(bool $leader): array
     {
-        $weekendDays = floor($this->cnf->work_lifecycle_max_day / 7) * 2;
-        $workDays = $this->cnf->work_lifecycle_max_day - $weekendDays;
+        $maxDay = $leader ? $this->cnf->work_lifecycle_max_day_by_leader : $this->cnf->work_lifecycle_max_day;
+
+        $weekendDays = floor($maxDay / 7) * 2;
+        $workDays = $maxDay - $weekendDays;
         $maxHours = ceil($workDays * $this->cnf->work_lifecycle_day_hours);
 
-        if ($maxHours > $max = 100) {
+        if ($maxHours > $max = 176) { // 22 work days in month
             $maxHours = $max;
         }
 

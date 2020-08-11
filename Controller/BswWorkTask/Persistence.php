@@ -32,21 +32,35 @@ trait Persistence
      */
     public function persistenceAnnotation(Arguments $args): array
     {
+        [$team, $leader] = $this->workTaskTeam();
+
         if ($args->id && !$args->persistence) {
             [$dateStart, $timeStart] = explode(' ', date(Abs::FMT_FULL, $args->record['startTime']));
             [$dateEnd, $timeEnd] = explode(' ', date(Abs::FMT_FULL, $args->record['endTime']));
         }
 
-        if (!isset($timeStart) || !isset($timeEnd)) {
+        if (!isset($timeStart)) {
             [$hour, $minute] = explode(' ', date('H i', strtotime('+20 minutes')));
             $minute = floor($minute / 10) * 10;
             $timeStart = "{$hour}:{$minute}:00";
+        }
+
+        if (!isset($timeEnd)) {
             $timeEnd = '18:00:00';
         }
 
+        /**
+         * @param string $label
+         *
+         * @return array
+         */
+        $required = function (string $label): array {
+            return [$this->formRuleRequired($this->messageLang($label))];
+        };
+
         return [
             'title'           => ['label' => 'Mission title'],
-            'weight'          => ['typeArgs' => $this->weightTypeArgs()],
+            'weight'          => ['typeArgs' => $this->weightTypeArgs($leader)],
             'lifecycle_start' => [
                 'type'     => Group::class,
                 'sort'     => 3.1,
@@ -57,14 +71,14 @@ trait Persistence
                             ->setKey('day')
                             ->setPlaceholder('Start date')
                             ->setValue($dateStart ?? null)
-                            ->setFormRules([$this->formRuleRequired($this->messageLang('Select start date please'))]),
+                            ->setFormRules($required('Select start date please')),
                         (new Time())
                             ->setKey('time')
                             ->setPlaceholder('Start time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
                             ->setValue($timeStart)
-                            ->setFormRules([$this->formRuleRequired($this->messageLang('Select start time please'))]),
+                            ->setFormRules($required('Select start time please')),
                     ],
                 ],
             ],
@@ -78,14 +92,14 @@ trait Persistence
                             ->setKey('day')
                             ->setPlaceholder('End date')
                             ->setValue($dateEnd ?? null)
-                            ->setFormRules([$this->formRuleRequired($this->messageLang('Select end date please'))]),
+                            ->setFormRules($required('Select end date please')),
                         (new Time())
                             ->setKey('time')
                             ->setPlaceholder('End time')
                             ->setMinuteStep(10)
                             ->setSecondStep(60)
                             ->setValue($timeEnd)
-                            ->setFormRules([$this->formRuleRequired($this->messageLang('Select end time please'))]),
+                            ->setFormRules($required('Select end time please')),
                     ],
                 ],
             ],
@@ -115,15 +129,14 @@ trait Persistence
             return new Message('Start datetime should lte end');
         }
 
+        [$team, $leader, $leaderId] = $this->workTaskTeamAndLeader();
         if ($args->submit['type'] == 1) {
             $days = ($endTime - $startTime) / Abs::TIME_DAY;
-            if ($days > $this->cnf->work_lifecycle_max_day) {
-                return (new Message())
-                    ->setMessage('Time span less than {{ day }} days')
-                    ->setArgs(['{{ day }}' => $this->cnf->work_lifecycle_max_day]);
+            $maxDay = $leader ? $this->cnf->work_lifecycle_max_day_by_leader : $this->cnf->work_lifecycle_max_day;
+            if ($days > $maxDay) {
+                return (new Message('Time span less than {{ day }} days'))->setArgs(['{{ day }}' => $maxDay]);
             }
         } else {
-            [$team, $leader, $leaderId] = $this->workTaskTeamAndLeader();
             $args->submit['userId'] = $leaderId;
             $args->submit['weight'] = 0;
         }

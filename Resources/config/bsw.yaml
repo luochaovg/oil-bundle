@@ -130,6 +130,7 @@ parameters:
         host_file: http://file.bsw-antd.com
         third_message_key: bsw_third_message
         work_lifecycle_max_day: 14
+        work_lifecycle_max_day_by_leader: 30
         work_lifecycle_day_hours: 8
 
         cache_enabled: true
