@@ -20,12 +20,14 @@ class Timestamp extends Hook
             return null;
         }
 
-        if (empty($value)) {
+        if ($value == 0) {
             $zero = trim("{$scene}_zero", '_');
             if (!empty($args[$zero])) { // default value
                 return $args[$zero];
             }
+        }
 
+        if (empty($value)) {
             $empty = trim("{$scene}_empty", '_');
             if (!empty($args[$empty])) { // default timestamp
                 $value = $args[$empty];
