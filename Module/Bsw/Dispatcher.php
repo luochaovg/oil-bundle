@@ -30,11 +30,12 @@ class Dispatcher
      *
      * @param string $moduleClass
      * @param array  $inputArgs
+     * @param array  $extraArgs
      *
      * @return array
      * @throws
      */
-    public function execute(string $moduleClass, array $inputArgs): array
+    public function execute(string $moduleClass, array $inputArgs, array $extraArgs = []): array
     {
         if (!Helper::extendClass($moduleClass, Bsw::class)) {
             throw new ModuleException("Class {$moduleClass} should extend " . Bsw::class);
@@ -44,12 +45,13 @@ class Dispatcher
          * @var Bsw $bsw
          */
         $bsw = new $moduleClass($this->web);
+        $inputArgsHandling = array_merge($inputArgs, $extraArgs);
 
-        if (($inputArgs['ajax'] ?? false) && !$bsw->allowAjax()) {
+        if (($inputArgsHandling['ajax'] ?? false) && !$bsw->allowAjax()) {
             return [null, null, $inputArgs, []];
         }
 
-        if (($inputArgs['iframe'] ?? false) && !$bsw->allowIframe()) {
+        if (($inputArgsHandling['iframe'] ?? false) && !$bsw->allowIframe()) {
             return [null, null, $inputArgs, []];
         }
 
@@ -63,7 +65,7 @@ class Dispatcher
         $ref = new Reflection();
 
         foreach ($input as $attribute => $value) {
-            $input->{$attribute} = $inputArgs[$attribute] ?? $value;
+            $input->{$attribute} = $inputArgsHandling[$attribute] ?? $value;
             if ($ref->propertyExistsSelf($cls, $attribute)) {
                 $inputReal[$attribute] = $input->{$attribute};
             }

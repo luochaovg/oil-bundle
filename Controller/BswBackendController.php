@@ -11,7 +11,6 @@ use Leon\BswBundle\Entity\BswAdminRole;
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
-use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Bsw as BswModule;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
@@ -315,6 +314,32 @@ class BswBackendController extends BswWebController
     }
 
     /**
+     * Module list handler
+     *
+     * @param array $moduleList
+     *
+     * @return array
+     * @throws
+     */
+    protected function moduleListHandler(array $moduleList): array
+    {
+        foreach ($moduleList as $module => $extraArgs) {
+            if (!is_array($extraArgs)) {
+                throw new ModuleException('The extra args must be array for ' . $module);
+            }
+            if (!isset($extraArgs['sort']) || !is_numeric($extraArgs['sort'])) {
+                throw new ModuleException('The extra args must include `sort` and be integer type for ' . $module);
+            }
+        }
+
+        return [
+            new BswModule\Dispatcher($this),
+            $this->displayArgsScaffold(),
+            Helper::sortArray($moduleList, 'sort'),
+        ];
+    }
+
+    /**
      * Render module by simple mode
      *
      * @param array $moduleList
@@ -326,31 +351,20 @@ class BswBackendController extends BswWebController
      */
     protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
     {
+        if (empty($logicArgs['scene'])) {
+            $logicArgs['scene'] = Abs::TAG_UNKNOWN;
+        }
+
+        [$dispatcher, $inputArgs, $moduleList] = $this->moduleListHandler($moduleList);
         $showArgs = ['logic' => $logicArgs];
-        $inputArgs = $this->displayArgsScaffold();
 
-        $extraBswArgs = [
-            'expr'       => $this->expr,
-            'translator' => $this->translator,
-            'logger'     => $this->logger,
-        ];
-
-        $bswDispatcher = new BswModule\Dispatcher($this);
+        /**
+         * @var BswModule\Dispatcher $dispatcher
+         */
         foreach ($moduleList as $module => $extraArgs) {
 
-            if (is_numeric($module)) {
-                [$module, $extraArgs] = [$extraArgs, []];
-            }
-
-            /**
-             * validator extra
-             */
-            if (!is_array($extraArgs)) {
-                throw new ModuleException('The extra args must be array for ' . $module);
-            }
-
-            $inputArgs = array_merge($inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $input, $output] = $bswDispatcher->execute($module, $inputArgs);
+            $inputArgs = array_merge($inputArgs, $logicArgs);
+            [$name, $twig, $input, $output] = $dispatcher->execute($module, $inputArgs, $extraArgs);
 
             $inputArgs['moduleArgs'][$name]['input'] = $input;
             $inputArgs['moduleArgs'][$name]['output'] = $output;
@@ -388,35 +402,20 @@ class BswBackendController extends BswWebController
         }
 
         $ajaxShowArgs = [];
-        $inputArgs = $this->displayArgsScaffold();
+        [$dispatcher, $inputArgs, $moduleList] = $this->moduleListHandler($moduleList);
+
         $globalLogic = (array)Helper::dig($inputArgs, 'logic');
         $showArgs = ['logic' => array_merge($globalLogic, $logicArgs)];
-
-        $extraBswArgs = [
-            'expr'       => $this->expr,
-            'translator' => $this->translator,
-            'logger'     => $this->logger,
-        ];
-
-        $bswDispatcher = new BswModule\Dispatcher($this);
-        $moduleList = Helper::sortArray($moduleList, 'sort');
         $logic = &$showArgs['logic'];
 
+        /**
+         * @var BswModule\Dispatcher $dispatcher
+         */
         foreach ($moduleList as $module => $extraArgs) {
-            /**
-             * validator extra
-             */
-            if (!is_array($extraArgs)) {
-                throw new ModuleException('The extra args must be array for ' . $module);
-            }
 
             $extraArgs = array_merge($extraArgs, (array)($globalLogic[$module] ?? []));
-
-            /**
-             * @var Bsw $bsw
-             */
-            $inputArgs = array_merge($globalLogic, $inputArgs, $logicArgs, $extraBswArgs, $extraArgs);
-            [$name, $twig, $inputArgs, $output] = $bswDispatcher->execute($module, $inputArgs);
+            $inputArgs = array_merge($globalLogic, $inputArgs, $logicArgs);
+            [$name, $twig, $inputArgs, $output] = $dispatcher->execute($module, $inputArgs, $extraArgs);
 
             /**
              * @var BswModule\Message $message
