@@ -68,6 +68,21 @@ class BswBackendController extends BswWebController
     protected $plaintextSensitive = false;
 
     /**
+     * @var string
+     */
+    protected $twigPreview = 'layout/preview.html';
+
+    /**
+     * @var string
+     */
+    protected $twigPersistence = 'layout/persistence.html';
+
+    /**
+     * @var string
+     */
+    protected $twigChart = 'layout/chart.html';
+
+    /**
      * @var array
      */
     protected $currentSrcCss = [
@@ -548,7 +563,7 @@ class BswBackendController extends BswWebController
             ]
         );
 
-        return $this->showModule($moduleList, $view ?? 'layout/preview.html', $args);
+        return $this->showModule($moduleList, $view ?? $this->twigPreview, $args);
     }
 
     /**
@@ -574,7 +589,7 @@ class BswBackendController extends BswWebController
             [BswModule\Persistence\Module::class => ['sort' => Abs::MODULE_PERSISTENCE_SORT]]
         );
 
-        return $this->showModule($moduleList, $view ?? 'layout/persistence.html', $args);
+        return $this->showModule($moduleList, $view ?? $this->twigPersistence, $args);
     }
 
     /**
@@ -599,7 +614,7 @@ class BswBackendController extends BswWebController
             ]
         );
 
-        return $this->showModule($moduleList, $view ?? 'layout/chart.html', $args);
+        return $this->showModule($moduleList, $view ?? $this->twigChart, $args);
     }
 
     /**
