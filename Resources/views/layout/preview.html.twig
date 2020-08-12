@@ -14,6 +14,7 @@
   {% block preview %}
     <div class="bsw-preview">
       <a-table
+        :key="`{{ scaffold.uuid }}-${f5JustNow}`"
         :columns="previewColumns"
         :data-source="previewList"
         :bordered="{{ preview.border ? 'true' : 'false' }}"

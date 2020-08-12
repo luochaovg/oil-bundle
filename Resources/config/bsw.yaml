@@ -254,8 +254,8 @@ parameters:
 
     bsw_crumbs_keyword_to_icon_map:
         home: b:icon-home
-        preview: b:icon-caidan
-        persistence: b:icon-bianji1
+        preview: b:icon-5
+        persistence: b:icon-qianming
         away: b:icon-delete1
         sort: a:icon-pin
         export: b:icon-export4
