@@ -1890,10 +1890,9 @@ var FoundationAntD = function (_FoundationTools) {
 
             var width = d.body.clientWidth;
             var height = d.body.clientHeight;
-
             if (!honest) {
-                width *= width < 1285 ? 1 : .7;
-                height *= height < 666 ? .85 : .75;
+                width *= width < 1285 ? .95 : .65;
+                height *= height < 666 ? .95 : .75;
             }
 
             return {
@@ -2353,7 +2352,9 @@ var FoundationAntD = function (_FoundationTools) {
                 that.showModal(options);
                 v.$nextTick(function () {
                     var iframe = $('.bsw-iframe-' + mode);
-                    iframe.height(data.height || size.height);
+                    var headerHeight = options.title ? 55 : 0;
+                    var footerHeight = options.footer ? 53 : 0;
+                    iframe.height(data.height || size.height - headerHeight - footerHeight);
                     iframe.parents('div.ant-modal-body').css({ margin: 0, padding: 0 });
                 });
             }
@@ -2885,13 +2886,16 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'dispatcherByBswDataInParent',
         value: function dispatcherByBswDataInParent(data, element) {
             var that = this;
-            this.modalOnCancel();
-            this.drawerOnCancel();
+            var d = data.data;
+            var closeModal = typeof d.closePrevModal === 'undefined' ? true : d.closePrevModal;
+            var closeDrawer = typeof d.closePrevDrawer === 'undefined' ? true : d.closePrevDrawer;
+            closeModal && this.modalOnCancel();
+            closeDrawer && this.drawerOnCancel();
             that.cnf.v.$nextTick(function () {
-                if (typeof data.data.location !== 'undefined') {
-                    data.data.location = that.unsetParams(['iframe'], data.data.location);
+                if (typeof d.location !== 'undefined') {
+                    d.location = that.unsetParams(['iframe'], d.location);
                 }
-                that.dispatcherByBswData(data.data, element);
+                that.dispatcherByBswData(d, element);
             });
         }
 
@@ -2909,8 +2913,10 @@ var FoundationAntD = function (_FoundationTools) {
             var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
 
             var v = this.cnf.v;
-            this.modalOnCancel();
-            this.drawerOnCancel();
+            var closeModal = typeof data.closePrevModal === 'undefined' ? true : data.closePrevModal;
+            var closeDrawer = typeof data.closePrevDrawer === 'undefined' ? true : data.closePrevDrawer;
+            closeModal && this.modalOnCancel();
+            closeDrawer && this.drawerOnCancel();
             v.$nextTick(function () {
                 if (v[form] && data.repair) {
                     v[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
@@ -2944,12 +2950,15 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'handleResponseInParent',
         value: function handleResponseInParent(data, element) {
             var that = this;
-            if (data.response.classify === 'success') {
-                that.modalOnCancel();
-                that.drawerOnCancel();
+            var res = data.response;
+            if (res.classify === 'success') {
+                var closeModal = typeof res.sets.closePrevModal === 'undefined' ? true : res.sets.closePrevModal;
+                var closeDrawer = typeof res.sets.closePrevDrawer === 'undefined' ? true : res.sets.closePrevDrawer;
+                closeModal && that.modalOnCancel();
+                closeDrawer && that.drawerOnCancel();
             }
             that.cnf.v.$nextTick(function () {
-                that.response(data.response).catch(function (reason) {
+                that.response(res).catch(function (reason) {
                     console.warn(reason);
                 });
             });

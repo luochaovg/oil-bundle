@@ -25,7 +25,7 @@ class Input extends ArgsInput
     /**
      * @var int
      */
-    public $tabBarGutter = 8;
+    public $tabBarGutter = 6;
 
     /**
      * @var string
@@ -35,5 +35,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $tabsClsName = 'bsw-align-center';
+    public $clsName = 'bsw-align-center';
 }

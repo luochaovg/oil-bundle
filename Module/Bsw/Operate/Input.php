@@ -10,12 +10,12 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $operatesSize = Abs::SIZE_DEFAULT;
+    public $size = Abs::SIZE_DEFAULT;
 
     /**
      * @var string
      */
-    public $operatesSizeInMobile = Abs::SIZE_DEFAULT;
+    public $sizeInMobile = Abs::SIZE_DEFAULT;
 
     /**
      * @var string

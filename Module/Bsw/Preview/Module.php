@@ -1044,7 +1044,8 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
+
         $this->isExport = $this->input->ajax && ($this->web->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT);
 
         /**
@@ -1098,20 +1099,9 @@ class Module extends Bsw
 
         $output->choiceFixed = $this->input->mobile ? false : $this->input->choiceFixed;
         $output->border = $this->input->mobile ? $this->input->borderInMobile : $this->input->border;
-        $output->childrenName = $this->input->childrenName;
-        $output->expandRows = $this->input->expandRows;
-        $output->expandRowByClick = $this->input->expandRowByClick;
-        $output->expandIconColumnIndex = $this->input->expandIconColumnIndex;
-        $output->indentSize = $this->input->indentSize;
-        $output->scroll = $this->input->scroll;
         $output->size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions);
-        $output->paginationClsName = $this->input->paginationClsName;
-        $output->dynamic = $this->input->dynamic;
-        $output->rowClsNameMethod = $this->input->rowClsNameMethod;
-        $output->header = $this->input->header;
-        $output->footer = $this->input->footer;
 
         $output = $this->caller(
             $this->method(),

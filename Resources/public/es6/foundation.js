@@ -1462,10 +1462,9 @@ class FoundationAntD extends FoundationTools {
     popupCosySize(honest = false, d = document) {
         let width = d.body.clientWidth;
         let height = d.body.clientHeight;
-
         if (!honest) {
-            width *= (width < 1285 ? 1 : .7);
-            height *= (height < 666 ? .85 : .75);
+            width *= (width < 1285 ? .95 : .65);
+            height *= (height < 666 ? .95 : .75);
         }
 
         return {
@@ -1831,7 +1830,9 @@ class FoundationAntD extends FoundationTools {
             that.showModal(options);
             v.$nextTick(function () {
                 let iframe = $(`.bsw-iframe-${mode}`);
-                iframe.height(data.height || size.height);
+                let headerHeight = options.title ? 55 : 0;
+                let footerHeight = options.footer ? 53 : 0;
+                iframe.height(data.height || (size.height - headerHeight - footerHeight));
                 iframe.parents('div.ant-modal-body').css({margin: 0, padding: 0});
             });
         }
@@ -2276,13 +2277,16 @@ class FoundationAntD extends FoundationTools {
      */
     dispatcherByBswDataInParent(data, element) {
         let that = this;
-        this.modalOnCancel();
-        this.drawerOnCancel();
+        let d = data.data;
+        let closeModal = (typeof d.closePrevModal === 'undefined') ? true : d.closePrevModal;
+        let closeDrawer = (typeof d.closePrevDrawer === 'undefined') ? true : d.closePrevDrawer;
+        closeModal && this.modalOnCancel();
+        closeDrawer && this.drawerOnCancel();
         that.cnf.v.$nextTick(function () {
-            if (typeof data.data.location !== 'undefined') {
-                data.data.location = that.unsetParams(['iframe'], data.data.location);
+            if (typeof d.location !== 'undefined') {
+                d.location = that.unsetParams(['iframe'], d.location);
             }
-            that.dispatcherByBswData(data.data, element);
+            that.dispatcherByBswData(d, element);
         });
     }
 
@@ -2295,8 +2299,10 @@ class FoundationAntD extends FoundationTools {
      */
     fillParentFormInParent(data, element, form = 'persistenceForm') {
         let v = this.cnf.v;
-        this.modalOnCancel();
-        this.drawerOnCancel();
+        let closeModal = (typeof data.closePrevModal === 'undefined') ? true : data.closePrevModal;
+        let closeDrawer = (typeof data.closePrevDrawer === 'undefined') ? true : data.closePrevDrawer;
+        closeModal && this.modalOnCancel();
+        closeDrawer && this.drawerOnCancel();
         v.$nextTick(function () {
             if (v[form] && data.repair) {
                 v[form].setFieldsValue({[data.repair]: data.ids});
@@ -2324,12 +2330,15 @@ class FoundationAntD extends FoundationTools {
      */
     handleResponseInParent(data, element) {
         let that = this;
-        if (data.response.classify === 'success') {
-            that.modalOnCancel();
-            that.drawerOnCancel();
+        let res = data.response;
+        if (res.classify === 'success') {
+            let closeModal = (typeof res.sets.closePrevModal === 'undefined') ? true : res.sets.closePrevModal;
+            let closeDrawer = (typeof res.sets.closePrevDrawer === 'undefined') ? true : res.sets.closePrevDrawer;
+            closeModal && that.modalOnCancel();
+            closeDrawer && that.drawerOnCancel();
         }
         that.cnf.v.$nextTick(function () {
-            that.response(data.response).catch(reason => {
+            that.response(res).catch(reason => {
                 console.warn(reason);
             });
         });

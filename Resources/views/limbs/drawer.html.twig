@@ -24,7 +24,7 @@
   <div
     v-if="drawer.footer"
     :data-bsw.prop="{ok: drawer.ok, cancel: drawer.cancel, extra: drawer.extra}"
-    class="{{ ['bsw-footer-bar', drawer.drawerClsName]|joinClass }}"
+    class="{{ ['bsw-footer-bar', drawer.clsName]|joinClass }}"
   >
     <a-button
       v-if="typeof drawer.cancelShow !== 'undefined' ? drawer.cancelShow : {{ drawer.cancelShow ? 'true' : 'false' }}"

@@ -488,7 +488,7 @@ class Module extends Bsw
      */
     protected function getSize(): string
     {
-        return $this->input->mobile ? $this->input->formSizeInMobile : $this->input->formSize;
+        return $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
     }
 
     /**
@@ -735,7 +735,7 @@ class Module extends Bsw
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
-            if ($this->input->iframe ? $this->input->formOperatesBlockInIFrame : $this->input->formOperatesBlock) {
+            if ($this->input->iframe ? $this->input->operatesBlockInIFrame : $this->input->operatesBlock) {
                 $operate->setBlock(true);
             }
 
@@ -1098,7 +1098,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
 
         /**
          * handle annotation
@@ -1217,7 +1217,6 @@ class Module extends Bsw
             }
         }
 
-        $output->id = $this->input->id;
         $output->record = $record;
         $output->operates = $operates;
         $output->formatJson = Helper::jsonFlexible($format);

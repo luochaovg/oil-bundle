@@ -68,7 +68,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
 
         // links
         $links = $this->caller($this->method, self::TABS_LINKS, Abs::T_ARRAY, [], $this->arguments($this->input->args));
@@ -87,13 +87,6 @@ class Module extends Bsw
             $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Tabs links'));
             array_push($output->links, $item);
         }
-
-        $output->fit = $this->input->fit;
-        $output->size = $this->input->size;
-        $output->type = $this->input->type;
-        $output->tabBarGutter = $this->input->tabBarGutter;
-        $output->position = $this->input->position;
-        $output->tabsClsName = $this->input->tabsClsName;
 
         $output = $this->caller(
             $this->method(),

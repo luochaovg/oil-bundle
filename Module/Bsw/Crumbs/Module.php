@@ -66,7 +66,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
         $this->web->crumbs = $this->web->crumbsBuilder(
             $this->input->route,
             array_merge($this->input->masterMenuDetail, $this->input->slaveMenuDetail)

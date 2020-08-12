@@ -366,7 +366,7 @@ class Module extends Bsw
      */
     protected function getSize(): string
     {
-        return $this->input->mobile ? $this->input->filterFormSizeInMobile : $this->input->filterFormSize;
+        return $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
     }
 
     /**
@@ -683,7 +683,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
 
         /**
          * handle annotation
@@ -702,16 +702,11 @@ class Module extends Bsw
         );
 
         [$output->filter, $output->operates, $format] = $this->handleFilterData($filter);
-        $output->showLabel = $this->input->showLabel;
         $output->condition = $condition;
         $output->formatJson = Helper::jsonFlexible($format);
 
         $this->handleShowList($filterAnnotation, $output);
         $this->handleFilter($output);
-
-        $output->columnPx = $this->input->columnPx;
-        $output->textShow = $this->input->textShow;
-        $output->textHide = $this->input->textHide;
         $output->size = $this->getSize();
 
         $output = $this->caller(

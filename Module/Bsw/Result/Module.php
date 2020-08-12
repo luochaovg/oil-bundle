@@ -13,11 +13,11 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 class Module extends Bsw
 {
     /**
-     * @return bool
+     * @return bool|array
      */
-    public function inheritArgs(): bool
+    public function inheritExcludeArgs()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -66,26 +66,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
-
-        $output->title = $this->input->title;
-        $output->subTitle = $this->input->subTitle;
-        $output->closable = $this->input->closable;
-        $output->animate = $this->input->animate;
-        $output->zIndex = $this->input->zIndex;
-        $output->width = $this->input->width;
-        $output->wrapClsName = $this->input->wrapClsName;
-        $output->keyboard = $this->input->keyboard;
-        $output->mask = $this->input->mask;
-        $output->maskClosable = $this->input->maskClosable;
-        $output->maskAnimate = $this->input->maskAnimate;
-        $output->centered = $this->input->centered;
-        $output->status = $this->input->status;
-        $output->okText = $this->input->okText;
-        $output->okShow = $this->input->okShow;
-        $output->okType = $this->input->okType;
-        $output->cancelText = $this->input->cancelText;
-        $output->cancelShow = $this->input->cancelShow;
+        $output = new Output($this->input);
 
         $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
         $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);

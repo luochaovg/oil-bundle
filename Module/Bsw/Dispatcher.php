@@ -85,8 +85,13 @@ class Dispatcher
         $inputArgs['moduleArgs'][$name]['input'] = $input;
         $inputArgs['moduleArgs'][$name]['output'] = $output;
 
-        if ($bsw->inheritArgs()) {
+        $exclude = $bsw->inheritExcludeArgs();
+        if ($exclude === false) {
             $inputArgs = array_merge($inputArgs, $output);
+        } elseif (is_array($exclude)) {
+            $outputHanding = $output;
+            Helper::arrayPop($outputHanding, $exclude);
+            $inputArgs = array_merge($inputArgs, $outputHanding);
         }
 
         return [$name, $bsw->twig(), $inputArgs, $output];

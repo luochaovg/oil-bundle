@@ -87,7 +87,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
 
         // Menu
         $menu = $this->caller($this->method(), self::MENU, Abs::T_ARRAY, [], $this->arguments($this->input->args));

@@ -55,10 +55,10 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $filterFormSize = Abs::SIZE_DEFAULT;
+    public $size = Abs::SIZE_DEFAULT;
 
     /**
      * @var string
      */
-    public $filterFormSizeInMobile = Abs::SIZE_DEFAULT;
+    public $sizeInMobile = Abs::SIZE_DEFAULT;
 }

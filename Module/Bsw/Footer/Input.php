@@ -9,5 +9,5 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $footerClsName = 'bsw-align-center';
+    public $clsName = 'bsw-align-center';
 }

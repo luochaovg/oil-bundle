@@ -68,7 +68,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
 
         // items
         $arguments = $this->arguments(

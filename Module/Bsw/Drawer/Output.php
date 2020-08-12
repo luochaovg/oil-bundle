@@ -109,5 +109,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $drawerClsName;
+    public $clsName;
 }

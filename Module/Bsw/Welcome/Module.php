@@ -72,7 +72,8 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
+
         $output->speech = $this->caller(
             $this->method,
             self::WELCOME,

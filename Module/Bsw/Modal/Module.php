@@ -13,11 +13,11 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 class Module extends Bsw
 {
     /**
-     * @return bool
+     * @return bool|array
      */
-    public function inheritArgs(): bool
+    public function inheritExcludeArgs()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -66,22 +66,7 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
-
-        $output->title = $this->input->title;
-        $output->closable = $this->input->closable;
-        $output->animate = $this->input->animate;
-        $output->centered = $this->input->centered;
-        $output->width = $this->input->width;
-        $output->wrapClsName = $this->input->wrapClsName;
-        $output->keyboard = $this->input->keyboard;
-        $output->mask = $this->input->mask;
-        $output->maskClosable = $this->input->maskClosable;
-        $output->maskAnimate = $this->input->maskAnimate;
-        $output->okText = $this->input->okText;
-        $output->cancelText = $this->input->cancelText;
-        $output->okType = $this->input->okType;
-        $output->zIndex = $this->input->zIndex;
+        $output = new Output($this->input);
 
         $output->bodyStyleJson = Helper::jsonFlexible($this->input->bodyStyle);
         $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);

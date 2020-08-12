@@ -12,8 +12,7 @@
         leave-active-class="animated flipOutY"
       >
         <a-form-item
-          v-if="{{ item.hide ? 'false' : 'true' }}"
-          v-show="filterDisplay('{{ key }}')"
+          v-show="{{ item.hide ? 'false' : 'true' }} && filterDisplay('{{ key }}')"
           label="{{ filter.showLabel ? item.label : null }}"
           class="bsw-filter-item"
           :style="{ width: '{{ item.width }}' }"

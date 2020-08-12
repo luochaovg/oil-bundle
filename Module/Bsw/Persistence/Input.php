@@ -61,12 +61,12 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $formSize = Abs::SIZE_LARGE;
+    public $size = Abs::SIZE_LARGE;
 
     /**
      * @var string
      */
-    public $formSizeInMobile = Abs::SIZE_LARGE;
+    public $sizeInMobile = Abs::SIZE_LARGE;
 
     /**
      * @var array
@@ -81,10 +81,10 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
-    public $formOperatesBlock = false;
+    public $operatesBlock = false;
 
     /**
      * @var bool
      */
-    public $formOperatesBlockInIFrame = true;
+    public $operatesBlockInIFrame = true;
 }

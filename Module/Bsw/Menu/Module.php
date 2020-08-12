@@ -224,7 +224,8 @@ class Module extends Bsw
      */
     public function logic(): ArgsOutput
     {
-        $output = new Output();
+        $output = new Output($this->input);
+
         [
             $output->masterMenu,
             $output->slaveMenu,

@@ -96,11 +96,18 @@ abstract class Bsw
     }
 
     /**
-     * @return bool
+     * @return bool|array
      */
-    public function inheritArgs(): bool
+    public function inheritExcludeArgs()
     {
-        return true;
+        return [
+            'clsName',
+            'clsNameInIFrame',
+            'clsNameInMobile',
+            'size',
+            'sizeInIFrame',
+            'sizeInMobile',
+        ];
     }
 
     /**

@@ -40,5 +40,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $tabsClsName;
+    public $clsName;
 }

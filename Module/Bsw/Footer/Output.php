@@ -9,5 +9,5 @@ class Output extends ArgsOutput
     /**
      * @var string
      */
-    public $footerClsName;
+    public $clsName;
 }
