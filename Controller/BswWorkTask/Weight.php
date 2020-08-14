@@ -26,11 +26,13 @@ trait Weight
      */
     public function weightAnnotationOnly(): array
     {
+        [$team, $leader] = $this->workTaskTeam();
+
         return [
             'id'     => true,
             'weight' => [
                 'label'    => Helper::cnSpace(),
-                'typeArgs' => $this->weightTypeArgs(),
+                'typeArgs' => $this->weightTypeArgs($leader),
                 'style'    => ['margin-bottom' => '48px'],
             ],
         ];
