@@ -65,7 +65,9 @@ class Dispatcher
         $ref = new Reflection();
 
         foreach ($input as $attribute => $value) {
-            $input->{$attribute} = $inputArgsHandling[$attribute] ?? $value;
+            if (array_key_exists($attribute, $inputArgsHandling)) {
+                $input->{$attribute} = $inputArgsHandling[$attribute];
+            }
             if ($ref->propertyExistsSelf($cls, $attribute)) {
                 $inputReal[$attribute] = $input->{$attribute};
             }

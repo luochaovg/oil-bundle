@@ -25,4 +25,14 @@ class Input extends ArgsInput
      * @var array
      */
     public $i18nArgs = [];
+
+    /**
+     * @var string
+     */
+    public $nextRoute = '';
+
+    /**
+     * @var array
+     */
+    public $sets = [];
 }

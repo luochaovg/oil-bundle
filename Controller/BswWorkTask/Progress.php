@@ -30,17 +30,20 @@ trait Progress
     }
 
     /**
+     * @param Arguments $args
+     *
      * @return array
      */
-    public function progressAnnotationOnly(): array
+    public function progressEnumExtraWhatTodo(Arguments $args)
     {
-        [$team, $leader] = $this->workTaskTeam();
+        [$team] = $this->workTaskTeam();
 
         /**
          * @var BswAdminUserRepository $adminRepo
          */
         $adminRepo = $this->repo(BswAdminUser::class);
-        $member = $adminRepo->kvp(
+
+        return $adminRepo->kvp(
             ['name'],
             'telegramId',
             null,
@@ -55,7 +58,13 @@ trait Progress
                 ],
             ]
         );
+    }
 
+    /**
+     * @return array
+     */
+    public function progressAnnotationOnly(): array
+    {
         return [
             'id'          => true,
             'donePercent' => [
@@ -66,7 +75,8 @@ trait Progress
             ],
             'whatToDo'    => [
                 'type'      => Mentions::class,
-                'typeArgs'  => ['rows' => 6, 'enum' => $member],
+                'enumExtra' => true,
+                'typeArgs'  => ['rows' => 6],
                 'formRules' => [$this->formRuleRequired()],
             ],
             'state'       => ['show' => false],

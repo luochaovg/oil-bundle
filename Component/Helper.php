@@ -714,26 +714,73 @@ class Helper
      * Get the tree by array
      *
      * @param array  $items
-     * @param string $id
-     * @param string $pid
-     * @param string $subName
+     * @param string $pk
+     * @param string $parentKey
+     * @param string $childrenKey
      *
      * @return array
      */
-    public static function tree(array $items, string $id = 'id', string $pid = 'pid', string $subName = 'sub'): array
+    public static function tree(
+        array $items,
+        string $pk = Abs::PK,
+        string $parentKey = Abs::TAG_PARENT,
+        string $childrenKey = Abs::TAG_CHILDREN
+    ): array {
+        if (empty($items)) {
+            return [];
+        }
+
+        $tree = [];
+        $items = self::arrayColumn($items, true, $pk);
+
+        foreach ($items as $item) {
+            if (!empty($items[$item[$parentKey]])) {
+                $items[$item[$parentKey]][$childrenKey][] = &$items[$item[$pk]];
+            } else {
+                $tree[] = &$items[$item[$pk]];
+            }
+        }
+
+        return $tree;
+    }
+
+    /**
+     * Get the desc tree by array
+     *
+     * @param array  $items
+     * @param string $pk
+     * @param string $parentKey
+     *
+     * @return array
+     */
+    public static function descTree(array $items, string $pk = Abs::PK, string $parentKey = Abs::TAG_PARENT): array
     {
         if (empty($items)) {
             return [];
         }
 
-        $items = self::arrayColumn($items, true, $id);
         $tree = [];
-        foreach ($items as $item) {
-            if (!empty($items[$item[$pid]])) {
-                $items[$item[$pid]][$subName][] = &$items[$item[$id]];
-            } else {
-                $tree[] = &$items[$item[$id]];
+        $items = self::arrayColumn($items, $parentKey, $pk);
+
+        /**
+         * Get parent
+         *
+         * @param mixed $children
+         * @param array $parent
+         *
+         * @return array
+         */
+        $getParent = function ($children, array $parent = []) use ($items, &$getParent): array {
+            if (is_null($value = $items[$children] ?? null)) {
+                return $parent;
             }
+            array_push($parent, $children);
+
+            return $getParent($value, $parent);
+        };
+
+        foreach ($items as $children => $parent) {
+            $tree[$children] = $getParent($parent);
         }
 
         return $tree;
@@ -1159,18 +1206,56 @@ class Helper
      *
      * @param array $old
      * @param array $new
+     * @param bool  $strict
      *
      * @return array
      */
-    public static function newDifferenceOld(array $old, array $new): array
+    public static function newDifferenceOld(array $old, array $new, bool $strict = true): array
     {
+        if (!$strict) {
+            $old = self::numericValues($old);
+            $new = self::numericValues($new);
+        }
+
+        $old = array_map('serialize', $old);
+        $new = array_map('serialize', $new);
+
         $intersect = array_intersect($new, $old);
-        $add = array_diff($new, $intersect);
-        $del = array_diff($old, $intersect);
+        $add = array_values(array_diff($new, $intersect));
+        $del = array_values(array_diff($old, $intersect));
 
         return [
-            $add,
-            $del,
+            array_map('unserialize', $add),
+            array_map('unserialize', $del),
+        ];
+    }
+
+    /**
+     * New item difference to old with assoc
+     *
+     * @param array $new
+     * @param array $old
+     * @param bool  $strict
+     *
+     * @return array
+     */
+    public static function newDifferenceOldWithAssoc(array $old, array $new, bool $strict = true): array
+    {
+        if (!$strict) {
+            $old = self::numericValues($old);
+            $new = self::numericValues($new);
+        }
+
+        $old = array_map('serialize', $old);
+        $new = array_map('serialize', $new);
+
+        $intersect = array_intersect_assoc($new, $old);
+        $add = array_diff_assoc($new, $intersect);
+        $del = array_diff_assoc($old, $intersect);
+
+        return [
+            array_map('unserialize', $add),
+            array_map('unserialize', $del),
         ];
     }
 
@@ -3410,25 +3495,6 @@ class Helper
         }
 
         return $target;
-    }
-
-    /**
-     * Array diff assoc
-     *
-     * @param mixed ...$target
-     *
-     * @return array
-     */
-    public static function arrayDiffAssoc(...$target): array
-    {
-        foreach ($target as &$item) {
-            $item = array_map('serialize', $item);
-        }
-
-        $diff = array_diff_assoc(...$target);
-        $diff = array_map('unserialize', $diff);
-
-        return $diff;
     }
 
     /**

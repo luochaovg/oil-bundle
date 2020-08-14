@@ -18,8 +18,8 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.formRules }} }]"
 >
-  {% for key, value in form.enum %}
-    <a-mentions-option value="{{ value ~ '!' ~ key }}">{{ value }}</a-mentions-option>
+  {% for value, label in form.enum %}
+    <a-mentions-option value="{{ label ~ '!' ~ value }}">{{ label }}</a-mentions-option>
   {% endfor %}
 </a-mentions>
 

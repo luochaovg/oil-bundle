@@ -142,8 +142,8 @@ trait WebResponse
             $response[$item['key']] = $value;
         }
 
-        $this->logger->debug('Response data as follow', $response);
-        $this->logger->debug("-->> end: $this->route");
+        // $this->logger->debug('Response data as follow', $response);
+        $this->logger->debug("-->> end: {$this->route}");
 
         $this->iNeedCost(Abs::END_REQUEST);
         $this->iNeedLogger(Abs::END_REQUEST);

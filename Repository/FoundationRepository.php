@@ -383,7 +383,6 @@ abstract class FoundationRepository extends SFRepository
         /**
          * @var FoundationEntity $record
          */
-
         return $this->persistence($record, $attributes, $group);
     }
 
@@ -559,7 +558,6 @@ abstract class FoundationRepository extends SFRepository
         /*
          * Create
          */
-
         $model = $this->em()->createQueryBuilder();
 
         $table = $from ?? $this->entity;
@@ -568,7 +566,6 @@ abstract class FoundationRepository extends SFRepository
         /*
          * From
          */
-
         $model->from($table, $alias);
 
         /*

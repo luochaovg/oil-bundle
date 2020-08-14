@@ -405,12 +405,12 @@ trait Foundation
             $key = "{$caller['class']}::{$caller['function']}(" . Helper::jsonStringify($caller['args'] ?? []) . ")";
         }
 
-        $this->logger->debug("Using cache, ({$key})");
+        // $this->logger->debug("Using cache, ({$key})");
         $target = $this->cache->getItem(md5($key));
         $target->expiresAfter($time ?? intval($this->cnf->cache_default_expires ?? 3600));
 
         if (!$target->isHit()) {
-            $this->logger->warning("Cache misses so rebuilding now, ({$key})");
+            // $this->logger->warning("Cache misses so rebuilding now, ({$key})");
             $this->cache->save($target->set($rebuilding()));
         }
 
@@ -1232,8 +1232,12 @@ trait Foundation
      */
     public function enumLang(array $enum, bool $encode = false, array $args = [], string $locale = null)
     {
-        foreach ($enum as &$label) {
-            $label = $this->translator->trans($label, $args, 'enum', $locale);
+        foreach ($enum as $key => $label) {
+            if (is_array($label)) {
+                $enum[$key] = $this->enumLang($label, false, $args, $locale);
+            } elseif (gettype($label) == Abs::T_STRING) {
+                $enum[$key] = $this->translator->trans($label, $args, 'enum', $locale);
+            }
         }
 
         return $encode ? Helper::jsonStringify($enum) : $enum;

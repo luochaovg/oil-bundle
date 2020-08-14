@@ -59,6 +59,11 @@ class Input extends ArgsInput
     public $nextRoute = '';
 
     /**
+     * @var array
+     */
+    public $sets = [];
+
+    /**
      * @var string
      */
     public $size = Abs::SIZE_LARGE;
@@ -67,11 +72,6 @@ class Input extends ArgsInput
      * @var string
      */
     public $sizeInMobile = Abs::SIZE_LARGE;
-
-    /**
-     * @var array
-     */
-    public $sets = [];
 
     /**
      * @var string

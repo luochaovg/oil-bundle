@@ -39,6 +39,8 @@ class Abs
     const HOOKER_FLAG_ACME         = '__acme';
     const HOOKER_FLAG_ENUMS_SUFFIX = '__suffix';
     const HOOKER_FLAG_ENUMS_INFO   = '__info';
+    const RECORD_LOGGER_ADD        = '__add';
+    const RECORD_LOGGER_DEL        = '__del';
     const RECORD_LOGGER_EFFECT     = '__effect';
     const RECORD_LOGGER_EXTRA      = '__extra';
     const RULES_FLAG_HANDLER       = '__args_handler';
@@ -276,6 +278,7 @@ class Abs
     const TAG_TRANS          = 'transactional:';
     const TAG_TRANS_BEFORE   = 'transactional:before';
     const TAG_TRANS_AFTER    = 'transactional:after';
+    const TAG_PARENT         = 'parent';
     const TAG_CHILDREN       = 'children';
     const TAG_SCENE          = 'scene';
     const TAG_SEQUENCE       = 'sequence';

@@ -2174,8 +2174,10 @@ class FoundationAntD extends FoundationTools {
         $(selector).each(function () {
             let arrow = $(this);
             let step = parseInt(arrow.data('step'));
-            let target = $(arrow.data('target-selector'));
-            if (target.length === 0) {
+            let target = function (index) {
+                return typeof index === 'undefined' ? $(arrow.data('target-selector')) : $(arrow.data('target-selector'))[index];
+            };
+            if (target().length === 0) {
                 return true;
             }
 
@@ -2188,16 +2190,16 @@ class FoundationAntD extends FoundationTools {
             }
 
             let maxScrollTop = () => document.body.scrollHeight - document.body.clientHeight;
-            let maxScrollLeft = () => target[0].scrollWidth - target[0].clientWidth;
+            let maxScrollLeft = () => target(0).scrollWidth - target(0).clientWidth;
             arrow.off('click').on('click', function () {
-                let nowScrollLeft = target.scrollLeft();
+                let nowScrollLeft = target().scrollLeft();
                 if (position === -1 && nowScrollLeft <= 1) {
                     return bsw.warning(bsw.lang.is_far_left, 1);
                 }
                 if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
                     return bsw.warning(bsw.lang.is_far_right, 1);
                 }
-                target.stop().animate({scrollLeft: `${nowScrollLeft + (step * position)}px`})
+                target().stop().animate({scrollLeft: `${nowScrollLeft + (step * position)}px`})
             });
 
             $(window).resize(function () {

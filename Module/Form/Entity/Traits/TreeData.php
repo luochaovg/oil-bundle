@@ -17,7 +17,19 @@ trait TreeData
      */
     public function getTreeData(): string
     {
-        return Helper::jsonStringify($this->treeData);
+        $handler = function (array $treeData) use (&$handler) {
+            foreach ($treeData as $key => $value) {
+                if (is_array($value)) {
+                    $treeData[$key] = $handler($value);
+                } elseif (is_numeric($value)) {
+                    $treeData[$key] = strval($value); // to string for ant-d bug
+                }
+            }
+
+            return $treeData;
+        };
+
+        return Helper::jsonStringify($handler($this->treeData));
     }
 
     /**

@@ -1054,4 +1054,29 @@ class Enum
         0 => Abs::COMMON,
         1 => 'Work task login',
     ];
+
+    /**
+     * @const array 树状结构样例 - 部门树
+     */
+    const TREE_DATA_DEMO = [
+        [
+            'title'    => 'IT department',
+            'value'    => 1,
+            'children' => [
+                [
+                    'title'    => 'Backend',
+                    'value'    => 101,
+                    'children' => [
+                        ['title' => 'php', 'value' => 10101],
+                        ['title' => 'go', 'value' => 10102],
+                        ['title' => 'python', 'value' => 10103],
+                    ],
+                ],
+                ['title' => 'Frontend', 'value' => 102],
+                ['title' => 'Client', 'value' => 103],
+            ],
+        ],
+        ['title' => 'DevOps department', 'value' => 2],
+        ['title' => 'Product department', 'value' => 3],
+    ];
 }

@@ -15,17 +15,14 @@ use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Error\Entity\ErrorRequestOften;
 use Leon\BswBundle\Module\Error\Error;
-use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Group;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\CkEditor;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
-use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Entity\Upload;
 use Leon\BswBundle\Module\Form\Entity\Input as FormInput;
@@ -277,9 +274,9 @@ class Module extends Bsw
             [$submit, $extraSubmit] = $this->resolveSubmit($this->input->submit);
 
             $recordBefore = $this->web->session->get($key) ?? [];
-            $recordDiff = Helper::arrayDiffAssoc($submit, $recordBefore);
 
-            $args = compact('submit', 'extraSubmit', 'recordDiff', 'recordBefore');
+            [$recordAdd, $recordDel] = Helper::newDifferenceOldWithAssoc($recordBefore, $submit, false);
+            $args = compact('submit', 'extraSubmit', 'recordAdd', 'recordDel', 'recordBefore');
             $arguments = $this->arguments(
                 $args,
                 [
@@ -311,7 +308,8 @@ class Module extends Bsw
                 }
             }
 
-            $args = compact('extraSubmit', 'recordDiff', 'recordBefore');
+            [$recordAdd, $recordDel] = Helper::newDifferenceOldWithAssoc($recordBefore, $submit, false);
+            $args = compact('extraSubmit', 'recordAdd', 'recordDel', 'recordBefore');
             $arguments = $this->arguments(
                 ['target' => $submit],
                 $args,
@@ -351,7 +349,7 @@ class Module extends Bsw
             $record->attributes($submit, true);
             $record = Helper::entityToArray($record);
 
-            return [$submit, $record, $extraSubmit, $recordBefore, $recordDiff];
+            return [$submit, $record, $extraSubmit, $recordBefore, $recordAdd, $recordDel];
         }
 
         /**
@@ -367,7 +365,7 @@ class Module extends Bsw
         $record = Helper::entityToArray($record);
         $this->web->session->set($key, $record);
 
-        return [[], $record, [], $record, $record];
+        return [[], $record, [], $record, $record, []];
     }
 
     /**
@@ -378,7 +376,7 @@ class Module extends Bsw
      * @param array  $item
      * @param Output $output
      */
-    protected function formDefaultConfigure(Form $form, string $field, array $item, Output $output)
+    protected function formDefaultConfigure(string $field, Form $form, array $item, Output $output)
     {
         if ($form instanceof Upload) {
             if (!$form->getRoute()) {
@@ -640,40 +638,18 @@ class Module extends Bsw
              * extra enum
              */
 
-            $item = $this->handleForEnum($item, ['scene' => Abs::TAG_PERSISTENCE, 'id' => $this->input->id]);
-
-            $enumClass = [
-                Select::class,
-                Radio::class,
-                Checkbox::class,
-            ];
-
-            if (in_array(get_class($form), $enumClass)) {
-
-                if (!is_array($item['enum'])) {
-                    $exception = $this->getAnnotationException($key);
-                    $enumClassStr = implode("\n", $enumClass);
-                    throw new AnnotationException(
-                        "{$exception} option `enum` must configure when type is below:\n\n{$enumClassStr}"
-                    );
-                }
-
-                /**
-                 * @var Select $form
-                 */
-                $form->setEnum($this->web->enumLang($item['enum']));
-            }
-
+            $item = $this->handleForEnumExtra($item, ['scene' => Abs::TAG_PERSISTENCE, 'id' => $this->input->id]);
+            $this->handleFormWithEnum($key, $form, $item);
             $this->datetimeFormat($key, $form, $format);
 
             if (!$form->getPlaceholder()) {
                 $form->setPlaceholder($item['placeholder'] ?: $form->getLabel());
             }
 
-            $this->formDefaultConfigure($form, $key, $item, $output);
+            $this->formDefaultConfigure($key, $form, $item, $output);
 
             $tipsAuto = $titleAuto = null;
-            if (get_class($form) == Select::class && $form->getMode() == Abs::MODE_MULTIPLE) {
+            if (($form instanceOf Select) && $form->getMode() == Abs::MODE_MULTIPLE) {
                 if (!$this->input->id || $form->isValueMultiple()) {
                     $tipsAuto = $this->web->twigLang('For multiple newly');
                 } else {
@@ -900,7 +876,8 @@ class Module extends Bsw
      * @param array $persistAnnotationHandling
      * @param array $extraSubmit
      * @param array $recordBefore
-     * @param array $recordDiff
+     * @param array $recordAdd
+     * @param array $recordDel
      *
      * @return Output
      * @throws
@@ -912,7 +889,8 @@ class Module extends Bsw
         array $persistAnnotationHandling,
         array $extraSubmit,
         array $recordBefore,
-        array $recordDiff
+        array $recordAdd,
+        array $recordDel
     ): ArgsOutput {
 
         if (empty($this->entity)) {
@@ -930,7 +908,8 @@ class Module extends Bsw
                 $persistAnnotationHandling,
                 $extraSubmit,
                 $recordBefore,
-                $recordDiff,
+                $recordAdd,
+                $recordDel,
                 $newly,
                 $pk
             ) {
@@ -946,7 +925,8 @@ class Module extends Bsw
                         'submit',
                         'extraSubmit',
                         'recordBefore',
-                        'recordDiff'
+                        'recordAdd',
+                        'recordDel'
                     ),
                     $this->input->args
                 );
@@ -963,7 +943,7 @@ class Module extends Bsw
                     throw new LogicException($before->tiny());
                 }
 
-                if (($before instanceof Message) && $before->isErrorClassify()) {
+                if (($before instanceof Message) && !$before->isSuccessClassify()) {
                     throw new LogicException($before->getMessage());
                 }
 
@@ -982,7 +962,7 @@ class Module extends Bsw
                     }
 
                     $loggerType = $multipleField ? 2 : 1;
-                    $recordBefore = $recordDiff = [];
+                    $recordBefore = $recordAdd = $recordDel = [];
                     $record = $this->recordHandler(
                         $record,
                         $record,
@@ -1019,15 +999,15 @@ class Module extends Bsw
                     }
                 }
 
-                if ($token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
-                    $this->web->invalidWebsiteToken($token);
-                }
-
-                $recordDiff[Abs::RECORD_LOGGER_EFFECT] = $result;
+                $recordDiff = [
+                    Abs::RECORD_LOGGER_ADD    => $recordAdd,
+                    Abs::RECORD_LOGGER_DEL    => $recordDel,
+                    Abs::RECORD_LOGGER_EFFECT => $result,
+                ];
                 $record[Abs::RECORD_LOGGER_EXTRA] = $extraSubmit;
                 $this->web->databaseOperationLogger($this->entity, $loggerType, $recordBefore, $record, $recordDiff);
 
-                unset($recordDiff[Abs::RECORD_LOGGER_EFFECT], $record[Abs::RECORD_LOGGER_EXTRA]);
+                unset($record[Abs::RECORD_LOGGER_EXTRA]);
 
                 /**
                  * After persistence
@@ -1041,9 +1021,12 @@ class Module extends Bsw
                         'submit',
                         'extraSubmit',
                         'recordBefore',
-                        'recordDiff',
-                        'result'
+                        'recordAdd',
+                        'recordDel',
+                        'result',
+                        'pk'
                     ),
+                    ['pk' => $newly ? $result : $recordBefore[$pk]],
                     $this->input->args
                 );
 
@@ -1059,8 +1042,13 @@ class Module extends Bsw
                     throw new LogicException($after->tiny());
                 }
 
-                if (($after instanceof Message) && $after->isErrorClassify()) {
+                if (($after instanceof Message) && !$after->isSuccessClassify()) {
                     throw new LogicException($after->getMessage());
+                }
+
+                // destroy form token
+                if ($token = $this->input->submit[Abs::FLAG_WEBSITE_TOKEN] ?? null) {
+                    $this->web->invalidWebsiteToken($token);
                 }
 
                 return [$result, $before, $after];
@@ -1108,7 +1096,7 @@ class Module extends Bsw
         if ($result instanceof ArgsOutput) {
             return $result;
         } else {
-            [$submit, $record, $extraSubmit, $recordBefore, $recordDiff] = $result;
+            [$submit, $record, $extraSubmit, $recordBefore, $recordAdd, $recordDel] = $result;
         }
 
         // get annotation
@@ -1153,7 +1141,8 @@ class Module extends Bsw
                         $persistAnnotationHandling,
                         $extraSubmit,
                         $recordBefore,
-                        $recordDiff
+                        $recordAdd,
+                        $recordDel
                     );
                 }
 
@@ -1169,11 +1158,17 @@ class Module extends Bsw
                 );
                 $result = $this->caller(
                     $this->method,
-                    self::CUSTOM_HANDLER,
+                    $fn = self::CUSTOM_HANDLER,
                     [Message::class, Error::class],
                     null,
                     $arguments
                 );
+
+                if (empty($result)) {
+                    throw new ModuleException(
+                        "Persistence {$this->class}::{$this->method}{$fn}() must be implementation"
+                    );
+                }
 
                 if ($result instanceof Error) {
                     return $this->showError($result->tiny());

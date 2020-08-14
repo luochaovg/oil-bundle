@@ -319,9 +319,15 @@ abstract class BswWebController extends AbstractController
 
             if ($content) {
                 $this->appendMessage($content, $message->getDuration(), $message->getClassify(), $message->getType());
+                $content = null;
             }
-            $content = null;
-            $data = array_merge($data, ['href' => $this->redirectUrl($url ?: null, $params)]);
+
+            $data = array_merge(
+                $data,
+                [
+                    'href' => $this->redirectUrl($url ?: null, $params),
+                ]
+            );
 
             if ($click = $message->getClick()) {
                 $data = array_merge(
@@ -697,9 +703,9 @@ abstract class BswWebController extends AbstractController
             [
                 'seo'     => $this->seo(),
                 'src'     => $this->source(),
-                'message' => $this->latestMessage(Abs::TAG_MESSAGE),
-                'modal'   => $this->latestMessage(Abs::TAG_MODAL),
-                'result'  => $this->latestMessage(Abs::TAG_RESULT),
+                'message' => $this->latestFlash(Abs::TAG_MESSAGE),
+                'modal'   => $this->latestFlash(Abs::TAG_MODAL),
+                'result'  => $this->latestFlash(Abs::TAG_RESULT),
             ],
             true
         );

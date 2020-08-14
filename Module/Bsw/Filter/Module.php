@@ -10,14 +10,10 @@ use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Filter\Entity\Senior;
 use Leon\BswBundle\Module\Form\Entity\Button;
-use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Form\Entity\Datetime;
-use Leon\BswBundle\Module\Form\Entity\Radio;
-use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Form\Entity\Input as FormInput;
 
@@ -433,26 +429,8 @@ class Module extends Bsw
              * extra enum
              */
 
-            $item = $this->handleForEnum($item, ['scene' => Abs::TAG_FILTER]);
-
-            $enumClass = [
-                Select::class,
-                Radio::class,
-                Checkbox::class,
-            ];
-
-            if (in_array(get_class($form), $enumClass)) {
-                if (!is_array($item['enum'])) {
-                    $exception = $this->getAnnotationException($key);
-                    throw new AnnotationException(
-                        "{$exception} option `enum` must configure when type is {$enumClass}"
-                    );
-                }
-                /**
-                 * @var Select $form
-                 */
-                $form->setEnum($this->web->enumLang($item['enum']));
-            }
+            $item = $this->handleForEnumExtra($item, ['scene' => Abs::TAG_FILTER]);
+            $this->handleFormWithEnum($key, $form, $item);
 
             if (get_class($form) === FormInput::class) {
                 /**

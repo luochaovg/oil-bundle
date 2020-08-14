@@ -2759,8 +2759,10 @@ var FoundationAntD = function (_FoundationTools) {
             $(selector).each(function () {
                 var arrow = $(this);
                 var step = parseInt(arrow.data('step'));
-                var target = $(arrow.data('target-selector'));
-                if (target.length === 0) {
+                var target = function target(index) {
+                    return typeof index === 'undefined' ? $(arrow.data('target-selector')) : $(arrow.data('target-selector'))[index];
+                };
+                if (target().length === 0) {
                     return true;
                 }
 
@@ -2776,17 +2778,17 @@ var FoundationAntD = function (_FoundationTools) {
                     return document.body.scrollHeight - document.body.clientHeight;
                 };
                 var maxScrollLeft = function maxScrollLeft() {
-                    return target[0].scrollWidth - target[0].clientWidth;
+                    return target(0).scrollWidth - target(0).clientWidth;
                 };
                 arrow.off('click').on('click', function () {
-                    var nowScrollLeft = target.scrollLeft();
+                    var nowScrollLeft = target().scrollLeft();
                     if (position === -1 && nowScrollLeft <= 1) {
                         return bsw.warning(bsw.lang.is_far_left, 1);
                     }
                     if (position === 1 && nowScrollLeft >= maxScrollLeft() - 1) {
                         return bsw.warning(bsw.lang.is_far_right, 1);
                     }
-                    target.stop().animate({ scrollLeft: nowScrollLeft + step * position + 'px' });
+                    target().stop().animate({ scrollLeft: nowScrollLeft + step * position + 'px' });
                 });
 
                 $(window).resize(function () {

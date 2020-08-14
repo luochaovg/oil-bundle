@@ -12,7 +12,6 @@ use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw as BswModule;
-use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
@@ -314,15 +313,22 @@ class BswBackendController extends BswWebController
     }
 
     /**
-     * Module list handler
+     * Render module
      *
-     * @param array $moduleList
+     * @param array  $moduleList
+     * @param string $view
+     * @param array  $routeArgs
+     * @param bool   $simpleMode
      *
-     * @return array
+     * @return Response|array
      * @throws
      */
-    protected function moduleListHandler(array $moduleList): array
+    protected function showModule(array $moduleList, ?string $view, array $routeArgs = [], bool $simpleMode = false)
     {
+        if (empty($routeArgs['scene'])) {
+            $routeArgs['scene'] = Abs::TAG_UNKNOWN;
+        }
+
         foreach ($moduleList as $module => $extraArgs) {
             if (!is_array($extraArgs)) {
                 throw new ModuleException('The extra args must be array for ' . $module);
@@ -332,90 +338,23 @@ class BswBackendController extends BswWebController
             }
         }
 
-        return [
-            new BswModule\Dispatcher($this),
-            $this->displayArgsScaffold(),
-            Helper::sortArray($moduleList, 'sort'),
-        ];
-    }
-
-    /**
-     * Render module by simple mode
-     *
-     * @param array $moduleList
-     * @param array $logicArgs
-     * @param bool  $directResponseMessage
-     *
-     * @return Response|Message|array
-     * @throws
-     */
-    protected function showModuleSimple(array $moduleList, array $logicArgs = [], bool $directResponseMessage = true)
-    {
-        if (empty($logicArgs['scene'])) {
-            $logicArgs['scene'] = Abs::TAG_UNKNOWN;
-        }
-
-        [$dispatcher, $inputArgs, $moduleList] = $this->moduleListHandler($moduleList);
-        $showArgs = ['logic' => $logicArgs];
-
         /**
          * @var BswModule\Dispatcher $dispatcher
          */
+        $dispatcher = new BswModule\Dispatcher($this);
+        $moduleList = Helper::sortArray($moduleList, 'sort');
+
+        $acmeArgs = $this->displayArgsScaffold();
+        $globalArgs = (array)Helper::dig($acmeArgs, 'logic');
+        $logicArgs = ['logic' => array_merge($globalArgs, $routeArgs)];
+        $logicArgsAjax = [];
+
+        $logic = &$logicArgs['logic'];
         foreach ($moduleList as $module => $extraArgs) {
 
-            $inputArgs = array_merge($inputArgs, $logicArgs);
-            [$name, $twig, $input, $output] = $dispatcher->execute($module, $inputArgs, $extraArgs);
-
-            $inputArgs['moduleArgs'][$name]['input'] = $input;
-            $inputArgs['moduleArgs'][$name]['output'] = $output;
-            $inputArgs = array_merge($inputArgs, $output);
-
-            /**
-             * @var BswModule\Message $message
-             */
-            if (($message = $output['message'] ?? null)) {
-                return $directResponseMessage ? $this->messageToResponse($message) : $message;
-            }
-
-            if ($name) {
-                $showArgs[$name] = $output;
-            }
-        }
-
-        return $showArgs;
-    }
-
-    /**
-     * Render module
-     *
-     * @param array  $moduleList
-     * @param string $view
-     * @param array  $logicArgs
-     *
-     * @return Response
-     * @throws
-     */
-    protected function showModule(array $moduleList, string $view, array $logicArgs = []): Response
-    {
-        if (empty($logicArgs['scene'])) {
-            $logicArgs['scene'] = Abs::TAG_UNKNOWN;
-        }
-
-        $ajaxShowArgs = [];
-        [$dispatcher, $inputArgs, $moduleList] = $this->moduleListHandler($moduleList);
-
-        $globalLogic = (array)Helper::dig($inputArgs, 'logic');
-        $showArgs = ['logic' => array_merge($globalLogic, $logicArgs)];
-        $logic = &$showArgs['logic'];
-
-        /**
-         * @var BswModule\Dispatcher $dispatcher
-         */
-        foreach ($moduleList as $module => $extraArgs) {
-
-            $extraArgs = array_merge($extraArgs, (array)($globalLogic[$module] ?? []));
-            $inputArgs = array_merge($globalLogic, $inputArgs, $logicArgs);
-            [$name, $twig, $inputArgs, $output] = $dispatcher->execute($module, $inputArgs, $extraArgs);
+            $extraArgs = array_merge($extraArgs, (array)($globalArgs[$module] ?? []));
+            $acmeArgs = array_merge($globalArgs, $acmeArgs, $routeArgs);
+            [$name, $twig, $acmeArgs, $output] = $dispatcher->execute($module, $acmeArgs, $extraArgs);
 
             /**
              * @var BswModule\Message $message
@@ -430,16 +369,16 @@ class BswBackendController extends BswWebController
                 return $this->messageToResponse($message);
             }
 
-            if (!$name) {
+            if (!$name || $simpleMode) {
                 continue;
             }
 
             /**
              * twig args
              */
-            $showArgs[$name] = $output;
+            $logicArgs[$name] = $output;
+            $logicArgsAjax[$name] = $output;
             $this->bsw[$name] = $output;
-            $ajaxShowArgs[$name] = $output;
 
             if (!$twig) {
                 continue;
@@ -448,32 +387,40 @@ class BswBackendController extends BswWebController
             /**
              * twig html
              */
-            $html = $this->renderPart($twig, array_merge($showArgs, [$name => $output]));
+            $html = $this->renderPart($twig, array_merge($logicArgs, [$name => $output]));
 
             $name = str_replace('-', '_', $name);
             $name = Helper::underToCamel("{$name}_html");
-            $showArgs[$name] = $html;
-            $ajaxShowArgs[$name] = $html;
+            $logicArgs[$name] = $html;
+            $logicArgsAjax[$name] = $html;
         }
 
+        if ($simpleMode) {
+            throw new Exception('Latest module should return `Message instance` when simple mode');
+        } elseif (empty($view)) {
+            throw new Exception('Render view is required when not simple mode');
+        }
+
+        /**
+         * After module handler
+         */
         $afterModule = Helper::dig($logic, 'afterModule') ?? [];
         Helper::callReturnType($afterModule, Abs::T_ARRAY, 'Handler after module');
 
         foreach ($afterModule as $key => $handler) {
-            if (!is_callable($handler)) {
-                continue;
+            if (is_callable($handler)) {
+                $logic[$key] = call_user_func_array($handler, [$logic, $logicArgs]);
             }
-            $logic[$key] = call_user_func_array($handler, [$logic, $showArgs]);
         }
 
-        if ($this->ajax) {
-            $content = $this->show($showArgs, $view);
-            $ajaxShowArgs = array_merge($showArgs, $ajaxShowArgs, ['content' => $content]);
-
-            return $this->okayAjax($ajaxShowArgs);
+        if (!$this->ajax) {
+            return $this->show($logicArgs, $view);
         }
 
-        return $this->show($showArgs, $view);
+        $content = $this->show($logicArgs, $view);
+        $logicArgsAjax = array_merge($logicArgs, $logicArgsAjax, ['content' => $content]);
+
+        return $this->okayAjax($logicArgsAjax);
     }
 
     /**
@@ -621,24 +568,20 @@ class BswBackendController extends BswWebController
      *
      * @param array $args
      * @param array $relation
-     * @param bool  $directResponseMessage
      *
      * @return Response|BswModule\Message|array
      * @throws
      */
-    protected function doAway(array $args = [], array $relation = [], bool $directResponseMessage = true)
+    protected function doAway(array $args = [], array $relation = [])
     {
         $args['relation'] = $relation;
+        $moduleList = [
+            BswModule\Menu\Module::class   => ['sort' => Abs::MODULE_MENU_SORT],
+            BswModule\Crumbs\Module::class => ['sort' => Abs::MODULE_CRUMBS_SORT, 'crumbs' => $this->crumbs],
+            BswModule\Away\Module::class   => ['sort' => Abs::MODULE_AWAY_SORT],
+        ];
 
-        return $this->showModuleSimple(
-            [
-                BswModule\Menu\Module::class   => ['sort' => Abs::MODULE_MENU_SORT],
-                BswModule\Crumbs\Module::class => ['sort' => Abs::MODULE_CRUMBS_SORT, 'crumbs' => $this->crumbs],
-                BswModule\Away\Module::class   => ['sort' => Abs::MODULE_AWAY_SORT],
-            ],
-            $args,
-            $directResponseMessage
-        );
+        return $this->showModule($moduleList, null, $args, true);
     }
 
     /**

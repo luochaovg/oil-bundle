@@ -78,6 +78,10 @@ class Module extends Bsw
             throw new ModuleException('Entity is required for away module');
         }
 
+        if (empty($this->input->id)) {
+            throw new ModuleException('Arguments `id` is required for away');
+        }
+
         $result = $this->repository->transactional(
             function () {
 
@@ -101,7 +105,7 @@ class Module extends Bsw
                     throw new LogicException($result->tiny());
                 }
 
-                if (($result instanceof Message) && $result->isErrorClassify()) {
+                if (($result instanceof Message) && !$result->isSuccessClassify()) {
                     throw new LogicException($result->getMessage());
                 }
 
@@ -147,7 +151,7 @@ class Module extends Bsw
                     throw new LogicException($result->tiny());
                 }
 
-                if (($result instanceof Message) && $result->isErrorClassify()) {
+                if (($result instanceof Message) && !$result->isSuccessClassify()) {
                     throw new LogicException($result->getMessage());
                 }
 
@@ -170,6 +174,11 @@ class Module extends Bsw
 
         $this->web->databaseOperationLogger($this->entity, $type, $relation, $result, ['effect' => $count]);
 
-        return $this->showSuccess($this->input->i18nAway, [], $this->input->i18nArgs);
+        return $this->showSuccess(
+            $this->input->i18nAway,
+            $this->input->sets,
+            $this->input->i18nArgs,
+            isset($this->input->sets['function']) ? null : $this->input->nextRoute
+        );
     }
 }

@@ -248,7 +248,7 @@ class Module extends Bsw
          * extra enum
          */
 
-        $item = $this->handleForEnum($item, ['scene' => Abs::TAG_PREVIEW]);
+        $item = $this->handleForEnumExtra($item, ['scene' => Abs::TAG_PREVIEW]);
 
         /**
          * eradicate xss

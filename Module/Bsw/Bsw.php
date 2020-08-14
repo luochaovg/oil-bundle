@@ -6,7 +6,15 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Entity\FoundationEntity;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Module\Form\Entity\AutoComplete;
+use Leon\BswBundle\Module\Form\Entity\Checkbox;
+use Leon\BswBundle\Module\Form\Entity\Mentions;
+use Leon\BswBundle\Module\Form\Entity\Radio;
+use Leon\BswBundle\Module\Form\Entity\Select;
+use Leon\BswBundle\Module\Form\Entity\SelectTree;
+use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Repository\FoundationRepository;
 use ReflectionClass;
 
@@ -107,6 +115,9 @@ abstract class Bsw
             'size',
             'sizeInIFrame',
             'sizeInMobile',
+            'i18nAway',
+            'i18nArgs',
+            'nextRoute',
         ];
     }
 
@@ -435,7 +446,7 @@ abstract class Bsw
      *
      * @return array
      */
-    protected function handleForEnum(array $item, array $args = []): array
+    protected function handleForEnumExtra(array $item, array $args = []): array
     {
         if (is_string($item['enumExtra'])) {
             $method = self::ENUM_EXTRA . ucfirst($item['enumExtra']);
@@ -458,6 +469,77 @@ abstract class Bsw
         }
 
         return $item;
+    }
+
+    /**
+     * Handle form with enum
+     *
+     * @param string $field
+     * @param Form   $form
+     * @param array  $item
+     *
+     * @throws
+     */
+    protected function handleFormWithEnum(string $field, Form $form, array $item)
+    {
+        $enumClass = [
+            Select::class,
+            Radio::class,
+            Checkbox::class,
+            Mentions::class,
+        ];
+
+        $treeDataClass = [
+            SelectTree::class,
+        ];
+
+        $dataSourceClass = [
+            AutoComplete::class,
+        ];
+
+        $formClass = get_class($form);
+        if (in_array($formClass, $enumClass)) {
+
+            if (!is_array($item['enum'])) {
+                $exception = $this->getAnnotationException($field);
+                throw new AnnotationException(
+                    "{$exception} option `enum` must configure in {$formClass}"
+                );
+            }
+
+            /**
+             * @var Select $form
+             */
+            $form->setEnum($this->web->enumLang($item['enum']));
+
+        } elseif (in_array($formClass, $treeDataClass)) {
+
+            if (!is_array($item['enum'])) {
+                $exception = $this->getAnnotationException($field);
+                throw new AnnotationException(
+                    "{$exception} option `enum` (for `treeData`) must configure in {$formClass}"
+                );
+            }
+
+            /**
+             * @var SelectTree $form
+             */
+            $form->setTreeData($this->web->enumLang($item['enum']));
+
+        } elseif (in_array($formClass, $dataSourceClass)) {
+
+            if (!is_array($item['enum'])) {
+                $exception = $this->getAnnotationException($field);
+                throw new AnnotationException(
+                    "{$exception} option `enum` (for `dataSource`) must configure in {$formClass}"
+                );
+            }
+
+            /**
+             * @var AutoComplete $form
+             */
+            $form->setDataSource($this->web->enumLang($item['enum']));
+        }
     }
 
     /**

@@ -113,7 +113,7 @@ trait WebFlash
      *
      * @return mixed
      */
-    public function latestMessage(string $key, bool $jsonDecode = false)
+    public function latestFlash(string $key, bool $jsonDecode = false)
     {
         $list = $this->session->getFlashBag()->get($key);
         $latest = end($list);
