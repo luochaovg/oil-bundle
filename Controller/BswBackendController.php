@@ -346,12 +346,23 @@ class BswBackendController extends BswWebController
         $logicArgs = ['logic' => array_merge($globalArgs, $routeArgs)];
         $logicArgsAjax = [];
 
+        $beforeOutput = [];
         $logic = &$logicArgs['logic'];
+
         foreach ($moduleList as $module => $extraArgs) {
 
             $extraArgs = array_merge($extraArgs, (array)($globalArgs[$module] ?? []));
-            $acmeArgs = array_merge($globalArgs, $acmeArgs, $routeArgs);
-            [$name, $twig, $acmeArgs, $output] = $dispatcher->execute($module, $acmeArgs, $extraArgs);
+            [$name, $twig, $input, $output] = $dispatcher->execute(
+                $module,
+                $globalArgs,
+                $acmeArgs,
+                $routeArgs,
+                $extraArgs,
+                $beforeOutput
+            );
+
+            $beforeOutput = array_merge($beforeOutput, $output);
+            $acmeArgs['moduleArgs'][$name] = compact('input', 'output');
 
             /**
              * @var BswModule\Message $message

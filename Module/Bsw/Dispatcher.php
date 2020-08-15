@@ -29,14 +29,24 @@ class Dispatcher
      * Execute
      *
      * @param string $moduleClass
+     * @param array  $globalArgs
      * @param array  $acmeArgs
+     * @param array  $routeArgs
      * @param array  $extraArgs
+     * @param array  $beforeOutput
      *
      * @return array
      * @throws
      */
-    public function execute(string $moduleClass, array $acmeArgs, array $extraArgs = []): array
-    {
+    public function execute(
+        string $moduleClass,
+        array $globalArgs,
+        array $acmeArgs,
+        array $routeArgs,
+        array $extraArgs,
+        array $beforeOutput
+    ): array {
+
         if (!Helper::extendClass($moduleClass, Bsw::class)) {
             throw new ModuleException("Class {$moduleClass} should extend " . Bsw::class);
         }
@@ -59,16 +69,17 @@ class Dispatcher
         }
 
         if (is_array($exclude)) {
-            Helper::arrayPop($acmeArgs, $exclude);
+            Helper::arrayPop($beforeOutput, $exclude);
         }
 
-        $inputArgsHandling = array_merge($acmeArgs, $extraArgs);
-        if (($inputArgsHandling['ajax'] ?? false) && !$bsw->allowAjax()) {
-            return [null, null, $acmeArgs, []];
+        $acmeArgs = array_merge($globalArgs, $acmeArgs, $routeArgs, $extraArgs, $beforeOutput);
+
+        if (($acmeArgs['ajax'] ?? false) && !$bsw->allowAjax()) {
+            return [null, null, [], []];
         }
 
-        if (($inputArgsHandling['iframe'] ?? false) && !$bsw->allowIframe()) {
-            return [null, null, $acmeArgs, []];
+        if (($acmeArgs['iframe'] ?? false) && !$bsw->allowIframe()) {
+            return [null, null, [], []];
         }
 
         /**
@@ -80,8 +91,8 @@ class Dispatcher
         $ref = new Reflection();
 
         foreach ($input as $attribute => $value) {
-            if (array_key_exists($attribute, $inputArgsHandling)) {
-                $input->{$attribute} = $inputArgsHandling[$attribute];
+            if (array_key_exists($attribute, $acmeArgs)) {
+                $input->{$attribute} = $acmeArgs[$attribute];
             }
             if ($ref->propertyExistsSelf($cls, $attribute)) {
                 $inputReal[$attribute] = $input->{$attribute};
@@ -99,12 +110,8 @@ class Dispatcher
          */
         $this->web->appendSrcCss($bsw->css());
         $this->web->appendSrcJs($bsw->javascript());
+        $input = Helper::entityToArray($input);
 
-        $name = $bsw->name();
-        $acmeArgs['moduleArgs'][$name]['input'] = $input;
-        $acmeArgs['moduleArgs'][$name]['output'] = $output;
-        $acmeArgs = array_merge($acmeArgs, $output);
-
-        return [$name, $bsw->twig(), $acmeArgs, $output];
+        return [$bsw->name(), $bsw->twig(), $input, $output];
     }
 }

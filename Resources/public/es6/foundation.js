@@ -1851,7 +1851,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.modal.visible = false;
+        if (typeof bsw.cnf.v.modal.visible !== 'undefined') {
+            bsw.cnf.v.modal.visible = false;
+        }
     }
 
     /**
@@ -1867,7 +1869,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.modal.visible = false;
+        if (typeof bsw.cnf.v.modal.visible !== 'undefined') {
+            bsw.cnf.v.modal.visible = false;
+        }
     }
 
     /**
@@ -1883,7 +1887,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.drawer.visible = false;
+        if (typeof bsw.cnf.v.drawer.visible !== 'undefined') {
+            bsw.cnf.v.drawer.visible = false;
+        }
     }
 
     /**
@@ -1899,7 +1905,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.drawer.visible = false;
+        if (typeof bsw.cnf.v.drawer.visible !== 'undefined') {
+            bsw.cnf.v.drawer.visible = false;
+        }
     }
 
     /**
@@ -1915,7 +1923,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.result.visible = false;
+        if (typeof bsw.cnf.v.result.visible !== 'undefined') {
+            bsw.cnf.v.result.visible = false;
+        }
     }
 
     /**
@@ -1931,7 +1941,9 @@ class FoundationAntD extends FoundationTools {
                 return;
             }
         }
-        bsw.cnf.v.result.visible = false;
+        if (typeof bsw.cnf.v.result.visible !== 'undefined') {
+            bsw.cnf.v.result.visible = false;
+        }
     }
 
     /**

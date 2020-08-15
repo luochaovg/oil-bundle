@@ -649,7 +649,7 @@ class Module extends Bsw
             $this->formDefaultConfigure($key, $form, $item, $output);
 
             $tipsAuto = $titleAuto = null;
-            if (($form instanceOf Select) && $form->getMode() == Abs::MODE_MULTIPLE) {
+            if (($form instanceof Select) && $form->getMode() == Abs::MODE_MULTIPLE) {
                 if (!$this->input->id || $form->isValueMultiple()) {
                     $tipsAuto = $this->web->twigLang('For multiple newly');
                 } else {

@@ -113,7 +113,7 @@ abstract class BswWebController extends AbstractController
         if (!$url) {
             $access = array_filter($this->access);
             foreach ($access as $route => $assert) {
-                if (strpos($route, Abs::TAG_PREVIEW) !== false) {
+                if (strpos($route, Abs::TAG_PREVIEW) !== false && strpos($route, Abs::TAG_EXPORT) === false) {
                     $url = $route;
                     break;
                 }

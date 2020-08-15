@@ -88,8 +88,14 @@ trait Preview
             (new Button('Edit record', 'app_bsw_config_persistence'))->setArgs(['id' => $args->item['id']]),
             (new Button('Remove', 'app_bsw_config_away'))
                 ->setType(Abs::THEME_DANGER)
+                ->setClick('requestByAjax')
                 ->setConfirm($this->translator->trans('Are you sure'))
-                ->setArgs(['id' => $args->item['id']]),
+                ->setArgs(
+                    [
+                        'id'      => $args->item['id'],
+                        'refresh' => true,
+                    ]
+                ),
         ];
     }
 

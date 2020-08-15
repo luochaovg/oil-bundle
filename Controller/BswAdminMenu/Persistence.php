@@ -115,7 +115,13 @@ trait Persistence
             return $args;
         }
 
-        return $this->showPersistence(['id' => $id]);
+        return $this->showPersistence(
+            [
+                'id'        => $id,
+                'nextRoute' => null,
+                'sets'      => ['function' => 'refreshPreview',],
+            ]
+        );
     }
 
     /**

@@ -2376,7 +2376,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.modal.visible = false;
+            if (typeof bsw.cnf.v.modal.visible !== 'undefined') {
+                bsw.cnf.v.modal.visible = false;
+            }
         }
 
         /**
@@ -2395,7 +2397,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.modal.visible = false;
+            if (typeof bsw.cnf.v.modal.visible !== 'undefined') {
+                bsw.cnf.v.modal.visible = false;
+            }
         }
 
         /**
@@ -2414,7 +2418,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.drawer.visible = false;
+            if (typeof bsw.cnf.v.drawer.visible !== 'undefined') {
+                bsw.cnf.v.drawer.visible = false;
+            }
         }
 
         /**
@@ -2433,7 +2439,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.drawer.visible = false;
+            if (typeof bsw.cnf.v.drawer.visible !== 'undefined') {
+                bsw.cnf.v.drawer.visible = false;
+            }
         }
 
         /**
@@ -2452,7 +2460,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.result.visible = false;
+            if (typeof bsw.cnf.v.result.visible !== 'undefined') {
+                bsw.cnf.v.result.visible = false;
+            }
         }
 
         /**
@@ -2471,7 +2481,9 @@ var FoundationAntD = function (_FoundationTools) {
                     return;
                 }
             }
-            bsw.cnf.v.result.visible = false;
+            if (typeof bsw.cnf.v.result.visible !== 'undefined') {
+                bsw.cnf.v.result.visible = false;
+            }
         }
 
         /**

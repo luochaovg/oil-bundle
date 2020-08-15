@@ -60,6 +60,11 @@ trait Persistence
             return $args;
         }
 
-        return $this->doAway(['id' => $id]);
+        return $this->doAway(
+            [
+                'id'        => $id,
+                'nextRoute' => null,
+            ]
+        );
     }
 }
