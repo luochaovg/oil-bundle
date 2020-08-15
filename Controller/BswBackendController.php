@@ -338,9 +338,6 @@ class BswBackendController extends BswWebController
             }
         }
 
-        /**
-         * @var BswModule\Dispatcher $dispatcher
-         */
         $dispatcher = new BswModule\Dispatcher($this);
         $moduleList = Helper::sortArray($moduleList, 'sort');
 

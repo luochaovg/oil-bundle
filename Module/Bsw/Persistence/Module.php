@@ -259,7 +259,7 @@ class Module extends Bsw
     protected function getPersistenceData()
     {
         if (empty($this->entity)) {
-            return [[], [], [], [], []]; // just interlude, basically useless
+            return [[], [], [], [], [], []]; // just interlude, basically useless
         }
 
         $key = "{$this->input->route}:record:before";

@@ -972,6 +972,70 @@ class Helper
     }
 
     /**
+     * Print array
+     *
+     * @param array  $source
+     * @param string $boundary
+     * @param string $indicate
+     * @param string $split
+     * @param string $highOrder
+     *
+     * @return string
+     */
+    public static function printArray(
+        array $source,
+        string $boundary = '[%s]',
+        string $indicate = ':',
+        string $split = ',',
+        string $highOrder = null
+    ): string {
+
+        $print = [];
+        foreach ($source as $key => $value) {
+            if (is_array($value)) {
+                $value = $highOrder ?: self::printArray($value, $boundary, $indicate, $split, $highOrder);
+            } elseif (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+            $key = $indicate ? "{$key}{$indicate}" : null;
+            array_push($print, "{$key}{$value}");
+        }
+
+        $print = implode($split, $print);
+        if (!$boundary) {
+            return $print;
+        }
+
+        return sprintf($boundary, $print);
+    }
+
+    /**
+     * Print php array to string
+     *
+     * @param array $item
+     *
+     * @return string
+     */
+    public static function printPhpArray(array $item): string
+    {
+        $stringify = var_export($item, true);
+
+        $patterns = [
+            "/NULL/"                                       => 'null',
+            "/\'([\\\a-zA-Z0-9]+)(::)([\\\a-zA-Z0-9]+)\'/" => '$1$2$3',
+        ];
+
+        $stringify = preg_replace(array_keys($patterns), array_values($patterns), $stringify);
+
+        $stringify = preg_replace("/^([ ]*)(.*)/m", '$1$1$2', $stringify);
+        $stringify = preg_split("/\r\n|\n|\r/", $stringify);
+        $stringify = preg_replace(["/\s*array\s\($/", "/\)(,)?$/", "/\s=>\s$/"], [null, ']$1', ' => ['], $stringify);
+        $stringify = join(PHP_EOL, array_filter(["["] + $stringify));
+
+        return $stringify;
+    }
+
+    /**
      * Get current url
      *
      * @return string
@@ -4238,44 +4302,6 @@ class Helper
     }
 
     /**
-     * Print array
-     *
-     * @param array  $source
-     * @param string $boundary
-     * @param string $indicate
-     * @param string $split
-     * @param string $highOrder
-     *
-     * @return string
-     */
-    public static function printArray(
-        array $source,
-        string $boundary = '[%s]',
-        string $indicate = ':',
-        string $split = ',',
-        string $highOrder = null
-    ): string {
-
-        $print = [];
-        foreach ($source as $key => $value) {
-            if (is_array($value)) {
-                $value = $highOrder ?: self::printArray($value, $boundary, $indicate, $split, $highOrder);
-            } elseif (is_bool($value)) {
-                $value = $value ? 'true' : 'false';
-            }
-            $key = $indicate ? "{$key}{$indicate}" : null;
-            array_push($print, "{$key}{$value}");
-        }
-
-        $print = implode($split, $print);
-        if (!$boundary) {
-            return $print;
-        }
-
-        return sprintf($boundary, $print);
-    }
-
-    /**
      * Recursion value handler
      *
      * @param array    $source
@@ -4520,32 +4546,6 @@ class Helper
         if ($boundary) {
             return "{{$stringify}}";
         }
-
-        return $stringify;
-    }
-
-    /**
-     * Print php array to string
-     *
-     * @param array $item
-     *
-     * @return string
-     */
-    public static function printPhpArray(array $item): string
-    {
-        $stringify = var_export($item, true);
-
-        $patterns = [
-            "/NULL/"                                       => 'null',
-            "/\'([\\\a-zA-Z0-9]+)(::)([\\\a-zA-Z0-9]+)\'/" => '$1$2$3',
-        ];
-
-        $stringify = preg_replace(array_keys($patterns), array_values($patterns), $stringify);
-
-        $stringify = preg_replace("/^([ ]*)(.*)/m", '$1$1$2', $stringify);
-        $stringify = preg_split("/\r\n|\n|\r/", $stringify);
-        $stringify = preg_replace(["/\s*array\s\($/", "/\)(,)?$/", "/\s=>\s$/"], [null, ']$1', ' => ['], $stringify);
-        $stringify = join(PHP_EOL, array_filter(["["] + $stringify));
 
         return $stringify;
     }

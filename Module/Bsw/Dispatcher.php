@@ -6,7 +6,7 @@ use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Reflection;
 use Leon\BswBundle\Controller\BswWebController;
 use Leon\BswBundle\Module\Exception\ModuleException;
-use stdClass;
+use ReflectionClass;
 
 class Dispatcher
 {
@@ -29,13 +29,13 @@ class Dispatcher
      * Execute
      *
      * @param string $moduleClass
-     * @param array  $inputArgs
+     * @param array  $acmeArgs
      * @param array  $extraArgs
      *
      * @return array
      * @throws
      */
-    public function execute(string $moduleClass, array $inputArgs, array $extraArgs = []): array
+    public function execute(string $moduleClass, array $acmeArgs, array $extraArgs = []): array
     {
         if (!Helper::extendClass($moduleClass, Bsw::class)) {
             throw new ModuleException("Class {$moduleClass} should extend " . Bsw::class);
@@ -45,20 +45,35 @@ class Dispatcher
          * @var Bsw $bsw
          */
         $bsw = new $moduleClass($this->web);
-        $inputArgsHandling = array_merge($inputArgs, $extraArgs);
+        $input = $bsw->input();
+        $exclude = $bsw->inheritExcludeArgs();
 
+        if ($exclude === true) {
+            $ref = new ReflectionClass($input);
+            $exclude = [];
+            foreach ($ref->getProperties() as $property) {
+                if ($property->class === $ref->name) {
+                    $exclude[] = $property->name;
+                }
+            }
+        }
+
+        if (is_array($exclude)) {
+            Helper::arrayPop($acmeArgs, $exclude);
+        }
+
+        $inputArgsHandling = array_merge($acmeArgs, $extraArgs);
         if (($inputArgsHandling['ajax'] ?? false) && !$bsw->allowAjax()) {
-            return [null, null, $inputArgs, []];
+            return [null, null, $acmeArgs, []];
         }
 
         if (($inputArgsHandling['iframe'] ?? false) && !$bsw->allowIframe()) {
-            return [null, null, $inputArgs, []];
+            return [null, null, $acmeArgs, []];
         }
 
         /**
          * create input args
          */
-        $input = $bsw->input();
         $inputReal = [];
 
         $cls = get_class($input);
@@ -86,18 +101,10 @@ class Dispatcher
         $this->web->appendSrcJs($bsw->javascript());
 
         $name = $bsw->name();
-        $inputArgs['moduleArgs'][$name]['input'] = $input;
-        $inputArgs['moduleArgs'][$name]['output'] = $output;
+        $acmeArgs['moduleArgs'][$name]['input'] = $input;
+        $acmeArgs['moduleArgs'][$name]['output'] = $output;
+        $acmeArgs = array_merge($acmeArgs, $output);
 
-        $exclude = $bsw->inheritExcludeArgs();
-        if ($exclude === false) {
-            $inputArgs = array_merge($inputArgs, $output);
-        } elseif (is_array($exclude)) {
-            $outputHanding = $output;
-            Helper::arrayPop($outputHanding, $exclude);
-            $inputArgs = array_merge($inputArgs, $outputHanding);
-        }
-
-        return [$name, $bsw->twig(), $inputArgs, $output];
+        return [$name, $bsw->twig(), $acmeArgs, $output];
     }
 }

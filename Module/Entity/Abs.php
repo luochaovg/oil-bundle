@@ -206,6 +206,8 @@ class Abs
     const CSS_PHOTOS    = 'npm;photoswipe/dist/photoswipe.css';
     const CSS_FANCY_BOX = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.css';
     const CSS_HIGHLIGHT = 'npm;@highlightjs/cdn-assets/styles/default.min.css';
+    const CSS_ANT_D_BSW = 'diy;antd.bsw.keep.css';
+    const CSS_ANT_D_ALI = 'diy;antd.aliyun.keep.css';
     const CSS_BSW       = 'diy;bsw.css';
     const CSS_WEB       = 'diy;web.css';
     const CSS_EDITOR    = 'diy;third/ckeditor5.css';
@@ -442,6 +444,7 @@ class Abs
     const UNKNOWN     = '(Unknown)';
     const UNALLOCATED = '(Unallocated)';
     const COMMON      = '(Common)';
+    const NOT_SCALAR  = '(NotScalar)';
 
     const FN_INIT                    = 'init';
     const FN_BEFORE_BOOTSTRAP        = 'beforeBootstrap';

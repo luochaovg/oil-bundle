@@ -69,6 +69,18 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
+                        cwd: 'less/',
+                        src: ['**/*.keep.css'],
+                        dest: 'dist/src-css/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'less/',
+                        src: ['**/*.keep.css'],
+                        dest: 'dist/css/'
+                    },
+                    {
+                        expand: true,
                         cwd: 'es6/',
                         src: ['**/*.keep.js'],
                         dest: 'dist/src-js/'

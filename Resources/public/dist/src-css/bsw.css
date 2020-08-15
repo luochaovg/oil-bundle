@@ -251,7 +251,7 @@ div.ant-modal-mask {
 }
 .ant-layout-sider-light .logo h1,
 .ant-layout-header-light .logo h1 {
-  color: #1890ff;
+  color: unset;
 }
 .ant-layout-sider-light .ant-layout-sider-trigger:hover,
 .ant-layout-header-light .ant-layout-sider-trigger:hover {
@@ -313,7 +313,7 @@ ul.ant-pagination li {
   margin-right: 24px;
 }
 .ant-layout .ant-layout-header .user-wrapper .avatar {
-  color: #1890ff;
+  color: #77bcfb;
   background-color: rgba(119, 188, 251, 0.25);
   margin-bottom: 3px;
 }

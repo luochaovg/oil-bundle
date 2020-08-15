@@ -85,6 +85,12 @@ trait EnumDict
 
         $enum = [];
         foreach ($args->original['enum'] as $k => $v) {
+            if (is_array($v)) {
+                $v = Helper::printPhpArray($v);
+            }
+            if (!is_scalar($v)) {
+                $v = Abs::NOT_SCALAR;
+            }
             $k = Html::tag('div', $k, ['class' => 'ant-tag ant-tag-has-color', 'style' => ['color' => '#1890ff']]);
             $v = Html::tag('div', $v, ['class' => 'bsw-code bsw-long-text']);
             array_push($enum, "{$k} => {$v}");
