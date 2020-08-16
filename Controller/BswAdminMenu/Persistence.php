@@ -117,9 +117,8 @@ trait Persistence
 
         return $this->showPersistence(
             [
-                'id'        => $id,
-                'nextRoute' => null,
-                'sets'      => ['function' => 'refreshPreview',],
+                'id'   => $id,
+                'sets' => ['function' => 'refreshPreview',],
             ]
         );
     }
@@ -160,7 +159,7 @@ trait Persistence
 
         return $this->responseSuccess(
             'Multiple action success, total {{ num }}',
-            ['{{ num }}' => $effect, 'href' => '']
+            ['{{ num }}' => $effect]
         );
     }
 }

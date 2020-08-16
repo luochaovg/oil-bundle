@@ -64,16 +64,24 @@ $(function () {
             bsw.redirect(bsw.getBswData($(event.item.$el).find('span')));
         },
 
-        tabsLinksSwitch(key) {
-            bsw.redirect(bsw.getBswData($(`#tabs_link_${key}`)));
-        },
-
         dispatcherByNative(element) {
             bsw.dispatcherByBswData(bsw.getBswData($(element)), element);
         },
 
         dispatcherByVue(event) {
             this.dispatcherByNative($(event.target)[0])
+        },
+
+        showIFrameByNative(element) {
+            bsw.showIFrame(bsw.getBswData($(element)), element);
+        },
+
+        showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0])
+        },
+
+        tabsLinksSwitch(key) {
+            bsw.redirect(bsw.getBswData($(`#tabs_link_${key}`)));
         },
 
         selectedRowHandler(field) {
@@ -90,6 +98,7 @@ $(function () {
         },
 
         multipleAction(data, element) {
+            let that = this;
             let ids = this.selectedRowHandler();
             if (ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
@@ -98,6 +107,9 @@ $(function () {
                 bsw.response(res).catch(reason => {
                     console.warn(reason);
                 });
+                if (typeof data.refresh !== 'undefined' && data.refresh) {
+                    that.previewPaginationRefresh(false);
+                }
             }).catch(reason => {
                 console.warn(reason);
             });
@@ -112,14 +124,6 @@ $(function () {
             }
             data.location = bsw.setParams(args, data.location);
             bsw.showIFrame(data, element);
-        },
-
-        showIFrameByNative(element) {
-            bsw.showIFrame(bsw.getBswData($(element)), element);
-        },
-
-        showIFrameByVue(event) {
-            this.showIFrameByNative($(event.target)[0])
         },
 
         fillParentForm(data, element) {
@@ -394,13 +398,12 @@ $(function () {
         requestByAjax(data, element) {
             let that = this;
             bsw.request(data.location).then(res => {
-                bsw.response(res).then(() => {
-                    if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.previewPaginationRefresh(false);
-                    }
-                }).catch(reason => {
+                bsw.response(res).catch(reason => {
                     console.warn(reason);
                 });
+                if (typeof data.refresh !== 'undefined' && data.refresh) {
+                    that.previewPaginationRefresh(false);
+                }
             }).catch(reason => {
                 console.warn(reason);
             });

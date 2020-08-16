@@ -13,6 +13,14 @@ use Leon\BswBundle\Module\Bsw\Bsw;
 class Module extends Bsw
 {
     /**
+     * @return bool|array
+     */
+    public function inheritExcludeArgs()
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     public function name(): string

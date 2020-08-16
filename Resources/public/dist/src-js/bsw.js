@@ -69,14 +69,20 @@ $(function () {
         redirectByVue: function redirectByVue(event) {
             bsw.redirect(bsw.getBswData($(event.item.$el).find('span')));
         },
-        tabsLinksSwitch: function tabsLinksSwitch(key) {
-            bsw.redirect(bsw.getBswData($('#tabs_link_' + key)));
-        },
         dispatcherByNative: function dispatcherByNative(element) {
             bsw.dispatcherByBswData(bsw.getBswData($(element)), element);
         },
         dispatcherByVue: function dispatcherByVue(event) {
             this.dispatcherByNative($(event.target)[0]);
+        },
+        showIFrameByNative: function showIFrameByNative(element) {
+            bsw.showIFrame(bsw.getBswData($(element)), element);
+        },
+        showIFrameByVue: function showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0]);
+        },
+        tabsLinksSwitch: function tabsLinksSwitch(key) {
+            bsw.redirect(bsw.getBswData($('#tabs_link_' + key)));
         },
         selectedRowHandler: function selectedRowHandler(field) {
             var rows = [];
@@ -91,6 +97,7 @@ $(function () {
             return rows;
         },
         multipleAction: function multipleAction(data, element) {
+            var that = this;
             var ids = this.selectedRowHandler();
             if (ids.length === 0) {
                 return bsw.warning(bsw.lang.select_item_first);
@@ -99,6 +106,9 @@ $(function () {
                 bsw.response(res).catch(function (reason) {
                     console.warn(reason);
                 });
+                if (typeof data.refresh !== 'undefined' && data.refresh) {
+                    that.previewPaginationRefresh(false);
+                }
             }).catch(function (reason) {
                 console.warn(reason);
             });
@@ -112,12 +122,6 @@ $(function () {
             }
             data.location = bsw.setParams(args, data.location);
             bsw.showIFrame(data, element);
-        },
-        showIFrameByNative: function showIFrameByNative(element) {
-            bsw.showIFrame(bsw.getBswData($(element)), element);
-        },
-        showIFrameByVue: function showIFrameByVue(event) {
-            this.showIFrameByNative($(event.target)[0]);
         },
         fillParentForm: function fillParentForm(data, element) {
             data.ids = this.selectedRowHandler(data.selector).join(',');
@@ -392,13 +396,12 @@ $(function () {
         requestByAjax: function requestByAjax(data, element) {
             var that = this;
             bsw.request(data.location).then(function (res) {
-                bsw.response(res).then(function () {
-                    if (typeof data.refresh !== 'undefined' && data.refresh) {
-                        that.previewPaginationRefresh(false);
-                    }
-                }).catch(function (reason) {
+                bsw.response(res).catch(function (reason) {
                     console.warn(reason);
                 });
+                if (typeof data.refresh !== 'undefined' && data.refresh) {
+                    that.previewPaginationRefresh(false);
+                }
             }).catch(function (reason) {
                 console.warn(reason);
             });

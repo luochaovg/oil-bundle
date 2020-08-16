@@ -419,7 +419,7 @@ ul.ant-pagination li {
   margin: 3px 0;
 }
 .bsw-record-action {
-  overflow: auto;
+  overflow: hidden;
 }
 .bsw-record-action button {
   margin: 3px 2px;

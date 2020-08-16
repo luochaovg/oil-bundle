@@ -42,6 +42,18 @@ $(function () {
             this.dispatcherByNative($(event.target)[0])
         },
 
+        showIFrameByNative(element) {
+            bsw.showIFrame(bsw.getBswData($(element)), element);
+        },
+
+        showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0])
+        },
+
+        tabsLinksSwitch(key) {
+            bsw.redirect(bsw.getBswData($(`#tabs_link_${key}`)));
+        },
+
     }, bsw.config.method || {})).directive(Object.assign({
 
         // directive

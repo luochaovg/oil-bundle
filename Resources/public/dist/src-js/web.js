@@ -39,6 +39,15 @@ $(function () {
         },
         dispatcherByVue: function dispatcherByVue(event) {
             this.dispatcherByNative($(event.target)[0]);
+        },
+        showIFrameByNative: function showIFrameByNative(element) {
+            bsw.showIFrame(bsw.getBswData($(element)), element);
+        },
+        showIFrameByVue: function showIFrameByVue(event) {
+            this.showIFrameByNative($(event.target)[0]);
+        },
+        tabsLinksSwitch: function tabsLinksSwitch(key) {
+            bsw.redirect(bsw.getBswData($('#tabs_link_' + key)));
         }
     }, bsw.config.method || {})).directive(Object.assign({
 
