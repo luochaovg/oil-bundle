@@ -1070,16 +1070,13 @@ class FoundationAntD extends FoundationTools {
         this.config = {};
         this.lang = lang;
         this.cnf = {
-            marginTop: '150px',
-            loadingMarginTop: '250px',
-            shade: .1,
-            zIndex: 9999,
             requestTimeout: 30,
-            notificationDuration: 5,
-            messageDuration: 5,
-            confirmDuration: 5,
+            notificationDuration: 3,
+            messageDuration: 3,
+            confirmDuration: 3,
             alertType: 'message',
             alertTypeForce: null,
+            maxZIndex: 1000,
             notificationPlacement: 'topRight',
             transitionName: 'bsw-zoom',
             maskTransitionName: 'fade',
@@ -1656,12 +1653,15 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showModal(options) {
-        let v = this.cnf.v;
+        let cnf = this.cnf;
+        let v = cnf.v;
         v.modal.visible = false;
         if (typeof options.width === 'undefined') {
             options.width = this.popupCosySize().width;
         }
         let meta = this.cloneJson(v.modalMeta);
+        cnf.maxZIndex += 1;
+        meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
         if (options.footer) {
             v.footer = '_footer';
@@ -1679,6 +1679,8 @@ class FoundationAntD extends FoundationTools {
      * @return {*}
      */
     showConfirm(options) {
+        let cnf = this.cnf;
+        cnf.maxZIndex += 1;
         return this.cnf.v.$confirm(Object.assign({
             title: options.title,
             content: options.content,
@@ -1689,6 +1691,7 @@ class FoundationAntD extends FoundationTools {
             onCancel: options.onClose || bsw.blank,
             transitionName: this.cnf.transitionName,
             maskTransitionName: this.cnf.maskTransitionName,
+            zIndex: cnf.maxZIndex,
         }, options));
     }
 
@@ -1698,12 +1701,15 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showDrawer(options) {
-        let v = this.cnf.v;
+        let cnf = this.cnf;
+        let v = cnf.v;
         v.drawer.visible = false;
         if (typeof options.width === 'undefined') {
             options.width = this.popupCosySize().width;
         }
         let meta = this.cloneJson(v.drawerMeta);
+        cnf.maxZIndex += 1;
+        meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
         v.drawer = options;
     }
@@ -1714,9 +1720,12 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showResult(options) {
-        let v = this.cnf.v;
+        let cnf = this.cnf;
+        let v = cnf.v;
         v.result.visible = false;
         let meta = this.cloneJson(v.resultMeta);
+        cnf.maxZIndex += 1;
+        meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
         v.result = options;
     }

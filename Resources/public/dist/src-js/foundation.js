@@ -1426,16 +1426,13 @@ var FoundationAntD = function (_FoundationTools) {
         _this2.config = {};
         _this2.lang = lang;
         _this2.cnf = {
-            marginTop: '150px',
-            loadingMarginTop: '250px',
-            shade: .1,
-            zIndex: 9999,
             requestTimeout: 30,
-            notificationDuration: 5,
-            messageDuration: 5,
-            confirmDuration: 5,
+            notificationDuration: 3,
+            messageDuration: 3,
+            confirmDuration: 3,
             alertType: 'message',
             alertTypeForce: null,
+            maxZIndex: 1000,
             notificationPlacement: 'topRight',
             transitionName: 'bsw-zoom',
             maskTransitionName: 'fade',
@@ -2160,12 +2157,15 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showModal',
         value: function showModal(options) {
-            var v = this.cnf.v;
+            var cnf = this.cnf;
+            var v = cnf.v;
             v.modal.visible = false;
             if (typeof options.width === 'undefined') {
                 options.width = this.popupCosySize().width;
             }
             var meta = this.cloneJson(v.modalMeta);
+            cnf.maxZIndex += 1;
+            meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
             if (options.footer) {
                 v.footer = '_footer';
@@ -2186,6 +2186,8 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showConfirm',
         value: function showConfirm(options) {
+            var cnf = this.cnf;
+            cnf.maxZIndex += 1;
             return this.cnf.v.$confirm(Object.assign({
                 title: options.title,
                 content: options.content,
@@ -2195,7 +2197,8 @@ var FoundationAntD = function (_FoundationTools) {
                 cancelText: this.lang.cancel,
                 onCancel: options.onClose || bsw.blank,
                 transitionName: this.cnf.transitionName,
-                maskTransitionName: this.cnf.maskTransitionName
+                maskTransitionName: this.cnf.maskTransitionName,
+                zIndex: cnf.maxZIndex
             }, options));
         }
 
@@ -2208,12 +2211,15 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showDrawer',
         value: function showDrawer(options) {
-            var v = this.cnf.v;
+            var cnf = this.cnf;
+            var v = cnf.v;
             v.drawer.visible = false;
             if (typeof options.width === 'undefined') {
                 options.width = this.popupCosySize().width;
             }
             var meta = this.cloneJson(v.drawerMeta);
+            cnf.maxZIndex += 1;
+            meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
             v.drawer = options;
         }
@@ -2227,9 +2233,12 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showResult',
         value: function showResult(options) {
-            var v = this.cnf.v;
+            var cnf = this.cnf;
+            var v = cnf.v;
             v.result.visible = false;
             var meta = this.cloneJson(v.resultMeta);
+            cnf.maxZIndex += 1;
+            meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
             v.result = options;
         }
