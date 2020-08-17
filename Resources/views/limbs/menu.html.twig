@@ -6,16 +6,18 @@
   :width="menuWidth"
 >
   <div class="logo">
-    <a href="{{ path(scaffold.cnf.routeDefault) }}">
-      {% if scaffold.cnf.appLogo %}
-        <img src="{{ scaffold.cnf.appLogo }}?version={{ scaffold.version }}" alt="logo">
-      {% endif %}
-      {% set appName = scaffold.cnf.appName ?? 'Application' %}
-      {% set appName = appName|trans({}, 'twig') %}
-      <h1 :style="`max-width:${menuWidth - 80}px;`" title="{{ appName }}">
-        {{ appName }} <sup>{{ scaffold.env }}</sup>
-      </h1>
-    </a>
+    {% block menuLogo %}
+      <a href="{{ path(scaffold.cnf.routeDefault) }}">
+        {% if scaffold.cnf.appLogo %}
+          <img src="{{ scaffold.cnf.appLogo }}?version={{ scaffold.version }}" alt="logo">
+        {% endif %}
+        {% set appName = scaffold.cnf.appName ?? 'Application' %}
+        {% set appName = appName|trans({}, 'twig') %}
+        <h1 :style="`max-width:${menuWidth - 80}px;`" title="{{ appName }}">
+          {{ appName }} <sup>{{ scaffold.env }}</sup>
+        </h1>
+      </a>
+    {% endblock %}
   </div>
   <a-menu
     :theme="theme"
