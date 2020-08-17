@@ -318,13 +318,19 @@ class BswBackendController extends BswWebController
      * @param array  $moduleList
      * @param string $view
      * @param array  $routeArgs
+     * @param bool   $responseWhenMessage
      * @param bool   $simpleMode
      *
      * @return Response|array
      * @throws
      */
-    protected function showModule(array $moduleList, ?string $view, array $routeArgs = [], bool $simpleMode = false)
-    {
+    protected function showModule(
+        array $moduleList,
+        ?string $view,
+        array $routeArgs = [],
+        bool $responseWhenMessage = true,
+        bool $simpleMode = false
+    ) {
         if (empty($routeArgs['scene'])) {
             $routeArgs['scene'] = Abs::TAG_UNKNOWN;
         }
@@ -374,7 +380,7 @@ class BswBackendController extends BswWebController
                     Helper::callReturnType($message, BswModule\Message::class, 'Message handler');
                 }
 
-                return $this->messageToResponse($message);
+                return $responseWhenMessage ? $this->messageToResponse($message) : $message;
             }
 
             if (!$name || $simpleMode) {
@@ -576,11 +582,12 @@ class BswBackendController extends BswWebController
      *
      * @param array $args
      * @param array $relation
+     * @param bool  $responseWhenMessage
      *
      * @return Response|BswModule\Message|array
      * @throws
      */
-    protected function doAway(array $args = [], array $relation = [])
+    protected function doAway(array $args = [], array $relation = [], bool $responseWhenMessage = true)
     {
         $args['relation'] = $relation;
         $moduleList = [
@@ -589,7 +596,7 @@ class BswBackendController extends BswWebController
             BswModule\Away\Module::class   => ['sort' => Abs::MODULE_AWAY_SORT],
         ];
 
-        return $this->showModule($moduleList, null, $args, true);
+        return $this->showModule($moduleList, null, $args, $responseWhenMessage, true);
     }
 
     /**
