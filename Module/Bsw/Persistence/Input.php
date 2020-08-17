@@ -71,6 +71,11 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $sizeInIframe = Abs::SIZE_LARGE;
+
+    /**
+     * @var string
+     */
     public $sizeInMobile = Abs::SIZE_LARGE;
 
     /**
@@ -86,5 +91,10 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
-    public $operatesBlockInIFrame = true;
+    public $operatesBlockInIframe = true;
+
+    /**
+     * @var bool
+     */
+    public $operatesBlockInMobile = true;
 }

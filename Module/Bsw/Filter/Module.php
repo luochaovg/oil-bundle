@@ -356,16 +356,6 @@ class Module extends Bsw
     }
 
     /**
-     * Get item size
-     *
-     * @return string
-     */
-    protected function getSize(): string
-    {
-        return $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
-    }
-
-    /**
      * Get item width
      *
      * @param int $column
@@ -422,7 +412,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($this->getSize());
+                $form->setSize($this->getInputAuto('size'));
             }
 
             /**
@@ -507,7 +497,7 @@ class Module extends Bsw
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
-            $operate->setSize($this->getSize());
+            $operate->setSize($this->getInputAuto('size'));
             if (!$this->web->routeIsAccess($operate->getRouteForAccess())) {
                 $operate->setDisplay(false);
             }
@@ -598,16 +588,12 @@ class Module extends Bsw
      *
      * @param array  $filterAnnotation
      * @param Output $output
+     *
+     * @throws
      */
     protected function handleShowList(array $filterAnnotation, Output $output)
     {
-        if ($this->input->mobile) {
-            $output->maxShow = $this->input->maxShowInMobile;
-        } elseif ($this->input->iframe) {
-            $output->maxShow = $this->input->maxShowInIframe;
-        } else {
-            $output->maxShow = $this->input->maxShow;
-        }
+        $output->maxShow = $this->getInputAuto('maxShow');
 
         [$output->group, $output->diffuse] = $this->getFilterGroup($filterAnnotation);
         $output->showFull = $this->getShowFilterItemList($filterAnnotation, $output->group, $output->diffuse);
@@ -685,7 +671,7 @@ class Module extends Bsw
 
         $this->handleShowList($filterAnnotation, $output);
         $this->handleFilter($output);
-        $output->size = $this->getSize();
+        $output->size = $this->getInputAuto('size');
 
         $output = $this->caller(
             $this->method(),

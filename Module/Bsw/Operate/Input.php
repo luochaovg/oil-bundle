@@ -15,6 +15,11 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $sizeInIframe = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var string
+     */
     public $sizeInMobile = Abs::SIZE_DEFAULT;
 
     /**
@@ -30,5 +35,10 @@ class Input extends ArgsInput
     /**
      * @var string
      */
-    public $clsNameInIFrame = 'bsw-align-left';
+    public $clsNameInIframe = 'bsw-align-left';
+
+    /**
+     * @var string
+     */
+    public $clsNameInMobile = 'bsw-align-right';
 }

@@ -110,10 +110,10 @@ abstract class Bsw
     {
         return [
             'clsName',
-            'clsNameInIFrame',
+            'clsNameInIframe',
             'clsNameInMobile',
             'size',
-            'sizeInIFrame',
+            'sizeInIframe',
             'sizeInMobile',
             'i18nAway',
             'i18nArgs',
@@ -721,5 +721,32 @@ abstract class Bsw
             },
             "bsw-entity-{$this->entity}"
         );
+    }
+
+    /**
+     * Get input auto
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws
+     */
+    public function getInputAuto(string $name)
+    {
+        $inMobile = "{$name}InMobile";
+        if ($this->input->mobile && isset($this->input->{$inMobile})) {
+            return $this->input->{$inMobile};
+        }
+
+        $inIframe = "{$name}InIframe";
+        if ($this->input->iframe && isset($this->input->{$inIframe})) {
+            return $this->input->{$inIframe};
+        }
+
+        if (!isset($this->input->{$name})) {
+            throw new ModuleException("Argument `{$name}` is not defined in " . get_class($this->input));
+        }
+
+        return $this->input->{$name};
     }
 }

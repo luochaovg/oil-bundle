@@ -59,19 +59,21 @@
           </template>
         {% endif %}
       </a-table>
-      {% block scrollX %}
-        <div
-          class="bsw-scroll-x left"
-          data-step="500"
-          data-target-selector=".ant-table-body"
-          :style="{bottom: '44px'}"
-        >{{ 'b:icon-back'|icon|raw }}</div>
-        <div
-          class="bsw-scroll-x right"
-          data-step="500"
-          data-target-selector=".ant-table-body"
-          :style="{bottom: '44px'}"
-        >{{ 'b:icon-more'|icon|raw }}</div>
+      {% block scrollXOperate %}
+        {% if preview.scrollXOperate %}
+          <div
+            class="bsw-scroll-x left"
+            data-step="500"
+            data-target-selector=".ant-table-body"
+            :style="{bottom: '44px'}"
+          >{{ 'b:icon-back'|icon|raw }}</div>
+          <div
+            class="bsw-scroll-x right"
+            data-step="500"
+            data-target-selector=".ant-table-body"
+            :style="{bottom: '44px'}"
+          >{{ 'b:icon-more'|icon|raw }}</div>
+        {% endif %}
       {% endblock %}
       {% block pagination %}
         <a-pagination

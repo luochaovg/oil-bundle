@@ -81,7 +81,7 @@ class Module extends Bsw
 
         $nowScene = $this->input->iframe ? Abs::SCENE_IFRAME : Abs::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $this->arguments($this->input->args));
-        $size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
+        $size = $this->getInputAuto('size');
 
         // buttons handler
         foreach ($buttons as $button) {
@@ -118,7 +118,7 @@ class Module extends Bsw
 
         $output->choice = $choiceScene[$nowScene] ?? $output->choice;
         $output->buttons = $buttonScene[$nowScene] ?? $output->buttons;
-        $output->clsName = $this->input->iframe ? $this->input->clsNameInIFrame : $this->input->clsName;
+        $output->clsName = $this->getInputAuto('clsName');
 
         $output = $this->caller(
             $this->method(),

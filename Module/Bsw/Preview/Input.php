@@ -22,7 +22,22 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
+    public $choiceFixedInIframe = true;
+
+    /**
+     * @var bool
+     */
+    public $choiceFixedInMobile = false;
+
+    /**
+     * @var bool
+     */
     public $border = true;
+
+    /**
+     * @var bool
+     */
+    public $borderInIframe = true;
 
     /**
      * @var bool
@@ -62,12 +77,27 @@ class Input extends ArgsInput
     /**
      * @var bool
      */
+    public $removeOperate = false;
+
+    /**
+     * @var bool
+     */
     public $removeOperateInIframe = true;
 
     /**
      * @var bool
      */
+    public $removeOperateInMobile = false;
+
+    /**
+     * @var bool
+     */
     public $size = Abs::SIZE_DEFAULT;
+
+    /**
+     * @var bool
+     */
+    public $sizeInIframe = Abs::SIZE_DEFAULT;
 
     /**
      * @var bool
@@ -118,4 +148,19 @@ class Input extends ArgsInput
      * @var string
      */
     public $childrenRowClsName = 'bsw-row-children';
+
+    /**
+     * @var bool
+     */
+    public $scrollXOperate = true;
+
+    /**
+     * @var bool
+     */
+    public $scrollXOperateInIframe = true;
+
+    /**
+     * @var bool
+     */
+    public $scrollXOperateInMobile = false;
 }

@@ -164,11 +164,16 @@ trait BackendPreset
      * @param string $label
      * @param string $content
      * @param array  $options
+     * @param string $shape
      *
      * @return Charm
      */
-    public function charmShowContent(string $label, string $content, array $options = []): Charm
-    {
+    public function charmShowContent(
+        string $label,
+        string $content,
+        array $options = [],
+        string $shape = Abs::SHAPE_MODAL
+    ): Charm {
         $args = [
             'title'        => $this->twigLang($label),
             'content'      => Html::tag('pre', $content, ['class' => 'bsw-pre bsw-long-text']),
@@ -180,8 +185,8 @@ trait BackendPreset
         $button = (new Button('{value}'))
             ->setSize(Abs::SIZE_SMALL)
             ->setType(Abs::THEME_DEFAULT)
-            ->setClick('showModal')
-            ->setArgs(array_merge($options, $args));
+            ->setClick([Abs::SHAPE_MODAL => 'showModal', Abs::SHAPE_DRAWER => 'showDrawer'][$shape])
+            ->setArgs(array_merge($args, $options));
 
         return new Charm($this->getButtonHtml($button), $label);
     }

@@ -40,6 +40,11 @@ class Input extends ArgsInput
     /**
      * @var string
      */
+    public $placementInIframe = Abs::POS_LEFT;
+
+    /**
+     * @var string
+     */
     public $placementInMobile = Abs::POS_BOTTOM;
 
     /**

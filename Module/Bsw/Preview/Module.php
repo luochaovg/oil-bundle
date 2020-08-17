@@ -939,7 +939,7 @@ class Module extends Bsw
             unset($output->columns[$operate]);
         }
 
-        if ($this->input->iframe && $this->input->removeOperateInIframe) {
+        if ($this->getInputAuto('removeOperate')) {
             $output->scrollX -= ($output->columns[$operate]['width'] ?? 0);
             unset($output->columns[$operate]);
         }
@@ -1097,11 +1097,12 @@ class Module extends Bsw
         $output->listJson = Helper::jsonStringify($output->list);
         $output->pageJson = Helper::jsonFlexible($output->page);
 
-        $output->choiceFixed = $this->input->mobile ? false : $this->input->choiceFixed;
-        $output->border = $this->input->mobile ? $this->input->borderInMobile : $this->input->border;
-        $output->size = $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
+        $output->choiceFixed = $this->getInputAuto('choiceFixed');
+        $output->border = $this->getInputAuto('border');
+        $output->size = $this->getInputAuto('size');
         $output->pageSizeOptions = array_map('strval', $this->input->pageSizeOptions);
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions);
+        $output->scrollXOperate = $this->getInputAuto('scrollXOperate');
 
         $output = $this->caller(
             $this->method(),

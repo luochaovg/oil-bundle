@@ -63,12 +63,13 @@ class Module extends Bsw
 
     /**
      * @return ArgsOutput
+     * @throws
      */
     public function logic(): ArgsOutput
     {
         $output = new Output($this->input);
 
-        $output->placement = $this->input->mobile ? $this->input->placementInMobile : $this->input->placement;
+        $output->placement = $this->getInputAuto('placement');
         $output->maskStyleJson = Helper::jsonFlexible($this->input->maskStyle);
         $output->wrapStyleJson = Helper::jsonFlexible($this->input->wrapStyle);
         $output->drawerStyleJson = Helper::jsonFlexible($this->input->drawerStyle);

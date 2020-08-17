@@ -482,14 +482,6 @@ class Module extends Bsw
     }
 
     /**
-     * @return string
-     */
-    protected function getSize(): string
-    {
-        return $this->input->mobile ? $this->input->sizeInMobile : $this->input->size;
-    }
-
-    /**
      * Persistence data handler
      *
      * @param array  $persistAnnotation
@@ -620,7 +612,7 @@ class Module extends Bsw
             }
 
             if (method_exists($form, 'setSize')) {
-                $form->setSize($this->getSize());
+                $form->setSize($this->getInputAuto('size'));
             }
 
             if (Helper::extendClass($form, Group::class, true)) {
@@ -629,7 +621,7 @@ class Module extends Bsw
                  */
                 foreach ($form->getMember() as $f) {
                     if (method_exists($f, 'setSize')) {
-                        $f->setSize($this->getSize());
+                        $f->setSize($this->getInputAuto('size'));
                     }
                 }
             }
@@ -711,7 +703,7 @@ class Module extends Bsw
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
             $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
 
-            if ($this->input->iframe ? $this->input->operatesBlockInIFrame : $this->input->operatesBlock) {
+            if ($this->getInputAuto('operatesBlock')) {
                 $operate->setBlock(true);
             }
 
