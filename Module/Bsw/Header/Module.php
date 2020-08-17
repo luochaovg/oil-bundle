@@ -109,7 +109,7 @@ class Module extends Bsw
 
             // route path
             if ($route) {
-                $item->setUrl($this->web->urlSafe($route, $args, 'Header menu route'));
+                $item->setUrl($this->web->urlSafe($route, $args, 'Build header menu'));
             }
 
             // javascript
@@ -141,7 +141,7 @@ class Module extends Bsw
             Helper::objectInstanceOf($item, Setting::class, "Method {$method}():array items");
 
             $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
-            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header setting'));
+            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Build header setting'));
             array_push($output->setting, $item);
         }
 
@@ -156,7 +156,7 @@ class Module extends Bsw
             Helper::objectInstanceOf($item, Links::class, "Method {$method}():array items");
 
             $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
-            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Header links'));
+            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Build header links'));
             array_push($output->links, $item);
         }
 

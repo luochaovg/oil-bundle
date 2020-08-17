@@ -494,7 +494,7 @@ class Module extends Bsw
 
             $operate->setClick('setUrlToForm');
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
-            $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Filter button'));
+            $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Build filter operates'));
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
             $operate->setSize($this->getInputAuto('size'));

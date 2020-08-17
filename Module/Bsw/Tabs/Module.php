@@ -84,7 +84,7 @@ class Module extends Bsw
              * @var Links $item
              */
             $item->setScript(Html::scriptBuilder($item->getClick(), $item->getArgs()));
-            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Tabs links'));
+            $item->setUrl($this->web->urlSafe($item->getRoute(), $item->getArgs(), 'Build tabs links'));
             array_push($output->links, $item);
         }
 

@@ -154,6 +154,9 @@ trait BackendPreset
     public function getButtonHtml(Button $button, bool $vue = false): string
     {
         $twig = $vue ? 'form/button.html' : 'form/button.native.html';
+        if (empty($button->getUrl())) {
+            $button->setUrl($this->urlSafe($button->getRoute(), $button->getArgs(), 'Build charm operates'));
+        }
 
         return $this->renderPart($twig, ['form' => $button]);
     }

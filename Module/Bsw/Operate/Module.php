@@ -107,7 +107,7 @@ class Module extends Bsw
 
             // script
             $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
-            $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Operate button'));
+            $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Build page operate'));
 
             if (!$this->web->routeIsAccess($button->getRouteForAccess())) {
                 $button->setDisplay(false);

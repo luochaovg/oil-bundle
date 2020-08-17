@@ -383,7 +383,7 @@ class Module extends Bsw
                 $form->setRoute($this->input->cnf->route_upload);
             }
 
-            $form->setUrl($this->web->urlSafe($form->getRoute(), $form->getArgs(), 'Upload route'));
+            $form->setUrl($this->web->urlSafe($form->getRoute(), $form->getArgs(), 'Build upload route'));
 
             /**
              * File list key
@@ -701,13 +701,16 @@ class Module extends Bsw
 
             $operate->setClick('setUrlToForm');
             $operate->setScript(Html::scriptBuilder($operate->getClick(), $operate->getArgs()));
-            $operate->setUrl($this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Persistence button'));
+            $operate->setUrl(
+                $this->web->urlSafe($operate->getRoute(), $operate->getArgs(), 'Build persistence operates')
+            );
 
             if ($this->getInputAuto('operatesBlock')) {
                 $operate->setBlock(true);
             }
 
             $operate->setHtmlType(Abs::TYPE_SUBMIT);
+            $operate->setSize($this->getInputAuto('size'));
             if (!$this->web->routeIsAccess($operate->getRouteForAccess())) {
                 $operate->setDisplay(false);
             }

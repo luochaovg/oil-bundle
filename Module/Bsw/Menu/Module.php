@@ -143,7 +143,7 @@ class Module extends Bsw
 
             // route path
             if ($route) {
-                $item->setUrl($this->web->urlSafe($route, $args, 'Menu route'));
+                $item->setUrl($this->web->urlSafe($route, $args, 'Build admin menu'));
             }
 
             // javascript

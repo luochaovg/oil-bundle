@@ -846,7 +846,7 @@ class Module extends Bsw
                 $button->setSize($this->input->recordOperatesSize);
 
                 $button->setScript(Html::scriptBuilder($button->getClick(), $button->getArgs()));
-                $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Preview button'));
+                $button->setUrl($this->web->urlSafe($button->getRoute(), $button->getArgs(), 'Build record operates'));
 
                 // instead of display with remove
                 if (!$this->web->routeIsAccess($button->getRouteForAccess())) {

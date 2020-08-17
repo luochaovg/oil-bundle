@@ -58,9 +58,11 @@
       </a-form-item>
     {% endif %}
     {% for item in filter.operates %}
-      <a-form-item class="bsw-filter-item bsw-filter-action" label="{{ filter.showLabel ? '　' : null }}">
-        {% include 'form/button.html.twig' with {form: item} %}
-      </a-form-item>
+      {% if item.display %}
+        <a-form-item class="bsw-filter-item bsw-filter-action" label="{{ filter.showLabel ? '　' : null }}">
+          {% include 'form/button.html.twig' with {form: item} %}
+        </a-form-item>
+      {% endif %}
     {% endfor %}
   </a-form>
 {% endif %}
