@@ -75,8 +75,9 @@ trait Close
 
         return $this->showPersistence(
             [
-                'id'     => $id,
-                'submit' => ['id' => $id, 'state' => 0],
+                'id'        => $id,
+                'submit'    => ['id' => $id, 'state' => 0],
+                'nextRoute' => null,
             ]
         );
     }

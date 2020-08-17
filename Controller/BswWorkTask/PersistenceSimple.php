@@ -114,6 +114,11 @@ trait PersistenceSimple
             return $args;
         }
 
-        return $this->showPersistence(['id' => $id, 'nextRoute' => 'app_bsw_work_task_preview']);
+        return $this->showPersistence(
+            [
+                'id'   => $id,
+                'sets' => ['function' => 'refreshPreview'],
+            ]
+        );
     }
 }

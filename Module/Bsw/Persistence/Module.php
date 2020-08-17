@@ -1016,9 +1016,8 @@ class Module extends Bsw
                         'recordAdd',
                         'recordDel',
                         'result',
-                        'pk'
                     ),
-                    ['pk' => $newly ? $result : $recordBefore[$pk]],
+                    ['pk' => $newly ? $result : ($recordBefore[$pk] ?? $original[$pk])],
                     $this->input->args
                 );
 

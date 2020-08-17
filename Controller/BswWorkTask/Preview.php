@@ -241,8 +241,14 @@ trait Preview
                 ->setIcon('b:icon-success')
                 ->setDisplay($leader)
                 ->setDisabled(!in_array($args->item['state'], [3, 4]))
+                ->setClick('requestByAjax')
                 ->setConfirm($this->messageLang('Are you sure'))
-                ->setArgs(['id' => $args->item['id']]),
+                ->setArgs(
+                    [
+                        'id'      => $args->item['id'],
+                        'refresh' => true,
+                    ]
+                ),
         ];
     }
 
