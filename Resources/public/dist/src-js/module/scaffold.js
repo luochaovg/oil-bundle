@@ -1,20 +1,33 @@
 'use strict';
 
 bsw.configure({
+    data: {
+        menuTheme: 'dark',
+        menuWidth: 256,
+        menuCollapsed: false,
+        weak: 'no'
+    },
     method: {
         themeSwitch: function themeSwitch(data, element) {
-            this.theme = bsw.cookieMapNext('bsw_theme', this.themeMap, this.theme, true, bsw.lang.theme);
+            var cnf = bsw.cnf;
+            var menuTheme = cnf.menuTheme || this.menuTheme;
+            this.menuTheme = bsw.cookieMapNext('bsw_theme', cnf.menuThemeMap, menuTheme, true, bsw.lang.theme);
         },
         colorWeakSwitch: function colorWeakSwitch(data, element) {
-            this.weak = bsw.cookieMapNext('bsw_color_weak', this.opposeMap, this.weak, true, bsw.lang.color_weak);
+            var cnf = bsw.cnf;
+            var weak = cnf.weak || this.weak;
+            this.weak = bsw.cookieMapNext('bsw_color_weak', cnf.opposeMap, weak, true, bsw.lang.color_weak);
             bsw.switchClass('bsw-weak', this.weak);
         },
         thirdMessageSwitch: function thirdMessageSwitch(data, element) {
-            this.thirdMessage = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.thirdMessage, true, bsw.lang.third_message);
+            var cnf = bsw.cnf;
+            var thirdMessage = cnf.thirdMessage || this.thirdMessage;
+            cnf.thirdMessage = bsw.cookieMapNext('bsw_third_message', cnf.opposeMap, thirdMessage, true, bsw.lang.third_message);
         },
         menuTrigger: function menuTrigger() {
-            var _collapsed = this.menuCollapsed ? 'yes' : 'no';
-            var collapsed = bsw.cookieMapNext('bsw_menu_collapsed', this.opposeMap, _collapsed, true);
+            var cnf = bsw.cnf;
+            var collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            collapsed = bsw.cookieMapNext('bsw_menu_collapsed', cnf.opposeMap, collapsed ? 'yes' : 'no', true);
             this.menuCollapsed = collapsed === 'yes';
             setTimeout(function () {
                 $(window).resize();
@@ -31,17 +44,24 @@ bsw.configure({
             });
         },
         scaffoldInit: function scaffoldInit() {
-            var cnf = this.init.configure;
+            var cnf = bsw.cnf;
+
             // theme
-            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, cnf.theme || this.theme);
+            var menuTheme = cnf.menuTheme || this.menuTheme;
+            this.menuTheme = bsw.cookieMapCurrent('bsw_theme', cnf.menuThemeMap, menuTheme);
+
             // color weak
-            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, cnf.weak || this.weak);
+            var weak = cnf.weak || this.weak;
+            this.weak = bsw.cookieMapCurrent('bsw_color_weak', cnf.opposeMap, weak);
             bsw.switchClass('bsw-weak', this.weak);
+
             // third message
-            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, cnf.third_message || this.third_message);
+            var thirdMessage = cnf.thirdMessage || this.thirdMessage;
+            cnf.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', cnf.opposeMap, thirdMessage);
+
             // menu
-            this.menuWidth = cnf.menu_width || this.menuWidth;
-            var collapsed = bsw.cookieMapCurrent('bsw_menu_collapsed', this.opposeMap, typeof cnf.menu_collapsed === 'undefined' ? this.menuWidth : cnf.menu_collapsed);
+            this.menuWidth = cnf.menuWidth || this.menuWidth;
+            var collapsed = bsw.cookieMapCurrent('bsw_menu_collapsed', cnf.opposeMap, typeof cnf.menuCollapsed === 'undefined' ? this.menuWidth : cnf.menuCollapsed);
 
             var menuCollapsed = collapsed === 'yes';
             this.$nextTick(function () {
@@ -52,16 +72,16 @@ bsw.configure({
     },
     logic: {
         thirdMessage: function thirdMessage(v) {
-            var cnf = v.init.configure;
-            if (typeof cnf === 'undefined' || typeof cnf.third_message_second === 'undefined') {
+            var cnf = bsw.cnf;
+            if (typeof cnf === 'undefined' || typeof cnf.thirdMessageSecond === 'undefined') {
                 return;
             }
-            if (cnf.third_message_second < 3) {
+            if (cnf.thirdMessageSecond < 3) {
                 return;
             }
             v.$nextTick(function () {
                 setInterval(function () {
-                    var tm = bsw.cookieMapCurrent('bsw_third_message', v.opposeMap, v.thirdMessage);
+                    var tm = bsw.cookieMapCurrent('bsw_third_message', cnf.opposeMap, cnf.thirdMessage);
                     if (tm === 'no') {
                         return;
                     }
@@ -76,7 +96,7 @@ bsw.configure({
                     }).catch(function (reason) {
                         console.warn(reason);
                     });
-                }, cnf.third_message_second * 1000);
+                }, cnf.thirdMessageSecond * 1000);
             });
         }
     }

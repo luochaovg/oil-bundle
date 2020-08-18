@@ -1,6 +1,6 @@
 <a-layout-sider
   class="bsw-menu-container"
-  :theme="theme"
+  :theme="menuTheme"
   collapsible
   v-model="menuCollapsed"
   :width="menuWidth"
@@ -20,7 +20,7 @@
     {% endblock %}
   </div>
   <a-menu
-    :theme="theme"
+    :theme="menuTheme"
     :default-open-keys="['{{ menu.parent }}']"
     :default-selected-keys="['{{ menu.current }}']"
     :inline-collapsed="menuCollapsed"

@@ -516,6 +516,61 @@ class FoundationTools extends FoundationPrototype {
     }
 
     /**
+     * Sort json array
+     *
+     * @param array
+     * @param field
+     * @param desc
+     *
+     * @returns {*}
+     */
+    sortJsonArray(array, field, desc = false) {
+        if (array.length < 2 || !field || typeof array[0] !== 'object') {
+            return array;
+        }
+        if (typeof array[0][field] === "number") {
+            array.sort(function (x, y) {
+                return x[field] - y[field]
+            });
+        }
+        if (typeof array[0][field] === "string") {
+            array.sort(function (x, y) {
+                return x[field].localeCompare(y[field])
+            });
+        }
+        if (desc) {
+            array.reverse();
+        }
+        return array;
+    }
+
+    /**
+     * Sort json
+     *
+     * @param object
+     * @returns {{}}
+     */
+    sortJson(object) {
+        let keys = [];
+        for (let key in object) {
+            if (!object.hasOwnProperty(key)) {
+                continue;
+            }
+            keys.push(key)
+        }
+        keys.sort();
+        let target = {};
+        for (let key in keys) {
+            if (!keys.hasOwnProperty(key)) {
+                continue;
+            }
+            let k = keys[key];
+            target[k] = object[k];
+        }
+        return target;
+    }
+
+    /**
      * Get element offset
      *
      * @param element
@@ -604,6 +659,7 @@ class FoundationTools extends FoundationPrototype {
      */
     jsonBuildQuery(source, returnObject = false, needEncode = true) {
         let query = '', _query = {}, name, value, fullSubName, subName, subValue, innerObject, i;
+        source = this.sortJson(source);
         for (let name in source) {
             if (!source.hasOwnProperty(name)) {
                 continue;
@@ -1070,16 +1126,37 @@ class FoundationAntD extends FoundationTools {
         this.config = {};
         this.lang = lang;
         this.cnf = {
+            menuTheme: 'dark',
+            menuWidth: 256,
+            menuCollapsed: false,
+            menuThemeMap: {dark: 'light', light: 'dark'},
+            opposeMap: {yes: 'no', no: 'yes'},
+            mobileDefaultCollapsed: true,
+            weak: 'no',
+            thirdMessage: 'no',
+            thirdMessageSecond: 15,
             requestTimeout: 30,
+            requestRetryTimes: 3,
             notificationDuration: 3,
             messageDuration: 3,
             confirmDuration: 3,
+            confirmWidth: 350,
             alertType: 'message',
             alertTypeForce: null,
             maxZIndex: 1000,
             notificationPlacement: 'topRight',
             transitionName: 'bsw-zoom',
             maskTransitionName: 'fade',
+            cosyMinWidth: 1285,
+            cosyMinWidthLess: .95,
+            cosyMinWidthMore: .65,
+            cosyMinHeight: 666,
+            cosyMinHeightLess: .95,
+            cosyMinHeightMore: .75,
+            autoHeightDuration: 100,
+            autoHeightOffset: 0,
+            scrollXMinHeight: 300,
+            scrollXFadeDuration: 100,
             v: null,
             method: {
                 get: 'GET',
@@ -1098,7 +1175,7 @@ class FoundationAntD extends FoundationTools {
             if (!config.hasOwnProperty(key)) {
                 continue;
             }
-            this.config[key] = Object.assign(this.config[key] || {}, config[key]);
+            bsw.config[key] = Object.assign(bsw.config[key] || {}, config[key]);
         }
     }
 
@@ -1288,7 +1365,7 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     success(description, duration, onClose, type) {
-        return this[type || this.cnf.alertType]('success', description, duration, onClose);
+        return this[type || bsw.cnf.alertType]('success', description, duration, onClose);
     }
 
     /**
@@ -1302,7 +1379,7 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     info(description, duration, onClose, type) {
-        return this[type || this.cnf.alertType]('info', description, duration, onClose);
+        return this[type || bsw.cnf.alertType]('info', description, duration, onClose);
     }
 
     /**
@@ -1316,7 +1393,7 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     warning(description, duration, onClose, type) {
-        return this[type || this.cnf.alertType]('warning', description, duration, onClose);
+        return this[type || bsw.cnf.alertType]('warning', description, duration, onClose);
     }
 
     /**
@@ -1330,7 +1407,7 @@ class FoundationAntD extends FoundationTools {
      * @returns {*}
      */
     error(description, duration, onClose, type) {
-        return this[type || this.cnf.alertType]('error', description, duration, onClose);
+        return this[type || bsw.cnf.alertType]('error', description, duration, onClose);
     }
 
     /**
@@ -1344,7 +1421,7 @@ class FoundationAntD extends FoundationTools {
      *
      * @returns {Promise}
      */
-    request(url, data = {}, type = this.cnf.method.post, upload = false, times = 1) {
+    request(url, data = {}, type = bsw.cnf.method.post, upload = false, times = 1) {
         let that = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
@@ -1381,7 +1458,7 @@ class FoundationAntD extends FoundationTools {
                     if (obj.statusText === 'timeout') {
                         console.warn('Client request timeout: ', obj);
                         console.warn(`Retry current request in times ${times}`);
-                        if (times <= 3) {
+                        if (times <= that.cnf.requestRetryTimes) {
                             return that.request(url, data, type, upload, ++times);
                         }
                     }
@@ -1401,7 +1478,7 @@ class FoundationAntD extends FoundationTools {
      */
     response(result, successSameHandler, failedSameHandler, duration) {
         if (typeof result.code === 'undefined') {
-            return this.error(this.lang.response_error_message);
+            return bsw.error(bsw.lang.response_error_message);
         }
 
         let that = this;
@@ -1457,11 +1534,12 @@ class FoundationAntD extends FoundationTools {
      * @returns {{width: number, height: number}}
      */
     popupCosySize(honest = false, d = document) {
+        let cnf = bsw.cnf;
         let width = d.body.clientWidth;
         let height = d.body.clientHeight;
         if (!honest) {
-            width *= (width < 1285 ? .95 : .65);
-            height *= (height < 666 ? .95 : .75);
+            width *= (width < cnf.cosyMinWidth ? cnf.cosyMinWidthLess : cnf.cosyMinWidthMore);
+            height *= (height < cnf.cosyMinHeight ? cnf.cosyMinHeightLess : cnf.cosyMinHeightMore);
         }
 
         return {
@@ -1487,7 +1565,7 @@ class FoundationAntD extends FoundationTools {
      */
     rsaEncrypt(text) {
         let encrypt = new JSEncrypt();
-        encrypt.setPublicKey(this.cnf.v.rsaPublicKey);
+        encrypt.setPublicKey(bsw.cnf.v.rsaPublicKey);
 
         return encrypt.encrypt(text);
     }
@@ -1515,10 +1593,10 @@ class FoundationAntD extends FoundationTools {
             if (!target.hasOwnProperty(key)) {
                 continue;
             }
-            if (this.isJson(target[key])) {
-                target[key] = this.arrayBase64Decode(target[key]);
-            } else if (this.isString(target[key])) {
-                target[key] = this.base64Decode(target[key]);
+            if (bsw.isJson(target[key])) {
+                target[key] = bsw.arrayBase64Decode(target[key]);
+            } else if (bsw.isString(target[key])) {
+                target[key] = bsw.base64Decode(target[key]);
             }
         }
         return target;
@@ -1638,11 +1716,11 @@ class FoundationAntD extends FoundationTools {
      */
     showMessage(options) {
         let classify = options.classify || 'info';
-        let duration = this.isNull(options.duration) ? undefined : options.duration;
+        let duration = bsw.isNull(options.duration) ? undefined : options.duration;
         try {
             this[classify](options.content, duration, null, options.type);
         } catch (e) {
-            console.warn(this.lang.message_data_error, options);
+            console.warn(bsw.lang.message_data_error, options);
             console.warn(e);
         }
     }
@@ -1653,13 +1731,13 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showModal(options) {
-        let cnf = this.cnf;
+        let cnf = bsw.cnf;
         let v = cnf.v;
         v.modal.visible = false;
         if (typeof options.width === 'undefined') {
-            options.width = this.popupCosySize().width;
+            options.width = bsw.popupCosySize().width;
         }
-        let meta = this.cloneJson(v.modalMeta);
+        let meta = bsw.cloneJson(v.modalMeta);
         cnf.maxZIndex += 1;
         meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
@@ -1679,18 +1757,18 @@ class FoundationAntD extends FoundationTools {
      * @return {*}
      */
     showConfirm(options) {
-        let cnf = this.cnf;
+        let cnf = bsw.cnf;
         cnf.maxZIndex += 1;
-        return this.cnf.v.$confirm(Object.assign({
+        return bsw.cnf.v.$confirm(Object.assign({
             title: options.title,
             content: options.content,
             keyboard: false,
-            width: 350,
-            okText: this.lang.confirm,
-            cancelText: this.lang.cancel,
+            width: cnf.confirmWidth,
+            okText: bsw.lang.confirm,
+            cancelText: bsw.lang.cancel,
             onCancel: options.onClose || bsw.blank,
-            transitionName: this.cnf.transitionName,
-            maskTransitionName: this.cnf.maskTransitionName,
+            transitionName: bsw.cnf.transitionName,
+            maskTransitionName: bsw.cnf.maskTransitionName,
             zIndex: cnf.maxZIndex,
         }, options));
     }
@@ -1701,13 +1779,13 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showDrawer(options) {
-        let cnf = this.cnf;
+        let cnf = bsw.cnf;
         let v = cnf.v;
         v.drawer.visible = false;
         if (typeof options.width === 'undefined') {
-            options.width = this.popupCosySize().width;
+            options.width = bsw.popupCosySize().width;
         }
-        let meta = this.cloneJson(v.drawerMeta);
+        let meta = bsw.cloneJson(v.drawerMeta);
         cnf.maxZIndex += 1;
         meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
@@ -1720,10 +1798,10 @@ class FoundationAntD extends FoundationTools {
      * @param options
      */
     showResult(options) {
-        let cnf = this.cnf;
+        let cnf = bsw.cnf;
         let v = cnf.v;
         v.result.visible = false;
-        let meta = this.cloneJson(v.resultMeta);
+        let meta = bsw.cloneJson(v.resultMeta);
         cnf.maxZIndex += 1;
         meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
@@ -1773,9 +1851,9 @@ class FoundationAntD extends FoundationTools {
         }
 
         let content = $('.bsw-content');
-        let height = content.height() + this.pam(content.parent(), content).column;
+        let height = content.height() + bsw.pam(content.parent(), content).column;
         if (!maxHeight) {
-            maxHeight = this.popupCosySize(false, parent.document).height;
+            maxHeight = bsw.popupCosySize(false, parent.document).height;
         }
 
         if (minHeight > maxHeight) {
@@ -1783,11 +1861,11 @@ class FoundationAntD extends FoundationTools {
         }
 
         if (height < minHeight) {
-            iframe.animate({height: minHeight});
+            iframe.animate({height: minHeight}, bsw.cnf.autoHeightDuration);
         } else if (height > maxHeight) {
-            iframe.animate({height: maxHeight});
+            iframe.animate({height: maxHeight}, bsw.cnf.autoHeightDuration);
         } else {
-            iframe.animate({height});
+            iframe.animate({height}, bsw.cnf.autoHeightDuration);
         }
     }
 
@@ -1806,23 +1884,17 @@ class FoundationAntD extends FoundationTools {
 
         let mode = data.shape || 'modal';
         let clsName = ['bsw-iframe', `bsw-iframe-${mode}`].join(' ');
-
-        let attributes = [];
-        if (data.minHeight) {
-            attributes.push(`data-min-height="${data.minHeight}"`);
-        }
-        if (data.maxHeight) {
-            attributes.push(`data-max-height="${data.maxHeight}"`);
-        }
-        attributes = attributes.join(' ');
-
         let options = that.jsonFilter(Object.assign(data, {
             width: data.width || size.width,
-            title: data.title === false ? data.title : (data.title || that.lang.please_select),
-            content: `<iframe class="${clsName}" ${attributes} src="${data.location}"></iframe>`,
+            title: data.title === false ? data.title : (data.title || that.lang.please_select)
         }));
 
         if (mode === 'drawer') {
+
+            options = Object.assign(options, {
+                content: `<iframe class="${clsName}" src="${data.location}"></iframe>`
+            });
+
             that.showDrawer(options);
             v.$nextTick(function () {
                 let iframe = $(`.bsw-iframe-${mode}`);
@@ -1835,13 +1907,36 @@ class FoundationAntD extends FoundationTools {
                 iframe.height(height - headerHeight - footerHeight);
                 iframe.parents('div.ant-drawer-body').css({margin: 0, padding: 0});
             });
+
         } else {
+
+            let headerHeight = options.title ? 55 : 0;
+            let footerHeight = options.footer ? 53 : 0;
+            let height = data.height || (size.height - headerHeight - footerHeight);
+
+            let attributes = [];
+            if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
+                data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
+            }
+            if (data.minHeight) {
+                attributes.push(`data-min-height="${data.minHeight}"`);
+            }
+            if (typeof data.maxHeight === 'undefined' && that.cnf.autoHeightOffset) {
+                data.maxHeight = height + that.cnf.autoHeightOffset;
+            }
+            if (data.maxHeight) {
+                attributes.push(`data-max-height="${data.maxHeight}"`);
+            }
+
+            attributes = attributes.join(' ');
+            options = Object.assign(options, {
+                content: `<iframe class="${clsName}" ${attributes} src="${data.location}"></iframe>`
+            });
+
             that.showModal(options);
             v.$nextTick(function () {
                 let iframe = $(`.bsw-iframe-${mode}`);
-                let headerHeight = options.title ? 55 : 0;
-                let footerHeight = options.footer ? 53 : 0;
-                iframe.height(data.height || (size.height - headerHeight - footerHeight));
+                iframe.height(height);
                 iframe.parents('div.ant-modal-body').css({margin: 0, padding: 0});
             });
         }
@@ -2008,8 +2103,9 @@ class FoundationAntD extends FoundationTools {
     dispatcherByBswData(data, element) {
         let that = this;
         if (data.iframe) {
-            delete data.iframe;
-            parent.postMessage({data, function: 'dispatcherByBswData'}, '*');
+            let d = bsw.cloneJson(data);
+            delete d.iframe;
+            parent.postMessage({data: d, function: 'dispatcherByBswData'}, '*');
             return;
         }
 
@@ -2068,11 +2164,11 @@ class FoundationAntD extends FoundationTools {
      */
     redirect(data) {
         if (data.function && data.function !== 'redirect') {
-            return this.dispatcherByBswData(data, $('body'));
+            return bsw.dispatcherByBswData(data, $('body'));
         }
         let url = data.location;
-        if (this.isMobile() && this.cnf.v.mobileDefaultCollapsed) {
-            this.cookie().set('bsw_menu_collapsed', 'yes');
+        if (bsw.isMobile() && bsw.cnf.mobileDefaultCollapsed) {
+            bsw.cookie().set('bsw_menu_collapsed', 'yes');
         }
         if (url.startsWith('http') || url.startsWith('/')) {
             if (typeof data.window === 'undefined') {
@@ -2177,11 +2273,11 @@ class FoundationAntD extends FoundationTools {
             }
         });
         clipboard.on('success', function (e) {
-            that.success(that.lang.copy_success, 3);
+            that.success(that.lang.copy_success);
             e.clearSelection();
         });
         clipboard.on('error', function (e) {
-            that.error(that.lang.copy_failed, 3);
+            that.error(that.lang.copy_failed);
             console.warn('Clipboard operation error', e);
         });
     }
@@ -2192,6 +2288,7 @@ class FoundationAntD extends FoundationTools {
      * @param selector
      */
     initScrollX(selector = '.bsw-scroll-x') {
+        let cnf = bsw.cnf;
         $(selector).each(function () {
             let arrow = $(this);
             let step = parseInt(arrow.data('step'));
@@ -2226,10 +2323,10 @@ class FoundationAntD extends FoundationTools {
             $(window).resize(function () {
                 let x = maxScrollLeft();
                 let y = maxScrollTop();
-                if (x > 0 && y > 300) {
-                    arrow.fadeIn(100);
+                if (x > 0 && y > cnf.scrollXMinHeight) {
+                    arrow.fadeIn(cnf.scrollXFadeDuration);
                 } else {
-                    arrow.fadeOut(100);
+                    arrow.fadeOut(cnf.scrollXFadeDuration);
                 }
             });
         });
@@ -2270,11 +2367,11 @@ class FoundationAntD extends FoundationTools {
      * @param duration
      */
     prominentAnchor(animate = 'flash', duration = '.65s') {
-        let anchor = this.leftTrim(window.location.hash, '#');
+        let anchor = bsw.leftTrim(window.location.hash, '#');
         if (anchor.length === 0 || $(`#${anchor}`).length === 0) {
             return;
         }
-        this.doAnimateCSS(`#${anchor}`, animate, duration);
+        bsw.doAnimateCSS(`#${anchor}`, animate, duration);
     }
 
     /**
@@ -2303,8 +2400,8 @@ class FoundationAntD extends FoundationTools {
         let d = data.data;
         let closeModal = (typeof d.closePrevModal === 'undefined') ? true : d.closePrevModal;
         let closeDrawer = (typeof d.closePrevDrawer === 'undefined') ? true : d.closePrevDrawer;
-        closeModal && this.modalOnCancel();
-        closeDrawer && this.drawerOnCancel();
+        closeModal && bsw.modalOnCancel();
+        closeDrawer && bsw.drawerOnCancel();
         that.cnf.v.$nextTick(function () {
             if (typeof d.location !== 'undefined') {
                 d.location = that.unsetParams(['iframe'], d.location);
@@ -2321,11 +2418,11 @@ class FoundationAntD extends FoundationTools {
      * @param form
      */
     fillParentFormInParent(data, element, form = 'persistenceForm') {
-        let v = this.cnf.v;
+        let v = bsw.cnf.v;
         let closeModal = (typeof data.closePrevModal === 'undefined') ? true : data.closePrevModal;
         let closeDrawer = (typeof data.closePrevDrawer === 'undefined') ? true : data.closePrevDrawer;
-        closeModal && this.modalOnCancel();
-        closeDrawer && this.drawerOnCancel();
+        closeModal && bsw.modalOnCancel();
+        closeDrawer && bsw.drawerOnCancel();
         v.$nextTick(function () {
             if (v[form] && data.repair) {
                 v[form].setFieldsValue({[data.repair]: data.ids});
@@ -2342,7 +2439,7 @@ class FoundationAntD extends FoundationTools {
     fillParentFormAfterAjaxInParent(res, element) {
         let data = res.response.sets;
         data.repair = data.arguments.repair;
-        this.fillParentFormInParent(data, element);
+        bsw.fillParentFormInParent(data, element);
     }
 
     /**
@@ -2374,7 +2471,7 @@ class FoundationAntD extends FoundationTools {
      * @param element
      */
     showIFrameInParent(data, element) {
-        this.showIFrame(data.response.sets, element);
+        bsw.showIFrame(data.response.sets, element);
     }
 
     /**

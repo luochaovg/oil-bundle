@@ -1,19 +1,34 @@
 bsw.configure({
+    data: {
+        menuTheme: 'dark',
+        menuWidth: 256,
+        menuCollapsed: false,
+        weak: 'no',
+    },
     method: {
         themeSwitch(data, element) {
-            this.theme = bsw.cookieMapNext('bsw_theme', this.themeMap, this.theme, true, bsw.lang.theme);
+            let cnf = bsw.cnf;
+            let menuTheme = cnf.menuTheme || this.menuTheme;
+            this.menuTheme = bsw.cookieMapNext('bsw_theme', cnf.menuThemeMap, menuTheme, true, bsw.lang.theme);
         },
+
         colorWeakSwitch(data, element) {
-            this.weak = bsw.cookieMapNext('bsw_color_weak', this.opposeMap, this.weak, true, bsw.lang.color_weak);
+            let cnf = bsw.cnf;
+            let weak = cnf.weak || this.weak;
+            this.weak = bsw.cookieMapNext('bsw_color_weak', cnf.opposeMap, weak, true, bsw.lang.color_weak);
             bsw.switchClass('bsw-weak', this.weak);
         },
+
         thirdMessageSwitch(data, element) {
-            this.thirdMessage = bsw.cookieMapNext('bsw_third_message', this.opposeMap, this.thirdMessage, true, bsw.lang.third_message);
+            let cnf = bsw.cnf;
+            let thirdMessage = cnf.thirdMessage || this.thirdMessage;
+            cnf.thirdMessage = bsw.cookieMapNext('bsw_third_message', cnf.opposeMap, thirdMessage, true, bsw.lang.third_message);
         },
 
         menuTrigger() {
-            let _collapsed = this.menuCollapsed ? 'yes' : 'no';
-            let collapsed = bsw.cookieMapNext('bsw_menu_collapsed', this.opposeMap, _collapsed, true);
+            let cnf = bsw.cnf;
+            let collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            collapsed = bsw.cookieMapNext('bsw_menu_collapsed', cnf.opposeMap, collapsed ? 'yes' : 'no', true);
             this.menuCollapsed = (collapsed === 'yes');
             setTimeout(() => {
                 $(window).resize();
@@ -32,20 +47,27 @@ bsw.configure({
         },
 
         scaffoldInit() {
-            let cnf = this.init.configure;
+            let cnf = bsw.cnf;
+
             // theme
-            this.theme = bsw.cookieMapCurrent('bsw_theme', this.themeMap, cnf.theme || this.theme);
+            let menuTheme = cnf.menuTheme || this.menuTheme;
+            this.menuTheme = bsw.cookieMapCurrent('bsw_theme', cnf.menuThemeMap, menuTheme);
+
             // color weak
-            this.weak = bsw.cookieMapCurrent('bsw_color_weak', this.opposeMap, cnf.weak || this.weak);
+            let weak = cnf.weak || this.weak;
+            this.weak = bsw.cookieMapCurrent('bsw_color_weak', cnf.opposeMap, weak);
             bsw.switchClass('bsw-weak', this.weak);
+
             // third message
-            this.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', this.opposeMap, cnf.third_message || this.third_message);
+            let thirdMessage = cnf.thirdMessage || this.thirdMessage;
+            cnf.thirdMessage = bsw.cookieMapCurrent('bsw_third_message', cnf.opposeMap, thirdMessage);
+
             // menu
-            this.menuWidth = cnf.menu_width || this.menuWidth;
+            this.menuWidth = cnf.menuWidth || this.menuWidth;
             let collapsed = bsw.cookieMapCurrent(
                 'bsw_menu_collapsed',
-                this.opposeMap,
-                (typeof cnf.menu_collapsed === 'undefined') ? this.menuWidth : cnf.menu_collapsed
+                cnf.opposeMap,
+                (typeof cnf.menuCollapsed === 'undefined') ? this.menuWidth : cnf.menuCollapsed
             );
 
             let menuCollapsed = (collapsed === 'yes');
@@ -57,16 +79,16 @@ bsw.configure({
     },
     logic: {
         thirdMessage(v) {
-            let cnf = v.init.configure;
-            if (typeof cnf === 'undefined' || typeof cnf.third_message_second === 'undefined') {
+            let cnf = bsw.cnf;
+            if (typeof cnf === 'undefined' || typeof cnf.thirdMessageSecond === 'undefined') {
                 return;
             }
-            if (cnf.third_message_second < 3) {
+            if (cnf.thirdMessageSecond < 3) {
                 return;
             }
             v.$nextTick(function () {
                 setInterval(function () {
-                    let tm = bsw.cookieMapCurrent('bsw_third_message', v.opposeMap, v.thirdMessage);
+                    let tm = bsw.cookieMapCurrent('bsw_third_message', cnf.opposeMap, cnf.thirdMessage);
                     if (tm === 'no') {
                         return;
                     }
@@ -81,7 +103,7 @@ bsw.configure({
                     }).catch((reason => {
                         console.warn(reason);
                     }));
-                }, cnf.third_message_second * 1000);
+                }, cnf.thirdMessageSecond * 1000);
             });
         }
     }

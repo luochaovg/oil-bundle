@@ -274,11 +274,37 @@ parameters:
         - queue
 
     bsw_configure:
-        theme: dark
-        menu_width: 256
-        menu_collapsed: no
-        third_message: no
-        third_message_second: 15
+        menuTheme: dark
+        menuWidth: 256
+        menuCollapsed: false
+        menuThemeMap: {dark: 'light', light: 'dark'}
+        opposeMap: {yes: 'no', no: 'yes'}
+        mobileDefaultCollapsed: true
+        weak: no
+        thirdMessage: no
+        thirdMessageSecond: 15
+        requestTimeout: 30,
+        requestRetryTimes: 3
+        notificationDuration: 3
+        messageDuration: 3
+        confirmDuration: 3
+        confirmWidth: 350
+        alertType: message
+        alertTypeForce: null
+        maxZIndex: 1000
+        notificationPlacement: topRight
+        transitionName: bsw-zoom
+        maskTransitionName: fade
+        cosyMinWidth: 1285
+        cosyMinWidthLess: .95
+        cosyMinWidthMore: .65
+        cosyMinHeight: 666
+        cosyMinHeightLess: .95
+        cosyMinHeightMore: .75
+        autoHeightDuration: 100
+        autoHeightOffset: 0
+        scrollXMinHeight: 300
+        scrollXFadeDuration: 100
 
 services:
 

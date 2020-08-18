@@ -19,20 +19,10 @@ $(function () {
         bsw,
         locale: bsw.d.locales[bsw.lang.i18n_ant],
         timeFormat: 'YYYY-MM-DD HH:mm:ss',
-        opposeMap: {yes: 'no', no: 'yes'},
         submitFormUrl: null,
         submitFormMethod: null,
-
-        theme: 'light',
-        themeMap: {dark: 'light', light: 'dark'},
-        weak: 'no',
-        thirdMessage: 'yes',
-        menuWidth: 256,
-        menuCollapsed: false,
-        mobileDefaultCollapsed: true,
         ckEditor: {},
         f5JustNow: true,
-
         noLoadingOnce: false,
         spinning: false,
         init: { // from v-init
@@ -437,7 +427,12 @@ $(function () {
         init: {
             bind: function (el, binding, vnode) {
                 let key = bsw.smallHump(binding.arg);
-                vnode.context.init[key] = (binding.value || binding.expression);
+                let value = (binding.value || binding.expression);
+                if (key === 'configure') {
+                    bsw.cnf = Object.assign(bsw.cnf, value);
+                } else {
+                    vnode.context.init[key] = value;
+                }
             }
         },
 

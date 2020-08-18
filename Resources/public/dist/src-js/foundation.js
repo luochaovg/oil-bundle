@@ -656,6 +656,69 @@ var FoundationTools = function (_FoundationPrototype) {
         }
 
         /**
+         * Sort json array
+         *
+         * @param array
+         * @param field
+         * @param desc
+         *
+         * @returns {*}
+         */
+
+    }, {
+        key: 'sortJsonArray',
+        value: function sortJsonArray(array, field) {
+            var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+            if (array.length < 2 || !field || _typeof(array[0]) !== 'object') {
+                return array;
+            }
+            if (typeof array[0][field] === "number") {
+                array.sort(function (x, y) {
+                    return x[field] - y[field];
+                });
+            }
+            if (typeof array[0][field] === "string") {
+                array.sort(function (x, y) {
+                    return x[field].localeCompare(y[field]);
+                });
+            }
+            if (desc) {
+                array.reverse();
+            }
+            return array;
+        }
+
+        /**
+         * Sort json
+         *
+         * @param object
+         * @returns {{}}
+         */
+
+    }, {
+        key: 'sortJson',
+        value: function sortJson(object) {
+            var keys = [];
+            for (var key in object) {
+                if (!object.hasOwnProperty(key)) {
+                    continue;
+                }
+                keys.push(key);
+            }
+            keys.sort();
+            var target = {};
+            for (var _key in keys) {
+                if (!keys.hasOwnProperty(_key)) {
+                    continue;
+                }
+                var k = keys[_key];
+                target[k] = object[k];
+            }
+            return target;
+        }
+
+        /**
          * Get element offset
          *
          * @param element
@@ -793,6 +856,7 @@ var FoundationTools = function (_FoundationPrototype) {
                 subValue = void 0,
                 innerObject = void 0,
                 i = void 0;
+            source = this.sortJson(source);
             for (var _name in source) {
                 if (!source.hasOwnProperty(_name)) {
                     continue;
@@ -1426,16 +1490,37 @@ var FoundationAntD = function (_FoundationTools) {
         _this2.config = {};
         _this2.lang = lang;
         _this2.cnf = {
+            menuTheme: 'dark',
+            menuWidth: 256,
+            menuCollapsed: false,
+            menuThemeMap: { dark: 'light', light: 'dark' },
+            opposeMap: { yes: 'no', no: 'yes' },
+            mobileDefaultCollapsed: true,
+            weak: 'no',
+            thirdMessage: 'no',
+            thirdMessageSecond: 15,
             requestTimeout: 30,
+            requestRetryTimes: 3,
             notificationDuration: 3,
             messageDuration: 3,
             confirmDuration: 3,
+            confirmWidth: 350,
             alertType: 'message',
             alertTypeForce: null,
             maxZIndex: 1000,
             notificationPlacement: 'topRight',
             transitionName: 'bsw-zoom',
             maskTransitionName: 'fade',
+            cosyMinWidth: 1285,
+            cosyMinWidthLess: .95,
+            cosyMinWidthMore: .65,
+            cosyMinHeight: 666,
+            cosyMinHeightLess: .95,
+            cosyMinHeightMore: .75,
+            autoHeightDuration: 100,
+            autoHeightOffset: 0,
+            scrollXMinHeight: 300,
+            scrollXFadeDuration: 100,
             v: null,
             method: {
                 get: 'GET',
@@ -1459,7 +1544,7 @@ var FoundationAntD = function (_FoundationTools) {
                 if (!config.hasOwnProperty(key)) {
                     continue;
                 }
-                this.config[key] = Object.assign(this.config[key] || {}, config[key]);
+                bsw.config[key] = Object.assign(bsw.config[key] || {}, config[key]);
             }
         }
 
@@ -1691,7 +1776,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'success',
         value: function success(description, duration, onClose, type) {
-            return this[type || this.cnf.alertType]('success', description, duration, onClose);
+            return this[type || bsw.cnf.alertType]('success', description, duration, onClose);
         }
 
         /**
@@ -1708,7 +1793,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'info',
         value: function info(description, duration, onClose, type) {
-            return this[type || this.cnf.alertType]('info', description, duration, onClose);
+            return this[type || bsw.cnf.alertType]('info', description, duration, onClose);
         }
 
         /**
@@ -1725,7 +1810,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'warning',
         value: function warning(description, duration, onClose, type) {
-            return this[type || this.cnf.alertType]('warning', description, duration, onClose);
+            return this[type || bsw.cnf.alertType]('warning', description, duration, onClose);
         }
 
         /**
@@ -1742,7 +1827,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'error',
         value: function error(description, duration, onClose, type) {
-            return this[type || this.cnf.alertType]('error', description, duration, onClose);
+            return this[type || bsw.cnf.alertType]('error', description, duration, onClose);
         }
 
         /**
@@ -1761,7 +1846,7 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'request',
         value: function request(url) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-            var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.cnf.method.post;
+            var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : bsw.cnf.method.post;
             var upload = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
             var times = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
 
@@ -1801,7 +1886,7 @@ var FoundationAntD = function (_FoundationTools) {
                         if (obj.statusText === 'timeout') {
                             console.warn('Client request timeout: ', obj);
                             console.warn('Retry current request in times ' + times);
-                            if (times <= 3) {
+                            if (times <= that.cnf.requestRetryTimes) {
                                 return that.request(url, data, type, upload, ++times);
                             }
                         }
@@ -1824,7 +1909,7 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'response',
         value: function response(result, successSameHandler, failedSameHandler, duration) {
             if (typeof result.code === 'undefined') {
-                return this.error(this.lang.response_error_message);
+                return bsw.error(bsw.lang.response_error_message);
             }
 
             var that = this;
@@ -1885,11 +1970,12 @@ var FoundationAntD = function (_FoundationTools) {
             var honest = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 
+            var cnf = bsw.cnf;
             var width = d.body.clientWidth;
             var height = d.body.clientHeight;
             if (!honest) {
-                width *= width < 1285 ? .95 : .65;
-                height *= height < 666 ? .95 : .75;
+                width *= width < cnf.cosyMinWidth ? cnf.cosyMinWidthLess : cnf.cosyMinWidthMore;
+                height *= height < cnf.cosyMinHeight ? cnf.cosyMinHeightLess : cnf.cosyMinHeightMore;
             }
 
             return {
@@ -1918,7 +2004,7 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'rsaEncrypt',
         value: function rsaEncrypt(text) {
             var encrypt = new JSEncrypt();
-            encrypt.setPublicKey(this.cnf.v.rsaPublicKey);
+            encrypt.setPublicKey(bsw.cnf.v.rsaPublicKey);
 
             return encrypt.encrypt(text);
         }
@@ -1952,10 +2038,10 @@ var FoundationAntD = function (_FoundationTools) {
                 if (!target.hasOwnProperty(key)) {
                     continue;
                 }
-                if (this.isJson(target[key])) {
-                    target[key] = this.arrayBase64Decode(target[key]);
-                } else if (this.isString(target[key])) {
-                    target[key] = this.base64Decode(target[key]);
+                if (bsw.isJson(target[key])) {
+                    target[key] = bsw.arrayBase64Decode(target[key]);
+                } else if (bsw.isString(target[key])) {
+                    target[key] = bsw.base64Decode(target[key]);
                 }
             }
             return target;
@@ -2139,11 +2225,11 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'showMessage',
         value: function showMessage(options) {
             var classify = options.classify || 'info';
-            var duration = this.isNull(options.duration) ? undefined : options.duration;
+            var duration = bsw.isNull(options.duration) ? undefined : options.duration;
             try {
                 this[classify](options.content, duration, null, options.type);
             } catch (e) {
-                console.warn(this.lang.message_data_error, options);
+                console.warn(bsw.lang.message_data_error, options);
                 console.warn(e);
             }
         }
@@ -2157,13 +2243,13 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showModal',
         value: function showModal(options) {
-            var cnf = this.cnf;
+            var cnf = bsw.cnf;
             var v = cnf.v;
             v.modal.visible = false;
             if (typeof options.width === 'undefined') {
-                options.width = this.popupCosySize().width;
+                options.width = bsw.popupCosySize().width;
             }
-            var meta = this.cloneJson(v.modalMeta);
+            var meta = bsw.cloneJson(v.modalMeta);
             cnf.maxZIndex += 1;
             meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
@@ -2186,18 +2272,18 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showConfirm',
         value: function showConfirm(options) {
-            var cnf = this.cnf;
+            var cnf = bsw.cnf;
             cnf.maxZIndex += 1;
-            return this.cnf.v.$confirm(Object.assign({
+            return bsw.cnf.v.$confirm(Object.assign({
                 title: options.title,
                 content: options.content,
                 keyboard: false,
-                width: 350,
-                okText: this.lang.confirm,
-                cancelText: this.lang.cancel,
+                width: cnf.confirmWidth,
+                okText: bsw.lang.confirm,
+                cancelText: bsw.lang.cancel,
                 onCancel: options.onClose || bsw.blank,
-                transitionName: this.cnf.transitionName,
-                maskTransitionName: this.cnf.maskTransitionName,
+                transitionName: bsw.cnf.transitionName,
+                maskTransitionName: bsw.cnf.maskTransitionName,
                 zIndex: cnf.maxZIndex
             }, options));
         }
@@ -2211,13 +2297,13 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showDrawer',
         value: function showDrawer(options) {
-            var cnf = this.cnf;
+            var cnf = bsw.cnf;
             var v = cnf.v;
             v.drawer.visible = false;
             if (typeof options.width === 'undefined') {
-                options.width = this.popupCosySize().width;
+                options.width = bsw.popupCosySize().width;
             }
-            var meta = this.cloneJson(v.drawerMeta);
+            var meta = bsw.cloneJson(v.drawerMeta);
             cnf.maxZIndex += 1;
             meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
@@ -2233,10 +2319,10 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showResult',
         value: function showResult(options) {
-            var cnf = this.cnf;
+            var cnf = bsw.cnf;
             var v = cnf.v;
             v.result.visible = false;
-            var meta = this.cloneJson(v.resultMeta);
+            var meta = bsw.cloneJson(v.resultMeta);
             cnf.maxZIndex += 1;
             meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
@@ -2292,9 +2378,9 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             var content = $('.bsw-content');
-            var height = content.height() + this.pam(content.parent(), content).column;
+            var height = content.height() + bsw.pam(content.parent(), content).column;
             if (!maxHeight) {
-                maxHeight = this.popupCosySize(false, parent.document).height;
+                maxHeight = bsw.popupCosySize(false, parent.document).height;
             }
 
             if (minHeight > maxHeight) {
@@ -2302,11 +2388,11 @@ var FoundationAntD = function (_FoundationTools) {
             }
 
             if (height < minHeight) {
-                iframe.animate({ height: minHeight });
+                iframe.animate({ height: minHeight }, bsw.cnf.autoHeightDuration);
             } else if (height > maxHeight) {
-                iframe.animate({ height: maxHeight });
+                iframe.animate({ height: maxHeight }, bsw.cnf.autoHeightDuration);
             } else {
-                iframe.animate({ height: height });
+                iframe.animate({ height: height }, bsw.cnf.autoHeightDuration);
             }
         }
 
@@ -2328,23 +2414,17 @@ var FoundationAntD = function (_FoundationTools) {
 
             var mode = data.shape || 'modal';
             var clsName = ['bsw-iframe', 'bsw-iframe-' + mode].join(' ');
-
-            var attributes = [];
-            if (data.minHeight) {
-                attributes.push('data-min-height="' + data.minHeight + '"');
-            }
-            if (data.maxHeight) {
-                attributes.push('data-max-height="' + data.maxHeight + '"');
-            }
-            attributes = attributes.join(' ');
-
             var options = that.jsonFilter(Object.assign(data, {
                 width: data.width || size.width,
-                title: data.title === false ? data.title : data.title || that.lang.please_select,
-                content: '<iframe class="' + clsName + '" ' + attributes + ' src="' + data.location + '"></iframe>'
+                title: data.title === false ? data.title : data.title || that.lang.please_select
             }));
 
             if (mode === 'drawer') {
+
+                options = Object.assign(options, {
+                    content: '<iframe class="' + clsName + '" src="' + data.location + '"></iframe>'
+                });
+
                 that.showDrawer(options);
                 v.$nextTick(function () {
                     var iframe = $('.bsw-iframe-' + mode);
@@ -2358,12 +2438,34 @@ var FoundationAntD = function (_FoundationTools) {
                     iframe.parents('div.ant-drawer-body').css({ margin: 0, padding: 0 });
                 });
             } else {
+
+                var headerHeight = options.title ? 55 : 0;
+                var footerHeight = options.footer ? 53 : 0;
+                var height = data.height || size.height - headerHeight - footerHeight;
+
+                var attributes = [];
+                if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
+                    data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
+                }
+                if (data.minHeight) {
+                    attributes.push('data-min-height="' + data.minHeight + '"');
+                }
+                if (typeof data.maxHeight === 'undefined' && that.cnf.autoHeightOffset) {
+                    data.maxHeight = height + that.cnf.autoHeightOffset;
+                }
+                if (data.maxHeight) {
+                    attributes.push('data-max-height="' + data.maxHeight + '"');
+                }
+
+                attributes = attributes.join(' ');
+                options = Object.assign(options, {
+                    content: '<iframe class="' + clsName + '" ' + attributes + ' src="' + data.location + '"></iframe>'
+                });
+
                 that.showModal(options);
                 v.$nextTick(function () {
                     var iframe = $('.bsw-iframe-' + mode);
-                    var headerHeight = options.title ? 55 : 0;
-                    var footerHeight = options.footer ? 53 : 0;
-                    iframe.height(data.height || size.height - headerHeight - footerHeight);
+                    iframe.height(height);
                     iframe.parents('div.ant-modal-body').css({ margin: 0, padding: 0 });
                 });
             }
@@ -2562,8 +2664,9 @@ var FoundationAntD = function (_FoundationTools) {
         value: function dispatcherByBswData(data, element) {
             var that = this;
             if (data.iframe) {
-                delete data.iframe;
-                parent.postMessage({ data: data, function: 'dispatcherByBswData' }, '*');
+                var d = bsw.cloneJson(data);
+                delete d.iframe;
+                parent.postMessage({ data: d, function: 'dispatcherByBswData' }, '*');
                 return;
             }
 
@@ -2628,11 +2731,11 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'redirect',
         value: function redirect(data) {
             if (data.function && data.function !== 'redirect') {
-                return this.dispatcherByBswData(data, $('body'));
+                return bsw.dispatcherByBswData(data, $('body'));
             }
             var url = data.location;
-            if (this.isMobile() && this.cnf.v.mobileDefaultCollapsed) {
-                this.cookie().set('bsw_menu_collapsed', 'yes');
+            if (bsw.isMobile() && bsw.cnf.mobileDefaultCollapsed) {
+                bsw.cookie().set('bsw_menu_collapsed', 'yes');
             }
             if (url.startsWith('http') || url.startsWith('/')) {
                 if (typeof data.window === 'undefined') {
@@ -2757,11 +2860,11 @@ var FoundationAntD = function (_FoundationTools) {
                 }
             });
             clipboard.on('success', function (e) {
-                that.success(that.lang.copy_success, 3);
+                that.success(that.lang.copy_success);
                 e.clearSelection();
             });
             clipboard.on('error', function (e) {
-                that.error(that.lang.copy_failed, 3);
+                that.error(that.lang.copy_failed);
                 console.warn('Clipboard operation error', e);
             });
         }
@@ -2777,6 +2880,7 @@ var FoundationAntD = function (_FoundationTools) {
         value: function initScrollX() {
             var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.bsw-scroll-x';
 
+            var cnf = bsw.cnf;
             $(selector).each(function () {
                 var arrow = $(this);
                 var step = parseInt(arrow.data('step'));
@@ -2815,10 +2919,10 @@ var FoundationAntD = function (_FoundationTools) {
                 $(window).resize(function () {
                     var x = maxScrollLeft();
                     var y = maxScrollTop();
-                    if (x > 0 && y > 300) {
-                        arrow.fadeIn(100);
+                    if (x > 0 && y > cnf.scrollXMinHeight) {
+                        arrow.fadeIn(cnf.scrollXFadeDuration);
                     } else {
-                        arrow.fadeOut(100);
+                        arrow.fadeOut(cnf.scrollXFadeDuration);
                     }
                 });
             });
@@ -2871,11 +2975,11 @@ var FoundationAntD = function (_FoundationTools) {
             var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'flash';
             var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.65s';
 
-            var anchor = this.leftTrim(window.location.hash, '#');
+            var anchor = bsw.leftTrim(window.location.hash, '#');
             if (anchor.length === 0 || $('#' + anchor).length === 0) {
                 return;
             }
-            this.doAnimateCSS('#' + anchor, animate, duration);
+            bsw.doAnimateCSS('#' + anchor, animate, duration);
         }
 
         /**
@@ -2912,8 +3016,8 @@ var FoundationAntD = function (_FoundationTools) {
             var d = data.data;
             var closeModal = typeof d.closePrevModal === 'undefined' ? true : d.closePrevModal;
             var closeDrawer = typeof d.closePrevDrawer === 'undefined' ? true : d.closePrevDrawer;
-            closeModal && this.modalOnCancel();
-            closeDrawer && this.drawerOnCancel();
+            closeModal && bsw.modalOnCancel();
+            closeDrawer && bsw.drawerOnCancel();
             that.cnf.v.$nextTick(function () {
                 if (typeof d.location !== 'undefined') {
                     d.location = that.unsetParams(['iframe'], d.location);
@@ -2935,11 +3039,11 @@ var FoundationAntD = function (_FoundationTools) {
         value: function fillParentFormInParent(data, element) {
             var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'persistenceForm';
 
-            var v = this.cnf.v;
+            var v = bsw.cnf.v;
             var closeModal = typeof data.closePrevModal === 'undefined' ? true : data.closePrevModal;
             var closeDrawer = typeof data.closePrevDrawer === 'undefined' ? true : data.closePrevDrawer;
-            closeModal && this.modalOnCancel();
-            closeDrawer && this.drawerOnCancel();
+            closeModal && bsw.modalOnCancel();
+            closeDrawer && bsw.drawerOnCancel();
             v.$nextTick(function () {
                 if (v[form] && data.repair) {
                     v[form].setFieldsValue(_defineProperty({}, data.repair, data.ids));
@@ -2959,7 +3063,7 @@ var FoundationAntD = function (_FoundationTools) {
         value: function fillParentFormAfterAjaxInParent(res, element) {
             var data = res.response.sets;
             data.repair = data.arguments.repair;
-            this.fillParentFormInParent(data, element);
+            bsw.fillParentFormInParent(data, element);
         }
 
         /**
@@ -2997,7 +3101,7 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'showIFrameInParent',
         value: function showIFrameInParent(data, element) {
-            this.showIFrame(data.response.sets, element);
+            bsw.showIFrame(data.response.sets, element);
         }
 
         /**
