@@ -1843,6 +1843,7 @@ class FoundationAntD extends FoundationTools {
 
         let minHeight = parseInt(iframe.data('min-height'));
         let maxHeight = parseInt(iframe.data('max-height'));
+        let auto = iframe.data('auto-height');
 
         minHeight = minHeight ? minHeight : 0;
         maxHeight = maxHeight ? maxHeight : 0;
@@ -1860,13 +1861,18 @@ class FoundationAntD extends FoundationTools {
             minHeight = maxHeight;
         }
 
+        let latest = height;
         if (height < minHeight) {
-            iframe.animate({height: minHeight}, bsw.cnf.autoHeightDuration);
+            latest = minHeight;
         } else if (height > maxHeight) {
-            iframe.animate({height: maxHeight}, bsw.cnf.autoHeightDuration);
-        } else {
-            iframe.animate({height}, bsw.cnf.autoHeightDuration);
+            latest = maxHeight;
         }
+
+        if (auto && Math.abs(height - latest) > bsw.cnf.autoHeightOffset) {
+            return;
+        }
+
+        iframe.animate({height: latest}, bsw.cnf.autoHeightDuration);
     }
 
     /**
@@ -1917,18 +1923,20 @@ class FoundationAntD extends FoundationTools {
             let attributes = [];
             if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
                 data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
+                attributes.push('data-auto-height=true');
             }
             if (data.minHeight) {
                 attributes.push(`data-min-height="${data.minHeight}"`);
             }
             if (typeof data.maxHeight === 'undefined' && that.cnf.autoHeightOffset) {
                 data.maxHeight = height + that.cnf.autoHeightOffset;
+                attributes.push('data-auto-height=true');
             }
             if (data.maxHeight) {
                 attributes.push(`data-max-height="${data.maxHeight}"`);
             }
 
-            attributes = attributes.join(' ');
+            attributes = bsw.arrayUnique(attributes).join(' ');
             options = Object.assign(options, {
                 content: `<iframe class="${clsName}" ${attributes} src="${data.location}"></iframe>`
             });
