@@ -303,6 +303,7 @@ parameters:
         cosyMinHeightMore: .75
         autoHeightDuration: 100
         autoHeightOffset: 0
+        autoHeightOverOffset: yes
         scrollXMinHeight: 300
         scrollXFadeDuration: 100
 

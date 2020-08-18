@@ -20,6 +20,16 @@ trait Args
     }
 
     /**
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getArgsItem(string $key)
+    {
+        return $this->args[$key] ?? null;
+    }
+
+    /**
      * @return string
      */
     public function getArgsString(): string

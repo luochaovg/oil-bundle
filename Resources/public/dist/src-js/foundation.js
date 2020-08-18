@@ -1519,6 +1519,7 @@ var FoundationAntD = function (_FoundationTools) {
             cosyMinHeightMore: .75,
             autoHeightDuration: 100,
             autoHeightOffset: 0,
+            autoHeightOverOffset: 'yes',
             scrollXMinHeight: 300,
             scrollXFadeDuration: 100,
             v: null,
@@ -2370,7 +2371,7 @@ var FoundationAntD = function (_FoundationTools) {
 
             var minHeight = parseInt(iframe.data('min-height'));
             var maxHeight = parseInt(iframe.data('max-height'));
-            var auto = iframe.data('auto-height');
+            var overOffset = iframe.data('over-offset');
 
             minHeight = minHeight ? minHeight : 0;
             maxHeight = maxHeight ? maxHeight : 0;
@@ -2395,7 +2396,7 @@ var FoundationAntD = function (_FoundationTools) {
                 latest = maxHeight;
             }
 
-            if (auto && Math.abs(height - latest) > bsw.cnf.autoHeightOffset) {
+            if (overOffset === 'no' && Math.abs(height - latest) > bsw.cnf.autoHeightOffset) {
                 return;
             }
 
@@ -2450,16 +2451,18 @@ var FoundationAntD = function (_FoundationTools) {
                 var height = data.height || size.height - headerHeight - footerHeight;
 
                 var attributes = [];
+                var overOffset = typeof data.overOffset !== 'undefined' ? data.overOffset : that.cnf.autoHeightOverOffset;
+                attributes.push('data-over-offset=' + overOffset);
+
                 if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
                     data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
-                    attributes.push('data-auto-height=true');
                 }
                 if (data.minHeight) {
                     attributes.push('data-min-height="' + data.minHeight + '"');
                 }
+
                 if (typeof data.maxHeight === 'undefined' && that.cnf.autoHeightOffset) {
                     data.maxHeight = height + that.cnf.autoHeightOffset;
-                    attributes.push('data-auto-height=true');
                 }
                 if (data.maxHeight) {
                     attributes.push('data-max-height="' + data.maxHeight + '"');
