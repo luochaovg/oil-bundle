@@ -167,15 +167,23 @@ class Input extends ArgsInput
     /**
      * @var int
      */
-    public $actionWidthMargin = 16;
+    public $actionColBorder = 16.5;
 
     /**
      * @var int
      */
-    public $actionWidthButton = 44;
+    public $actionBtnBorder = 10;
 
     /**
      * @var int
      */
-    public $actionWidthGap = 5;
+    public $actionBtnGap = 8;
+
+    /**
+     * @var array
+     */
+    public $actionByteMapPx = [
+        1 => 6,
+        3 => 11.4,
+    ];
 }

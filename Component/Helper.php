@@ -64,6 +64,34 @@ class Helper
     }
 
     /**
+     * String length by bytes
+     *
+     * @param string $content
+     *
+     * @return array
+     */
+    public static function strLenByBytes(string $content): array
+    {
+        $length = [];
+        $target = [];
+        preg_replace_callback(
+            '/./u',
+            function ($match) use (&$length, &$target) {
+                $bytes = strlen($match[0]);
+                if (!isset($length[$bytes])) {
+                    $length[$bytes] = 0;
+                    $target[$bytes] = null;
+                }
+                $length[$bytes] += 1;
+                $target[$bytes] .= $match[0];
+            },
+            $content
+        );
+
+        return [$length, $target];
+    }
+
+    /**
      * Singleton
      *
      * @param callable $logicHandler
@@ -3634,7 +3662,7 @@ class Helper
      *
      * @return array
      */
-    public static function textWidthPx(string $str, string $fonts, int $size = 14, float $gap = 1): array
+    public static function textWidthPxByFonts(string $str, string $fonts, int $size = 14, float $gap = 1): array
     {
         $box = imagettfbbox($size, 0, $fonts, $str);
 
@@ -3645,6 +3673,26 @@ class Helper
             $width * $gap,
             $height * $gap,
         ];
+    }
+
+    /**
+     * @param string $str
+     * @param array  $byteMapToPx
+     *
+     * @return int
+     */
+    public static function textWidthPxByMap(string $str, array $byteMapToPx = []): int
+    {
+        $byteMapToPx = $byteMapToPx + [1 => 6, 3 => 11.4];
+
+        $px = 0;
+        [$length] = self::strLenByBytes($str);
+        dump($length);
+        foreach ($length as $bytes => $total) {
+            $px += (($byteMapToPx[$bytes] ?? 0) * $total);
+        }
+
+        return intval($px);
     }
 
     /**

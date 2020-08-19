@@ -812,6 +812,7 @@ class Module extends Bsw
 
         $operate = Abs::TR_ACT;
         $maxButtons = 0;
+        $maxButtonsDisplay = [];
 
         foreach ($list as $key => &$item) {
 
@@ -857,14 +858,18 @@ class Module extends Bsw
                 array_push($recordOperates, $this->web->getButtonHtml($button));
             }
 
-            $buttonsDisplay = 0;
+            $buttonsDisplay = [];
             foreach ($buttons as $button) {
                 if ($button->isDisplay()) {
-                    $buttonsDisplay += 1;
+                    array_push($buttonsDisplay, $this->web->twigLang($button->getLabel()));
                 }
             }
 
-            $maxButtons = max($maxButtons, $buttonsDisplay);
+            if (($count = count($buttonsDisplay)) > $maxButtons) {
+                $maxButtons = $count;
+                $maxButtonsDisplay = $buttonsDisplay;
+            }
+
             $recordOperates = implode(null, $recordOperates);
             $item[$operate] = Html::tag('div', $recordOperates, ['class' => 'bsw-record-action']);
 
@@ -917,9 +922,15 @@ class Module extends Bsw
             if (isset($output->columns[$operate]['width'])) {
                 $width = $output->columns[$operate]['width'];
             } else {
+                $buttonWidth = 0;
+                foreach ($maxButtonsDisplay as $btn) {
+                    $buttonWidth += Helper::textWidthPxByMap($btn, $this->input->actionByteMapPx);
+                }
                 $maxButtons = min($maxButtons, 4);
-                $width = $this->input->actionWidthMargin * 2;
-                $width += ($maxButtons * ($this->input->actionWidthButton) + ($maxButtons - 1) * $this->input->actionWidthGap);
+                $width = $buttonWidth;
+                $width += $this->input->actionColBorder * 2;
+                $width += ($maxButtons * $this->input->actionBtnBorder * 2);
+                $width += ($maxButtons - 1) * $this->input->actionBtnGap;
                 $output->scrollX += $width;
             }
 
