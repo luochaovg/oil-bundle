@@ -28,7 +28,7 @@ $(function () {
         submitFormUrl: null,
         submitFormMethod: null,
         ckEditor: {},
-        f5JustNow: true,
+        loadTimes: 1,
         noLoadingOnce: false,
         spinning: false,
         init: { // from v-init
@@ -449,6 +449,7 @@ $(function () {
 
         bsw.initClipboard();
         bsw.initUpwardInfect();
+        bsw.initHighlight();
 
         var timeout = change ? 1200 : 600;
         setTimeout(function () {
@@ -458,7 +459,7 @@ $(function () {
                 bsw.messageAutoDiscovery(v.init);
                 bsw.autoIFrameHeight();
                 bsw.prominentAnchor();
-                v.f5JustNow = false;
+                v.loadTimes += 1;
             };
             var loadingDiv = $('.bsw-page-loading');
             if (loadingDiv.length) {

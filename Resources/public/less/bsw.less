@@ -1,5 +1,12 @@
 @import "foundation.less";
 
+@font-face {
+  font-family: 'Monaco';
+  src: url("../../font/monaco.ttf");
+  font-style: normal;
+  font-weight: normal;
+}
+
 .bsw-scaffold,
 .bsw-menu {
   min-height: 100vh;
@@ -894,7 +901,7 @@ a.bsw-preview-link {
 }
 
 code, kbd, pre, samp {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: Monaco, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 textarea[size="large"] {
@@ -1002,7 +1009,7 @@ div.modal-container-center div.ant-modal-body > div {
   animation-duration: .3s;
 }
 
-.f5-just-now .ant-form-item {
+.just-first-load .ant-form-item {
   animation-duration: 0s;
 }
 
@@ -1145,4 +1152,8 @@ div.modal-container-center div.ant-modal-body > div {
   &:hover {
     background: rgba(0, 0, 0, .3);
   }
+}
+
+.hljs {
+  background: transparent !important;
 }

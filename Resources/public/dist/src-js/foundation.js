@@ -2260,6 +2260,16 @@ var FoundationAntD = function (_FoundationTools) {
                 v.footer = 'footer';
             }
             v.modal = options;
+            if (options.afterShow) {
+                v.$nextTick(function () {
+                    if (typeof bsw.cnf.v[options.afterShow] !== 'undefined') {
+                        return bsw.cnf.v[options.afterShow](options.afterShowArgs || {});
+                    } else if (typeof bsw[options.afterShow] !== 'undefined') {
+                        return bsw[options.afterShow](options.afterShowArgs || {});
+                    }
+                    return console.warn('Method ' + options.afterShow + ' is undefined.');
+                });
+            }
         }
 
         /**
@@ -2309,6 +2319,16 @@ var FoundationAntD = function (_FoundationTools) {
             meta.zIndex = cnf.maxZIndex;
             options = Object.assign(meta, options);
             v.drawer = options;
+            if (options.afterShow) {
+                v.$nextTick(function () {
+                    if (typeof bsw.cnf.v[options.afterShow] !== 'undefined') {
+                        return bsw.cnf.v[options.afterShow](options.afterShowArgs || {});
+                    } else if (typeof bsw[options.afterShow] !== 'undefined') {
+                        return bsw[options.afterShow](options.afterShowArgs || {});
+                    }
+                    return console.warn('Method ' + options.afterShow + ' is undefined.');
+                });
+            }
         }
 
         /**
@@ -2372,6 +2392,7 @@ var FoundationAntD = function (_FoundationTools) {
             var minHeight = parseInt(iframe.data('min-height'));
             var maxHeight = parseInt(iframe.data('max-height'));
             var overOffset = iframe.data('over-offset');
+            var debugHeight = iframe.data('debug-height');
 
             minHeight = minHeight ? minHeight : 0;
             maxHeight = maxHeight ? maxHeight : 0;
@@ -2381,10 +2402,13 @@ var FoundationAntD = function (_FoundationTools) {
 
             var content = $('.bsw-content');
             var height = content.height() + bsw.pam(content.parent(), content).column;
+            if (debugHeight) {
+                bsw.info('Real iframe height: ' + height);
+            }
+
             if (!maxHeight) {
                 maxHeight = bsw.popupCosySize(false, parent.document).height;
             }
-
             if (minHeight > maxHeight) {
                 minHeight = maxHeight;
             }
@@ -2453,6 +2477,9 @@ var FoundationAntD = function (_FoundationTools) {
                 var attributes = [];
                 var overOffset = typeof data.overOffset !== 'undefined' ? data.overOffset : that.cnf.autoHeightOverOffset;
                 attributes.push('data-over-offset=' + overOffset);
+
+                var debugHeight = typeof data.debugRealHeight !== 'undefined' ? data.debugRealHeight : false;
+                attributes.push('data-debug-height=' + debugHeight);
 
                 if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
                     data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
@@ -2722,6 +2749,7 @@ var FoundationAntD = function (_FoundationTools) {
             var that = this;
             var data = element[0].dataBsw;
             if (data[fn]) {
+
                 if (typeof that.cnf.v[data[fn]] !== 'undefined') {
                     return that.cnf.v[data[fn]](data.extra || {}, element);
                 } else if (typeof that[data[fn]] !== 'undefined') {
@@ -2800,6 +2828,38 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'filterOptionForTransfer',
         value: function filterOptionForTransfer(input, option) {
             return option.title.indexOf(input) !== -1;
+        }
+
+        /**
+         * Init highlight
+         */
+
+    }, {
+        key: 'initHighlight',
+        value: function initHighlight() {
+            if (typeof hljs === 'undefined') {
+                return;
+            }
+            hljs.initHighlighting();
+        }
+
+        /**
+         * Init highlight block
+         */
+
+    }, {
+        key: 'initHighlightBlock',
+        value: function initHighlightBlock(params) {
+            if (typeof hljs === 'undefined') {
+                return;
+            }
+            if (typeof params.selector === 'undefined') {
+                return;
+            }
+            if ($(params.selector).length === 0) {
+                return;
+            }
+            hljs.highlightBlock($(params.selector)[0]);
         }
 
         /**

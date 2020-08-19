@@ -1748,6 +1748,16 @@ class FoundationAntD extends FoundationTools {
             v.footer = 'footer';
         }
         v.modal = options;
+        if (options.afterShow) {
+            v.$nextTick(function () {
+                if (typeof bsw.cnf.v[options.afterShow] !== 'undefined') {
+                    return bsw.cnf.v[options.afterShow](options.afterShowArgs || {});
+                } else if (typeof bsw[options.afterShow] !== 'undefined') {
+                    return bsw[options.afterShow](options.afterShowArgs || {});
+                }
+                return console.warn(`Method ${options.afterShow} is undefined.`);
+            });
+        }
     }
 
     /**
@@ -1791,6 +1801,16 @@ class FoundationAntD extends FoundationTools {
         meta.zIndex = cnf.maxZIndex;
         options = Object.assign(meta, options);
         v.drawer = options;
+        if (options.afterShow) {
+            v.$nextTick(function () {
+                if (typeof bsw.cnf.v[options.afterShow] !== 'undefined') {
+                    return bsw.cnf.v[options.afterShow](options.afterShowArgs || {});
+                } else if (typeof bsw[options.afterShow] !== 'undefined') {
+                    return bsw[options.afterShow](options.afterShowArgs || {});
+                }
+                return console.warn(`Method ${options.afterShow} is undefined.`);
+            });
+        }
     }
 
     /**
@@ -1845,6 +1865,7 @@ class FoundationAntD extends FoundationTools {
         let minHeight = parseInt(iframe.data('min-height'));
         let maxHeight = parseInt(iframe.data('max-height'));
         let overOffset = iframe.data('over-offset');
+        let debugHeight = iframe.data('debug-height');
 
         minHeight = minHeight ? minHeight : 0;
         maxHeight = maxHeight ? maxHeight : 0;
@@ -1854,10 +1875,13 @@ class FoundationAntD extends FoundationTools {
 
         let content = $('.bsw-content');
         let height = content.height() + bsw.pam(content.parent(), content).column;
+        if (debugHeight) {
+            bsw.info(`Real iframe height: ${height}`);
+        }
+
         if (!maxHeight) {
             maxHeight = bsw.popupCosySize(false, parent.document).height;
         }
-
         if (minHeight > maxHeight) {
             minHeight = maxHeight;
         }
@@ -1924,6 +1948,9 @@ class FoundationAntD extends FoundationTools {
             let attributes = [];
             let overOffset = typeof data.overOffset !== 'undefined' ? data.overOffset : that.cnf.autoHeightOverOffset;
             attributes.push(`data-over-offset=${overOffset}`);
+
+            let debugHeight = typeof data.debugRealHeight !== 'undefined' ? data.debugRealHeight : false;
+            attributes.push(`data-debug-height=${debugHeight}`);
 
             if (typeof data.minHeight === 'undefined' && that.cnf.autoHeightOffset) {
                 data.minHeight = Math.max(height - that.cnf.autoHeightOffset, 0);
@@ -2158,6 +2185,7 @@ class FoundationAntD extends FoundationTools {
         let that = this;
         let data = element[0].dataBsw;
         if (data[fn]) {
+
             if (typeof that.cnf.v[data[fn]] !== 'undefined') {
                 return that.cnf.v[data[fn]](data.extra || {}, element);
             } else if (typeof that[data[fn]] !== 'undefined') {
@@ -2224,6 +2252,32 @@ class FoundationAntD extends FoundationTools {
      */
     filterOptionForTransfer(input, option) {
         return option.title.indexOf(input) !== -1;
+    }
+
+    /**
+     * Init highlight
+     */
+    initHighlight() {
+        if (typeof hljs === 'undefined') {
+            return;
+        }
+        hljs.initHighlighting();
+    }
+
+    /**
+     * Init highlight block
+     */
+    initHighlightBlock(params) {
+        if (typeof hljs === 'undefined') {
+            return;
+        }
+        if (typeof params.selector === 'undefined') {
+            return;
+        }
+        if ($(params.selector).length === 0) {
+            return;
+        }
+        hljs.highlightBlock($(params.selector)[0]);
     }
 
     /**

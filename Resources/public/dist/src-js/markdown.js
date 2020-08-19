@@ -3,7 +3,6 @@
 bsw.configure({
     logic: {
         init: function init(v) {
-            hljs.initHighlighting();
             var allLi = $('.markdown-content .index li');
             var anchor = bsw.leftTrim(window.location.hash, '#');
             if (anchor.length) {
