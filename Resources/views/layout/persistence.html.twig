@@ -7,7 +7,7 @@
     {% set view = scaffold.get.view ?? false %}
     <div class="{{ ['bsw-persistence', view ? 'bsw-persistence-view' : null]|joinClass }}">
       <a-form
-        :class="{'bsw-persistence-form': true, 'f5-just-now': f5JustNow}"
+        :class="{'bsw-persistence-form': true, 'just-first-load': loadTimes <= 1}"
         :form="persistenceForm"
         :style="{{ persistence.styleJson }}"
         @submit="persistenceSubmit"

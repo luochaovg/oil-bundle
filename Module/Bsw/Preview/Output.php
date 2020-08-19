@@ -152,4 +152,9 @@ class Output extends ArgsOutput
      * @var bool
      */
     public $scrollXOperate;
+
+    /**
+     * @var bool
+     */
+    public $loadTwice;
 }

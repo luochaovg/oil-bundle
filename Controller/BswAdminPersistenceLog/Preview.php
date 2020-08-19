@@ -10,6 +10,7 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
+use Leon\BswBundle\Module\Scene\ButtonScene;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -71,24 +72,13 @@ trait Preview
      */
     protected function printJson(string $label, string $value): Charm
     {
-        $value = Html::cleanHtml($value, true);
-
-        if (substr_count($value, "\n") + 1 < 25) {
-            return new Charm(Abs::HTML_TEXT, $value);
+        if (substr_count($value, "\n") + 1 < 20) {
+            return new Charm(Abs::HTML_JSON, $value);
         }
 
-        return $this->charmShowContent(
-            $label,
-            Html::tag(
-                'div',
-                $value,
-                [
-                    'class' => 'bsw-long-text',
-                    'style' => ['width' => '99.6%', 'padding' => '12px'],
-                ]
-            ),
-            ['width' => 600]
-        );
+        $button = (new ButtonScene($label))->sceneCharmJsonModal($value);
+
+        return new Charm($this->getButtonHtml($button));
     }
 
     /**
@@ -134,6 +124,9 @@ trait Preview
         if (($args = $this->valid()) instanceof Response) {
             return $args;
         }
+
+        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT);
+        $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
 
         return $this->showPreview();
     }

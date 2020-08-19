@@ -14,7 +14,7 @@
     shape="{{ form.shape }}"
   {% endif %}
   :data-bsw.prop="{{ form.data }}"
-  @click="dispatcherByVue"
+  @click="{{ form.rootClickForVue }}"
   {{ form.attributes|raw }}
   {% if form.bindLoading %}
     :loading="{{ form.bindLoading }}"

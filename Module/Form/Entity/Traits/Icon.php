@@ -49,7 +49,7 @@ trait Icon
      *
      * @return $this
      */
-    public function setIcon(string $icon)
+    public function setIcon(?string $icon = null)
     {
         $this->icon = $icon;
 

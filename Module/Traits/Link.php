@@ -10,6 +10,7 @@ trait Link
     use Form\Label;
     use Form\Icon;
     use Form\Route;
+    use Form\RootClick;
     use Form\Click;
     use Form\Args;
     use Form\Script;

@@ -1104,6 +1104,10 @@ class Module extends Bsw
         $output->pageSizeOptionsJson = Helper::jsonStringify($output->pageSizeOptions);
         $output->scrollXOperate = $this->getInputAuto('scrollXOperate');
 
+        if ($this->input->childrenRelationField) {
+            $output->loadTwice = true;
+        }
+
         $output = $this->caller(
             $this->method(),
             self::OUTPUT_ARGS_HANDLER,

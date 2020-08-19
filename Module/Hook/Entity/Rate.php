@@ -16,6 +16,6 @@ class Rate extends Money
     {
         $value /= static::REDOUBLE;
 
-        return Helper::numberFormat($value, 2);
+        return Helper::numberFormat($value, $args['decimals'] ?? 2);
     }
 }

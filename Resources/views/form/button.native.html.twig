@@ -4,7 +4,8 @@
   size: {small: 'ant-btn-sm', large: 'ant-btn-lg'}[form.size] ?? null,
   block: form.ghost ? 'ant-btn-block' : null,
   ghost: form.ghost ? 'ant-btn-background-ghost' : null,
-  shape: form.shape ? ('ant-btn-' ~ form.shape) : null
+  shape: form.shape ? ('ant-btn-' ~ form.shape) : null,
+  custom: form.class,
 } %}
 
 <button
@@ -18,7 +19,7 @@
   {% endif %}
   type="{{ form.htmlType }}"
   data-bsw="{{ form.data }}"
-  onclick="bsw.cnf.v.dispatcherByNative(this)"
+  onclick="{{ form.rootClickForNative }}"
   {% if form.selector and form.varNameForSelector is not empty %}
     {% set var = '(' ~ form.varNameForSelector ~ ' && ' ~ form.varNameForSelector ~ '.length)' %}
     {{ '{{ ' ~ var ~ ' ? `(${' ~ var ~ '})` : null }}' }}

@@ -771,6 +771,7 @@ class Abs
     const HTML_PRE       = "<pre class='bsw-pre bsw-long-text'>{value}</pre>";
     const HTML_CODE      = "<div class='bsw-code bsw-long-text'>{value}</div>";
     const HTML_CODE_FULL = "<div class='bsw-code full bsw-long-text'>{value}</div>";
+    const HTML_JSON      = "<pre class='bsw-long-text'><code class='language-json'>{value}</code></pre>";
 
     const HTML_PINK   = "<div class='ant-tag ant-tag-has-color' style='background-color:#eb2f96;'>{value}</div>";
     const HTML_RED    = "<div class='ant-tag ant-tag-has-color' style='background-color:#f5222d;'>{value}</div>";

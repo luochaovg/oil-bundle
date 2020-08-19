@@ -7,15 +7,18 @@ use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\Traits as CT;
 use Leon\BswBundle\Entity\BswAdminAccessControl;
 use Leon\BswBundle\Entity\BswAdminLogin;
+use Leon\BswBundle\Entity\BswAdminPersistenceLog;
 use Leon\BswBundle\Entity\BswAdminRole;
 use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw as BswModule;
+use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Exception\ModuleException;
+use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Checkbox;
 use Leon\BswBundle\Module\Hook\Entity\Aes;
 use Leon\BswBundle\Module\Hook\Entity\Enums;
@@ -30,6 +33,7 @@ use Leon\BswBundle\Module\Bsw\Menu\Entity\Menu as MenuItem;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Setting;
 use Leon\BswBundle\Module\Bsw\Header\Entity\Links;
 use Leon\BswBundle\Repository\BswAdminLoginRepository;
+use Leon\BswBundle\Repository\BswAdminPersistenceLogRepository;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswAttachmentRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -321,7 +325,7 @@ class BswBackendController extends BswWebController
      * @param bool   $responseWhenMessage
      * @param bool   $simpleMode
      *
-     * @return Response|array
+     * @return Response|BswModule\Message|array
      * @throws
      */
     protected function showModule(
@@ -896,5 +900,126 @@ class BswBackendController extends BswWebController
             'hk' => '繁體中文',
             'en' => 'English',
         ];
+    }
+
+    /**
+     * Preview filter
+     *
+     * @param array $filter
+     * @param array $index
+     * @param bool  $arrayValueToString
+     *
+     * @return array
+     */
+    public function previewFilter(array $filter, array $index = [], bool $arrayValueToString = true): array
+    {
+        $handling = [];
+        foreach ($filter as $key => $value) {
+
+            $k = Helper::camelToUnder($key);
+            if (strpos($k, Abs::FILTER_INDEX_SPLIT) === false) {
+                $k = $k . Abs::FILTER_INDEX_SPLIT . ($index[$key] ?? 0);
+            }
+
+            if (is_scalar($value)) {
+                $handling[$k] = $value;
+            } elseif (is_array($value)) {
+                if ($arrayValueToString) {
+                    $handling[$k] = implode(Abs::FORM_DATA_SPLIT, $value);
+                } else {
+                    foreach ($value as $index => $item) {
+                        $handling[$k][$index] = $item;
+                    }
+                }
+            }
+        }
+
+        return ['filter' => $handling];
+    }
+
+    /**
+     * Html -> button
+     *
+     * @param Button $button
+     * @param bool   $vue
+     *
+     * @return string
+     */
+    public function getButtonHtml(Button $button, bool $vue = false): string
+    {
+        $twig = $vue ? 'form/button.html' : 'form/button.native.html';
+        if (empty($button->getUrl())) {
+            $button->setUrl($this->urlSafe($button->getRoute(), $button->getArgs(), 'Build charm operates'));
+        }
+
+        return $this->renderPart($twig, ['form' => $button]);
+    }
+
+    /**
+     * Database operation logger
+     *
+     * @param string $entity
+     * @param int    $type
+     * @param array  $before
+     * @param array  $later
+     * @param array  $effect
+     *
+     * @throws
+     */
+    public function databaseOperationLogger(
+        string $entity,
+        int $type,
+        array $before = [],
+        array $later = [],
+        array $effect = []
+    ) {
+        if (!$this->parameter('backend_db_logger')) {
+            return;
+        }
+
+        /**
+         * @var BswAdminPersistenceLogRepository $loggerRepo
+         */
+        $loggerRepo = $this->repo(BswAdminPersistenceLog::class);
+        $result = $loggerRepo->newly(
+            [
+                'table'  => Helper::tableNameFromCls($entity),
+                'userId' => $this->usr('usr_uid') ?? 0,
+                'type'   => $type,
+                'before' => Helper::jsonStringify($before),
+                'later'  => Helper::jsonStringify($later),
+                'effect' => Helper::jsonStringify($effect),
+            ]
+        );
+
+        if ($result === false) {
+            $this->logger->error("Database operation logger error: {$loggerRepo->pop()}");
+        }
+    }
+
+    /**
+     * Upload options
+     *
+     * @param string $flag
+     * @param array  $option
+     *
+     * @return array
+     */
+    public function uploadOptionsHandler(string $flag, array $option): array
+    {
+        if ($flag === 'mixed') {
+            return array_merge(
+                $option,
+                [
+                    'fileFn' => function ($file) {
+                        $file->href = 'app_bsw_attachment_preview';
+
+                        return $file;
+                    },
+                ]
+            );
+        }
+
+        return $option;
     }
 }

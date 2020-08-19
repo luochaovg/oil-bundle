@@ -14,7 +14,11 @@
   {% block preview %}
     <div class="bsw-preview">
       <a-table
-        :key="`{{ scaffold.uuid }}-${f5JustNow}`"
+        {% if preview.loadTwice %}
+          :key="`preview-{{ scaffold.uuid }}-${loadTimes}`"
+        {% else %}
+          :key="`preview-{{ scaffold.uuid }}`"
+        {% endif %}
         :columns="previewColumns"
         :data-source="previewList"
         :bordered="{{ preview.border ? 'true' : 'false' }}"

@@ -14,6 +14,9 @@ class JsonStringify extends Json
      */
     public function preview($value, array $args)
     {
-        return Helper::formatPrintJson(parent::preview($value, $args), 4, ': ');
+        $space = $args['space'] ?? 4;
+        $split = $args['split'] ?? ': ';
+
+        return Helper::formatPrintJson(parent::preview($value, $args), $space, $split);
     }
 }

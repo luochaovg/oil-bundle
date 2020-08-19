@@ -907,9 +907,10 @@ class Helper
         string $prefix = null
     ): string {
 
-        if (is_array($json)) {
-            $json = self::jsonStringify($json);
+        if (is_string($json)) {
+            $json = self::parseJsonString($json);
         }
+        $json = self::jsonStringify($json);
 
         $result = null;
         $pos = 0;

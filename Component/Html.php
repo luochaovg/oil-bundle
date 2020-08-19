@@ -344,13 +344,15 @@ class Html
 
         $items = [];
         foreach ($params as $item) {
-            if (is_string($item)) {
+            if ($item === 'this') {
+                array_push($items, 'this');
+            } elseif (is_string($item)) {
                 $item = addslashes($item);
                 array_push($items, "'{$item}'");
             } elseif (!is_array($item)) {
                 array_push($items, $item);
             } else {
-                array_push($items, Helper::jsonStringify($items));
+                array_push($items, Helper::jsonStringify($item));
             }
         }
 

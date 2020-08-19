@@ -17,6 +17,6 @@ class RateStringify extends Rate
         $value /= static::REDOUBLE;
         $tpl = $args['tpl'] ?? '%.2f %%';
 
-        return sprintf($tpl, Helper::numberFormat($value, 2));
+        return sprintf($tpl, Helper::numberFormat($value, $args['decimals'] ?? 2));
     }
 }
