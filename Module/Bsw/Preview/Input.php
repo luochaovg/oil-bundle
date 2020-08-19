@@ -163,4 +163,19 @@ class Input extends ArgsInput
      * @var bool
      */
     public $scrollXOperateInMobile = false;
+
+    /**
+     * @var int
+     */
+    public $actionWidthMargin = 16;
+
+    /**
+     * @var int
+     */
+    public $actionWidthButton = 44;
+
+    /**
+     * @var int
+     */
+    public $actionWidthGap = 5;
 }

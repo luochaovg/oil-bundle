@@ -37,9 +37,9 @@ class BswAdminUser extends FoundationEntity
      * @Assert\Type(type="string", groups={"modify", "newly"})
      * @Assert\NotNull(groups={"modify", "newly"})
      * @Assert\Length(max=16, groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=2, align="center", render=BswAbs::RENDER_CODE)
-     * @BswAnnotation\Persistence(sort=2)
-     * @BswAnnotation\Filter(sort=2)
+     * @BswAnnotation\Preview(sort=2, align="center", render=BswAbs::RENDER_CODE, label="Account")
+     * @BswAnnotation\Persistence(sort=2, label="Account")
+     * @BswAnnotation\Filter(sort=2, label="Account")
      */
     protected $phone;
 

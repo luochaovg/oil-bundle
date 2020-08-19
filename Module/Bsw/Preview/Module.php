@@ -918,7 +918,8 @@ class Module extends Bsw
                 $width = $output->columns[$operate]['width'];
             } else {
                 $maxButtons = min($maxButtons, 4);
-                $width = 16 + ($maxButtons * (2 + 42 + 2) + ($maxButtons - 1) * 5) + 16;
+                $width = $this->input->actionWidthMargin * 2;
+                $width += ($maxButtons * ($this->input->actionWidthButton) + ($maxButtons - 1) * $this->input->actionWidthGap);
                 $output->scrollX += $width;
             }
 

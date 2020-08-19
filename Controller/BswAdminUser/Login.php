@@ -48,7 +48,7 @@ trait Login
 
         $form = [
             'account' => (new Input())
-                ->setPlaceholder('Phone number')
+                ->setPlaceholder('Account')
                 ->setKey('account')
                 ->setIcon($this->cnf->icon_user)
                 ->setIconAttribute(['slot' => 'prefix'])
@@ -97,7 +97,7 @@ trait Login
      *
      * @Route("/bsw-admin-user/login-handler", name="app_bsw_admin_user_login_handler", methods="POST")
      *
-     * @I("account", rules="phone")
+     * @I("account")
      * @I("password", rules="rsa|password")
      * @I("captcha", rules="length,4")
      * @I("google_captcha", rules="~|length,6")
