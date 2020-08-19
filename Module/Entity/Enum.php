@@ -1056,7 +1056,7 @@ class Enum
     ];
 
     /**
-     * @const array 树状结构样例 - 部门树
+     * @const array treeData 样例
      */
     const TREE_DATA_DEMO = [
         [
@@ -1078,5 +1078,23 @@ class Enum
         ],
         ['title' => 'DevOps department', 'value' => 2],
         ['title' => 'Product department', 'value' => 3],
+    ];
+
+    /**
+     * @const array dataSource 样例1
+     */
+    const DATA_SOURCE_DEMO1 = [
+        ['text' => 'Lee', 'value' => 1001],
+        ['text' => 'Ming', 'value' => 1002],
+        ['text' => 'Lucy', 'value' => 1003],
+    ];
+
+    /**
+     * @const array dataSource 样例2
+     */
+    const DATA_SOURCE_DEMO2 = [
+        'Lee',
+        'Ming',
+        'Lucy',
     ];
 }

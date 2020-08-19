@@ -21,7 +21,7 @@ trait DataSource
             return $this->dataSource;
         }
 
-        return Helper::jsonStringify($this->dataSource);
+        return Helper::jsonStringify(Helper::stringValues($this->dataSource));
     }
 
     /**

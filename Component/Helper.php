@@ -2024,8 +2024,32 @@ class Helper
      */
     public static function numericValues(array $params): array
     {
-        foreach ($params as &$value) {
-            $value = self::numericValue($value);
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $params[$key] = self::numericValues($value);
+            } else {
+                $params[$key] = self::numericValue($value);
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * String values
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public static function stringValues(array $params): array
+    {
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $params[$key] = self::stringValues($value);
+            } elseif (is_numeric($value)) {
+                $params[$key] = strval($value);
+            }
         }
 
         return $params;
@@ -3687,7 +3711,6 @@ class Helper
 
         $px = 0;
         [$length] = self::strLenByBytes($str);
-        dump($length);
         foreach ($length as $bytes => $total) {
             $px += (($byteMapToPx[$bytes] ?? 0) * $total);
         }

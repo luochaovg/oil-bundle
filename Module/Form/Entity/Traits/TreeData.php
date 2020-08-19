@@ -8,7 +8,7 @@ use Leon\BswBundle\Component\Html;
 trait TreeData
 {
     /**
-     * @var array
+     * @var array|string
      */
     protected $treeData = [];
 
@@ -17,27 +17,19 @@ trait TreeData
      */
     public function getTreeData(): string
     {
-        $handler = function (array $treeData) use (&$handler) {
-            foreach ($treeData as $key => $value) {
-                if (is_array($value)) {
-                    $treeData[$key] = $handler($value);
-                } elseif (is_numeric($value)) {
-                    $treeData[$key] = strval($value); // to string for ant-d bug
-                }
-            }
+        if (is_string($this->treeData)) {
+            return $this->treeData;
+        }
 
-            return $treeData;
-        };
-
-        return Helper::jsonStringify($handler($this->treeData));
+        return Helper::jsonStringify(Helper::stringValues($this->treeData));
     }
 
     /**
-     * @param array $treeData
+     * @param array|string $treeData
      *
      * @return $this
      */
-    public function setTreeData(array $treeData)
+    public function setTreeData($treeData)
     {
         $this->treeData = $treeData;
 
