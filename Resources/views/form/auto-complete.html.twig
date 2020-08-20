@@ -13,6 +13,9 @@
   {% if form.change %}
     @change="{{ form.change }}"
   {% endif %}
+  {% if form.search %}
+    @search="{{ form.search }}"
+  {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}

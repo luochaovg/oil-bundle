@@ -1056,43 +1056,52 @@ class Enum
     ];
 
     /**
-     * @const array treeData 样例
+     * @const array SelectTree::treeData 样例
      */
-    const TREE_DATA_DEMO = [
+    const SELECT_TREE_ENUM_DEMO = [
         [
             'title'    => 'IT department',
-            'value'    => 1,
+            'value'    => '1',
             'children' => [
                 [
                     'title'    => 'Backend',
-                    'value'    => 101,
+                    'value'    => '1-1',
                     'children' => [
-                        ['title' => 'php', 'value' => 10101],
-                        ['title' => 'go', 'value' => 10102],
-                        ['title' => 'python', 'value' => 10103],
+                        ['title' => 'php', 'value' => '1-1-1'],
+                        ['title' => 'go', 'value' => '1-1-2'],
+                        ['title' => 'python', 'value' => '1-1-3'],
                     ],
                 ],
-                ['title' => 'Frontend', 'value' => 102],
-                ['title' => 'Client', 'value' => 103],
+                ['title' => 'Frontend', 'value' => '1-2'],
+                ['title' => 'Client', 'value' => '1-3'],
             ],
         ],
-        ['title' => 'DevOps department', 'value' => 2],
-        ['title' => 'Product department', 'value' => 3],
+        ['title' => 'DevOps department', 'value' => '2'],
+        ['title' => 'Product department', 'value' => '3'],
     ];
 
     /**
-     * @const array dataSource 样例1
+     * @const array Transfer::dataSource 样例
      */
-    const DATA_SOURCE_DEMO1 = [
+    const TRANSFER_ENUM_DEMO = [
+        ['title' => 'IT department', 'key' => 1001],
+        ['title' => 'DevOps department', 'key' => 1002],
+        ['title' => 'Product department', 'key' => 1003],
+    ];
+
+    /**
+     * @const array AutoComplete::dataSource 样例1
+     */
+    const AUTO_COMPLETE_ENUM_DEMO1 = [
         ['text' => 'Lee', 'value' => 1001],
         ['text' => 'Ming', 'value' => 1002],
         ['text' => 'Lucy', 'value' => 1003],
     ];
 
     /**
-     * @const array dataSource 样例2
+     * @const array AutoComplete::dataSource 样例2
      */
-    const DATA_SOURCE_DEMO2 = [
+    const AUTO_COMPLETE_ENUM_DEMO2 = [
         'Lee',
         'Ming',
         'Lucy',

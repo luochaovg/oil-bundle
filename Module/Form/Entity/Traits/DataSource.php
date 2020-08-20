@@ -25,6 +25,19 @@ trait DataSource
     }
 
     /**
+     * @return array
+     */
+    public function getDataSourceArray(): array
+    {
+        $dataSource = $this->dataSource;
+        if (is_string($dataSource)) {
+            $dataSource = Helper::parseJsonString($dataSource);
+        }
+
+        return Helper::stringValues($dataSource);
+    }
+
+    /**
      * @param array|string $dataSource
      *
      * @return $this

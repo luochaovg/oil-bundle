@@ -4,20 +4,26 @@
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
-  :data-source="{{ form.treeData }}"
-  :titles="['{{ form.sourceTitle }}', '{{ form.targetTitle }}']"
-  :operations="['{{ form.sourceOperate }}', '{{ form.targetOperate }}']"
-  :target-keys="{{ form.targetKeys }}"
-  :selected-keys="{{ form.selectedKeys }}"
+  :data-source="{{ form.dataSource }}"
+  :titles="['{{ form.sourceTitle|trans({}, 'twig') }}', '{{ form.targetTitle|trans({}, 'twig') }}']"
+  :operations="['{{ form.sourceOperate|trans({}, 'twig') }}', '{{ form.targetOperate|trans({}, 'twig') }}']"
+  :target-keys="{{ form.targetKeysKey }}"
+  {% if form.selectedKeysArray is not empty %}
+    :selected-keys="{{ form.selectedKeysKey }}"
+  {% endif %}
   :render="(record) => record.title"
   :data-bsw.prop="{{ form.formData }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :show-search="{{ form.showSearch ? 'true' : 'false' }}"
   :filter-option="{{ form.filterOption }}"
   :show-select-all="{{ form.showSelectAll ? 'true' : 'false' }}"
+  :list-style="{{ form.listStyle }}"
   :style="{{ form.style }}"
   {% if form.change %}
-    @change="{{ form.change }}"
+    @change="((targetKeys, direction, moveKeys) => {this.{{ form.change }}(targetKeys, direction, moveKeys, '{{ form.key }}')})"
+  {% endif %}
+  {% if form.selectChange %}
+    @select-change="((sourceSelectedKeys, targetSelectedKeys) => {this.{{ form.selectChange }}(sourceSelectedKeys, targetSelectedKeys, '{{ form.key }}')})"
   {% endif %}
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"

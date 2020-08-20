@@ -14,6 +14,7 @@ use Leon\BswBundle\Module\Form\Entity\Mentions;
 use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Select;
 use Leon\BswBundle\Module\Form\Entity\SelectTree;
+use Leon\BswBundle\Module\Form\Entity\Transfer;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Repository\FoundationRepository;
 use ReflectionClass;
@@ -495,6 +496,7 @@ abstract class Bsw
 
         $dataSourceClass = [
             AutoComplete::class,
+            Transfer::class,
         ];
 
         $formClass = get_class($form);

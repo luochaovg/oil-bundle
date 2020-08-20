@@ -19,6 +19,7 @@ use Leon\BswBundle\Module\Exception\LogicException;
 use Leon\BswBundle\Module\Exception\ModuleException;
 use Leon\BswBundle\Module\Exception\RepositoryException;
 use Leon\BswBundle\Module\Form\Entity\Group;
+use Leon\BswBundle\Module\Form\Entity\Transfer;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\CkEditor;
@@ -405,7 +406,6 @@ class Module extends Bsw
             /**
              * Upload tips
              */
-
             $option = $this->web->uploadOptionByFlag($form->getFlag());
             [$list, $suffix, $mime] = Uploader::optionTips(
                 $option,
@@ -445,6 +445,24 @@ class Module extends Bsw
             if ($accept) {
                 $form->setAccept(ltrim($accept, ','));
             }
+        }
+
+        if ($form instanceof Transfer) {
+            $key = 'persistenceTransferKeysCollect';
+            if (!$form->getChange()) {
+                $form->setChange('persistenceTransferChange');
+            }
+            if (!$form->getSelectChange()) {
+                $form->setSelectChange('persistenceTransferSelectChange');
+            }
+
+            $form->setTargetKeysKey("{$key}.{$field}.target");
+            $form->setSelectedKeysKey("{$key}.{$field}.selected");
+
+            $output->transferKeysCollect[$field] = [
+                'target'   => $form->getTargetKeysArray(),
+                'selected' => $form->getSelectedKeysArray(),
+            ];
         }
 
         if ($form instanceof Select) {
@@ -1018,7 +1036,7 @@ class Module extends Bsw
                         'recordBefore',
                         'recordAdd',
                         'recordDel',
-                        'result',
+                        'result'
                     ),
                     ['pk' => $newly ? $result : ($recordBefore[$pk] ?? $original[$pk])],
                     $this->input->args
@@ -1213,6 +1231,7 @@ class Module extends Bsw
         $output->fileListKeyCollectJson = Helper::jsonFlexible($output->fileListKeyCollect);
         $output->uploadTipsCollectJson = Helper::jsonFlexible($output->uploadTipsCollect);
         $output->fieldShapeCollectJson = Helper::jsonFlexible($output->fieldShapeCollect);
+        $output->transferKeysCollectJson = Helper::jsonFlexible($output->transferKeysCollect);
 
         $output->style = array_merge($output->style, $this->input->style);
         $output->styleJson = Helper::jsonFlexible($output->style);

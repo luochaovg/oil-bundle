@@ -6,10 +6,17 @@ bsw.configure({
         persistenceUploadTipsCollect: {{ persistence.uploadTipsCollectJson|raw }},
         persistenceFieldShapeNow: {},
         persistenceFieldShapeCollect: {{ persistence.fieldShapeCollectJson|raw }},
+        persistenceTransferKeysCollect: {{ persistence.transferKeysCollectJson|raw }},
     },
     method: {
         persistenceSubmit(e) {
             this.submitFormAction(e, 'persistenceForm', 'persistenceFormat');
+        },
+        persistenceTransferChange(targetKeys, direction, moveKeys, field) {
+            this.persistenceTransferKeysCollect[field].target = targetKeys;
+        },
+        persistenceTransferSelectChange(sourceSelectedKeys, targetSelectedKeys, field) {
+            this.persistenceTransferKeysCollect[field].selected = [...sourceSelectedKeys, ...targetSelectedKeys];
         }
     },
     logic: {

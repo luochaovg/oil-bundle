@@ -30,6 +30,16 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
+    public $style = [];
+
+    /**
+     * @var string
+     */
+    public $styleJson;
+
+    /**
+     * @var array
+     */
     public $fileListKeyCollect = [];
 
     /**
@@ -60,10 +70,10 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
-    public $style = [];
+    public $transferKeysCollect = [];
 
     /**
      * @var string
      */
-    public $styleJson;
+    public $transferKeysCollectJson;
 }
