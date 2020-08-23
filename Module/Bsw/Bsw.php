@@ -473,19 +473,19 @@ abstract class Bsw
     }
 
     /**
-     * Lang the enum data
+     * Lang the enum meta
      *
      * @param array $enum
      * @param array $hitKeys
      *
      * @return array
      */
-    protected function langTheEnumData(array $enum, array $hitKeys = []): array
+    protected function langTheEnumMeta(array $enum, array $hitKeys = []): array
     {
         $hitKeys = array_merge(['label', 'title', 'text'], $hitKeys);
         foreach ($enum as $key => $item) {
             if (is_array($item)) {
-                $enum[$key] = $this->langTheEnumData($item);
+                $enum[$key] = $this->langTheEnumMeta($item);
             } elseif (in_array($key, $hitKeys)) {
                 $enum[$key] = $this->web->enumLangSimple($item);
             }
@@ -524,11 +524,12 @@ abstract class Bsw
                     "{$exception} option `enum` (for `{$property}`) must configure in {$formClass}"
                 );
             }
-            $property = ucfirst($property);
-            if (!$form->{"get{$property}"}()) {
+            $hasVar = property_exists($form, 'varNameForMeta');
+            if (!$hasVar || ($hasVar && !$form->getVarNameForMeta())) {
                 $enum = $form->enumHandler($item['enum']);
-                $enum = $this->langTheEnumData($enum);
-                $form->{"set{$property}"}($enum);
+                $enum = $this->langTheEnumMeta($enum);
+                $set = 'set' . ucfirst($property);
+                $form->{$set}($enum);
             }
         }
     }

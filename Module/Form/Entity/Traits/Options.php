@@ -7,7 +7,7 @@ use Leon\BswBundle\Component\Helper;
 trait Options
 {
     /**
-     * @var array|string
+     * @var array
      */
     protected $options = [];
 
@@ -16,11 +16,7 @@ trait Options
      */
     public function getOptions(): string
     {
-        if (is_string($this->options)) {
-            return $this->options;
-        }
-
-        return Helper::jsonStringify(Helper::stringValues($this->options));
+        return Helper::jsonStringify($this->getOptionsArray());
     }
 
     /**
@@ -28,19 +24,15 @@ trait Options
      */
     public function getOptionsArray(): array
     {
-        if (is_string($this->options)) {
-            return [];
-        }
-
-        return $this->options;
+        return Helper::stringValues($this->options);
     }
 
     /**
-     * @param array|string $options
+     * @param array $options
      *
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
 

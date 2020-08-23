@@ -1069,6 +1069,29 @@ class FoundationTools extends FoundationPrototype {
     }
 
     /**
+     * Set json value by deep
+     *
+     * @param target
+     * @param keys
+     * @param value
+     *
+     * @returns boolean
+     */
+    setJsonDeep(target, keys, value) {
+        let origin = target;
+        keys = keys.split('.');
+        for (let key of keys) {
+            let last = key === keys[keys.length - 1];
+            if (typeof origin[key] === 'undefined' || !origin[key]) {
+                origin[key] = last ? value : {};
+            } else {
+                origin[key] = last ? value : origin[key];
+            }
+            origin = origin[key];
+        }
+    }
+
+    /**
      * Json filter
      *
      * @param target

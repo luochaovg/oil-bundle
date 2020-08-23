@@ -25,6 +25,10 @@
   {% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
   {% set persistenceSence = (scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE')) %}
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.varNameForMeta %}
+    :options="{{ form.varNameForMeta }}"
+    data-dds-meta="{{ form.varNameForMeta }}"
+  {% endif %}
   {% if form.ddsRoute %}
     data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
   {% endif %}
@@ -39,10 +43,12 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"
 >
-  {% for i in form.optionsArray %}
-    <a-select-option value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
-      {{ i.label }}
-    </a-select-option>
-  {% endfor %}
+  {% if not form.varNameForMeta %}
+    {% for i in form.optionsArray %}
+      <a-select-option value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
+        {{ i.label }}
+      </a-select-option>
+    {% endfor %}
+  {% endif %}
 </a-select>
 {% include 'form/iframe-entrypoint.html.twig' with {form: form} %}

@@ -8,7 +8,7 @@ use Leon\BswBundle\Component\Html;
 trait DataSource
 {
     /**
-     * @var array|string
+     * @var array
      */
     protected $dataSource = [];
 
@@ -17,11 +17,7 @@ trait DataSource
      */
     public function getDataSource(): string
     {
-        if (is_string($this->dataSource)) {
-            return $this->dataSource;
-        }
-
-        return Helper::jsonStringify(Helper::stringValues($this->dataSource));
+        return Helper::jsonStringify($this->getDataSourceArray());
     }
 
     /**
@@ -29,19 +25,15 @@ trait DataSource
      */
     public function getDataSourceArray(): array
     {
-        if (is_string($this->dataSource)) {
-            return [];
-        }
-
-        return $this->dataSource;
+        return Helper::stringValues($this->dataSource);
     }
 
     /**
-     * @param array|string $dataSource
+     * @param array $dataSource
      *
      * @return $this
      */
-    public function setDataSource($dataSource)
+    public function setDataSource(array $dataSource)
     {
         $this->dataSource = $dataSource;
 

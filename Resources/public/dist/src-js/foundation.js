@@ -1416,6 +1416,53 @@ var FoundationTools = function (_FoundationPrototype) {
         }
 
         /**
+         * Set json value by deep
+         *
+         * @param target
+         * @param keys
+         * @param value
+         *
+         * @returns boolean
+         */
+
+    }, {
+        key: 'setJsonDeep',
+        value: function setJsonDeep(target, keys, value) {
+            var origin = target;
+            keys = keys.split('.');
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = keys[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var key = _step5.value;
+
+                    var last = key === keys[keys.length - 1];
+                    if (typeof origin[key] === 'undefined' || !origin[key]) {
+                        origin[key] = last ? value : {};
+                    } else {
+                        origin[key] = last ? value : origin[key];
+                    }
+                    origin = origin[key];
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+        }
+
+        /**
          * Json filter
          *
          * @param target
@@ -2124,45 +2171,15 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'chartHandlerTooltipStack',
         value: function chartHandlerTooltipStack(params) {
             var total = 0;
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
-
-            try {
-                for (var _iterator5 = params[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                    var item = _step5.value;
-
-                    total += Math.floor(Number.parseFloat(item.data) * 100);
-                }
-            } catch (err) {
-                _didIteratorError5 = true;
-                _iteratorError5 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                        _iterator5.return();
-                    }
-                } finally {
-                    if (_didIteratorError5) {
-                        throw _iteratorError5;
-                    }
-                }
-            }
-
-            total /= 100;
-
-            var tpl = params[0].name + ' (' + total + ')<br>';
             var _iteratorNormalCompletion6 = true;
             var _didIteratorError6 = false;
             var _iteratorError6 = undefined;
 
             try {
                 for (var _iterator6 = params[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                    var _item = _step6.value;
+                    var item = _step6.value;
 
-                    var percent = (Number.parseFloat(_item.data) / total || 0) * 100;
-                    percent = percent.toFixed(2);
-                    tpl += _item.marker + ' ' + _item.seriesName + ': ' + _item.data + ' (' + percent + '%)<br>';
+                    total += Math.floor(Number.parseFloat(item.data) * 100);
                 }
             } catch (err) {
                 _didIteratorError6 = true;
@@ -2175,6 +2192,36 @@ var FoundationAntD = function (_FoundationTools) {
                 } finally {
                     if (_didIteratorError6) {
                         throw _iteratorError6;
+                    }
+                }
+            }
+
+            total /= 100;
+
+            var tpl = params[0].name + ' (' + total + ')<br>';
+            var _iteratorNormalCompletion7 = true;
+            var _didIteratorError7 = false;
+            var _iteratorError7 = undefined;
+
+            try {
+                for (var _iterator7 = params[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                    var _item = _step7.value;
+
+                    var percent = (Number.parseFloat(_item.data) / total || 0) * 100;
+                    percent = percent.toFixed(2);
+                    tpl += _item.marker + ' ' + _item.seriesName + ': ' + _item.data + ' (' + percent + '%)<br>';
+                }
+            } catch (err) {
+                _didIteratorError7 = true;
+                _iteratorError7 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                        _iterator7.return();
+                    }
+                } finally {
+                    if (_didIteratorError7) {
+                        throw _iteratorError7;
                     }
                 }
             }

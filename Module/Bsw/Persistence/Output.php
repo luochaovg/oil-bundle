@@ -76,4 +76,14 @@ class Output extends ArgsOutput
      * @var string
      */
     public $transferKeysCollectJson;
+
+    /**
+     * @var array
+     */
+    public $varNameForMetaCollect = [];
+
+    /**
+     * @var string
+     */
+    public $varNameForMetaCollectJson;
 }

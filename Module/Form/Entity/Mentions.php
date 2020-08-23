@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Form\Entity\Traits\DynamicDataSource;
 use Leon\BswBundle\Module\Form\Entity\Traits\FilterOption;
 use Leon\BswBundle\Module\Form\Entity\Traits\Options;
 use Leon\BswBundle\Module\Form\Entity\Traits\Placement;
@@ -10,12 +11,14 @@ use Leon\BswBundle\Module\Form\Entity\Traits\Prefix;
 use Leon\BswBundle\Module\Form\Entity\Traits\Rows;
 use Leon\BswBundle\Module\Form\Entity\Traits\Separator;
 use Leon\BswBundle\Module\Form\Entity\Traits\Split;
+use Leon\BswBundle\Module\Form\Entity\Traits\VarNameForMeta;
 use Leon\BswBundle\Module\Form\Form;
 
 class Mentions extends Form
 {
     use Options;
     use FilterOption;
+    use DynamicDataSource;
     use Placement;
     use Prefix;
     use Separator;

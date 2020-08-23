@@ -9,7 +9,6 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ButtonStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\Change;
 use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
-use Leon\BswBundle\Module\Form\Entity\Traits\DynamicDataSource;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
 use Leon\BswBundle\Module\Form\Entity\Traits\FormData;
 use Leon\BswBundle\Module\Form\Entity\Traits\Key;
@@ -36,7 +35,6 @@ abstract class Form
     use Change;
     use AutoFocus;
     use FormData;
-    use DynamicDataSource;
     use ButtonStyle;
 
     /**

@@ -6,6 +6,10 @@
   :style="{{ form.style }}"
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.varNameForMeta %}
+    :options="{{ form.varNameForMeta }}"
+    data-dds-meta="{{ form.varNameForMeta }}"
+  {% endif %}
   {% if form.ddsRoute %}
     data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
   {% endif %}
@@ -16,19 +20,21 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}', { initialValue: `{{ form.value }}`, rules: {{ form.formRules }} }]"
 >
-  <a-row>
-    {% for i in form.optionsArray %}
-      {% if form.col is empty %}
-        <a-radio value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
-          {{ i.label }}
-        </a-radio>
-      {% else %}
-        <a-col {{ form.colStringify|raw }}>
+  {% if not form.varNameForMeta %}
+    <a-row>
+      {% for i in form.optionsArray %}
+        {% if form.col is empty %}
           <a-radio value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
             {{ i.label }}
           </a-radio>
-        </a-col>
-      {% endif %}
-    {% endfor %}
-  </a-row>
+        {% else %}
+          <a-col {{ form.colStringify|raw }}>
+            <a-radio value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
+              {{ i.label }}
+            </a-radio>
+          </a-col>
+        {% endif %}
+      {% endfor %}
+    </a-row>
+  {% endif %}
 </a-radio-group>

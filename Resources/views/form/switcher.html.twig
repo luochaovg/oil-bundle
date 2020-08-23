@@ -9,9 +9,6 @@
   checked-children="{{ form.checkedChildren|trans({}, 'twig') }}"
   un-checked-children="{{ form.unCheckedChildren|trans({}, 'twig') }}"
   :data-bsw.prop="{{ form.formData }}"
-  {% if form.ddsRoute %}
-    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
-  {% endif %}
   {% if form.change %}
     @change="((value) => {this.{{ form.change }}(value, '{{ form.key }}')})"
   {% endif %}

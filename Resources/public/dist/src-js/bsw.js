@@ -398,13 +398,14 @@ $(function () {
         },
         dynamicDataSource: function dynamicDataSource() {
             var that = this;
-            var field = arguments[arguments.length - 1];
-            var ddsApi = $('#' + field).data('dds-api');
+            var item = $('#' + arguments[arguments.length - 1]);
+            var ddsApi = item.data('dds-api');
+            var ddsMeta = item.data('dds-meta');
             that.noLoadingOnce = true;
-            bsw.request(ddsApi, { field: field, arguments: arguments }).then(function (res) {
+            bsw.request(ddsApi, { arguments: arguments }).then(function (res) {
                 bsw.response(res).then(function () {
-                    if (res.sets.meta) {
-                        that.meta[res.sets.meta] = res.sets.dds || {};
+                    if (ddsMeta && res.sets) {
+                        bsw.setJsonDeep(that, ddsMeta, res.sets);
                     }
                 }).catch(function (reason) {
                     console.warn(reason);

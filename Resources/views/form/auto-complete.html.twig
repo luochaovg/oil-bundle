@@ -7,9 +7,14 @@
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   size="{{ form.size }}"
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
-  :data-source="{{ form.dataSource }}"
   :filter-option="{{ form.filterOption }}"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.varNameForMeta %}
+    :data-source="{{ form.varNameForMeta }}"
+    data-dds-meta="{{ form.varNameForMeta }}"
+  {% else %}
+    :data-source="{{ form.dataSource }}"
+  {% endif %}
   {% if form.ddsRoute %}
     data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
   {% endif %}

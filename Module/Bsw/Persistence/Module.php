@@ -470,6 +470,14 @@ class Module extends Bsw
                 $output->fieldShapeCollect[$field] = $meta;
             }
         }
+
+        if (property_exists($form, 'varNameForMeta') && $fieldHandling = $form->getVarNameForMeta()) {
+            $output->varNameForMetaCollect[$field] = $form->getVarNameForMetaDefaultArray();
+            if ($fieldHandling === true) {
+                $fieldHandling = $field;
+            }
+            $form->setVarNameForMeta("persistenceVarNameForMetaCollect.{$fieldHandling}");
+        }
     }
 
     /**
@@ -606,7 +614,6 @@ class Module extends Bsw
         $view = $this->web->getArgs($this->input->view);
 
         foreach ($persistAnnotation as $key => $item) {
-
             /**
              * @var Form $form
              */
@@ -1232,6 +1239,7 @@ class Module extends Bsw
         $output->uploadTipsCollectJson = Helper::jsonFlexible($output->uploadTipsCollect);
         $output->fieldShapeCollectJson = Helper::jsonFlexible($output->fieldShapeCollect);
         $output->transferKeysCollectJson = Helper::jsonFlexible($output->transferKeysCollect);
+        $output->varNameForMetaCollectJson = Helper::jsonFlexible($output->varNameForMetaCollect);
 
         $output->style = array_merge($output->style, $this->input->style);
         $output->styleJson = Helper::jsonFlexible($output->style);

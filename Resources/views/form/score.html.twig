@@ -12,9 +12,6 @@
     character="{{ form.character }}"
   {% endif %}
   :data-bsw.prop="{{ form.formData }}"
-  {% if form.ddsRoute %}
-    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
-  {% endif %}
   {% if form.change %}
     @change="((value) => {this.{{ form.change }}(value, '{{ form.key }}')})"
   {% endif %}

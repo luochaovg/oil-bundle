@@ -401,13 +401,14 @@ $(function () {
 
         dynamicDataSource() {
             let that = this;
-            let field = arguments[arguments.length - 1];
-            let ddsApi = $(`#${field}`).data('dds-api');
+            let item = $(`#${arguments[arguments.length - 1]}`);
+            let ddsApi = item.data('dds-api');
+            let ddsMeta = item.data('dds-meta');
             that.noLoadingOnce = true;
-            bsw.request(ddsApi, {field, arguments: arguments}).then(res => {
+            bsw.request(ddsApi, {arguments: arguments}).then(res => {
                 bsw.response(res).then(() => {
-                    if (res.sets.meta) {
-                        that.meta[res.sets.meta] = res.sets.dds || {};
+                    if (ddsMeta && res.sets) {
+                        bsw.setJsonDeep(that, ddsMeta, res.sets);
                     }
                 }).catch(reason => {
                     console.warn(reason);

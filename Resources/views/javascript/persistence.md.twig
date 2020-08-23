@@ -7,6 +7,7 @@ bsw.configure({
         persistenceFieldShapeNow: {},
         persistenceFieldShapeCollect: {{ persistence.fieldShapeCollectJson|raw }},
         persistenceTransferKeysCollect: {{ persistence.transferKeysCollectJson|raw }},
+        persistenceVarNameForMetaCollect: {{ persistence.varNameForMetaCollectJson|raw }}
     },
     method: {
         persistenceSubmit(e) {

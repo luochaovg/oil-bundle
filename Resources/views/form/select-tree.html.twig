@@ -16,7 +16,12 @@
   :show-checked-strategy="{{ form.showCheckedStrategy }}"
   :dropdown-match-select-width="false"
   :dropdown-style="{{ form.dropdownStyle }}"
-  :tree-data="{{ form.treeData }}"
+  {% if form.varNameForMeta %}
+    :tree-data="{{ form.varNameForMeta }}"
+    data-dds-meta="{{ form.varNameForMeta }}"
+  {% else %}
+    :tree-data="{{ form.treeData }}"
+  {% endif %}
   :data-bsw.prop="{{ form.formData }}"
   {% if form.ddsRoute %}
     data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
