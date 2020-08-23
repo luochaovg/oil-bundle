@@ -1221,6 +1221,24 @@ trait Foundation
     }
 
     /**
+     * Lang for enum
+     *
+     * @param string|null $label
+     * @param array       $args
+     * @param string      $locale
+     *
+     * @return string|null
+     */
+    public function enumLangSimple(?string $label, array $args = [], string $locale = null): ?string
+    {
+        if (empty($label)) {
+            return $label;
+        }
+
+        return $this->translator->trans($label, $args, 'enum', $locale);
+    }
+
+    /**
      * Lang the enum
      *
      * @param array  $enum

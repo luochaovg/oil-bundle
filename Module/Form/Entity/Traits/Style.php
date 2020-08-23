@@ -21,6 +21,14 @@ trait Style
     }
 
     /**
+     * @return array
+     */
+    public function getStyleArray(): array
+    {
+        return $this->style;
+    }
+
+    /**
      * @return string|null
      */
     public function getStyleStringify(): ?string

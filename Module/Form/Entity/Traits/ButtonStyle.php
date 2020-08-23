@@ -21,6 +21,14 @@ trait ButtonStyle
     }
 
     /**
+     * @return array
+     */
+    public function getButtonStyleArray(): array
+    {
+        return $this->buttonStyle;
+    }
+
+    /**
      * @return string|null
      */
     public function getButtonStyleStringify(): ?string

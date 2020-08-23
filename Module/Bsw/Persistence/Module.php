@@ -452,13 +452,13 @@ class Module extends Bsw
             if (!$form->getChange()) {
                 $form->setChange('persistenceTransferChange');
             }
-            if (!$form->getSelectChange()) {
-                $form->setSelectChange('persistenceTransferSelectChange');
-            }
 
             $form->setTargetKeysKey("{$key}.{$field}.target");
             $form->setSelectedKeysKey("{$key}.{$field}.selected");
 
+            if (isset($item['value'])) {
+                $form->setTargetKeys((array)$item['value']);
+            }
             $output->transferKeysCollect[$field] = [
                 'target'   => $form->getTargetKeysArray(),
                 'selected' => $form->getSelectedKeysArray(),

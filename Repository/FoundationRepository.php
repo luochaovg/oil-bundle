@@ -190,7 +190,9 @@ abstract class FoundationRepository extends SFRepository
         $fields = implode(', ', $fields);
         $fieldsHanding = implode(', ', $fieldsHanding);
 
-        $this->logger->error("Persistence error with field `{$fields}` in {$this->entity}, {$message}, {$messageHandling}");
+        $this->logger->error(
+            "Persistence error with field `{$fields}` in {$this->entity}, {$message}, {$messageHandling}"
+        );
 
         return ["{$messageHandling} ({$fieldsHanding})", "{$message} ({$fields})"];
     }

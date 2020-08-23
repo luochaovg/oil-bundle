@@ -396,6 +396,23 @@ $(function () {
                 console.warn(reason);
             });
         },
+        dynamicDataSource: function dynamicDataSource() {
+            var that = this;
+            var field = arguments[arguments.length - 1];
+            var ddsApi = $('#' + field).data('dds-api');
+            that.noLoadingOnce = true;
+            bsw.request(ddsApi, { field: field, arguments: arguments }).then(function (res) {
+                bsw.response(res).then(function () {
+                    if (res.sets.meta) {
+                        that.meta[res.sets.meta] = res.sets.dds || {};
+                    }
+                }).catch(function (reason) {
+                    console.warn(reason);
+                });
+            }).catch(function (reason) {
+                console.warn(reason);
+            });
+        },
         copyFileLink: function copyFileLink(data, element) {
             this.copy = data.link;
         },
@@ -407,12 +424,6 @@ $(function () {
 
             return { field: field, value: value, data: data, form: form };
         },
-
-
-        //
-        // for iframe exec in parent
-        //
-
         refreshPreviewInParent: function refreshPreviewInParent(data, element) {
             bsw.handleResponseInParent(data, element);
             this.previewPaginationRefresh(false);

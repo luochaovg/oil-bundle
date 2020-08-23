@@ -22,11 +22,42 @@ class AutoComplete extends Form
     use Size;
 
     /**
+     * @const array Demo
+     */
+    const DATA_SOURCE_DEMO = [
+        ['value' => 1001, 'text' => 'IT department'],
+        ['value' => 1002, 'text' => 'DevOps department'],
+        ['value' => 1003, 'text' => 'Product department'],
+    ];
+
+    /**
      * Input constructor.
      */
     public function __construct()
     {
         $this->setAllowClear(false);
         $this->setFilterOption('bsw.filterOptionForAutoComplete');
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    public function enumHandler(array $options): array
+    {
+        if (!is_scalar(current($options))) {
+            return $options;
+        }
+
+        $optionsHandling = [];
+        foreach ($options as $value => $text) {
+            $optionsHandling[] = [
+                'value' => $value,
+                'text'  => $text,
+            ];
+        }
+
+        return $optionsHandling;
     }
 }

@@ -20,6 +20,14 @@ trait FormData
     }
 
     /**
+     * @return array
+     */
+    public function getFormDataArray(): array
+    {
+        return $this->formData;
+    }
+
+    /**
      * @param array $formData
      *
      * @return $this

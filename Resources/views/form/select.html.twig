@@ -25,16 +25,24 @@
   {% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
   {% set persistenceSence = (scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE')) %}
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   {% if form.change %}
     @change="((value, option) => {this.{{ form.change }}(value, option, '{{ form.key }}')})"
+  {% endif %}
+  {% if form.search %}
+    @search="((value) => {this.{{ form.search }}(value, '{{ form.key }}')})"
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"
 >
-  {% for value, label in form.enum %}
-    <a-select-option value="{{ value }}">{{ label }}</a-select-option>
+  {% for i in form.optionsArray %}
+    <a-select-option value="{{ i.value }}" {{ i.disabled ? 'disabled' : null }}>
+      {{ i.label }}
+    </a-select-option>
   {% endfor %}
 </a-select>
 {% include 'form/iframe-entrypoint.html.twig' with {form: form} %}

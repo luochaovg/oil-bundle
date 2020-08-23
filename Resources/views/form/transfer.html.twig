@@ -1,5 +1,3 @@
-{% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
-
 <a-transfer
   {% if form.class %}
     class="{{ form.class }}"
@@ -13,6 +11,9 @@
   {% endif %}
   :render="(record) => record.title"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :show-search="{{ form.showSearch ? 'true' : 'false' }}"
   :filter-option="{{ form.filterOption }}"
@@ -22,10 +23,6 @@
   {% if form.change %}
     @change="((targetKeys, direction, moveKeys) => {this.{{ form.change }}(targetKeys, direction, moveKeys, '{{ form.key }}')})"
   {% endif %}
-  {% if form.selectChange %}
-    @select-change="((sourceSelectedKeys, targetSelectedKeys) => {this.{{ form.selectChange }}(sourceSelectedKeys, targetSelectedKeys, '{{ form.key }}')})"
-  {% endif %}
   {{ form.attributes|raw }}
-  v-decorator="['{{ form.key }}', { {{ initial }} rules: {{ form.formRules }} }]"
->
-</a-transfer>
+  v-decorator="['{{ form.key }}', { initialValue: {{ form.targetKeysKey }}, rules: {{ form.formRules }} }]"
+></a-transfer>

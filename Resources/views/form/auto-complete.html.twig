@@ -10,11 +10,14 @@
   :data-source="{{ form.dataSource }}"
   :filter-option="{{ form.filterOption }}"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   {% if form.change %}
-    @change="{{ form.change }}"
+    @change="((value) => {this.{{ form.change }}(value, '{{ form.key }}')})"
   {% endif %}
   {% if form.search %}
-    @search="{{ form.search }}"
+    @search="((value) => {this.{{ form.search }}(value, '{{ form.key }}')})"
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"

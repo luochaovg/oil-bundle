@@ -399,6 +399,24 @@ $(function () {
             });
         },
 
+        dynamicDataSource() {
+            let that = this;
+            let field = arguments[arguments.length - 1];
+            let ddsApi = $(`#${field}`).data('dds-api');
+            that.noLoadingOnce = true;
+            bsw.request(ddsApi, {field, arguments: arguments}).then(res => {
+                bsw.response(res).then(() => {
+                    if (res.sets.meta) {
+                        that.meta[res.sets.meta] = res.sets.dds || {};
+                    }
+                }).catch(reason => {
+                    console.warn(reason);
+                });
+            }).catch(reason => {
+                console.warn(reason);
+            });
+        },
+
         copyFileLink(data, element) {
             this.copy = data.link;
         },
@@ -411,10 +429,6 @@ $(function () {
 
             return {field, value, data, form};
         },
-
-        //
-        // for iframe exec in parent
-        //
 
         refreshPreviewInParent(data, element) {
             bsw.handleResponseInParent(data, element);

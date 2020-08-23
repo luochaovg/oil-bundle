@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Module\Form\Entity;
 use Leon\BswBundle\Module\Form\Entity\Traits\DataSource;
 use Leon\BswBundle\Module\Form\Entity\Traits\FilterOption;
 use Leon\BswBundle\Module\Form\Entity\Traits\ListStyle;
-use Leon\BswBundle\Module\Form\Entity\Traits\SelectChange;
 use Leon\BswBundle\Module\Form\Entity\Traits\SelectedKeys;
 use Leon\BswBundle\Module\Form\Entity\Traits\SelectedKeysKey;
 use Leon\BswBundle\Module\Form\Entity\Traits\ShowSearch;
@@ -27,7 +26,6 @@ class Transfer extends Form
     use TargetOperate;
     use SelectedKeys;
     use SelectedKeysKey;
-    use SelectChange;
     use TargetKeys;
     use TargetKeysKey;
     use ShowSearch;
@@ -36,10 +34,42 @@ class Transfer extends Form
     use ListStyle;
 
     /**
+     * @const array Demo
+     */
+    const DATA_SOURCE_DEMO = [
+        ['key' => 1001, 'title' => 'IT department', 'disabled' => true],
+        ['key' => 1002, 'title' => 'DevOps department', 'disabled' => false],
+        ['key' => 1003, 'title' => 'Product department', 'disabled' => false],
+    ];
+
+    /**
      * Input constructor.
      */
     public function __construct()
     {
         $this->setFilterOption('bsw.filterOptionForTransfer');
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    public function enumHandler(array $options): array
+    {
+        if (!is_scalar(current($options))) {
+            return $options;
+        }
+
+        $optionsHandling = [];
+        foreach ($options as $key => $title) {
+            $optionsHandling[] = [
+                'key'      => $key,
+                'title'    => $title,
+                'disabled' => false,
+            ];
+        }
+
+        return $optionsHandling;
     }
 }

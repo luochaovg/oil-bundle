@@ -14,6 +14,9 @@
     shape="{{ form.shape }}"
   {% endif %}
   :data-bsw.prop="{{ form.data }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   @click="{{ form.rootClickForVue }}"
   {{ form.attributes|raw }}
   {% if form.bindLoading %}

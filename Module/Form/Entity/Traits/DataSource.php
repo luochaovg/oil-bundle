@@ -29,12 +29,11 @@ trait DataSource
      */
     public function getDataSourceArray(): array
     {
-        $dataSource = $this->dataSource;
-        if (is_string($dataSource)) {
-            $dataSource = Helper::parseJsonString($dataSource);
+        if (is_string($this->dataSource)) {
+            return [];
         }
 
-        return Helper::stringValues($dataSource);
+        return $this->dataSource;
     }
 
     /**

@@ -15,9 +15,6 @@ bsw.configure({
         persistenceTransferChange(targetKeys, direction, moveKeys, field) {
             this.persistenceTransferKeysCollect[field].target = targetKeys;
         },
-        persistenceTransferSelectChange(sourceSelectedKeys, targetSelectedKeys, field) {
-            this.persistenceTransferKeysCollect[field].selected = [...sourceSelectedKeys, ...targetSelectedKeys];
-        }
     },
     logic: {
         persistenceInit(v) {

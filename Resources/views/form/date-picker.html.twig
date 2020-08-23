@@ -9,8 +9,11 @@
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   size="{{ form.size }}"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   {% if form.change %}
-    @change="{{ form.change }}"
+    @change="((value) => {this.{{ form.change }}(value, '{{ form.key }}')})"
   {% endif %}
   :auto-focus="{{ form.autoFocus ? 'true' : 'false' }}"
   placeholder="{{ form.placeholder }}"

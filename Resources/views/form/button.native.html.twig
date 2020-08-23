@@ -19,6 +19,9 @@
   {% endif %}
   type="{{ form.htmlType }}"
   data-bsw="{{ form.data }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   onclick="{{ form.rootClickForNative }}"
   {% if form.selector and form.varNameForSelector is not empty %}
     {% set var = '(' ~ form.varNameForSelector ~ ' && ' ~ form.varNameForSelector ~ '.length)' %}

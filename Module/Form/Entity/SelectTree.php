@@ -29,11 +29,61 @@ class SelectTree extends Form
     use ExpandAll;
 
     /**
+     * @const array demo
+     */
+    const TREE_DATA_DEMO = [
+        [
+            'value'    => '1',
+            'title'    => 'IT department',
+            'disabled' => false,
+            'children' => [
+                [
+                    'value'    => '1-1',
+                    'title'    => 'Backend',
+                    'disabled' => false,
+                    'children' => [
+                        ['value' => '1-1-1', 'title' => 'php', 'disabled' => false],
+                        ['value' => '1-1-2', 'title' => 'go', 'disabled' => false],
+                        ['value' => '1-1-3', 'title' => 'python', 'disabled' => false],
+                    ],
+                ],
+                ['value' => '1-2', 'title' => 'Frontend', 'disabled' => false],
+                ['value' => '1-3', 'title' => 'Client', 'disabled' => false],
+            ],
+        ],
+        ['value' => '2', 'title' => 'DevOps department', 'disabled' => false],
+        ['value' => '3', 'title' => 'Product department', 'disabled' => false],
+    ];
+
+    /**
      * Select constructor.
      */
     public function __construct()
     {
         $this->setOptionFilterProp(Abs::SEARCH_TITLE);
         $this->setShowCheckedStrategy(Abs::CHECKED_STRATEGY_ALL);
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    public function enumHandler(array $options): array
+    {
+        if (!is_scalar(current($options))) {
+            return $options;
+        }
+
+        $optionsHandling = [];
+        foreach ($options as $value => $title) {
+            $optionsHandling[] = [
+                'value'    => $value,
+                'title'    => $title,
+                'disabled' => false,
+            ];
+        }
+
+        return $optionsHandling;
     }
 }

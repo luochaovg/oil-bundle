@@ -18,8 +18,11 @@
   :dropdown-style="{{ form.dropdownStyle }}"
   :tree-data="{{ form.treeData }}"
   :data-bsw.prop="{{ form.formData }}"
+  {% if form.ddsRoute %}
+    data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
+  {% endif %}
   {% if form.change %}
-    @change="{{ form.change }}"
+    @change="((value) => {this.{{ form.change }}(value, '{{ form.key }}')})"
   {% endif %}
   placeholder="{{ form.placeholder }}"
   {{ form.attributes|raw }}

@@ -473,6 +473,28 @@ abstract class Bsw
     }
 
     /**
+     * Lang the enum data
+     *
+     * @param array $enum
+     * @param array $hitKeys
+     *
+     * @return array
+     */
+    protected function langTheEnumData(array $enum, array $hitKeys = []): array
+    {
+        $hitKeys = array_merge(['label', 'title', 'text'], $hitKeys);
+        foreach ($enum as $key => $item) {
+            if (is_array($item)) {
+                $enum[$key] = $this->langTheEnumData($item);
+            } elseif (in_array($key, $hitKeys)) {
+                $enum[$key] = $this->web->enumLangSimple($item);
+            }
+        }
+
+        return $enum;
+    }
+
+    /**
      * Handle form with enum
      *
      * @param string $field
@@ -483,64 +505,31 @@ abstract class Bsw
      */
     protected function handleFormWithEnum(string $field, Form $form, array $item)
     {
-        $enumClass = [
-            Select::class,
-            Radio::class,
-            Checkbox::class,
-            Mentions::class,
-        ];
-
-        $treeDataClass = [
-            SelectTree::class,
-        ];
-
-        $dataSourceClass = [
-            AutoComplete::class,
-            Transfer::class,
+        $enumProperty = [
+            Select::class       => 'options',
+            Radio::class        => 'options',
+            Checkbox::class     => 'options',
+            Mentions::class     => 'options',
+            SelectTree::class   => 'treeData',
+            AutoComplete::class => 'dataSource',
+            Transfer::class     => 'dataSource',
         ];
 
         $formClass = get_class($form);
-        if (in_array($formClass, $enumClass)) {
-
+        $property = $enumProperty[$formClass] ?? null;
+        if ($property) {
             if (!is_array($item['enum'])) {
                 $exception = $this->getAnnotationException($field);
                 throw new AnnotationException(
-                    "{$exception} option `enum` must configure in {$formClass}"
+                    "{$exception} option `enum` (for `{$property}`) must configure in {$formClass}"
                 );
             }
-
-            /**
-             * @var Select $form
-             */
-            $form->setEnum($this->web->enumLang($item['enum']));
-
-        } elseif (in_array($formClass, $treeDataClass)) {
-
-            if (!is_array($item['enum'])) {
-                $exception = $this->getAnnotationException($field);
-                throw new AnnotationException(
-                    "{$exception} option `enum` (for `treeData`) must configure in {$formClass}"
-                );
+            $property = ucfirst($property);
+            if (!$form->{"get{$property}"}()) {
+                $enum = $form->enumHandler($item['enum']);
+                $enum = $this->langTheEnumData($enum);
+                $form->{"set{$property}"}($enum);
             }
-
-            /**
-             * @var SelectTree $form
-             */
-            $form->setTreeData($this->web->enumLang($item['enum']));
-
-        } elseif (in_array($formClass, $dataSourceClass)) {
-
-            if (!is_array($item['enum'])) {
-                $exception = $this->getAnnotationException($field);
-                throw new AnnotationException(
-                    "{$exception} option `enum` (for `dataSource`) must configure in {$formClass}"
-                );
-            }
-
-            /**
-             * @var AutoComplete $form
-             */
-            $form->setDataSource($this->web->enumLang($item['enum']));
         }
     }
 

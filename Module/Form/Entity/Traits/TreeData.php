@@ -25,6 +25,18 @@ trait TreeData
     }
 
     /**
+     * @return array
+     */
+    public function getTreeDataArray(): array
+    {
+        if (is_string($this->treeData)) {
+            [];
+        }
+
+        return $this->treeData;
+    }
+
+    /**
      * @param array|string $treeData
      *
      * @return $this
