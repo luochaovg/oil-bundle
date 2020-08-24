@@ -1,5 +1,4 @@
 {% set initial = (form.value is same as(null)) ? null : ("initialValue: `" ~ form.value ~ "`,") %}
-
 <a-tree-select
   {% if form.class %}
     class="{{ form.class }}"

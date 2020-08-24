@@ -137,6 +137,11 @@ trait Foundation
     protected $mobile;
 
     /**
+     * @var bool
+     */
+    protected $iframe;
+
+    /**
      * @var string
      */
     protected $env;

@@ -55,6 +55,7 @@ abstract class BswWebController extends AbstractController
     {
         $this->ajax = $this->request()->isXmlHttpRequest();
         $this->mobile = Helper::isMobile();
+        $this->iframe = !!$this->getArgs('iframe');
 
         // history for last time
         $args = $this->getArgs();
@@ -623,7 +624,7 @@ abstract class BswWebController extends AbstractController
             'access'     => $this->access,
             'ajax'       => $this->ajax,
             'mobile'     => $this->mobile,
-            'iframe'     => empty($getArgs['iframe']) ? false : true,
+            'iframe'     => $this->iframe,
             'abs'        => static::$abs,
             'enum'       => static::$enum,
             'uuid'       => $this->uuid,

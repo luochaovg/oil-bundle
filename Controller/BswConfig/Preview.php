@@ -140,17 +140,17 @@ trait Preview
     public function configuredAnnotation()
     {
         return [
-            'id'        => [
+            'id'    => [
                 'width'  => 80,
                 'align'  => Abs::POS_CENTER,
                 'render' => Abs::RENDER_CODE,
             ],
-            'key'       => [
+            'key'   => [
                 'width' => 200,
                 'align' => Abs::POS_RIGHT,
                 'html'  => true,
             ],
-            'value'     => [
+            'value' => [
                 'width' => 500,
                 'html'  => true,
             ],
@@ -193,7 +193,7 @@ trait Preview
     {
         return [
             (new Button('Persistence', 'app_bsw_config_persistence'))
-                ->setArgs(['iframe' => !!$this->getArgs('iframe')])
+                ->setArgs(['iframe' => $this->iframe])
                 ->appendArgs($this->clonePreviewToForm($args->hooked)),
         ];
     }

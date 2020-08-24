@@ -33,6 +33,7 @@
               label="{{ item.label|trans({}, 'twig') }}"
               extra="{{ ((item.tips|trans({}, 'twig')) ~ ',' ~ item.tipsAuto)|trim(',') }}"
               class="{{ ['bsw-form-' ~ form.itemName, formClass]|joinClass }}"
+              :style="{{ form.parentStyle }}"
             >
               {% set title = ((item.title|trans({}, 'twig')) ~ ',' ~ item.titleAuto)|trim(',') %}
               {% set begin = title ? '<a-popover><template slot="content">' ~ title ~ '</template>' : null %}

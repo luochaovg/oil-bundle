@@ -402,7 +402,7 @@ $(function () {
         dynamicDataSource() {
             let that = this;
             if (typeof this.ddsCore === 'undefined') {
-                this.ddsCore = bsw.debounce(500, function (args) {
+                this.ddsCore = bsw.debounce(300, function (args) {
                     let item = $(`#${args[args.length - 1]}`);
                     let ddsApi = item.data('dds-api');
                     let ddsMeta = item.data('dds-meta');

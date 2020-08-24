@@ -66,6 +66,11 @@ class SelectTree extends Form
     {
         $this->setOptionFilterProp(Abs::SEARCH_TITLE);
         $this->setShowCheckedStrategy(Abs::CHECKED_STRATEGY_ALL);
+        $this->setStyle(
+            [
+                'width' => '100%',
+            ]
+        );
     }
 
     /**
