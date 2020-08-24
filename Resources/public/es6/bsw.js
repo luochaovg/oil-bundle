@@ -401,21 +401,26 @@ $(function () {
 
         dynamicDataSource() {
             let that = this;
-            let item = $(`#${arguments[arguments.length - 1]}`);
-            let ddsApi = item.data('dds-api');
-            let ddsMeta = item.data('dds-meta');
-            that.noLoadingOnce = true;
-            bsw.request(ddsApi, {arguments: arguments}).then(res => {
-                bsw.response(res).then(() => {
-                    if (ddsMeta && res.sets) {
-                        bsw.setJsonDeep(that, ddsMeta, res.sets);
-                    }
-                }).catch(reason => {
-                    console.warn(reason);
+            if (typeof this.ddsCore === 'undefined') {
+                this.ddsCore = bsw.debounce(500, function (args) {
+                    let item = $(`#${args[args.length - 1]}`);
+                    let ddsApi = item.data('dds-api');
+                    let ddsMeta = item.data('dds-meta');
+                    that.noLoadingOnce = true;
+                    bsw.request(ddsApi, args).then(res => {
+                        bsw.response(res).then(() => {
+                            if (ddsMeta && res.sets) {
+                                bsw.setJsonDeep(that, ddsMeta, res.sets);
+                            }
+                        }).catch(reason => {
+                            console.warn(reason);
+                        });
+                    }).catch(reason => {
+                        console.warn(reason);
+                    });
                 });
-            }).catch(reason => {
-                console.warn(reason);
-            });
+            }
+            this.ddsCore(arguments);
         },
 
         copyFileLink(data, element) {

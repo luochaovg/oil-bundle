@@ -398,21 +398,26 @@ $(function () {
         },
         dynamicDataSource: function dynamicDataSource() {
             var that = this;
-            var item = $('#' + arguments[arguments.length - 1]);
-            var ddsApi = item.data('dds-api');
-            var ddsMeta = item.data('dds-meta');
-            that.noLoadingOnce = true;
-            bsw.request(ddsApi, { arguments: arguments }).then(function (res) {
-                bsw.response(res).then(function () {
-                    if (ddsMeta && res.sets) {
-                        bsw.setJsonDeep(that, ddsMeta, res.sets);
-                    }
-                }).catch(function (reason) {
-                    console.warn(reason);
+            if (typeof this.ddsCore === 'undefined') {
+                this.ddsCore = bsw.debounce(500, function (args) {
+                    var item = $('#' + args[args.length - 1]);
+                    var ddsApi = item.data('dds-api');
+                    var ddsMeta = item.data('dds-meta');
+                    that.noLoadingOnce = true;
+                    bsw.request(ddsApi, args).then(function (res) {
+                        bsw.response(res).then(function () {
+                            if (ddsMeta && res.sets) {
+                                bsw.setJsonDeep(that, ddsMeta, res.sets);
+                            }
+                        }).catch(function (reason) {
+                            console.warn(reason);
+                        });
+                    }).catch(function (reason) {
+                        console.warn(reason);
+                    });
                 });
-            }).catch(function (reason) {
-                console.warn(reason);
-            });
+            }
+            this.ddsCore(arguments);
         },
         copyFileLink: function copyFileLink(data, element) {
             this.copy = data.link;

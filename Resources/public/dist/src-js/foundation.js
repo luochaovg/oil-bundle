@@ -1505,6 +1505,95 @@ var FoundationTools = function (_FoundationPrototype) {
             }
             return newObj;
         }
+
+        /**
+         * Throttle
+         *
+         * @param {number} delay
+         * @param {boolean} [noTrailing]
+         * @param {Function} callback
+         * @param {boolean} [debounceMode]
+         *
+         * @returns {Function}
+         */
+
+    }, {
+        key: 'throttle',
+        value: function throttle(delay, noTrailing, callback, debounceMode) {
+            var timeoutID = void 0;
+            var cancelled = false;
+            var lastExec = 0;
+
+            function clearExistingTimeout() {
+                if (timeoutID) {
+                    clearTimeout(timeoutID);
+                }
+            }
+
+            function cancel() {
+                clearExistingTimeout();
+                cancelled = true;
+            }
+
+            if (typeof noTrailing !== 'boolean') {
+                debounceMode = callback;
+                callback = noTrailing;
+                noTrailing = undefined;
+            }
+
+            function wrapper() {
+                for (var _len = arguments.length, arguments_ = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                    arguments_[_key2] = arguments[_key2];
+                }
+
+                var self = this;
+                var elapsed = Date.now() - lastExec;
+                if (cancelled) {
+                    return;
+                }
+
+                function exec() {
+                    lastExec = Date.now();
+                    callback.apply(self, arguments_);
+                }
+
+                function clear() {
+                    timeoutID = undefined;
+                }
+
+                if (debounceMode && !timeoutID) {
+                    exec();
+                }
+                clearExistingTimeout();
+                if (debounceMode === undefined && elapsed > delay) {
+                    exec();
+                } else if (noTrailing !== true) {
+                    timeoutID = setTimeout(debounceMode ? clear : exec, debounceMode === undefined ? delay - elapsed : delay);
+                }
+            }
+
+            wrapper.cancel = cancel;
+            return wrapper;
+        }
+
+        /**
+         * Debounce
+         *
+         * @param {number} delay
+         * @param {boolean|Function} [atBegin]
+         * @param {Function} callback
+         *
+         * @returns {Function}
+         */
+
+    }, {
+        key: 'debounce',
+        value: function debounce(delay, atBegin, callback) {
+            if (typeof callback === 'undefined') {
+                return bsw.throttle(delay, atBegin, false);
+            }
+            return bsw.throttle(delay, callback, atBegin !== false);
+        }
     }]);
 
     return FoundationTools;
