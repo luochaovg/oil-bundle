@@ -6,10 +6,12 @@ use Leon\BswBundle\Entity\BswWorkTask;
 use Leon\BswBundle\Module\Bsw\Arguments;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Entity\Enum;
 use Leon\BswBundle\Module\Error\Error;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Form\Entity\Date;
 use Leon\BswBundle\Module\Form\Entity\Group;
+use Leon\BswBundle\Module\Form\Entity\Radio;
 use Leon\BswBundle\Module\Form\Entity\Time;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,6 +61,11 @@ trait Persistence
         };
 
         return [
+            'LEE'             => [
+                'type'     => (new Radio())->setButtonMode(),
+                'enum'     => Enum::GENDER,
+                'sort'     => .1,
+            ],
             'title'           => ['label' => 'Mission title'],
             'weight'          => ['typeArgs' => $this->weightTypeArgs($leader)],
             'lifecycle_start' => [
