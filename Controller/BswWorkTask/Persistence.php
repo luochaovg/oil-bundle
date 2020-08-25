@@ -61,11 +61,6 @@ trait Persistence
         };
 
         return [
-            'LEE'             => [
-                'type'     => (new Radio())->setButtonMode(),
-                'enum'     => Enum::GENDER,
-                'sort'     => .1,
-            ],
             'title'           => ['label' => 'Mission title'],
             'weight'          => ['typeArgs' => $this->weightTypeArgs($leader)],
             'lifecycle_start' => [
