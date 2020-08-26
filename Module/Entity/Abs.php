@@ -58,6 +58,9 @@ class Abs
     const MEDIA_XL  = 1200;
     const MEDIA_XXL = 1600;
 
+    const BUTTON_OUTLINE = 'outline';
+    const BUTTON_SOLID   = 'solid';
+
     const SHAPE_MODAL  = 'modal';
     const SHAPE_DRAWER = 'drawer';
 
