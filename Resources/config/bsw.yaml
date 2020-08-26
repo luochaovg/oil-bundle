@@ -141,7 +141,7 @@ parameters:
         debug_cost: false
         api_vs_client_time_diff: 300
         curl_timeout_second: 30
-        proxy_pass: false
+        proxy_pass: null
 
         route_default: app_site_index
         route_login: app_bsw_admin_user_login

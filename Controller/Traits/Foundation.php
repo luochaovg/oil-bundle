@@ -733,10 +733,10 @@ trait Foundation
         $referenceType = $abs ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH;
         $url = $this->generateUrl($route, $params, $referenceType);
 
-        if ($abs && $this->cnf->proxy_pass) {
+        if ($abs && $host = $this->cnf->proxy_pass) {
             $items = explode('/', $url);
             $errorHost = "{$items[0]}//{$items[2]}";
-            $url = str_replace($errorHost, $this->host(), $url);
+            $url = str_replace($errorHost, $this->host($host, true, false), $url);
         }
 
         return $url;
