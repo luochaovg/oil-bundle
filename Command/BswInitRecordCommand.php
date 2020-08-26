@@ -4,13 +4,12 @@ namespace Leon\BswBundle\Command;
 
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\CommandException;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BswInitRecordCommand extends Command implements CommandInterface
+class BswInitRecordCommand extends Command
 {
     use BswFoundation;
 

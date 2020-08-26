@@ -11,6 +11,7 @@ use Leon\BswBundle\Entity\BswConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Psr\Log\LoggerInterface;
@@ -90,6 +91,14 @@ trait BswFoundation
      * @return array
      */
     abstract function args(): array;
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    abstract public function execute(InputInterface $input, OutputInterface $output);
 
     /**
      * Configure

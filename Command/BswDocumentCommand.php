@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Command;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use Leon\BswBundle\Module\Exception\CommandException;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Validator\Entity\In;
 use Leon\BswBundle\Module\Validator\Entity\InKey;
@@ -18,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use ReflectionMethod;
 use stdClass;
 
-class BswDocumentCommand extends Command implements CommandInterface
+class BswDocumentCommand extends Command
 {
     use BswFoundation;
 

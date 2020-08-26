@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Command;
 use Leon\BswBundle\Component\Csv;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use InvalidArgumentException;
 use Exception;
 
-abstract class ImportCsvCommand extends Command implements CommandInterface
+abstract class ImportCsvCommand extends Command
 {
     use BswFoundation;
 

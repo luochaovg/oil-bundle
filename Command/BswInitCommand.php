@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Command;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\CommandException;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +14,7 @@ use Symfony\Component\Routing\Route as RoutingRoute;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Yaml;
 
-class BswInitCommand extends Command implements CommandInterface
+class BswInitCommand extends Command
 {
     use BswFoundation;
 

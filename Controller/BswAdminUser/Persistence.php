@@ -85,7 +85,8 @@ trait Persistence
         }
 
         $app = $this->app(null, false);
-        $qrCodeData = $ga->getQrCodeData("{$app}-{$user->name}", $user->googleAuthSecret);
+        $name = str_replace(' ', null, $user->name);
+        $qrCodeData = $ga->getQrCodeData("{$app}-{$name}", $user->googleAuthSecret);
 
         /**
          * @var QrCode $qrCode

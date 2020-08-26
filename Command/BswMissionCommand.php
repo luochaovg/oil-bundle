@@ -5,7 +5,6 @@ namespace Leon\BswBundle\Command;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\BswCommandQueue;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Leon\BswBundle\Repository\BswCommandQueueRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -13,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
 
-class BswMissionCommand extends Command implements CommandInterface
+class BswMissionCommand extends Command
 {
     use BswFoundation;
 

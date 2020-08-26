@@ -7,7 +7,6 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Leon\BswBundle\Repository\FoundationRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use InvalidArgumentException;
 use Exception;
 
-abstract class RecursionSqlCommand extends Command implements CommandInterface
+abstract class RecursionSqlCommand extends Command
 {
     use BswFoundation;
 

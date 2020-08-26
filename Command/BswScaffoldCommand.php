@@ -7,7 +7,6 @@ use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\CommandException;
 use Leon\BswBundle\Module\Exception\FileNotExistsException;
-use Leon\BswBundle\Module\Interfaces\CommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,7 +18,7 @@ use InvalidArgumentException;
 /**
  * @property ContainerInterface $container
  */
-class BswScaffoldCommand extends Command implements CommandInterface
+class BswScaffoldCommand extends Command
 {
     use BswFoundation;
 
