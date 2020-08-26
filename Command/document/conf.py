@@ -21,7 +21,7 @@ sys.path.append(os.path.abspath('./directive'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'BswLeonBundle Document'
+project = u'LeonBswBundle Document'
 copyright = u'https://github.com/jtleon'
 author = u'jiangxilee@gmail.com'
 
@@ -113,7 +113,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'BswLeonBundleDoc'
+htmlhelp_basename = 'LeonBswBundleDoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -140,7 +140,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'BswLeonBundle.tex', u'BswLeonBundle Documentation',
+    (master_doc, 'LeonBswBundle.tex', u'LeonBswBundle Documentation',
      u'Lez', 'manual'),
 ]
 
@@ -150,7 +150,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'BswLeonBundle', u'BswLeonBundle Documentation',
+    (master_doc, 'LeonBswBundle', u'LeonBswBundle Documentation',
      [author], 1)
 ]
 
@@ -161,8 +161,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'BswLeonBundle', u'BswLeonBundle Documentation',
-     author, 'BswLeonBundle', 'One line description of project.',
+    (master_doc, 'LeonBswBundle', u'LeonBswBundle Documentation',
+     author, 'LeonBswBundle', 'One line description of project.',
      'Miscellaneous'),
 ]
 

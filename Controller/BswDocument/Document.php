@@ -29,7 +29,7 @@ trait Document
             throw new Exception("The document is not found");
         }
 
-        $basic = $this->kernel->getBundle('LeonBswBundle')->getPath();
+        $basic = $this->kernel->getBundle(Abs::BSW_BUNDLE)->getPath();
         $all = $this->parseMdInPath(
             "{$basic}/Resources/doc",
             function ($file, $id, $n, $text) use ($args) {

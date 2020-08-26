@@ -1474,7 +1474,7 @@ trait Foundation
      * @return string
      * @throws
      */
-    public function getFilePathInOrder(string $fileName, string $dirName = 'mixed', string $bundle = 'LeonBswBundle')
+    public function getFilePathInOrder(string $fileName, string $dirName = 'mixed', string $bundle = Abs::BSW_BUNDLE)
     {
         $dirName = trim($dirName, '/');
         $path = $this->kernel->getProjectDir();
@@ -1504,7 +1504,7 @@ trait Foundation
      * @return string
      * @throws
      */
-    public function getFilePath(string $fileName, string $dirName = 'mixed', ?string $bundle = 'LeonBswBundle')
+    public function getFilePath(string $fileName, string $dirName = 'mixed', ?string $bundle = Abs::BSW_BUNDLE)
     {
         $dirName = trim($dirName, '/');
 

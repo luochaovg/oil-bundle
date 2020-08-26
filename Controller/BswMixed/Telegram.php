@@ -140,7 +140,7 @@ trait Telegram
             return $args;
         }
 
-        $bswPath = $this->kernel->getBundle('LeonBswBundle')->getPath();
+        $bswPath = $this->kernel->getBundle(Abs::BSW_BUNDLE)->getPath();
         $bswCommands = $this->fetchCommands("{$bswPath}/Module/Telegram", "Leon\\BswBundle\\Module\\Telegram");
 
         $appPath = $this->kernel->getProjectDir();

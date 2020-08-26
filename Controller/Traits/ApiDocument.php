@@ -60,7 +60,7 @@ trait ApiDocument
     {
         $paths = array_merge(
             [
-                'LeonBswBundle' => [
+                Abs::BSW_BUNDLE => [
                     'bundle'    => true,
                     'namespace' => 'Leon\BswBundle\Module\{module}\Entity',
                     'path'      => '{path}/Module/{module}/Entity',

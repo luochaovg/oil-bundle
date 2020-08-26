@@ -72,6 +72,16 @@ class BswBackendController extends BswWebController
     /**
      * @var string
      */
+    protected $twigBlank = 'layout/blank.html';
+
+    /**
+     * @var string
+     */
+    protected $twigEmpty = 'layout/empty.html';
+
+    /**
+     * @var string
+     */
     protected $twigPreview = 'layout/preview.html';
 
     /**
@@ -463,6 +473,18 @@ class BswBackendController extends BswWebController
     }
 
     /**
+     * Twig path
+     *
+     * @param string $twig
+     *
+     * @return string
+     */
+    protected function twigPath(string $twig): string
+    {
+        return '@' . Abs::BSW . '/' . $twig . Abs::TPL_SUFFIX;
+    }
+
+    /**
      * Render blank
      *
      * @param string $view
@@ -474,7 +496,14 @@ class BswBackendController extends BswWebController
      */
     protected function showBlank(string $view, array $args = [], array $moduleList = []): Response
     {
-        $args['scene'] = Abs::TAG_BLANK;
+        $args = array_merge(
+            $args,
+            [
+                'scene' => Abs::TAG_BLANK,
+                'twig'  => $this->twigPath($this->twigBlank),
+            ]
+        );
+
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -499,8 +528,14 @@ class BswBackendController extends BswWebController
      */
     protected function showEmpty(string $view, array $args = [], array $moduleList = []): Response
     {
-        $args['scene'] = Abs::TAG_EMPTY;
-        $args['display'] = ['menu', 'header', 'crumbs', 'footer'];
+        $args = array_merge(
+            $args,
+            [
+                'scene'   => Abs::TAG_EMPTY,
+                'twig'    => $this->twigPath($this->twigEmpty),
+                'display' => ['menu', 'header', 'crumbs', 'footer'],
+            ]
+        );
 
         return $this->showBlank($view, $args, $moduleList);
     }
@@ -517,7 +552,14 @@ class BswBackendController extends BswWebController
      */
     protected function showPreview(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
-        $args['scene'] = Abs::TAG_PREVIEW;
+        $args = array_merge(
+            $args,
+            [
+                'scene' => Abs::TAG_PREVIEW,
+                'twig'  => $this->twigPath($this->twigPreview),
+            ]
+        );
+
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -546,7 +588,14 @@ class BswBackendController extends BswWebController
             $args['submit'] = $this->postArgs('submit', false) ?? [];
         }
 
-        $args['scene'] = Abs::TAG_PERSISTENCE;
+        $args = array_merge(
+            $args,
+            [
+                'scene' => Abs::TAG_PERSISTENCE,
+                'twig'  => $this->twigPath($this->twigPersistence),
+            ]
+        );
+
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
@@ -568,7 +617,14 @@ class BswBackendController extends BswWebController
      */
     protected function showChart(array $args = [], array $moduleList = [], ?string $view = null): Response
     {
-        $args['scene'] = Abs::TAG_CHART;
+        $args = array_merge(
+            $args,
+            [
+                'scene' => Abs::TAG_CHART,
+                'twig'  => $this->twigPath($this->twigChart),
+            ]
+        );
+
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,

@@ -274,7 +274,7 @@ class BswInitCommand extends Command
             /*
             return [
                 'leon_bsw_bundle' => [
-                    'resource' => '@LeonBswBundle/Controller',
+                    'resource' => '@' . Abs::BSW_BUNDLE . '/Controller',
                     'type'     => 'annotation',
                 ],
             ];

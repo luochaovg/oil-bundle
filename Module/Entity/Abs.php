@@ -7,6 +7,8 @@ class Abs
     /**
      * Mixed
      */
+    const BSW                = 'LeonBsw';
+    const BSW_BUNDLE         = 'LeonBswBundle';
     const FORM_DATA_SPLIT    = ',';
     const VALIDATION_IF_SET  = '~';
     const FILTER_INDEX_SPLIT = '@';
