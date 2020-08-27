@@ -329,11 +329,11 @@ class BswBackendController extends BswWebController
     /**
      * Render module
      *
-     * @param array  $moduleList
-     * @param string $view
-     * @param array  $routeArgs
-     * @param bool   $responseWhenMessage
-     * @param bool   $simpleMode
+     * @param array       $moduleList
+     * @param string|null $view
+     * @param array       $routeArgs
+     * @param bool        $responseWhenMessage
+     * @param bool        $simpleMode
      *
      * @return Response|BswModule\Message|array
      * @throws
@@ -425,8 +425,6 @@ class BswBackendController extends BswWebController
 
         if ($simpleMode) {
             throw new Exception('Latest module should return `Message instance` when simple mode');
-        } elseif (empty($view)) {
-            throw new Exception('Render view is required when not simple mode');
         }
 
         /**
@@ -487,14 +485,14 @@ class BswBackendController extends BswWebController
     /**
      * Render blank
      *
-     * @param string $view
-     * @param array  $args
-     * @param array  $moduleList
+     * @param string|null $view
+     * @param array       $args
+     * @param array       $moduleList
      *
      * @return Response|array
      * @throws
      */
-    protected function showBlank(string $view, array $args = [], array $moduleList = []): Response
+    protected function showBlank(?string $view, array $args = [], array $moduleList = []): Response
     {
         $args = array_merge(
             $args,
@@ -519,14 +517,14 @@ class BswBackendController extends BswWebController
     /**
      * Render empty
      *
-     * @param string $view
-     * @param array  $args
-     * @param array  $moduleList
+     * @param string|null $view
+     * @param array       $args
+     * @param array       $moduleList
      *
      * @return Response|array
      * @throws
      */
-    protected function showEmpty(string $view, array $args = [], array $moduleList = []): Response
+    protected function showEmpty(?string $view, array $args = [], array $moduleList = []): Response
     {
         $args = array_merge(
             $args,
