@@ -11,36 +11,6 @@
   {% endif %}
   <div class="{{ ['bsw-vue', 'bsw-body', tplBodyClass ?? null]|joinClass }}">
     <template>
-      <!-- init -->
-      {% if limbsInit ?? true %}
-        {% block init %}
-          {% include 'limbs/init.html.twig' %}
-        {% endblock %}
-      {% endif %}
-      <!-- modal -->
-      {% block modalBefore %}{% endblock %}
-      {% if modal is defined and 'modal' not in logic.display ?? [] %}
-        {% block modal %}
-          {% include 'limbs/modal.html.twig' %}
-        {% endblock %}
-      {% endif %}
-      {% block modalAfter %}{% endblock %}
-      <!-- drawer -->
-      {% block drawerBefore %}{% endblock %}
-      {% if drawer is defined and 'drawer' not in logic.display ?? [] %}
-        {% block drawer %}
-          {% include 'limbs/drawer.html.twig' %}
-        {% endblock %}
-      {% endif %}
-      {% block drawerAfter %}{% endblock %}
-      <!-- result -->
-      {% block resultBefore %}{% endblock %}
-      {% if result is defined and 'result' not in logic.display ?? [] %}
-        {% block result %}
-          {% include 'limbs/result.html.twig' %}
-        {% endblock %}
-      {% endif %}
-      {% block resultAfter %}{% endblock %}
       <a-config-provider :locale="locale" :auto-insert-space-in-button="true">
         {% block bodyBefore %}{% endblock %}
         {% block body %}{% endblock %}
