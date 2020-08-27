@@ -13,7 +13,6 @@ use Leon\BswBundle\Entity\BswAdminRoleAccessControl;
 use Leon\BswBundle\Entity\BswAdminUser;
 use Leon\BswBundle\Entity\BswAttachment;
 use Leon\BswBundle\Module\Bsw as BswModule;
-use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorAuthorization;
 use Leon\BswBundle\Module\Error\Error;
@@ -72,27 +71,27 @@ class BswBackendController extends BswWebController
     /**
      * @var string
      */
-    protected $twigBlank = 'layout/blank.html';
+    protected $twigBlank = Abs::BACKEND_TWIG_BLANK;
 
     /**
      * @var string
      */
-    protected $twigEmpty = 'layout/empty.html';
+    protected $twigEmpty = Abs::BACKEND_TWIG_EMPTY;
 
     /**
      * @var string
      */
-    protected $twigPreview = 'layout/preview.html';
+    protected $twigPreview = Abs::BACKEND_TWIG_PREVIEW;
 
     /**
      * @var string
      */
-    protected $twigPersistence = 'layout/persistence.html';
+    protected $twigPersistence = Abs::BACKEND_TWIG_PERSISTENCE;
 
     /**
      * @var string
      */
-    protected $twigChart = 'layout/chart.html';
+    protected $twigChart = Abs::BACKEND_TWIG_CHART;
 
     /**
      * @var array
@@ -474,12 +473,21 @@ class BswBackendController extends BswWebController
      * Twig path
      *
      * @param string $twig
+     * @param bool   $bswForce
      *
      * @return string
      */
-    protected function twigPath(string $twig): string
+    protected function twigPath(string $twig, bool $bswForce = false): string
     {
-        return '@' . Abs::BSW . '/' . $twig . Abs::TPL_SUFFIX;
+        if ($bswForce) {
+            $twig = '@' . Abs::BSW . '/' . $twig;
+        }
+
+        if (!Helper::strEndWith($twig, Abs::TPL_SUFFIX)) {
+            $twig .= Abs::TPL_SUFFIX;
+        }
+
+        return $twig;
     }
 
     /**
@@ -497,8 +505,10 @@ class BswBackendController extends BswWebController
         $args = array_merge(
             $args,
             [
-                'scene' => Abs::TAG_BLANK,
-                'twig'  => $this->twigPath($this->twigBlank),
+                'scene'        => Abs::TAG_BLANK,
+                'twigBsw'      => $this->twigPath(Abs::BACKEND_TWIG_BLANK),
+                'twigBswForce' => $this->twigPath(Abs::BACKEND_TWIG_BLANK, true),
+                'twigApp'      => $this->twigPath($this->twigBlank),
             ]
         );
 
@@ -529,9 +539,11 @@ class BswBackendController extends BswWebController
         $args = array_merge(
             $args,
             [
-                'scene'   => Abs::TAG_EMPTY,
-                'twig'    => $this->twigPath($this->twigEmpty),
-                'display' => ['menu', 'header', 'crumbs', 'footer'],
+                'scene'        => Abs::TAG_EMPTY,
+                'twigBsw'      => $this->twigPath(Abs::BACKEND_TWIG_EMPTY),
+                'twigBswForce' => $this->twigPath(Abs::BACKEND_TWIG_EMPTY, true),
+                'twigApp'      => $this->twigPath($this->twigEmpty),
+                'display'      => ['menu', 'header', 'crumbs', 'footer'],
             ]
         );
 
@@ -553,8 +565,10 @@ class BswBackendController extends BswWebController
         $args = array_merge(
             $args,
             [
-                'scene' => Abs::TAG_PREVIEW,
-                'twig'  => $this->twigPath($this->twigPreview),
+                'scene'        => Abs::TAG_PREVIEW,
+                'twigBsw'      => $this->twigPath(Abs::BACKEND_TWIG_PREVIEW),
+                'twigBswForce' => $this->twigPath(Abs::BACKEND_TWIG_PREVIEW, true),
+                'twigApp'      => $this->twigPath($this->twigPreview),
             ]
         );
 
@@ -589,8 +603,10 @@ class BswBackendController extends BswWebController
         $args = array_merge(
             $args,
             [
-                'scene' => Abs::TAG_PERSISTENCE,
-                'twig'  => $this->twigPath($this->twigPersistence),
+                'scene'        => Abs::TAG_PERSISTENCE,
+                'twigBsw'      => $this->twigPath(Abs::BACKEND_TWIG_PERSISTENCE),
+                'twigBswForce' => $this->twigPath(Abs::BACKEND_TWIG_PERSISTENCE, true),
+                'twigApp'      => $this->twigPath($this->twigPersistence),
             ]
         );
 
@@ -618,8 +634,10 @@ class BswBackendController extends BswWebController
         $args = array_merge(
             $args,
             [
-                'scene' => Abs::TAG_CHART,
-                'twig'  => $this->twigPath($this->twigChart),
+                'scene'        => Abs::TAG_CHART,
+                'twigBsw'      => $this->twigPath(Abs::BACKEND_TWIG_CHART),
+                'twigBswForce' => $this->twigPath(Abs::BACKEND_TWIG_CHART, true),
+                'twigApp'      => $this->twigPath($this->twigChart),
             ]
         );
 

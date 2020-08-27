@@ -49,6 +49,12 @@ class Abs
     const FLAG_SEARCH_ALL          = '__search_all_value';
     const FLAG_WEBSITE_TOKEN       = '__c_s_r_f';
 
+    const BACKEND_TWIG_BLANK       = 'layout/blank.html';
+    const BACKEND_TWIG_EMPTY       = 'layout/empty.html';
+    const BACKEND_TWIG_PREVIEW     = 'layout/preview.html';
+    const BACKEND_TWIG_PERSISTENCE = 'layout/persistence.html';
+    const BACKEND_TWIG_CHART       = 'layout/chart.html';
+
     /**
      * About frontend & source
      */
