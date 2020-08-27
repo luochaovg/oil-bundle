@@ -19,25 +19,25 @@
       {% endif %}
       <!-- modal -->
       {% block modalBefore %}{% endblock %}
-      {% if 'modal' not in logic.display ?? [] %}
+      {% if modal is defined and 'modal' not in logic.display ?? [] %}
         {% block modal %}
-          {{ (modalHtml ?? null)|raw }}
+          {% include 'limbs/modal.html.twig' %}
         {% endblock %}
       {% endif %}
       {% block modalAfter %}{% endblock %}
       <!-- drawer -->
       {% block drawerBefore %}{% endblock %}
-      {% if 'drawer' not in logic.display ?? [] %}
+      {% if drawer is defined and 'drawer' not in logic.display ?? [] %}
         {% block drawer %}
-          {{ (drawerHtml ?? null)|raw }}
+          {% include 'limbs/drawer.html.twig' %}
         {% endblock %}
       {% endif %}
       {% block drawerAfter %}{% endblock %}
       <!-- result -->
       {% block resultBefore %}{% endblock %}
-      {% if 'result' not in logic.display ?? [] %}
+      {% if result is defined and 'result' not in logic.display ?? [] %}
         {% block result %}
-          {{ (resultHtml ?? null)|raw }}
+          {% include 'limbs/result.html.twig' %}
         {% endblock %}
       {% endif %}
       {% block resultAfter %}{% endblock %}

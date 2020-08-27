@@ -76,7 +76,7 @@ trait WebCrumbs
                 };
 
                 $stack = $inStack($route);
-                if (($last = count($stack) - 1) <= 0) {
+                if (count($stack) < $this->cnf->crumbs_min_level - 2) {
                     return [];
                 }
 

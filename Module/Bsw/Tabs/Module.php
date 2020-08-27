@@ -35,6 +35,7 @@ class Module extends Bsw
      */
     public function twig(): ?string
     {
+        return null;
         return 'limbs/tabs.html';
     }
 

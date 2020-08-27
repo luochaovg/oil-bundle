@@ -2,7 +2,7 @@
 
 {% block content %}
   <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|joinClass }}">
-    {% if menuHtml is defined and 'menu' not in logic.display ?? [] %}
+    {% if menu is defined and 'menu' not in logic.display ?? [] %}
       <!-- menu mobile -->
       <a-drawer
         wrap-class-name="bsw-menu-mobile"
@@ -14,57 +14,57 @@
         @close="menuTrigger"
       >
         {% block menuMobile %}
-          {{ menuHtml|raw }}
+          {% include 'limbs/menu.html.twig' %}
         {% endblock %}
       </a-drawer>
       <!-- menu -->
       <div class="bsw-menu" v-else>
         {% block menu %}
-          {{ menuHtml|raw }}
+          {% include 'limbs/menu.html.twig' %}
         {% endblock %}
       </div>
     {% endif %}
     <a-layout>
       <!-- header -->
       {% block headerBefore %}{% endblock %}
-      {% if 'header' not in logic.display ?? [] %}
+      {% if header is defined and 'header' not in logic.display ?? [] %}
         {% block header %}
-          {{ (headerHtml ?? null)|raw }}
+          {% include 'limbs/header.html.twig' %}
         {% endblock %}
       {% endif %}
       {% block headerAfter %}{% endblock %}
       <a-layout-content class="{{ scaffold.iframe ? 'iframe' : null }}">
         <!-- crumbs -->
         {% block crumbsBefore %}{% endblock %}
-        {% if 'crumbs' not in logic.display ?? [] %}
+        {% if crumbs is defined and 'crumbs' not in logic.display ?? [] %}
           {% block crumbs %}
-            {{ (crumbsHtml ?? null)|raw }}
+            {% include 'limbs/crumbs.html.twig' %}
           {% endblock %}
         {% endif %}
         {% block curmbsAfter %}{% endblock %}
         <!-- welcome -->
         {% block welcomeBefore %}{% endblock %}
-        {% if 'welcome' not in logic.display ?? [] %}
+        {% if welcome is defined and 'welcome' not in logic.display ?? [] %}
           {% block welcome %}
-            {{ (welcomeHtml ?? null)|raw }}
+            {% include 'limbs/welcome.html.twig' %}
           {% endblock %}
         {% endif %}
         {% block welcomeAfter %}{% endblock %}
         {% if operate is defined and operate.position is same as(top) %}
           <!-- operate top -->
           {% block operateTopBefore %}{% endblock %}
-          {% if 'operate' not in logic.display ?? [] %}
+          {% if operate is defined and 'operate' not in logic.display ?? [] %}
             {% block operateTop %}
-              {{ (operateHtml ?? null)|raw }}
+              {% include 'limbs/operate.html.twig' %}
             {% endblock %}
           {% endif %}
           {% block operateTopAfter %}{% endblock %}
         {% endif %}
         <!-- tabs -->
         {% block tabsBefore %}{% endblock %}
-        {% if 'tabs' not in logic.display ?? [] %}
+        {% if tabs is defined and 'tabs' not in logic.display ?? [] %}
           {% block tabs %}
-            {{ (tabsHtml ?? null)|raw }}
+            {% include 'limbs/tabs.html.twig' %}
           {% endblock %}
         {% endif %}
         {% block tabsAfter %}{% endblock %}
@@ -77,9 +77,9 @@
         {% if operate is defined and operate.position is same as(bottom) %}
           <!-- operate bottom -->
           {% block operateBottomBefore %}{% endblock %}
-          {% if 'operate' not in logic.display ?? [] %}
+          {% if operate is defined and 'operate' not in logic.display ?? [] %}
             {% block operateBottome %}
-              {{ (operateHtml ?? null)|raw }}
+              {% include 'limbs/operate.html.twig' %}
             {% endblock %}
           {% endif %}
           {% block operateBottomAfter %}{% endblock %}
@@ -87,9 +87,9 @@
       </a-layout-content>
       <!-- footer -->
       {% block footerBefore %}{% endblock %}
-      {% if 'footer' not in logic.display ?? [] %}
+      {% if footer is defined and 'footer' not in logic.display ?? [] %}
         {% block footer %}
-          {{ (footerHtml ?? null)|raw }}
+          {% include 'limbs/footer.html.twig' %}
         {% endblock %}
       {% endif %}
       {% block footerAfter %}{% endblock %}

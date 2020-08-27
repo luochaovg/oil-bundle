@@ -142,6 +142,7 @@ parameters:
         api_vs_client_time_diff: 300
         curl_timeout_second: 30
         proxy_pass: null
+        crumbs_min_level: 3
 
         route_default: app_site_index
         route_login: app_bsw_admin_user_login
@@ -342,3 +343,7 @@ services:
 
     Leon\BswBundle\Command\BswScaffoldCommand:
         tags: ['console.command']
+
+    Twig\Extension\StringLoaderExtension:
+        tags:
+            - { name: twig.extension }
