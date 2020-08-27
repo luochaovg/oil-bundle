@@ -332,6 +332,7 @@ ul.ant-pagination li {
 }
 .ant-layout .ant-layout-content.iframe {
   margin: 5px;
+  padding: 0;
 }
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
   padding: 60px 40px 30px;
