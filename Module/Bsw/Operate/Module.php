@@ -33,32 +33,6 @@ class Module extends Bsw
     }
 
     /**
-     * @return string|null
-     * @throws
-     */
-    public function twig(): ?string
-    {
-        return null;
-        return 'limbs/operate.html';
-    }
-
-    /**
-     * @return array
-     */
-    public function css(): ?array
-    {
-        return null;
-    }
-
-    /**
-     * @return array
-     */
-    public function javascript(): ?array
-    {
-        return null;
-    }
-
-    /**
      * @return ArgsInput
      */
     public function input(): ArgsInput

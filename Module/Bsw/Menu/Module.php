@@ -32,24 +32,6 @@ class Module extends Bsw
     }
 
     /**
-     * @return string|null
-     * @throws
-     */
-    public function twig(): ?string
-    {
-        return null;
-        return 'limbs/menu.html';
-    }
-
-    /**
-     * @return array
-     */
-    public function css(): ?array
-    {
-        return null;
-    }
-
-    /**
      * @return array
      */
     public function javascript(): ?array

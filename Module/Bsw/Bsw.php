@@ -131,17 +131,26 @@ abstract class Bsw
      * @return string|null
      * @throws
      */
-    abstract public function twig(): ?string;
+    public function twig(): ?string
+    {
+        return null;
+    }
 
     /**
      * @return array
      */
-    abstract public function css(): ?array;
+    public function css(): ?array
+    {
+        return null;
+    }
 
     /**
      * @return array
      */
-    abstract public function javascript(): ?array;
+    public function javascript(): ?array
+    {
+        return null;
+    }
 
     /**
      * @return ArgsInput
