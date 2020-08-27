@@ -167,6 +167,16 @@ class Input extends ArgsInput
     /**
      * @var int
      */
+    public $scrollXStepPx = 500;
+
+    /**
+     * @var int
+     */
+    public $scrollXBottomPx = 44;
+
+    /**
+     * @var int
+     */
     public $actionColBorder = 16.5;
 
     /**

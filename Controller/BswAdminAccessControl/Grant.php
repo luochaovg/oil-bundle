@@ -42,7 +42,7 @@ trait Grant
              * @var Checkbox $checkbox
              */
             $checkbox = $item['type'];
-            $checkbox->setEnum($item['enum']);
+            $checkbox->setOptions($item['enum']);
             $checkbox->setValue($item['value']);
         }
 
@@ -63,7 +63,7 @@ trait Grant
              * @var Checkbox $checkbox
              */
             $checkbox = $item['type'];
-            $render[$key] = array_keys($checkbox->getEnum());
+            $render[$key] = array_keys($checkbox->getOptionsArray());
         }
 
         return Helper::jsonStringify($render);

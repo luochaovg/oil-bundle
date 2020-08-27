@@ -8,8 +8,8 @@
   >
     {% for key, item in filter.filter %}
       <transition
-        enter-active-class="animated flipInY"
-        leave-active-class="animated flipOutY"
+        enter-active-class="animated {{ scaffold.cnf.twigFilterItemAnimateIn }}"
+        leave-active-class="animated {{ scaffold.cnf.twigFilterItemAnimateOut }}"
       >
         <a-form-item
           v-show="{{ item.hide ? 'false' : 'true' }} && filterDisplay('{{ key }}')"

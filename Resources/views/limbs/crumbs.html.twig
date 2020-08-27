@@ -1,16 +1,16 @@
 {% if crumbs.list is not empty %}
-  <a-breadcrumb separator="|">
+  <a-breadcrumb separator="{{ scaffold.cnf.twigCrumbsSplit }}">
     {% for item in crumbs.list %}
       {% if item.route is empty or loop.last %}
         <a-breadcrumb-item>
-          {% if item.icon is not empty %}
+          {% if item.icon is not empty and scaffold.cnf.twigCrumbsNeedIcon %}
             {{ item.icon|icon|raw }}
           {% endif %}
           {{ item.label|trans({}, 'twig') }}
         </a-breadcrumb-item>
       {% else %}
         <a-breadcrumb-item>
-          {% if item.icon is not empty %}
+          {% if item.icon is not empty and scaffold.cnf.twigCrumbsNeedIcon %}
             {{ item.icon|icon|raw }}
           {% endif %}
           <a href="{{ path(item.route) }}">{{ item.label|trans({}, 'twig') }}</a>

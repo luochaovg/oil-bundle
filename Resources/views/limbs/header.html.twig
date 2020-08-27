@@ -35,6 +35,9 @@
         <span class="item action ant-dropdown-link">
           {{ scaffold.cnf.iconLanguage|icon|raw }}
           <span class="language">{{ 'Language'|trans({}, 'twig') }}</span>
+          {% if scaffold.cnf.twigHeaderLanguageIcon is not empty %}
+            {{ scaffold.cnf.twigHeaderLanguageIcon|icon|raw }}
+          {% endif %}
         </span>
           <a-menu slot="overlay" @click="changeLanguageByVue">
             {% for key, label in header.language %}
@@ -54,6 +57,9 @@
         <span class="item action ant-dropdown-link">
           {{ scaffold.cnf.iconSetting|icon|raw }}
           <span class="setting">{{ 'Setting'|trans({}, 'twig') }}</span>
+          {% if scaffold.cnf.twigHeaderSettingIcon is not empty %}
+            {{ scaffold.cnf.twigHeaderSettingIcon|icon|raw }}
+          {% endif %}
         </span>
           <a-menu slot="overlay" @click="redirectByVue">
             {% for item in header.setting %}
@@ -76,6 +82,9 @@
           <a-avatar class="avatar" size="small" src="{{ avatar }}" icon="user"></a-avatar>
           {% set account = scaffold.cnf.usrAccount %}
           <span class="username">{{ attribute(scaffold.usr, account) ?? ('`' ~ account ~ '`') }}</span>
+          {% if scaffold.cnf.twigHeaderLinksIcon is not empty %}
+            {{ scaffold.cnf.twigHeaderLinksIcon|icon|raw }}
+          {% endif %}
         </span>
           <a-menu slot="overlay" :default-selected-keys="['{{ scaffold.route }}']" @click="redirectByVue">
             {% for item in header.links %}

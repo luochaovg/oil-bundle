@@ -1,8 +1,8 @@
 {% if form.previewRoute %}
   <a-button
-    type="dashed"
+    type="{{ form.buttonType }}"
     size="{{ form.size }}"
-    :block="true"
+    :block="{{ form.buttonBlock ? 'true' : 'false' }}"
     :disabled="{{ form.disabled ? 'true' : 'false' }}"
     :style="{{ form.buttonStyle }}"
     :data-bsw.prop="{{ form.previewIframeArgs|merge({location: path(form.previewRoute, form.previewArgs)})|stringify }}"

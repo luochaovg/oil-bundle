@@ -52,7 +52,7 @@
               v-decorator="['{{ index }}', { initialValue: [{{ initial }}], rules: {{ item.type.formRules }} }]"
             >
               <a-row>
-                {% for value, label in item.type.enum %}
+                {% for value, label in item.type.optionsArray %}
                   {% set _danger = attribute(danger, value) ?? null %}
                   <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
                     {% macro checkbox(logic, value, label, _danger) %}

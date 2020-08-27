@@ -67,16 +67,16 @@
         {% if preview.scrollXOperate %}
           <div
             class="bsw-scroll-x left"
-            data-step="500"
+            data-step="{{ preview.scrollXStepPx }}"
             data-target-selector=".ant-table-body"
-            :style="{bottom: '44px'}"
-          >{{ 'b:icon-back'|icon|raw }}</div>
+            :style="{bottom: '{{ preview.scrollXBottomPx }}px'}"
+          >{{ scaffold.cnf.twigScrollXLeftIcon|icon|raw }}</div>
           <div
             class="bsw-scroll-x right"
-            data-step="500"
+            data-step="{{ preview.scrollXStepPx }}"
             data-target-selector=".ant-table-body"
-            :style="{bottom: '44px'}"
-          >{{ 'b:icon-more'|icon|raw }}</div>
+            :style="{bottom: '{{ preview.scrollXBottomPx }}px'}"
+          >{{ scaffold.cnf.twigScrollXRightIcon|icon|raw }}</div>
         {% endif %}
       {% endblock %}
       {% block pagination %}

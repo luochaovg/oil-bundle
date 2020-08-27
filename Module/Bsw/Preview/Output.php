@@ -154,6 +154,16 @@ class Output extends ArgsOutput
     public $scrollXOperate;
 
     /**
+     * @var int
+     */
+    public $scrollXStepPx;
+
+    /**
+     * @var int
+     */
+    public $scrollXBottomPx;
+
+    /**
      * @var bool
      */
     public $loadTwice;

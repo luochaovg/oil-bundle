@@ -226,6 +226,18 @@ parameters:
         icon_language: b:icon-icon-60
         icon_speech: b:icon-icon-49
 
+        twig_crumbs_split: '|'
+        twig_crumbs_need_icon: true
+        twig_filter_item_animate_in: flipInY
+        twig_filter_item_animate_out: flipOutY
+        twig_header_language_icon: null
+        twig_header_setting_icon: null
+        twig_header_links_icon: null
+        twig_persistence_item_animate_in: fadeInDown
+        twig_persistence_item_animate_out: fadeOutDown
+        twig_scroll_x_left_icon: b:icon-back
+        twig_scroll_x_right_icon: b:icon-more
+
     currency_code: CNY
     currency_char: ￥
 
