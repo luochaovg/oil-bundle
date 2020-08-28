@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Module\Bsw\Footer;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Bsw;

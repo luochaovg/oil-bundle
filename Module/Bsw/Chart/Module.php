@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Module\Bsw\Chart;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Controller\BswBackendController;
 use Leon\BswBundle\Module\Bsw\ArgsInput;
 use Leon\BswBundle\Module\Bsw\ArgsOutput;

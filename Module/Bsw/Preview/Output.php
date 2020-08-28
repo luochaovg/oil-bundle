@@ -4,7 +4,6 @@ namespace Leon\BswBundle\Module\Bsw\Preview;
 
 use Leon\BswBundle\Module\Bsw\ArgsOutput;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
-use Leon\BswBundle\Module\Form\Entity\Button;
 
 class Output extends ArgsOutput
 {

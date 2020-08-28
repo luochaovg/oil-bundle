@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Module\Bsw;
 
-use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Error;
 use Symfony\Component\HttpFoundation\Response;
