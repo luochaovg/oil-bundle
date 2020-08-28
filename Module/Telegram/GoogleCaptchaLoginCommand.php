@@ -53,7 +53,7 @@ class GoogleCaptchaLoginCommand extends Acme
             return $this->textMessage('*Error*: sorry, `permission denied`.');
         }
 
-        if (empty($user['googleAuthSecret']) || strlen($user['googleAuthSecret']) !== 16) {
+        if (empty($user['google_auth_secret']) || strlen($user['google_auth_secret']) !== 16) {
             return $this->textMessage('*Error*: google auth secret is not configured.');
         }
 
