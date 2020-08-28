@@ -933,8 +933,11 @@ class Helper
         int $tabBySpace = 2,
         string $split = ':',
         string $prefix = null
-    ): string {
+    ): ?string {
 
+        if (empty($json)) {
+            return null;
+        }
         if (is_string($json)) {
             $json = self::parseJsonString($json);
         }
@@ -3443,7 +3446,9 @@ class Helper
      */
     public static function jsonArray(string $json): array
     {
-        return json_decode($json, true) ?: [];
+        $json = json_decode($json, true);
+
+        return is_array($json) ? $json : [];
     }
 
     /**
