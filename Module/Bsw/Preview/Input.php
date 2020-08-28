@@ -194,6 +194,6 @@ class Input extends ArgsInput
      */
     public $actionByteMapPx = [
         1 => 6,
-        3 => 11.4,
+        3 => 11.6,
     ];
 }
