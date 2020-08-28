@@ -1,6 +1,8 @@
 {% extends 'layout/persistence.html.twig' %}
 {% set tplContentChildrenClass = 'bsw-content-grant' %}
 
+{% use 'layout/nothing.html.twig' %}
+
 {% block page %}
   <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
   <p class="bsw-hide" v-init:disabled_list='{{ logic.disabledJson|raw }}'></p>

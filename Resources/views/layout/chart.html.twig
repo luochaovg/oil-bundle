@@ -1,6 +1,7 @@
 {% extends 'layout/blank.html.twig' %}
 {% set tplContentClass = ['bsw-content-chart', tplContentChildrenClass ?? null]|joinClass %}
 
+{% use 'layout/nothing.html.twig' %}
 {% use 'limbs/filter.html.twig' %}
 {% use 'limbs/chart.html.twig' %}
 {% use 'javascript/filter.md.twig' %}

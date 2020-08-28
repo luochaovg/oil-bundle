@@ -1,6 +1,8 @@
 {% extends 'layout/empty.html.twig' %}
 {% set tplBodyClass = 'bsw-body-login' %}
 
+{% use 'layout/nothing.html.twig' %}
+
 {% block stylesheets %}
   .ant-spin-container {{ scaffold.cnf|imageStyle('login', true) }}
 {% endblock %}

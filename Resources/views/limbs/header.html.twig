@@ -3,8 +3,8 @@
     {% block headerMenuTrigger %}
       {% if 'menu' not in logic.display ?? [] %}
         <span class="icon" @click="menuTrigger">
-      <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
-    </span>
+          <a-icon :type="menuCollapsed ? 'menu-unfold' : 'menu-fold'"></a-icon>
+        </span>
       {% endif %}
     {% endblock %}
     <div class="user-wrapper left">
