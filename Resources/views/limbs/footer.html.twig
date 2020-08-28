@@ -1,1 +1,3 @@
-<a-layout-footer class="{{ footer.clsName }}">{{ scaffold.cnf.copyright }}</a-layout-footer>
+{% block footer %}
+  <a-layout-footer class="{{ footer.clsName }}">{{ scaffold.cnf.copyright }}</a-layout-footer>
+{% endblock %}

@@ -1,3 +1,4 @@
+{% block previewJavascript %}
 bsw.configure({
     data: {
         previewColumns: {{ preview.columnsJson|raw }},
@@ -100,3 +101,4 @@ bsw.configure({
         }
     }
 });
+{% endblock %}

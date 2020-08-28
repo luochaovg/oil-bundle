@@ -215,7 +215,7 @@ class BswBackendController extends BswWebController
          * Telegram token mode
          */
         $token = $this->getArgs($this->parameter('token_for_login_key'));
-        if ($token && $record = $this->checkSceneToken($token, 1)) {
+        if ($token && is_string($token) && $record = $this->checkSceneToken($token, 1)) {
             $this->session->clear();
             if ($record instanceof Error) {
                 return $record;

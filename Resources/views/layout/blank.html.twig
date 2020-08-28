@@ -1,5 +1,13 @@
 {% extends 'layout/empty.html.twig' %}
 
+{% use 'limbs/menu.html.twig' with menu as bswMenu %}
+{% use 'limbs/header.html.twig' %}
+{% use 'limbs/crumbs.html.twig' %}
+{% use 'limbs/welcome.html.twig' %}
+{% use 'limbs/operate.html.twig' %}
+{% use 'limbs/tabs.html.twig' %}
+{% use 'limbs/footer.html.twig' %}
+
 {% block content %}
   <a-layout class="{{ ['bsw-scaffold', tplScaffoldClass ?? null]|joinClass }}">
     {% if menu is defined and 'menu' not in logic.display ?? [] %}
@@ -14,13 +22,13 @@
         @close="menuTrigger"
       >
         {% block menuMobile %}
-          {% include 'limbs/menu.html.twig' %}
+          {{ block('bswMenu') }}
         {% endblock %}
       </a-drawer>
       <!-- menu -->
       <div class="bsw-menu" v-else>
         {% block menu %}
-          {% include 'limbs/menu.html.twig' %}
+          {{ block('bswMenu') }}
         {% endblock %}
       </div>
     {% endif %}
@@ -29,7 +37,7 @@
       {% block headerBefore %}{% endblock %}
       {% if header is defined and 'header' not in logic.display ?? [] %}
         {% block header %}
-          {% include 'limbs/header.html.twig' %}
+          {{ parent() }}
         {% endblock %}
       {% endif %}
       {% block headerAfter %}{% endblock %}
@@ -38,7 +46,7 @@
         {% block crumbsBefore %}{% endblock %}
         {% if crumbs is defined and 'crumbs' not in logic.display ?? [] %}
           {% block crumbs %}
-            {% include 'limbs/crumbs.html.twig' %}
+            {{ parent() }}
           {% endblock %}
         {% endif %}
         {% block curmbsAfter %}{% endblock %}
@@ -46,7 +54,7 @@
         {% block welcomeBefore %}{% endblock %}
         {% if welcome is defined and 'welcome' not in logic.display ?? [] %}
           {% block welcome %}
-            {% include 'limbs/welcome.html.twig' %}
+            {{ parent() }}
           {% endblock %}
         {% endif %}
         {% block welcomeAfter %}{% endblock %}
@@ -55,7 +63,7 @@
           {% block operateTopBefore %}{% endblock %}
           {% if operate is defined and 'operate' not in logic.display ?? [] %}
             {% block operateTop %}
-              {% include 'limbs/operate.html.twig' %}
+              {{ block('operate') }}
             {% endblock %}
           {% endif %}
           {% block operateTopAfter %}{% endblock %}
@@ -64,7 +72,7 @@
         {% block tabsBefore %}{% endblock %}
         {% if tabs is defined and 'tabs' not in logic.display ?? [] %}
           {% block tabs %}
-            {% include 'limbs/tabs.html.twig' %}
+            {{ parent() }}
           {% endblock %}
         {% endif %}
         {% block tabsAfter %}{% endblock %}
@@ -79,7 +87,7 @@
           {% block operateBottomBefore %}{% endblock %}
           {% if operate is defined and 'operate' not in logic.display ?? [] %}
             {% block operateBottome %}
-              {% include 'limbs/operate.html.twig' %}
+              {{ block('operate') }}
             {% endblock %}
           {% endif %}
           {% block operateBottomAfter %}{% endblock %}
@@ -89,7 +97,7 @@
       {% block footerBefore %}{% endblock %}
       {% if footer is defined and 'footer' not in logic.display ?? [] %}
         {% block footer %}
-          {% include 'limbs/footer.html.twig' %}
+          {{ parent() }}
         {% endblock %}
       {% endif %}
       {% block footerAfter %}{% endblock %}

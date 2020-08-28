@@ -1,5 +1,10 @@
 {% extends 'foundation/scaffold.html.twig' %}
 
+{% use 'limbs/init.html.twig' %}
+{% use 'limbs/modal.html.twig' %}
+{% use 'limbs/drawer.html.twig' %}
+{% use 'limbs/result.html.twig' %}
+
 {% block body %}
   <a-spin
     :spinning="spinning"
@@ -12,14 +17,14 @@
     <!-- init -->
     {% if limbsInit ?? true %}
       {% block init %}
-        {% include 'limbs/init.html.twig' %}
+        {{ parent() }}
       {% endblock %}
     {% endif %}
     <!-- modal -->
     {% block modalBefore %}{% endblock %}
     {% if modal is defined and 'modal' not in logic.display ?? [] %}
       {% block modal %}
-        {% include 'limbs/modal.html.twig' %}
+        {{ parent() }}
       {% endblock %}
     {% endif %}
     {% block modalAfter %}{% endblock %}
@@ -27,7 +32,7 @@
     {% block drawerBefore %}{% endblock %}
     {% if drawer is defined and 'drawer' not in logic.display ?? [] %}
       {% block drawer %}
-        {% include 'limbs/drawer.html.twig' %}
+        {{ parent() }}
       {% endblock %}
     {% endif %}
     {% block drawerAfter %}{% endblock %}
@@ -35,7 +40,7 @@
     {% block resultBefore %}{% endblock %}
     {% if result is defined and 'result' not in logic.display ?? [] %}
       {% block result %}
-        {% include 'limbs/result.html.twig' %}
+        {{ parent() }}
       {% endblock %}
     {% endif %}
     {% block resultAfter %}{% endblock %}

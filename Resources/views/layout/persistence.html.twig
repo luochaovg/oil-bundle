@@ -1,6 +1,8 @@
 {% extends 'layout/blank.html.twig' %}
 {% set tplContentClass = ['bsw-content-persistence', tplContentChildrenClass ?? null]|joinClass %}
 
+{% use 'javascript/persistence.md.twig' %}
+
 {% block page %}
   {% block persistenceBefore %}{% endblock %}
   {% block persistence %}
@@ -61,5 +63,5 @@
 {% endblock %}
 
 {% block javascript %}
-{% include 'javascript/persistence.md.twig' %}
+{{ block('persistenceJavascript') }}
 {% endblock %}

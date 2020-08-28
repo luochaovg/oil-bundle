@@ -1,11 +1,15 @@
 {% extends 'layout/blank.html.twig' %}
 {% set tplContentClass = ['bsw-content-preview', tplContentChildrenClass ?? null]|joinClass %}
 
+{% use 'limbs/filter.html.twig' %}
+{% use 'javascript/filter.md.twig' %}
+{% use 'javascript/preview.md.twig' %}
+
 {% block page %}
   {% block filterBefore %}{% endblock %}
   {% if 'filter' not in logic.display ?? [] %}
     {% block filter %}
-      {% include 'limbs/filter.html.twig' %}
+      {{ parent() }}
     {% endblock %}
   {% endif %}
   {% block filterAfter %}{% endblock %}
@@ -102,7 +106,7 @@
 
 {% block javascript %}
 {% if 'filter' not in logic.display ?? [] %}
-  {% include 'javascript/filter.md.twig' %}
+  {{ block('filterJavascript') }}
 {% endif %}
-{% include 'javascript/preview.md.twig' %}
+{{ block('previewJavascript') }}
 {% endblock %}

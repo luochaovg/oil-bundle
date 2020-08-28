@@ -1,5 +1,7 @@
 {% extends 'layout/preview.html.twig' %}
 
+{% use 'javascript/task.md.twig' %}
+
 {% block pageAfter %}
   {% set maskClosable = drawer.maskClosable ? 'true' :'false' %}
   {% set clsName = ['bsw-drawer', 'bsw-work-task-drawer', drawer.wrapClsName]|joinClass %}
@@ -41,5 +43,5 @@
 {% endblock %}
 
 {% block javascriptAfter %}
-  {% include 'javascript/task.md.twig' %}
+  {{ block('taskJavascript') }}
 {% endblock %}

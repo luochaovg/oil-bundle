@@ -1,9 +1,12 @@
 {% extends 'layout/preview.html.twig' %}
 
+{% use 'limbs/filter.html.twig' %}
+{% use 'javascript/filter.md.twig' %}
+
 {% block page %}
   {% if 'filter' not in logic.display ?? [] %}
     {% block filter %}
-      {% include 'limbs/filter.html.twig' %}
+      {{ parent() }}
     {% endblock %}
   {% endif %}
   {% block weekReport %}
@@ -26,6 +29,6 @@
 
 {% block javascript %}
 {% if 'filter' not in logic.display ?? [] %}
-  {% include 'javascript/filter.md.twig' %}
+  {{ block('filterJavascript') }}
 {% endif %}
 {% endblock %}

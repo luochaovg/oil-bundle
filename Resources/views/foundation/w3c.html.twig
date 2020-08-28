@@ -15,7 +15,7 @@
   {% set v = '?version=' ~ scaffold.version %}
   {% set vv = '&version=' ~ scaffold.version %}
   {% for src in [['css', top], ['css', topApp], ['js', top], ['js', topApp]] %}
-    {% include 'limbs/'~ src[0] ~'.html.twig' with {position: src[1]} %}
+    {% include 'block/'~ src[0] ~'.html.twig' with {position: src[1]} %}
   {% endfor %}
   <style>
     {% block stylesheetsBefore %}{% endblock %}
@@ -31,7 +31,7 @@
 {% block w3c %}{% endblock %}
 {% block w3cAfter %}{% endblock %}
 {% for src in [['css', bottom], ['css', bottomApp], ['js', bottom], ['js', bottomApp]] %}
-  {% include 'limbs/'~ src[0] ~'.html.twig' with {position: src[1]} %}
+  {% include 'block/'~ src[0] ~'.html.twig' with {position: src[1]} %}
 {% endfor %}
 <script>
   {% block javascriptBefore %}{% endblock %}
