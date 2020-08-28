@@ -19,6 +19,7 @@ parameters:
     upload_save_name: uniqid
     upload_save_path: savePath
     upload_save_fmt: null
+    token_for_login_key: tk4l
 
     platform_sms: aws
     platform_email: aws

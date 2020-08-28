@@ -16,10 +16,8 @@ use Leon\BswBundle\Module\Filter\Entity\TeamMember;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Repository\BswAdminUserRepository;
 use Leon\BswBundle\Repository\BswWorkTaskTrailRepository;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\AbstractQuery;
-use MathPHP\Algebra;
 use Symfony\Component\HttpFoundation\Session\Session;
+use MathPHP\Algebra;
 
 /**
  * @property Session $session
@@ -600,51 +598,5 @@ trait Common
         $leader = $leader ? ' 🚩' : null;
         $this->cnf->copyright = "{$title} © {$this->usr('usr_account')}{$leader}";
         $this->logic->display = ['menu', 'header', 'crumbs'];
-    }
-
-    /**
-     * @param array $args
-     *
-     * @return array|Error|object|Response
-     * @throws
-     */
-    public function webShouldAuth(array $args)
-    {
-        $token = $this->getArgs('token');
-        if ($token && $record = $this->checkSceneToken($token, 1)) {
-
-            $this->session->clear();
-            if ($record instanceof Error) {
-                return $record;
-            }
-
-            /**
-             * @var BswAdminUserRepository $adminRepo
-             */
-            $adminRepo = $this->repo(BswAdminUser::class);
-
-            $user = $adminRepo->lister(
-                [
-                    'limit' => 1,
-                    'where' => [
-                        $this->expr->eq('bau.telegramId', ':telegram'),
-                        $this->expr->gt('bau.teamId', ':team'),
-                    ],
-                    'args'  => [
-                        'telegram' => [$record->userId],
-                        'team'     => [0],
-                    ],
-                ],
-                AbstractQuery::HYDRATE_OBJECT
-            );
-
-            if ($user) {
-                $this->loginAdminUser($user, $this->getClientIp());
-
-                return $this->redirectToRoute($this->route);
-            }
-        }
-
-        return parent::webShouldAuth($args);
     }
 }

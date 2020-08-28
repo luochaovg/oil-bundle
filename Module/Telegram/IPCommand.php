@@ -30,7 +30,6 @@ class IPCommand extends Acme
     public function handle()
     {
         $ip = $this->getArguments()['ip'];
-
         if (empty($ip)) {
             return $this->textMessage('*Error*: Please given a ip address');
         }

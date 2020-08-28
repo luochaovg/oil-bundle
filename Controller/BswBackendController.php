@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Controller;
 
+use Doctrine\ORM\AbstractQuery;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Controller\Traits as CT;
@@ -206,9 +207,49 @@ class BswBackendController extends BswWebController
      * @param array $args
      *
      * @return array|object|Error|Response
+     * @throws
      */
     protected function webShouldAuth(array $args)
     {
+        /**
+         * Telegram token mode
+         */
+        $token = $this->getArgs($this->parameter('token_for_login_key'));
+        if ($token && $record = $this->checkSceneToken($token, 1)) {
+            $this->session->clear();
+            if ($record instanceof Error) {
+                return $record;
+            }
+
+            /**
+             * @var BswAdminUserRepository $adminRepo
+             */
+            $adminRepo = $this->repo(BswAdminUser::class);
+            $user = $adminRepo->lister(
+                [
+                    'limit' => 1,
+                    'where' => [
+                        $this->expr->eq('bau.state', ':state'),
+                        $this->expr->eq('bau.telegramId', ':telegram'),
+                    ],
+                    'args'  => [
+                        'state'    => [Abs::NORMAL],
+                        'telegram' => [$record->userId],
+                    ],
+                ],
+                AbstractQuery::HYDRATE_OBJECT
+            );
+
+            if ($user) {
+                $this->loginAdminUser($user, $this->getClientIp());
+
+                return $this->redirectToRoute($this->route);
+            }
+        }
+
+        /**
+         * Normal mode
+         */
         $user = $this->session->get($this->skUser);
         if (empty($user)) {
             return new ErrorAuthorization();

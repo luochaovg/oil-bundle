@@ -1052,6 +1052,6 @@ class Enum
      */
     const BSW_TOKEN_SCENE = [
         0 => Abs::COMMON,
-        1 => 'Work task login',
+        1 => 'Login backend',
     ];
 }
