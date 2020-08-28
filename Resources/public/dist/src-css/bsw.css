@@ -263,9 +263,11 @@ div.ant-modal-mask {
 .ant-layout-header-light .ant-layout-sider-trigger:hover {
   background: rgba(0, 0, 0, 0.025);
 }
-.ant-layout-sider-dark .logo,
-.ant-layout-header-dark .logo {
-  background: #002140;
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+}
+span.ant-tag {
+  background: transparent;
 }
 .ant-layout-sider-dark .logo h1,
 .ant-layout-header-dark .logo h1 {
@@ -332,7 +334,6 @@ ul.ant-pagination li {
 }
 .ant-layout .ant-layout-content.iframe {
   margin: 5px;
-  padding: 0;
 }
 .ant-layout .ant-layout-content.iframe .bsw-persistence {
   padding: 60px 40px 30px;

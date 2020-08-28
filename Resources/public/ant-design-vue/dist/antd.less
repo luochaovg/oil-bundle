@@ -1,6 +1,8 @@
 @import "../lib/style/index.less";
 @import "../lib/style/components.less";
 
+// jqk-admin-npm run all && cp dist/antd.theme.min.css ../less/antd.talk.keep.css && cd .. && jqk-admin-npm run all && cd -
+
 @blue-6: #016AA1;
 @purple-6: #722ed1;
 @cyan-6: #11a8a8;
@@ -16,27 +18,20 @@
 @gold-6: #faad14;
 
 @font-size-base: 14px;
+@border-color-base: rgba(232, 237, 250, 1);
 
-@border-color-base: rgba(232, 237, 250, 1); // base border outline a component
-@border-color-split: hsv(0, 0, 91%); // split border inside a component
-
-@btn-height-base: 34px;
-@btn-height-lg: 44px;
+@btn-height-base: 32px;
+@btn-height-lg: 40px;
 @btn-height-sm: 24px;
 
-@input-height-base: 34px;
-@input-height-lg: 44px;
+@input-height-base: 32px;
+@input-height-lg: 40px;
 @input-height-sm: 24px;
 
-@border-radius-base: 0;
-@border-radius-sm: 0;
+@border-radius-base: 8px;
+@border-radius-sm: 4px;
 
-@layout-sider-background: @primary-color;
-@menu-bg: @primary-color;
-@menu-popup-bg: @primary-color;
-@menu-highlight-color: @primary-color;
-@menu-item-active-bg: @item-active-bg;
-@menu-dark-bg: @primary-color;
-@menu-dark-arrow-color: #fff;
-@menu-dark-submenu-bg: @primary-color; // 子菜单底色
-@menu-dark-item-active-bg: @primary-color; // 菜单选中背景
+@layout-header-background: @primary-color;
+@layout-trigger-background: @primary-color;
+@menu-dark-submenu-bg: @primary-color; // 展开菜单背景色
+@menu-dark-item-active-bg: @primary-color; // 选中菜单背景色
