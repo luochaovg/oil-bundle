@@ -58,7 +58,7 @@ class GoogleCaptchaLoginCommand extends Acme
         }
 
         $ga = new GoogleAuthenticator();
-        $result = $ga->verifyCode($user->googleAuthSecret, $captcha, 2);
+        $result = $ga->verifyCode($user['google_auth_secret'], $captcha, 2);
         if (!$result) {
             return $this->textMessage('*Error*: google captcha error.');
         }
