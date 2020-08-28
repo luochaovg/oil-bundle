@@ -528,7 +528,7 @@ class Abs
     const PG_TOTAL_PAGE        = 'total_page';
     const PG_TOTAL_ITEM        = 'total_item';
     const PG_ITEMS             = 'items';
-    const PG_PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50, 100];
+    const PG_PAGE_SIZE_OPTIONS = [3, 5, 8, 10, 15, 20, 30, 50, 100];
 
     const MULTIPLE_PER       = 50;
     const PAGE_DEFAULT_SIZE  = 30;
