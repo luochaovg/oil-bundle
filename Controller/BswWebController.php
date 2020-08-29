@@ -34,6 +34,26 @@ abstract class BswWebController extends AbstractController
         CT\WebSource;
 
     /**
+     * @var bool
+     */
+    protected $ajax;
+
+    /**
+     * @var bool
+     */
+    protected $mobile;
+
+    /**
+     * @var bool
+     */
+    protected $iframe;
+
+    /**
+     * @var object
+     */
+    protected $logic;
+
+    /**
      * @var string
      */
     protected $skUser = 'user-session-key';
@@ -56,6 +76,7 @@ abstract class BswWebController extends AbstractController
         $this->ajax = $this->request()->isXmlHttpRequest();
         $this->mobile = Helper::isMobile();
         $this->iframe = !!$this->getArgs('iframe');
+        $this->logic = (object)[];
 
         // history for last time
         $args = $this->getArgs();

@@ -2,25 +2,27 @@
 
 namespace Leon\BswBundle\Module\Chart\Traits;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 trait Module
 {
     /**
-     * @var bool[]
+     * @var array
      */
     protected $module = [
-        'title'     => true,
-        'tooltip'   => true,
-        'toolbox'   => true,
-        'legend'    => true,
-        'grid'      => true,
-        'axisX'     => true,
-        'axisY'     => true,
-        'zoom'      => true,
-        'series'    => true,
-        'line'      => true,
-        'point'     => true,
-        'mapVisual' => true,
-        'color'     => false,
+        Abs::CHART_TITLE      => true,
+        Abs::CHART_TOOLTIP    => true,
+        Abs::CHART_TOOLBOX    => true,
+        Abs::CHART_LEGEND     => true,
+        Abs::CHART_GRID       => true,
+        Abs::CHART_AXIS_X     => true,
+        Abs::CHART_AXIS_Y     => true,
+        Abs::CHART_ZOOM       => true,
+        Abs::CHART_SERIES     => true,
+        Abs::CHART_LINE       => true,
+        Abs::CHART_POINT      => true,
+        Abs::CHART_MAP_VISUAL => true,
+        Abs::CHART_COLOR      => false,
     ];
 
     /**
@@ -38,13 +40,15 @@ trait Module
     }
 
     /**
-     * @param string $name
+     * @param string ...$names
      *
      * @return $this
      */
-    public function moduleEnable(string $name)
+    public function moduleEnable(string ...$names)
     {
-        $this->module[$name] = true;
+        foreach ($names as $name) {
+            $this->module[$name] = true;
+        }
 
         return $this;
     }

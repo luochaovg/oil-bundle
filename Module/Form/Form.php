@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Form\Entity\Traits\Area;
 use Leon\BswBundle\Module\Form\Entity\Traits\Attributes;
 use Leon\BswBundle\Module\Form\Entity\Traits\AutoFocus;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonBlock;
@@ -13,6 +14,7 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
 use Leon\BswBundle\Module\Form\Entity\Traits\FormData;
+use Leon\BswBundle\Module\Form\Entity\Traits\FormScene;
 use Leon\BswBundle\Module\Form\Entity\Traits\Key;
 use Leon\BswBundle\Module\Form\Entity\Traits\Label;
 use Leon\BswBundle\Module\Form\Entity\Traits\Name;
@@ -42,6 +44,8 @@ abstract class Form
     use ButtonType;
     use ButtonBlock;
     use ButtonStyle;
+    use FormScene;
+    use Area;
 
     /**
      * @return string

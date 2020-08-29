@@ -31,7 +31,7 @@ class Map extends Chart
     protected function init()
     {
         $this->setSelectedMode(Abs::SELECTOR_MODE_SINGLE)
-            ->moduleDisable('legend', 'grid', 'axisX', 'axisY')
+            ->moduleDisable(Abs::CHART_LEGEND, Abs::CHART_GRID, Abs::CHART_AXIS_X, Abs::CHART_AXIS_Y)
             ->setTooltipField('formatter', $this->getTooltipTpl())
             ->setTooltipField('trigger', 'item')
             ->setLegendTitle(array_keys($this->getDataList()));
@@ -90,7 +90,7 @@ class Map extends Chart
      */
     protected function rebuildOption(array $option): array
     {
-        if ($this->moduleState('mapVisual')) {
+        if ($this->moduleState(Abs::CHART_MAP_VISUAL)) {
             $option['visualMap'] = [
                 'type'       => 'piecewise',
                 'show'       => !$this->isMobile(),

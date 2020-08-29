@@ -218,6 +218,15 @@ class Module extends Bsw
         $persistAnnotationHandling = $persistAnnotation;
 
         foreach ($persistAnnotation as $field => $item) {
+            /**
+             * @var Form $form
+             */
+            $form = $item['type'];
+            if (!$form->formSceneState(Abs::TAG_PERSISTENCE)) {
+                $formClass = get_class($form);
+                throw new ModuleException("Form item `{$formClass}` not support in persistence scene");
+            }
+
             $this->handleForFieldHook($field, $item['hook'], $hooks);
             if (!$item['show']) {
                 unset($persistAnnotation[$field]);

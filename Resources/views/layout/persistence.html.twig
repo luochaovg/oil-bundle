@@ -5,6 +5,7 @@
 {% use 'javascript/persistence.md.twig' %}
 
 {% block page %}
+  {% set persistenceArea = 'good' %}
   {% block persistenceBefore %}{% endblock %}
   {% block persistence %}
     {% set view = scaffold.get.view ?? false %}
@@ -20,7 +21,7 @@
         <!-- xs < sm < md < lg < xl < xxl -->
         {% set small = scaffold.iframe ? 'sm' : 'md' %}
         {% set large = scaffold.iframe ? 'md' : 'lg' %}
-        {% for field, item in persistence.record %}
+        {% for field, item in persistence.record if item.type|formArea(persistenceArea ?? null) %}
           {% set form = item.type %}
           {% set wrapperColumn = item.column ?: (totalColumn - labelColumn) %}
           {% set meta = "persistenceFieldShapeNow." ~ field %}

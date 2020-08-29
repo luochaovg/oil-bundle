@@ -19,7 +19,7 @@ bsw.configure({
                         });
                     {% endif %}
                 } catch(e) {
-                    console.log("Build chart error when name = `{{ item.name }}`.");
+                    console.warning("Build chart error when name = `{{ item.name }}`.");
                     console.error(e);
                 }
             {% endfor %}

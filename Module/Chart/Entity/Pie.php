@@ -26,7 +26,7 @@ class Pie extends Chart
         $this->setLegendTitle($this->getDataField())
             ->setTooltipField('trigger', 'item')
             ->setTooltipField('formatter', $this->getTooltipTpl())
-            ->moduleDisable('axisX', 'axisY');
+            ->moduleDisable(Abs::CHART_AXIS_X, Abs::CHART_AXIS_X);
     }
 
     /**

@@ -42,6 +42,7 @@ class Button extends Form
      */
     public function __construct(string $label = null, string $route = null, string $icon = null, string $type = null)
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setType($type ?? Abs::THEME_PRIMARY);
         $this->setHtmlType(Abs::TYPE_BUTTON);
 

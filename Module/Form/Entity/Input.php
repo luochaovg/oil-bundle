@@ -29,6 +29,7 @@ class Input extends Form
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setAllowClear(false);
         $this->setType(Abs::TYPE_TEXT);
     }

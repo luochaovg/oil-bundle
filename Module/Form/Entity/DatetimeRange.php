@@ -14,6 +14,14 @@ class DatetimeRange extends Datetime
     use Separator;
 
     /**
+     * DatetimeRange constructor.
+     */
+    public function __construct()
+    {
+        $this->formSceneEnable(Abs::TAG_FILTER);
+    }
+
+    /**
      * @return string
      */
     public function getItemName(): string

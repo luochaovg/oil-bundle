@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonLabel;
 use Leon\BswBundle\Module\Form\Entity\Traits\Max;
 use Leon\BswBundle\Module\Form\Entity\Traits\Min;
@@ -24,6 +25,7 @@ class Number extends Form
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setButtonLabel('Popup for select');
     }
 }

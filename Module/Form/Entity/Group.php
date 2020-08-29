@@ -3,6 +3,7 @@
 namespace Leon\BswBundle\Module\Form\Entity;
 
 use Leon\BswBundle\Component\Helper;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Form;
 
 class Group extends Form
@@ -31,6 +32,14 @@ class Group extends Form
      * @var int|array
      */
     protected $gutter = 8;
+
+    /**
+     * Group constructor.
+     */
+    public function __construct()
+    {
+        $this->formSceneEnable(Abs::TAG_FILTER);
+    }
 
     /**
      * @return Form[]

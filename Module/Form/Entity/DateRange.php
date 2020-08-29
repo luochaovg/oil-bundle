@@ -14,6 +14,7 @@ class DateRange extends DatetimeRange
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setFormat('YYYY-MM-DD');
         $this->setShowTime(false);
     }

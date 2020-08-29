@@ -94,7 +94,7 @@ abstract class Chart
         $titleNumber = (($this->getTitleText() ? 1 : 0) + ($this->getSubTitleText() ? 1 : 0));
 
         // title
-        if ($this->moduleState('title')) {
+        if ($this->moduleState(Abs::CHART_TITLE)) {
             $option['title'] = Helper::merge(
                 [
                     'text'      => $this->getTitleText(),
@@ -114,13 +114,13 @@ abstract class Chart
         }
 
         // tooltip
-        if ($this->moduleState('tooltip')) {
+        if ($this->moduleState(Abs::CHART_TOOLTIP)) {
             $this->setTooltipField('position', $this->getTooltipPosition());
             $option['tooltip'] = $this->getTooltip();
         }
 
         // legend
-        if ($this->moduleState('legend')) {
+        if ($this->moduleState(Abs::CHART_LEGEND)) {
             $option['legend'] = Helper::merge(
                 [
                     'data'         => $this->getLegendTitle(),
@@ -136,7 +136,7 @@ abstract class Chart
         }
 
         // toolbox
-        if ($this->moduleState('toolbox') && !$this->isMobile()) {
+        if ($this->moduleState(Abs::CHART_TOOLBOX) && !$this->isMobile()) {
             $option['toolbox'] = Helper::merge(
                 [
                     'orient'   => 'vertical',
@@ -156,7 +156,7 @@ abstract class Chart
         }
 
         // grid
-        if ($this->moduleState('grid')) {
+        if ($this->moduleState(Abs::CHART_GRID)) {
             $titleNumberMapToBottom = [
                 0 => 15,
                 1 => 45,
@@ -175,18 +175,18 @@ abstract class Chart
         }
 
         // x-axis
-        if ($this->moduleState('axisX')) {
+        if ($this->moduleState(Abs::CHART_AXIS_X)) {
             $this->setAxisXField('data', $this->getAxisXTitle());
             $option['xAxis'] = $this->getAxisX();
         }
 
         // y-axis
-        if ($this->moduleState('axisY')) {
+        if ($this->moduleState(Abs::CHART_AXIS_Y)) {
             $option['yAxis'] = $this->getAxisY();
         }
 
         // zoom
-        if ($this->moduleState('zoom')) {
+        if ($this->moduleState(Abs::CHART_ZOOM)) {
 
             $maxZoom = $this->getMaxZoom();
             $totalXAxis = count($this->getDataField());
@@ -211,7 +211,7 @@ abstract class Chart
         }
 
         // series
-        if ($this->moduleState('series')) {
+        if ($this->moduleState(Abs::CHART_SERIES)) {
             $series = $this->getSeries();
             $seriesExtra = $this->getSeriesExtra();
 
@@ -237,7 +237,7 @@ abstract class Chart
         }
 
         // color
-        if ($this->moduleState('color')) {
+        if ($this->moduleState(Abs::CHART_COLOR)) {
             $option['color'] = $this->getColor();
         }
 

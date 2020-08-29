@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Traits\AllowClear;
 use Leon\BswBundle\Module\Form\Entity\Traits\DisabledDate;
 use Leon\BswBundle\Module\Form\Entity\Traits\DisabledTime;
@@ -18,6 +19,14 @@ class Datetime extends Form
     use ShowTime;
     use DisabledDate;
     use DisabledTime;
+
+    /**
+     * Datetime constructor.
+     */
+    public function __construct()
+    {
+        $this->formSceneEnable(Abs::TAG_FILTER);
+    }
 
     /**
      * @return string

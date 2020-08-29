@@ -64,13 +64,9 @@ class SelectTree extends Form
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setOptionFilterProp(Abs::SEARCH_TITLE);
         $this->setShowCheckedStrategy(Abs::CHECKED_STRATEGY_ALL);
-        $this->setStyle(
-            [
-                'width' => '100%',
-            ]
-        );
     }
 
     /**

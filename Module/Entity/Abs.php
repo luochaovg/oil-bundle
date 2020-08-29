@@ -66,6 +66,20 @@ class Abs
     const MEDIA_XL  = 1200;
     const MEDIA_XXL = 1600;
 
+    const CHART_TITLE      = 'title';
+    const CHART_TOOLTIP    = 'tooltip';
+    const CHART_TOOLBOX    = 'toolbox';
+    const CHART_LEGEND     = 'legend';
+    const CHART_GRID       = 'grid';
+    const CHART_AXIS_X     = 'axisX';
+    const CHART_AXIS_Y     = 'axisY';
+    const CHART_ZOOM       = 'zoom';
+    const CHART_SERIES     = 'series';
+    const CHART_LINE       = 'line';
+    const CHART_POINT      = 'point';
+    const CHART_MAP_VISUAL = 'mapVisual';
+    const CHART_COLOR      = 'color';
+
     const BUTTON_OUTLINE = 'outline';
     const BUTTON_SOLID   = 'solid';
 

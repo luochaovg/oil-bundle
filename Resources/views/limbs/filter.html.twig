@@ -7,7 +7,7 @@
       layout="vertical"
       @submit="filterSubmit"
     >
-      {% for key, item in filter.filter %}
+      {% for key, item in filter.filter if item.type|formArea(filterArea ?? null) %}
         <transition
           enter-active-class="animated {{ scaffold.cnf.twigFilterItemAnimateIn }}"
           leave-active-class="animated {{ scaffold.cnf.twigFilterItemAnimateOut }}"

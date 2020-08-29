@@ -60,6 +60,7 @@ class Select extends Form
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setButtonLabel('Popup for select');
         $this->setMode(Abs::MODE_DEFAULT);
         $this->setOptionFilterProp(Abs::SEARCH_LABEL);

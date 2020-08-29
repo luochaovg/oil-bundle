@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 class Month extends Datetime
 {
     /**
@@ -9,6 +11,7 @@ class Month extends Datetime
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         $this->setFormat('YYYY-MM');
         $this->setShowTime(false);
     }

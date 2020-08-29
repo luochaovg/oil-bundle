@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Twig;
 
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
+use Leon\BswBundle\Module\Form\Form;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -25,6 +26,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('stringify', [Helper::class, 'jsonStringify']),
             new TwigFilter('joinClass', [$this, 'joinClass']),
             new TwigFilter('vueType', [$this, 'vueType']),
+            new TwigFilter('formArea', [$this, 'formArea']),
         ];
     }
 
@@ -176,5 +178,38 @@ class AppExtension extends AbstractExtension
         }
 
         return "'{$target}'";
+    }
+
+    /**
+     * Form area
+     *
+     * @param Form|array  $type
+     * @param string|null $area
+     *
+     * @return bool
+     */
+    public static function formArea($type, ?string $area = null): bool
+    {
+        if (empty($area)) {
+            return true;
+        }
+
+        if ($type instanceof Form) {
+            return $type->getAllowArea($area);
+        }
+
+        if (is_array($type)) {
+            $allow = 0;
+            foreach ($type as $form) {
+                /**
+                 * @var Form $form
+                 */
+                $allow += $form->getAllowArea($area) ? 1 : 0;
+            }
+
+            return $allow === count($type);
+        }
+
+        return false;
     }
 }

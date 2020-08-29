@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Module\Chart\Entity;
 
 use Leon\BswBundle\Module\Chart\Chart;
 use Leon\BswBundle\Module\Chart\Traits;
+use Leon\BswBundle\Module\Entity\Abs;
 
 class Line extends Chart
 {
@@ -119,10 +120,10 @@ class Line extends Chart
             'smooth'     => $this->isSmooth(),
             'symbolSize' => 6,
             'markPoint'  => [
-                'data' => $this->moduleState('point') ? $this->getPoint() : null,
+                'data' => $this->moduleState(Abs::CHART_POINT) ? $this->getPoint() : null,
             ],
             'markLine'   => [
-                'data'     => $this->moduleState('line') ? $this->getLine() : null,
+                'data'     => $this->moduleState(Abs::CHART_LINE) ? $this->getLine() : null,
                 'symbol'   => ['none', 'none'],
                 'label'    => [
                     'position' => 'insideStartTop',

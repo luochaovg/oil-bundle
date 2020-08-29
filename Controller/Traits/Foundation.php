@@ -127,21 +127,6 @@ trait Foundation
     //
 
     /**
-     * @var bool
-     */
-    protected $ajax;
-
-    /**
-     * @var bool
-     */
-    protected $mobile;
-
-    /**
-     * @var bool
-     */
-    protected $iframe;
-
-    /**
      * @var string
      */
     protected $env;
@@ -155,11 +140,6 @@ trait Foundation
      * @var array
      */
     protected $cnf;
-
-    /**
-     * @var object
-     */
-    protected $logic;
 
     /**
      * @var string
@@ -263,7 +243,6 @@ trait Foundation
         $config = $this->parameters('cnf', false);
         $config = $this->dispatchMethod(Abs::FN_EXTRA_CONFIG, $config, [$config]);
         $this->cnf = (object)$config;
-        $this->logic = (object)[];
 
         $this->iNeedCost(Abs::BEGIN_CONSTRUCT);
 

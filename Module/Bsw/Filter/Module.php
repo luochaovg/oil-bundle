@@ -242,6 +242,15 @@ class Module extends Bsw
          */
         $hooks = [];
         foreach ($filterAnnotation as $field => $item) {
+            /**
+             * @var Form $form
+             */
+            $form = $item['type'];
+            if (!$form->formSceneState(Abs::TAG_FILTER)) {
+                $formClass = get_class($form);
+                throw new ModuleException("Form item `{$formClass}` not support in filter scene");
+            }
+
             $this->handleForFieldHook($field, $item['hook'], $hooks);
             if (!$item['show']) {
                 unset($filterAnnotation[$field]);

@@ -2,6 +2,8 @@
 
 namespace Leon\BswBundle\Module\Form\Entity;
 
+use Leon\BswBundle\Module\Entity\Abs;
+
 class Week extends Datetime
 {
     /**
@@ -9,6 +11,7 @@ class Week extends Datetime
      */
     public function __construct()
     {
+        $this->formSceneEnable(Abs::TAG_FILTER);
         /**
          * @see https://momentjs.com/docs/#/displaying/format
          */
