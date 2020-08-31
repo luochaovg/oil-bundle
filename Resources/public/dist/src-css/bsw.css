@@ -8,8 +8,7 @@
 .ant-layout-sider,
 .bsw-foundation,
 .bsw-body,
-.bsw-loading,
-.bsw-loading > .ant-spin-container {
+.bsw-loading {
   height: 100%;
 }
 /* Cover */
@@ -17,11 +16,11 @@
   z-index: 1000;
   position: fixed;
 }
-.ant-tooltip {
-  z-index: 998;
-}
 .ant-spin-blur:after {
   opacity: 0;
+}
+.ant-tooltip {
+  z-index: 998;
 }
 div.ant-modal-mask {
   background-color: rgba(0, 0, 0, 0.2);
@@ -1249,7 +1248,10 @@ div.modal-container-center div.ant-modal-body > div {
 .bsw-scroll-x:hover {
   background: rgba(0, 0, 0, 0.3);
 }
-.hljs {
+.bsw-modal .hljs {
   background: transparent !important;
+}
+.ant-table-body {
+  overflow-x: auto !important;
 }
 /*# sourceMappingURL=bsw.css.map */
