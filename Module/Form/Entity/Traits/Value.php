@@ -14,7 +14,7 @@ trait Value
      */
     public function getValue()
     {
-        return $this->value;
+        return str_replace(['`'], ['\`'], $this->value);
     }
 
     /**
