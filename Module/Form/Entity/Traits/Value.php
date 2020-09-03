@@ -14,6 +14,10 @@ trait Value
      */
     public function getValue()
     {
+        if (empty($this->value) || !is_string($this->value)) {
+            return $this->value;
+        }
+
         return str_replace(['`'], ['\`'], $this->value);
     }
 

@@ -402,7 +402,7 @@ class BswBackendController extends BswWebController
         $moduleList = Helper::sortArray($moduleList, 'sort');
 
         $acmeArgs = $this->displayArgsScaffold();
-        $globalArgs = (array)Helper::dig($acmeArgs, 'logic');
+        $globalArgs = Helper::dig($acmeArgs, 'logic');
         $logicArgs = ['logic' => array_merge($globalArgs, $routeArgs)];
         $logicArgsAjax = [];
 

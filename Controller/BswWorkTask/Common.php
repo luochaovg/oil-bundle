@@ -565,6 +565,7 @@ trait Common
                 ->setIcon('a:bug')
                 ->setDisplay($team)
                 ->setClick('showIFrame')
+                ->setStyle(['margin' => '3px 0 3px 4px'])
                 ->setArgs(
                     [
                         'width'  => Abs::MEDIA_SM,
@@ -578,6 +579,7 @@ trait Common
                 ->setRoute($this->cnf->route_logout)
                 ->setIcon($this->cnf->icon_logout)
                 ->setDisplay($team)
+                ->setStyle(['margin' => '3px 0 3px 4px'])
                 ->setConfirm($this->messageLang('Are you sure')),
         ];
     }
@@ -597,6 +599,6 @@ trait Common
 
         $leader = $leader ? ' 🚩' : null;
         $this->cnf->copyright = "{$title} © {$this->usr('usr_account')}{$leader}";
-        $this->logic->display = ['menu', 'header', 'crumbs'];
+        $this->logicMerge('display', ['menu', 'header', 'crumbs']);
     }
 }

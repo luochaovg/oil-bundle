@@ -652,15 +652,21 @@ trait Foundation
      *
      * @param string $host
      * @param bool   $schemeNeed
-     * @param bool   $portNeed
+     * @param bool   $autoPortNeed
      *
      * @return string
      */
-    public function host(string $host = null, bool $schemeNeed = true, $portNeed = true): string
+    public function host(string $host = null, bool $schemeNeed = true, bool $autoPortNeed = true): string
     {
         $request = $this->request();
 
-        if (!$host) {
+        if (empty($host) && $this->cnf->proxy_pass) {
+            $host = $this->cnf->proxy_pass;
+            $schemeNeed = true;
+            $autoPortNeed = false;
+        }
+
+        if (empty($host)) {
             if (empty($this->cnf->host)) {
                 $host = $request->getHost();
             } else {
@@ -680,7 +686,7 @@ trait Foundation
         }
 
         $port = null;
-        if ($portNeed && !parse_url($host, PHP_URL_PORT)) {
+        if ($autoPortNeed && !parse_url($host, PHP_URL_PORT)) {
             $port = $request->getPort();
             $port = (in_array($port, [null, 80, 443]) ? null : ":{$port}");
         }
@@ -712,10 +718,10 @@ trait Foundation
         $referenceType = $abs ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH;
         $url = $this->generateUrl($route, $params, $referenceType);
 
-        if ($abs && $host = $this->cnf->proxy_pass) {
+        if ($abs && $this->cnf->proxy_pass) {
             $items = explode('/', $url);
             $errorHost = "{$items[0]}//{$items[2]}";
-            $url = str_replace($errorHost, $this->host($host, true, false), $url);
+            $url = str_replace($errorHost, $this->host(), $url);
         }
 
         return $url;

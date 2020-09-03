@@ -26,6 +26,7 @@ abstract class BswWebController extends AbstractController
 {
     use CT\Foundation,
         CT\WebAccess,
+        CT\WebArgs,
         CT\WebCrumbs,
         CT\WebResponse,
         CT\WebSeo,
@@ -47,11 +48,6 @@ abstract class BswWebController extends AbstractController
      * @var bool
      */
     protected $iframe;
-
-    /**
-     * @var object
-     */
-    protected $logic;
 
     /**
      * @var string
@@ -76,7 +72,6 @@ abstract class BswWebController extends AbstractController
         $this->ajax = $this->request()->isXmlHttpRequest();
         $this->mobile = Helper::isMobile();
         $this->iframe = !!$this->getArgs('iframe');
-        $this->logic = (object)[];
 
         // history for last time
         $args = $this->getArgs();

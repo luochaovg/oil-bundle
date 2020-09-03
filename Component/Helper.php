@@ -1070,16 +1070,26 @@ class Helper
     /**
      * Get current url
      *
+     * @param bool $useServerName
+     *
      * @return string
      */
-    public static function currentUrl(): string
+    public static function currentUrl(bool $useServerName = false): string
     {
         $scheme = 'http';
         if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
             $scheme = 'https';
         }
 
-        $url = "{$scheme}://{$_SERVER['HTTP_HOST']}";
+        if ($useServerName) {
+            $url = "{$scheme}://{$_SERVER['SERVER_NAME']}";
+            if (!in_array($_SERVER['SERVER_PORT'], [null, 80, 443])) {
+                $url .= ":{$_SERVER['SERVER_PORT']}";
+            }
+        } else {
+            $url = "{$scheme}://{$_SERVER['HTTP_HOST']}";
+        }
+
         $url .= $_SERVER['REQUEST_URI'];
 
         return $url;
