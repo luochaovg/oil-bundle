@@ -50,7 +50,9 @@ trait WebArgs
         if (!isset($this->logic[$key])) {
             $this->logic[$key] = [];
         }
+
         $this->logic[$key] = array_merge($this->logic[$key], $value);
+        $this->logic[$key] = array_filter(array_unique($this->logic[$key]));
 
         return $this;
     }
@@ -68,7 +70,9 @@ trait WebArgs
         if (!isset($this->logic[$key])) {
             $this->logic[$key] = [];
         }
+
         array_push($this->logic[$key], $value);
+        $this->logic[$key] = array_filter(array_unique($this->logic[$key]));
 
         return $this;
     }
