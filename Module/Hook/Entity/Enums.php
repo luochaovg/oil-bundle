@@ -16,7 +16,7 @@ class Enums extends Hook
      */
     public function preview($value, array $args)
     {
-        $value = $args[$value] ?? Abs::DIRTY;
+        $value = $args['enum'][$value] ?? Abs::DIRTY;
         $trans = $args['trans'] ?? null;
 
         if (is_object($trans) && $trans instanceof TranslatorInterface) {

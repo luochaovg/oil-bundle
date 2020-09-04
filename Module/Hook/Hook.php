@@ -5,6 +5,7 @@ namespace Leon\BswBundle\Module\Hook;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\HookException;
+use Leon\BswBundle\Module\Hook\Entity\Enums;
 
 abstract class Hook
 {
@@ -78,6 +79,9 @@ abstract class Hook
         }
 
         // to hook
+        if ($this instanceof Enums) {
+            $args = ['enum' => $args];
+        }
         $args = array_merge($extraArgs, $args);
         $this->item->{$this->field} = $this->{$fn}($value, $args);
 
