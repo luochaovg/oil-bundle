@@ -18,12 +18,16 @@ class Pie extends Chart
     protected $type = 'pie';
 
     /**
+     * @var string
+     */
+    protected $dataFieldKey = 'name';
+
+    /**
      * @inheritdoc
      * @return void
      */
     protected function init()
     {
-        $this->setDataFieldKey('name');
         $this->setLegendTitle($this->getDataField())
             ->setTooltipField('trigger', 'item')
             ->setTooltipField('formatter', $this->getTooltipTpl())
