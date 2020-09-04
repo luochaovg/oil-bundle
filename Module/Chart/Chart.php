@@ -15,6 +15,7 @@ abstract class Chart
         Traits\BackgroundColor,
         Traits\Color,
         Traits\DataField,
+        Traits\DataFieldKey,
         Traits\DataList,
         Traits\Grid,
         Traits\Height,
@@ -68,7 +69,11 @@ abstract class Chart
         $data = $this->getDataList();
         foreach ($data as $key => &$item) {
             if (!$this->getDataField()) {
-                $this->setDataField(array_keys($item));
+                if ($key = $this->getDataFieldKey()) {
+                    $this->setDataField(array_column($item, $key));
+                } else {
+                    $this->setDataField(array_keys($item));
+                }
             }
             $item = array_values($item);
         }

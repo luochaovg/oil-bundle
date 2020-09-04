@@ -23,6 +23,7 @@ class Pie extends Chart
      */
     protected function init()
     {
+        $this->setDataFieldKey('name');
         $this->setLegendTitle($this->getDataField())
             ->setTooltipField('trigger', 'item')
             ->setTooltipField('formatter', $this->getTooltipTpl())
