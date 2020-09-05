@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Module\Form\Entity\Traits;
 
+use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 
 trait Args
@@ -16,7 +17,7 @@ trait Args
      */
     public function getArgs(): array
     {
-        return $this->args;
+        return Helper::urlEncodeValues($this->args);
     }
 
     /**
@@ -26,7 +27,7 @@ trait Args
      */
     public function getArgsItem(string $key)
     {
-        return $this->args[$key] ?? null;
+        return $this->getArgs()[$key] ?? null;
     }
 
     /**
@@ -34,7 +35,7 @@ trait Args
      */
     public function getArgsString(): string
     {
-        return Html::paramsBuilder($this->args);
+        return Html::paramsBuilder($this->getArgs());
     }
 
     /**

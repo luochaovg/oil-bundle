@@ -2,6 +2,7 @@
 
 namespace Leon\BswBundle\Component;
 
+use Doctrine\ORM\Query\Expr\Math;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
 use InvalidArgumentException;
@@ -2008,13 +2009,14 @@ class Helper
      * Numeric value
      *
      * @param mixed $num
+     * @param mixed $default
      *
      * @return float|int
      */
-    public static function numericValue($num)
+    public static function numericValue($num, $default = null)
     {
         if (!is_numeric($num)) {
-            return $num;
+            return $default ?? $num;
         }
 
         if (self::isIntNumeric($num)) {
@@ -2062,6 +2064,26 @@ class Helper
                 $params[$key] = self::stringValues($value);
             } elseif (is_numeric($value)) {
                 $params[$key] = strval($value);
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Url encode values
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public static function urlEncodeValues(array $params): array
+    {
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $params[$key] = self::urlEncodeValues($value);
+            } elseif (is_string($value)) {
+                $params[$key] = urlencode($value);
             }
         }
 
@@ -4856,7 +4878,7 @@ class Helper
     /**
      * Number format
      *
-     * @param number $number
+     * @param string $number
      * @param int    $decimals
      * @param string $thousandsSep
      * @param string $decPoint

