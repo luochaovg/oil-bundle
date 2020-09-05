@@ -30,13 +30,6 @@ parameters:
     backend_with_google_secret: true
     backend_with_ip_strict: true
     backend_ip_limit: false
-    bsw_backend_allow_ips:
-        - 0.0.0.0
-        - 127.0.0.1
-        - 172.16.0.0/16
-        - 172.17.0.0/16
-        - 172.18.0.0/16
-        - 172.19.0.0/16
 
     backend_maintain_alone: true
     backend_with_login_log: true
@@ -80,6 +73,11 @@ parameters:
 
     doctrine_prefix: null
     doctrine_prefix_mode: remove # add、remove
+
+    currency_code: CNY
+    currency_char: ￥
+
+    module_extra_path: []
 
     wx_official_default:
         app_id: app-id
@@ -239,10 +237,13 @@ parameters:
         twig_scroll_x_left_icon: b:icon-back
         twig_scroll_x_right_icon: b:icon-more
 
-    currency_code: CNY
-    currency_char: ￥
-
-    module_extra_path: []
+    bsw_backend_allow_ips:
+        - 0.0.0.0
+        - 127.0.0.1
+        - 172.16.0.0/16
+        - 172.17.0.0/16
+        - 172.18.0.0/16
+        - 172.19.0.0/16
 
     bsw_route_exclude_login:
         - app_user_login
@@ -321,6 +322,24 @@ parameters:
         autoHeightOverOffset: yes
         scrollXMinHeight: 300
         scrollXFadeDuration: 100
+
+    bsw_module_input_args:
+        Leon\BswBundle\Module\Bsw\Away\Module: []
+        Leon\BswBundle\Module\Bsw\Chart\Module: []
+        Leon\BswBundle\Module\Bsw\Crumbs\Module: []
+        Leon\BswBundle\Module\Bsw\Data\Module: []
+        Leon\BswBundle\Module\Bsw\Drawer\Module: []
+        Leon\BswBundle\Module\Bsw\Filter\Module: []
+        Leon\BswBundle\Module\Bsw\Footer\Module: []
+        Leon\BswBundle\Module\Bsw\Header\Module: []
+        Leon\BswBundle\Module\Bsw\Menu\Module: []
+        Leon\BswBundle\Module\Bsw\Modal\Module: []
+        Leon\BswBundle\Module\Bsw\Operate\Module: []
+        Leon\BswBundle\Module\Bsw\Persistence\Module: []
+        Leon\BswBundle\Module\Bsw\Preview\Module: []
+        Leon\BswBundle\Module\Bsw\Result\Module: []
+        Leon\BswBundle\Module\Bsw\Tabs\Module: []
+        Leon\BswBundle\Module\Bsw\Welcome\Module: []
 
 services:
 

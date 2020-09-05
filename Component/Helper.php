@@ -2083,7 +2083,7 @@ class Helper
             if (is_array($value)) {
                 $params[$key] = self::urlEncodeValues($value);
             } elseif (is_string($value)) {
-                $params[$key] = urlencode($value);
+                $params[$key] = rawurlencode($value);
             }
         }
 

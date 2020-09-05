@@ -70,13 +70,13 @@ trait Preview
      *
      * @return Charm
      */
-    protected function printJson(string $label, string $value): Charm
+    protected function printJson(string $label, ?string $value): Charm
     {
         if (substr_count($value, "\n") + 1 < 20) {
             return new Charm(Abs::HTML_JSON, $value);
         }
 
-        $button = (new ButtonScene($label))->sceneCharmJsonModal($value);
+        $button = (new ButtonScene($label))->sceneCharmCodeModal($value);
 
         return new Charm($this->getButtonHtml($button));
     }
@@ -125,9 +125,14 @@ trait Preview
             return $args;
         }
 
-        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT);
+        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT_GH);
         $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
 
-        return $this->showPreview();
+        return $this->showPreview(
+            [
+                'function'     => 'initHighlightBlock',
+                'functionArgs' => ['selector' => 'pre.bsw-long-text code'],
+            ]
+        );
     }
 }

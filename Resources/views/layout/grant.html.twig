@@ -40,7 +40,7 @@
           <a-form-item
             :label-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
             :wrapper-col="{'xs':24, 'sm':24, 'md':24, 'lg':24, 'xl':24, 'xxl':24}"
-            label="{{ item.info }} ←"
+            label="{{ item.info }}"
           >
             {% set initial = (item.type.value is empty) ? null : ('"' ~ item.type.value|join('","') ~ '"') %}
             <a-checkbox-group

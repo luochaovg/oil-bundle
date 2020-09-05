@@ -14,7 +14,7 @@ class UrlCode extends Hook
      */
     public function preview($value, array $args)
     {
-        return urldecode($value);
+        return rawurldecode($value);
     }
 
     /**
@@ -25,6 +25,6 @@ class UrlCode extends Hook
      */
     public function persistence($value, array $args)
     {
-        return urlencode($value);
+        return rawurlencode($value);
     }
 }

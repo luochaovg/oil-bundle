@@ -403,9 +403,10 @@ class BswBackendController extends BswWebController
 
         $acmeArgs = $this->displayArgsScaffold();
         $globalArgs = Helper::dig($acmeArgs, 'logic');
-        $logicArgs = ['logic' => array_merge($globalArgs, $routeArgs)];
-        $logicArgsAjax = [];
+        $globalArgs = Helper::merge($this->parameters('module_input_args') ?? [], $globalArgs);
+        $logicArgs = ['logic' => Helper::merge($globalArgs, $routeArgs)];
 
+        $logicArgsAjax = [];
         $beforeOutput = [];
         $logic = &$logicArgs['logic'];
 

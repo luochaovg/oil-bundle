@@ -513,7 +513,8 @@ class ButtonScene extends Button
             ['class' => 'bsw-pre bsw-long-text']
         );
 
-        return $this->setContentModal($content)
+        return $this
+            ->setContentModal($content)
             ->setSize(Abs::SIZE_SMALL)
             ->setType(Abs::THEME_DEFAULT)
             ->setAutoTitle()
@@ -538,14 +539,16 @@ class ButtonScene extends Button
      *
      * @return ButtonScene
      */
-    public function sceneCharmJsonModal($content, array $options = [])
+    public function sceneCharmCodeModal($content, array $options = [])
     {
         $content = Helper::formatPrintJson($content, 2, ': ');
         $content = Html::cleanHtml($content, true);
-        $content = Html::tag('code', $content, ['class' => 'language-json']);
+        $language = $options['language'] ?? 'json';
+        $content = Html::tag('code', $content, ['class' => "language-{$language}"]);
 
-        return $this->sceneCharmContentModal($content, $options)
-            ->setShowIframeWhenDone('initHighlightBlock', ['selector' => 'div.ant-modal-body code.language-json'])
+        return $this
+            ->sceneCharmContentModal($content, $options)
+            ->setShowIframeWhenDone('initHighlightBlock', ['selector' => '.ant-modal-body code'])
             ->setWidth(600)
             ->setNoTitle();
     }
@@ -556,9 +559,12 @@ class ButtonScene extends Button
      *
      * @return ButtonScene
      */
-    public function sceneCharmJsonDrawer($content, array $options = [])
+    public function sceneCharmCodeDrawer($content, array $options = [])
     {
-        return $this->sceneCharmJsonModal($content, $options)->setClick('showDrawer');
+        return $this
+            ->sceneCharmCodeModal($content, $options)
+            ->setShowIframeWhenDone('initHighlightBlock', ['selector' => '.ant-drawer-body code'])
+            ->setClick('showDrawer');
     }
 
     /**
@@ -570,7 +576,8 @@ class ButtonScene extends Button
      */
     public function sceneRemoveByAjax(string $route, int $id, string $confirm = null)
     {
-        return $this->setType(Abs::THEME_DANGER)
+        return $this
+            ->setType(Abs::THEME_DANGER)
             ->setIcon('b:icon-delete1')
             ->setId($id)
             ->setAjaxRequest($route)

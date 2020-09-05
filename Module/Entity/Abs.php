@@ -241,20 +241,21 @@ class Abs
         'en' => 'npm;@ckeditor/ckeditor5-build-decoupled-document/build/translations/en-gb.js',
     ];
 
-    const CSS_ANT_D      = 'npm;ant-design-vue/dist/antd.min.css';
-    const CSS_ELE        = 'npm;element-ui/lib/theme-chalk/index.css';
-    const CSS_ANIMATE    = 'npm;animate.css/animate.min.css';
-    const CSS_CROPPER    = 'npm;cropper/dist/cropper.min.css';
-    const CSS_PHOTOS     = 'npm;photoswipe/dist/photoswipe.css';
-    const CSS_FANCY_BOX  = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.css';
-    const CSS_HIGHLIGHT  = 'npm;@highlightjs/cdn-assets/styles/default.min.css';
-    const CSS_ANT_D_BSW  = 'diy;antd.bsw.keep.css';
-    const CSS_ANT_D_ALI  = 'diy;antd.aliyun.keep.css';
-    const CSS_ANT_D_TALK = 'diy;antd.talk.keep.css';
-    const CSS_BSW        = 'diy;bsw.css';
-    const CSS_WEB        = 'diy;web.css';
-    const CSS_EDITOR     = 'diy;third/ckeditor5.css';
-    const CSS_MARKDOWN   = 'diy;markdown.css';
+    const CSS_ANT_D        = 'npm;ant-design-vue/dist/antd.min.css';
+    const CSS_ELE          = 'npm;element-ui/lib/theme-chalk/index.css';
+    const CSS_ANIMATE      = 'npm;animate.css/animate.min.css';
+    const CSS_CROPPER      = 'npm;cropper/dist/cropper.min.css';
+    const CSS_PHOTOS       = 'npm;photoswipe/dist/photoswipe.css';
+    const CSS_FANCY_BOX    = 'npm;@fancyapps/fancybox/dist/jquery.fancybox.min.css';
+    const CSS_HIGHLIGHT    = 'npm;@highlightjs/cdn-assets/styles/default.min.css';
+    const CSS_HIGHLIGHT_GH = 'npm;@highlightjs/cdn-assets/styles/github.min.css';
+    const CSS_ANT_D_BSW    = 'diy;antd.bsw.keep.css';
+    const CSS_ANT_D_ALI    = 'diy;antd.aliyun.keep.css';
+    const CSS_ANT_D_TALK   = 'diy;antd.talk.keep.css';
+    const CSS_BSW          = 'diy;bsw.css';
+    const CSS_WEB          = 'diy;web.css';
+    const CSS_EDITOR       = 'diy;third/ckeditor5.css';
+    const CSS_MARKDOWN     = 'diy;markdown.css';
 
     /**
      * About framework
