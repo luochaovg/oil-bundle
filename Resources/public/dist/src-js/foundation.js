@@ -2045,63 +2045,91 @@ var FoundationAntD = function (_FoundationTools) {
         }
 
         /**
+         * Location after response
+         *
+         * @param result
+         * @param success
+         */
+
+    }, {
+        key: 'responseLocation',
+        value: function responseLocation(result) {
+            var success = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            if (typeof result.sets.href !== 'undefined') {
+                location.href = result.sets.href || location.href;
+            }
+        }
+
+        /**
+         * Run function after response
+         *
+         * @param result
+         * @param success
+         * @returns {void|*}
+         */
+
+    }, {
+        key: 'responseFunction',
+        value: function responseFunction(result) {
+            var success = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            var v = bsw.cnf.v;
+            v.$nextTick(function () {
+                var sets = typeof result.sets.function === 'undefined' ? result.sets.logic || {} : result.sets;
+                var successDo = typeof sets.functionSuccess === 'undefined' ? true : sets.functionSuccess;
+                var failedDo = typeof sets.functionFailed === 'undefined' ? false : sets.functionFailed;
+                if (_typeof(sets.function) && (success && successDo || !success && failedDo)) {
+                    if (typeof v[sets.function] !== 'undefined') {
+                        return v[sets.function](sets.functionArgs || {});
+                    } else if (typeof bsw[sets.function] !== 'undefined') {
+                        return bsw[sets.function](sets.functionArgs || {});
+                    }
+                    return console.warn('Method ' + sets.function + ' is undefined.');
+                }
+            });
+        }
+
+        /**
+         * Logic after response
+         *
+         * @param result
+         * @param success
+         */
+
+    }, {
+        key: 'responseLogic',
+        value: function responseLogic(result) {
+            var success = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            bsw.responseLocation(result, success);
+            bsw.responseFunction(result, success);
+        }
+
+        /**
          * Handler for response
          *
          * @param result
-         * @param successSameHandler
-         * @param failedSameHandler
          * @param duration
          */
 
     }, {
         key: 'response',
-        value: function response(result, successSameHandler, failedSameHandler, duration) {
+        value: function response(result, duration) {
             if (typeof result.code === 'undefined') {
                 return bsw.error(bsw.lang.response_error_message);
             }
-
             var that = this;
             return new Promise(function (resolve, reject) {
-
-                var failedHandler = function failedHandler(result) {
-                    reject(result);
-                    if (typeof result.sets.href !== 'undefined') {
-                        location.href = result.sets.href || location.href;
-                    }
-                };
-
-                var successHandler = function successHandler(result) {
-                    resolve(result);
-                    if (typeof result.sets.href !== 'undefined') {
-                        location.href = result.sets.href || location.href;
-                    }
-                };
-
-                if (result.error) {
-                    if (result.message) {
-                        var _duration = that.isNull(result.duration) ? undefined : result.duration;
-                        that[result.classify](result.message, _duration, null, result.type).then(function () {
-                            failedHandler(result);
-                        }).catch(function (reason) {
-                            console.warn(reason);
-                        });
-                    } else {
-                        failedHandler(result);
-                    }
-                    failedSameHandler && failedSameHandler(result);
+                if (result.message) {
+                    var _duration = that.isNull(result.duration) ? undefined : result.duration;
+                    that[result.classify](result.message, _duration, null, result.type).then(function () {
+                        result.error ? reject(result) : resolve(result);
+                    }).catch(function (reason) {
+                        console.warn(reason);
+                    });
                 } else {
-
-                    if (result.message) {
-                        var _duration2 = that.isNull(result.duration) ? undefined : result.duration;
-                        that[result.classify](result.message, _duration2, null, result.type).then(function () {
-                            successHandler(result);
-                        }).catch(function (reason) {
-                            console.warn(reason);
-                        });
-                    } else {
-                        successHandler(result);
-                    }
-                    successSameHandler && successSameHandler(result);
+                    result.error ? reject(result) : resolve(result);
                 }
             });
         }
@@ -2546,6 +2574,7 @@ var FoundationAntD = function (_FoundationTools) {
                         content: res.sets.content
                     }));
                     that.showModal(options);
+                    bsw.responseLogic(res);
                 }).catch(function (reason) {
                     console.warn(reason);
                 });
@@ -2833,6 +2862,8 @@ var FoundationAntD = function (_FoundationTools) {
 
         /**
          * Message auto discovery
+         *
+         * @param discovery
          */
 
     }, {
@@ -3038,7 +3069,9 @@ var FoundationAntD = function (_FoundationTools) {
             if ($(params.selector).length === 0) {
                 return;
             }
-            hljs.highlightBlock($(params.selector)[0]);
+            $(params.selector).each(function () {
+                hljs.highlightBlock(this);
+            });
         }
 
         /**
@@ -3348,7 +3381,9 @@ var FoundationAntD = function (_FoundationTools) {
                 closeDrawer && that.drawerOnCancel();
             }
             that.cnf.v.$nextTick(function () {
-                that.response(res).catch(function (reason) {
+                that.response(res).then(function () {
+                    bsw.responseLogic(res);
+                }).catch(function (reason) {
                     console.warn(reason);
                 });
             });
@@ -3400,7 +3435,7 @@ var FoundationAntD = function (_FoundationTools) {
         key: 'wxJsApiPay',
         value: function wxJsApiPay(config) {
             if (!window.WeixinJSBridge) {
-                console.log('The api just work in WeChat browser.');
+                console.warn('The api just work in WeChat browser.');
                 return;
             }
             WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {

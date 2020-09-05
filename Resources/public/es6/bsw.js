@@ -95,7 +95,9 @@ $(function () {
                 return bsw.warning(bsw.lang.select_item_first);
             }
             bsw.request(data.location, {ids: ids}).then(res => {
-                bsw.response(res).catch(reason => {
+                bsw.response(res).then(() => {
+                    bsw.responseLogic(res);
+                }).catch(reason => {
                     console.warn(reason);
                 });
                 if (typeof data.refresh !== 'undefined' && data.refresh) {
@@ -176,12 +178,13 @@ $(function () {
                 return location.href = url;
             }
             bsw.request(url).then(res => {
-                bsw.response(res).then(() => {
+                bsw.response(res).then((a) => {
                     that.previewList = res.sets.preview.list;
                     that.previewPageNumber = page;
                     that.previewUrl = url;
                     that.previewPaginationData = res.sets.preview.page;
                     that.previewImageChange();
+                    bsw.responseLogic(res);
                     history.replaceState({}, '', url);
                 }).catch(reason => {
                     console.warn(reason);
@@ -264,6 +267,7 @@ $(function () {
                     };
                     data.location = bsw.setParams(res.sets, that.init.exportApiUrl, true);
                     bsw.showIFrame(data, $('body')[0]);
+                    bsw.responseLogic(res);
                 }).catch(reason => {
                     console.warn(reason);
                 });
@@ -312,7 +316,9 @@ $(function () {
                     let fn = res.sets.function || 'handleResponse';
                     parent.postMessage({response: res, function: fn}, '*');
                 } else {
-                    bsw.response(res).catch(reason => {
+                    bsw.response(res).then(() => {
+                        bsw.responseLogic(res);
+                    }).catch(reason => {
                         console.warn(reason);
                     });
                 }
@@ -369,7 +375,9 @@ $(function () {
                 let fn = file.response.sets.function || 'handleResponse';
                 parent.postMessage({response: file.response, function: fn}, '*');
             } else {
-                bsw.response(file.response).catch(reason => {
+                bsw.response(file.response).then(() => {
+                    bsw.responseLogic(file.response);
+                }).catch(reason => {
                     console.warn(reason);
                 });
             }
@@ -389,7 +397,9 @@ $(function () {
         requestByAjax(data, element) {
             let that = this;
             bsw.request(data.location).then(res => {
-                bsw.response(res).catch(reason => {
+                bsw.response(res).then(() => {
+                    bsw.responseLogic(res);
+                }).catch(reason => {
                     console.warn(reason);
                 });
                 if (typeof data.refresh !== 'undefined' && data.refresh) {
@@ -413,6 +423,7 @@ $(function () {
                             if (ddsMeta && res.sets) {
                                 bsw.setJsonDeep(that, ddsMeta, res.sets);
                             }
+                            bsw.responseLogic(res);
                         }).catch(reason => {
                             console.warn(reason);
                         });

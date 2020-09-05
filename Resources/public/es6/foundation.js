@@ -1583,61 +1583,73 @@ class FoundationAntD extends FoundationTools {
     }
 
     /**
+     * Location after response
+     *
+     * @param result
+     * @param success
+     */
+    responseLocation(result, success = true) {
+        if (typeof result.sets.href !== 'undefined') {
+            location.href = result.sets.href || location.href;
+        }
+    }
+
+    /**
+     * Run function after response
+     *
+     * @param result
+     * @param success
+     * @returns {void|*}
+     */
+    responseFunction(result, success = true) {
+        let v = bsw.cnf.v;
+        v.$nextTick(function () {
+            let sets = typeof result.sets.function === 'undefined' ? (result.sets.logic || {}) : result.sets;
+            let successDo = (typeof sets.functionSuccess === 'undefined') ? true : sets.functionSuccess;
+            let failedDo = (typeof sets.functionFailed === 'undefined') ? false : sets.functionFailed;
+            if (typeof sets.function && ((success && successDo) || (!success && failedDo))) {
+                if (typeof v[sets.function] !== 'undefined') {
+                    return v[sets.function](sets.functionArgs || {});
+                } else if (typeof bsw[sets.function] !== 'undefined') {
+                    return bsw[sets.function](sets.functionArgs || {});
+                }
+                return console.warn(`Method ${sets.function} is undefined.`);
+            }
+        });
+    }
+
+    /**
+     * Logic after response
+     *
+     * @param result
+     * @param success
+     */
+    responseLogic(result, success = true) {
+        bsw.responseLocation(result, success);
+        bsw.responseFunction(result, success);
+    }
+
+    /**
      * Handler for response
      *
      * @param result
-     * @param successSameHandler
-     * @param failedSameHandler
      * @param duration
      */
-    response(result, successSameHandler, failedSameHandler, duration) {
+    response(result, duration) {
         if (typeof result.code === 'undefined') {
             return bsw.error(bsw.lang.response_error_message);
         }
-
         let that = this;
         return new Promise(function (resolve, reject) {
-
-            let failedHandler = function (result) {
-                reject(result);
-                if (typeof result.sets.href !== 'undefined') {
-                    location.href = result.sets.href || location.href;
-                }
-            };
-
-            let successHandler = function (result) {
-                resolve(result);
-                if (typeof result.sets.href !== 'undefined') {
-                    location.href = result.sets.href || location.href;
-                }
-            };
-
-            if (result.error) {
-                if (result.message) {
-                    let duration = that.isNull(result.duration) ? undefined : result.duration;
-                    that[result.classify](result.message, duration, null, result.type).then(() => {
-                        failedHandler(result);
-                    }).catch(reason => {
-                        console.warn(reason);
-                    });
-                } else {
-                    failedHandler(result);
-                }
-                failedSameHandler && failedSameHandler(result);
-
+            if (result.message) {
+                let duration = that.isNull(result.duration) ? undefined : result.duration;
+                that[result.classify](result.message, duration, null, result.type).then(function () {
+                    result.error ? reject(result) : resolve(result);
+                }).catch(reason => {
+                    console.warn(reason);
+                });
             } else {
-
-                if (result.message) {
-                    let duration = that.isNull(result.duration) ? undefined : result.duration;
-                    that[result.classify](result.message, duration, null, result.type).then(function () {
-                        successHandler(result);
-                    }).catch(reason => {
-                        console.warn(reason);
-                    });
-                } else {
-                    successHandler(result);
-                }
-                successSameHandler && successSameHandler(result);
+                result.error ? reject(result) : resolve(result);
             }
         });
     }
@@ -1981,6 +1993,7 @@ class FoundationAntD extends FoundationTools {
                     content: res.sets.content,
                 }));
                 that.showModal(options);
+                bsw.responseLogic(res);
             }).catch(reason => {
                 console.warn(reason);
             });
@@ -2240,6 +2253,8 @@ class FoundationAntD extends FoundationTools {
 
     /**
      * Message auto discovery
+     *
+     * @param discovery
      */
     messageAutoDiscovery(discovery) {
         let that = this;
@@ -2415,7 +2430,9 @@ class FoundationAntD extends FoundationTools {
         if ($(params.selector).length === 0) {
             return;
         }
-        hljs.highlightBlock($(params.selector)[0]);
+        $(params.selector).each(function () {
+            hljs.highlightBlock(this);
+        });
     }
 
     /**
@@ -2671,7 +2688,9 @@ class FoundationAntD extends FoundationTools {
             closeDrawer && that.drawerOnCancel();
         }
         that.cnf.v.$nextTick(function () {
-            that.response(res).catch(reason => {
+            that.response(res).then(() => {
+                bsw.responseLogic(res);
+            }).catch(reason => {
                 console.warn(reason);
             });
         });
@@ -2714,16 +2733,15 @@ class FoundationAntD extends FoundationTools {
      */
     wxJsApiPay(config) {
         if (!window.WeixinJSBridge) {
-            console.log('The api just work in WeChat browser.');
+            console.warn('The api just work in WeChat browser.');
             return;
         }
         WeixinJSBridge.invoke('getBrandWCPayRequest', config, function (result) {
-                console.log(result);
-                if (result.err_msg === 'get_brand_wcpay_request:ok') {
-                    console.log('Success');
-                }
+            console.log(result);
+            if (result.err_msg === 'get_brand_wcpay_request:ok') {
+                console.log('Success');
             }
-        );
+        });
     }
 }
 
