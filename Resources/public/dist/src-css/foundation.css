@@ -8,7 +8,8 @@
 .ant-layout-sider,
 .bsw-foundation,
 .bsw-body,
-.bsw-loading {
+.bsw-loading,
+.bsw-loading > .ant-spin-container {
   height: 100%;
 }
 /* Cover */
@@ -16,11 +17,11 @@
   z-index: 1000;
   position: fixed;
 }
-.ant-spin-blur:after {
-  opacity: 0;
-}
 .ant-tooltip {
   z-index: 998;
+}
+.ant-spin-blur:after {
+  opacity: 0;
 }
 div.ant-modal-mask {
   background-color: rgba(0, 0, 0, 0.2);

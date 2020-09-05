@@ -23,6 +23,7 @@ $(function () {
         noLoadingOnce: false,
         spinning: false,
         ckEditor: {},
+        vConsole: null,
         init: { // from v-init
             configure: {},
             message: {},
@@ -68,6 +69,9 @@ $(function () {
         })
 
     }, bsw.config.component || {})).init(function (v) {
+
+        bsw.initClipboard('.bsw-copy');
+        bsw.initVConsole();
 
         setTimeout(function () {
             bsw.messageAutoDiscovery(v.init);

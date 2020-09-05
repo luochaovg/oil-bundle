@@ -37,7 +37,7 @@ bsw.configure({
 
         changeLanguageByVue(event) {
             let key = $(event.item.$el).find('span').attr('lang');
-            bsw.request(this.init.languageApiUrl, {key}).then((res) => {
+            bsw.request(this.init.languageApiUrl, { key }).then((res) => {
                 bsw.response(res).catch((reason => {
                     console.warn(reason);
                 }));
@@ -71,7 +71,7 @@ bsw.configure({
             );
 
             let menuCollapsed = (collapsed === 'yes');
-            this.$nextTick(function () {
+            this.$nextTick(function() {
                 this.menuCollapsed = menuCollapsed;
             });
             return menuCollapsed;
@@ -86,8 +86,8 @@ bsw.configure({
             if (cnf.thirdMessageSecond < 3) {
                 return;
             }
-            v.$nextTick(function () {
-                setInterval(function () {
+            v.$nextTick(function() {
+                setInterval(function() {
                     let tm = bsw.cookieMapCurrent('bsw_third_message', cnf.opposeMap, cnf.thirdMessage);
                     if (tm === 'no') {
                         return;

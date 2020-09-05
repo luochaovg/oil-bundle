@@ -31,6 +31,7 @@ $(function () {
         loadTimes: 1,
         noLoadingOnce: false,
         spinning: false,
+        vConsole: null,
         init: { // from v-init
             configure: {},
             message: {},
@@ -467,6 +468,7 @@ $(function () {
         bsw.initClipboard();
         bsw.initUpwardInfect();
         bsw.initHighlight();
+        bsw.initVConsole();
 
         var timeout = change ? 1200 : 600;
         setTimeout(function () {

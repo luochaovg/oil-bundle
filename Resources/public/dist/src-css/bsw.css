@@ -8,7 +8,8 @@
 .ant-layout-sider,
 .bsw-foundation,
 .bsw-body,
-.bsw-loading {
+.bsw-loading,
+.bsw-loading > .ant-spin-container {
   height: 100%;
 }
 /* Cover */
@@ -16,11 +17,11 @@
   z-index: 1000;
   position: fixed;
 }
-.ant-spin-blur:after {
-  opacity: 0;
-}
 .ant-tooltip {
   z-index: 998;
+}
+.ant-spin-blur:after {
+  opacity: 0;
 }
 div.ant-modal-mask {
   background-color: rgba(0, 0, 0, 0.2);
@@ -279,9 +280,6 @@ span.ant-tag {
 ul.ant-pagination {
   margin: 40px 0 0;
   padding: 0 10px 45px;
-}
-ul.ant-pagination li {
-  margin-bottom: 5px;
 }
 .ant-layout {
   min-width: 300px;
@@ -1148,7 +1146,7 @@ div.modal-container-center div.ant-modal-body > div {
   white-space: unset;
 }
 .ant-select-selection {
-  border-top: 1px solid #d9d9d9;
+  border-top-width: 1px;
 }
 .bsw-page-loading {
   width: 100%;
@@ -1248,10 +1246,7 @@ div.modal-container-center div.ant-modal-body > div {
 .bsw-scroll-x:hover {
   background: rgba(0, 0, 0, 0.3);
 }
-.bsw-modal .hljs {
+.hljs {
   background: transparent !important;
-}
-.ant-table-body {
-  overflow-x: auto !important;
 }
 /*# sourceMappingURL=bsw.css.map */

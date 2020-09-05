@@ -816,12 +816,16 @@ class FoundationTools extends FoundationPrototype {
             row: 0,
             column: 0
         };
-        for (let m of ['margin', 'padding']) {
+        for (let m of ['margin', 'padding', 'border']) {
             if (typeof px[m] === 'undefined') {
                 px[m] = {};
             }
             for (let n of ['left', 'right', 'top', 'bottom']) {
-                px[m][n] = parseInt(parentElement.css(`${m}-${n}`));
+                if (m === 'border') {
+                    px[m][n] = parseInt(parentElement.css(`${m}-${n}-width`));
+                } else {
+                    px[m][n] = parseInt(parentElement.css(`${m}-${n}`));
+                }
                 if (n === 'left' || n === 'right') {
                     px.row += px[m][n];
                 } else if (n === 'top' || n === 'bottom') {
@@ -830,9 +834,13 @@ class FoundationTools extends FoundationPrototype {
             }
         }
         if (element) {
-            let borderWidth = parseInt(element.css('border-width')) * 2;
-            px.row += borderWidth;
-            px.column += borderWidth;
+            for (let n of ['left', 'right', 'top', 'bottom']) {
+                if (n === 'left' || n === 'right') {
+                    px.row += parseInt(element.css(`border-${n}-width`));
+                } else if (n === 'top' || n === 'bottom') {
+                    px.column += parseInt(element.css(`border-${n}-width`));
+                }
+            }
         }
 
         return px;
@@ -1691,18 +1699,41 @@ class FoundationAntD extends FoundationTools {
      * Base64 decode (array)
      *
      * @param target
+     * @param exclude
      *
      * @returns {*}
      */
-    arrayBase64Decode(target) {
+    arrayBase64Decode(target, exclude = []) {
         for (let key in target) {
             if (!target.hasOwnProperty(key)) {
                 continue;
             }
             if (bsw.isJson(target[key])) {
                 target[key] = bsw.arrayBase64Decode(target[key]);
-            } else if (bsw.isString(target[key])) {
+            } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
                 target[key] = bsw.base64Decode(target[key]);
+            }
+        }
+        return target;
+    }
+
+    /**
+     * Url decode (array)
+     *
+     * @param target
+     * @param exclude
+     *
+     * @returns {*}
+     */
+    arrayUrlDecode(target, exclude = []) {
+        for (let key in target) {
+            if (!target.hasOwnProperty(key)) {
+                continue;
+            }
+            if (bsw.isJson(target[key])) {
+                target[key] = bsw.arrayUrlDecode(target[key]);
+            } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
+                target[key] = decodeURIComponent(target[key]);
             }
         }
         return target;
@@ -2234,7 +2265,9 @@ class FoundationAntD extends FoundationTools {
      * @returns {*|{}}
      */
     getBswData(object) {
-        return object[0].dataBsw || object.data('bsw') || {};
+        let data = object[0].dataBsw || object.data('bsw') || {};
+        data = bsw.arrayUrlDecode(data, ['location', 'href', 'url', 'query']);
+        return data;
     }
 
     /**
@@ -2383,6 +2416,16 @@ class FoundationAntD extends FoundationTools {
             return;
         }
         hljs.highlightBlock($(params.selector)[0]);
+    }
+
+    /**
+     * Init vConsole
+     */
+    initVConsole() {
+        if (typeof VConsole === 'undefined') {
+            return;
+        }
+        bsw.cnf.v.vConsole = new VConsole();
     }
 
     /**

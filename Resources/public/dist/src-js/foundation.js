@@ -1075,27 +1075,38 @@ var FoundationTools = function (_FoundationPrototype) {
                 row: 0,
                 column: 0
             };
-            var _arr = ['margin', 'padding'];
+            var _arr = ['margin', 'padding', 'border'];
             for (var _i = 0; _i < _arr.length; _i++) {
                 var m = _arr[_i];
                 if (typeof px[m] === 'undefined') {
                     px[m] = {};
                 }
-                var _arr2 = ['left', 'right', 'top', 'bottom'];
-                for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-                    var n = _arr2[_i2];
-                    px[m][n] = parseInt(parentElement.css(m + '-' + n));
-                    if (n === 'left' || n === 'right') {
-                        px.row += px[m][n];
-                    } else if (n === 'top' || n === 'bottom') {
-                        px.column += px[m][n];
+                var _arr3 = ['left', 'right', 'top', 'bottom'];
+                for (var _i3 = 0; _i3 < _arr3.length; _i3++) {
+                    var _n = _arr3[_i3];
+                    if (m === 'border') {
+                        px[m][_n] = parseInt(parentElement.css(m + '-' + _n + '-width'));
+                    } else {
+                        px[m][_n] = parseInt(parentElement.css(m + '-' + _n));
+                    }
+                    if (_n === 'left' || _n === 'right') {
+                        px.row += px[m][_n];
+                    } else if (_n === 'top' || _n === 'bottom') {
+                        px.column += px[m][_n];
                     }
                 }
             }
             if (element) {
-                var borderWidth = parseInt(element.css('border-width')) * 2;
-                px.row += borderWidth;
-                px.column += borderWidth;
+                var _arr2 = ['left', 'right', 'top', 'bottom'];
+
+                for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+                    var n = _arr2[_i2];
+                    if (n === 'left' || n === 'right') {
+                        px.row += parseInt(element.css('border-' + n + '-width'));
+                    } else if (n === 'top' || n === 'bottom') {
+                        px.column += parseInt(element.css('border-' + n + '-width'));
+                    }
+                }
             }
 
             return px;
@@ -2164,6 +2175,7 @@ var FoundationAntD = function (_FoundationTools) {
          * Base64 decode (array)
          *
          * @param target
+         * @param exclude
          *
          * @returns {*}
          */
@@ -2171,14 +2183,43 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'arrayBase64Decode',
         value: function arrayBase64Decode(target) {
+            var exclude = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
             for (var key in target) {
                 if (!target.hasOwnProperty(key)) {
                     continue;
                 }
                 if (bsw.isJson(target[key])) {
                     target[key] = bsw.arrayBase64Decode(target[key]);
-                } else if (bsw.isString(target[key])) {
+                } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
                     target[key] = bsw.base64Decode(target[key]);
+                }
+            }
+            return target;
+        }
+
+        /**
+         * Url decode (array)
+         *
+         * @param target
+         * @param exclude
+         *
+         * @returns {*}
+         */
+
+    }, {
+        key: 'arrayUrlDecode',
+        value: function arrayUrlDecode(target) {
+            var exclude = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+            for (var key in target) {
+                if (!target.hasOwnProperty(key)) {
+                    continue;
+                }
+                if (bsw.isJson(target[key])) {
+                    target[key] = bsw.arrayUrlDecode(target[key]);
+                } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
+                    target[key] = decodeURIComponent(target[key]);
                 }
             }
             return target;
@@ -2823,7 +2864,9 @@ var FoundationAntD = function (_FoundationTools) {
     }, {
         key: 'getBswData',
         value: function getBswData(object) {
-            return object[0].dataBsw || object.data('bsw') || {};
+            var data = object[0].dataBsw || object.data('bsw') || {};
+            data = bsw.arrayUrlDecode(data, ['location', 'href', 'url', 'query']);
+            return data;
         }
 
         /**
@@ -2996,6 +3039,19 @@ var FoundationAntD = function (_FoundationTools) {
                 return;
             }
             hljs.highlightBlock($(params.selector)[0]);
+        }
+
+        /**
+         * Init vConsole
+         */
+
+    }, {
+        key: 'initVConsole',
+        value: function initVConsole() {
+            if (typeof VConsole === 'undefined') {
+                return;
+            }
+            bsw.cnf.v.vConsole = new VConsole();
         }
 
         /**

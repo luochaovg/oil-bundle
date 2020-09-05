@@ -113,10 +113,6 @@ span.ant-tag {
 ul.ant-pagination {
   margin: 40px 0 0;
   padding: 0 10px 45px;
-
-  li {
-    margin-bottom: 5px;
-  }
 }
 
 .ant-layout {
@@ -1040,7 +1036,7 @@ div.modal-container-center div.ant-modal-body > div {
 }
 
 .ant-select-selection {
-  border-top: 1px solid #d9d9d9;
+  border-top-width: 1px; // 1.02px in AntD why?
 }
 
 .bsw-page-loading {
@@ -1161,10 +1157,6 @@ div.modal-container-center div.ant-modal-body > div {
   }
 }
 
-.bsw-modal .hljs {
+.hljs {
   background: transparent !important;
-}
-
-.ant-table-body {
-  overflow-x: auto !important;
 }
