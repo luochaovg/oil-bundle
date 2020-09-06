@@ -38,7 +38,9 @@ NydhxUEs0y8aMzWbGwIDAQAB
             login.password = bsw.rsaEncrypt(login.password);
             bsw.request(this.init.loginApiUrl, login).then((res) => {
                 this.btnLoading = true;
-                bsw.response(res, 2).catch(() => {
+                bsw.response(res, 2).then(() => {
+                    bsw.responseLogic(res);
+                }).catch(() => {
                     this.btnLoading = false;
                 });
             });

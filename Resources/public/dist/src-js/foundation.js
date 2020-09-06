@@ -2608,6 +2608,7 @@ var FoundationAntD = function (_FoundationTools) {
 
             var content = $('.bsw-content');
             var height = content.height() + bsw.pam(content.parent(), content).column;
+            height = Math.ceil(height);
             if (debugHeight) {
                 bsw.info('Real iframe height: ' + height);
             }

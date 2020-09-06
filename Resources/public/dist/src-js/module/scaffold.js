@@ -36,7 +36,9 @@ bsw.configure({
         changeLanguageByVue: function changeLanguageByVue(event) {
             var key = $(event.item.$el).find('span').attr('lang');
             bsw.request(this.init.languageApiUrl, { key: key }).then(function (res) {
-                bsw.response(res).catch(function (reason) {
+                bsw.response(res).then(function () {
+                    bsw.responseLogic(res);
+                }).catch(function (reason) {
                     console.warn(reason);
                 });
             }).catch(function (reason) {
@@ -90,7 +92,9 @@ bsw.configure({
                         if (res.error === 4967) {
                             return;
                         }
-                        bsw.response(res).catch(function (reason) {
+                        bsw.response(res).then(function () {
+                            bsw.responseLogic(res);
+                        }).catch(function (reason) {
                             console.warn(reason);
                         });
                     }).catch(function (reason) {

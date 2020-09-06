@@ -45,7 +45,9 @@ bsw.configure({
             login.password = bsw.rsaEncrypt(login.password);
             bsw.request(this.init.loginApiUrl, login).then(function (res) {
                 _this.btnLoading = true;
-                bsw.response(res, 2).catch(function () {
+                bsw.response(res, 2).then(function () {
+                    bsw.responseLogic(res);
+                }).catch(function () {
                     _this.btnLoading = false;
                 });
             });

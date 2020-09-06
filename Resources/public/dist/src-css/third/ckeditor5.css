@@ -19,7 +19,7 @@
 }
 .bsw-ck .bsw-ck-editor {
   min-height: 220px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .bsw-ck .bsw-ck-editor p {
   margin-bottom: 8px;
