@@ -36,7 +36,7 @@ class AutoComplete extends Form
     ];
 
     /**
-     * Input constructor.
+     * AutoComplete constructor.
      */
     public function __construct()
     {

@@ -23,6 +23,7 @@ class Time extends Datetime
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setFormat('HH:mm:ss');
     }
 

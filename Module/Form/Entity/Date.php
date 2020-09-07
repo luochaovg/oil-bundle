@@ -11,7 +11,7 @@ class Date extends Datetime
      */
     public function __construct()
     {
-        $this->formSceneEnable(Abs::TAG_FILTER);
+        parent::__construct();
         $this->setFormat('YYYY-MM-DD');
         $this->setShowTime(false);
     }

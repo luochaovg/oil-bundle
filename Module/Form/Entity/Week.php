@@ -11,7 +11,8 @@ class Week extends Datetime
      */
     public function __construct()
     {
-        $this->formSceneEnable(Abs::TAG_FILTER);
+        parent::__construct();
+
         /**
          * @see https://momentjs.com/docs/#/displaying/format
          */
