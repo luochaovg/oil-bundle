@@ -46,4 +46,14 @@ class Checkbox extends Form
 
         return $optionsHandling;
     }
+
+    /**
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setEnum(array $options)
+    {
+        return $this->setOptions($this->enumHandler($options));
+    }
 }

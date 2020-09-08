@@ -535,10 +535,7 @@ abstract class Bsw
             }
             $hasVar = property_exists($form, 'varNameForMeta');
             if (!$hasVar || ($hasVar && !$form->getVarNameForMeta())) {
-                $enum = $form->enumHandler($item['enum']);
-                $enum = $this->langTheEnumMeta($enum);
-                $set = 'set' . ucfirst($property);
-                $form->{$set}($enum);
+                $form->setEnum($this->langTheEnumMeta($item['enum']));
             }
         }
     }

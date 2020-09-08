@@ -85,6 +85,16 @@ class Select extends Form
     }
 
     /**
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setEnum(array $options)
+    {
+        return $this->setOptions($this->enumHandler($options));
+    }
+
+    /**
      * @return bool
      */
     public function isValueMultiple(): bool
