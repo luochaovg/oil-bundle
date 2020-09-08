@@ -10,6 +10,8 @@ use Leon\BswBundle\Module\Form\Entity\Traits\ButtonBlock;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonStyle;
 use Leon\BswBundle\Module\Form\Entity\Traits\ButtonType;
 use Leon\BswBundle\Module\Form\Entity\Traits\Change;
+use Leon\BswBundle\Module\Form\Entity\Traits\ChangeTriggerDisabled;
+use Leon\BswBundle\Module\Form\Entity\Traits\ChangeTriggerHide;
 use Leon\BswBundle\Module\Form\Entity\Traits\ClassCss;
 use Leon\BswBundle\Module\Form\Entity\Traits\Disabled;
 use Leon\BswBundle\Module\Form\Entity\Traits\Field;
@@ -46,6 +48,8 @@ abstract class Form
     use ButtonStyle;
     use FormScene;
     use Area;
+    use ChangeTriggerHide;
+    use ChangeTriggerDisabled;
 
     /**
      * @return string

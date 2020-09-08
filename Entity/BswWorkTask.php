@@ -58,7 +58,7 @@ class BswWorkTask extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=4, align="center", enum=true, dress="blue", show=false)
-     * @BswAnnotation\Persistence(sort=1.1, type=BswForm\Select::class, enum=true, typeArgs={"switchFieldShape":{"userId":{2},"weight":{2}}})
+     * @BswAnnotation\Persistence(sort=1.1, type=BswForm\Select::class, enum=true, typeArgs={"changeTriggerHide":{"userId":{2},"weight":{2}}})
      * @BswAnnotation\Filter(sort=4, type=BswForm\Select::class, enum=true, show=false)
      */
     protected $type = 1;

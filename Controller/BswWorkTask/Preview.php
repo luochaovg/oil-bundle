@@ -176,6 +176,7 @@ trait Preview
                 ->setRoute('app_bsw_work_task_progress')
                 ->setIcon('b:icon-process')
                 ->setClick('showIFrame')
+                ->setName('adjust_work_progress')
                 ->setDisabled(!$isMyTask)
                 ->setArgs(
                     [
@@ -196,6 +197,7 @@ trait Preview
                 ->setRoute('app_bsw_work_task_notes')
                 ->setIcon('b:icon-form')
                 ->setClick('showIFrame')
+                ->setName('note_work_task')
                 ->setArgs(
                     [
                         'fill'   => ['taskId' => $args->item['id']],
@@ -211,6 +213,7 @@ trait Preview
                 ->setIcon('b:icon-feng')
                 ->setDisplay($leader && !$this->isTeamTask)
                 ->setClick('showIFrame')
+                ->setName('transfer_work_task')
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],
@@ -226,6 +229,7 @@ trait Preview
                 ->setIcon('b:icon-jewelry')
                 ->setDisplay($leader && !$this->isTeamTask)
                 ->setClick('showIFrame')
+                ->setName('adjust_work_weight')
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],

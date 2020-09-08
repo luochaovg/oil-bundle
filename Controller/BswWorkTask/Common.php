@@ -565,6 +565,7 @@ trait Common
                 ->setIcon('a:bug')
                 ->setDisplay($team)
                 ->setClick('showIFrame')
+                ->setName('new_work_task')
                 ->setStyle(['margin' => '3px 0 3px 4px'])
                 ->setArgs(
                     [

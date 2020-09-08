@@ -5,13 +5,18 @@
   {% set dateTail = "moment(`" ~ form.value[1] ~ "`, `" ~ form.format ~ "`)" %}
   {% set initial = "[" ~ dateHead ~ ", " ~ dateTail ~ "]" %}
 {% endif %}
+{% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
 <a-range-picker
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
   name="{{ form.name }}"
   :style="{{ form.style }}"
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"
   size="{{ form.size }}"
   :data-bsw.prop="{{ form.formData }}"

@@ -1607,7 +1607,7 @@ class FoundationAntD extends FoundationTools {
             let sets = typeof result.sets.function === 'undefined' ? (result.sets.logic || {}) : result.sets;
             let successDo = (typeof sets.functionSuccess === 'undefined') ? true : sets.functionSuccess;
             let failedDo = (typeof sets.functionFailed === 'undefined') ? false : sets.functionFailed;
-            if (typeof sets.function && ((success && successDo) || (!success && failedDo))) {
+            if (typeof sets.function !== 'undefined' && ((success && successDo) || (!success && failedDo))) {
                 if (typeof v[sets.function] !== 'undefined') {
                     return v[sets.function](sets.functionArgs || {});
                 } else if (typeof bsw[sets.function] !== 'undefined') {
@@ -1742,10 +1742,12 @@ class FoundationAntD extends FoundationTools {
             if (!target.hasOwnProperty(key)) {
                 continue;
             }
+            console.log(`${key} -> ${target[key]}`);
             if (bsw.isJson(target[key])) {
                 target[key] = bsw.arrayUrlDecode(target[key]);
             } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
                 target[key] = decodeURIComponent(target[key]);
+                console.log(`-> result -> ${target[key]}`);
             }
         }
         return target;

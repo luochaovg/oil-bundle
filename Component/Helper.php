@@ -3740,9 +3740,9 @@ class Helper
      * @param string $str
      * @param array  $byteMapToPx
      *
-     * @return int
+     * @return float|int
      */
-    public static function textWidthPxByMap(string $str, array $byteMapToPx = []): int
+    public static function textWidthPxByMap(string $str, array $byteMapToPx = [])
     {
         $byteMapToPx = $byteMapToPx + [1 => 6, 3 => 11.4];
 
@@ -3752,7 +3752,7 @@ class Helper
             $px += (($byteMapToPx[$bytes] ?? 0) * $total);
         }
 
-        return intval($px);
+        return $px;
     }
 
     /**

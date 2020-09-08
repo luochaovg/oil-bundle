@@ -30,7 +30,6 @@ trait Preview
                 'sort'   => 2.1,
                 'render' => Abs::HTML_CODE,
             ],
-            Abs::TR_ACT       => ['width' => 150],
         ];
     }
 

@@ -174,17 +174,37 @@ class Input extends ArgsInput
     public $scrollXBottomPx = 44;
 
     /**
-     * @var int
+     * @var bool
      */
-    public $actionColBorder = 16.5;
+    public $actionBtnForceLink = false;
 
     /**
-     * @var int
+     * @var bool
+     */
+    public $actionBtnForceNoIcon = false;
+
+    /**
+     * @var ?string
+     */
+    public $actionBtnSplit = null;
+
+    /**
+     * @var int|float
+     */
+    public $actionColBorder = 16;
+
+    /**
+     * @var int|float
+     */
+    public $actionBtnIconWidth = 15.4;
+
+    /**
+     * @var int|float
      */
     public $actionBtnBorder = 10;
 
     /**
-     * @var int
+     * @var int|float
      */
     public $actionBtnGap = 8;
 
@@ -193,6 +213,6 @@ class Input extends ArgsInput
      */
     public $actionByteMapPx = [
         1 => 6,
-        3 => 11.6,
+        3 => 12,
     ];
 }

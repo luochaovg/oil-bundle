@@ -50,6 +50,7 @@ trait Preview
                 ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_attachment_upload_file')
                 ->setClick('showIFrame')
+                ->setName('attachment_diy_upload')
                 ->setArgs(
                     [
                         'width'        => Abs::MEDIA_MIN,

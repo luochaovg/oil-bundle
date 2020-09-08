@@ -5,8 +5,10 @@ bsw.configure({
         persistenceFormat: {{ persistence.formatJson|raw }},
         persistenceFileListKeyCollect: {{ persistence.fileListKeyCollectJson|raw }},
         persistenceUploadTipsCollect: {{ persistence.uploadTipsCollectJson|raw }},
-        persistenceFieldShapeNow: {},
-        persistenceFieldShapeCollect: {{ persistence.fieldShapeCollectJson|raw }},
+        persistenceFieldHideNow: {},
+        persistenceFieldDisabledNow: {},
+        persistenceFieldHideCollect: {{ persistence.fieldHideCollectJson|raw }},
+        persistenceFieldDisabledCollect: {{ persistence.fieldDisabledCollectJson|raw }},
         persistenceTransferKeysCollect: {{ persistence.transferKeysCollectJson|raw }},
         persistenceVarNameForMetaCollect: {{ persistence.varNameForMetaCollectJson|raw }}
     },
@@ -25,13 +27,21 @@ bsw.configure({
                 bsw.initCkEditor();
             });
             v.$nextTick(function () {
-                for (let field in v.persistenceFieldShapeCollect) {
-                    if (!v.persistenceFieldShapeCollect.hasOwnProperty(field)) {
+                for (let field in v.persistenceFieldHideCollect) {
+                    if (!v.persistenceFieldHideCollect.hasOwnProperty(field)) {
                         continue;
                     }
                     let value = v.persistenceForm.getFieldValue(field);
                     v.persistenceForm.setFieldsValue({[field]: value}); // fixed bug
-                    v.switchFieldShapeWithSelect(value, {}, field);
+                    v.changeTriggerHide(value, field);
+                }
+                for (let field in v.persistenceFieldDisabledCollect) {
+                    if (!v.persistenceFieldDisabledCollect.hasOwnProperty(field)) {
+                        continue;
+                    }
+                    let value = v.persistenceForm.getFieldValue(field);
+                    v.persistenceForm.setFieldsValue({[field]: value}); // fixed bug
+                    v.changeTriggerDisabled(value, field);
                 }
             });
         }

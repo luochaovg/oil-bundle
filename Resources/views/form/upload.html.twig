@@ -1,3 +1,4 @@
+{% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
 <a-input-number
   v-if="{{ form.needId ? 'true' : 'false' }}"
   {% if form.class %}
@@ -5,7 +6,11 @@
   {% endif %}
   name="{{ form.name }}"
   :style="{{ form.style }}"
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   size="{{ form.size }}"
   :min="{{ form.min }}"
   :max="{{ form.max }}"
@@ -18,7 +23,11 @@
     class="{{ form.class }}"
   {% endif %}
   :style="{{ form.style }}"
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   {% if not form.needDrag %}
     accept="{{ form.accept }}"
   {% endif %}
@@ -33,12 +42,16 @@
   {{ form.attributes|raw }}
   v-decorator="['{{ form.key }}FileList']"
 >
-  {% macro button(scaffold, form) %}
+  {% macro button(scaffold, form, scene) %}
     <a-button
       type="{{ form.buttonType }}"
       size="{{ form.size }}"
       :block="{{ form.buttonBlock ? 'true' : 'false' }}"
-      :disabled="{{ form.disabled ? 'true' : 'false' }}"
+      {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+        :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+      {% else %}
+        :disabled="{{ form.disabled ? 'true' : 'false' }}"
+      {% endif %}
       :style="{{ form.buttonStyle }}"
     >
       {{ scaffold.cnf.iconUpload|icon|raw }}
@@ -57,9 +70,9 @@
           size="small"
         ></a-table>
       </template>
-      {{ _self.button(scaffold, form) }}
+      {{ _self.button(scaffold, form, scene) }}
     </a-popover>
   {% else %}
-    {{ _self.button(scaffold, form) }}
+    {{ _self.button(scaffold, form, scene) }}
   {% endif %}
 </a-upload>

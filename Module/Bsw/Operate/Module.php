@@ -56,17 +56,24 @@ class Module extends Bsw
 
         $nowScene = $this->input->iframe ? Abs::SCENE_IFRAME : Abs::SCENE_NORMAL;
         $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $this->arguments($this->input->args));
+        $coverArgs = $this->web->parameters('cover_iframe_args_by_name') ?? [];
         $size = $this->getInputAuto('size');
 
         // buttons handler
         foreach ($buttons as $button) {
-            /**
-             * @var Button $button
-             */
+
             $buttonCls = Button::class;
             if (!Helper::extendClass($button, $buttonCls, true)) {
                 $fn = self::OPERATES;
                 throw new ModuleException("{$this->class}::{$this->method}{$fn}() return must be {$buttonCls}[]");
+            }
+
+            /**
+             * @var Button $button
+             */
+            if ($name = $button->getName()) {
+                $buttonArgs = array_merge($button->getArgs(true), $coverArgs[$name] ?? []);
+                $button->setArgs($buttonArgs);
             }
 
             $button->setSize($size);

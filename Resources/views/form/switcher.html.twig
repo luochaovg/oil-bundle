@@ -1,10 +1,15 @@
+{% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
 <a-switch
   {% if form.class %}
     class="{{ form.class }}"
   {% endif %}
   name="{{ form.name }}"
   :style="{{ form.style }}"
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   size="{{ form.size }}"
   checked-children="{{ form.checkedChildren|trans({}, 'twig') }}"
   un-checked-children="{{ form.unCheckedChildren|trans({}, 'twig') }}"

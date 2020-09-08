@@ -118,6 +118,7 @@ trait Preview
                 ->setType(Abs::THEME_DEFAULT)
                 ->setRoute('app_bsw_admin_menu_sort')
                 ->setClick('showIFrame')
+                ->setName('admin_menu_sort')
                 ->setArgs(
                     [
                         'id'     => $args->item['id'],

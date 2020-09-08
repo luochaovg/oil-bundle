@@ -67,6 +67,7 @@ trait Preview
                 ->setType(Abs::THEME_DASHED)
                 ->setRoute('app_bsw_configured_preview')
                 ->setClick('showIFrame')
+                ->setName('yaml_config_list')
                 ->setArgs(
                     [
                         'width' => Abs::MEDIA_LG,

@@ -808,6 +808,7 @@ class Module extends Bsw
 
             $recordOperates = [];
             $buttons = $this->caller($this->method, self::OPERATES, Abs::T_ARRAY, [], $arguments);
+            $coverArgs = $this->web->parameters('cover_iframe_args_by_name') ?? [];
 
             foreach ($buttons as $index => $button) {
                 $buttonCls = Button::class;
@@ -819,6 +820,18 @@ class Module extends Bsw
                 /**
                  * @var Button $button
                  */
+                if ($name = $button->getName()) {
+                    $buttonArgs = array_merge($button->getArgs(), $coverArgs[$name] ?? []);
+                    $button->setArgs($buttonArgs);
+                }
+
+                if ($this->input->actionBtnForceLink) {
+                    $button->setType(Abs::THEME_LINK)->appendStyle(['padding' => '0', 'margin' => '3px 0']);
+                }
+
+                if ($this->input->actionBtnForceNoIcon) {
+                    $button->setIcon(null);
+                }
 
                 $button->setSize($this->input->recordOperatesSize);
 
@@ -837,7 +850,13 @@ class Module extends Bsw
             $buttonsDisplay = [];
             foreach ($buttons as $button) {
                 if ($button->isDisplay()) {
-                    array_push($buttonsDisplay, $this->web->twigLang($button->getLabel()));
+                    array_push(
+                        $buttonsDisplay,
+                        [
+                            'label' => $this->web->twigLang($button->getLabel()),
+                            'icon'  => $button->getIcon(),
+                        ]
+                    );
                 }
             }
 
@@ -846,7 +865,7 @@ class Module extends Bsw
                 $maxButtonsDisplay = $buttonsDisplay;
             }
 
-            $recordOperates = implode(null, $recordOperates);
+            $recordOperates = implode($this->input->actionBtnSplit, $recordOperates);
             $item[$operate] = Html::tag('div', $recordOperates, ['class' => 'bsw-record-action']);
 
             /**
@@ -899,10 +918,12 @@ class Module extends Bsw
                 $width = $output->columns[$operate]['width'];
             } else {
                 $buttonWidth = 0;
-                foreach ($maxButtonsDisplay as $btn) {
-                    $buttonWidth += Helper::textWidthPxByMap($btn, $this->input->actionByteMapPx);
+                foreach ($maxButtonsDisplay as $i) {
+                    $buttonWidth += Helper::textWidthPxByMap($i['label'], $this->input->actionByteMapPx);
+                    if ($i['icon']) {
+                        $buttonWidth += $this->input->actionBtnIconWidth;
+                    }
                 }
-                $maxButtons = min($maxButtons, 4);
                 $width = $buttonWidth;
                 $width += $this->input->actionColBorder * 2;
                 $width += ($maxButtons * $this->input->actionBtnBorder * 2);

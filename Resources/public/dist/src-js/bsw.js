@@ -382,14 +382,36 @@ $(function () {
                 });
             }
         },
-        switchFieldShapeWithSelect: function switchFieldShapeWithSelect(value, option, field) {
-            var now = this.persistenceFieldShapeNow;
-            var collect = this.persistenceFieldShapeCollect[field];
+        changeTriggerHideForInput: function changeTriggerHideForInput(event, field) {
+            this.changeTriggerHide(event.target.value, {}, field);
+        },
+        changeTriggerHideForSelect: function changeTriggerHideForSelect(value, option, field) {
+            this.changeTriggerHide(value, field);
+        },
+        changeTriggerHide: function changeTriggerHide(value, field) {
+            var now = this.persistenceFieldHideNow;
+            var collect = this.persistenceFieldHideCollect[field];
             for (var f in collect) {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
                 }
-                now[f] = collect[f].includes(value);
+                now[f] = collect[f].includes(value.toString());
+            }
+        },
+        changeTriggerDisabledForInput: function changeTriggerDisabledForInput(event, field) {
+            this.changeTriggerDisabled(event.target.value, {}, field);
+        },
+        changeTriggerDisabledForSelect: function changeTriggerDisabledForSelect(value, option, field) {
+            this.changeTriggerDisabled(value, field);
+        },
+        changeTriggerDisabled: function changeTriggerDisabled(value, field) {
+            var now = this.persistenceFieldDisabledNow;
+            var collect = this.persistenceFieldDisabledCollect[field];
+            for (var f in collect) {
+                if (!collect.hasOwnProperty(f)) {
+                    continue;
+                }
+                now[f] = collect[f].includes(value.toString());
             }
         },
         requestByAjax: function requestByAjax(data, element) {

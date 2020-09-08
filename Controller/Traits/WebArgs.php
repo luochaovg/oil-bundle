@@ -32,7 +32,7 @@ trait WebArgs
      *
      * @return $this
      */
-    public function logicGet(string $key = null, $default = null)
+    public function logicGet(string $key, $default = null)
     {
         return $this->logic[$key] ?? $default;
     }
@@ -52,7 +52,7 @@ trait WebArgs
         }
 
         $this->logic[$key] = array_merge($this->logic[$key], $value);
-        $this->logic[$key] = array_filter(array_unique($this->logic[$key]));
+        $this->logic[$key] = array_unique($this->logic[$key]);
 
         return $this;
     }
@@ -72,7 +72,7 @@ trait WebArgs
         }
 
         array_push($this->logic[$key], $value);
-        $this->logic[$key] = array_filter(array_unique($this->logic[$key]));
+        $this->logic[$key] = array_unique($this->logic[$key]);
 
         return $this;
     }

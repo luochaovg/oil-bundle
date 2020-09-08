@@ -1252,8 +1252,10 @@ div.modal-container-center div.ant-modal-body > div {
 .bsw-scroll-x:hover {
   background: rgba(0, 0, 0, 0.3);
 }
-pre.bsw-pre code.hljs {
-  background: transparent;
+body.bsw-foundation pre code.hljs {
+  background: rgba(0, 0, 0, 0.007);
+  border: 4px;
+  padding: 6px 8px;
 }
 div.ant-table-body {
   overflow-x: auto !important;

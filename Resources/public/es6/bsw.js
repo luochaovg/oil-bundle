@@ -383,14 +383,41 @@ $(function () {
             }
         },
 
-        switchFieldShapeWithSelect(value, option, field) {
-            let now = this.persistenceFieldShapeNow;
-            let collect = this.persistenceFieldShapeCollect[field];
+        changeTriggerHideForInput(event, field) {
+            this.changeTriggerHide(event.target.value, {}, field)
+        },
+
+        changeTriggerHideForSelect(value, option, field) {
+            this.changeTriggerHide(value, field)
+        },
+
+        changeTriggerHide(value, field) {
+            let now = this.persistenceFieldHideNow;
+            let collect = this.persistenceFieldHideCollect[field];
             for (let f in collect) {
                 if (!collect.hasOwnProperty(f)) {
                     continue;
                 }
-                now[f] = (collect[f].includes(value));
+                now[f] = (collect[f].includes(value.toString()));
+            }
+        },
+
+        changeTriggerDisabledForInput(event, field) {
+            this.changeTriggerDisabled(event.target.value, {}, field)
+        },
+
+        changeTriggerDisabledForSelect(value, option, field) {
+            this.changeTriggerDisabled(value, field)
+        },
+
+        changeTriggerDisabled(value, field) {
+            let now = this.persistenceFieldDisabledNow;
+            let collect = this.persistenceFieldDisabledCollect[field];
+            for (let f in collect) {
+                if (!collect.hasOwnProperty(f)) {
+                    continue;
+                }
+                now[f] = (collect[f].includes(value.toString()));
             }
         },
 

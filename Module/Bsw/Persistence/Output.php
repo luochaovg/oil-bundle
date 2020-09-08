@@ -60,12 +60,22 @@ class Output extends ArgsOutput
     /**
      * @var array
      */
-    public $fieldShapeCollect = [];
+    public $fieldHideCollect = [];
 
     /**
      * @var string
      */
-    public $fieldShapeCollectJson;
+    public $fieldHideCollectJson;
+
+    /**
+     * @var array
+     */
+    public $fieldDisabledCollect = [];
+
+    /**
+     * @var string
+     */
+    public $fieldDisabledCollectJson;
 
     /**
      * @var array

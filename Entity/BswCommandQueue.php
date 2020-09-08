@@ -97,7 +97,7 @@ class BswCommandQueue extends FoundationEntity
      * @Assert\Type(type="integer", groups={"modify"})
      * @Assert\NotNull(groups={"modify"})
      * @BswAnnotation\Preview(sort=8, align="center", enum=true, dress="blue")
-     * @BswAnnotation\Persistence(sort=8, type=BswForm\Select::class, enum=true, typeArgs={"switchFieldShape":{"cronDateFormat":1, "cronDateValue":1, "resourceNeed":2}})
+     * @BswAnnotation\Persistence(sort=8, type=BswForm\Select::class, enum=true, typeArgs={"changeTriggerHide":{"cronDateFormat":1, "cronDateValue":1, "resourceNeed":2}})
      * @BswAnnotation\Filter(sort=8, type=BswForm\Select::class, enum=true)
      */
     protected $cronType = 1;

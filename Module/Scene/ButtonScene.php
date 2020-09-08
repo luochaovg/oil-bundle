@@ -36,6 +36,14 @@ class ButtonScene extends Button
     }
 
     /**
+     * @return ButtonScene
+     */
+    public function setThemeLink()
+    {
+        return $this->setType(Abs::THEME_LINK)->appendStyle(['padding' => '0', 'margin' => '3px 0']);
+    }
+
+    /**
      * @param bool $want
      *
      * @return ButtonScene
@@ -386,12 +394,15 @@ class ButtonScene extends Button
 
     /**
      * @param string $route
+     * @param int    $id
      *
      * @return ButtonScene
      */
-    public function setAjaxRequest(string $route)
+    public function setAjaxRequest(string $route, ?int $id = null)
     {
-        return $this->setRoute($route)->setClick('requestByAjax')->appendArgs(['refresh' => true]);
+        $button = $this->setRoute($route)->setClick('requestByAjax')->appendArgs(['refresh' => true]);
+
+        return $id ? $button->setId($id) : $button;
     }
 
     /**

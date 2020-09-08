@@ -26,7 +26,10 @@ class Abs
     const RULES_REQUIRED     = ['required' => true, 'message' => '{{ field }} Required'];
     const BR                 = '<br>';
     const HR                 = '<hr>';
-    const LINE_DASHED        = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 10px 0;"></div>';
+    const LINE               = '<div class="ant-divider ant-divider-horizontal" style="margin: 8px 0;"></div>';
+    const LINE_DASHED        = '<div class="ant-divider ant-divider-horizontal ant-divider-dashed" style="margin: 8px 0;"></div>';
+    const LINE_V             = '<div class="ant-divider ant-divider-vertical" style="margin: 0 2px; height: 16px;"></div>';
+    const LINE_DASHED_V      = '<div class="ant-divider ant-divider-vertical ant-divider-dashed" style="margin: 0 2px; height: 16px;"></div>';
     const BK_RENDER_ARGS     = 1;
 
     const CODE_BASIC     = 1000024;
@@ -308,8 +311,8 @@ class Abs
     const TAG_EMPTY          = 'empty';
     const TAG_PREVIEW        = 'preview';
     const TAG_PERSISTENCE    = 'persistence';
-    const TAG_PERS_MODIFY    = 'persistence:modify';
-    const TAG_PERS_NEWLY     = 'persistence:newly';
+    const TAG_PERSIST_MODIFY = 'persistence:modify';
+    const TAG_PERSIST_NEWLY  = 'persistence:newly';
     const TAG_CHART          = 'chart';
     const TAG_FILTER         = 'filter';
     const TAG_SEARCH         = 'search';

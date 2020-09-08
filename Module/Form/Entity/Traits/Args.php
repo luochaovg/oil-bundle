@@ -13,11 +13,13 @@ trait Args
     protected $args = [];
 
     /**
+     * @param bool $meta
+     *
      * @return array
      */
-    public function getArgs(): array
+    public function getArgs(bool $meta = false): array
     {
-        return Helper::urlEncodeValues($this->args);
+        return $meta ? $this->args : Helper::urlEncodeValues($this->args);
     }
 
     /**

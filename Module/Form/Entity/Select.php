@@ -51,11 +51,6 @@ class Select extends Form
     ];
 
     /**
-     * @var array
-     */
-    protected $switchFieldShape = [];
-
-    /**
      * Select constructor.
      */
     public function __construct()
@@ -107,48 +102,5 @@ class Select extends Form
         }
 
         return $this->value;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSwitchFieldShape(): array
-    {
-        if (empty($this->switchFieldShape)) {
-            return $this->switchFieldShape;
-        }
-
-        $this->setAllowClear(false);
-        $this->setChange('switchFieldShapeWithSelect');
-
-        foreach ($this->switchFieldShape as &$item) {
-            $item = array_map('strval', (array)$item);
-        }
-
-        return $this->switchFieldShape;
-    }
-
-    /**
-     * @param array $switchFieldShape
-     *
-     * @return $this
-     */
-    public function setSwitchFieldShape(array $switchFieldShape)
-    {
-        $this->switchFieldShape = $switchFieldShape;
-
-        return $this;
-    }
-
-    /**
-     * @param array $switchFieldShape
-     *
-     * @return $this
-     */
-    public function appendSwitchFieldShape(array $switchFieldShape)
-    {
-        $this->switchFieldShape = array_merge($this->switchFieldShape, $switchFieldShape);
-
-        return $this;
     }
 }

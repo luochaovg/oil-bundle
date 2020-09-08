@@ -1,3 +1,4 @@
+{% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
 <a-input
   {% if form.class %}
     class="{{ form.class }}"
@@ -10,7 +11,11 @@
     suffix="{{ form.suffix }}"
   {% endif %}
   :style="{{ form.style }}"
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   type="{{ form.type }}"
   size="{{ form.size }}"
   :allow-clear="{{ form.allowClear ? 'true' : 'false' }}"

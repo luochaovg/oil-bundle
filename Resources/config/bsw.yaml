@@ -278,7 +278,17 @@ parameters:
         import: b:icon-import1
         grant: b:icon-assessedbadge
 
-    bsw_menus_same_current_map: []
+    bsw_menus_same_current_map: {}
+
+    bsw_cover_iframe_args_by_name:
+        new_work_task: {}
+        adjust_work_progress: {}
+        note_work_task: {}
+        transfer_work_task: {}
+        adjust_work_weight: {}
+        admin_menu_sort: {}
+        attachment_diy_upload: {}
+        yaml_config_list: {}
 
     bsw_menus_same_parent_map:
         app_site_index: app_bsw_config_preview
@@ -324,22 +334,22 @@ parameters:
         scrollXFadeDuration: 100
 
     bsw_module_input_args:
-        Leon\BswBundle\Module\Bsw\Away\Module: []
-        Leon\BswBundle\Module\Bsw\Chart\Module: []
-        Leon\BswBundle\Module\Bsw\Crumbs\Module: []
-        Leon\BswBundle\Module\Bsw\Data\Module: []
-        Leon\BswBundle\Module\Bsw\Drawer\Module: []
-        Leon\BswBundle\Module\Bsw\Filter\Module: []
-        Leon\BswBundle\Module\Bsw\Footer\Module: []
-        Leon\BswBundle\Module\Bsw\Header\Module: []
-        Leon\BswBundle\Module\Bsw\Menu\Module: []
-        Leon\BswBundle\Module\Bsw\Modal\Module: []
-        Leon\BswBundle\Module\Bsw\Operate\Module: []
-        Leon\BswBundle\Module\Bsw\Persistence\Module: []
-        Leon\BswBundle\Module\Bsw\Preview\Module: []
-        Leon\BswBundle\Module\Bsw\Result\Module: []
-        Leon\BswBundle\Module\Bsw\Tabs\Module: []
-        Leon\BswBundle\Module\Bsw\Welcome\Module: []
+        Leon\BswBundle\Module\Bsw\Away\Module: {}
+        Leon\BswBundle\Module\Bsw\Chart\Module: {}
+        Leon\BswBundle\Module\Bsw\Crumbs\Module: {}
+        Leon\BswBundle\Module\Bsw\Data\Module: {}
+        Leon\BswBundle\Module\Bsw\Drawer\Module: {}
+        Leon\BswBundle\Module\Bsw\Filter\Module: {}
+        Leon\BswBundle\Module\Bsw\Footer\Module: {}
+        Leon\BswBundle\Module\Bsw\Header\Module: {}
+        Leon\BswBundle\Module\Bsw\Menu\Module: {}
+        Leon\BswBundle\Module\Bsw\Modal\Module: {}
+        Leon\BswBundle\Module\Bsw\Operate\Module: {}
+        Leon\BswBundle\Module\Bsw\Persistence\Module: {}
+        Leon\BswBundle\Module\Bsw\Preview\Module: {}
+        Leon\BswBundle\Module\Bsw\Result\Module: {}
+        Leon\BswBundle\Module\Bsw\Tabs\Module: {}
+        Leon\BswBundle\Module\Bsw\Welcome\Module: {}
 
 services:
 

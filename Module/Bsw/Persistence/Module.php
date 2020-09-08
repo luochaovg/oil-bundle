@@ -355,14 +355,14 @@ class Module extends Bsw
     }
 
     /**
-     * Set default value for form data
+     * Configure form for frontend
      *
      * @param Form   $form
      * @param string $field
      * @param array  $item
      * @param Output $output
      */
-    protected function formDefaultConfigure(string $field, Form $form, array $item, Output $output)
+    protected function formConfigureForFrontend(string $field, Form $form, array $item, Output $output)
     {
         if ($form instanceof Upload) {
             if (!$form->getRoute()) {
@@ -450,18 +450,20 @@ class Module extends Bsw
             ];
         }
 
-        if ($form instanceof Select) {
-            if ($meta = $form->getSwitchFieldShape()) {
-                $output->fieldShapeCollect[$field] = $meta;
-            }
-        }
-
         if (property_exists($form, 'varNameForMeta') && $fieldHandling = $form->getVarNameForMeta()) {
             $output->varNameForMetaCollect[$field] = $form->getVarNameForMetaDefaultArray();
             if ($fieldHandling === true) {
                 $fieldHandling = $field;
             }
             $form->setVarNameForMeta("persistenceVarNameForMetaCollect.{$fieldHandling}");
+        }
+
+        if ($fieldHideMeta = $form->getChangeTriggerHide()) {
+            $output->fieldHideCollect[$field] = $fieldHideMeta;
+        }
+
+        if ($fieldDisabledMeta = $form->getChangeTriggerDisabled()) {
+            $output->fieldDisabledCollect[$field] = $fieldDisabledMeta;
         }
     }
 
@@ -549,7 +551,7 @@ class Module extends Bsw
         $persistence = !!$this->input->submit;
 
         $original = $record;
-        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERS_MODIFY : Abs::TAG_PERS_NEWLY]];
+        $extraArgs = [Abs::HOOKER_FLAG_ACME => ['scene' => $this->input->id ? Abs::TAG_PERSIST_MODIFY : Abs::TAG_PERSIST_NEWLY]];
         $record = $this->web->hooker($hooks, $record, $persistence, $before, $after, $extraArgs);
         $hooked = $record;
 
@@ -648,7 +650,7 @@ class Module extends Bsw
                 $form->setPlaceholder($item['placeholder'] ?: $form->getLabel());
             }
 
-            $this->formDefaultConfigure($key, $form, $item, $output);
+            $this->formConfigureForFrontend($key, $form, $item, $output);
 
             $tipsAuto = $titleAuto = null;
             if (($form instanceof Select) && $form->getMode() == Abs::MODE_MULTIPLE) {
@@ -1222,7 +1224,8 @@ class Module extends Bsw
 
         $output->fileListKeyCollectJson = Helper::jsonFlexible($output->fileListKeyCollect);
         $output->uploadTipsCollectJson = Helper::jsonFlexible($output->uploadTipsCollect);
-        $output->fieldShapeCollectJson = Helper::jsonFlexible($output->fieldShapeCollect);
+        $output->fieldHideCollectJson = Helper::jsonFlexible($output->fieldHideCollect);
+        $output->fieldDisabledCollectJson = Helper::jsonFlexible($output->fieldDisabledCollect);
         $output->transferKeysCollectJson = Helper::jsonFlexible($output->transferKeysCollect);
         $output->varNameForMetaCollectJson = Helper::jsonFlexible($output->varNameForMetaCollect);
 

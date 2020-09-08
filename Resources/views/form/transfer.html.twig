@@ -1,3 +1,4 @@
+{% set scene = logic.scene ?? constant(scaffold.abs ~ '::TAG_UNKNOWN') %}
 <a-transfer
   {% if form.class %}
     class="{{ form.class }}"
@@ -5,6 +6,11 @@
   :titles="['{{ form.sourceTitle|trans({}, 'twig') }}', '{{ form.targetTitle|trans({}, 'twig') }}']"
   :operations="['{{ form.sourceOperate|trans({}, 'twig') }}', '{{ form.targetOperate|trans({}, 'twig') }}']"
   :target-keys="{{ form.targetKeysKey }}"
+  {% if scene == constant(scaffold.abs ~ '::TAG_PERSISTENCE') %}
+    :disabled="(typeof persistenceFieldDisabledNow.{{ form.key }} !== 'undefined') ? (persistenceFieldDisabledNow.{{ form.key }} || {{ form.disabled ? 'true' : 'false' }}) : {{ form.disabled ? 'true' : 'false' }}"
+  {% else %}
+    :disabled="{{ form.disabled ? 'true' : 'false' }}"
+  {% endif %}
   {% if form.selectedKeysArray is not empty %}
     :selected-keys="{{ form.selectedKeysKey }}"
   {% endif %}
@@ -19,7 +25,6 @@
   {% if form.ddsRoute %}
     data-dds-api="{{ path(form.ddsRoute, form.ddsArgs) }}"
   {% endif %}
-  :disabled="{{ form.disabled ? 'true' : 'false' }}"
   :show-search="{{ form.showSearch ? 'true' : 'false' }}"
   :filter-option="{{ form.filterOption }}"
   :show-select-all="{{ form.showSelectAll ? 'true' : 'false' }}"
