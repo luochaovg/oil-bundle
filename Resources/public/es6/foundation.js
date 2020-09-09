@@ -1742,12 +1742,10 @@ class FoundationAntD extends FoundationTools {
             if (!target.hasOwnProperty(key)) {
                 continue;
             }
-            console.log(`${key} -> ${target[key]}`);
             if (bsw.isJson(target[key])) {
                 target[key] = bsw.arrayUrlDecode(target[key]);
             } else if (bsw.isString(target[key]) && !exclude.includes(key)) {
                 target[key] = decodeURIComponent(target[key]);
-                console.log(`-> result -> ${target[key]}`);
             }
         }
         return target;

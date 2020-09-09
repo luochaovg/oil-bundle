@@ -24,14 +24,19 @@ bsw.configure({
             var thirdMessage = cnf.thirdMessage || this.thirdMessage;
             cnf.thirdMessage = bsw.cookieMapNext('bsw_third_message', cnf.opposeMap, thirdMessage, true, bsw.lang.third_message);
         },
-        menuTrigger: function menuTrigger() {
+        menuTrigger: function menuTrigger(collapsed) {
             var cnf = bsw.cnf;
-            var collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            if (typeof collapsed === 'undefined') {
+                collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            }
             collapsed = bsw.cookieMapNext('bsw_menu_collapsed', cnf.opposeMap, collapsed ? 'yes' : 'no', true);
             this.menuCollapsed = collapsed === 'yes';
             setTimeout(function () {
                 $(window).resize();
             }, 300);
+        },
+        menuTriggerFooter: function menuTriggerFooter(collapsed) {
+            this.menuTrigger(collapsed);
         },
         changeLanguageByVue: function changeLanguageByVue(event) {
             var key = $(event.item.$el).find('span').attr('lang');

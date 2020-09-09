@@ -93,8 +93,8 @@ body {
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
-    margin-top: .83em;
-    margin-bottom: .83em;
+    margin-top: 2em;
+    margin-bottom: 1em;
   }
 
   h1 {
@@ -184,8 +184,6 @@ body {
     &[class^="language-"] {
       white-space: unset;
       display: block;
-      padding: 20px;
-      background-color: #f7f8fa;
       overflow: auto;
     }
   }
@@ -208,4 +206,9 @@ body {
       list-style-type: circle;
     }
   }
+}
+
+body.bsw-foundation div.bsw-content-document pre code.hljs {
+  background-color: #f7f8fa;
+  padding: 20px;
 }

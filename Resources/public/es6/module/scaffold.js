@@ -25,14 +25,20 @@ bsw.configure({
             cnf.thirdMessage = bsw.cookieMapNext('bsw_third_message', cnf.opposeMap, thirdMessage, true, bsw.lang.third_message);
         },
 
-        menuTrigger() {
+        menuTrigger(collapsed) {
             let cnf = bsw.cnf;
-            let collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            if (typeof collapsed === 'undefined') {
+                collapsed = typeof cnf.menuCollapsed !== 'undefined' ? cnf.menuCollapsed : this.menuCollapsed;
+            }
             collapsed = bsw.cookieMapNext('bsw_menu_collapsed', cnf.opposeMap, collapsed ? 'yes' : 'no', true);
             this.menuCollapsed = (collapsed === 'yes');
             setTimeout(() => {
                 $(window).resize();
             }, 300);
+        },
+
+        menuTriggerFooter(collapsed) {
+            this.menuTrigger(collapsed);
         },
 
         changeLanguageByVue(event) {
