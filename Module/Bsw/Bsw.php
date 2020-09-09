@@ -619,13 +619,23 @@ abstract class Bsw
             return [$field, $item];
         }
 
-        if (!(isset($item['table']) && isset($item['field']))) {
+        if (isset($item['field'])) {
+            [$table, $item['field']] = Helper::getAliasAndFieldFromField($item['field']);
+            if (!empty($table)) {
+                $item['table'] = $table;
+            }
+        }
+
+        if (empty($item['table']) || empty($item['field'])) {
             return [$field, $item];
         }
 
         $tableHandling = Helper::dig($item, 'table');
         $fieldHandling = Helper::dig($item, 'field');
 
+        /**
+         * For preview
+         */
         if (is_null($defaultIndex)) {
             $itemHandling = $annotationFull[$tableHandling][$fieldHandling] ?? [];
             $item = array_merge($itemHandling, $item);
@@ -633,6 +643,9 @@ abstract class Bsw
             return [$field, $item];
         }
 
+        /**
+         * For filter
+         */
         $indexHandling = Helper::dig($item, 'index') ?? $defaultIndex;
         $indexSplit = Abs::FILTER_INDEX_SPLIT;
 

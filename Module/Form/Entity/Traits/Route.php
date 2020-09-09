@@ -29,7 +29,7 @@ trait Route
      *
      * @return $this
      */
-    public function setRoute(string $route)
+    public function setRoute(?string $route)
     {
         $this->route = $route;
 

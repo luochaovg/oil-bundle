@@ -4,14 +4,13 @@ namespace Leon\BswBundle\Module\Bsw;
 
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Error;
-use Symfony\Component\HttpFoundation\Response;
 
 class Message
 {
     /**
      * @var Error|int
      */
-    protected $code = Response::HTTP_OK;
+    protected $code = 0;
 
     /**
      * @var string

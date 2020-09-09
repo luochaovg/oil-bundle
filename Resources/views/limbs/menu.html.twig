@@ -5,8 +5,9 @@
     collapsible
     v-model="menuCollapsed"
     :width="menuWidth"
+    @collapse="menuTriggerFooter"
   >
-    <div class="logo">
+    <div class="logo" :class="{'menu-collapse':menuCollapsed}">
       {% block menuLogo %}
         <a href="{{ path(scaffold.cnf.routeDefault) }}">
           {% if scaffold.cnf.appLogo %}

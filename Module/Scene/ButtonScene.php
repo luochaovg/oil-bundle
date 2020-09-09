@@ -413,9 +413,11 @@ class ButtonScene extends Button
      */
     public function sceneCharmSortModal(string $route, int $id)
     {
-        return $this->setType(Abs::THEME_BSW_LINK)
-            ->setIcon('b:icon-pin')
+        return $this
+            ->setType(Abs::THEME_LINK)
+            ->setIcon('b:icon-icon-72')
             ->setSize(Abs::SIZE_SMALL)
+            ->appendStyle(['padding' => '0'])
             ->setWidthHeight(Abs::MEDIA_XS, 222)
             ->setRouteModalNoTitle($route)
             ->setId($id);

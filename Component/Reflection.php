@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Component;
 
-use Leon\BswBundle\Module\Entity\Abs;
 use Reflection as Ref;
 use ReflectionClass;
 use ReflectionMethod;
@@ -83,7 +82,7 @@ class Reflection
      */
     public function preProcessingDoc(string $doc, $type = null): array
     {
-        $comment = array_slice(explode(Abs::ENTER, $doc), 1, -1);
+        $comment = array_slice(explode(PHP_EOL, $doc), 1, -1);
         foreach ($comment as &$item) {
             $item = trim($item, $this->commentFilter);
         }

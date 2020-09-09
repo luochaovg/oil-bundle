@@ -928,6 +928,7 @@ class Module extends Bsw
                 $width += $this->input->actionColBorder * 2;
                 $width += ($maxButtons * $this->input->actionBtnBorder * 2);
                 $width += ($maxButtons - 1) * $this->input->actionBtnGap;
+                $width = max($width, 64);
                 $output->scrollX += $width;
             }
 

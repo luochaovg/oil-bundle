@@ -86,7 +86,11 @@ trait WebCrumbs
                 /**
                  * @var Crumb[] $stack
                  */
-                foreach ($stack as $item) {
+                $count = count($stack);
+                foreach ($stack as $i => $item) {
+                    if ($i == $count - 1) {
+                        $item->setRoute(null);
+                    }
                     foreach ($crumbsIconMap as $keyword => $icon) {
                         if (strpos($item->getRoute(), "_{$keyword}") !== false) {
                             $item->setIcon($icon);

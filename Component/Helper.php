@@ -2257,11 +2257,29 @@ class Helper
     public static function getAliasFromField(string $field, string $dbTableSplit = '.'): ?string
     {
         $item = explode($dbTableSplit, $field);
-        if (count($item) < 2) {
+        if (count($item) != 2) {
             return null;
         }
 
         return current($item);
+    }
+
+    /**
+     * Get alias and field from field
+     *
+     * @param string $field
+     * @param string $dbTableSplit
+     *
+     * @return array
+     */
+    public static function getAliasAndFieldFromField(string $field, string $dbTableSplit = '.'): array
+    {
+        $item = explode($dbTableSplit, $field);
+        if (count($item) != 2) {
+            return [null, current($item)];
+        }
+
+        return [current($item), last($item)];
     }
 
     /**
