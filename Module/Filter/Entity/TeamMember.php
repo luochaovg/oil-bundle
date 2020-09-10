@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Leon\BswBundle\Module\Filter\Filter;
 
 class TeamMember extends Filter
@@ -102,7 +102,7 @@ class TeamMember extends Filter
         return [
             "{$field} = :{$valueName}",
             [$valueName => $value],
-            [$valueName => Type::INTEGER],
+            [$valueName => Types::INTEGER],
         ];
     }
 
@@ -122,7 +122,7 @@ class TeamMember extends Filter
         return [
             $this->expr->eq($field, ":{$valueName}"),
             [$valueName => $value],
-            [$valueName => Type::INTEGER],
+            [$valueName => Types::INTEGER],
         ];
     }
 }

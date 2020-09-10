@@ -78,4 +78,12 @@ class Mentions extends Form
     {
         return $this->setOptions($this->enumHandler($options));
     }
+
+    /**
+     * @return array
+     */
+    public function getEnum(): array
+    {
+        return $this->getOptionsArray();
+    }
 }

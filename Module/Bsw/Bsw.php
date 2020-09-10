@@ -524,21 +524,17 @@ abstract class Bsw
             Transfer::class     => 'dataSource',
         ];
 
-        $formClass = get_class($form);
-        $property = $enumProperty[$formClass] ?? null;
-        if ($property) {
+        if (method_exists($form, 'getEnum') && !$form->getEnum()) {
+            $formClass = get_class($form);
             if (!is_array($item['enum'])) {
                 $exception = $this->getAnnotationException($field);
                 throw new AnnotationException(
-                    "{$exception} option `enum` (for `{$property}`) must configure in {$formClass}"
+                    "{$exception} option `enum` (for `{$enumProperty[$formClass]}`) must configure in {$formClass}"
                 );
             }
-            $hasVar = property_exists($form, 'varNameForMeta');
-            if (!$hasVar || ($hasVar && !$form->getVarNameForMeta())) {
-                $enum = $form->enumHandler($item['enum']);
-                $enum = $this->langTheEnumMeta($enum);
-                $form->setEnum($enum);
-            }
+            $enum = $form->enumHandler($item['enum']);
+            $enum = $this->langTheEnumMeta($enum);
+            $form->setEnum($enum);
         }
     }
 

@@ -422,16 +422,26 @@ class Module extends Bsw
             }
 
             if (!$form->getPlaceholder()) {
-                $placeholder = $this->input->showLabel ? $item['label'] : $form->getLabel();
-                $form->setPlaceholder($item['placeholder'] ?: $placeholder);
+                $placeholder = $item['placeholder'];
+                if ($this->input->showLabel) {
+                    $placeholder = $placeholder ?: $item['label']; // without trans
+                } else {
+                    if ($placeholder) {
+                        $placeholder = $item['trans'] ? $this->web->fieldLang($placeholder) : $placeholder;
+                    } else {
+                        $placeholder = $form->getLabel(); // already trans
+                    }
+                    $placeholder = $placeholder ?: $form->getLabel();
+                }
+                $form->setPlaceholder($placeholder);
             }
 
             $record[$key] = [
+                'type'   => $form,
                 'hide'   => $item['hide'],
                 'label'  => $form->getLabel(),
                 'column' => $item['column'],
                 'width'  => $this->getWidth($item['column']),
-                'type'   => $form,
                 'sort'   => $item['sort'],
                 'group'  => $item['group'],
                 'title'  => $this->web->twigLang($item['title']),

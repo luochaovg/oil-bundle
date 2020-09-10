@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Leon\BswBundle\Module\Exception\FilterException;
 use Leon\BswBundle\Module\Filter\Filter;
 
@@ -109,7 +109,7 @@ class Mixed extends Filter
         return [
             implode(' OR ', $expr),
             [$name => current($item)],
-            [$name => Type::STRING],
+            [$name => Types::STRING],
         ];
     }
 

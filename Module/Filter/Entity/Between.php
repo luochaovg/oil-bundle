@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Exception\FilterException;
@@ -140,8 +140,8 @@ class Between extends Filter
                 $nameTo   => $to,
             ],
             [
-                $nameFrom => is_numeric($from) ? Type::FLOAT : Type::STRING,
-                $nameTo   => is_numeric($to) ? Type::FLOAT : Type::STRING,
+                $nameFrom => is_numeric($from) ? Types::FLOAT : Types::STRING,
+                $nameTo   => is_numeric($to) ? Types::FLOAT : Types::STRING,
             ],
         ];
     }
@@ -166,8 +166,8 @@ class Between extends Filter
                 $nameTo   => $to,
             ],
             [
-                $nameFrom => is_numeric($from) ? Type::FLOAT : Type::STRING,
-                $nameTo   => is_numeric($to) ? Type::FLOAT : Type::STRING,
+                $nameFrom => is_numeric($from) ? Types::FLOAT : Types::STRING,
+                $nameTo   => is_numeric($to) ? Types::FLOAT : Types::STRING,
             ],
         ];
     }

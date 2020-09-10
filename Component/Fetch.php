@@ -3,7 +3,7 @@
 namespace Leon\BswBundle\Component;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Types\Types;
 use Leon\BswBundle\Module\Entity\Abs;
 use Exception;
 use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
@@ -55,7 +55,7 @@ class Fetch
         $this->sql = trim("{$this->sql}{$this->splitChar}{$sql}", $this->splitChar);
 
         if (!is_null($param)) {
-            $type = $integer ? ParameterType::INTEGER : ParameterType::STRING;
+            $type = $integer ? Types::INTEGER : Types::STRING;
             if (is_array($param)) {
                 $this->params = array_merge($this->params, $param);
                 $this->types = array_merge($this->types, array_fill(0, count($param), $type));

@@ -2,7 +2,7 @@
 
 namespace Leon\BswBundle\Module\Filter\Entity;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 
 class WeekIntersect extends Between
 {
@@ -61,8 +61,8 @@ class WeekIntersect extends Between
                 $toName   => $to,
             ],
             [
-                $fromName => is_numeric($from) ? Type::FLOAT : Type::STRING,
-                $toName   => is_numeric($to) ? Type::FLOAT : Type::STRING,
+                $fromName => is_numeric($from) ? Types::FLOAT : Types::STRING,
+                $toName   => is_numeric($to) ? Types::FLOAT : Types::STRING,
             ],
         ];
     }
@@ -98,8 +98,8 @@ class WeekIntersect extends Between
                 $toName   => $to,
             ],
             [
-                $fromName => is_numeric($from) ? Type::FLOAT : Type::STRING,
-                $toName   => is_numeric($to) ? Type::FLOAT : Type::STRING,
+                $fromName => is_numeric($from) ? Types::FLOAT : Types::STRING,
+                $toName   => is_numeric($to) ? Types::FLOAT : Types::STRING,
             ],
         ];
     }

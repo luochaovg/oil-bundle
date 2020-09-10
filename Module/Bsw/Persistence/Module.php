@@ -450,12 +450,13 @@ class Module extends Bsw
             ];
         }
 
-        if (property_exists($form, 'varNameForMeta') && $fieldHandling = $form->getVarNameForMeta()) {
-            $output->varNameForMetaCollect[$field] = $form->getVarNameForMetaDefaultArray();
-            if ($fieldHandling === true) {
-                $fieldHandling = $field;
+        if (method_exists($form, 'getVarNameForMeta') && $varName = $form->getVarNameForMeta()) {
+            $output->varNameForMetaCollect[$field] = $form->getEnum() ?: $form->getVarNameForMetaDefaultArray();
+            $form->setEnum([]);
+            if ($varName === true) {
+                $varName = $field;
             }
-            $form->setVarNameForMeta("persistenceVarNameForMetaCollect.{$fieldHandling}");
+            $form->setVarNameForMeta("persistenceVarNameForMetaCollect.{$varName}");
         }
 
         if ($fieldHideMeta = $form->getChangeTriggerHide()) {

@@ -86,4 +86,12 @@ class Transfer extends Form
     {
         return $this->setDataSource($this->enumHandler($options));
     }
+
+    /**
+     * @return array
+     */
+    public function getEnum(): array
+    {
+        return $this->getDataSourceArray();
+    }
 }

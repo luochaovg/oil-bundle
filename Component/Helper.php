@@ -2,7 +2,6 @@
 
 namespace Leon\BswBundle\Component;
 
-use Doctrine\ORM\Query\Expr\Math;
 use Leon\BswBundle\Module\Entity\Abs;
 use BadFunctionCallException;
 use InvalidArgumentException;
@@ -266,7 +265,7 @@ class Helper
     }
 
     /**
-     * Remove items and unset they
+     * Remove items and unset they by keys
      *
      * @param array $target
      * @param array $items
@@ -277,6 +276,26 @@ class Helper
     {
         foreach ($items as $item) {
             self::dig($target, $item);
+        }
+
+        return $target;
+    }
+
+    /**
+     * Remove items and unset they by values
+     *
+     * @param array $target
+     * @param array $values
+     *
+     * @return array
+     */
+    public static function arrayRemoveByValues(array $target, array $values): array
+    {
+        foreach ($values as $value) {
+            $index = array_search($value, $target);
+            if ($index !== false) {
+                self::dig($target, $index);
+            }
         }
 
         return $target;
@@ -774,7 +793,7 @@ class Helper
     }
 
     /**
-     * Get the desc tree by array
+     * Get the tree parent by array
      *
      * @param array  $items
      * @param string $pk
@@ -782,7 +801,7 @@ class Helper
      *
      * @return array
      */
-    public static function descTree(array $items, string $pk = Abs::PK, string $parentKey = Abs::TAG_PARENT): array
+    public static function treeParentMap(array $items, string $pk = Abs::PK, string $parentKey = Abs::TAG_PARENT): array
     {
         if (empty($items)) {
             return [];
@@ -803,7 +822,7 @@ class Helper
             if (is_null($value = $items[$children] ?? null)) {
                 return $parent;
             }
-            array_push($parent, $children);
+            $parent[$children] = count($parent) + 1;
 
             return $getParent($value, $parent);
         };
@@ -813,6 +832,70 @@ class Helper
         }
 
         return $tree;
+    }
+
+    /**
+     * Get the tree children by array
+     *
+     * @param array  $items
+     * @param string $pk
+     * @param string $parentKey
+     * @param string $childrenKey
+     *
+     * @return array
+     */
+    public static function treeChildrenMap(
+        array $items,
+        string $pk = Abs::PK,
+        string $parentKey = Abs::TAG_PARENT,
+        string $childrenKey = Abs::TAG_CHILDREN
+    ): array {
+        if (empty($items)) {
+            return [];
+        }
+
+        $tree = [];
+        $items = self::tree($items, $pk, $parentKey, $childrenKey);
+
+        /**
+         * Get children
+         *
+         * @param array $items
+         * @param int   $zIndex
+         * @param array $zIndexKey
+         * @param array $tree
+         */
+        $getChildren = function (array $items, int $zIndex, array $zIndexKey, array &$tree) use (
+            &$getChildren,
+            $pk,
+            $childrenKey
+        ) {
+            foreach ($items as $v) {
+                foreach ($zIndexKey as $k) {
+                    $tree[$k][$v[$pk]] = $zIndex;
+                }
+                if (!empty($v[$childrenKey])) {
+                    $zIndexKeyHandling = array_merge($zIndexKey, [$v[$pk]]);
+                    $getChildren($v[$childrenKey], $zIndex + 1, $zIndexKeyHandling, $tree);
+                }
+            }
+        };
+
+        $top = 0;
+        $getChildren($items, 0, [$top], $tree);
+        $all = Helper::dig($tree, $top);
+
+        foreach ($all as $m => $n) {
+            $all[$m] = $n + 1;
+        }
+
+        foreach ($tree as $key => &$item) {
+            foreach ($item as $m => $n) {
+                $item[$m] = $n - $all[$key] + 1;
+            }
+        }
+
+        return [$top => $all] + $tree;
     }
 
     /**

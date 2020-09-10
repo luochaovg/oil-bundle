@@ -95,6 +95,14 @@ class Select extends Form
     }
 
     /**
+     * @return array
+     */
+    public function getEnum(): array
+    {
+        return $this->getOptionsArray();
+    }
+
+    /**
      * @return bool
      */
     public function isValueMultiple(): bool

@@ -101,4 +101,12 @@ class SelectTree extends Form
     {
         return $this->setTreeData($this->enumHandler($options));
     }
+
+    /**
+     * @return array
+     */
+    public function getEnum(): array
+    {
+        return $this->getTreeDataArray();
+    }
 }
