@@ -85,35 +85,60 @@ class Dispatcher
      *
      * @param array $list
      * @param int   $mode
-     * @param bool  $append
      * @param array $fieldMap
      *
      * @return mixed
      * @throws
      */
-    public function filterList(array $list, int $mode = self::SQL_MODE, bool $append = false, array $fieldMap = [])
+    public function filterList(array $list, int $mode = self::SQL_MODE, array $fieldMap = [])
     {
-        $list = array_filter($list);
-
-        foreach ($list as $field => &$item) {
+        $listHanding = array_filter($list);
+        foreach ($listHanding as $field => $item) {
             $field = $fieldMap[$field] ?? $field;
             $item = $this->filter($field, $item, $mode);
-            $item = $item + [1 => [], 2 => []];
+            $listHanding[$field] = $item + [1 => [], 2 => []];
+        }
+
+        $orient = [
+            'where'  => [],
+            'having' => [],
+            'args'   => [],
+            'type'   => [],
+        ];
+
+        foreach ($list as $key => $v) {
+            /**
+             * @var Filter $filter
+             */
+            $filter = $v['filter'];
+            $k = $filter->isHaving() ? 'having' : 'where';
+            $orient[$k][] = $listHanding[$key][0];
+            $orient['args'][] = $listHanding[$key][1];
+            $orient['type'][] = $listHanding[$key][2];
         }
 
         if ($mode === self::SQL_MODE) {
-            $list = array_filter($list);
-            if (empty($list)) {
-                return [null, []];
+            foreach (['where', 'having'] as $k) {
+                $orient[$k] = implode(' AND ', $orient[$k]);
+            }
+            foreach (['args', 'type'] as $k) {
+                $orient[$k] = array_merge(...$orient[$k]);
             }
 
-            $part = implode(' AND ', array_column($list, 0));
-            $sql = ($append ? ' AND ' : 'WHERE ') . $part;
-            $params = array_merge(...array_column($list, 1));
-
-            return [$sql, $params];
+            return $orient;
         }
 
-        return $list;
+        $args = [];
+        foreach (['args', 'type'] as $k) {
+            $orient[$k] = array_merge(...$orient[$k]);
+        }
+        foreach ($orient['args'] as $key => $value) {
+            $args[$key] = [$value, $orient['type'][$key]];
+        }
+
+        $orient['args'] = $args;
+        unset($orient['type']);
+
+        return $orient;
     }
 }

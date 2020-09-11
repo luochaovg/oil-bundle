@@ -13,11 +13,52 @@ abstract class Filter
     protected $expr;
 
     /**
+     * @var bool
+     */
+    protected $having = false;
+
+    /**
      * Filter constructor.
      */
     public function __construct()
     {
         $this->expr = new Expr();
+    }
+
+    /**
+     * @return Expr
+     */
+    public function getExpr(): Expr
+    {
+        return $this->expr;
+    }
+
+    /**
+     * @param Expr $expr
+     */
+    public function setExpr(Expr $expr): void
+    {
+        $this->expr = $expr;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHaving(): bool
+    {
+        return $this->having;
+    }
+
+    /**
+     * @param bool $having
+     *
+     * @return $this
+     */
+    public function setHaving(bool $having)
+    {
+        $this->having = $having;
+
+        return $this;
     }
 
     /**

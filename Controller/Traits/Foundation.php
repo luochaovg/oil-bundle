@@ -26,7 +26,6 @@ use Leon\BswBundle\Module\Filter\Filter;
 use Leon\BswBundle\Module\Form\Form;
 use Leon\BswBundle\Module\Traits as MT;
 use Leon\BswBundle\Module\Hook\Dispatcher as HookerDispatcher;
-use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
 use Leon\BswBundle\Module\Validator\Dispatcher as ValidatorDispatcher;
 use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Controller\Traits as CT;
@@ -1055,48 +1054,6 @@ trait Foundation
             'filter' => $filter,
             'value'  => $value,
         ];
-    }
-
-    /**
-     * Get filter
-     *
-     * @param array $condition
-     * @param int   $mode
-     * @param bool  $append
-     * @param array $fieldMap
-     *
-     * @return array
-     */
-    public function parseFilter(
-        array $condition,
-        int $mode = FilterDispatcher::DQL_MODE,
-        bool $append = false,
-        array $fieldMap = []
-    ): array {
-
-        $filterDispatcher = new FilterDispatcher();
-        $query = $filterDispatcher->filterList($condition, $mode, $append, $fieldMap);
-
-        $filter = [
-            'where' => [],
-            'args'  => [],
-        ];
-
-        if ($mode === FilterDispatcher::SQL_MODE) {
-            [$filter['where'], $filter['args']] = $query;
-
-            return $filter;
-        }
-
-        foreach ($query as $item) {
-            [$where, $args, $type] = $item;
-            $filter['where'][] = $where;
-            foreach ($args as $k => $arg) {
-                $filter['args'][$k] = [$arg, $type[$k]];
-            }
-        }
-
-        return $filter;
     }
 
     /**

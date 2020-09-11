@@ -13,6 +13,7 @@ use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Exception\AnnotationException;
 use Leon\BswBundle\Module\Exception\FilterException;
+use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Choice;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
@@ -142,7 +143,7 @@ class Module extends Bsw
             $query['alias'] = Helper::tableNameToAlias($this->entity);
         }
 
-        $condition = $this->web->parseFilter($this->input->condition);
+        $condition = (new FilterDispatcher())->filterList($this->input->condition, FilterDispatcher::DQL_MODE);
         $query = Helper::merge($query, $condition);
 
         return $query;

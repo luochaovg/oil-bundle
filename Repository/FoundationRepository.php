@@ -872,7 +872,7 @@ abstract class FoundationRepository extends SFRepository
 
             $hintModel->setFirstResult(null);
             $hintModel->setMaxResults(null);
-            $hintModel->resetDQLParts(['select']);
+            $hintModel->resetDQLParts(['select', 'having']);
 
             if (empty($hintModel->getDQLPart('where'))) {
                 $hintModel->resetDQLPart('join');
@@ -988,7 +988,8 @@ abstract class FoundationRepository extends SFRepository
     public function lister(array $filter, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
     {
         $filter = $this->getFilters($filter, ['method' => Abs::SELECT]);
-        $query = $this->getQueryBuilder($filter)->getQuery();
+        $model = $this->getQueryBuilder($filter);
+        $query = $model->getQuery();
 
         if (!$filter['paging']) {
             $query->setFirstResult($filter['offset']);

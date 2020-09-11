@@ -228,9 +228,7 @@ class Module extends Bsw
                 $annotationHandling[$key] = $item;
                 continue;
             }
-
-            $item['field'] = Helper::tableFieldAddAlias($item['field'], $query['alias']);
-            if (in_array($item['field'], $allowFields)) {
+            if ($item['adopt'] === true || in_array($item['field'], $allowFields)) {
                 $annotationHandling[$key] = $item;
             }
         }

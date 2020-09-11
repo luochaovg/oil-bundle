@@ -647,7 +647,7 @@ abstract class Bsw
 
         $item['field'] = "{$tableHandling}.{$fieldHandling}";
         $fieldHandling = "{$fieldHandling}{$indexSplit}{$indexHandling}";
-
+        
         $itemHandling = $annotationFull[$tableHandling][$fieldHandling] ?? [];
         $item = array_merge($itemHandling, $item);
 

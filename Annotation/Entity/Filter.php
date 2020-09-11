@@ -20,6 +20,11 @@ class Filter extends Annotation
     public $field;
 
     /**
+     * @var bool
+     */
+    public $adopt = false;
+
+    /**
      * @var mixed
      */
     public $index;

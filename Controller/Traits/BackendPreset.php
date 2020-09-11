@@ -10,6 +10,7 @@ use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
 use Leon\BswBundle\Module\Exception\FilterException;
+use Leon\BswBundle\Module\Filter\Dispatcher as FilterDispatcher;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Monolog\Logger;
 
@@ -174,7 +175,7 @@ trait BackendPreset
     {
         try {
             $condition = $fields ? Helper::arrayPull($args->condition, $fields) : $args->condition;
-            $filter = $this->parseFilter($condition);
+            $filter = (new FilterDispatcher())->filterList($condition, FilterDispatcher::DQL_MODE);
         } catch (FilterException $e) {
             return (new Message())
                 ->setMessage($e->getMessage())
