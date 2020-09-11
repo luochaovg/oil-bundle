@@ -100,7 +100,7 @@ class Module extends Bsw
     protected function handleAnnotation(array $record): array
     {
         /**
-         * preview annotation
+         * persistence annotation
          */
 
         $persistAnnotation = [];
@@ -116,13 +116,17 @@ class Module extends Bsw
         }
 
         /**
-         * preview annotation only
+         * persistence annotation only
          */
 
         $fn = self::ANNOTATION_ONLY;
 
         $arguments = $this->arguments(
-            ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
+            [
+                'id'                => $this->input->id,
+                'persistence'       => !!$this->input->submit,
+                'persistAnnotation' => $persistAnnotation,
+            ],
             $this->input->args
         );
         $arguments->set('record', $record);
@@ -132,7 +136,7 @@ class Module extends Bsw
             ['target' => $persistAnnotationExtra, 'id' => $this->input->id],
             $this->input->args
         );
-        $arguments->setMany(compact('persistAnnotation', 'record'));
+        $arguments->setMany(compact('record'));
         $persistAnnotationExtra = $this->tailor($this->methodTailor, $fn, [Abs::T_ARRAY, null], $arguments);
 
         /**
@@ -147,13 +151,17 @@ class Module extends Bsw
         } else {
 
             /**
-             * preview extra annotation
+             * persistence extra annotation
              */
 
             $fn = self::ANNOTATION;
 
             $arguments = $this->arguments(
-                ['id' => $this->input->id, 'persistence' => !!$this->input->submit],
+                [
+                    'id'                => $this->input->id,
+                    'persistence'       => !!$this->input->submit,
+                    'persistAnnotation' => $persistAnnotation,
+                ],
                 $this->input->args
             );
             $arguments->set('record', $record);
@@ -1156,6 +1164,13 @@ class Module extends Bsw
             } else {
 
                 // handle by custom
+                $submitCleanList = Html::cleanArrayHtml($this->input->submit);
+                foreach ($this->input->submit as $field => $value) {
+                    if (!($persistAnnotationHandling[$field]['html'] ?? false)) {
+                        $this->input->submit[$field] = $submitCleanList[$field];
+                    }
+                }
+
                 $arguments = $this->arguments(
                     [
                         'submit'                => $this->input->submit,

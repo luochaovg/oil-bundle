@@ -1393,7 +1393,8 @@ trait Foundation
         }
 
         $query = array_merge($query, Helper::pageArgs($query, Abs::PAGE_DEFAULT_SIZE));
-        $total = count($list);
+        $hint = $query['hint'] ?? count($list);
+        $total = intval($hint);
 
         $query['limit'] = $query['limit'] ?: $total;
 

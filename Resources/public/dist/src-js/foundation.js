@@ -2077,16 +2077,15 @@ var FoundationAntD = function (_FoundationTools) {
             var v = bsw.cnf.v;
             v.$nextTick(function () {
                 var sets = typeof result.sets.function === 'undefined' ? result.sets.logic || {} : result.sets;
-                var successDo = typeof sets.functionSuccess === 'undefined' ? true : sets.functionSuccess;
-                var failedDo = typeof sets.functionFailed === 'undefined' ? false : sets.functionFailed;
-                if (typeof sets.function !== 'undefined' && (success && successDo || !success && failedDo)) {
-                    if (typeof v[sets.function] !== 'undefined') {
-                        return v[sets.function](sets.functionArgs || {});
-                    } else if (typeof bsw[sets.function] !== 'undefined') {
-                        return bsw[sets.function](sets.functionArgs || {});
-                    }
-                    return console.warn('Method ' + sets.function + ' is undefined.');
+                if (typeof sets.function === 'undefined') {
+                    return;
                 }
+                if (typeof v[sets.function] !== 'undefined') {
+                    return v[sets.function](sets.functionArgs || {});
+                } else if (typeof bsw[sets.function] !== 'undefined') {
+                    return bsw[sets.function](sets.functionArgs || {});
+                }
+                return console.warn('Method ' + sets.function + ' is undefined.');
             });
         }
 

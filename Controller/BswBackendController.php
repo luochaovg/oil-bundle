@@ -619,6 +619,7 @@ class BswBackendController extends BswWebController
             $moduleList,
             [
                 BswModule\Filter\Module::class  => ['sort' => Abs::MODULE_FILTER_SORT],
+                BswModule\Data\Module::class    => ['sort' => Abs::MODULE_DATA_SORT],
                 BswModule\Preview\Module::class => ['sort' => Abs::MODULE_PREVIEW_SORT],
             ]
         );
@@ -655,7 +656,10 @@ class BswBackendController extends BswWebController
         $moduleList = Helper::merge(
             $this->blankModule(),
             $moduleList,
-            [BswModule\Persistence\Module::class => ['sort' => Abs::MODULE_PERSISTENCE_SORT]]
+            [
+                BswModule\Data\Module::class        => ['sort' => Abs::MODULE_DATA_SORT],
+                BswModule\Persistence\Module::class => ['sort' => Abs::MODULE_PERSISTENCE_SORT],
+            ]
         );
 
         return $this->showModule($moduleList, $view ?? $this->twigPersistence, $args);
@@ -688,6 +692,7 @@ class BswBackendController extends BswWebController
             $moduleList,
             [
                 BswModule\Filter\Module::class => ['sort' => Abs::MODULE_FILTER_SORT],
+                BswModule\Data\Module::class   => ['sort' => Abs::MODULE_DATA_SORT],
                 BswModule\Chart\Module::class  => ['sort' => Abs::MODULE_CHART_SORT],
             ]
         );

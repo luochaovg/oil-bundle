@@ -60,8 +60,20 @@ $(function () {
         // directive
         init: {
             bind: function (el, binding, vnode) {
-                let key = bsw.smallHump(binding.arg);
-                vnode.context.init[key] = (binding.value || binding.expression);
+                let keyFlag = '';
+                if (binding.arg.startsWith('data-')) {
+                    keyFlag = 'data';
+                    binding.arg = binding.arg.substr(5);
+                }
+                let key = bsw.smallHump(binding.arg, '-');
+                let value = (binding.value || binding.expression);
+                if (key === 'configure') {
+                    bsw.cnf = Object.assign(bsw.cnf, value);
+                } else if (keyFlag === 'data') {
+                    vnode.context[key] = value;
+                } else {
+                    vnode.context.init[key] = value;
+                }
             }
         },
 

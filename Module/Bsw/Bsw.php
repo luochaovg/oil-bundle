@@ -574,11 +574,11 @@ abstract class Bsw
     protected function listEntityBasicFields(array $query): array
     {
         $entityList = [];
-
-        if ($this->entity) {
-            $entityList[$query['alias']] = $this->entity;
+        if (!$this->entity) {
+            return $entityList;
         }
 
+        $entityList[$query['alias']] = $this->entity;
         foreach (($query['join'] ?? []) as $alias => $item) {
             if (is_string($item['entity'])) {
                 $entityList[$alias] = $item['entity'];

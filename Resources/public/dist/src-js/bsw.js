@@ -473,10 +473,17 @@ $(function () {
         // directive
         init: {
             bind: function bind(el, binding, vnode) {
-                var key = bsw.smallHump(binding.arg);
+                var keyFlag = '';
+                if (binding.arg.startsWith('data-')) {
+                    keyFlag = 'data';
+                    binding.arg = binding.arg.substr(5);
+                }
+                var key = bsw.smallHump(binding.arg, '-');
                 var value = binding.value || binding.expression;
                 if (key === 'configure') {
                     bsw.cnf = Object.assign(bsw.cnf, value);
+                } else if (keyFlag === 'data') {
+                    vnode.context[key] = value;
                 } else {
                     vnode.context.init[key] = value;
                 }

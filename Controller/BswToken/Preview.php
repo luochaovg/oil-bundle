@@ -4,6 +4,7 @@ namespace Leon\BswBundle\Controller\BswToken;
 
 use Leon\BswBundle\Entity\BswToken;
 use Leon\BswBundle\Module\Bsw\Arguments;
+use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Form\Entity\Button;
 use Leon\BswBundle\Annotation\Entity\AccessControl as Access;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,6 +55,9 @@ trait Preview
         if (($args = $this->valid()) instanceof Response) {
             return $args;
         }
+
+        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT_GH);
+        $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
 
         return $this->showPreview();
     }

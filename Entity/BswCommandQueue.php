@@ -55,7 +55,7 @@ class BswCommandQueue extends FoundationEntity
     /**
      * @ORM\Column(type="string", name="`condition`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=4, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::RENDER_CODE_FULL)
+     * @BswAnnotation\Preview(sort=4, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_JSON)
      * @BswAnnotation\Persistence(sort=4, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class, typeArgs={"minRows":5})
      * @BswAnnotation\Filter(sort=4)
      */

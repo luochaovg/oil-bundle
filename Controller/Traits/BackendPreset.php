@@ -5,8 +5,11 @@ namespace Leon\BswBundle\Controller\Traits;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Component\Html;
 use Leon\BswBundle\Module\Bsw\Arguments;
+use Leon\BswBundle\Module\Bsw\Message;
 use Leon\BswBundle\Module\Bsw\Preview\Entity\Charm;
 use Leon\BswBundle\Module\Entity\Abs;
+use Leon\BswBundle\Module\Error\Entity\ErrorParameter;
+use Leon\BswBundle\Module\Exception\FilterException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Monolog\Logger;
 
@@ -157,5 +160,28 @@ trait BackendPreset
     public function charmAddClass(string $value, string $class, string $tag = 'p'): Charm
     {
         return new Charm(Html::tag($tag, '{value}', ['class' => $class]), $value);
+    }
+
+    /**
+     * Get filter from condition
+     *
+     * @param Arguments  $args
+     * @param array|null $fields
+     *
+     * @return array|Message
+     */
+    public function getFilterFromCondition(Arguments $args, array $fields = null)
+    {
+        try {
+            $condition = $fields ? Helper::arrayPull($args->condition, $fields) : $args->condition;
+            $filter = $this->parseFilter($condition);
+        } catch (FilterException $e) {
+            return (new Message())
+                ->setMessage($e->getMessage())
+                ->setClassify(Abs::TAG_CLASSIFY_ERROR)
+                ->setCode(ErrorParameter::CODE);
+        }
+
+        return $filter;
     }
 }

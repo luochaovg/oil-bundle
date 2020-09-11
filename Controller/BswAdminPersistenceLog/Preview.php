@@ -73,7 +73,7 @@ trait Preview
     protected function printJson(string $label, ?string $value): Charm
     {
         if (substr_count($value, "\n") + 1 < 20) {
-            return new Charm(Abs::HTML_JSON, $value);
+            return new Charm(Abs::HTML_JSON, Html::cleanHtml($value, true));
         }
 
         $button = (new ButtonScene($label))->sceneCharmCodeModal($value);

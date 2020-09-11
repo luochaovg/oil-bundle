@@ -134,7 +134,7 @@ class Module extends Bsw
         [$filterAnnotation, $filterAnnotationFull] = $this->listEntityFields($query);
 
         /**
-         * preview annotation only
+         * filter annotation only
          */
 
         $fn = self::FILTER_ANNOTATION_ONLY;

@@ -86,9 +86,9 @@ class BswToken extends FoundationEntity
     /**
      * @ORM\Column(type="string", name="`params`")
      * @Assert\Type(type="string", groups={"modify", "newly"})
-     * @BswAnnotation\Preview(sort=7, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_PRE)
+     * @BswAnnotation\Preview(sort=7, width=360, hook={0:BswHook\JsonStringify::class}, render=BswAbs::HTML_JSON)
      * @BswAnnotation\Persistence(sort=7, hook={0:BswHook\JsonStringify::class}, type=BswForm\TextArea::class)
-     * @BswAnnotation\Filter(sort=7, hook={0:BswHook\JsonStringify::class})
+     * @BswAnnotation\Filter(sort=7)
      */
     protected $params;
 

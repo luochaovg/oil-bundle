@@ -145,6 +145,9 @@ trait Preview
             return $args;
         }
 
+        $this->appendSrcCssWithKey('highlight', Abs::CSS_HIGHLIGHT_GH);
+        $this->appendSrcJsWithKey('highlight', Abs::JS_HIGHLIGHT);
+
         return $this->showPreview(['childrenRelationField' => true]);
     }
 }

@@ -4,8 +4,8 @@
 {% use 'layout/nothing.html.twig' %}
 
 {% block page %}
-  <p class="bsw-hide" v-init:selected_list='{{ logic.render|raw }}'></p>
-  <p class="bsw-hide" v-init:disabled_list='{{ logic.disabledJson|raw }}'></p>
+  <p class="bsw-hide" v-init:selected-list='{{ logic.render|raw }}'></p>
+  <p class="bsw-hide" v-init:disabled-list='{{ logic.disabledJson|raw }}'></p>
   {% block grantBefore %}{% endblock %}
   {% block grant %}
     <div class="bsw-persistence">

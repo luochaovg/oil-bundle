@@ -536,7 +536,7 @@ class Module extends Bsw
      */
     protected function manualLister(array $query): array
     {
-        $arguments = $this->arguments(['condition' => $this->input->condition], $this->input->args);
+        $arguments = $this->arguments(['condition' => $this->input->condition, 'query' => $query], $this->input->args);
         $previewData = $this->caller($this->method, self::PREVIEW_DATA, Abs::T_ARRAY, null, $arguments);
 
         if (!is_array($previewData)) {
@@ -1055,7 +1055,6 @@ class Module extends Bsw
     public function logic(): ArgsOutput
     {
         $output = new Output($this->input);
-
         $this->isExport = $this->input->ajax && ($this->web->getArgs(Abs::TAG_SCENE) === Abs::TAG_EXPORT);
 
         /**
