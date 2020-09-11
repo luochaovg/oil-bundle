@@ -1051,7 +1051,7 @@ trait Foundation
         }
 
         return [
-            'filter' => $filter,
+            'filter' => is_object($filter) ? $filter : new $filter(),
             'value'  => $value,
         ];
     }

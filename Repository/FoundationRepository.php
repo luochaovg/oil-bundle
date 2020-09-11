@@ -1006,7 +1006,7 @@ abstract class FoundationRepository extends SFRepository
         }
 
         $options = ['distinct' => $filter['distinct'] ?? false];
-        if (!empty($filter['group'])) {
+        if (!empty($filter['group']) || !empty($filter['having'])) {
             $options = array_merge($options, ['distinct' => false, 'wrap-queries' => true]);
         }
 
