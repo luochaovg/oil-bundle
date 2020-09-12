@@ -3,8 +3,11 @@
 namespace Leon\BswBundle\Repository;
 
 use Doctrine\DBAL\Types\Types;
+use Knp\Component\Pager\Event\Subscriber\Paginate\Doctrine\ORM\QuerySubscriber;
+use Knp\Component\Pager\Paginator;
 use Leon\BswBundle\Component\Helper;
 use Leon\BswBundle\Entity\FoundationEntity;
+use Leon\BswBundle\Module\Doctrine\ArrayHydration;
 use Leon\BswBundle\Module\Entity\Abs;
 use Leon\BswBundle\Module\Error\Entity\ErrorDebugExit;
 use Leon\BswBundle\Module\Exception\EntityException;
@@ -14,8 +17,6 @@ use Leon\BswBundle\Module\Traits as MT;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use Knp\Component\Pager\Pagination\AbstractPagination;
-use Knp\Component\Pager\Pagination\SlidingPagination;
 use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -560,7 +561,9 @@ abstract class FoundationRepository extends SFRepository
         /*
          * Create
          */
-        $model = $this->em()->createQueryBuilder();
+        $em = $this->em();
+        $em->getConfiguration()->addCustomHydrationMode(ArrayHydration::BSW_ARRAY, ArrayHydration::class);
+        $model = $em->createQueryBuilder();
 
         $table = $from ?? $this->entity;
         $alias = $alias ?? Helper::tableNameToAlias($table);
@@ -872,13 +875,13 @@ abstract class FoundationRepository extends SFRepository
 
             $hintModel->setFirstResult(null);
             $hintModel->setMaxResults(null);
-            $hintModel->resetDQLParts(['select', 'having']);
+            $hintModel->resetDQLParts(['select', 'orderBy', 'having']);
 
             if (empty($hintModel->getDQLPart('where'))) {
                 $hintModel->resetDQLPart('join');
             }
 
-            $hintModel->select(["count({$alias}.{$this->pk})"]);
+            $hintModel->select(["COUNT({$alias}.{$this->pk}) AS _COUNT"]);
             $count = $hintModel->getQuery()->getOneOrNullResult();
             $hint = intval(current($count));
         }
@@ -1006,15 +1009,24 @@ abstract class FoundationRepository extends SFRepository
         }
 
         $options = ['distinct' => $filter['distinct'] ?? false];
-        if (!empty($filter['group']) || !empty($filter['having'])) {
+        if (!empty($filter['group'])) {
             $options = array_merge($options, ['distinct' => false, 'wrap-queries' => true]);
+        }
+        if (!empty($filter['having'])) {
+            $options = array_merge($options, ['wrap-queries' => true]);
+            $hydrationMode = ArrayHydration::BSW_ARRAY;
+        }
+
+        $query->setHydrationMode($hydrationMode);
+        if (is_int($filter['hint'])) {
+            $query->setHint(QuerySubscriber::HINT_COUNT, $filter['hint']);
         }
 
         /**
-         * @var AbstractPagination|SlidingPagination $pagination
+         * @var Paginator $paginator
          */
-        $query->setHydrationMode($hydrationMode);
-        $pagination = $this->container->get('knp_paginator')->paginate(
+        $paginator = $this->container->get('knp_paginator');
+        $pagination = $paginator->paginate(
             $query,
             $filter['page'],
             $filter['limit'],
@@ -1023,7 +1035,6 @@ abstract class FoundationRepository extends SFRepository
 
         // page range
         $pagination->setPageRange(Abs::PAGE_DEFAULT_RANGE);
-
         if (is_int($filter['hint'])) {
             $pagination->setTotalItemCount($filter['hint']);
         }
